@@ -4,435 +4,395 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>META 종합 분석 위젯</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-:root {
-    --color-background-primary: light-dark(rgba(255, 255, 255, 1), rgba(48, 48, 46, 1));
-    --color-background-secondary: light-dark(rgba(245, 244, 237, 1), rgba(38, 38, 36, 1));
-    --color-background-tertiary: light-dark(rgba(250, 249, 245, 1), rgba(20, 20, 19, 1));
-    --color-background-inverse: light-dark(rgba(20, 20, 19, 1), rgba(250, 249, 245, 1));
-    --color-background-ghost: light-dark(rgba(255, 255, 255, 0), rgba(48, 48, 46, 0));
-    --color-background-info: light-dark(rgba(214, 228, 246, 1), rgba(37, 62, 95, 1));
-    --color-background-danger: light-dark(rgba(247, 236, 236, 1), rgba(96, 42, 40, 1));
-    --color-background-success: light-dark(rgba(233, 241, 220, 1), rgba(27, 70, 20, 1));
-    --color-background-warning: light-dark(rgba(246, 238, 223, 1), rgba(72, 58, 15, 1));
-    --color-background-disabled: light-dark(rgba(255, 255, 255, 0.5), rgba(48, 48, 46, 0.5));
-    --color-text-primary: light-dark(rgba(20, 20, 19, 1), rgba(250, 249, 245, 1));
-    --color-text-secondary: light-dark(rgba(61, 61, 58, 1), rgba(194, 192, 182, 1));
-    --color-text-tertiary: light-dark(rgba(115, 114, 108, 1), rgba(156, 154, 146, 1));
-    --color-text-inverse: light-dark(rgba(255, 255, 255, 1), rgba(20, 20, 19, 1));
-    --color-text-info: light-dark(rgba(50, 102, 173, 1), rgba(128, 170, 221, 1));
-    --color-text-danger: light-dark(rgba(127, 44, 40, 1), rgba(238, 136, 132, 1));
-    --color-text-success: light-dark(rgba(38, 91, 25, 1), rgba(122, 185, 72, 1));
-    --color-text-warning: light-dark(rgba(90, 72, 21, 1), rgba(209, 160, 65, 1));
-    --color-text-disabled: light-dark(rgba(20, 20, 19, 0.5), rgba(250, 249, 245, 0.5));
-    --color-text-ghost: light-dark(rgba(115, 114, 108, 0.5), rgba(156, 154, 146, 0.5));
-    --color-border-primary: light-dark(rgba(31, 30, 29, 0.4), rgba(222, 220, 209, 0.4));
-    --color-border-secondary: light-dark(rgba(31, 30, 29, 0.3), rgba(222, 220, 209, 0.3));
-    --color-border-tertiary: light-dark(rgba(31, 30, 29, 0.15), rgba(222, 220, 209, 0.15));
-    --color-border-inverse: light-dark(rgba(255, 255, 255, 0.3), rgba(20, 20, 19, 0.15));
-    --color-border-ghost: light-dark(rgba(31, 30, 29, 0), rgba(222, 220, 209, 0));
-    --color-border-info: light-dark(rgba(70, 130, 213, 1), rgba(70, 130, 213, 1));
-    --color-border-danger: light-dark(rgba(167, 61, 57, 1), rgba(205, 92, 88, 1));
-    --color-border-success: light-dark(rgba(67, 116, 38, 1), rgba(89, 145, 48, 1));
-    --color-border-warning: light-dark(rgba(128, 92, 31, 1), rgba(168, 120, 41, 1));
-    --color-border-disabled: light-dark(rgba(31, 30, 29, 0.1), rgba(222, 220, 209, 0.1));
-    --color-ring-primary: light-dark(rgba(20, 20, 19, 0.7), rgba(250, 249, 245, 0.7));
-    --color-ring-secondary: light-dark(rgba(61, 61, 58, 0.7), rgba(194, 192, 182, 0.7));
-    --color-ring-inverse: light-dark(rgba(255, 255, 255, 0.7), rgba(20, 20, 19, 0.7));
-    --color-ring-info: light-dark(rgba(50, 102, 173, 0.5), rgba(128, 170, 221, 0.5));
-    --color-ring-danger: light-dark(rgba(167, 61, 57, 0.5), rgba(205, 92, 88, 0.5));
-    --color-ring-success: light-dark(rgba(67, 116, 38, 0.5), rgba(89, 145, 48, 0.5));
-    --color-ring-warning: light-dark(rgba(128, 92, 31, 0.5), rgba(168, 120, 41, 0.5));
-    --font-sans: "Segoe UI", -apple-system, sans-serif;
-    --font-mono: ui-monospace, monospace;
-    --font-weight-normal: 400;
-    --font-weight-medium: 500;
-    --font-weight-semibold: 600;
-    --font-weight-bold: 700;
-    --font-text-xs-size: 12px;
-    --font-text-sm-size: 14px;
-    --font-text-md-size: 16px;
-    --font-text-lg-size: 20px;
-    --font-heading-xs-size: 12px;
-    --font-heading-sm-size: 14px;
-    --font-heading-md-size: 16px;
-    --font-heading-lg-size: 20px;
-    --font-heading-xl-size: 24px;
-    --font-heading-2xl-size: 28px;
-    --font-heading-3xl-size: 36px;
-    --font-text-xs-line-height: 1.4;
-    --font-text-sm-line-height: 1.4;
-    --font-text-md-line-height: 1.4;
-    --font-text-lg-line-height: 1.25;
-    --font-heading-xs-line-height: 1.4;
-    --font-heading-sm-line-height: 1.4;
-    --font-heading-md-line-height: 1.4;
-    --font-heading-lg-line-height: 1.25;
-    --font-heading-xl-line-height: 1.25;
-    --font-heading-2xl-line-height: 1.1;
-    --font-heading-3xl-line-height: 1;
-    --border-radius-xs: 4px;
-    --border-radius-sm: 6px;
-    --border-radius-md: 8px;
-    --border-radius-lg: 10px;
-    --border-radius-xl: 12px;
-    --border-radius-full: 9999px;
-    --border-width-regular: 0.5px;
-    --shadow-hairline: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-    color-scheme: light dark;
-}
-body { background: var(--color-background-tertiary); color: var(--color-text-primary); margin: 0; }
-.page-center { max-width: 800px; margin: 0 auto; padding: 16px; }
+  :root {
+    --bg: #0f1117; --bg2: #1a1d27; --bg3: #22263a; --border: #2e3347;
+    --text: #e8eaf0; --text2: #9aa0b8; --text3: #5c6282;
+    --accent: #1877F2; --accent2: #5a9dff; --accent3: #0d4aa3;
+    --bull: #D85A30; --bear: #185FA5; --ma5: #ff6b9d; --ma20: #9b59b6; --ma60: #f0c040; --ma120: #27ae60;
+    --green: #2ecc71; --red: #e74c3c; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
+  .header { background: linear-gradient(135deg, #05122a 0%, #0f1117 40%, #1a1d27 100%); border-bottom: 2px solid var(--accent3); padding: 28px 32px 24px; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(24,119,242,0.14) 0%, transparent 70%); pointer-events: none; }
+  .header-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .ticker-block { display: flex; align-items: center; gap: 16px; }
+  .ticker-badge { background: linear-gradient(135deg, var(--accent3), var(--accent)); color: #fff; font-size: 13px; font-weight: 800; padding: 5px 12px; border-radius: 6px; letter-spacing: 1px; }
+  .company-name { font-size: 22px; font-weight: 700; color: var(--text); }
+  .company-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .price-block { text-align: right; }
+  .price-main { font-size: 32px; font-weight: 800; color: var(--accent2); letter-spacing: -1px; }
+  .price-change { font-size: 13px; color: var(--red); font-weight: 600; }
+  .header-meta { display: flex; gap: 24px; margin-top: 16px; flex-wrap: wrap; }
+  .meta-item { display: flex; flex-direction: column; }
+  .meta-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .meta-value { font-size: 13px; font-weight: 600; color: var(--text2); margin-top: 2px; }
+  .meta-value.highlight { color: var(--accent2); }
+  .nav { display: flex; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
+  .nav-btn:hover { color: var(--text); background: var(--bg3); }
+  .nav-btn.active { background: var(--accent3); color: var(--accent2); }
+  .section { display: none; padding: 28px 32px; }
+  .section.active { display: block; }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--accent2); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; display: inline-block; }
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px; }
+  .card-title { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; font-weight: 600; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .chart-wrap { position: relative; }
+  .chart-wrap canvas { max-width: 100%; }
+  .price-chart-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+  .stat-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .stat-value { font-size: 20px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
+  .stat-sub { font-size: 11px; color: var(--text3); }
+  .stat-value.up { color: var(--green); }
+  .stat-value.down { color: var(--red); }
+  .stat-value.gold { color: var(--accent2); }
+  .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .ma-row:last-child { border-bottom: none; }
+  .ma-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+  .ma-name { display: flex; align-items: center; font-size: 13px; color: var(--text2); }
+  .ma-val { font-size: 13px; font-weight: 600; }
+  .ma-status { font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
+  .status-above { background: rgba(46,204,113,0.15); color: var(--green); }
+  .status-below { background: rgba(231,76,60,0.15); color: var(--red); }
+  .zone-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .zone-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg3); border-radius: 6px; }
+  .zone-label { font-size: 12px; color: var(--text2); }
+  .zone-val { font-size: 13px; font-weight: 700; color: var(--accent2); }
+  .zone-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
+  .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
+  .tag-current { background: rgba(24,119,242,0.2); color: var(--accent2); }
+  .val-item { margin-bottom: 18px; }
+  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
+  .val-track { height: 8px; background: var(--bg3); border-radius: 4px; position: relative; overflow: hidden; }
+  .val-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+  .val-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+  .val-low { font-size: 10px; color: var(--green); }
+  .val-mid { font-size: 10px; color: var(--accent2); text-align: center; }
+  .val-high { font-size: 10px; color: var(--red); }
+  .stage-badge { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
+  .stage-1 { background: rgba(46,204,113,0.2); color: #2ecc71; }
+  .stage-2 { background: rgba(39,174,96,0.2); color: #27ae60; }
+  .stage-3 { background: rgba(200,168,75,0.2); color: var(--accent2); }
+  .stage-4 { background: rgba(231,126,35,0.2); color: #e67e22; }
+  .stage-5 { background: rgba(231,76,60,0.2); color: var(--red); }
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent2); border: 2px solid var(--bg); }
+  .tl-dot.red { background: var(--red); }
+  .tl-dot.green { background: var(--green); }
+  .tl-dot.blue { background: var(--blue); }
+  .tl-dot.gold { background: var(--accent2); }
+  .tl-date { font-size: 10px; color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+  .tl-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 3px 0; }
+  .tl-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .bull-bear { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .bb-box { background: var(--bg3); border-radius: var(--radius); padding: 16px; }
+  .bb-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .bb-bull { color: var(--bull); }
+  .bb-bear { color: var(--bear); }
+  .bb-item { display: flex; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .bb-icon { flex-shrink: 0; margin-top: 2px; }
+  .driver-item { display: flex; gap: 12px; padding: 12px; background: var(--bg3); border-radius: 8px; margin-bottom: 10px; }
+  .driver-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent3); color: var(--accent2); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .driver-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .driver-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
+  .per-share-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .ps-card { background: var(--bg3); border-radius: 8px; padding: 16px; text-align: center; }
+  .ps-icon { font-size: 22px; margin-bottom: 6px; }
+  .ps-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .ps-value { font-size: 22px; font-weight: 800; color: var(--accent2); }
+  .ps-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
+  .disclaimer { margin: 28px 32px 16px; padding: 12px 16px; background: rgba(24,119,242,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
+  .box-key { background: rgba(24,119,242,0.1); border: 1px solid var(--accent3); border-radius: var(--radius); padding: 12px 16px; margin: 0 32px 16px; }
+  @media (max-width: 600px) {
+    .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
+    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; }
+    .per-share-grid { grid-template-columns: 1fr 1fr; } .price-main { font-size: 24px; }
+  }
 </style>
 </head>
 <body>
-<div class="page-center">
 
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-.wrap{padding:1rem 0;font-family:var(--font-sans);}
-h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
-.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;}
-.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
-.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
-.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
-.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
-.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;}
-.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
-.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
-.mv{font-size:14px;font-weight:500;color:var(--color-text-primary);}
-.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
-.up{color:#1D9E75;}.dn{color:#D85A30;}
-.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
-.b-green{background:#EAF3DE;color:#27500A;}.b-amber{background:#FAEEDA;color:#633806;}
-.b-red{background:#FCEBEB;color:#791F1F;}.b-blue{background:#E6F1FB;color:#0C447C;}
-.b-gray{background:#F1EFE8;color:#444441;}.b-meta{background:#1877F2;color:#fff;}
-.b-meta-l{background:#E7F0FD;color:#0A3D7A;}
-.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
-.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
-.ir:last-child{border-bottom:none;}
-.il{color:var(--color-text-secondary);}.iv{font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;}
-.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:6px;}
-.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:12px 14px;margin-top:10px;}
-.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:12px 14px;margin-top:10px;}
-.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
-.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
-.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
-.ev-5{background:#FCEBEB;color:#791F1F;}
-.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
-.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
-.ind-row:last-child{border-bottom:none;}
-.ind-nm{font-size:13px;font-weight:500;color:var(--color-text-primary);min-width:100px;}
-.ind-val{font-size:14px;font-weight:500;color:var(--color-text-primary);min-width:80px;text-align:right;}
-.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
-.bar-f{border-radius:4px;height:7px;}
-.stage-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:12px;}
-.stage{text-align:center;padding:12px 6px;border-radius:var(--border-radius-md);}
-.tl{position:relative;padding-left:28px;}
-.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
-.tl-item{position:relative;margin-bottom:18px;}
-.tl-item:last-child{margin-bottom:0;}
-.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid var(--color-background-primary);}
-.dot-big{background:#1877F2;}.dot-pos{background:#1D9E75;}
-.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
-.tl-date{font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:3px;}
-.tl-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
-.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
-.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
-.tag-big{background:#1877F2;color:#fff;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
-.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
-.sprow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:12px;}
-.sprow:last-child{border-bottom:none;}
-.box-key{background:#E7F0FD;border:1px solid #1877F2;border-radius:var(--border-radius-md);padding:12px 16px;margin-bottom:12px;}
-</style>
-
-<div class="wrap">
-<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-  <h2>Meta Platforms (META)</h2>
-  <span class="badge b-meta">S&P 500 시총 8위</span>
-  <span class="badge b-meta-l">SNS 광고 독점 · Llama AI · AR 글래스</span>
-  <span class="src">차트 + 분기 재무제표 + SEC 8-K</span>
+<div class="header">
+  <div class="header-top">
+    <div class="ticker-block">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+          <span class="ticker-badge">META</span>
+          <span style="font-size:11px;color:var(--accent2);font-weight:600;">NASDAQ · SNS 광고·Llama AI·AR</span>
+        </div>
+        <div class="company-name">Meta Platforms, Inc.</div>
+        <div class="company-sub">SNS 광고 독점 · Llama AI · AR 글래스 · S&P 500 시총 8위</div>
+      </div>
+    </div>
+    <div class="price-block">
+      <div class="price-main">$577.22</div>
+      <div class="price-change">52주 수익률 -17.2%</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px;">52주 최고 $796 · 최저 $537</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$1.46T</span></div>
+    <div class="meta-item"><span class="meta-label">EV/EBITDA</span><span class="meta-value">13.8x (10년 중간값 대비 최저)</span></div>
+    <div class="meta-item"><span class="meta-label">DAU</span><span class="meta-value">3.56B (▲4%)</span></div>
+    <div class="meta-item"><span class="meta-label">Q1 2026 매출</span><span class="meta-value">$56.3B (▲33.1%)</span></div>
+    <div class="meta-item"><span class="meta-label">EPS (TTM)</span><span class="meta-value">$27.51</span></div>
+    <div class="meta-item"><span class="meta-label">배당수익률</span><span class="meta-value">0.36% (분기 $0.525)</span></div>
+  </div>
 </div>
-<p class="sub">현재가 $577.22 · 52주 최고 $796 (2025.09) · 52주 최저 $537 (2026.04) · 시총 $1.46T · EPS(TTM) $27.51 · 52주 수익률 -17.2%</p>
 
 <div class="box-key">
-  <div style="font-size:13px;font-weight:500;color:#0A3D7A;margin-bottom:4px;">핵심 투자 역설 — Q1 +33% 성장 · EPS +62% 서프라이즈 → 주가 -10% (Capex $145B 공포)</div>
-  <div style="font-size:12px;color:#1877F2;line-height:1.6;">EV/EBITDA 13.8x — 10년 중간값 18x 대비 역대급 저평가 구간. PER 21x는 10년 평균 26x 대비 -20%. 광고 단가 +12% + 노출량 +19% = AI가 광고 엔진을 즉각 개선 중. Capex $125~145B 공포가 주가를 억누르지만, 2025년에도 같은 우려 속 +22% 성장 달성.</div>
+  <div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 역설 — Q1 +33% 성장·EPS +62% 서프라이즈 → 주가 -10% (Capex $145B 공포)</div>
+  <div style="font-size:12px;color:var(--text2);line-height:1.6;">EV/EBITDA 13.8x — 10년 중간값 18x 대비 역대급 저평가 구간. PER 21x는 10년 평균 26x 대비 -20%. 광고 단가 +12% + 노출량 +19% = AI가 광고 엔진을 즉각 개선 중. Capex $125~145B 공포가 주가를 억누르지만, 2025년에도 같은 우려 속 +22% 성장 달성.</div>
 </div>
 
-<div class="g4">
-  <div class="met"><div class="ml">현재가</div><div class="mv">$577.22</div><div class="ms dn">고점 $796 대비 -27.5%</div></div>
-  <div class="met"><div class="ml">Q1 2026 매출</div><div class="mv">$56.3B</div><div class="ms up">▲33.1% YoY</div></div>
-  <div class="met"><div class="ml">EV/EBITDA</div><div class="mv">13.8x</div><div class="ms up">10년 중간값 18x 대비 최저</div></div>
-  <div class="met"><div class="ml">DAU</div><div class="mv">3.56B</div><div class="ms up">▲4% · 지구 절반</div></div>
+<div class="nav">
+  <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
+  <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
+  <button class="nav-btn" onclick="showSection('pershare')">💰 Per-Share</button>
+  <button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button>
+  <button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button>
+  <button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button>
+  <button class="nav-btn" onclick="showSection('invest')">🎯 투자 포인트</button>
 </div>
 
-<!-- 1. 기술적 분석 -->
-<div class="card">
-  <div class="sec">1. 기술적 분석 — 2025.07 ~ 2026.06 · 52주 수익률 -17.2%</div>
-  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
-    52주 최고 $796 (2025.09) → 52주 최저 $537 (2026.04) → 현재 $577
-  </div>
-
-  <!-- 캔들 차트 SVG -->
-  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px;margin-bottom:12px;">
-    <svg id="metaSvg2" viewBox="0 0 680 200" width="100%" style="display:block;" role="img" aria-label="META 52주 주가 차트"></svg>
-  </div>
-
-  <!-- 막대 차트 (분기 매출) -->
-  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">분기 매출 및 영업이익률 추이</div>
-  <div style="position:relative;width:100%;height:160px;margin-bottom:12px;">
-    <canvas id="metaRevChart2"></canvas>
-  </div>
-
-  <div class="g4" style="font-size:11px;margin-bottom:12px;">
-    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#27500A;font-weight:500;margin-bottom:3px;">2025.07~09 — $796 신고점</div>
-      <div style="color:#3B6D11;line-height:1.6;">Meta AI 10억 MAU<br>효율의 해 2.0<br>Superintelligence Labs<br>$796 역대 최고</div>
+<div id="tech" class="section active">
+  <div class="section-title">기술적 분석 — 실제 차트 기반 (2025.07 ~ 2026.06)</div>
+  <div class="price-chart-container">
+    <div style="font-size:11px;color:var(--text3);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
+      <span>META 52주 가격 추이 · 52주 최고 $796('25.09) → 최저 $537('26.04)</span>
+      <span style="color:var(--accent2);font-weight:600;">현재가 $577.22</span>
     </div>
-    <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#791F1F;font-weight:500;margin-bottom:3px;">2025.10~11 — -12% 급락</div>
-      <div style="color:#A32D2D;line-height:1.6;">Capex $115~135B 예고<br>Reality Labs 적자 지속<br>$796→$585 급락</div>
-    </div>
-    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#633806;font-weight:500;margin-bottom:3px;">2026.01~04 — 재조정</div>
-      <div style="color:#854F0B;line-height:1.6;">관세 쇼크 $537 저점<br>Q4·Q1 실적 서프라이즈<br>Capex $145B 상향 -10%</div>
-    </div>
-    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#633806;font-weight:500;margin-bottom:3px;">2026.05~06 — $577 회복 중</div>
-      <div style="color:#854F0B;line-height:1.6;">저점 대비 +7.4%<br>EV/EBITDA 역대 최저<br>96% Buy · 목표 $839</div>
+    <svg id="metaSvg" viewBox="0 0 680 200" width="100%" style="display:block;background:var(--bg3);border-radius:8px;padding:4px;" role="img" aria-label="META 52주 주가 차트"></svg>
+  </div>
+  <div class="card">
+    <div class="card-title">구간별 패턴 분석</div>
+    <div class="grid-4">
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.07~09 $796 신고점</div><div style="font-size:12px;color:var(--text2);">Meta AI 10억 MAU. 효율의 해 2.0. Superintelligence Labs. $796 역대 최고.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.10~11 -12% 급락</div><div style="font-size:12px;color:var(--text2);">Capex $115~135B 예고. Reality Labs 적자 지속. $796→$585 급락.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.01~04 재조정</div><div style="font-size:12px;color:var(--text2);">관세 쇼크 $537 저점. Q4·Q1 실적 서프라이즈. Capex $145B 상향 -10%.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.05~06 $577 회복 중</div><div style="font-size:12px;color:var(--text2);">저점 대비 +7.4%. EV/EBITDA 역대 최저. 96% Buy · 목표 $839.</div></div>
     </div>
   </div>
-
-  <div class="sig">
-    <span class="badge b-green">EV/EBITDA 13.8x — 10년 중간값 대비 역대 최저</span>
-    <span class="badge b-green">PER 21x · Forward PER 17.6x · PEG 0.84</span>
-    <span class="badge b-green">3.56B DAU · 광고 단가 +12% · 노출량 +19%</span>
-    <span class="badge b-red">52주 -17.2% — MSFT와 함께 빅테크 마이너스</span>
-    <span class="badge b-red">Capex $125~145B — "증명의 해" 불확실성</span>
-    <span class="badge b-meta-l">애널리스트 96% Buy · 목표가 $839 (+45%)</span>
+  <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;">
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">EV/EBITDA 13.8x — 10년 중간값 대비 역대 최저</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">PER 21x · Forward PER 17.6x · PEG 0.84</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">3.56B DAU · 광고 단가 +12% · 노출량 +19%</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">52주 -17.2% — MSFT와 함께 빅테크 마이너스</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">Capex $125~145B — "증명의 해" 불확실성</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(24,119,242,0.18);color:var(--accent2);">애널리스트 96% Buy · 목표가 $839 (+45%)</span>
   </div>
 </div>
 
-<!-- 2. 밸류에이션 핵심 -->
-<div class="card">
-  <div class="sec">2. 밸류에이션 — 빅테크 PER 비교</div>
-
-  <div style="position:relative;width:100%;height:160px;margin-bottom:12px;">
-    <canvas id="peerChart2"></canvas>
+<div id="fund" class="section">
+  <div class="section-title">기본적 분석 — 분기 재무제표</div>
+  <div class="card">
+    <div class="card-title">분기 매출 / 영업이익 / OPM (Q1'25~Q2'26E)</div>
+    <div class="chart-wrap" style="height:260px;"><canvas id="metaRevChart"></canvas></div>
   </div>
-
-  <div class="ind-row">
-    <div class="ind-nm">PER (TTM)</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">$577÷$27.51 · 10년 평균 26x 대비 -20% · Forward PER 17.6x · PEG 0.84</div>
-    <div class="ind-val">21.0x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(12x)</span><span>적정(25x)</span><span>고(50x)</span></div><div class="bar-bg"><div class="bar-f" style="width:24%;background:#EAF3DE;"></div></div></div>
-    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  <div class="grid-3">
+    <div class="stat-box"><div class="stat-label">매출 (Q1 2026)</div><div class="stat-value up">$56.3B</div><div class="stat-sub">▲33.1% YoY</div></div>
+    <div class="stat-box"><div class="stat-label">영업이익 (Q1 2026)</div><div class="stat-value up">$22.9B</div><div class="stat-sub">OPM 40.6%</div></div>
+    <div class="stat-box"><div class="stat-label">TTM FCF</div><div class="stat-value up">$48.5B</div><div class="stat-sub">FCF마진 23%</div></div>
+    <div class="stat-box"><div class="stat-label">ROE</div><div class="stat-value gold">33%</div><div class="stat-sub">자기자본 $244B</div></div>
+    <div class="stat-box"><div class="stat-label">2026 Capex</div><div class="stat-value down">$125~145B</div><div class="stat-sub">전년比 2배</div></div>
+    <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value" style="font-size:15px;">2026.07.29</div><div class="stat-sub">Q2 2026</div></div>
   </div>
-  <div class="ind-row">
-    <div class="ind-nm">EV/EBITDA</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">EV $1.47T÷TTM EBITDA $111.5B · 10년 중간값 18x 대비 역대 최저</div>
-    <div class="ind-val">13.8x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(8x)</span><span>적정(18x)</span><span>고(35x)</span></div><div class="bar-bg"><div class="bar-f" style="width:21%;background:#EAF3DE;"></div></div></div>
-    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
-  </div>
-  <div class="ind-row">
-    <div class="ind-nm">PSR (TTM)</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">시총 $1.46T÷TTM $215B · OPM 40%+ 광고 독점 프리미엄</div>
-    <div class="ind-val">6.8x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(3x)</span><span>적정(8x)</span><span>고(20x)</span></div><div class="bar-bg"><div class="bar-f" style="width:28%;background:#EAF3DE;"></div></div></div>
-    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
-  </div>
-  <div class="ind-row">
-    <div class="ind-nm">PCR (FCF)</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">시총 $1.46T÷TTM FCF $48.5B · Capex 급증으로 FCF 압박</div>
-    <div class="ind-val">30.1x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(10x)</span><span>적정(25x)</span><span>고(60x)</span></div><div class="bar-bg"><div class="bar-f" style="width:40%;background:#F1EFE8;"></div></div></div>
-    <span class="ev ev-3" style="min-width:58px;text-align:center;">3단계</span>
-  </div>
-
-  <div class="hl">
-    <div style="font-size:13px;font-weight:500;color:#27500A;margin-bottom:4px;">종합 — 빅테크 8개 중 PER·EV/EBITDA 모두 최저 · Capex 공포가 만든 역대급 저평가 기회</div>
-    <div style="font-size:12px;color:#1D9E75;line-height:1.6;">PER 21x(10년 평균 26x 대비 -20%), EV/EBITDA 13.8x(중간값 18x 대비 -23%), PSR 6.8x — 모두 2단계 저평가. <strong>3.56B DAU 독점 광고 플랫폼을 PER 21x에 살 수 있는 구조. 7/29 Q2 실적이 다음 카탈리스트.</strong></div>
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">핵심 성장 동력 3가지</div>
+    <div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">AI 광고 효율화</div><div class="driver-desc">광고 단가 YoY +12% (AI 효과). 광고 노출량 YoY +19%. AI가 광고 엔진을 즉각 개선 중.</div></div></div>
+    <div class="driver-item"><div class="driver-num">2</div><div><div class="driver-title">3.56B DAU 플랫폼 해자</div><div class="driver-desc">전체 DAU 3.56B(▲4%) — 지구 인구의 절반. 교체 불가능한 SNS 광고 독점 플랫폼.</div></div></div>
+    <div class="driver-item"><div class="driver-num">3</div><div><div class="driver-title">Capex $125~145B 투자 사이클</div><div class="driver-desc">전년比 2배 규모 AI 인프라 투자. 단기 FCF 압박 요인이나 장기 AI 경쟁력 확보 목적.</div></div></div>
   </div>
 </div>
 
-<!-- 3. 기본 데이터 -->
-<div class="card">
-  <div class="sec">3. 기본 투자지표 & 사업 구조</div>
-  <div class="g2" style="margin-bottom:12px;">
-    <div>
-      <div class="ir"><span class="il">TTM EPS(희석)</span><span class="iv up">$27.51 · PER 21.0x</span></div>
-      <div class="ir"><span class="il">Q1 2026 영업이익</span><span class="iv up">$22.9B · OPM 40.6%</span></div>
-      <div class="ir"><span class="il">TTM FCF</span><span class="iv up">$48.5B · FCF마진 23%</span></div>
-      <div class="ir"><span class="il">배당</span><span class="iv up">분기 $0.525 · 수익률 0.36%</span></div>
-      <div class="ir"><span class="il">ROE</span><span class="iv up">33% · 자기자본 $244B</span></div>
-    </div>
-    <div>
-      <div class="ir"><span class="il">전체 DAU</span><span class="iv up">3.56B (▲4%)</span></div>
-      <div class="ir"><span class="il">광고 단가 YoY</span><span class="iv up">+12% · AI 효과</span></div>
-      <div class="ir"><span class="il">광고 노출량 YoY</span><span class="iv up">+19%</span></div>
-      <div class="ir"><span class="il">2026 Capex</span><span class="iv dn">$125~145B (전년比 2배)</span></div>
-      <div class="ir"><span class="il">다음 실적</span><span class="iv">2026년 7월 29일 (Q2)</span></div>
-    </div>
+<div id="pershare" class="section">
+  <div class="section-title">Per-Share 지표</div>
+  <div class="per-share-grid">
+    <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석, TTM)</div><div class="ps-value">$27.51</div><div class="ps-sub">PER 21.0x</div></div>
+    <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS (연간배당)</div><div class="ps-value">$2.10</div><div class="ps-sub">분기 $0.525 · 수익률 0.36%</div></div>
   </div>
-
-  <!-- Capex vs FCF 차트 -->
-  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">Capex vs 운영CF vs FCF</div>
-  <div style="position:relative;width:100%;height:130px;margin-bottom:10px;">
-    <canvas id="capexChart2"></canvas>
-  </div>
+  <div style="font-size:11px;color:var(--text3);margin-top:10px;">* BPS·FCF/주는 원본 자료에 발행주식수가 명시되지 않아 별도 표기하지 않음 (ROE 33%·자기자본 $244B·TTM FCF $48.5B은 기본적 분석 섹션 참고).</div>
 </div>
 
-<!-- 4. 뉴스 -->
-<div class="card">
-  <div class="sec">4. 시계열 주요 이벤트</div>
-  <div class="tl">
-    <div class="tl-item">
-      <div class="tl-dot dot-big"></div>
-      <div class="tl-date">2025년 9월 — $796 역대 최고</div>
-      <div class="tl-title">Meta AI 10억 MAU · Superintelligence Labs 설립 · $796 신고점</div>
-      <div class="tl-body">AI 월간 활성 사용자 10억 돌파. "개인 초지능 구현" 선언. 역대 최고가 달성.</div>
-      <span class="tag tag-big">$796 역대최고</span><span class="tag tag-pos">Meta AI 10억 MAU</span>
+<div id="valuation" class="section">
+  <div class="section-title">밸류에이션 (Valuation Multiples) — 현재가 $577.22 · 빅테크 PER 비교</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">멀티플 평가</div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PER (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">21.0x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:24%;background:linear-gradient(90deg,#27ae60,#f0c040);"></div></div>
+        <div class="val-labels"><span class="val-low">저 12x</span><span class="val-mid">적정 25x</span><span class="val-high">고 50x</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">10년 평균 26x 대비 -20% · Forward PER 17.6x · PEG 0.84</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">13.8x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:21%;background:linear-gradient(90deg,#27ae60,#f0c040);"></div></div>
+        <div class="val-labels"><span class="val-low">저 8x</span><span class="val-mid">적정 18x</span><span class="val-high">고 35x</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV $1.47T÷TTM EBITDA $111.5B · 10년 중간값 18x 대비 역대 최저</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">6.8x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:28%;background:linear-gradient(90deg,#27ae60,#f0c040);"></div></div>
+        <div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 8x</span><span class="val-high">고 20x</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">시총 $1.46T÷TTM $215B · OPM 40%+ 광고 독점 프리미엄</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PCR (FCF)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">30.1x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:40%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
+        <div class="val-labels"><span class="val-low">저 10x</span><span class="val-mid">적정 25x</span><span class="val-high">고 60x</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">시총 $1.46T÷TTM FCF $48.5B · Capex 급증으로 FCF 압박</div>
+      </div>
     </div>
-    <div class="tl-item">
-      <div class="tl-dot dot-neg"></div>
-      <div class="tl-date">2025년 10~11월 — Capex 공포 -12%</div>
-      <div class="tl-title">2026 Capex $115~135B 예고 → 하루 -12% 급락 · $796→$585</div>
-      <div class="tl-body">Capex 대폭 증가 발표로 -12%. 2022년 메타버스 공포와 유사한 패턴.</div>
-      <span class="tag tag-neg">-12% 급락</span><span class="tag tag-pos">2022 패턴과 유사</span>
+    <div class="card">
+      <div class="card-title">빅테크 PER 비교</div>
+      <div class="chart-wrap" style="height:280px;"><canvas id="peerChart"></canvas></div>
     </div>
-    <div class="tl-item">
-      <div class="tl-dot dot-big"></div>
-      <div class="tl-date">2026년 1월 29일 — Q4 2025 실적</div>
-      <div class="tl-title">연간 $201B 돌파 · EPS $8.88 서프라이즈 · Q1 가이던스 $53.5~56.5B</div>
-      <div class="tl-body">Q1 가이던스가 컨센서스 $51.4B을 대폭 상회. $585→$745 급등.</div>
-      <span class="tag tag-big">연간 $201B</span><span class="tag tag-pos">Q1 가이던스 대폭 상회</span>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot dot-neg"></div>
-      <div class="tl-date">2026년 4월 30일 — Q1 +33% 서프라이즈 → -10%</div>
-      <div class="tl-title">Q1 EPS +62% 역대 서프라이즈 → Capex $145B 상향에 -10% 급락</div>
-      <div class="tl-body">광고 단가 +12%, 노출량 +19%. EPS $10.44 대폭 상회. 그러나 Capex $145B 상향으로 -10%. 현재 $537 저점에서 $577 반등 중.</div>
-      <span class="tag tag-neg">Capex $145B</span><span class="tag tag-pos">EPS +62%</span><span class="tag tag-neg">역설적 -10%</span>
-    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">종합 — 빅테크 8개 중 PER·EV/EBITDA 모두 최저 · Capex 공포가 만든 역대급 저평가 기회</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;">PER 21x(10년 평균 26x 대비 -20%), EV/EBITDA 13.8x(중간값 18x 대비 -23%), PSR 6.8x — 모두 2단계 저평가. 3.56B DAU 독점 광고 플랫폼을 PER 21x에 살 수 있는 구조. 7/29 Q2 실적이 다음 카탈리스트.</div>
   </div>
 </div>
 
-<!-- 5. 투자 포인트 -->
-<div class="card">
-  <div class="sec">5. 2026년 핵심 투자 포인트</div>
-  <div class="g2">
-    <div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
-      <div class="ir"><span class="il">EV/EBITDA 13.8x — 10년 중간값 대비 역대 최저</span><span class="badge b-green">역대급 저평가</span></div>
-      <div class="ir"><span class="il">3.56B DAU · 교체 불가 플랫폼</span><span class="badge b-blue">독점 해자</span></div>
-      <div class="ir"><span class="il">AI 광고 즉각 수익화 — 단가+12% · 노출+19%</span><span class="badge b-green">현재 수익화</span></div>
-      <div class="ir"><span class="il">애널리스트 96% Buy · 목표가 $839</span><span class="badge b-meta-l">월가 최고 신뢰</span></div>
+<div id="us" class="section">
+  <div class="section-title">US 특화 — 플랫폼 KPI · Capex 투자 사이클</div>
+  <div class="card">
+    <div class="card-title">플랫폼 핵심 지표</div>
+    <div class="zone-list">
+      <div class="zone-item"><span class="zone-label">전체 DAU</span><span class="zone-val">3.56B (▲4%)</span></div>
+      <div class="zone-item"><span class="zone-label">광고 단가 YoY</span><span class="zone-val">+12% (AI 효과)</span></div>
+      <div class="zone-item"><span class="zone-label">광고 노출량 YoY</span><span class="zone-val">+19%</span></div>
+      <div class="zone-item"><span class="zone-label">2026 Capex</span><span class="zone-val">$125~145B (전년比 2배)</span></div>
+      <div class="zone-item"><span class="zone-label">다음 실적</span><span class="zone-val">2026년 7월 29일 (Q2)</span></div>
     </div>
-    <div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
-      <div class="ir"><span class="il">Capex $125~145B — AI ROI 미검증</span><span class="badge b-red">지출 공포</span></div>
-      <div class="ir"><span class="il">52주 -17.2% — 역배열 부담</span><span class="badge b-red">모멘텀 약세</span></div>
-      <div class="ir"><span class="il">Reality Labs 분기 $5B 손실 지속</span><span class="badge b-amber">VR/AR 출혈</span></div>
-      <div class="ir"><span class="il">광고 경기 침체 시 직격</span><span class="badge b-amber">경기 민감도</span></div>
-    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">* 원본 자료에 S&P500 대비 상대 수익률·베타·섹터 비중이 별도 제공되지 않아 해당 항목은 표기하지 않음 (52주 수익률 -17.2%는 헤더 참고).</div>
   </div>
-  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">차트 + 분기 재무제표 기준 · 투자 권고가 아닙니다</div>
-</div>
+  <div class="card">
+    <div class="card-title">Capex vs 운영CF vs FCF</div>
+    <div class="chart-wrap" style="height:200px;"><canvas id="capexChart"></canvas></div>
+  </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<div id="news" class="section">
+  <div class="section-title">시계열 주요 이벤트 (2025.07 ~ 2026.06)</div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-dot gold"></div><div class="tl-date">2025년 9월 — $796 역대 최고</div><div class="tl-title">Meta AI 10억 MAU · Superintelligence Labs 설립 · $796 신고점</div><div class="tl-desc">AI 월간 활성 사용자 10억 돌파. "개인 초지능 구현" 선언. 역대 최고가 달성.</div></div>
+    <div class="tl-item"><div class="tl-dot red"></div><div class="tl-date">2025년 10~11월 — Capex 공포 -12%</div><div class="tl-title">2026 Capex $115~135B 예고 → 하루 -12% 급락 · $796→$585</div><div class="tl-desc">Capex 대폭 증가 발표로 -12%. 2022년 메타버스 공포와 유사한 패턴.</div></div>
+    <div class="tl-item"><div class="tl-dot gold"></div><div class="tl-date">2026년 1월 29일 — Q4 2025 실적</div><div class="tl-title">연간 $201B 돌파 · EPS $8.88 서프라이즈 · Q1 가이던스 $53.5~56.5B</div><div class="tl-desc">Q1 가이던스가 컨센서스 $51.4B을 대폭 상회. $585→$745 급등.</div></div>
+    <div class="tl-item"><div class="tl-dot red"></div><div class="tl-date">2026년 4월 30일 — Q1 +33% 서프라이즈 → -10%</div><div class="tl-title">Q1 EPS +62% 역대 서프라이즈 → Capex $145B 상향에 -10% 급락</div><div class="tl-desc">광고 단가 +12%, 노출량 +19%. EPS $10.44 대폭 상회. 그러나 Capex $145B 상향으로 -10%. 현재 $537 저점에서 $577 반등 중.</div></div>
+  </div>
+</div>
+
+<div id="invest" class="section">
+  <div class="section-title">2026년 핵심 투자 포인트</div>
+  <div class="bull-bear">
+    <div class="bb-box">
+      <div class="bb-title bb-bull">🐂 Bull 요인</div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>EV/EBITDA 13.8x:</strong> 10년 중간값 대비 역대 최저, 역대급 저평가.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>3.56B DAU:</strong> 교체 불가 플랫폼, 독점 해자.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>AI 광고 즉각 수익화:</strong> 단가+12%·노출+19%.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>월가 최고 신뢰:</strong> 애널리스트 96% Buy·목표가 $839.</span></div>
+    </div>
+    <div class="bb-box">
+      <div class="bb-title bb-bear">🐻 Bear 요인</div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>지출 공포:</strong> Capex $125~145B — AI ROI 미검증.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>모멘텀 약세:</strong> 52주 -17.2% — 역배열 부담.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>VR/AR 출혈:</strong> Reality Labs 분기 $5B 손실 지속.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>경기 민감도:</strong> 광고 경기 침체 시 직격.</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="disclaimer">
+  ⚠️ 본 위젯은 차트, 분기 재무제표를 기반으로 작성된 정보 제공 목적의 분석 자료입니다. 투자 권고 또는 매매 추천이 아니며, 모든 투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다. 과거 실적이 미래 수익을 보장하지 않습니다.
+</div>
+
 <script>
-// META 캔들 차트 SVG
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  renderCharts(id);
+}
+const charts = {};
+
 (function(){
-  const svg = document.getElementById('metaSvg2');
+  const svg = document.getElementById('metaSvg');
   if (!svg) return;
   const W=680, H=200, pL=60, pR=10, pT=12, pB=22;
   const cW=W-pL-pR, cH=H-pT-pB;
-
-  // 실제 차트 기반 데이터 (단위: $10 = 1 틱)
-  // 2025.07($680) ~ 2025.09($796) ~ 2025.11($585) ~ 2026.01($740) ~ 2026.04($537) ~ 2026.06($577)
   const raw = [
     68,70,72,74,76,78,79.6,78,77,76,75,74,72,71,74,76,77,78,79,78,
     75,72,69,68,70,71,72,74,75,74,73,72,70,68,67.5,66,64,
     65,66,67,67.5,67,65.5,65,64.5,57.7
   ];
-
   const candles = [];
   for(let i=0;i<raw.length;i++){
     const prev = i>0?raw[i-1]:raw[i];
     const o = prev;
     const c = raw[i];
-    const h = Math.max(o,c) + (Math.random()*0.8+0.2);
-    const l = Math.min(o,c) - (Math.random()*0.8+0.2);
+    const h = Math.max(o,c) + 0.5;
+    const l = Math.min(o,c) - 0.5;
     candles.push({o,h,l,c});
   }
-
   const allPrices = candles.flatMap(d=>[d.h,d.l]);
   const maxP = Math.max(...allPrices)+1;
   const minP = Math.min(...allPrices)-0.5;
   const rng = maxP - minP;
-
   function py(v){ return pT + cH*(1-(v-minP)/rng); }
-
-  // 격자선
   [58,62,66,70,74,78].forEach(v=>{
     const y = py(v);
     const line = document.createElementNS('http://www.w3.org/2000/svg','line');
     line.setAttribute('x1',pL); line.setAttribute('x2',W-pR);
     line.setAttribute('y1',y); line.setAttribute('y2',y);
-    line.setAttribute('stroke','rgba(128,128,128,0.12)');
+    line.setAttribute('stroke','rgba(255,255,255,0.08)');
     line.setAttribute('stroke-width','1');
     svg.appendChild(line);
-
     const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
     txt.setAttribute('x',pL-4); txt.setAttribute('y',y+4);
     txt.setAttribute('text-anchor','end'); txt.setAttribute('font-size','9');
-    txt.setAttribute('fill','rgba(128,128,128,0.7)');
+    txt.setAttribute('fill','rgba(154,160,184,0.8)');
     txt.textContent = '$'+(v*10);
     svg.appendChild(txt);
   });
-
   const colW = cW/candles.length;
   const cw = Math.max(colW*0.65, 6);
-
-  // MA 계산
   function calcMA(data,n){
     return data.map((_,i)=>i<n-1?null:data.slice(i-n+1,i+1).reduce((s,x)=>s+x.c,0)/n);
   }
   function drawLine(arr,col,w){
     let pts=[];
-    arr.forEach((v,i)=>{
-      if(v===null) return;
-      pts.push(`${pL+(i+0.5)*colW},${py(v)}`);
-    });
+    arr.forEach((v,i)=>{ if(v===null) return; pts.push(`${pL+(i+0.5)*colW},${py(v)}`); });
     if(pts.length<2) return;
     const p=document.createElementNS('http://www.w3.org/2000/svg','polyline');
-    p.setAttribute('points',pts.join(' '));
-    p.setAttribute('fill','none');
-    p.setAttribute('stroke',col);
-    p.setAttribute('stroke-width',w||1.5);
+    p.setAttribute('points',pts.join(' ')); p.setAttribute('fill','none');
+    p.setAttribute('stroke',col); p.setAttribute('stroke-width',w||1.5);
     svg.appendChild(p);
   }
-
-  // 캔들 그리기
   candles.forEach((d,i)=>{
     const cx = pL + (i+0.5)*colW;
     const isUp = d.c >= d.o;
     const col = isUp ? '#D85A30' : '#185FA5';
-
-    // 심지
     const wk = document.createElementNS('http://www.w3.org/2000/svg','line');
     wk.setAttribute('x1',cx); wk.setAttribute('x2',cx);
     wk.setAttribute('y1',py(d.h)); wk.setAttribute('y2',py(d.l));
     wk.setAttribute('stroke',col); wk.setAttribute('stroke-width','1.5');
     svg.appendChild(wk);
-
-    // 몸통
     const bT = py(Math.max(d.o,d.c));
     const bB = py(Math.min(d.o,d.c));
     const bd = document.createElementNS('http://www.w3.org/2000/svg','rect');
@@ -441,13 +401,9 @@ h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:
     bd.setAttribute('fill', col); bd.setAttribute('rx','1');
     svg.appendChild(bd);
   });
-
-  // MA 라인
   drawLine(calcMA(candles,5),'#FF69B4',1.5);
   drawLine(calcMA(candles,20),'#9370DB',1.5);
   drawLine(calcMA(candles,40),'#DAA520',2);
-
-  // 주요 가격 마커
   const mkLabel = (idx,lbl,isLow,col)=>{
     const cx = pL+(idx+0.5)*colW;
     const d = candles[idx];
@@ -461,10 +417,8 @@ h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:
     t.textContent = lbl;
     svg.appendChild(t);
   };
-  mkLabel(8,'$796최고(\'25.09)',false,'#D85A30');
-  mkLabel(37,'$537최저(\'26.04)',true,'#185FA5');
-
-  // X축 월 레이블
+  mkLabel(8,'$796최고(\'25.09)',false,'#e8825f');
+  mkLabel(37,'$537최저(\'26.04)',true,'#5aa4e8');
   [
     {idx:0,  label:"'25.07"},
     {idx:8,  label:"'25.09"},
@@ -479,12 +433,10 @@ h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:
     t.setAttribute('y',H-4);
     t.setAttribute('text-anchor','middle');
     t.setAttribute('font-size','9');
-    t.setAttribute('fill','rgba(128,128,128,0.8)');
+    t.setAttribute('fill','rgba(154,160,184,0.8)');
     t.textContent = label;
     svg.appendChild(t);
   });
-
-  // 범례
   [{c:'#D85A30',t:'양봉'},{c:'#185FA5',t:'음봉'},{c:'#FF69B4',t:'MA5'},{c:'#9370DB',t:'MA20'},{c:'#DAA520',t:'MA40'}].forEach((item,i)=>{
     const gx = pL + i*90;
     const r = document.createElementNS('http://www.w3.org/2000/svg','rect');
@@ -495,81 +447,90 @@ h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:
     const t = document.createElementNS('http://www.w3.org/2000/svg','text');
     t.setAttribute('x',gx+13); t.setAttribute('y',11);
     t.setAttribute('font-size','9');
-    t.setAttribute('fill','rgba(128,128,128,0.9)');
+    t.setAttribute('fill','rgba(154,160,184,0.9)');
     t.textContent = item.t;
     svg.appendChild(t);
   });
 })();
 
-// 분기 매출 차트
-new Chart(document.getElementById('metaRevChart2'),{
-  type:'bar',
-  data:{
-    labels:['Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26','Q2(E)'],
-    datasets:[
-      {label:'매출($B)',data:[42.3,47.5,51.2,59.9,56.3,59.5],backgroundColor:'#1877F2',borderRadius:4,yAxisID:'y'},
-      {label:'영업이익($B)',data:[17.6,20.4,20.5,24.7,22.9,24.0],backgroundColor:'rgba(29,158,117,0.75)',borderRadius:4,yAxisID:'y'},
-      {label:'OPM%',type:'line',data:[41.5,43.0,40.1,41.3,40.6,40.3],borderColor:'#EF9F27',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
-    ]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false}},
-    scales:{
-      y:{position:'left',ticks:{font:{size:10},callback:v=>v+'B',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
-      y2:{position:'right',min:35,max:50,ticks:{font:{size:10},callback:v=>v+'%',color:'#EF9F27'},grid:{display:false}},
-      x:{ticks:{font:{size:10},color:'#888'},grid:{display:false}}
-    }
-  }
-});
-
-// 빅테크 PER 비교
-new Chart(document.getElementById('peerChart2'),{
-  type:'bar',
-  data:{
-    labels:['META','MSFT','AMZN','GOOGL','NVDA','AAPL'],
-    datasets:[{
-      label:'PER(TTM)',
-      data:[21.0,23.2,28.5,27.8,31.3,37.3],
-      backgroundColor:['#1877F2','#B4B2A9','#B4B2A9','#B4B2A9','#B4B2A9','#B4B2A9'],
-      borderRadius:5,borderSkipped:false
-    }]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{
-      legend:{display:false},
-      tooltip:{callbacks:{label:ctx=>`PER ${ctx.raw}x`}}
+function renderFundChart() {
+  const ctx = document.getElementById('metaRevChart');
+  if (!ctx || charts['fund']) return;
+  charts['fund'] = new Chart(ctx,{
+    data:{
+      labels:['Q1\'25','Q2\'25','Q3\'25','Q4\'25','Q1\'26','Q2(E)'],
+      datasets:[
+        {type:'bar',label:'매출($B)',data:[42.3,47.5,51.2,59.9,56.3,59.5],backgroundColor:'rgba(24,119,242,0.55)',borderColor:'#1877F2',borderWidth:1,borderRadius:4,yAxisID:'y'},
+        {type:'bar',label:'영업이익($B)',data:[17.6,20.4,20.5,24.7,22.9,24.0],backgroundColor:'rgba(46,204,113,0.5)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4,yAxisID:'y'},
+        {type:'line',label:'OPM(%)',data:[41.5,43.0,40.1,41.3,40.6,40.3],borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+      ]
     },
-    scales:{
-      y:{max:45,ticks:{font:{size:10},callback:v=>v+'x',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
-      x:{ticks:{font:{size:10},color:'#888'},grid:{display:false}}
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#9aa0b8',font:{size:11}}}},
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:11}}},
+        y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}},
+        y2:{position:'right',min:35,max:50,grid:{display:false},ticks:{color:'#f0c040',font:{size:10},callback:v=>v+'%'}}
+      }
     }
-  }
-});
-
-// Capex vs FCF
-new Chart(document.getElementById('capexChart2'),{
-  type:'bar',
-  data:{
-    labels:['Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26'],
-    datasets:[
-      {label:'운영CF($B)',data:[24.0,25.6,30.0,36.2,32.2],backgroundColor:'rgba(29,158,117,0.7)',borderRadius:4},
-      {label:'Capex($B)',data:[-12.9,-16.5,-18.8,-21.4,-19.0],backgroundColor:'rgba(216,90,48,0.7)',borderRadius:4},
-      {label:'FCF($B)',data:[11.1,9.0,11.2,14.8,13.2],backgroundColor:'rgba(24,119,242,0.5)',borderColor:'#1877F2',borderWidth:1,borderRadius:4}
-    ]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false}},
-    scales:{
-      y:{ticks:{font:{size:10},callback:v=>v+'B',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
-      x:{ticks:{font:{size:10},color:'#888'},grid:{display:false}}
+  });
+}
+function renderPeerChart() {
+  const ctx = document.getElementById('peerChart');
+  if (!ctx || charts['peer']) return;
+  charts['peer'] = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['META','MSFT','AMZN','GOOGL','NVDA','AAPL'],
+      datasets:[{
+        label:'PER(TTM)',
+        data:[21.0,23.2,28.5,27.8,31.3,37.3],
+        backgroundColor:['#1877F2','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)'],
+        borderColor:['#5a9dff','#5c6282','#5c6282','#5c6282','#5c6282','#5c6282'],
+        borderWidth:1,borderRadius:5
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`PER ${ctx.raw}x`}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{max:45,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
+      }
     }
-  }
-});
+  });
+}
+function renderCapexChart() {
+  const ctx = document.getElementById('capexChart');
+  if (!ctx || charts['capex']) return;
+  charts['capex'] = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['Q1\'25','Q2\'25','Q3\'25','Q4\'25','Q1\'26'],
+      datasets:[
+        {label:'운영CF($B)',data:[24.0,25.6,30.0,36.2,32.2],backgroundColor:'rgba(46,204,113,0.5)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4},
+        {label:'Capex($B)',data:[-12.9,-16.5,-18.8,-21.4,-19.0],backgroundColor:'rgba(216,90,48,0.5)',borderColor:'#D85A30',borderWidth:1,borderRadius:4},
+        {label:'FCF($B)',data:[11.1,9.0,11.2,14.8,13.2],backgroundColor:'rgba(24,119,242,0.5)',borderColor:'#1877F2',borderWidth:1,borderRadius:4}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#9aa0b8',font:{size:10}}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}}
+      }
+    }
+  });
+}
+function renderCharts(sectionId) {
+  setTimeout(() => {
+    if (sectionId === 'fund') renderFundChart();
+    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'us') renderCapexChart();
+  }, 50);
+}
 </script>
-
-</div>
 </body>
 </html>
