@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "rank": 11,
+    "ticker": "BRK.B",
+    "name": "Berkshire Hathaway",
+    "sector": "Financials",
+    "accentColor": "#c8a84b",
+    "page": "widgets/BRK_B_analysis_widget.html",
+    "lastUpdated": "2026-07-15"
+  }
+]
