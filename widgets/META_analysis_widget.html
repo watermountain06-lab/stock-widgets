@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>META 종합 분석 위젯</title>
+<style>
+:root {
+    --color-background-primary: light-dark(rgba(255, 255, 255, 1), rgba(48, 48, 46, 1));
+    --color-background-secondary: light-dark(rgba(245, 244, 237, 1), rgba(38, 38, 36, 1));
+    --color-background-tertiary: light-dark(rgba(250, 249, 245, 1), rgba(20, 20, 19, 1));
+    --color-background-inverse: light-dark(rgba(20, 20, 19, 1), rgba(250, 249, 245, 1));
+    --color-background-ghost: light-dark(rgba(255, 255, 255, 0), rgba(48, 48, 46, 0));
+    --color-background-info: light-dark(rgba(214, 228, 246, 1), rgba(37, 62, 95, 1));
+    --color-background-danger: light-dark(rgba(247, 236, 236, 1), rgba(96, 42, 40, 1));
+    --color-background-success: light-dark(rgba(233, 241, 220, 1), rgba(27, 70, 20, 1));
+    --color-background-warning: light-dark(rgba(246, 238, 223, 1), rgba(72, 58, 15, 1));
+    --color-background-disabled: light-dark(rgba(255, 255, 255, 0.5), rgba(48, 48, 46, 0.5));
+    --color-text-primary: light-dark(rgba(20, 20, 19, 1), rgba(250, 249, 245, 1));
+    --color-text-secondary: light-dark(rgba(61, 61, 58, 1), rgba(194, 192, 182, 1));
+    --color-text-tertiary: light-dark(rgba(115, 114, 108, 1), rgba(156, 154, 146, 1));
+    --color-text-inverse: light-dark(rgba(255, 255, 255, 1), rgba(20, 20, 19, 1));
+    --color-text-info: light-dark(rgba(50, 102, 173, 1), rgba(128, 170, 221, 1));
+    --color-text-danger: light-dark(rgba(127, 44, 40, 1), rgba(238, 136, 132, 1));
+    --color-text-success: light-dark(rgba(38, 91, 25, 1), rgba(122, 185, 72, 1));
+    --color-text-warning: light-dark(rgba(90, 72, 21, 1), rgba(209, 160, 65, 1));
+    --color-text-disabled: light-dark(rgba(20, 20, 19, 0.5), rgba(250, 249, 245, 0.5));
+    --color-text-ghost: light-dark(rgba(115, 114, 108, 0.5), rgba(156, 154, 146, 0.5));
+    --color-border-primary: light-dark(rgba(31, 30, 29, 0.4), rgba(222, 220, 209, 0.4));
+    --color-border-secondary: light-dark(rgba(31, 30, 29, 0.3), rgba(222, 220, 209, 0.3));
+    --color-border-tertiary: light-dark(rgba(31, 30, 29, 0.15), rgba(222, 220, 209, 0.15));
+    --color-border-inverse: light-dark(rgba(255, 255, 255, 0.3), rgba(20, 20, 19, 0.15));
+    --color-border-ghost: light-dark(rgba(31, 30, 29, 0), rgba(222, 220, 209, 0));
+    --color-border-info: light-dark(rgba(70, 130, 213, 1), rgba(70, 130, 213, 1));
+    --color-border-danger: light-dark(rgba(167, 61, 57, 1), rgba(205, 92, 88, 1));
+    --color-border-success: light-dark(rgba(67, 116, 38, 1), rgba(89, 145, 48, 1));
+    --color-border-warning: light-dark(rgba(128, 92, 31, 1), rgba(168, 120, 41, 1));
+    --color-border-disabled: light-dark(rgba(31, 30, 29, 0.1), rgba(222, 220, 209, 0.1));
+    --color-ring-primary: light-dark(rgba(20, 20, 19, 0.7), rgba(250, 249, 245, 0.7));
+    --color-ring-secondary: light-dark(rgba(61, 61, 58, 0.7), rgba(194, 192, 182, 0.7));
+    --color-ring-inverse: light-dark(rgba(255, 255, 255, 0.7), rgba(20, 20, 19, 0.7));
+    --color-ring-info: light-dark(rgba(50, 102, 173, 0.5), rgba(128, 170, 221, 0.5));
+    --color-ring-danger: light-dark(rgba(167, 61, 57, 0.5), rgba(205, 92, 88, 0.5));
+    --color-ring-success: light-dark(rgba(67, 116, 38, 0.5), rgba(89, 145, 48, 0.5));
+    --color-ring-warning: light-dark(rgba(128, 92, 31, 0.5), rgba(168, 120, 41, 0.5));
+    --font-sans: "Segoe UI", -apple-system, sans-serif;
+    --font-mono: ui-monospace, monospace;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-text-xs-size: 12px;
+    --font-text-sm-size: 14px;
+    --font-text-md-size: 16px;
+    --font-text-lg-size: 20px;
+    --font-heading-xs-size: 12px;
+    --font-heading-sm-size: 14px;
+    --font-heading-md-size: 16px;
+    --font-heading-lg-size: 20px;
+    --font-heading-xl-size: 24px;
+    --font-heading-2xl-size: 28px;
+    --font-heading-3xl-size: 36px;
+    --font-text-xs-line-height: 1.4;
+    --font-text-sm-line-height: 1.4;
+    --font-text-md-line-height: 1.4;
+    --font-text-lg-line-height: 1.25;
+    --font-heading-xs-line-height: 1.4;
+    --font-heading-sm-line-height: 1.4;
+    --font-heading-md-line-height: 1.4;
+    --font-heading-lg-line-height: 1.25;
+    --font-heading-xl-line-height: 1.25;
+    --font-heading-2xl-line-height: 1.1;
+    --font-heading-3xl-line-height: 1;
+    --border-radius-xs: 4px;
+    --border-radius-sm: 6px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 10px;
+    --border-radius-xl: 12px;
+    --border-radius-full: 9999px;
+    --border-width-regular: 0.5px;
+    --shadow-hairline: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    color-scheme: light dark;
+}
+body { background: var(--color-background-tertiary); color: var(--color-text-primary); margin: 0; }
+.page-center { max-width: 800px; margin: 0 auto; padding: 16px; }
+</style>
+</head>
+<body>
+<div class="page-center">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.wrap{padding:1rem 0;font-family:var(--font-sans);}
+h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
+.mv{font-size:14px;font-weight:500;color:var(--color-text-primary);}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
+.up{color:#1D9E75;}.dn{color:#D85A30;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
+.b-green{background:#EAF3DE;color:#27500A;}.b-amber{background:#FAEEDA;color:#633806;}
+.b-red{background:#FCEBEB;color:#791F1F;}.b-blue{background:#E6F1FB;color:#0C447C;}
+.b-gray{background:#F1EFE8;color:#444441;}.b-meta{background:#1877F2;color:#fff;}
+.b-meta-l{background:#E7F0FD;color:#0A3D7A;}
+.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
+.ir:last-child{border-bottom:none;}
+.il{color:var(--color-text-secondary);}.iv{font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;}
+.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:6px;}
+.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:12px 14px;margin-top:10px;}
+.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:12px 14px;margin-top:10px;}
+.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
+.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
+.ev-5{background:#FCEBEB;color:#791F1F;}
+.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
+.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
+.ind-row:last-child{border-bottom:none;}
+.ind-nm{font-size:13px;font-weight:500;color:var(--color-text-primary);min-width:100px;}
+.ind-val{font-size:14px;font-weight:500;color:var(--color-text-primary);min-width:80px;text-align:right;}
+.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
+.bar-f{border-radius:4px;height:7px;}
+.stage-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:12px;}
+.stage{text-align:center;padding:12px 6px;border-radius:var(--border-radius-md);}
+.tl{position:relative;padding-left:28px;}
+.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
+.tl-item{position:relative;margin-bottom:18px;}
+.tl-item:last-child{margin-bottom:0;}
+.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid var(--color-background-primary);}
+.dot-big{background:#1877F2;}.dot-pos{background:#1D9E75;}
+.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
+.tl-date{font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:3px;}
+.tl-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
+.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
+.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
+.tag-big{background:#1877F2;color:#fff;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
+.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
+.sprow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:12px;}
+.sprow:last-child{border-bottom:none;}
+.box-key{background:#E7F0FD;border:1px solid #1877F2;border-radius:var(--border-radius-md);padding:12px 16px;margin-bottom:12px;}
+</style>
+
+<div class="wrap">
+<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+  <h2>Meta Platforms (META)</h2>
+  <span class="badge b-meta">S&P 500 시총 8위</span>
+  <span class="badge b-meta-l">SNS 광고 독점 · Llama AI · AR 글래스</span>
+  <span class="src">차트 + 분기 재무제표 + SEC 8-K</span>
+</div>
+<p class="sub">현재가 $577.22 · 52주 최고 $796 (2025.09) · 52주 최저 $537 (2026.04) · 시총 $1.46T · EPS(TTM) $27.51 · 52주 수익률 -17.2%</p>
+
+<div class="box-key">
+  <div style="font-size:13px;font-weight:500;color:#0A3D7A;margin-bottom:4px;">핵심 투자 역설 — Q1 +33% 성장 · EPS +62% 서프라이즈 → 주가 -10% (Capex $145B 공포)</div>
+  <div style="font-size:12px;color:#1877F2;line-height:1.6;">EV/EBITDA 13.8x — 10년 중간값 18x 대비 역대급 저평가 구간. PER 21x는 10년 평균 26x 대비 -20%. 광고 단가 +12% + 노출량 +19% = AI가 광고 엔진을 즉각 개선 중. Capex $125~145B 공포가 주가를 억누르지만, 2025년에도 같은 우려 속 +22% 성장 달성.</div>
+</div>
+
+<div class="g4">
+  <div class="met"><div class="ml">현재가</div><div class="mv">$577.22</div><div class="ms dn">고점 $796 대비 -27.5%</div></div>
+  <div class="met"><div class="ml">Q1 2026 매출</div><div class="mv">$56.3B</div><div class="ms up">▲33.1% YoY</div></div>
+  <div class="met"><div class="ml">EV/EBITDA</div><div class="mv">13.8x</div><div class="ms up">10년 중간값 18x 대비 최저</div></div>
+  <div class="met"><div class="ml">DAU</div><div class="mv">3.56B</div><div class="ms up">▲4% · 지구 절반</div></div>
+</div>
+
+<!-- 1. 기술적 분석 -->
+<div class="card">
+  <div class="sec">1. 기술적 분석 — 2025.07 ~ 2026.06 · 52주 수익률 -17.2%</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
+    52주 최고 $796 (2025.09) → 52주 최저 $537 (2026.04) → 현재 $577
+  </div>
+
+  <!-- 캔들 차트 SVG -->
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px;margin-bottom:12px;">
+    <svg id="metaSvg2" viewBox="0 0 680 200" width="100%" style="display:block;" role="img" aria-label="META 52주 주가 차트"></svg>
+  </div>
+
+  <!-- 막대 차트 (분기 매출) -->
+  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">분기 매출 및 영업이익률 추이</div>
+  <div style="position:relative;width:100%;height:160px;margin-bottom:12px;">
+    <canvas id="metaRevChart2"></canvas>
+  </div>
+
+  <div class="g4" style="font-size:11px;margin-bottom:12px;">
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#27500A;font-weight:500;margin-bottom:3px;">2025.07~09 — $796 신고점</div>
+      <div style="color:#3B6D11;line-height:1.6;">Meta AI 10억 MAU<br>효율의 해 2.0<br>Superintelligence Labs<br>$796 역대 최고</div>
+    </div>
+    <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#791F1F;font-weight:500;margin-bottom:3px;">2025.10~11 — -12% 급락</div>
+      <div style="color:#A32D2D;line-height:1.6;">Capex $115~135B 예고<br>Reality Labs 적자 지속<br>$796→$585 급락</div>
+    </div>
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#633806;font-weight:500;margin-bottom:3px;">2026.01~04 — 재조정</div>
+      <div style="color:#854F0B;line-height:1.6;">관세 쇼크 $537 저점<br>Q4·Q1 실적 서프라이즈<br>Capex $145B 상향 -10%</div>
+    </div>
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#633806;font-weight:500;margin-bottom:3px;">2026.05~06 — $577 회복 중</div>
+      <div style="color:#854F0B;line-height:1.6;">저점 대비 +7.4%<br>EV/EBITDA 역대 최저<br>96% Buy · 목표 $839</div>
+    </div>
+  </div>
+
+  <div class="sig">
+    <span class="badge b-green">EV/EBITDA 13.8x — 10년 중간값 대비 역대 최저</span>
+    <span class="badge b-green">PER 21x · Forward PER 17.6x · PEG 0.84</span>
+    <span class="badge b-green">3.56B DAU · 광고 단가 +12% · 노출량 +19%</span>
+    <span class="badge b-red">52주 -17.2% — MSFT와 함께 빅테크 마이너스</span>
+    <span class="badge b-red">Capex $125~145B — "증명의 해" 불확실성</span>
+    <span class="badge b-meta-l">애널리스트 96% Buy · 목표가 $839 (+45%)</span>
+  </div>
+</div>
+
+<!-- 2. 밸류에이션 핵심 -->
+<div class="card">
+  <div class="sec">2. 밸류에이션 — 빅테크 PER 비교</div>
+
+  <div style="position:relative;width:100%;height:160px;margin-bottom:12px;">
+    <canvas id="peerChart2"></canvas>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PER (TTM)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">$577÷$27.51 · 10년 평균 26x 대비 -20% · Forward PER 17.6x · PEG 0.84</div>
+    <div class="ind-val">21.0x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(12x)</span><span>적정(25x)</span><span>고(50x)</span></div><div class="bar-bg"><div class="bar-f" style="width:24%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+  <div class="ind-row">
+    <div class="ind-nm">EV/EBITDA</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">EV $1.47T÷TTM EBITDA $111.5B · 10년 중간값 18x 대비 역대 최저</div>
+    <div class="ind-val">13.8x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(8x)</span><span>적정(18x)</span><span>고(35x)</span></div><div class="bar-bg"><div class="bar-f" style="width:21%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+  <div class="ind-row">
+    <div class="ind-nm">PSR (TTM)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">시총 $1.46T÷TTM $215B · OPM 40%+ 광고 독점 프리미엄</div>
+    <div class="ind-val">6.8x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(3x)</span><span>적정(8x)</span><span>고(20x)</span></div><div class="bar-bg"><div class="bar-f" style="width:28%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+  <div class="ind-row">
+    <div class="ind-nm">PCR (FCF)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">시총 $1.46T÷TTM FCF $48.5B · Capex 급증으로 FCF 압박</div>
+    <div class="ind-val">30.1x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(10x)</span><span>적정(25x)</span><span>고(60x)</span></div><div class="bar-bg"><div class="bar-f" style="width:40%;background:#F1EFE8;"></div></div></div>
+    <span class="ev ev-3" style="min-width:58px;text-align:center;">3단계</span>
+  </div>
+
+  <div class="hl">
+    <div style="font-size:13px;font-weight:500;color:#27500A;margin-bottom:4px;">종합 — 빅테크 8개 중 PER·EV/EBITDA 모두 최저 · Capex 공포가 만든 역대급 저평가 기회</div>
+    <div style="font-size:12px;color:#1D9E75;line-height:1.6;">PER 21x(10년 평균 26x 대비 -20%), EV/EBITDA 13.8x(중간값 18x 대비 -23%), PSR 6.8x — 모두 2단계 저평가. <strong>3.56B DAU 독점 광고 플랫폼을 PER 21x에 살 수 있는 구조. 7/29 Q2 실적이 다음 카탈리스트.</strong></div>
+  </div>
+</div>
+
+<!-- 3. 기본 데이터 -->
+<div class="card">
+  <div class="sec">3. 기본 투자지표 & 사업 구조</div>
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div class="ir"><span class="il">TTM EPS(희석)</span><span class="iv up">$27.51 · PER 21.0x</span></div>
+      <div class="ir"><span class="il">Q1 2026 영업이익</span><span class="iv up">$22.9B · OPM 40.6%</span></div>
+      <div class="ir"><span class="il">TTM FCF</span><span class="iv up">$48.5B · FCF마진 23%</span></div>
+      <div class="ir"><span class="il">배당</span><span class="iv up">분기 $0.525 · 수익률 0.36%</span></div>
+      <div class="ir"><span class="il">ROE</span><span class="iv up">33% · 자기자본 $244B</span></div>
+    </div>
+    <div>
+      <div class="ir"><span class="il">전체 DAU</span><span class="iv up">3.56B (▲4%)</span></div>
+      <div class="ir"><span class="il">광고 단가 YoY</span><span class="iv up">+12% · AI 효과</span></div>
+      <div class="ir"><span class="il">광고 노출량 YoY</span><span class="iv up">+19%</span></div>
+      <div class="ir"><span class="il">2026 Capex</span><span class="iv dn">$125~145B (전년比 2배)</span></div>
+      <div class="ir"><span class="il">다음 실적</span><span class="iv">2026년 7월 29일 (Q2)</span></div>
+    </div>
+  </div>
+
+  <!-- Capex vs FCF 차트 -->
+  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">Capex vs 운영CF vs FCF</div>
+  <div style="position:relative;width:100%;height:130px;margin-bottom:10px;">
+    <canvas id="capexChart2"></canvas>
+  </div>
+</div>
+
+<!-- 4. 뉴스 -->
+<div class="card">
+  <div class="sec">4. 시계열 주요 이벤트</div>
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2025년 9월 — $796 역대 최고</div>
+      <div class="tl-title">Meta AI 10억 MAU · Superintelligence Labs 설립 · $796 신고점</div>
+      <div class="tl-body">AI 월간 활성 사용자 10억 돌파. "개인 초지능 구현" 선언. 역대 최고가 달성.</div>
+      <span class="tag tag-big">$796 역대최고</span><span class="tag tag-pos">Meta AI 10억 MAU</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2025년 10~11월 — Capex 공포 -12%</div>
+      <div class="tl-title">2026 Capex $115~135B 예고 → 하루 -12% 급락 · $796→$585</div>
+      <div class="tl-body">Capex 대폭 증가 발표로 -12%. 2022년 메타버스 공포와 유사한 패턴.</div>
+      <span class="tag tag-neg">-12% 급락</span><span class="tag tag-pos">2022 패턴과 유사</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2026년 1월 29일 — Q4 2025 실적</div>
+      <div class="tl-title">연간 $201B 돌파 · EPS $8.88 서프라이즈 · Q1 가이던스 $53.5~56.5B</div>
+      <div class="tl-body">Q1 가이던스가 컨센서스 $51.4B을 대폭 상회. $585→$745 급등.</div>
+      <span class="tag tag-big">연간 $201B</span><span class="tag tag-pos">Q1 가이던스 대폭 상회</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 4월 30일 — Q1 +33% 서프라이즈 → -10%</div>
+      <div class="tl-title">Q1 EPS +62% 역대 서프라이즈 → Capex $145B 상향에 -10% 급락</div>
+      <div class="tl-body">광고 단가 +12%, 노출량 +19%. EPS $10.44 대폭 상회. 그러나 Capex $145B 상향으로 -10%. 현재 $537 저점에서 $577 반등 중.</div>
+      <span class="tag tag-neg">Capex $145B</span><span class="tag tag-pos">EPS +62%</span><span class="tag tag-neg">역설적 -10%</span>
+    </div>
+  </div>
+</div>
+
+<!-- 5. 투자 포인트 -->
+<div class="card">
+  <div class="sec">5. 2026년 핵심 투자 포인트</div>
+  <div class="g2">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
+      <div class="ir"><span class="il">EV/EBITDA 13.8x — 10년 중간값 대비 역대 최저</span><span class="badge b-green">역대급 저평가</span></div>
+      <div class="ir"><span class="il">3.56B DAU · 교체 불가 플랫폼</span><span class="badge b-blue">독점 해자</span></div>
+      <div class="ir"><span class="il">AI 광고 즉각 수익화 — 단가+12% · 노출+19%</span><span class="badge b-green">현재 수익화</span></div>
+      <div class="ir"><span class="il">애널리스트 96% Buy · 목표가 $839</span><span class="badge b-meta-l">월가 최고 신뢰</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
+      <div class="ir"><span class="il">Capex $125~145B — AI ROI 미검증</span><span class="badge b-red">지출 공포</span></div>
+      <div class="ir"><span class="il">52주 -17.2% — 역배열 부담</span><span class="badge b-red">모멘텀 약세</span></div>
+      <div class="ir"><span class="il">Reality Labs 분기 $5B 손실 지속</span><span class="badge b-amber">VR/AR 출혈</span></div>
+      <div class="ir"><span class="il">광고 경기 침체 시 직격</span><span class="badge b-amber">경기 민감도</span></div>
+    </div>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">차트 + 분기 재무제표 기준 · 투자 권고가 아닙니다</div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// META 캔들 차트 SVG
+(function(){
+  const svg = document.getElementById('metaSvg2');
+  if (!svg) return;
+  const W=680, H=200, pL=60, pR=10, pT=12, pB=22;
+  const cW=W-pL-pR, cH=H-pT-pB;
+
+  // 실제 차트 기반 데이터 (단위: $10 = 1 틱)
+  // 2025.07($680) ~ 2025.09($796) ~ 2025.11($585) ~ 2026.01($740) ~ 2026.04($537) ~ 2026.06($577)
+  const raw = [
+    68,70,72,74,76,78,79.6,78,77,76,75,74,72,71,74,76,77,78,79,78,
+    75,72,69,68,70,71,72,74,75,74,73,72,70,68,67.5,66,64,
+    65,66,67,67.5,67,65.5,65,64.5,57.7
+  ];
+
+  const candles = [];
+  for(let i=0;i<raw.length;i++){
+    const prev = i>0?raw[i-1]:raw[i];
+    const o = prev;
+    const c = raw[i];
+    const h = Math.max(o,c) + (Math.random()*0.8+0.2);
+    const l = Math.min(o,c) - (Math.random()*0.8+0.2);
+    candles.push({o,h,l,c});
+  }
+
+  const allPrices = candles.flatMap(d=>[d.h,d.l]);
+  const maxP = Math.max(...allPrices)+1;
+  const minP = Math.min(...allPrices)-0.5;
+  const rng = maxP - minP;
+
+  function py(v){ return pT + cH*(1-(v-minP)/rng); }
+
+  // 격자선
+  [58,62,66,70,74,78].forEach(v=>{
+    const y = py(v);
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',pL); line.setAttribute('x2',W-pR);
+    line.setAttribute('y1',y); line.setAttribute('y2',y);
+    line.setAttribute('stroke','rgba(128,128,128,0.12)');
+    line.setAttribute('stroke-width','1');
+    svg.appendChild(line);
+
+    const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+    txt.setAttribute('x',pL-4); txt.setAttribute('y',y+4);
+    txt.setAttribute('text-anchor','end'); txt.setAttribute('font-size','9');
+    txt.setAttribute('fill','rgba(128,128,128,0.7)');
+    txt.textContent = '$'+(v*10);
+    svg.appendChild(txt);
+  });
+
+  const colW = cW/candles.length;
+  const cw = Math.max(colW*0.65, 6);
+
+  // MA 계산
+  function calcMA(data,n){
+    return data.map((_,i)=>i<n-1?null:data.slice(i-n+1,i+1).reduce((s,x)=>s+x.c,0)/n);
+  }
+  function drawLine(arr,col,w){
+    let pts=[];
+    arr.forEach((v,i)=>{
+      if(v===null) return;
+      pts.push(`${pL+(i+0.5)*colW},${py(v)}`);
+    });
+    if(pts.length<2) return;
+    const p=document.createElementNS('http://www.w3.org/2000/svg','polyline');
+    p.setAttribute('points',pts.join(' '));
+    p.setAttribute('fill','none');
+    p.setAttribute('stroke',col);
+    p.setAttribute('stroke-width',w||1.5);
+    svg.appendChild(p);
+  }
+
+  // 캔들 그리기
+  candles.forEach((d,i)=>{
+    const cx = pL + (i+0.5)*colW;
+    const isUp = d.c >= d.o;
+    const col = isUp ? '#D85A30' : '#185FA5';
+
+    // 심지
+    const wk = document.createElementNS('http://www.w3.org/2000/svg','line');
+    wk.setAttribute('x1',cx); wk.setAttribute('x2',cx);
+    wk.setAttribute('y1',py(d.h)); wk.setAttribute('y2',py(d.l));
+    wk.setAttribute('stroke',col); wk.setAttribute('stroke-width','1.5');
+    svg.appendChild(wk);
+
+    // 몸통
+    const bT = py(Math.max(d.o,d.c));
+    const bB = py(Math.min(d.o,d.c));
+    const bd = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    bd.setAttribute('x', cx-cw/2); bd.setAttribute('y', bT);
+    bd.setAttribute('width', cw); bd.setAttribute('height', Math.max(bB-bT,2));
+    bd.setAttribute('fill', col); bd.setAttribute('rx','1');
+    svg.appendChild(bd);
+  });
+
+  // MA 라인
+  drawLine(calcMA(candles,5),'#FF69B4',1.5);
+  drawLine(calcMA(candles,20),'#9370DB',1.5);
+  drawLine(calcMA(candles,40),'#DAA520',2);
+
+  // 주요 가격 마커
+  const mkLabel = (idx,lbl,isLow,col)=>{
+    const cx = pL+(idx+0.5)*colW;
+    const d = candles[idx];
+    const cy = isLow ? py(d.l)+12 : py(d.h)-8;
+    const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x', Math.min(Math.max(cx,40),W-50));
+    t.setAttribute('y', cy);
+    t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','9'); t.setAttribute('fill',col);
+    t.setAttribute('font-weight','500');
+    t.textContent = lbl;
+    svg.appendChild(t);
+  };
+  mkLabel(8,'$796최고(\'25.09)',false,'#D85A30');
+  mkLabel(37,'$537최저(\'26.04)',true,'#185FA5');
+
+  // X축 월 레이블
+  [
+    {idx:0,  label:"'25.07"},
+    {idx:8,  label:"'25.09"},
+    {idx:18, label:"'25.11"},
+    {idx:27, label:"'26.01"},
+    {idx:35, label:"'26.03"},
+    {idx:42, label:"'26.05"},
+  ].forEach(({idx,label})=>{
+    const cx = pL+(idx+0.5)*colW;
+    const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',Math.min(cx,W-20));
+    t.setAttribute('y',H-4);
+    t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','9');
+    t.setAttribute('fill','rgba(128,128,128,0.8)');
+    t.textContent = label;
+    svg.appendChild(t);
+  });
+
+  // 범례
+  [{c:'#D85A30',t:'양봉'},{c:'#185FA5',t:'음봉'},{c:'#FF69B4',t:'MA5'},{c:'#9370DB',t:'MA20'},{c:'#DAA520',t:'MA40'}].forEach((item,i)=>{
+    const gx = pL + i*90;
+    const r = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    r.setAttribute('x',gx); r.setAttribute('y',2);
+    r.setAttribute('width',10); r.setAttribute('height',10);
+    r.setAttribute('fill',item.c); r.setAttribute('rx','2');
+    svg.appendChild(r);
+    const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',gx+13); t.setAttribute('y',11);
+    t.setAttribute('font-size','9');
+    t.setAttribute('fill','rgba(128,128,128,0.9)');
+    t.textContent = item.t;
+    svg.appendChild(t);
+  });
+})();
+
+// 분기 매출 차트
+new Chart(document.getElementById('metaRevChart2'),{
+  type:'bar',
+  data:{
+    labels:['Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26','Q2(E)'],
+    datasets:[
+      {label:'매출($B)',data:[42.3,47.5,51.2,59.9,56.3,59.5],backgroundColor:'#1877F2',borderRadius:4,yAxisID:'y'},
+      {label:'영업이익($B)',data:[17.6,20.4,20.5,24.7,22.9,24.0],backgroundColor:'rgba(29,158,117,0.75)',borderRadius:4,yAxisID:'y'},
+      {label:'OPM%',type:'line',data:[41.5,43.0,40.1,41.3,40.6,40.3],borderColor:'#EF9F27',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{position:'left',ticks:{font:{size:10},callback:v=>v+'B',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      y2:{position:'right',min:35,max:50,ticks:{font:{size:10},callback:v=>v+'%',color:'#EF9F27'},grid:{display:false}},
+      x:{ticks:{font:{size:10},color:'#888'},grid:{display:false}}
+    }
+  }
+});
+
+// 빅테크 PER 비교
+new Chart(document.getElementById('peerChart2'),{
+  type:'bar',
+  data:{
+    labels:['META','MSFT','AMZN','GOOGL','NVDA','AAPL'],
+    datasets:[{
+      label:'PER(TTM)',
+      data:[21.0,23.2,28.5,27.8,31.3,37.3],
+      backgroundColor:['#1877F2','#B4B2A9','#B4B2A9','#B4B2A9','#B4B2A9','#B4B2A9'],
+      borderRadius:5,borderSkipped:false
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>`PER ${ctx.raw}x`}}
+    },
+    scales:{
+      y:{max:45,ticks:{font:{size:10},callback:v=>v+'x',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      x:{ticks:{font:{size:10},color:'#888'},grid:{display:false}}
+    }
+  }
+});
+
+// Capex vs FCF
+new Chart(document.getElementById('capexChart2'),{
+  type:'bar',
+  data:{
+    labels:['Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26'],
+    datasets:[
+      {label:'운영CF($B)',data:[24.0,25.6,30.0,36.2,32.2],backgroundColor:'rgba(29,158,117,0.7)',borderRadius:4},
+      {label:'Capex($B)',data:[-12.9,-16.5,-18.8,-21.4,-19.0],backgroundColor:'rgba(216,90,48,0.7)',borderRadius:4},
+      {label:'FCF($B)',data:[11.1,9.0,11.2,14.8,13.2],backgroundColor:'rgba(24,119,242,0.5)',borderColor:'#1877F2',borderWidth:1,borderRadius:4}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{ticks:{font:{size:10},callback:v=>v+'B',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      x:{ticks:{font:{size:10},color:'#888'},grid:{display:false}}
+    }
+  }
+});
+</script>
+
+</div>
+</body>
+</html>
