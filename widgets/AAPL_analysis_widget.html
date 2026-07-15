@@ -4,473 +4,438 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AAPL 종합 분석 위젯</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-:root {
-    --color-background-primary: light-dark(rgba(255, 255, 255, 1), rgba(48, 48, 46, 1));
-    --color-background-secondary: light-dark(rgba(245, 244, 237, 1), rgba(38, 38, 36, 1));
-    --color-background-tertiary: light-dark(rgba(250, 249, 245, 1), rgba(20, 20, 19, 1));
-    --color-background-inverse: light-dark(rgba(20, 20, 19, 1), rgba(250, 249, 245, 1));
-    --color-background-ghost: light-dark(rgba(255, 255, 255, 0), rgba(48, 48, 46, 0));
-    --color-background-info: light-dark(rgba(214, 228, 246, 1), rgba(37, 62, 95, 1));
-    --color-background-danger: light-dark(rgba(247, 236, 236, 1), rgba(96, 42, 40, 1));
-    --color-background-success: light-dark(rgba(233, 241, 220, 1), rgba(27, 70, 20, 1));
-    --color-background-warning: light-dark(rgba(246, 238, 223, 1), rgba(72, 58, 15, 1));
-    --color-background-disabled: light-dark(rgba(255, 255, 255, 0.5), rgba(48, 48, 46, 0.5));
-    --color-text-primary: light-dark(rgba(20, 20, 19, 1), rgba(250, 249, 245, 1));
-    --color-text-secondary: light-dark(rgba(61, 61, 58, 1), rgba(194, 192, 182, 1));
-    --color-text-tertiary: light-dark(rgba(115, 114, 108, 1), rgba(156, 154, 146, 1));
-    --color-text-inverse: light-dark(rgba(255, 255, 255, 1), rgba(20, 20, 19, 1));
-    --color-text-info: light-dark(rgba(50, 102, 173, 1), rgba(128, 170, 221, 1));
-    --color-text-danger: light-dark(rgba(127, 44, 40, 1), rgba(238, 136, 132, 1));
-    --color-text-success: light-dark(rgba(38, 91, 25, 1), rgba(122, 185, 72, 1));
-    --color-text-warning: light-dark(rgba(90, 72, 21, 1), rgba(209, 160, 65, 1));
-    --color-text-disabled: light-dark(rgba(20, 20, 19, 0.5), rgba(250, 249, 245, 0.5));
-    --color-text-ghost: light-dark(rgba(115, 114, 108, 0.5), rgba(156, 154, 146, 0.5));
-    --color-border-primary: light-dark(rgba(31, 30, 29, 0.4), rgba(222, 220, 209, 0.4));
-    --color-border-secondary: light-dark(rgba(31, 30, 29, 0.3), rgba(222, 220, 209, 0.3));
-    --color-border-tertiary: light-dark(rgba(31, 30, 29, 0.15), rgba(222, 220, 209, 0.15));
-    --color-border-inverse: light-dark(rgba(255, 255, 255, 0.3), rgba(20, 20, 19, 0.15));
-    --color-border-ghost: light-dark(rgba(31, 30, 29, 0), rgba(222, 220, 209, 0));
-    --color-border-info: light-dark(rgba(70, 130, 213, 1), rgba(70, 130, 213, 1));
-    --color-border-danger: light-dark(rgba(167, 61, 57, 1), rgba(205, 92, 88, 1));
-    --color-border-success: light-dark(rgba(67, 116, 38, 1), rgba(89, 145, 48, 1));
-    --color-border-warning: light-dark(rgba(128, 92, 31, 1), rgba(168, 120, 41, 1));
-    --color-border-disabled: light-dark(rgba(31, 30, 29, 0.1), rgba(222, 220, 209, 0.1));
-    --color-ring-primary: light-dark(rgba(20, 20, 19, 0.7), rgba(250, 249, 245, 0.7));
-    --color-ring-secondary: light-dark(rgba(61, 61, 58, 0.7), rgba(194, 192, 182, 0.7));
-    --color-ring-inverse: light-dark(rgba(255, 255, 255, 0.7), rgba(20, 20, 19, 0.7));
-    --color-ring-info: light-dark(rgba(50, 102, 173, 0.5), rgba(128, 170, 221, 0.5));
-    --color-ring-danger: light-dark(rgba(167, 61, 57, 0.5), rgba(205, 92, 88, 0.5));
-    --color-ring-success: light-dark(rgba(67, 116, 38, 0.5), rgba(89, 145, 48, 0.5));
-    --color-ring-warning: light-dark(rgba(128, 92, 31, 0.5), rgba(168, 120, 41, 0.5));
-    --font-sans: "Segoe UI", -apple-system, sans-serif;
-    --font-mono: ui-monospace, monospace;
-    --font-weight-normal: 400;
-    --font-weight-medium: 500;
-    --font-weight-semibold: 600;
-    --font-weight-bold: 700;
-    --font-text-xs-size: 12px;
-    --font-text-sm-size: 14px;
-    --font-text-md-size: 16px;
-    --font-text-lg-size: 20px;
-    --font-heading-xs-size: 12px;
-    --font-heading-sm-size: 14px;
-    --font-heading-md-size: 16px;
-    --font-heading-lg-size: 20px;
-    --font-heading-xl-size: 24px;
-    --font-heading-2xl-size: 28px;
-    --font-heading-3xl-size: 36px;
-    --font-text-xs-line-height: 1.4;
-    --font-text-sm-line-height: 1.4;
-    --font-text-md-line-height: 1.4;
-    --font-text-lg-line-height: 1.25;
-    --font-heading-xs-line-height: 1.4;
-    --font-heading-sm-line-height: 1.4;
-    --font-heading-md-line-height: 1.4;
-    --font-heading-lg-line-height: 1.25;
-    --font-heading-xl-line-height: 1.25;
-    --font-heading-2xl-line-height: 1.1;
-    --font-heading-3xl-line-height: 1;
-    --border-radius-xs: 4px;
-    --border-radius-sm: 6px;
-    --border-radius-md: 8px;
-    --border-radius-lg: 10px;
-    --border-radius-xl: 12px;
-    --border-radius-full: 9999px;
-    --border-width-regular: 0.5px;
-    --shadow-hairline: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-    color-scheme: light dark;
-}
-body { background: var(--color-background-tertiary); color: var(--color-text-primary); margin: 0; }
-.page-center { max-width: 800px; margin: 0 auto; padding: 16px; }
+  :root {
+    --bg: #0f1117;
+    --bg2: #1a1d27;
+    --bg3: #22263a;
+    --border: #2e3347;
+    --text: #e8eaf0;
+    --text2: #9aa0b8;
+    --text3: #5c6282;
+    --accent: #a2aaad;
+    --accent2: #d0d5d7;
+    --accent3: #6b7274;
+    --bull: #D85A30;
+    --bear: #185FA5;
+    --ma5: #ff6b9d;
+    --ma20: #9b59b6;
+    --ma60: #f0c040;
+    --ma120: #27ae60;
+    --green: #2ecc71;
+    --red: #e74c3c;
+    --blue: #3498db;
+    --radius: 10px;
+    --shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
+  .header { background: linear-gradient(135deg, #17181a 0%, #0f1117 40%, #1a1d27 100%); border-bottom: 2px solid var(--accent3); padding: 28px 32px 24px; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(162,170,173,0.14) 0%, transparent 70%); pointer-events: none; }
+  .header-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .ticker-block { display: flex; align-items: center; gap: 16px; }
+  .ticker-badge { background: linear-gradient(135deg, var(--accent3), var(--accent)); color: #0f1117; font-size: 13px; font-weight: 800; padding: 5px 12px; border-radius: 6px; letter-spacing: 1px; }
+  .company-name { font-size: 22px; font-weight: 700; color: var(--text); }
+  .company-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .price-block { text-align: right; }
+  .price-main { font-size: 32px; font-weight: 800; color: var(--accent2); letter-spacing: -1px; }
+  .price-change { font-size: 13px; color: var(--red); font-weight: 600; }
+  .header-meta { display: flex; gap: 24px; margin-top: 16px; flex-wrap: wrap; }
+  .meta-item { display: flex; flex-direction: column; }
+  .meta-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .meta-value { font-size: 13px; font-weight: 600; color: var(--text2); margin-top: 2px; }
+  .meta-value.highlight { color: var(--accent2); }
+  .nav { display: flex; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
+  .nav-btn:hover { color: var(--text); background: var(--bg3); }
+  .nav-btn.active { background: var(--accent3); color: var(--accent2); }
+  .section { display: none; padding: 28px 32px; }
+  .section.active { display: block; }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--accent2); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; display: inline-block; }
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px; }
+  .card-title { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; font-weight: 600; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .chart-wrap { position: relative; }
+  .chart-wrap canvas { max-width: 100%; }
+  .price-chart-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+  .stat-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .stat-value { font-size: 20px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
+  .stat-sub { font-size: 11px; color: var(--text3); }
+  .stat-value.up { color: var(--green); }
+  .stat-value.down { color: var(--red); }
+  .stat-value.gold { color: var(--accent2); }
+  .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .ma-row:last-child { border-bottom: none; }
+  .ma-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+  .ma-name { display: flex; align-items: center; font-size: 13px; color: var(--text2); }
+  .ma-val { font-size: 13px; font-weight: 600; }
+  .ma-status { font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
+  .status-above { background: rgba(46,204,113,0.15); color: var(--green); }
+  .status-below { background: rgba(231,76,60,0.15); color: var(--red); }
+  .zone-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .zone-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg3); border-radius: 6px; }
+  .zone-label { font-size: 12px; color: var(--text2); }
+  .zone-val { font-size: 13px; font-weight: 700; color: var(--accent2); }
+  .zone-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
+  .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
+  .tag-current { background: rgba(162,170,173,0.2); color: var(--accent2); }
+  .val-item { margin-bottom: 18px; }
+  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
+  .val-track { height: 8px; background: var(--bg3); border-radius: 4px; position: relative; overflow: hidden; }
+  .val-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+  .val-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+  .val-low { font-size: 10px; color: var(--green); }
+  .val-mid { font-size: 10px; color: var(--accent2); text-align: center; }
+  .val-high { font-size: 10px; color: var(--red); }
+  .stage-badge { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
+  .stage-1 { background: rgba(46,204,113,0.2); color: #2ecc71; }
+  .stage-2 { background: rgba(39,174,96,0.2); color: #27ae60; }
+  .stage-3 { background: rgba(200,168,75,0.2); color: var(--accent2); }
+  .stage-4 { background: rgba(231,126,35,0.2); color: #e67e22; }
+  .stage-5 { background: rgba(231,76,60,0.2); color: var(--red); }
+  .stage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .stage-mini { text-align: center; padding: 10px 4px; border-radius: 8px; }
+  .stage-mini-num { font-size: 15px; font-weight: 700; }
+  .stage-mini-label { font-size: 9px; margin-top: 2px; }
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg); }
+  .tl-dot.red { background: var(--red); }
+  .tl-dot.green { background: var(--green); }
+  .tl-dot.blue { background: var(--blue); }
+  .tl-dot.gold { background: var(--accent2); }
+  .tl-date { font-size: 10px; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+  .tl-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 3px 0; }
+  .tl-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .bull-bear { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .bb-box { background: var(--bg3); border-radius: var(--radius); padding: 16px; }
+  .bb-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .bb-bull { color: var(--bull); }
+  .bb-bear { color: var(--bear); }
+  .bb-item { display: flex; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .bb-icon { flex-shrink: 0; margin-top: 2px; }
+  .driver-item { display: flex; gap: 12px; padding: 12px; background: var(--bg3); border-radius: 8px; margin-bottom: 10px; }
+  .driver-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent3); color: var(--accent2); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .driver-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .driver-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
+  .per-share-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .ps-card { background: var(--bg3); border-radius: 8px; padding: 16px; text-align: center; }
+  .ps-icon { font-size: 22px; margin-bottom: 6px; }
+  .ps-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .ps-value { font-size: 22px; font-weight: 800; color: var(--accent2); }
+  .ps-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
+  .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+  .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
+  .disclaimer { margin: 28px 32px 16px; padding: 12px 16px; background: rgba(162,170,173,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
+  @media (max-width: 600px) {
+    .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
+    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; }
+    .per-share-grid { grid-template-columns: 1fr 1fr; } .stage-grid { grid-template-columns: 1fr 1fr; } .price-main { font-size: 24px; }
+  }
 </style>
 </head>
 <body>
-<div class="page-center">
 
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-.wrap{padding:1rem 0;font-family:var(--font-sans);}
-h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
-.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;}
-.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
-.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
-.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
-.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
-.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;}
-.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
-.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
-.mv{font-size:14px;font-weight:500;color:var(--color-text-primary);}
-.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
-.up{color:#1D9E75;}.dn{color:#D85A30;}
-.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
-.b-green{background:#EAF3DE;color:#27500A;}.b-amber{background:#FAEEDA;color:#633806;}
-.b-red{background:#FCEBEB;color:#791F1F;}.b-blue{background:#E6F1FB;color:#0C447C;}
-.b-gray{background:#F1EFE8;color:#444441;}.b-aapl{background:#F1EFE8;color:#2C2C2A;}
-.b-silver{background:#D3D1C7;color:#2C2C2A;}.b-teal{background:#E1F5EE;color:#04342C;}
-.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
-.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
-.ir:last-child{border-bottom:none;}
-.il{color:var(--color-text-secondary);}.iv{font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;}
-.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:6px;}
-.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:12px 14px;margin-top:10px;}
-.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:12px 14px;margin-top:10px;}
-.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
-.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
-.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
-.ev-5{background:#FCEBEB;color:#791F1F;}
-.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
-.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
-.ind-row:last-child{border-bottom:none;}
-.ind-nm{font-size:13px;font-weight:500;color:var(--color-text-primary);min-width:100px;}
-.ind-val{font-size:14px;font-weight:500;color:var(--color-text-primary);min-width:80px;text-align:right;}
-.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
-.bar-f{border-radius:4px;height:7px;}
-.stage-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:12px;}
-.stage{text-align:center;padding:12px 6px;border-radius:var(--border-radius-md);}
-.tl{position:relative;padding-left:28px;}
-.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
-.tl-item{position:relative;margin-bottom:18px;}
-.tl-item:last-child{margin-bottom:0;}
-.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid var(--color-background-primary);}
-.dot-big{background:#2C2C2A;}.dot-pos{background:#1D9E75;}
-.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
-.tl-date{font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:3px;}
-.tl-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
-.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
-.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
-.tag-big{background:#F1EFE8;color:#2C2C2A;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
-.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
-.sprow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:12px;}
-.sprow:last-child{border-bottom:none;}
-</style>
-
-<div class="wrap">
-<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-  <h2>Apple (AAPL)</h2>
-  <span class="badge b-aapl">S&P 500 시총 3위</span>
-  <span class="badge b-silver">iPhone · Services · Apple Intelligence</span>
-  <span class="src">차트 + 분기 재무제표 + SEC 공시</span>
-</div>
-<p class="sub">현재가 $307.34 (-1.25%) · 52주 최저 $169.2 (2025.04) · 52주 최고 $307.34 (2026.06) · 시총 $4.5T · EPS(TTM) $8.25 · ROE 141%</p>
-
-<div class="g4">
-  <div class="met"><div class="ml">현재가 (06/12)</div><div class="mv">$307.34</div><div class="ms up">역대 최고 경신 중</div></div>
-  <div class="met"><div class="ml">52주 범위</div><div class="mv">$169 ~ $307</div><div class="ms">관세 저점 → 신고점</div></div>
-  <div class="met"><div class="ml">Q2 FY26 매출</div><div class="mv">$111.2B</div><div class="ms up">▲16.6% YoY · 3월분기 역대최대</div></div>
-  <div class="met"><div class="ml">Services 매출</div><div class="mv">$31.0B</div><div class="ms up">역대최대 · 고마진 성장 지속</div></div>
-</div>
-
-<!-- 1. 기술적 분석 -->
-<div class="card">
-  <div class="sec">1. 기술적 분석 — 실제 차트 기반 (2025.07 ~ 2026.06)</div>
-  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
-    52주 최저 ~$169 (2025.04 관세 쇼크) → 현재 $307.34 역대 최고 경신 · 52주 수익률 +51.5%
-  </div>
-  <svg id="aaplSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;" role="img" aria-label="AAPL 52주 주가 차트 2025.07~2026.06"></svg>
-
-  <div class="g4" style="font-size:11px;margin-bottom:12px;">
-    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#633806;font-weight:500;margin-bottom:3px;">2025.07 — 관세 저점</div>
-      <div style="color:#854F0B;line-height:1.6;">$200~$210 박스권<br>관세 우려 저점 형성<br>차트상 2025.07 시작가<br>이후 반등 시작</div>
+<div class="header">
+  <div class="header-top">
+    <div class="ticker-block">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+          <span class="ticker-badge">AAPL</span>
+          <span style="font-size:11px;color:var(--accent2);font-weight:600;">NASDAQ · iPhone·Services</span>
+        </div>
+        <div class="company-name">Apple Inc.</div>
+        <div class="company-sub">iPhone · Services · Apple Intelligence · S&P 500 시총 3위</div>
+      </div>
     </div>
-    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#27500A;font-weight:500;margin-bottom:3px;">2025.09~12 — 반등 상승</div>
-      <div style="color:#3B6D11;line-height:1.6;">$220→$280 급등<br>iPhone 17 기대감<br>Apple Intelligence 출시<br>Services 역대 최고 행진</div>
-    </div>
-    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#633806;font-weight:500;margin-bottom:3px;">2026.01~03 — 조정</div>
-      <div style="color:#854F0B;line-height:1.6;">$280→$245 조정<br>관세 지속 부담<br>CEO 교체 발표 급락<br>중국 시장 우려</div>
-    </div>
-    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#27500A;font-weight:500;margin-bottom:3px;">2026.05~06 — 신고점 경신</div>
-      <div style="color:#3B6D11;line-height:1.6;">$245→$307 급등<br>Q2 실적+$100B 바이백<br>WWDC 2026 기대감<br>$307.34 역대 최고</div>
+    <div class="price-block">
+      <div class="price-main">$307.34</div>
+      <div class="price-change">▼ -1.25% (2026.06.12 기준)</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px;">52주 최저 $169.2 · 최고 $307.34 (현재가 = 역대 최고)</div>
     </div>
   </div>
-
-  <div class="g2" style="margin-bottom:12px;">
-    <div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">이동평균선 현황</div>
-      <div class="ir"><span class="il">5일선</span><span class="badge b-amber">단기 저항 (신고점 직후)</span></div>
-      <div class="ir"><span class="il">20일선</span><span class="badge b-green">골든크로스 · 상승</span></div>
-      <div class="ir"><span class="il">60일선</span><span class="badge b-green">우상향 강세</span></div>
-      <div class="ir"><span class="il">120일선</span><span class="badge b-green">장기 정배열</span></div>
-      <div class="ir"><span class="il">배열</span><span class="badge b-green">완전 정배열</span></div>
-    </div>
-    <div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">핵심 가격대</div>
-      <div class="ir"><span class="il">역대 최고</span><span style="font-weight:500;color:#1D9E75;">$307.34 (2026.06 현재)</span></div>
-      <div class="ir"><span class="il">강한 지지</span><span style="font-weight:500;color:#444441;">$280~$290</span></div>
-      <div class="ir"><span class="il">52주 수익률</span><span style="font-weight:500;color:#1D9E75;">+51.5%</span></div>
-      <div class="ir"><span class="il">배당수익률</span><span style="font-weight:500;">0.35% (분기 $0.26→$0.27)</span></div>
-      <div class="ir"><span class="il">자사주 매입</span><span style="font-weight:500;color:#1D9E75;">$100B 추가 승인 (4월)</span></div>
-    </div>
-  </div>
-
-  <div class="sig">
-    <span class="badge b-green">완전 정배열 · 역대 최고 경신 진행 중</span>
-    <span class="badge b-green">52주 +51.5% · S&P500 대비 강한 아웃퍼폼</span>
-    <span class="badge b-green">$100B 자사주 추가 · 배당 4% 인상</span>
-    <span class="badge b-amber">PER 37x — 빅테크 내 가장 높은 밸류에이션</span>
-    <span class="badge b-red">Tim Cook CEO 교체 (9월) · 中 관세 누적 $3.3B</span>
-    <span class="badge b-aapl">Services 고마진 확장 → 소프트웨어 기업 프리미엄</span>
+  <div class="header-meta">
+    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$4.5T</span></div>
+    <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Information Technology</span></div>
+    <div class="meta-item"><span class="meta-label">TTM 매출</span><span class="meta-value">$451.4B</span></div>
+    <div class="meta-item"><span class="meta-label">CEO</span><span class="meta-value">Tim Cook (→Ternus 9월)</span></div>
+    <div class="meta-item"><span class="meta-label">EPS (TTM)</span><span class="meta-value">$8.25</span></div>
+    <div class="meta-item"><span class="meta-label">배당수익률</span><span class="meta-value">0.35% (분기 $0.27)</span></div>
   </div>
 </div>
 
-<!-- 2. 기본적 분석 -->
-<div class="card">
-  <div class="sec">2. 기본적 분석 — 분기 재무제표 <span class="src">실제 수치 · Apple FY 기준 (10월~9월)</span></div>
+<div class="nav">
+  <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
+  <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
+  <button class="nav-btn" onclick="showSection('pershare')">💰 Per-Share</button>
+  <button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button>
+  <button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button>
+  <button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button>
+  <button class="nav-btn" onclick="showSection('invest')">🎯 투자 포인트</button>
+</div>
 
-  <div style="position:relative;width:100%;height:165px;margin-bottom:12px;">
-    <canvas id="aaplRevChart" role="img" aria-label="AAPL 분기 매출 및 영업이익률 추이">분기 매출 및 OPM 차트</canvas>
+<div id="tech" class="section active">
+  <div class="section-title">기술적 분석 — 실제 차트 기반 (2025.07 ~ 2026.06)</div>
+  <div class="price-chart-container">
+    <div style="font-size:11px;color:var(--text3);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
+      <span>AAPL 52주 가격 추이 · 52주 최저 ~$169('25.04 관세쇼크) → 현재 역대 최고</span>
+      <span style="color:var(--accent2);font-weight:600;">현재가 $307.34</span>
+    </div>
+    <svg id="aaplSvg" viewBox="0 0 720 240" width="100%" style="display:block;background:var(--bg3);border-radius:8px;padding:4px;" role="img" aria-label="AAPL 52주 주가 차트 2025.07~2026.06"></svg>
   </div>
-
-  <div class="g2" style="margin-bottom:12px;">
-    <div>
-      <div class="ir"><span class="il">Q2 FY26 매출</span><span class="iv up">$111.2B (▲16.6% YoY) <span class="ev ev-4">높음</span></span></div>
-      <div class="ir"><span class="il">Q2 FY26 iPhone</span><span class="iv up">$58.0B (▲22%) — 3월분기 역대최대 <span class="ev ev-5">매우높음</span></span></div>
-      <div class="ir"><span class="il">Q2 FY26 Services</span><span class="iv up">$31.0B — 역대최대 <span class="ev ev-5">매우높음</span></span></div>
-      <div class="ir"><span class="il">Q2 FY26 OPM</span><span class="iv up">32.3% / GM 49.3% <span class="ev ev-4">높음</span></span></div>
-      <div class="ir"><span class="il">Q2 FY26 EPS</span><span class="iv up">$2.01 (▲22%) · 컨센서스 +$0.06 상회 <span class="ev ev-4">높음</span></span></div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">구간별 가격 분석</div>
+      <div class="zone-list">
+        <div class="zone-item"><span class="zone-label">역대 최고</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$307.34 (2026.06 현재)</span><span class="zone-tag tag-current">현재</span></div></div>
+        <div class="zone-item"><span class="zone-label">강한 지지</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$280~$290</span><span class="zone-tag tag-support">지지선</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">~$169 (2025.04 관세쇼크)</span><span class="zone-tag tag-support">강지지</span></div></div>
+      </div>
     </div>
-    <div>
-      <div class="ir"><span class="il">TTM 매출</span><span class="iv up">$451.4B · 연간 $400B 돌파</span></div>
-      <div class="ir"><span class="il">TTM EPS(희석)</span><span class="iv up">$8.25 (PER 37.3x)</span></div>
-      <div class="ir"><span class="il">ROE</span><span class="iv up">141% — 세계 최고 수준</span></div>
-      <div class="ir"><span class="il">자사주 매입 (H1 FY26)</span><span class="iv up">$36.0B + $100B 추가 승인</span></div>
-      <div class="ir"><span class="il">관세 누적 부담</span><span class="iv dn">$3.3B (Q2~Q4 FY25~Q2 FY26)</span></div>
-    </div>
-  </div>
-
-  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">핵심 성장 동력</div>
-  <div class="g3" style="font-size:12px;margin-bottom:12px;">
-    <div style="background:#F1EFE8;border-radius:var(--border-radius-md);padding:10px 12px;">
-      <div style="color:#2C2C2A;font-weight:500;margin-bottom:3px;">Services (고마진 핵심)</div>
-      <div style="color:#444441;line-height:1.6;">Q2 $31.0B 역대최대<br>App Store · iCloud · Apple TV+<br>유료 구독 10억+ 돌파<br>GM 75%+ 고마진 구조</div>
-    </div>
-    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px 12px;">
-      <div style="color:#27500A;font-weight:500;margin-bottom:3px;">iPhone (슈퍼사이클)</div>
-      <div style="color:#3B6D11;line-height:1.6;">Q2 $58.0B ▲22%<br>Apple Intelligence 탑재<br>인도 공장 전환 가속<br>iPhone 17 대기 수요</div>
-    </div>
-    <div style="background:#E6F1FB;border-radius:var(--border-radius-md);padding:10px 12px;">
-      <div style="color:#0C447C;font-weight:500;margin-bottom:3px;">Apple Intelligence (AI)</div>
-      <div style="color:#185FA5;line-height:1.6;">온디바이스 AI 독자 강점<br>WWDC 2026 6월 발표<br>Siri 대폭 업그레이드<br>새 CEO Ternus 하드웨어 강점</div>
+    <div class="card">
+      <div class="card-title">이동평균선 현황</div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기)</span><span class="ma-val" style="color:var(--ma5)">단기 저항</span><span class="ma-status status-below">신고점 직후</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기)</span><span class="ma-val" style="color:var(--ma20)">골든크로스</span><span class="ma-status status-above">상승</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기)</span><span class="ma-val" style="color:var(--ma60)">우상향</span><span class="ma-status status-above">강세</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기)</span><span class="ma-val" style="color:var(--ma120)">장기 정배열</span><span class="ma-status status-above">유지</span></div>
+      <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">
+        ⚠️ 완전 정배열 · 52주 수익률 +51.5% · 배당수익률 0.35%(분기 $0.26→$0.27) · $100B 추가 바이백 승인(4월)
+      </div>
     </div>
   </div>
-
-  <div class="hl">
-    <div style="font-size:13px;font-weight:500;color:#27500A;margin-bottom:4px;">핵심 투자 논리 — 설치 기반 20억+ · Services 복합성장 · 역대급 주주환원</div>
-    <div style="font-size:12px;color:#1D9E75;line-height:1.7;">활성 기기 20억대 이상의 설치 기반 위에 Services 고마진 구조가 매년 복리 성장. TTM FCF $113B으로 분기당 $25~$28B 자사주 매입 가능. ROE 141%는 자본효율성 세계 최고. <strong>iPhone 슈퍼사이클 + Services 복리 성장 + AI 업그레이드 수요 = 3중 촉매.</strong> 관세 부담은 인도 생산 확대로 점진적 상쇄.</div>
+  <div class="card">
+    <div class="card-title">구간별 패턴 분석</div>
+    <div class="grid-4">
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.07 관세 저점</div><div style="font-size:12px;color:var(--text2);">$200~$210 박스권. 관세 우려 저점 형성. 차트상 2025.07 시작가. 이후 반등 시작.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.09~12 반등 상승</div><div style="font-size:12px;color:var(--text2);">$220→$280 급등. iPhone 17 기대감. Apple Intelligence 출시. Services 역대 최고 행진.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.01~03 조정</div><div style="font-size:12px;color:var(--text2);">$280→$245 조정. 관세 지속 부담. CEO 교체 발표 급락. 중국 시장 우려.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.05~06 신고점 경신</div><div style="font-size:12px;color:var(--text2);">$245→$307 급등. Q2 실적+$100B 바이백. WWDC 2026 기대감. $307.34 역대 최고.</div></div>
+    </div>
+  </div>
+  <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;">
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">완전 정배열 · 역대 최고 경신 진행 중</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">52주 +51.5% · S&P500 대비 강한 아웃퍼폼</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">$100B 자사주 추가 · 배당 4% 인상</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(240,192,64,0.18);color:var(--ma60);">PER 37x — 빅테크 내 가장 높은 밸류에이션</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">Tim Cook CEO 교체(9월) · 中 관세 누적 $3.3B</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(162,170,173,0.18);color:var(--accent2);">Services 고마진 확장 → 소프트웨어 기업 프리미엄</span>
   </div>
 </div>
 
-<!-- 3. Per-Share -->
-<div class="card">
-  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">Q2 FY26 기준 · 14.67B 주</span></div>
-  <div class="g4">
-    <div class="met"><div class="ml">EPS(희석) · TTM</div><div class="mv">$8.25</div><div class="ms">Q3 FY25~Q2 FY26 합산</div><div style="margin-top:5px;"><span class="ev ev-4">높음</span></div></div>
-    <div class="met"><div class="ml">BPS · 주당순자산</div><div class="mv">$7.23</div><div class="ms">Q2 FY26 · 자본 $106.5B</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
-    <div class="met"><div class="ml">FCF/주 · TTM</div><div class="mv">$7.72</div><div class="ms">TTM FCF $113.4B</div><div style="margin-top:5px;"><span class="ev ev-5">매우높음</span></div></div>
-    <div class="met"><div class="ml">DPS · 연간배당</div><div class="mv">$1.04</div><div class="ms">분기 $0.26 → $0.27 인상</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+<div id="fund" class="section">
+  <div class="section-title">기본적 분석 — 분기 재무제표 (Apple FY 기준, 10월~9월)</div>
+  <div class="card">
+    <div class="card-title">분기 매출 / Services 매출 / OPM (Q3 FY24~Q2 FY26)</div>
+    <div class="chart-wrap" style="height:260px;"><canvas id="aaplRevChart"></canvas></div>
   </div>
-  <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:6px;">* BPS가 낮은 이유: 수십년간 자사주 매입으로 순자산이 압축됨 — PBR 42x는 자본의 극단적 효율성 반영.</div>
-</div>
-
-<!-- 4. 밸류에이션 -->
-<div class="card">
-  <div class="sec">4. 상대 투자지표 (Valuation Multiples) · 현재가 $307.34 · 빅테크 비교</div>
-
-  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;font-size:11px;">
-    <span style="padding:2px 8px;border-radius:999px;background:#E6F1FB;color:#0C447C;font-weight:500;">1단계 매우낮음</span>
-    <span style="padding:2px 8px;border-radius:999px;background:#EAF3DE;color:#27500A;font-weight:500;">2단계 낮음</span>
-    <span style="padding:2px 8px;border-radius:999px;background:#F1EFE8;color:#444441;font-weight:500;">3단계 적정</span>
-    <span style="padding:2px 8px;border-radius:999px;background:#FAEEDA;color:#633806;font-weight:500;">4단계 높음</span>
-    <span style="padding:2px 8px;border-radius:999px;background:#FCEBEB;color:#791F1F;font-weight:500;">5단계 매우높음</span>
+  <div class="grid-3">
+    <div class="stat-box"><div class="stat-label">매출 (Q2 FY26)</div><div class="stat-value up">$111.2B</div><div class="stat-sub">▲16.6% YoY</div></div>
+    <div class="stat-box"><div class="stat-label">iPhone (Q2 FY26)</div><div class="stat-value up">$58.0B</div><div class="stat-sub">▲22% · 3월분기 역대최대</div></div>
+    <div class="stat-box"><div class="stat-label">Services (Q2 FY26)</div><div class="stat-value up">$31.0B</div><div class="stat-sub">역대최대</div></div>
+    <div class="stat-box"><div class="stat-label">OPM / GM (Q2 FY26)</div><div class="stat-value">32.3% / 49.3%</div><div class="stat-sub">영업이익률/매출총이익률</div></div>
+    <div class="stat-box"><div class="stat-label">EPS (Q2 FY26)</div><div class="stat-value up">$2.01</div><div class="stat-sub">▲22% · 컨센서스 +$0.06 상회</div></div>
+    <div class="stat-box"><div class="stat-label">TTM 매출</div><div class="stat-value">$451.4B</div><div class="stat-sub">연간 $400B 돌파</div></div>
+    <div class="stat-box"><div class="stat-label">ROE</div><div class="stat-value gold">141%</div><div class="stat-sub">세계 최고 수준</div></div>
+    <div class="stat-box"><div class="stat-label">자사주 매입 (H1 FY26)</div><div class="stat-value">$36.0B</div><div class="stat-sub">+ $100B 추가 승인</div></div>
   </div>
-
-  <div class="ind-row">
-    <div class="ind-nm">PER (TTM)</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">$307.34÷$8.25 · 빅테크 최고 · 10년 평균 25x 대비 프리미엄<br><span style="color:#D85A30;">Forward PER 33.7x · PEG 3.01 — 성장 대비 비쌈</span></div>
-    <div class="ind-val">37.3x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(15x)</span><span>적정(28x)</span><span>고(50x)</span></div><div class="bar-bg"><div class="bar-f" style="width:63%;background:#FAEEDA;"></div></div></div>
-    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">핵심 성장 동력 3가지</div>
+    <div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">Services — 고마진 핵심</div><div class="driver-desc">Q2 $31.0B 역대최대. App Store·iCloud·Apple TV+. 유료 구독 10억+ 돌파. GM 75%+ 고마진 구조.</div></div></div>
+    <div class="driver-item"><div class="driver-num">2</div><div><div class="driver-title">iPhone — 슈퍼사이클</div><div class="driver-desc">Q2 $58.0B ▲22%. Apple Intelligence 탑재. 인도 공장 전환 가속. iPhone 17 대기 수요.</div></div></div>
+    <div class="driver-item"><div class="driver-num">3</div><div><div class="driver-title">Apple Intelligence (AI)</div><div class="driver-desc">온디바이스 AI 독자 강점. WWDC 2026 6월 발표. Siri 대폭 업그레이드. 새 CEO Ternus 하드웨어 강점.</div></div></div>
   </div>
-
-  <div class="ind-row">
-    <div class="ind-nm">PBR</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">$307.34÷$7.23 · 자사주 매입으로 BPS 낮음 → PBR 높음이 구조적 특징</div>
-    <div class="ind-val">42.5x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(5x)</span><span>적정(20x)</span><span>고(60x)</span></div><div class="bar-bg"><div class="bar-f" style="width:69%;background:#FCEBEB;"></div></div></div>
-    <span class="ev ev-5" style="min-width:58px;text-align:center;">5단계</span>
-  </div>
-
-  <div class="ind-row">
-    <div class="ind-nm">PSR (TTM)</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">시총 $4.5T÷TTM $451.4B · Services 고마진으로 하드웨어 PSR보다 정당화</div>
-    <div class="ind-val">10.0x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(3x)</span><span>적정(10x)</span><span>고(25x)</span></div><div class="bar-bg"><div class="bar-f" style="width:32%;background:#F1EFE8;"></div></div></div>
-    <span class="ev ev-3" style="min-width:58px;text-align:center;">3단계</span>
-  </div>
-
-  <div class="ind-row">
-    <div class="ind-nm">PCR (FCF)</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">시총 $4.5T÷TTM FCF $113.4B · FCF마진 25% · 자사주 매입 재원 충분</div>
-    <div class="ind-val">39.7x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(10x)</span><span>적정(25x)</span><span>고(60x)</span></div><div class="bar-bg"><div class="bar-f" style="width:49%;background:#FAEEDA;"></div></div></div>
-    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
-  </div>
-
-  <div class="ind-row">
-    <div class="ind-nm">EV/EBITDA</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">EV ~$4.4T÷TTM EBITDA $158B · 소비자가전+서비스 혼합 기업으로 30x 적정 논쟁</div>
-    <div class="ind-val">27.8x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(10x)</span><span>적정(25x)</span><span>고(50x)</span></div><div class="bar-bg"><div class="bar-f" style="width:45%;background:#F1EFE8;"></div></div></div>
-    <span class="ev ev-3" style="min-width:58px;text-align:center;">3단계</span>
-  </div>
-
-  <div style="margin-top:12px;font-size:13px;font-weight:500;margin-bottom:8px;">빅테크 PER 비교 (AAPL이 가장 높음)</div>
-  <div style="position:relative;width:100%;height:140px;margin-bottom:10px;">
-    <canvas id="peerChart" role="img" aria-label="빅테크 PER 비교 차트">GOOGL 27.8x, META 26x, NVDA 31.3x, AAPL 37.3x, MSFT 35.2x</canvas>
-  </div>
-
-  <div class="stage-grid" style="margin-top:14px;">
-    <div class="stage" style="background:#E6F1FB;"><div style="font-size:16px;font-weight:500;color:#0C447C;">1단계</div><div style="font-size:10px;color:#185FA5;margin-top:2px;">매우 저평가</div></div>
-    <div class="stage" style="background:#EAF3DE;"><div style="font-size:16px;font-weight:500;color:#27500A;">2단계</div><div style="font-size:10px;color:#3B6D11;margin-top:2px;">저평가</div></div>
-    <div class="stage" style="background:#F1EFE8;border:2px solid #5F5E5A;"><div style="font-size:16px;font-weight:500;color:#444441;">3단계</div><div style="font-size:10px;color:#5F5E5A;margin-top:2px;">적정</div><div style="font-size:9px;color:#5F5E5A;background:#D3D1C7;border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PSR·EV/EBITDA</div></div>
-    <div class="stage" style="background:#FAEEDA;border:2px solid #854F0B;"><div style="font-size:16px;font-weight:500;color:#633806;">4단계</div><div style="font-size:10px;color:#854F0B;margin-top:2px;">고평가</div><div style="font-size:9px;color:#854F0B;background:#FAC775;border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PER·PCR</div></div>
-    <div class="stage" style="background:#FCEBEB;border:2px solid #A32D2D;"><div style="font-size:16px;font-weight:500;color:#791F1F;">5단계</div><div style="font-size:10px;color:#A32D2D;margin-top:2px;">매우 고평가</div><div style="font-size:9px;color:#A32D2D;background:#F7C1C1;border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PBR</div></div>
-  </div>
-
-  <div class="warn">
-    <div style="font-size:13px;font-weight:500;color:#633806;margin-bottom:4px;">종합 밸류에이션 — 3~5단계 혼재 · 빅테크 최고 프리미엄 · Services 복합 성장이 정당화 근거</div>
-    <div style="font-size:12px;color:#854F0B;line-height:1.6;">PER 37.3x → 4단계(빅테크 최고). PBR 42.5x → 5단계(자사주 구조적). PSR 10.0x → 3단계. PCR 39.7x → 4단계. EV/EBITDA 27.8x → 3단계. <strong>5개 지표 평균 4단계 — "비싼" 주식임은 분명하나, Services 복리 성장과 설치 기반 20억대 해자가 프리미엄 정당화.</strong> PEG 3.01 — 성장 대비 가장 비싼 빅테크. 신고점 부근에서 신규 매수는 신중 필요.</div>
+  <div class="card">
+    <div class="card-title">핵심 투자 논리</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.7;">활성 기기 20억대 이상의 설치 기반 위에 Services 고마진 구조가 매년 복리 성장. TTM FCF $113B으로 분기당 $25~$28B 자사주 매입 가능. ROE 141%는 자본효율성 세계 최고. iPhone 슈퍼사이클 + Services 복리 성장 + AI 업그레이드 수요 = 3중 촉매. 관세 부담은 인도 생산 확대로 점진적 상쇄.</div>
   </div>
 </div>
 
-<!-- 5. US 특화 -->
-<div class="card">
-  <div class="sec">5. US 특화 — S&P 500 상대 성과 · 사업 구성 · 주주환원</div>
-  <div class="g2" style="margin-bottom:12px;">
-    <div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:8px;">S&P 500 대비 상대 수익률</div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">AAPL 52주</span><span class="up" style="font-weight:500;">+51.5%</span></div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">S&P 500 52주</span><span style="font-weight:500;">+15.2% (추정)</span></div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">알파(초과 수익)</span><span class="up" style="font-weight:500;">+36.3%p 아웃퍼폼</span></div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">S&P500 내 비중</span><span style="font-weight:500;">~5.8% (시총 3위)</span></div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">베타</span><span style="font-weight:500;">1.09 — 시장과 유사</span></div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">섹터</span><span class="badge b-aapl">Information Technology</span></div>
-    </div>
-    <div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:8px;">주주환원 · 사업 구성 (TTM)</div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">TTM 자사주 매입</span><span class="up" style="font-weight:500;">~$100B 수준 · 분기 $25B</span></div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">$100B 추가 바이백 승인</span><span class="up" style="font-weight:500;">2026.04 — 역대 최대 규모</span></div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">배당 증가율</span><span style="font-weight:500;">4% 인상 (분기 $0.26→$0.27)</span></div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">Services 비중</span><span class="up" style="font-weight:500;">TTM $96B · ~21% · 고마진</span></div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">iPhone 비중</span><span style="font-weight:500;">TTM ~$224B · ~50%</span></div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">다음 실적</span><span style="font-weight:500;">2026년 7월 (Q3 FY26)</span></div>
-    </div>
+<div id="pershare" class="section">
+  <div class="section-title">Per-Share 지표 (Q2 FY26 기준 · 14.67B 주)</div>
+  <div class="per-share-grid">
+    <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석, TTM)</div><div class="ps-value">$8.25</div><div class="ps-sub">Q3 FY25~Q2 FY26 합산</div></div>
+    <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (주당순자산)</div><div class="ps-value">$7.23</div><div class="ps-sub">Q2 FY26 · 자본 $106.5B</div></div>
+    <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$7.72</div><div class="ps-sub">TTM FCF $113.4B</div></div>
+    <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS (연간배당)</div><div class="ps-value">$1.04</div><div class="ps-sub">분기 $0.26 → $0.27 인상</div></div>
   </div>
-
-  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">Services vs Hardware 매출 비중 추이</div>
-  <div style="position:relative;width:100%;height:120px;margin-bottom:10px;">
-    <canvas id="servChart" role="img" aria-label="AAPL Services vs iPhone 분기 매출 추이">Services vs iPhone 매출 차트</canvas>
-  </div>
-  <div class="ib">
-    <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.7;"><strong style="color:var(--color-text-primary);">섹터 ETF:</strong> XLK(기술 ETF) 최대 비중. QQQ 최상위. DIA(다우존스) 포함. 시총 3위이나 WWDC 2026 + iPhone 17 출시 대기 카탈리스트. CEO 교체(Cook→Ternus 9월)는 시장이 첫 주요 불확실성으로 주목.</div>
-  </div>
+  <div style="font-size:11px;color:var(--text3);margin-top:10px;">* BPS가 낮은 이유: 수십년간 자사주 매입으로 순자산이 압축됨 — PBR 42x는 자본의 극단적 효율성 반영.</div>
 </div>
 
-<!-- 6. 뉴스 -->
-<div class="card">
-  <div class="sec">6. 시계열 주요 뉴스 <span class="src">2025.07 ~ 2026.06</span></div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;font-size:11px;">
-    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#2C2C2A;display:inline-block;"></span>초대형 이벤트</span>
-    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#1D9E75;display:inline-block;"></span>긍정</span>
-    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#D85A30;display:inline-block;"></span>부정</span>
-    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#888780;display:inline-block;"></span>중립</span>
+<div id="valuation" class="section">
+  <div class="section-title">밸류에이션 (Valuation Multiples) — 현재가 $307.34 · 빅테크 비교</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">멀티플 5단계 평가</div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PER (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">37.3x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:63%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 28x</span><span class="val-high">고 50x</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">빅테크 최고 · 10년평균 25x 대비 프리미엄. Forward PER 33.7x·PEG 3.01</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">42.5x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:69%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div>
+        <div class="val-labels"><span class="val-low">저 5x</span><span class="val-mid">적정 20x</span><span class="val-high">고 60x</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">자사주 매입으로 BPS 낮음 → PBR 높음이 구조적 특징</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">10.0x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:32%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
+        <div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 10x</span><span class="val-high">고 25x</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">Services 고마진으로 하드웨어 PSR보다 정당화</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PCR (FCF)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">39.7x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:49%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-labels"><span class="val-low">저 10x</span><span class="val-mid">적정 25x</span><span class="val-high">고 60x</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">FCF마진 25% · 자사주 매입 재원 충분</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">27.8x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:45%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
+        <div class="val-labels"><span class="val-low">저 10x</span><span class="val-mid">적정 25x</span><span class="val-high">고 50x</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV ~$4.4T÷TTM EBITDA $158B · 소비자가전+서비스 혼합 기업으로 30x 적정 논쟁</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">빅테크 PER 비교 (AAPL이 가장 높음)</div>
+      <div class="chart-wrap" style="height:220px;"><canvas id="peerChart"></canvas></div>
+      <div style="margin-top:12px;">
+        <div class="stage-grid">
+          <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우저평가</div></div>
+          <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div></div>
+          <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:8px;color:var(--accent2);background:rgba(162,170,173,0.15);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PSR·EV/EBITDA</div></div>
+          <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:8px;color:#e67e22;background:rgba(231,126,35,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PER·PCR</div></div>
+          <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우고평가</div><div style="font-size:8px;color:var(--red);background:rgba(231,76,60,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PBR</div></div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="tl">
-    <div class="tl-item">
-      <div class="tl-dot dot-neg"></div>
-      <div class="tl-date">2025년 4월 — 관세 최저점</div>
-      <div class="tl-title">트럼프 상호관세 발표 — $169 52주 최저 · 중국 공급망 직격</div>
-      <div class="tl-body">대중 관세 125% 발표로 AAPL $169까지 급락. iPhone 생산의 대부분이 중국 기반으로 직접적 타격. 이후 팀쿡 인도·베트남 생산 전환 가속 발표로 반등.</div>
-      <span class="tag tag-neg">관세 쇼크</span><span class="tag tag-pos">인도 전환 가속</span>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot dot-big"></div>
-      <div class="tl-date">2026년 1월 — Q1 FY26 실적</div>
-      <div class="tl-title">Q1 FY26 매출 $143.8B · iPhone 역대최대 $85.3B · EPS $2.84(+19%)</div>
-      <div class="tl-body">사상 최강 분기 성적. iPhone $85.3B(▲1.1%), Services $26.3B(▲14%) 역대최대. 영업CF $53.9B. EPS $2.84로 컨센서스 $2.67 크게 상회. Apple Intelligence 탑재 iPhone 16 업그레이드 수요 확인.</div>
-      <span class="tag tag-big">분기 역대최대</span><span class="tag tag-pos">EPS +19%</span><span class="tag tag-pos">Services 역대최대</span>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot dot-neg"></div>
-      <div class="tl-date">2026년 4월 20일 — CEO 교체</div>
-      <div class="tl-title">Tim Cook CEO 사임 발표 — John Ternus(SVP 하드웨어) 9월 승계 · 주가 -2.5%</div>
-      <div class="tl-body">팀쿡 9월 1일부로 CEO 사임 및 Executive Chairman 전환 발표. 25년 경력 하드웨어 엔지니어링 SVP John Ternus 승계. 시장은 초기 -2.5% 하락 반응했으나 빠르게 회복.</div>
-      <span class="tag tag-neg">CEO 교체</span><span class="tag tag-neu">Ternus 하드웨어 강점</span>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot dot-big"></div>
-      <div class="tl-date">2026년 4월 30일 — Q2 FY26 실적</div>
-      <div class="tl-title">Q2 FY26 매출 $111.2B(▲17%) · iPhone $58B 3월분기 최대 · $100B 바이백 승인</div>
-      <div class="tl-body">매출 $111.2B(컨센서스 $109.7B 상회), EPS $2.01(컨센서스 $1.95 상회), GM 49.3%. Services $31.0B 역대최대. 추가 $100B 자사주 승인 + 배당 4% 인상. 누적 관세 $3.3B 부담에도 서프라이즈.</div>
-      <span class="tag tag-big">컨센서스 상회</span><span class="tag tag-big">$100B 바이백</span><span class="tag tag-pos">GM 49.3%</span>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot dot-pos"></div>
-      <div class="tl-date">2026년 6월 — WWDC + 신고점</div>
-      <div class="tl-title">WWDC 2026 Apple Intelligence 2.0 발표 + 주가 $307 역대 최고 경신 중</div>
-      <div class="tl-body">WWDC 2026에서 Apple Intelligence 2.0, 강화된 Siri, Vision Pro 업데이트 발표. iOS 20 프리뷰. iPhone 17 Pro 탑재 M5칩 소문. 주가 $307 역대 최고 경신 진행 중.</div>
-      <span class="tag tag-pos">WWDC 2026</span><span class="tag tag-big">역대 최고가</span><span class="tag tag-pos">Apple Intelligence 2.0</span>
+  <div class="card">
+    <div class="card-title">밸류에이션 종합 코멘트 — 3~5단계 혼재 · 빅테크 최고 프리미엄</div>
+    <div class="grid-2">
+      <div style="background:var(--bg3);padding:14px;border-radius:8px;">
+        <div style="font-size:12px;color:var(--accent2);font-weight:700;margin-bottom:6px;">프리미엄 정당화 근거</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.6;">PSR 10.0x → 3단계. EV/EBITDA 27.8x → 3단계. Services 복리 성장과 설치 기반 20억대 해자가 프리미엄 정당화.</div>
+      </div>
+      <div style="background:var(--bg3);padding:14px;border-radius:8px;">
+        <div style="font-size:12px;color:var(--red);font-weight:700;margin-bottom:6px;">주의 요소</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.6;">PER 37.3x → 4단계(빅테크 최고). PBR 42.5x → 5단계(자사주 구조적). PCR 39.7x → 4단계. 5개 지표 평균 4단계 — PEG 3.01로 성장 대비 가장 비싼 빅테크. 신고점 부근 신규 매수는 신중 필요.</div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- 7. 투자 포인트 -->
-<div class="card">
-  <div class="sec">7. 2026년 핵심 투자 포인트</div>
-  <div class="g2">
-    <div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
-      <div class="ir"><span class="il">설치 기반 20억대 — 진입 불가 해자</span><span class="badge b-green">독점적 생태계</span></div>
-      <div class="ir"><span class="il">Services $31B+ · GM 75% · 복리성장</span><span class="badge b-green">마진 믹스 개선</span></div>
-      <div class="ir"><span class="il">$100B 바이백 + 배당 인상</span><span class="badge b-green">역대급 주주환원</span></div>
-      <div class="ir"><span class="il">인도 생산 확대 — 관세 리스크 완화</span><span class="badge b-teal">공급망 다변화</span></div>
-      <div class="ir"><span class="il">Apple Intelligence → iPhone 슈퍼사이클</span><span class="badge b-aapl">AI 업그레이드</span></div>
+<div id="us" class="section">
+  <div class="section-title">US 특화 — S&P 500 상대 성과 · 사업 구성 · 주주환원</div>
+  <div class="rel-container">
+    <div class="rel-title">S&P 500 대비 상대 수익률 (52주)</div>
+    <div class="grid-3">
+      <div class="stat-box"><div class="stat-label">AAPL 52주</div><div class="stat-value up">+51.5%</div></div>
+      <div class="stat-box"><div class="stat-label">S&P 500 52주 (추정)</div><div class="stat-value">+15.2%</div></div>
+      <div class="stat-box"><div class="stat-label">알파 (초과수익)</div><div class="stat-value gold">+36.3%p</div><div class="stat-sub">아웃퍼폼</div></div>
     </div>
-    <div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
-      <div class="ir"><span class="il">PER 37x · PEG 3.0 — 빅테크 최고 밸류</span><span class="badge b-red">고밸류 부담</span></div>
-      <div class="ir"><span class="il">Tim Cook 교체 (9월) — 리더십 불확실성</span><span class="badge b-amber">CEO 리스크</span></div>
-      <div class="ir"><span class="il">관세 누적 $3.3B · 중국 의존 지속</span><span class="badge b-amber">관세 지속 부담</span></div>
-      <div class="ir"><span class="il">중국 스마트폰 시장 점유율 압박</span><span class="badge b-amber">화웨이 경쟁</span></div>
-      <div class="ir"><span class="il">App Store EU·DOJ 규제 압박</span><span class="badge b-gray">규제 리스크</span></div>
+    <div class="zone-list" style="margin-top:12px;">
+      <div class="zone-item"><span class="zone-label">S&P500 내 비중</span><span class="zone-val">~5.8% (시총 3위)</span></div>
+      <div class="zone-item"><span class="zone-label">베타</span><span class="zone-val">1.09 — 시장과 유사</span></div>
     </div>
   </div>
-  <div class="ib">
+  <div class="card">
+    <div class="card-title">주주환원 · 사업 구성 (TTM)</div>
+    <div class="zone-list">
+      <div class="zone-item"><span class="zone-label">TTM 자사주 매입</span><span class="zone-val">~$100B · 분기 $25B</span></div>
+      <div class="zone-item"><span class="zone-label">$100B 추가 바이백 승인</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">2026.04</span><span class="zone-tag tag-current">역대 최대</span></div></div>
+      <div class="zone-item"><span class="zone-label">배당 증가율</span><span class="zone-val">4% 인상 (분기 $0.26→$0.27)</span></div>
+      <div class="zone-item"><span class="zone-label">Services 비중</span><span class="zone-val">TTM $96B · ~21%</span></div>
+      <div class="zone-item"><span class="zone-label">iPhone 비중</span><span class="zone-val">TTM ~$224B · ~50%</span></div>
+      <div class="zone-item"><span class="zone-label">다음 실적</span><span class="zone-val">2026년 7월 (Q3 FY26)</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Services vs Hardware 매출 비중 추이</div>
+    <div class="chart-wrap" style="height:200px;"><canvas id="servChart"></canvas></div>
+    <div style="margin-top:12px;font-size:12px;color:var(--text2);line-height:1.7;">
+      <strong style="color:var(--text);">섹터 ETF:</strong> XLK(기술 ETF) 최대 비중. QQQ 최상위. DIA(다우존스) 포함. 시총 3위이나 WWDC 2026 + iPhone 17 출시 대기 카탈리스트. CEO 교체(Cook→Ternus 9월)는 시장이 첫 주요 불확실성으로 주목.
+    </div>
+  </div>
+</div>
+
+<div id="news" class="section">
+  <div class="section-title">시계열 주요 뉴스 (2025.07 ~ 2026.06)</div>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;color:var(--text2);">
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent2);display:inline-block;"></span>초대형 이벤트</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;"></span>긍정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block;"></span>부정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--text3);display:inline-block;"></span>중립</span>
+  </div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-dot red"></div><div class="tl-date">2025년 4월 — 관세 최저점</div><div class="tl-title">트럼프 상호관세 발표 — $169 52주 최저 · 중국 공급망 직격</div><div class="tl-desc">대중 관세 125% 발표로 AAPL $169까지 급락. iPhone 생산의 대부분이 중국 기반으로 직접적 타격. 이후 팀쿡 인도·베트남 생산 전환 가속 발표로 반등.</div></div>
+    <div class="tl-item"><div class="tl-dot gold"></div><div class="tl-date">2026년 1월 — Q1 FY26 실적</div><div class="tl-title">Q1 FY26 매출 $143.8B · iPhone 역대최대 $85.3B · EPS $2.84(+19%)</div><div class="tl-desc">사상 최강 분기 성적. iPhone $85.3B(▲1.1%), Services $26.3B(▲14%) 역대최대. 영업CF $53.9B. EPS $2.84로 컨센서스 $2.67 크게 상회. Apple Intelligence 탑재 iPhone 16 업그레이드 수요 확인.</div></div>
+    <div class="tl-item"><div class="tl-dot red"></div><div class="tl-date">2026년 4월 20일 — CEO 교체</div><div class="tl-title">Tim Cook CEO 사임 발표 — John Ternus(SVP 하드웨어) 9월 승계 · 주가 -2.5%</div><div class="tl-desc">팀쿡 9월 1일부로 CEO 사임 및 Executive Chairman 전환 발표. 25년 경력 하드웨어 엔지니어링 SVP John Ternus 승계. 시장은 초기 -2.5% 하락 반응했으나 빠르게 회복.</div></div>
+    <div class="tl-item"><div class="tl-dot gold"></div><div class="tl-date">2026년 4월 30일 — Q2 FY26 실적</div><div class="tl-title">Q2 FY26 매출 $111.2B(▲17%) · iPhone $58B 3월분기 최대 · $100B 바이백 승인</div><div class="tl-desc">매출 $111.2B(컨센서스 $109.7B 상회), EPS $2.01(컨센서스 $1.95 상회), GM 49.3%. Services $31.0B 역대최대. 추가 $100B 자사주 승인 + 배당 4% 인상. 누적 관세 $3.3B 부담에도 서프라이즈.</div></div>
+    <div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2026년 6월 — WWDC + 신고점</div><div class="tl-title">WWDC 2026 Apple Intelligence 2.0 발표 + 주가 $307 역대 최고 경신 중</div><div class="tl-desc">WWDC 2026에서 Apple Intelligence 2.0, 강화된 Siri, Vision Pro 업데이트 발표. iOS 20 프리뷰. iPhone 17 Pro 탑재 M5칩 소문. 주가 $307 역대 최고 경신 진행 중.</div></div>
+  </div>
+</div>
+
+<div id="invest" class="section">
+  <div class="section-title">2026년 핵심 투자 포인트</div>
+  <div class="bull-bear">
+    <div class="bb-box">
+      <div class="bb-title bb-bull">🐂 Bull 요인</div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>설치 기반 20억대:</strong> 진입 불가 해자, 독점적 생태계.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Services $31B+, GM 75%:</strong> 복리성장, 마진 믹스 개선.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>$100B 바이백 + 배당 인상:</strong> 역대급 주주환원.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>인도 생산 확대:</strong> 관세 리스크 완화, 공급망 다변화.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Apple Intelligence:</strong> iPhone 슈퍼사이클 촉매.</span></div>
+    </div>
+    <div class="bb-box">
+      <div class="bb-title bb-bear">🐻 Bear 요인</div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>PER 37x·PEG 3.0:</strong> 빅테크 최고 밸류, 고밸류 부담.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>CEO 리스크:</strong> Tim Cook 교체(9월), 리더십 불확실성.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>관세 부담 지속:</strong> 누적 $3.3B, 중국 의존.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>화웨이 경쟁:</strong> 중국 스마트폰 시장 점유율 압박.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>규제 리스크:</strong> App Store EU·DOJ 규제 압박.</span></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">투자의견 요약</div>
     <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
-      <div><span style="color:var(--color-text-secondary);">투자의견:</span> <span class="badge b-aapl">Buy (BofA $325 · Evercore $330)</span></div>
-      <div><span style="color:var(--color-text-secondary);">다음 실적:</span> <span style="font-weight:500;">2026년 7월 (Q3 FY26)</span></div>
-      <div><span style="color:var(--color-text-secondary);">TTM EPS:</span> <span class="up" style="font-weight:500;">$8.25 · PER 37.3x</span></div>
-      <div><span style="color:var(--color-text-secondary);">배당:</span> <span style="font-weight:500;">분기 $0.27 · 수익률 0.35%</span></div>
+      <div><span style="color:var(--text2);">투자의견:</span> <strong style="color:var(--accent2)">Buy (BofA $325 · Evercore $330)</strong></div>
+      <div><span style="color:var(--text2);">다음 실적:</span> <strong style="color:var(--text)">2026년 7월 (Q3 FY26)</strong></div>
+      <div><span style="color:var(--text2);">TTM EPS:</span> <strong style="color:var(--green)">$8.25 · PER 37.3x</strong></div>
+      <div><span style="color:var(--text2);">배당:</span> <strong style="color:var(--text)">분기 $0.27 · 수익률 0.35%</strong></div>
     </div>
   </div>
-  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">차트 + 분기 재무제표 + SEC 공시 기준 · 투자 권고가 아닙니다</div>
-</div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<div class="disclaimer">
+  ⚠️ 본 위젯은 차트, 분기 재무제표, SEC 공시를 기반으로 작성된 정보 제공 목적의 분석 자료입니다. 투자 권고 또는 매매 추천이 아니며, 모든 투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다. 과거 실적이 미래 수익을 보장하지 않습니다.
+</div>
+
 <script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  renderCharts(id);
+}
+const charts = {};
+
 (function(){
   const svg=document.getElementById('aaplSvg');
   const W=720,H=240,pL=72,pR=12,pT=14,pB=24;
   const cW=W-pL-pR,cH=H-pT-pB;
-  // 차트 기반: 2025.07~2026.06 · $200→$280→$245→$307
   const data=[
     {o:20.0,h:21.0,l:19.8,c:20.5},{o:20.5,h:21.5,l:20.0,c:21.0},
     {o:21.0,h:22.0,l:20.5,c:21.5},{o:21.5,h:22.5,l:21.0,c:22.0},
@@ -506,10 +471,10 @@ h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:
     const y=py(v);
     const l=document.createElementNS('http://www.w3.org/2000/svg','line');
     l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
-    l.setAttribute('stroke','rgba(128,128,128,.12)');l.setAttribute('stroke-width','1');svg.appendChild(l);
+    l.setAttribute('stroke','rgba(255,255,255,.08)');l.setAttribute('stroke-width','1');svg.appendChild(l);
     const t=document.createElementNS('http://www.w3.org/2000/svg','text');
     t.setAttribute('x',pL-4);t.setAttribute('y',y+4);t.setAttribute('text-anchor','end');
-    t.setAttribute('font-size','9');t.setAttribute('fill','rgba(128,128,128,.7)');
+    t.setAttribute('font-size','9');t.setAttribute('fill','rgba(154,160,184,.8)');
     t.textContent='$'+(v*10);svg.appendChild(t);
   });
   function calcMA(d,n){return d.map((_,i)=>i<n-1?null:d.slice(i-n+1,i+1).reduce((s,x)=>s+x.c,0)/n);}
@@ -541,13 +506,13 @@ h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:
     t.setAttribute('font-size','9');t.setAttribute('fill',col);t.setAttribute('font-weight','500');
     t.textContent=lbl;svg.appendChild(t);
   };
-  mk(0,'$200 저점(\'25.07)',true,'#185FA5');
-  mk(47,'$307 역대최고(\'26.06)',false,'#D85A30');
+  mk(0,'$200 저점(\'25.07)',true,'#5aa4e8');
+  mk(47,'$307 역대최고(\'26.06)',false,'#e8825f');
   ['\'25.07','\'25.09','\'25.11','\'26.01','\'26.03','\'26.05'].forEach((m,i)=>{
     const cx=pL+(i/6)*cW+cW/12;
     const t=document.createElementNS('http://www.w3.org/2000/svg','text');
     t.setAttribute('x',cx);t.setAttribute('y',H-4);t.setAttribute('text-anchor','middle');
-    t.setAttribute('font-size','10');t.setAttribute('fill','rgba(128,128,128,.8)');
+    t.setAttribute('font-size','10');t.setAttribute('fill','rgba(154,160,184,.8)');
     t.textContent=m;svg.appendChild(t);
   });
   [{c:'#D85A30',t:'양봉'},{c:'#185FA5',t:'음봉'},{c:'#FF69B4',t:'MA5'},{c:'#9370DB',t:'MA20'},{c:'#DAA520',t:'MA60'},{c:'#228B22',t:'MA120'}].forEach((l,i)=>{
@@ -557,73 +522,88 @@ h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:
     r.setAttribute('fill',l.c);r.setAttribute('rx','2');svg.appendChild(r);
     const t=document.createElementNS('http://www.w3.org/2000/svg','text');
     t.setAttribute('x',gx+13);t.setAttribute('y',11);t.setAttribute('font-size','9');
-    t.setAttribute('fill','rgba(128,128,128,.9)');t.textContent=l.t;svg.appendChild(t);
+    t.setAttribute('fill','rgba(154,160,184,.9)');t.textContent=l.t;svg.appendChild(t);
   });
 })();
 
-new Chart(document.getElementById('aaplRevChart'),{
-  type:'bar',
-  data:{
-    labels:['Q3 FY24','Q4 FY24','Q1 FY25','Q2 FY25','Q3 FY25','Q4 FY25','Q1 FY26','Q2 FY26'],
-    datasets:[
-      {label:'매출($B)',data:[85.8,94.9,124.3,95.4,94.0,102.5,143.8,111.2],backgroundColor:'#444441',borderRadius:4,yAxisID:'y'},
-      {label:'Services($B)',data:[24.2,25.0,26.3,23.9,25.0,24.7,26.3,31.0],backgroundColor:'rgba(29,158,117,0.75)',borderRadius:4,yAxisID:'y'},
-      {label:'OPM%',type:'line',data:[29.6,31.2,34.5,31.0,30.0,31.7,35.4,32.3],borderColor:'#EF9F27',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
-    ]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false}},
-    scales:{
-      y:{position:'left',ticks:{font:{size:10},callback:v=>v+'B',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
-      y2:{position:'right',min:25,max:42,ticks:{font:{size:10},callback:v=>v+'%',color:'#EF9F27'},grid:{display:false}},
-      x:{ticks:{font:{size:9},color:'#888',maxRotation:30},grid:{display:false}}
+function renderFundChart() {
+  const ctx = document.getElementById('aaplRevChart');
+  if (!ctx || charts['fund']) return;
+  charts['fund'] = new Chart(ctx,{
+    data:{
+      labels:['Q3 FY24','Q4 FY24','Q1 FY25','Q2 FY25','Q3 FY25','Q4 FY25','Q1 FY26','Q2 FY26'],
+      datasets:[
+        {type:'bar',label:'매출($B)',data:[85.8,94.9,124.3,95.4,94.0,102.5,143.8,111.2],backgroundColor:'rgba(162,170,173,0.5)',borderColor:'#a2aaad',borderWidth:1,borderRadius:4,yAxisID:'y'},
+        {type:'bar',label:'Services($B)',data:[24.2,25.0,26.3,23.9,25.0,24.7,26.3,31.0],backgroundColor:'rgba(46,204,113,0.5)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4,yAxisID:'y'},
+        {type:'line',label:'OPM(%)',data:[29.6,31.2,34.5,31.0,30.0,31.7,35.4,32.3],borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#9aa0b8',font:{size:11}}}},
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:9},maxRotation:30}},
+        y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}},
+        y2:{position:'right',min:25,max:42,grid:{display:false},ticks:{color:'#f0c040',font:{size:10},callback:v=>v+'%'}}
+      }
     }
-  }
-});
-
-new Chart(document.getElementById('peerChart'),{
-  type:'bar',
-  data:{
-    labels:['GOOGL','META','NVDA','MSFT','AAPL'],
-    datasets:[{
-      label:'PER(TTM)',
-      data:[27.8,25.8,31.3,35.2,37.3],
-      backgroundColor:['#B4B2A9','#B4B2A9','#B4B2A9','#B4B2A9','#444441'],
-      borderRadius:5,borderSkipped:false
-    }]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`PER ${ctx.raw}x`}}},
-    scales:{
-      y:{max:45,ticks:{font:{size:10},callback:v=>v+'x',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
-      x:{ticks:{font:{size:10},color:'#888'},grid:{display:false}}
+  });
+}
+function renderPeerChart() {
+  const ctx = document.getElementById('peerChart');
+  if (!ctx || charts['peer']) return;
+  charts['peer'] = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['GOOGL','META','NVDA','MSFT','AAPL'],
+      datasets:[{
+        label:'PER(TTM)',
+        data:[27.8,25.8,31.3,35.2,37.3],
+        backgroundColor:['rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','#a2aaad'],
+        borderColor:['#5c6282','#5c6282','#5c6282','#5c6282','#d0d5d7'],
+        borderWidth:1,borderRadius:5
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`PER ${ctx.raw}x`}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{max:45,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
+      }
     }
-  }
-});
-
-new Chart(document.getElementById('servChart'),{
-  type:'bar',
-  data:{
-    labels:['Q1 FY25','Q2 FY25','Q3 FY25','Q4 FY25','Q1 FY26','Q2 FY26'],
-    datasets:[
-      {label:'iPhone($B)',data:[69.1,46.8,42.3,46.5,85.3,58.0],backgroundColor:'#D3D1C7',borderRadius:4,stack:'s'},
-      {label:'Services($B)',data:[26.3,23.9,25.0,24.7,26.3,31.0],backgroundColor:'#1D9E75',borderRadius:4,stack:'s'},
-      {label:'기타($B)',data:[28.9,24.7,26.7,31.3,32.2,22.2],backgroundColor:'#888780',borderRadius:4,stack:'s'}
-    ]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false}},
-    scales:{
-      y:{ticks:{font:{size:10},callback:v=>v+'B',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
-      x:{ticks:{font:{size:10},color:'#888'},grid:{display:false}}
+  });
+}
+function renderServChart() {
+  const ctx = document.getElementById('servChart');
+  if (!ctx || charts['serv']) return;
+  charts['serv'] = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['Q1 FY25','Q2 FY25','Q3 FY25','Q4 FY25','Q1 FY26','Q2 FY26'],
+      datasets:[
+        {label:'iPhone($B)',data:[69.1,46.8,42.3,46.5,85.3,58.0],backgroundColor:'rgba(154,160,184,0.4)',stack:'s',borderRadius:4},
+        {label:'Services($B)',data:[26.3,23.9,25.0,24.7,26.3,31.0],backgroundColor:'#2ecc71',stack:'s',borderRadius:4},
+        {label:'기타($B)',data:[28.9,24.7,26.7,31.3,32.2,22.2],backgroundColor:'rgba(92,98,130,0.6)',stack:'s',borderRadius:4}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#9aa0b8',font:{size:10}}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}}
+      }
     }
-  }
-});
+  });
+}
+function renderCharts(sectionId) {
+  setTimeout(() => {
+    if (sectionId === 'fund') renderFundChart();
+    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'us') renderServChart();
+  }, 50);
+}
 </script>
-
-</div>
 </body>
 </html>

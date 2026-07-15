@@ -9,15 +9,6 @@
     "lastUpdated": "2026-07-15"
   },
   {
-    "rank": 3,
-    "ticker": "AAPL",
-    "name": "Apple",
-    "sector": "Information Technology",
-    "accentColor": "#A2AAAD",
-    "page": "widgets/AAPL_analysis_widget.html",
-    "lastUpdated": "2026-07-15"
-  },
-  {
     "rank": 4,
     "ticker": "MSFT",
     "name": "Microsoft",
@@ -141,6 +132,15 @@
     "sector": "Communication Services",
     "accentColor": "#4285F4",
     "page": "widgets/GOOGL_analysis_widget.html",
+    "lastUpdated": "2026-07-15"
+  },
+  {
+    "rank": 3,
+    "ticker": "AAPL",
+    "name": "Apple",
+    "sector": "Information Technology",
+    "accentColor": "#A2AAAD",
+    "page": "widgets/AAPL_analysis_widget.html",
     "lastUpdated": "2026-07-15"
   }
 ]
