@@ -4,471 +4,417 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AVGO 종합 분석 위젯</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-:root {
-    --color-background-primary: light-dark(rgba(255, 255, 255, 1), rgba(48, 48, 46, 1));
-    --color-background-secondary: light-dark(rgba(245, 244, 237, 1), rgba(38, 38, 36, 1));
-    --color-background-tertiary: light-dark(rgba(250, 249, 245, 1), rgba(20, 20, 19, 1));
-    --color-background-inverse: light-dark(rgba(20, 20, 19, 1), rgba(250, 249, 245, 1));
-    --color-background-ghost: light-dark(rgba(255, 255, 255, 0), rgba(48, 48, 46, 0));
-    --color-background-info: light-dark(rgba(214, 228, 246, 1), rgba(37, 62, 95, 1));
-    --color-background-danger: light-dark(rgba(247, 236, 236, 1), rgba(96, 42, 40, 1));
-    --color-background-success: light-dark(rgba(233, 241, 220, 1), rgba(27, 70, 20, 1));
-    --color-background-warning: light-dark(rgba(246, 238, 223, 1), rgba(72, 58, 15, 1));
-    --color-background-disabled: light-dark(rgba(255, 255, 255, 0.5), rgba(48, 48, 46, 0.5));
-    --color-text-primary: light-dark(rgba(20, 20, 19, 1), rgba(250, 249, 245, 1));
-    --color-text-secondary: light-dark(rgba(61, 61, 58, 1), rgba(194, 192, 182, 1));
-    --color-text-tertiary: light-dark(rgba(115, 114, 108, 1), rgba(156, 154, 146, 1));
-    --color-text-inverse: light-dark(rgba(255, 255, 255, 1), rgba(20, 20, 19, 1));
-    --color-text-info: light-dark(rgba(50, 102, 173, 1), rgba(128, 170, 221, 1));
-    --color-text-danger: light-dark(rgba(127, 44, 40, 1), rgba(238, 136, 132, 1));
-    --color-text-success: light-dark(rgba(38, 91, 25, 1), rgba(122, 185, 72, 1));
-    --color-text-warning: light-dark(rgba(90, 72, 21, 1), rgba(209, 160, 65, 1));
-    --color-text-disabled: light-dark(rgba(20, 20, 19, 0.5), rgba(250, 249, 245, 0.5));
-    --color-text-ghost: light-dark(rgba(115, 114, 108, 0.5), rgba(156, 154, 146, 0.5));
-    --color-border-primary: light-dark(rgba(31, 30, 29, 0.4), rgba(222, 220, 209, 0.4));
-    --color-border-secondary: light-dark(rgba(31, 30, 29, 0.3), rgba(222, 220, 209, 0.3));
-    --color-border-tertiary: light-dark(rgba(31, 30, 29, 0.15), rgba(222, 220, 209, 0.15));
-    --color-border-inverse: light-dark(rgba(255, 255, 255, 0.3), rgba(20, 20, 19, 0.15));
-    --color-border-ghost: light-dark(rgba(31, 30, 29, 0), rgba(222, 220, 209, 0));
-    --color-border-info: light-dark(rgba(70, 130, 213, 1), rgba(70, 130, 213, 1));
-    --color-border-danger: light-dark(rgba(167, 61, 57, 1), rgba(205, 92, 88, 1));
-    --color-border-success: light-dark(rgba(67, 116, 38, 1), rgba(89, 145, 48, 1));
-    --color-border-warning: light-dark(rgba(128, 92, 31, 1), rgba(168, 120, 41, 1));
-    --color-border-disabled: light-dark(rgba(31, 30, 29, 0.1), rgba(222, 220, 209, 0.1));
-    --color-ring-primary: light-dark(rgba(20, 20, 19, 0.7), rgba(250, 249, 245, 0.7));
-    --color-ring-secondary: light-dark(rgba(61, 61, 58, 0.7), rgba(194, 192, 182, 0.7));
-    --color-ring-inverse: light-dark(rgba(255, 255, 255, 0.7), rgba(20, 20, 19, 0.7));
-    --color-ring-info: light-dark(rgba(50, 102, 173, 0.5), rgba(128, 170, 221, 0.5));
-    --color-ring-danger: light-dark(rgba(167, 61, 57, 0.5), rgba(205, 92, 88, 0.5));
-    --color-ring-success: light-dark(rgba(67, 116, 38, 0.5), rgba(89, 145, 48, 0.5));
-    --color-ring-warning: light-dark(rgba(128, 92, 31, 0.5), rgba(168, 120, 41, 0.5));
-    --font-sans: "Segoe UI", -apple-system, sans-serif;
-    --font-mono: ui-monospace, monospace;
-    --font-weight-normal: 400;
-    --font-weight-medium: 500;
-    --font-weight-semibold: 600;
-    --font-weight-bold: 700;
-    --font-text-xs-size: 12px;
-    --font-text-sm-size: 14px;
-    --font-text-md-size: 16px;
-    --font-text-lg-size: 20px;
-    --font-heading-xs-size: 12px;
-    --font-heading-sm-size: 14px;
-    --font-heading-md-size: 16px;
-    --font-heading-lg-size: 20px;
-    --font-heading-xl-size: 24px;
-    --font-heading-2xl-size: 28px;
-    --font-heading-3xl-size: 36px;
-    --font-text-xs-line-height: 1.4;
-    --font-text-sm-line-height: 1.4;
-    --font-text-md-line-height: 1.4;
-    --font-text-lg-line-height: 1.25;
-    --font-heading-xs-line-height: 1.4;
-    --font-heading-sm-line-height: 1.4;
-    --font-heading-md-line-height: 1.4;
-    --font-heading-lg-line-height: 1.25;
-    --font-heading-xl-line-height: 1.25;
-    --font-heading-2xl-line-height: 1.1;
-    --font-heading-3xl-line-height: 1;
-    --border-radius-xs: 4px;
-    --border-radius-sm: 6px;
-    --border-radius-md: 8px;
-    --border-radius-lg: 10px;
-    --border-radius-xl: 12px;
-    --border-radius-full: 9999px;
-    --border-width-regular: 0.5px;
-    --shadow-hairline: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-    color-scheme: light dark;
-}
-body { background: var(--color-background-tertiary); color: var(--color-text-primary); margin: 0; }
-.page-center { max-width: 800px; margin: 0 auto; padding: 16px; }
+  :root {
+    --bg: #0f1117; --bg2: #1a1d27; --bg3: #22263a; --border: #2e3347;
+    --text: #e8eaf0; --text2: #9aa0b8; --text3: #5c6282;
+    --accent: #CC092F; --accent2: #ff5c76; --accent3: #8a0620;
+    --bull: #D85A30; --bear: #185FA5; --ma5: #ff6b9d; --ma20: #9b59b6; --ma60: #f0c040; --ma120: #27ae60;
+    --green: #2ecc71; --red: #e74c3c; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
+  .header { background: linear-gradient(135deg, #1f0509 0%, #0f1117 40%, #1a1d27 100%); border-bottom: 2px solid var(--accent3); padding: 28px 32px 24px; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(204,9,47,0.14) 0%, transparent 70%); pointer-events: none; }
+  .header-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .ticker-block { display: flex; align-items: center; gap: 16px; }
+  .ticker-badge { background: linear-gradient(135deg, var(--accent3), var(--accent)); color: #fff; font-size: 13px; font-weight: 800; padding: 5px 12px; border-radius: 6px; letter-spacing: 1px; }
+  .company-name { font-size: 22px; font-weight: 700; color: var(--text); }
+  .company-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .price-block { text-align: right; }
+  .price-main { font-size: 32px; font-weight: 800; color: var(--accent2); letter-spacing: -1px; }
+  .price-change { font-size: 13px; color: var(--green); font-weight: 600; }
+  .header-meta { display: flex; gap: 24px; margin-top: 16px; flex-wrap: wrap; }
+  .meta-item { display: flex; flex-direction: column; }
+  .meta-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .meta-value { font-size: 13px; font-weight: 600; color: var(--text2); margin-top: 2px; }
+  .meta-value.highlight { color: var(--accent2); }
+  .nav { display: flex; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
+  .nav-btn:hover { color: var(--text); background: var(--bg3); }
+  .nav-btn.active { background: var(--accent3); color: var(--accent2); }
+  .section { display: none; padding: 28px 32px; }
+  .section.active { display: block; }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--accent2); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; display: inline-block; }
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px; }
+  .card-title { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; font-weight: 600; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .chart-wrap { position: relative; }
+  .chart-wrap canvas { max-width: 100%; }
+  .price-chart-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+  .stat-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .stat-value { font-size: 20px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
+  .stat-sub { font-size: 11px; color: var(--text3); }
+  .stat-value.up { color: var(--green); }
+  .stat-value.down { color: var(--red); }
+  .stat-value.gold { color: var(--accent2); }
+  .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .ma-row:last-child { border-bottom: none; }
+  .ma-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+  .ma-name { display: flex; align-items: center; font-size: 13px; color: var(--text2); }
+  .ma-val { font-size: 13px; font-weight: 600; }
+  .ma-status { font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
+  .status-above { background: rgba(46,204,113,0.15); color: var(--green); }
+  .status-below { background: rgba(231,76,60,0.15); color: var(--red); }
+  .zone-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .zone-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg3); border-radius: 6px; }
+  .zone-label { font-size: 12px; color: var(--text2); }
+  .zone-val { font-size: 13px; font-weight: 700; color: var(--accent2); }
+  .zone-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
+  .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
+  .tag-current { background: rgba(204,9,47,0.2); color: var(--accent2); }
+  .val-item { margin-bottom: 18px; }
+  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
+  .val-track { height: 8px; background: var(--bg3); border-radius: 4px; position: relative; overflow: hidden; }
+  .val-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+  .val-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+  .val-low { font-size: 10px; color: var(--green); }
+  .val-mid { font-size: 10px; color: var(--accent2); text-align: center; }
+  .val-high { font-size: 10px; color: var(--red); }
+  .stage-badge { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
+  .stage-1 { background: rgba(46,204,113,0.2); color: #2ecc71; }
+  .stage-2 { background: rgba(39,174,96,0.2); color: #27ae60; }
+  .stage-3 { background: rgba(200,168,75,0.2); color: var(--accent2); }
+  .stage-4 { background: rgba(231,126,35,0.2); color: #e67e22; }
+  .stage-5 { background: rgba(231,76,60,0.2); color: var(--red); }
+  .stage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .stage-mini { text-align: center; padding: 10px 4px; border-radius: 8px; }
+  .stage-mini-num { font-size: 15px; font-weight: 700; }
+  .stage-mini-label { font-size: 9px; margin-top: 2px; }
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent2); border: 2px solid var(--bg); }
+  .tl-dot.red { background: var(--red); }
+  .tl-dot.green { background: var(--green); }
+  .tl-dot.blue { background: var(--blue); }
+  .tl-dot.gold { background: var(--accent2); }
+  .tl-date { font-size: 10px; color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+  .tl-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 3px 0; }
+  .tl-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .bull-bear { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .bb-box { background: var(--bg3); border-radius: var(--radius); padding: 16px; }
+  .bb-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .bb-bull { color: var(--bull); }
+  .bb-bear { color: var(--bear); }
+  .bb-item { display: flex; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .bb-icon { flex-shrink: 0; margin-top: 2px; }
+  .driver-item { display: flex; gap: 12px; padding: 12px; background: var(--bg3); border-radius: 8px; margin-bottom: 10px; }
+  .driver-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent3); color: var(--accent2); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .driver-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .driver-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
+  .per-share-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .ps-card { background: var(--bg3); border-radius: 8px; padding: 16px; text-align: center; }
+  .ps-icon { font-size: 22px; margin-bottom: 6px; }
+  .ps-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .ps-value { font-size: 22px; font-weight: 800; color: var(--accent2); }
+  .ps-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
+  .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+  .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
+  .disclaimer { margin: 28px 32px 16px; padding: 12px 16px; background: rgba(204,9,47,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
+  .box-key { background: rgba(204,9,47,0.1); border: 1px solid var(--accent3); border-radius: var(--radius); padding: 12px 16px; margin: 0 32px 16px; }
+  .info-box { background: rgba(52,152,219,0.08); border: 1px solid var(--blue); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; color: var(--text2); }
+  @media (max-width: 600px) {
+    .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
+    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; }
+    .per-share-grid { grid-template-columns: 1fr 1fr; } .stage-grid { grid-template-columns: 1fr 1fr; } .price-main { font-size: 24px; }
+  }
 </style>
 </head>
 <body>
-<div class="page-center">
 
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-.wrap{padding:1rem 0;font-family:var(--font-sans);}
-h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
-.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;}
-.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
-.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
-.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
-.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
-.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;}
-.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
-.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
-.mv{font-size:14px;font-weight:500;color:var(--color-text-primary);}
-.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
-.up{color:#1D9E75;}.dn{color:#D85A30;}
-.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
-.b-green{background:#EAF3DE;color:#27500A;}.b-amber{background:#FAEEDA;color:#633806;}
-.b-red{background:#FCEBEB;color:#791F1F;}.b-blue{background:#E6F1FB;color:#0C447C;}
-.b-gray{background:#F1EFE8;color:#444441;}.b-avgo{background:#1A1A2E;color:#E8E8F0;}
-.b-avgo-l{background:#E8E8F0;color:#1A1A2E;}.b-teal{background:#E1F5EE;color:#04342C;}
-.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
-.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
-.ir:last-child{border-bottom:none;}
-.il{color:var(--color-text-secondary);}.iv{font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;}
-.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:6px;}
-.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:12px 14px;margin-top:10px;}
-.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:12px 14px;margin-top:10px;}
-.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
-.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
-.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
-.ev-5{background:#FCEBEB;color:#791F1F;}
-.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
-.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
-.ind-row:last-child{border-bottom:none;}
-.ind-nm{font-size:13px;font-weight:500;color:var(--color-text-primary);min-width:100px;}
-.ind-val{font-size:14px;font-weight:500;color:var(--color-text-primary);min-width:80px;text-align:right;}
-.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
-.bar-f{border-radius:4px;height:7px;}
-.stage-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:12px;}
-.stage{text-align:center;padding:12px 6px;border-radius:var(--border-radius-md);}
-.tl{position:relative;padding-left:28px;}
-.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
-.tl-item{position:relative;margin-bottom:18px;}
-.tl-item:last-child{margin-bottom:0;}
-.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid var(--color-background-primary);}
-.dot-big{background:#1A1A2E;}.dot-pos{background:#1D9E75;}
-.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
-.tl-date{font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:3px;}
-.tl-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
-.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
-.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
-.tag-big{background:#1A1A2E;color:#E8E8F0;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
-.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
-.sprow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:12px;}
-.sprow:last-child{border-bottom:none;}
-.box-key{background:#1A1A2E;border-radius:var(--border-radius-md);padding:12px 16px;margin-bottom:12px;}
-</style>
-
-<div class="wrap">
-<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-  <h2>Broadcom (AVGO)</h2>
-  <span class="badge b-avgo">S&P 500 시총 7위</span>
-  <span class="badge b-avgo-l">AI XPU · Networking · VMware · EBITDA 69%</span>
-  <span class="src">차트 + 분기 재무제표 + SEC 8-K</span>
+<div class="header">
+  <div class="header-top">
+    <div class="ticker-block">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+          <span class="ticker-badge">AVGO</span>
+          <span style="font-size:11px;color:var(--accent2);font-weight:600;">NASDAQ · AI XPU·Networking·VMware</span>
+        </div>
+        <div class="company-name">Broadcom Inc.</div>
+        <div class="company-sub">AI XPU · Networking · VMware · EBITDA 69% · S&P 500 시총 7위</div>
+      </div>
+    </div>
+    <div class="price-block">
+      <div class="price-main">$411.35</div>
+      <div class="price-change">▲ +4.70% (2026.06.16 기준)</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px;">52주 최저 $248 · 최고 $458</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$1.8T</span></div>
+    <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Information Technology</span></div>
+    <div class="meta-item"><span class="meta-label">Q2 AI 반도체</span><span class="meta-value">$10.8B (▲143%)</span></div>
+    <div class="meta-item"><span class="meta-label">Q3 가이던스</span><span class="meta-value">$29.4B (▲84%)</span></div>
+    <div class="meta-item"><span class="meta-label">GAAP EPS (TTM)</span><span class="meta-value">$6.20</span></div>
+    <div class="meta-item"><span class="meta-label">배당수익률</span><span class="meta-value">0.63% (분기 $0.65)</span></div>
+  </div>
 </div>
-<p class="sub">현재가 $411.35 (+4.70%) · 52주 최저 $248 (2025.07) · 52주 최고 $458 (2026.06) · 시총 $1.8T · GAAP EPS(TTM) $6.20 · 52주 수익률 +53%</p>
 
 <div class="box-key">
-  <div style="font-size:13px;font-weight:500;color:#E8E8F0;margin-bottom:4px;">핵심 투자 역설 — AI XPU +143% 성장 vs Q2 직후 -13% 급락</div>
-  <div style="font-size:12px;color:#B0B0C8;line-height:1.6;">Q2 FY26: AI 반도체 $10.8B(▲143%), Q3 가이던스 $29.4B(▲84%) — 역대 최대. 그러나 연간 AI 전망 불변 발표로 하루 -13% 급락. XPU 고객 Google·Meta·ByteDance·Anthropic·Fujitsu·OpenAI 6개사 확보. Non-GAAP EBITDA 69% — 소프트웨어 수준 마진. PEG 0.55로 성장 대비 저평가가 핵심 논리.</div>
+  <div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 역설 — AI XPU +143% 성장 vs Q2 직후 -13% 급락</div>
+  <div style="font-size:12px;color:var(--text2);line-height:1.6;">Q2 FY26: AI 반도체 $10.8B(▲143%), Q3 가이던스 $29.4B(▲84%) — 역대 최대. 그러나 연간 AI 전망 불변 발표로 하루 -13% 급락. XPU 고객 Google·Meta·ByteDance·Anthropic·Fujitsu·OpenAI 6개사 확보. Non-GAAP EBITDA 69% — 소프트웨어 수준 마진. PEG 0.55로 성장 대비 저평가가 핵심 논리.</div>
 </div>
 
-<div class="g4">
-  <div class="met"><div class="ml">현재가 (06/16)</div><div class="mv">$411.35</div><div class="ms dn">신고점 $458 대비 -10.2%</div></div>
-  <div class="met"><div class="ml">Q2 AI 반도체</div><div class="mv">$10.8B</div><div class="ms up">▲143% YoY · Q2 FY26</div></div>
-  <div class="met"><div class="ml">Q3 FY26 가이던스</div><div class="mv">$29.4B</div><div class="ms up">▲84% YoY · 역대 최대</div></div>
-  <div class="met"><div class="ml">Adj. EBITDA 마진</div><div class="mv">69%</div><div class="ms up">Q2 FY26 · 역대 최고</div></div>
+<div class="nav">
+  <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
+  <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
+  <button class="nav-btn" onclick="showSection('pershare')">💰 Per-Share</button>
+  <button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button>
+  <button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button>
+  <button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button>
+  <button class="nav-btn" onclick="showSection('invest')">🎯 투자 포인트</button>
 </div>
 
-<!-- 1. 기술적 분석 -->
-<div class="card">
-  <div class="sec">1. 기술적 분석 — 실제 차트 기반 (2025.07 ~ 2026.06)</div>
-  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
-    52주 최저 $248 (2025.07) → 52주 최고 $458 (2026.06) → 현재 $411.35 · 52주 수익률 +53%
+<div id="tech" class="section active">
+  <div class="section-title">기술적 분석 — 실제 차트 기반 (2025.07 ~ 2026.06)</div>
+  <div class="price-chart-container">
+    <div style="font-size:11px;color:var(--text3);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
+      <span>AVGO 52주 가격 추이 · 52주 최저 $248('25.07) → 최고 $458('26.06)</span>
+      <span style="color:var(--accent2);font-weight:600;">현재가 $411.35</span>
+    </div>
+    <svg id="avgoSvg" viewBox="0 0 720 240" width="100%" style="display:block;background:var(--bg3);border-radius:8px;padding:4px;" role="img" aria-label="AVGO 52주 주가 차트 2025.07~2026.06"></svg>
   </div>
-  <svg id="avgoSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;" role="img" aria-label="AVGO 52주 주가 차트 2025.07~2026.06"></svg>
-
-  <div class="g4" style="font-size:11px;margin-bottom:12px;">
-    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#27500A;font-weight:500;margin-bottom:3px;">2025.07~08 — 저점 반등</div>
-      <div style="color:#3B6D11;line-height:1.6;">$248 저점<br>VMware 통합 우려 해소<br>AI 수요 가시화<br>$330 박스 진입</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">구간별 가격 분석</div>
+      <div class="zone-list">
+        <div class="zone-item"><span class="zone-label">역대 최고</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$458 (2026.06.03 실적 전)</span><span class="zone-tag tag-resist">저항선</span></div></div>
+        <div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$411.35 (고점 대비 -10.2%)</span><span class="zone-tag tag-current">현재</span></div></div>
+        <div class="zone-item"><span class="zone-label">강한 지지</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$390~$400</span><span class="zone-tag tag-support">지지선</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$248 (2025.07)</span><span class="zone-tag tag-support">강지지</span></div></div>
+      </div>
     </div>
-    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#633806;font-weight:500;margin-bottom:3px;">2025.09~2026.01 — 박스 횡보</div>
-      <div style="color:#854F0B;line-height:1.6;">$300~$380 박스권<br>AI 매출 가속 확인 중<br>12월 $390 돌파 후 조정<br>방향성 탐색 구간</div>
-    </div>
-    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#27500A;font-weight:500;margin-bottom:3px;">2026.03~06 — 신고점 폭등</div>
-      <div style="color:#3B6D11;line-height:1.6;">$285→$458 폭등<br>Q1·Q2 AI 연속 서프라이즈<br>XPU 고객 6개사 공개<br>$458 역대 최고</div>
-    </div>
-    <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 11px;">
-      <div style="color:#791F1F;font-weight:500;margin-bottom:3px;">2026.06.04 — -13% 급락</div>
-      <div style="color:#A32D2D;line-height:1.6;">가이던스 불변에 충격<br>$458→$395 하루 급락<br>Q3 가이던스 $29.4B<br>현재 $411 반등 중</div>
-    </div>
-  </div>
-
-  <div class="g2" style="margin-bottom:12px;">
-    <div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">이동평균선 현황</div>
-      <div class="ir"><span class="il">5일선</span><span class="badge b-green">반등 지지</span></div>
-      <div class="ir"><span class="il">20일선</span><span class="badge b-amber">지지·저항 테스트</span></div>
-      <div class="ir"><span class="il">60일선</span><span class="badge b-green">강한 우상향</span></div>
-      <div class="ir"><span class="il">120일선</span><span class="badge b-green">완전 정배열</span></div>
-      <div class="ir"><span class="il">배열</span><span class="badge b-green">정배열 유지 · 조정 후 반등</span></div>
-    </div>
-    <div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">핵심 가격대</div>
-      <div class="ir"><span class="il">역대 최고</span><span style="font-weight:500;color:#1D9E75;">$458 (2026.06.03 실적 전)</span></div>
-      <div class="ir"><span class="il">강한 지지</span><span style="font-weight:500;color:#185FA5;">$390~$400</span></div>
-      <div class="ir"><span class="il">현재가</span><span style="font-weight:500;color:#854F0B;">$411.35 (고점 대비 -10.2%)</span></div>
-      <div class="ir"><span class="il">52주 수익률</span><span style="font-weight:500;color:#1D9E75;">+53.1%</span></div>
-      <div class="ir"><span class="il">배당수익률</span><span style="font-weight:500;color:#1D9E75;">0.63% · 분기 $0.65 · 매년 10%+ 인상</span></div>
+    <div class="card">
+      <div class="card-title">이동평균선 현황</div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기)</span><span class="ma-val" style="color:var(--ma5)">반등 지지</span><span class="ma-status status-above">지지</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기)</span><span class="ma-val" style="color:var(--ma20)">지지·저항 테스트</span><span class="ma-status status-below">테스트중</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기)</span><span class="ma-val" style="color:var(--ma60)">강한 우상향</span><span class="ma-status status-above">정배열</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기)</span><span class="ma-val" style="color:var(--ma120)">완전 정배열</span><span class="ma-status status-above">유지</span></div>
+      <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">
+        ⚠️ 정배열 유지 · 조정 후 반등 중 · 52주 수익률 +53.1% · 배당수익률 0.63%(분기 $0.65, 매년 10%+ 인상)
+      </div>
     </div>
   </div>
-
-  <div class="sig">
-    <span class="badge b-green">Q2 AI 반도체 +143% · Q3 가이던스 +84% 역대최대</span>
-    <span class="badge b-green">XPU 고객 6개사 — Google·Meta·OpenAI·Anthropic 등</span>
-    <span class="badge b-green">FCF 마진 46% · PEG 0.55 — 성장 대비 저평가</span>
-    <span class="badge b-red">연간 AI 전망 불변 → 하루 -13% 급락 (6/4)</span>
-    <span class="badge b-amber">GAAP PER 66x — 소프트웨어 혼합 구조로 왜곡</span>
-    <span class="badge b-avgo-l">Non-GAAP PER 25x · EBITDA 69% = 실질 저평가</span>
+  <div class="card">
+    <div class="card-title">구간별 패턴 분석</div>
+    <div class="grid-4">
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.07~08 저점 반등</div><div style="font-size:12px;color:var(--text2);">$248 저점. VMware 통합 우려 해소. AI 수요 가시화. $330 박스 진입.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.09~2026.01 박스 횡보</div><div style="font-size:12px;color:var(--text2);">$300~$380 박스권. AI 매출 가속 확인 중. 12월 $390 돌파 후 조정. 방향성 탐색 구간.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.03~06 신고점 폭등</div><div style="font-size:12px;color:var(--text2);">$285→$458 폭등. Q1·Q2 AI 연속 서프라이즈. XPU 고객 6개사 공개. $458 역대 최고.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.06.04 -13% 급락</div><div style="font-size:12px;color:var(--text2);">가이던스 불변에 충격. $458→$395 하루 급락. Q3 가이던스 $29.4B. 현재 $411 반등 중.</div></div>
+    </div>
+  </div>
+  <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;">
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">Q2 AI 반도체 +143% · Q3 가이던스 +84% 역대최대</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">XPU 고객 6개사 — Google·Meta·OpenAI·Anthropic 등</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">FCF 마진 46% · PEG 0.55 — 성장 대비 저평가</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">연간 AI 전망 불변 → 하루 -13% 급락 (6/4)</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(240,192,64,0.18);color:var(--ma60);">GAAP PER 66x — 소프트웨어 혼합 구조로 왜곡</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(204,9,47,0.18);color:var(--accent2);">Non-GAAP PER 25x · EBITDA 69% = 실질 저평가</span>
   </div>
 </div>
 
-<!-- 2. 기본적 분석 -->
-<div class="card">
-  <div class="sec">2. 기본적 분석 — 분기 재무제표 <span class="src">실제 수치 · AVGO FY 기준 (11월~10월)</span></div>
-
-  <div style="position:relative;width:100%;height:165px;margin-bottom:12px;">
-    <canvas id="avgoRevChart" role="img" aria-label="AVGO 분기 매출 및 AI반도체·영업이익률 추이">분기 매출 차트</canvas>
+<div id="fund" class="section">
+  <div class="section-title">기본적 분석 — 분기 재무제표 (AVGO FY 기준, 11월~10월)</div>
+  <div class="card">
+    <div class="card-title">분기 총매출 / AI반도체 / OPM (Q1'25~Q3'26E)</div>
+    <div class="chart-wrap" style="height:260px;"><canvas id="avgoRevChart"></canvas></div>
   </div>
-
-  <div class="g2" style="margin-bottom:12px;">
-    <div>
-      <div class="ir"><span class="il">Q2 FY26 총매출</span><span class="iv up">$22.2B (▲48% YoY) <span class="ev ev-5">매우높음</span></span></div>
-      <div class="ir"><span class="il">Q2 AI 반도체</span><span class="iv up">$10.8B (▲143% YoY) <span class="ev ev-5">매우높음</span></span></div>
-      <div class="ir"><span class="il">Q2 FCF</span><span class="iv up">$10.3B (FCF 마진 46%) <span class="ev ev-5">매우높음</span></span></div>
-      <div class="ir"><span class="il">Q2 Adj. EBITDA</span><span class="iv up">$15.2B (69% 마진 · 역대최고) <span class="ev ev-5">매우높음</span></span></div>
-      <div class="ir"><span class="il">Q2 Non-GAAP EPS</span><span class="iv up">$2.44 (컨센서스 $2.32 상회) <span class="ev ev-4">높음</span></span></div>
-    </div>
-    <div>
-      <div class="ir"><span class="il">Q3 FY26 가이던스</span><span class="iv up">$29.4B (▲84% YoY) · 역대최대</span></div>
-      <div class="ir"><span class="il">Q3 AI 반도체 예상</span><span class="iv up">$16.0B (▲200%+)</span></div>
-      <div class="ir"><span class="il">AI 백로그</span><span class="iv up">$73B (2025~2027 예약)</span></div>
-      <div class="ir"><span class="il">XPU 고객 수</span><span class="iv up">6개사 + 2개사 협상 중</span></div>
-      <div class="ir"><span class="il">VMware 인프라SW</span><span class="iv up">$6.5B/분기 · 고마진 안정 성장</span></div>
-    </div>
+  <div class="grid-3">
+    <div class="stat-box"><div class="stat-label">총매출 (Q2 FY26)</div><div class="stat-value up">$22.2B</div><div class="stat-sub">▲48% YoY</div></div>
+    <div class="stat-box"><div class="stat-label">AI 반도체 (Q2 FY26)</div><div class="stat-value up">$10.8B</div><div class="stat-sub">▲143% YoY</div></div>
+    <div class="stat-box"><div class="stat-label">FCF (Q2 FY26)</div><div class="stat-value up">$10.3B</div><div class="stat-sub">FCF 마진 46%</div></div>
+    <div class="stat-box"><div class="stat-label">Adj. EBITDA (Q2 FY26)</div><div class="stat-value up">$15.2B</div><div class="stat-sub">69% 마진, 역대최고</div></div>
+    <div class="stat-box"><div class="stat-label">Non-GAAP EPS (Q2 FY26)</div><div class="stat-value up">$2.44</div><div class="stat-sub">컨센서스 $2.32 상회</div></div>
+    <div class="stat-box"><div class="stat-label">AI 백로그</div><div class="stat-value gold">$73B</div><div class="stat-sub">2025~2027 예약</div></div>
   </div>
-
-  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">핵심 성장 동력</div>
-  <div class="g3" style="font-size:12px;margin-bottom:12px;">
-    <div style="background:#1A1A2E;border-radius:var(--border-radius-md);padding:10px 12px;">
-      <div style="color:#E8E8F0;font-weight:500;margin-bottom:3px;">AI XPU (폭발 성장)</div>
-      <div style="color:#B0B0C8;line-height:1.6;">Q2 $10.8B ▲143%<br>Google·Meta·ByteDance<br>Anthropic·Fujitsu·OpenAI<br>Meta 2027 1GW → $12~15B</div>
-    </div>
-    <div style="background:#E6F1FB;border-radius:var(--border-radius-md);padding:10px 12px;">
-      <div style="color:#0C447C;font-weight:500;margin-bottom:3px;">AI 네트워킹 (독점)</div>
-      <div style="color:#185FA5;line-height:1.6;">Ultra Ethernet 표준 주도<br>NVDA InfiniBand 대항마<br>AI 클러스터당 $0.4~0.6<br>가속기 시장 연동 성장</div>
-    </div>
-    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px 12px;">
-      <div style="color:#27500A;font-weight:500;margin-bottom:3px;">VMware (SW 고마진)</div>
-      <div style="color:#3B6D11;line-height:1.6;">$69B 인수 → 완전 통합<br>분기 ~$6.5B 안정 수익<br>OPM 60%+ 초고마진<br>구독 전환 완료 · 안정화</div>
-    </div>
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">핵심 성장 동력 3가지</div>
+    <div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">AI XPU — 폭발 성장</div><div class="driver-desc">Q2 $10.8B ▲143%. Google·Meta·ByteDance·Anthropic·Fujitsu·OpenAI. Meta 2027 1GW → $12~15B.</div></div></div>
+    <div class="driver-item"><div class="driver-num">2</div><div><div class="driver-title">AI 네트워킹 — 독점</div><div class="driver-desc">Ultra Ethernet 표준 주도. NVDA InfiniBand 대항마. AI 클러스터당 $0.4~0.6. 가속기 시장 연동 성장.</div></div></div>
+    <div class="driver-item"><div class="driver-num">3</div><div><div class="driver-title">VMware — SW 고마진</div><div class="driver-desc">$69B 인수 → 완전 통합. 분기 ~$6.5B 안정 수익. OPM 60%+ 초고마진. 구독 전환 완료·안정화.</div></div></div>
   </div>
-
-  <div class="hl">
-    <div style="font-size:13px;font-weight:500;color:#27500A;margin-bottom:4px;">핵심 투자 논리 — 커스텀 XPU 독점 + VMware SW 고마진 + 69% EBITDA 마진의 3중 구조</div>
-    <div style="font-size:12px;color:#1D9E75;line-height:1.7;">NVDA와 달리 범용 GPU가 아닌 고객 맞춤형 XPU 설계 → 고객 이탈 불가 구조. 각 XPU 고객은 3~5년 반복 수익 확보. 2027 목표: Meta 1GW($12~15B) + OpenAI XPU 대규모 배포 → 연 매출 $100B 돌파 가시권. <strong>GAAP PER 66x는 M&A 상각 비용 왜곡 — Non-GAAP 기준 25x · PEG 0.55 = 성장 대비 NVDA보다 저렴.</strong></div>
+  <div class="card">
+    <div class="card-title">핵심 투자 논리</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.7;">NVDA와 달리 범용 GPU가 아닌 고객 맞춤형 XPU 설계 → 고객 이탈 불가 구조. 각 XPU 고객은 3~5년 반복 수익 확보. 2027 목표: Meta 1GW($12~15B) + OpenAI XPU 대규모 배포 → 연 매출 $100B 돌파 가시권. GAAP PER 66x는 M&A 상각 비용 왜곡 — Non-GAAP 기준 25x · PEG 0.55 = 성장 대비 NVDA보다 저렴.</div>
   </div>
 </div>
 
-<!-- 3. Per-Share -->
-<div class="card">
-  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">Q2 FY26 기준 · 4.76B 주</span></div>
-  <div class="g4">
-    <div class="met"><div class="ml">GAAP EPS(희석) · TTM</div><div class="mv">$6.20</div><div class="ms">VMware 상각 왜곡 포함</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
-    <div class="met"><div class="ml">Non-GAAP EPS · TTM</div><div class="mv">$8.41</div><div class="ms">실질 수익력 지표</div><div style="margin-top:5px;"><span class="ev ev-4">높음</span></div></div>
-    <div class="met"><div class="ml">FCF/주 · TTM</div><div class="mv">$7.30</div><div class="ms">TTM FCF $34.8B</div><div style="margin-top:5px;"><span class="ev ev-5">매우높음</span></div></div>
-    <div class="met"><div class="ml">DPS · 연간배당</div><div class="mv">$2.60</div><div class="ms">분기 $0.65 · 매년 10%+ 인상</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+<div id="pershare" class="section">
+  <div class="section-title">Per-Share 지표 (Q2 FY26 기준 · 4.76B 주)</div>
+  <div class="per-share-grid">
+    <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS (희석, TTM)</div><div class="ps-value">$6.20</div><div class="ps-sub">VMware 상각 왜곡 포함</div></div>
+    <div class="ps-card"><div class="ps-icon">💎</div><div class="ps-label">Non-GAAP EPS (TTM)</div><div class="ps-value">$8.41</div><div class="ps-sub">실질 수익력 지표</div></div>
+    <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$7.30</div><div class="ps-sub">TTM FCF $34.8B</div></div>
+    <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS (연간배당)</div><div class="ps-value">$2.60</div><div class="ps-sub">분기 $0.65 · 매년 10%+ 인상</div></div>
   </div>
-  <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:6px;">* GAAP EPS vs Non-GAAP EPS 괴리의 이유: VMware $69B 인수 관련 분기 $2.2B 무형자산 상각(D&A) — 현금 지출 없는 회계 비용. Non-GAAP 기준이 실질 수익력을 반영.</div>
+  <div style="font-size:11px;color:var(--text3);margin-top:10px;">* GAAP EPS vs Non-GAAP EPS 괴리의 이유: VMware $69B 인수 관련 분기 $2.2B 무형자산 상각(D&A) — 현금 지출 없는 회계 비용. Non-GAAP 기준이 실질 수익력을 반영.</div>
 </div>
 
-<!-- 4. 밸류에이션 -->
-<div class="card">
-  <div class="sec">4. 상대 투자지표 (Valuation Multiples) · 현재가 $411.35 · GAAP vs Non-GAAP 분리 분석</div>
-
-  <div style="background:#E6F1FB;border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:12px;font-size:12px;color:#0C447C;">
-    <strong>⚠ AVGO 밸류에이션 주의:</strong> VMware 인수 무형자산 상각($2.2B/분기)으로 GAAP EPS·PER이 크게 왜곡됨. <strong>Non-GAAP 기준(Forward PER 25x, PEG 0.55)이 실질 투자지표.</strong>
+<div id="valuation" class="section">
+  <div class="section-title">밸류에이션 (Valuation Multiples) — 현재가 $411.35 · GAAP vs Non-GAAP 분리 분석</div>
+  <div class="info-box">
+    <strong>⚠ AVGO 밸류에이션 주의:</strong> VMware 인수 무형자산 상각($2.2B/분기)으로 GAAP EPS·PER이 크게 왜곡됨. Non-GAAP 기준(Forward PER 25x, PEG 0.55)이 실질 투자지표.
   </div>
-
-  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;font-size:11px;">
-    <span style="padding:2px 8px;border-radius:999px;background:#E6F1FB;color:#0C447C;font-weight:500;">1단계 매우낮음</span>
-    <span style="padding:2px 8px;border-radius:999px;background:#EAF3DE;color:#27500A;font-weight:500;">2단계 낮음</span>
-    <span style="padding:2px 8px;border-radius:999px;background:#F1EFE8;color:#444441;font-weight:500;">3단계 적정</span>
-    <span style="padding:2px 8px;border-radius:999px;background:#FAEEDA;color:#633806;font-weight:500;">4단계 높음</span>
-    <span style="padding:2px 8px;border-radius:999px;background:#FCEBEB;color:#791F1F;font-weight:500;">5단계 매우높음</span>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">멀티플 5단계 평가</div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PER (GAAP)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">66.3x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:47%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-labels"><span class="val-low">저 20x</span><span class="val-mid">적정 50x</span><span class="val-high">고 120x</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">VMware 상각 포함. Non-GAAP PER: $411.35÷$16.40(LTM) = 25.1x · Forward 25.0x · PEG 0.55</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">22.9x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:32%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
+        <div class="val-labels"><span class="val-low">저 5x</span><span class="val-mid">적정 20x</span><span class="val-high">고 60x</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">$411.35÷$17.98(BPS) · 자기자본 $88B · Goodwill $98B 포함 · ROE 37%</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">23.8x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:42%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-labels"><span class="val-low">저 5x</span><span class="val-mid">적정 20x</span><span class="val-high">고 50x</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">시총 $1.8T÷TTM $75.5B · AI+SW 혼합 50%+ 마진으로 높은 PSR 정당화</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PCR (FCF)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">51.7x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 35x</span><span class="val-high">고 80x</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">FCF 마진 46% · $1 수익에 $1.5의 성장 자금 재투자</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">44.3x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:45%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 35x</span><span class="val-high">고 80x</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV $1.86T÷TTM EBITDA $42B. Adj.EBITDA 기준: EV÷$47.7B = 39x · 성장률 80%+ 고려 시 합리적</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">빅테크+반도체 Non-GAAP PER 비교</div>
+      <div class="chart-wrap" style="height:220px;"><canvas id="peerChart"></canvas></div>
+      <div style="margin-top:12px;">
+        <div class="stage-grid">
+          <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우저평가</div></div>
+          <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div></div>
+          <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:8px;color:var(--accent2);background:rgba(204,9,47,0.15);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PBR</div></div>
+          <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:8px;color:#e67e22;background:rgba(231,126,35,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">GAAP PER·PSR·PCR·EV/EBITDA</div></div>
+          <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우고평가</div></div>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <div class="ind-row">
-    <div class="ind-nm">PER (GAAP)</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">$411.35÷$6.20 · VMware 상각 포함<br><span style="color:#1D9E75;">Non-GAAP PER: $411.35÷$16.40(LTM Non-GAAP) = 25.1x · Forward 25.0x · PEG 0.55</span></div>
-    <div class="ind-val">66.3x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(20x)</span><span>적정(50x)</span><span>고(120x)</span></div><div class="bar-bg"><div class="bar-f" style="width:47%;background:#FAEEDA;"></div></div></div>
-    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
-  </div>
-
-  <div class="ind-row">
-    <div class="ind-nm">PBR</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">$411.35÷$17.98 · 자기자본 $88B · Goodwill $98B 포함 · ROE 37%</div>
-    <div class="ind-val">22.9x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(5x)</span><span>적정(20x)</span><span>고(60x)</span></div><div class="bar-bg"><div class="bar-f" style="width:32%;background:#F1EFE8;"></div></div></div>
-    <span class="ev ev-3" style="min-width:58px;text-align:center;">3단계</span>
-  </div>
-
-  <div class="ind-row">
-    <div class="ind-nm">PSR (TTM)</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">시총 $1.8T÷TTM $75.5B · AI+SW 혼합 50%+ 마진으로 높은 PSR 정당화</div>
-    <div class="ind-val">23.8x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(5x)</span><span>적정(20x)</span><span>고(50x)</span></div><div class="bar-bg"><div class="bar-f" style="width:42%;background:#FAEEDA;"></div></div></div>
-    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
-  </div>
-
-  <div class="ind-row">
-    <div class="ind-nm">PCR (FCF)</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">시총 $1.8T÷TTM FCF $34.8B · FCF 마진 46% · $1 수익에 $1.5의 성장 자금 재투자</div>
-    <div class="ind-val">51.7x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(15x)</span><span>적정(35x)</span><span>고(80x)</span></div><div class="bar-bg"><div class="bar-f" style="width:57%;background:#FAEEDA;"></div></div></div>
-    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
-  </div>
-
-  <div class="ind-row">
-    <div class="ind-nm">EV/EBITDA</div>
-    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">EV $1.86T÷TTM EBITDA $42B · <span style="color:#1D9E75;">Adj. EBITDA 기준: EV÷$47.7B = 39x · 성장률 80%+ 고려 시 합리적</span></div>
-    <div class="ind-val">44.3x</div>
-    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(15x)</span><span>적정(35x)</span><span>고(80x)</span></div><div class="bar-bg"><div class="bar-f" style="width:45%;background:#FAEEDA;"></div></div></div>
-    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
-  </div>
-
-  <div style="margin-top:12px;font-size:13px;font-weight:500;margin-bottom:8px;">빅테크+반도체 Non-GAAP PER 비교</div>
-  <div style="position:relative;width:100%;height:140px;margin-bottom:10px;">
-    <canvas id="peerChart" role="img" aria-label="Non-GAAP PER 비교 차트">MSFT 23.2x, AVGO 25.1x, GOOGL 27.8x, NVDA 31.3x, AAPL 37.3x</canvas>
-  </div>
-
-  <div class="stage-grid" style="margin-top:14px;">
-    <div class="stage" style="background:#E6F1FB;"><div style="font-size:16px;font-weight:500;color:#0C447C;">1단계</div><div style="font-size:10px;color:#185FA5;margin-top:2px;">매우 저평가</div></div>
-    <div class="stage" style="background:#EAF3DE;"><div style="font-size:16px;font-weight:500;color:#27500A;">2단계</div><div style="font-size:10px;color:#3B6D11;margin-top:2px;">저평가</div></div>
-    <div class="stage" style="background:#F1EFE8;border:2px solid #5F5E5A;"><div style="font-size:16px;font-weight:500;color:#444441;">3단계</div><div style="font-size:10px;color:#5F5E5A;margin-top:2px;">적정</div><div style="font-size:9px;color:#5F5E5A;background:#D3D1C7;border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PBR</div></div>
-    <div class="stage" style="background:#FAEEDA;border:2px solid #854F0B;"><div style="font-size:16px;font-weight:500;color:#633806;">4단계</div><div style="font-size:10px;color:#854F0B;margin-top:2px;">고평가</div><div style="font-size:9px;color:#854F0B;background:#FAC775;border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">GAAP PER·PSR·PCR·EV/EBITDA</div></div>
-    <div class="stage" style="background:#FCEBEB;"><div style="font-size:16px;font-weight:500;color:#791F1F;">5단계</div><div style="font-size:10px;color:#A32D2D;margin-top:2px;">매우 고평가</div></div>
-  </div>
-
-  <div class="warn">
-    <div style="font-size:13px;font-weight:500;color:#633806;margin-bottom:4px;">종합 밸류에이션 — GAAP 기준 4단계(고평가) · Non-GAAP 기준 2~3단계 · PEG 0.55이 핵심</div>
-    <div style="font-size:12px;color:#854F0B;line-height:1.6;">GAAP 기준 모든 지표 4단계 — 그러나 VMware 상각($2.2B/분기)이 수치를 왜곡. <strong>Non-GAAP 기준 Forward PER 25x + PEG 0.55 = 성장률 80%+ 대비 NVDA(PEG 0.49)와 거의 동등하게 저평가된 성장주.</strong> 전통 GAAP 지표로만 평가하면 오류. Q3 가이던스 $29.4B(▲84%) 시현 시 PER 급격 하락.</div>
+  <div class="card">
+    <div class="card-title">종합 밸류에이션 — GAAP 기준 4단계(고평가) · Non-GAAP 기준 2~3단계 · PEG 0.55이 핵심</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;">GAAP 기준 모든 지표 4단계 — 그러나 VMware 상각($2.2B/분기)이 수치를 왜곡. Non-GAAP 기준 Forward PER 25x + PEG 0.55 = 성장률 80%+ 대비 NVDA(PEG 0.49)와 거의 동등하게 저평가된 성장주. 전통 GAAP 지표로만 평가하면 오류. Q3 가이던스 $29.4B(▲84%) 시현 시 PER 급격 하락.</div>
   </div>
 </div>
 
-<!-- 5. US 특화 -->
-<div class="card">
-  <div class="sec">5. US 특화 — S&P 500 상대 성과 · XPU 고객 파이프라인 · 실적 로드맵</div>
-  <div class="g2" style="margin-bottom:12px;">
-    <div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:8px;">S&P 500 대비 상대 수익률</div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">AVGO 52주</span><span class="up" style="font-weight:500;">+53.1%</span></div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">S&P 500 52주</span><span style="font-weight:500;">+15.2% (추정)</span></div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">알파(초과 수익)</span><span class="up" style="font-weight:500;">+37.9%p 아웃퍼폼</span></div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">S&P500 내 비중</span><span style="font-weight:500;">~2.0%</span></div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">베타</span><span style="font-weight:500;">1.43</span></div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">섹터</span><span class="badge b-avgo-l">Information Technology (SOXX·SMH 상위)</span></div>
+<div id="us" class="section">
+  <div class="section-title">US 특화 — S&P 500 상대 성과 · XPU 고객 파이프라인 · 실적 로드맵</div>
+  <div class="rel-container">
+    <div class="rel-title">S&P 500 대비 상대 수익률 (52주)</div>
+    <div class="grid-3">
+      <div class="stat-box"><div class="stat-label">AVGO 52주</div><div class="stat-value up">+53.1%</div></div>
+      <div class="stat-box"><div class="stat-label">S&P 500 52주 (추정)</div><div class="stat-value">+15.2%</div></div>
+      <div class="stat-box"><div class="stat-label">알파 (초과수익)</div><div class="stat-value gold">+37.9%p</div><div class="stat-sub">아웃퍼폼</div></div>
     </div>
-    <div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:8px;">XPU 고객별 수익 파이프라인</div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">Google (Ironwood TPU)</span><span class="up" style="font-weight:500;">7세대 배포 중 · 8세대 2027 대기</span></div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">Meta</span><span class="up" style="font-weight:500;">2027 1GW → $12~15B 기회</span></div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">OpenAI</span><span class="up" style="font-weight:500;">1세대 XPU 2027 1GW+ 배포</span></div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">ByteDance</span><span style="font-weight:500;">대규모 수주 진행 중</span></div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">Anthropic</span><span style="font-weight:500;">+ Fujitsu 추가 확보</span></div>
-      <div class="sprow"><span style="color:var(--color-text-secondary);">다음 실적</span><span style="font-weight:500;">2026년 9월 4일 (Q3 FY26)</span></div>
+    <div class="zone-list" style="margin-top:12px;">
+      <div class="zone-item"><span class="zone-label">S&P500 내 비중</span><span class="zone-val">~2.0%</span></div>
+      <div class="zone-item"><span class="zone-label">베타</span><span class="zone-val">1.43</span></div>
     </div>
   </div>
-
-  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">AI 반도체 매출 폭발 궤적</div>
-  <div style="position:relative;width:100%;height:120px;margin-bottom:10px;">
-    <canvas id="aiChart" role="img" aria-label="AVGO AI 반도체 분기 매출 및 성장률 추이">AI 반도체 매출 차트</canvas>
-  </div>
-  <div class="ib">
-    <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.7;"><strong style="color:var(--color-text-primary);">섹터 ETF:</strong> SOXX·SMH 주요 구성. Q2 실적 직후 -13% 급락은 "연간 AI 전망 불변" 우려였으나, Q3 가이던스 $29.4B(▲84%) 자체는 역대 최대. Morningstar 목표가 $500. AI 백로그 $73B = 2년치 AI 수요 선확보 구조.</div>
-  </div>
-</div>
-
-<!-- 6. 뉴스 -->
-<div class="card">
-  <div class="sec">6. 시계열 주요 뉴스 <span class="src">2025.07 ~ 2026.06</span></div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;font-size:11px;">
-    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#1A1A2E;display:inline-block;"></span>초대형 이벤트</span>
-    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#1D9E75;display:inline-block;"></span>긍정</span>
-    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#D85A30;display:inline-block;"></span>부정</span>
-    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#888780;display:inline-block;"></span>중립</span>
-  </div>
-  <div class="tl">
-    <div class="tl-item">
-      <div class="tl-dot dot-pos"></div>
-      <div class="tl-date">2025년 12월 — Q4 FY25 실적</div>
-      <div class="tl-title">Q4 FY25 매출 $14.1B(▲51%) · AI 반도체 $4.1B ▲220% · VMware 완전 통합</div>
-      <div class="tl-body">VMware 인수 후 첫 완전 통합 분기. AI 반도체 $4.1B(+220% YoY) — 사상 최대. 인프라 소프트웨어 구독 전환 완료로 안정적 반복 수익 확보. 주가 $380→$420 급등.</div>
-      <span class="tag tag-pos">VMware 통합 완료</span><span class="tag tag-pos">AI +220%</span>
+  <div class="card">
+    <div class="card-title">XPU 고객별 수익 파이프라인</div>
+    <div class="zone-list">
+      <div class="zone-item"><span class="zone-label">Google (Ironwood TPU)</span><span class="zone-val">7세대 배포 중 · 8세대 2027 대기</span></div>
+      <div class="zone-item"><span class="zone-label">Meta</span><span class="zone-val">2027 1GW → $12~15B 기회</span></div>
+      <div class="zone-item"><span class="zone-label">OpenAI</span><span class="zone-val">1세대 XPU 2027 1GW+ 배포</span></div>
+      <div class="zone-item"><span class="zone-label">ByteDance</span><span class="zone-val">대규모 수주 진행 중</span></div>
+      <div class="zone-item"><span class="zone-label">Anthropic</span><span class="zone-val">+ Fujitsu 추가 확보</span></div>
+      <div class="zone-item"><span class="zone-label">다음 실적</span><span class="zone-val">2026년 9월 4일 (Q3 FY26)</span></div>
     </div>
-    <div class="tl-item">
-      <div class="tl-dot dot-big"></div>
-      <div class="tl-date">2026년 3월 4일 — Q1 FY26 실적 + $10B 바이백</div>
-      <div class="tl-title">Q1 FY26 매출 $19.3B(▲29%) · AI $8.4B ▲106% · Non-GAAP EPS $2.05 · $10B 바이백</div>
-      <div class="tl-body">매출 $19.3B(컨센서스 상회). AI 반도체 $8.4B(+106%). Non-GAAP EPS $2.05(컨센서스 $1.78 대폭 상회). $10B 자사주 추가 승인. XPU 고객 6개사(Google·Meta·ByteDance·Anthropic·Fujitsu·OpenAI) 공식 발표. 주가 $285→$420 폭등.</div>
-      <span class="tag tag-big">XPU 6개 고객 공개</span><span class="tag tag-big">$10B 바이백</span><span class="tag tag-pos">EPS 대폭 상회</span>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot dot-pos"></div>
-      <div class="tl-date">2026년 4월 — OpenAI XPU 파트너십 확정</div>
-      <div class="tl-title">OpenAI 다년간 XPU 공동 개발 계약 · 2027 1GW+ 배포 · Morningstar 목표가 $500</div>
-      <div class="tl-body">OpenAI가 Broadcom과 다년간 맞춤형 AI 가속기(XPU) 공동 개발 계약 체결. 2027년 1GW 이상 규모 배포 예정. Morningstar가 $500 목표가 제시. 2027 연간 매출 전망치 $134B→$158B으로 $24B 상향. 주가 $420→$458 신고점.</div>
-      <span class="tag tag-big">OpenAI 다년 계약</span><span class="tag tag-pos">Morningstar $500</span><span class="tag tag-pos">$458 신고점</span>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot dot-neg"></div>
-      <div class="tl-date">2026년 6월 4일 — Q2 FY26 실적 후 -13% 급락</div>
-      <div class="tl-title">Q2 매출 $22.2B(▲48%) · AI +143% 역대최대 · 연간 AI 전망 불변 → -13% 급락</div>
-      <div class="tl-body">Q2 AI 반도체 $10.8B(+143%), Non-GAAP EPS $2.44(추정 $2.32 상회). Q3 가이던스 $29.4B(+84%) — 컨센서스 상회. 그러나 Hock Tan이 연간 AI 전망을 상향하지 않자 시장 실망 -13% 급락. $458→$395. 현재 $411로 반등 중.</div>
-      <span class="tag tag-neg">연간 전망 불변</span><span class="tag tag-neg">-13% 하루 급락</span><span class="tag tag-pos">Q3 $29.4B 역대최대</span>
+  </div>
+  <div class="card">
+    <div class="card-title">AI 반도체 매출 폭발 궤적</div>
+    <div class="chart-wrap" style="height:200px;"><canvas id="aiChart"></canvas></div>
+    <div style="margin-top:12px;font-size:12px;color:var(--text2);line-height:1.7;">
+      <strong style="color:var(--text);">섹터 ETF:</strong> SOXX·SMH 주요 구성. Q2 실적 직후 -13% 급락은 "연간 AI 전망 불변" 우려였으나, Q3 가이던스 $29.4B(▲84%) 자체는 역대 최대. Morningstar 목표가 $500. AI 백로그 $73B = 2년치 AI 수요 선확보 구조.
     </div>
   </div>
 </div>
 
-<!-- 7. 투자 포인트 -->
-<div class="card">
-  <div class="sec">7. 2026년 핵심 투자 포인트</div>
-  <div class="g2">
-    <div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
-      <div class="ir"><span class="il">PEG 0.55 — NVDA와 동급 성장 대비 저평가</span><span class="badge b-green">성장주 저평가</span></div>
-      <div class="ir"><span class="il">Q3 가이던스 $29.4B(▲84%) — 역대 최대</span><span class="badge b-green">성장 가속화</span></div>
-      <div class="ir"><span class="il">XPU 6개사 · 고객당 3~5년 반복 수익</span><span class="badge b-green">이탈 불가 구조</span></div>
-      <div class="ir"><span class="il">FCF 마진 46% · Adj.EBITDA 69%</span><span class="badge b-green">초고마진 구조</span></div>
-      <div class="ir"><span class="il">Meta 2027 1GW → $12~15B 파이프라인</span><span class="badge b-teal">장기 계약 가시성</span></div>
+<div id="news" class="section">
+  <div class="section-title">시계열 주요 뉴스 (2025.07 ~ 2026.06)</div>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;color:var(--text2);">
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent2);display:inline-block;"></span>초대형 이벤트</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;"></span>긍정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block;"></span>부정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--text3);display:inline-block;"></span>중립</span>
+  </div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2025년 12월 — Q4 FY25 실적</div><div class="tl-title">Q4 FY25 매출 $14.1B(▲51%) · AI 반도체 $4.1B ▲220% · VMware 완전 통합</div><div class="tl-desc">VMware 인수 후 첫 완전 통합 분기. AI 반도체 $4.1B(+220% YoY) — 사상 최대. 인프라 소프트웨어 구독 전환 완료로 안정적 반복 수익 확보. 주가 $380→$420 급등.</div></div>
+    <div class="tl-item"><div class="tl-dot gold"></div><div class="tl-date">2026년 3월 4일 — Q1 FY26 실적 + $10B 바이백</div><div class="tl-title">Q1 FY26 매출 $19.3B(▲29%) · AI $8.4B ▲106% · Non-GAAP EPS $2.05 · $10B 바이백</div><div class="tl-desc">매출 $19.3B(컨센서스 상회). AI 반도체 $8.4B(+106%). Non-GAAP EPS $2.05(컨센서스 $1.78 대폭 상회). $10B 자사주 추가 승인. XPU 고객 6개사(Google·Meta·ByteDance·Anthropic·Fujitsu·OpenAI) 공식 발표. 주가 $285→$420 폭등.</div></div>
+    <div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2026년 4월 — OpenAI XPU 파트너십 확정</div><div class="tl-title">OpenAI 다년간 XPU 공동 개발 계약 · 2027 1GW+ 배포 · Morningstar 목표가 $500</div><div class="tl-desc">OpenAI가 Broadcom과 다년간 맞춤형 AI 가속기(XPU) 공동 개발 계약 체결. 2027년 1GW 이상 규모 배포 예정. Morningstar가 $500 목표가 제시. 2027 연간 매출 전망치 $134B→$158B으로 $24B 상향. 주가 $420→$458 신고점.</div></div>
+    <div class="tl-item"><div class="tl-dot red"></div><div class="tl-date">2026년 6월 4일 — Q2 FY26 실적 후 -13% 급락</div><div class="tl-title">Q2 매출 $22.2B(▲48%) · AI +143% 역대최대 · 연간 AI 전망 불변 → -13% 급락</div><div class="tl-desc">Q2 AI 반도체 $10.8B(+143%), Non-GAAP EPS $2.44(추정 $2.32 상회). Q3 가이던스 $29.4B(+84%) — 컨센서스 상회. 그러나 Hock Tan이 연간 AI 전망을 상향하지 않자 시장 실망 -13% 급락. $458→$395. 현재 $411로 반등 중.</div></div>
+  </div>
+</div>
+
+<div id="invest" class="section">
+  <div class="section-title">2026년 핵심 투자 포인트</div>
+  <div class="bull-bear">
+    <div class="bb-box">
+      <div class="bb-title bb-bull">🐂 Bull 요인</div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>PEG 0.55:</strong> NVDA와 동급, 성장 대비 저평가.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Q3 가이던스 $29.4B(+84%):</strong> 역대 최대, 성장 가속화.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>XPU 6개사:</strong> 고객당 3~5년 반복 수익, 이탈 불가 구조.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>FCF 마진 46%·Adj.EBITDA 69%:</strong> 초고마진 구조.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Meta 2027 1GW:</strong> $12~15B 파이프라인, 장기 계약 가시성.</span></div>
     </div>
-    <div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
-      <div class="ir"><span class="il">GAAP PER 66x — 절대 고평가 지표</span><span class="badge b-red">밸류 부담</span></div>
-      <div class="ir"><span class="il">연간 AI 전망 불변 → 상향 기대 실망</span><span class="badge b-red">가이던스 리스크</span></div>
-      <div class="ir"><span class="il">고객 집중 (Google·Meta 2개사 의존)</span><span class="badge b-amber">집중 리스크</span></div>
-      <div class="ir"><span class="il">부채 $65B — VMware 인수 레버리지</span><span class="badge b-amber">부채 부담</span></div>
-      <div class="ir"><span class="il">NVDA 범용 GPU 생태계와 경쟁</span><span class="badge b-gray">시장 경쟁</span></div>
+    <div class="bb-box">
+      <div class="bb-title bb-bear">🐻 Bear 요인</div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>밸류 부담:</strong> GAAP PER 66x — 절대 고평가 지표.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>가이던스 리스크:</strong> 연간 AI 전망 불변 → 상향 기대 실망.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>집중 리스크:</strong> 고객 집중(Google·Meta 2개사 의존).</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>부채 부담:</strong> 부채 $65B — VMware 인수 레버리지.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>시장 경쟁:</strong> NVDA 범용 GPU 생태계와 경쟁.</span></div>
     </div>
   </div>
-  <div class="ib">
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">투자의견 요약</div>
     <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
-      <div><span style="color:var(--color-text-secondary);">투자의견:</span> <span class="badge b-avgo-l">Buy (Morningstar $500 · 컨센서스 $435)</span></div>
-      <div><span style="color:var(--color-text-secondary);">다음 실적:</span> <span style="font-weight:500;">2026년 9월 4일 (Q3 FY26)</span></div>
-      <div><span style="color:var(--color-text-secondary);">Non-GAAP PER:</span> <span class="up" style="font-weight:500;">25.1x · PEG 0.55</span></div>
-      <div><span style="color:var(--color-text-secondary);">Q3 AI 가이던스:</span> <span class="up" style="font-weight:500;">$16.0B (▲200%+) — 역대최대</span></div>
+      <div><span style="color:var(--text2);">투자의견:</span> <strong style="color:var(--accent2)">Buy (Morningstar $500 · 컨센서스 $435)</strong></div>
+      <div><span style="color:var(--text2);">다음 실적:</span> <strong style="color:var(--text)">2026년 9월 4일 (Q3 FY26)</strong></div>
+      <div><span style="color:var(--text2);">Non-GAAP PER:</span> <strong style="color:var(--green)">25.1x · PEG 0.55</strong></div>
+      <div><span style="color:var(--text2);">Q3 AI 가이던스:</span> <strong style="color:var(--green)">$16.0B (▲200%+) — 역대최대</strong></div>
     </div>
   </div>
-  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">차트 + 분기 재무제표 + SEC 8-K 기준 · 투자 권고가 아닙니다</div>
-</div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<div class="disclaimer">
+  ⚠️ 본 위젯은 차트, 분기 재무제표, SEC 8-K 공시를 기반으로 작성된 정보 제공 목적의 분석 자료입니다. 투자 권고 또는 매매 추천이 아니며, 모든 투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다. 과거 실적이 미래 수익을 보장하지 않습니다.
+</div>
+
 <script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  renderCharts(id);
+}
+const charts = {};
+
 (function(){
   const svg=document.getElementById('avgoSvg');
   const W=720,H=240,pL=72,pR=12,pT=14,pB=24;
@@ -507,10 +453,10 @@ h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:
     const y=py(v);
     const l=document.createElementNS('http://www.w3.org/2000/svg','line');
     l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
-    l.setAttribute('stroke','rgba(128,128,128,.12)');l.setAttribute('stroke-width','1');svg.appendChild(l);
+    l.setAttribute('stroke','rgba(255,255,255,.08)');l.setAttribute('stroke-width','1');svg.appendChild(l);
     const t=document.createElementNS('http://www.w3.org/2000/svg','text');
     t.setAttribute('x',pL-4);t.setAttribute('y',y+4);t.setAttribute('text-anchor','end');
-    t.setAttribute('font-size','9');t.setAttribute('fill','rgba(128,128,128,.7)');
+    t.setAttribute('font-size','9');t.setAttribute('fill','rgba(154,160,184,.8)');
     t.textContent='$'+(v*10);svg.appendChild(t);
   });
   function calcMA(d,n){return d.map((_,i)=>i<n-1?null:d.slice(i-n+1,i+1).reduce((s,x)=>s+x.c,0)/n);}
@@ -542,13 +488,13 @@ h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:
     t.setAttribute('font-size','9');t.setAttribute('fill',col);t.setAttribute('font-weight','500');
     t.textContent=lbl;svg.appendChild(t);
   };
-  mk(0,'$248 저점(\'25.07)',true,'#185FA5');
-  mk(38,'$458 최고(\'26.06)',false,'#D85A30');
+  mk(0,'$248 저점(\'25.07)',true,'#5aa4e8');
+  mk(38,'$458 최고(\'26.06)',false,'#e8825f');
   ['\'25.07','\'25.09','\'25.11','\'26.01','\'26.03','\'26.05'].forEach((m,i)=>{
     const cx=pL+(i/6)*cW+cW/12;
     const t=document.createElementNS('http://www.w3.org/2000/svg','text');
     t.setAttribute('x',cx);t.setAttribute('y',H-4);t.setAttribute('text-anchor','middle');
-    t.setAttribute('font-size','10');t.setAttribute('fill','rgba(128,128,128,.8)');
+    t.setAttribute('font-size','10');t.setAttribute('fill','rgba(154,160,184,.8)');
     t.textContent=m;svg.appendChild(t);
   });
   [{c:'#D85A30',t:'양봉'},{c:'#185FA5',t:'음봉'},{c:'#FF69B4',t:'MA5'},{c:'#9370DB',t:'MA20'},{c:'#DAA520',t:'MA60'},{c:'#228B22',t:'MA120'}].forEach((l,i)=>{
@@ -558,73 +504,87 @@ h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:
     r.setAttribute('fill',l.c);r.setAttribute('rx','2');svg.appendChild(r);
     const t=document.createElementNS('http://www.w3.org/2000/svg','text');
     t.setAttribute('x',gx+13);t.setAttribute('y',11);t.setAttribute('font-size','9');
-    t.setAttribute('fill','rgba(128,128,128,.9)');t.textContent=l.t;svg.appendChild(t);
+    t.setAttribute('fill','rgba(154,160,184,.9)');t.textContent=l.t;svg.appendChild(t);
   });
 })();
 
-new Chart(document.getElementById('avgoRevChart'),{
-  type:'bar',
-  data:{
-    labels:['Q1 FY25','Q2 FY25','Q3 FY25','Q4 FY25','Q1 FY26','Q2 FY26','Q3 FY26(E)'],
-    datasets:[
-      {label:'총매출($B)',data:[14.9,15.0,16.0,14.1,19.3,22.2,29.4],backgroundColor:'#1A1A2E',borderRadius:4,yAxisID:'y'},
-      {label:'AI반도체($B)',data:[4.0,3.8,3.1,4.1,8.4,10.8,16.0],backgroundColor:'rgba(29,158,117,0.8)',borderRadius:4,yAxisID:'y'},
-      {label:'OPM%',type:'line',data:[42.0,38.9,36.9,32.9,44.3,48.6,67.0],borderColor:'#EF9F27',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
-    ]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false}},
-    scales:{
-      y:{position:'left',ticks:{font:{size:10},callback:v=>v+'B',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
-      y2:{position:'right',min:25,max:75,ticks:{font:{size:10},callback:v=>v+'%',color:'#EF9F27'},grid:{display:false}},
-      x:{ticks:{font:{size:9},color:'#888',maxRotation:30},grid:{display:false}}
+function renderFundChart() {
+  const ctx = document.getElementById('avgoRevChart');
+  if (!ctx || charts['fund']) return;
+  charts['fund'] = new Chart(ctx,{
+    data:{
+      labels:['Q1 FY25','Q2 FY25','Q3 FY25','Q4 FY25','Q1 FY26','Q2 FY26','Q3 FY26(E)'],
+      datasets:[
+        {type:'bar',label:'총매출($B)',data:[14.9,15.0,16.0,14.1,19.3,22.2,29.4],backgroundColor:'rgba(204,9,47,0.5)',borderColor:'#CC092F',borderWidth:1,borderRadius:4,yAxisID:'y'},
+        {type:'bar',label:'AI반도체($B)',data:[4.0,3.8,3.1,4.1,8.4,10.8,16.0],backgroundColor:'rgba(46,204,113,0.55)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4,yAxisID:'y'},
+        {type:'line',label:'OPM(%)',data:[42.0,38.9,36.9,32.9,44.3,48.6,67.0],borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#9aa0b8',font:{size:11}}}},
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:9},maxRotation:30}},
+        y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}},
+        y2:{position:'right',min:25,max:75,grid:{display:false},ticks:{color:'#f0c040',font:{size:10},callback:v=>v+'%'}}
+      }
     }
-  }
-});
-
-new Chart(document.getElementById('peerChart'),{
-  type:'bar',
-  data:{
-    labels:['MSFT','AVGO(NG)','GOOGL','NVDA','AAPL'],
-    datasets:[{
-      label:'Non-GAAP PER',
-      data:[23.2,25.1,27.8,31.3,37.3],
-      backgroundColor:['#B4B2A9','#1A1A2E','#B4B2A9','#B4B2A9','#B4B2A9'],
-      borderRadius:5,borderSkipped:false
-    }]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`Non-GAAP PER ${ctx.raw}x`}}},
-    scales:{
-      y:{max:45,ticks:{font:{size:10},callback:v=>v+'x',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
-      x:{ticks:{font:{size:9},color:'#888'},grid:{display:false}}
+  });
+}
+function renderPeerChart() {
+  const ctx = document.getElementById('peerChart');
+  if (!ctx || charts['peer']) return;
+  charts['peer'] = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['MSFT','AVGO(NG)','GOOGL','NVDA','AAPL'],
+      datasets:[{
+        label:'Non-GAAP PER',
+        data:[23.2,25.1,27.8,31.3,37.3],
+        backgroundColor:['rgba(154,160,184,0.35)','#CC092F','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)'],
+        borderColor:['#5c6282','#ff5c76','#5c6282','#5c6282','#5c6282'],
+        borderWidth:1,borderRadius:5
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`Non-GAAP PER ${ctx.raw}x`}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:9}}},
+        y:{max:45,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
+      }
     }
-  }
-});
-
-new Chart(document.getElementById('aiChart'),{
-  type:'bar',
-  data:{
-    labels:['Q1 FY25','Q2 FY25','Q3 FY25','Q4 FY25','Q1 FY26','Q2 FY26','Q3 FY26(E)'],
-    datasets:[
-      {label:'AI반도체($B)',data:[4.0,3.8,3.1,4.1,8.4,10.8,16.0],backgroundColor:['#444','#444','#444','#444','#1A1A2E','#1A1A2E','rgba(26,26,46,0.5)'],borderRadius:4},
-      {label:'YoY%',type:'line',data:[null,null,null,220,106,143,200],borderColor:'#1D9E75',backgroundColor:'transparent',tension:.3,pointRadius:4,borderWidth:2,yAxisID:'y2'}
-    ]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false}},
-    scales:{
-      y:{ticks:{font:{size:10},callback:v=>v+'B',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
-      y2:{position:'right',min:0,max:300,ticks:{font:{size:10},callback:v=>v+'%',color:'#1D9E75'},grid:{display:false}},
-      x:{ticks:{font:{size:9},color:'#888',maxRotation:30},grid:{display:false}}
+  });
+}
+function renderAiChart() {
+  const ctx = document.getElementById('aiChart');
+  if (!ctx || charts['ai']) return;
+  charts['ai'] = new Chart(ctx,{
+    data:{
+      labels:['Q1 FY25','Q2 FY25','Q3 FY25','Q4 FY25','Q1 FY26','Q2 FY26','Q3 FY26(E)'],
+      datasets:[
+        {type:'bar',label:'AI반도체($B)',data:[4.0,3.8,3.1,4.1,8.4,10.8,16.0],backgroundColor:['rgba(154,160,184,0.3)','rgba(154,160,184,0.3)','rgba(154,160,184,0.3)','rgba(154,160,184,0.3)','#CC092F','#CC092F','rgba(204,9,47,0.5)'],borderRadius:4},
+        {type:'line',label:'YoY(%)',data:[null,null,null,220,106,143,200],borderColor:'#2ecc71',backgroundColor:'transparent',tension:.3,pointRadius:4,borderWidth:2,yAxisID:'y2'}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#9aa0b8',font:{size:10}}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:9},maxRotation:30}},
+        y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}},
+        y2:{position:'right',min:0,max:300,grid:{display:false},ticks:{color:'#2ecc71',font:{size:10},callback:v=>v+'%'}}
+      }
     }
-  }
-});
+  });
+}
+function renderCharts(sectionId) {
+  setTimeout(() => {
+    if (sectionId === 'fund') renderFundChart();
+    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'us') renderAiChart();
+  }, 50);
+}
 </script>
-
-</div>
 </body>
 </html>
