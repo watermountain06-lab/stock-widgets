@@ -262,10 +262,15 @@ const STOCKS = /*STOCKS_JSON_START*/[
   }
 ]/*STOCKS_JSON_END*/;
 const MACRO = /*MACRO_JSON_START*/{
-  "generatedAt": "2026-07-15T19:24:17Z",
+  "generatedAt": "2026-07-15T19:32:01Z",
   "sp500": {
-    "value": 7559.03,
-    "changePct": 0.2,
+    "value": 7564.01,
+    "changePct": 0.27,
+    "asOf": "2026-07-15"
+  },
+  "spy": {
+    "value": 753.88,
+    "changePct": 0.27,
     "asOf": "2026-07-15"
   },
   "vix": {
@@ -371,8 +376,9 @@ function renderMacroStrip() {
   const tiles = [
     {
       label: 'S&P 500',
-      value: MACRO.sp500.value.toLocaleString(undefined, {maximumFractionDigits: 0}),
-      sub: fmtChangeSub(MACRO.sp500.changePct),
+      value: MACRO.sp500.value.toLocaleString(undefined, {maximumFractionDigits: 0}) + 'pt',
+      sub: fmtChangeSub(MACRO.sp500.changePct)
+        + (MACRO.spy ? `<div class="macro-sub">SPY $${MACRO.spy.value.toFixed(2)}</div>` : ''),
     },
     {
       label: 'VIX',
@@ -381,7 +387,7 @@ function renderMacroStrip() {
     },
     {
       label: '원/달러',
-      value: MACRO.usdkrw.value.toLocaleString(undefined, {maximumFractionDigits: 0}),
+      value: '₩' + MACRO.usdkrw.value.toLocaleString(undefined, {maximumFractionDigits: 0}),
       sub: fmtChangeSub(MACRO.usdkrw.changePct),
     },
     {

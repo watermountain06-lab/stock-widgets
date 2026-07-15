@@ -1,8 +1,13 @@
 {
-  "generatedAt": "2026-07-15T19:24:17Z",
+  "generatedAt": "2026-07-15T19:32:01Z",
   "sp500": {
-    "value": 7559.03,
-    "changePct": 0.2,
+    "value": 7564.01,
+    "changePct": 0.27,
+    "asOf": "2026-07-15"
+  },
+  "spy": {
+    "value": 753.88,
+    "changePct": 0.27,
     "asOf": "2026-07-15"
   },
   "vix": {

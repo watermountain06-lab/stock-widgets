@@ -100,6 +100,7 @@ def main():
     out_path = sys.argv[1] if len(sys.argv) > 1 else "macro.json"
 
     sp500 = fetch_yahoo_latest("%5EGSPC")
+    spy = fetch_yahoo_latest("SPY")
     vix = fetch_yahoo_latest("%5EVIX")
     usdkrw = fetch_yahoo_latest("KRW=X")
 
@@ -115,6 +116,7 @@ def main():
     macro = {
         "generatedAt": datetime.now(tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "sp500": sp500,
+        "spy": spy,
         "vix": vix,
         "usdkrw": usdkrw,
         "fedFunds": fedfunds_latest,
