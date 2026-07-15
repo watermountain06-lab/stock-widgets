@@ -61,5 +61,14 @@
     "accentColor": "#003087",
     "page": "widgets/TSM_analysis_widget.html",
     "lastUpdated": "2026-07-15"
+  },
+  {
+    "rank": 7,
+    "ticker": "AVGO",
+    "name": "Broadcom",
+    "sector": "Information Technology",
+    "accentColor": "#CC092F",
+    "page": "widgets/AVGO_analysis_widget.html",
+    "lastUpdated": "2026-07-15"
   }
 ]
