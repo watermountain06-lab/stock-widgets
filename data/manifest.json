@@ -9,15 +9,6 @@
     "lastUpdated": "2026-07-15"
   },
   {
-    "rank": 2,
-    "ticker": "GOOGL",
-    "name": "Alphabet",
-    "sector": "Communication Services",
-    "accentColor": "#EA4335",
-    "page": "widgets/GOOGL_analysis_widget.html",
-    "lastUpdated": "2026-07-15"
-  },
-  {
     "rank": 3,
     "ticker": "AAPL",
     "name": "Apple",
@@ -141,6 +132,15 @@
     "sector": "Information Technology",
     "accentColor": "#76b900",
     "page": "widgets/NVDA_analysis_widget.html",
+    "lastUpdated": "2026-07-15"
+  },
+  {
+    "rank": 2,
+    "ticker": "GOOGL",
+    "name": "Alphabet",
+    "sector": "Communication Services",
+    "accentColor": "#4285F4",
+    "page": "widgets/GOOGL_analysis_widget.html",
     "lastUpdated": "2026-07-15"
   }
 ]
