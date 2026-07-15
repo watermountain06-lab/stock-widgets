@@ -88,5 +88,14 @@
     "accentColor": "#005EB8",
     "page": "widgets/MU_analysis_widget.html",
     "lastUpdated": "2026-07-15"
+  },
+  {
+    "rank": 12,
+    "ticker": "LLY",
+    "name": "Eli Lilly and Company",
+    "sector": "Health Care",
+    "accentColor": "#4a9eff",
+    "page": "widgets/LLY_analysis_widget.html",
+    "lastUpdated": "2026-07-15"
   }
 ]
