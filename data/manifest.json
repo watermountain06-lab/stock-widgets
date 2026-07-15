@@ -9,15 +9,6 @@
     "lastUpdated": "2026-07-15"
   },
   {
-    "rank": 1,
-    "ticker": "NVDA",
-    "name": "NVIDIA",
-    "sector": "Information Technology",
-    "accentColor": "#76b900",
-    "page": "widgets/NVDA_analysis_widget.html",
-    "lastUpdated": "2026-07-15"
-  },
-  {
     "rank": 2,
     "ticker": "GOOGL",
     "name": "Alphabet",
@@ -141,6 +132,15 @@
     "sector": "Information Technology",
     "accentColor": "#c04040",
     "page": "widgets/ORCL_analysis_widget.html",
+    "lastUpdated": "2026-07-15"
+  },
+  {
+    "rank": 1,
+    "ticker": "NVDA",
+    "name": "NVIDIA",
+    "sector": "Information Technology",
+    "accentColor": "#76b900",
+    "page": "widgets/NVDA_analysis_widget.html",
     "lastUpdated": "2026-07-15"
   }
 ]
