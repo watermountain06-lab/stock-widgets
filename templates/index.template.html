@@ -31,6 +31,7 @@
   }
   header h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
   header p { color: var(--text2); font-size: 14px; }
+  header .stats { color: var(--text3); font-size: 12px; margin-top: 10px; }
   .wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 60px; }
   .controls { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
   #search {
@@ -74,7 +75,8 @@
 
 <header>
   <h1>US Stock Widgets</h1>
-  <p>미국 시가총액 상위 종목 인터랙티브 분석 · 기술적/기본적 분석 · 밸류에이션 · 투자 포인트</p>
+  <p>미국 시가총액 상위 종목 인터랙티브 분석 · 정기 업데이트</p>
+  <div class="stats" id="headerStats"></div>
 </header>
 
 <div class="wrap">
@@ -138,9 +140,17 @@ function renderGrid() {
   emptyMsg.style.display = filtered.length ? 'none' : 'block';
 }
 
+function renderHeaderStats() {
+  const count = STOCKS.length;
+  const latest = STOCKS.reduce((max, s) => s.lastUpdated > max ? s.lastUpdated : max, '');
+  document.getElementById('headerStats').textContent =
+    count ? `${count}개 종목 수록 · 마지막 업데이트 ${latest}` : '';
+}
+
 searchBox.addEventListener('input', renderGrid);
 renderSectorNav();
 renderGrid();
+renderHeaderStats();
 </script>
 
 </body>
