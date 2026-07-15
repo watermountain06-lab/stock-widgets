@@ -25,5 +25,14 @@
     "accentColor": "#EA4335",
     "page": "widgets/GOOGL_analysis_widget.html",
     "lastUpdated": "2026-07-15"
+  },
+  {
+    "rank": 3,
+    "ticker": "AAPL",
+    "name": "Apple",
+    "sector": "Information Technology",
+    "accentColor": "#A2AAAD",
+    "page": "widgets/AAPL_analysis_widget.html",
+    "lastUpdated": "2026-07-15"
   }
 ]
