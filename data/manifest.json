@@ -9,15 +9,6 @@
     "lastUpdated": "2026-07-15"
   },
   {
-    "rank": 5,
-    "ticker": "AMZN",
-    "name": "Amazon",
-    "sector": "Consumer Discretionary",
-    "accentColor": "#FF9900",
-    "page": "widgets/AMZN_analysis_widget.html",
-    "lastUpdated": "2026-07-15"
-  },
-  {
     "rank": 6,
     "ticker": "TSM",
     "name": "Taiwan Semiconductor",
@@ -141,6 +132,15 @@
     "sector": "Information Technology",
     "accentColor": "#0078D4",
     "page": "widgets/MSFT_analysis_widget.html",
+    "lastUpdated": "2026-07-15"
+  },
+  {
+    "rank": 5,
+    "ticker": "AMZN",
+    "name": "Amazon",
+    "sector": "Consumer Discretionary",
+    "accentColor": "#FF9900",
+    "page": "widgets/AMZN_analysis_widget.html",
     "lastUpdated": "2026-07-15"
   }
 ]
