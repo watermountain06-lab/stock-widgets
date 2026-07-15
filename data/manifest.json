@@ -106,5 +106,14 @@
     "accentColor": "#5dba3b",
     "page": "widgets/WMT_analysis_widget.html",
     "lastUpdated": "2026-07-15"
+  },
+  {
+    "rank": 14,
+    "ticker": "AMD",
+    "name": "Advanced Micro Devices",
+    "sector": "Information Technology",
+    "accentColor": "#e05a20",
+    "page": "widgets/AMD_analysis_widget.html",
+    "lastUpdated": "2026-07-15"
   }
 ]
