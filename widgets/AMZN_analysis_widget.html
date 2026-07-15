@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMZN 종합 분석 위젯</title>
+<style>
+:root {
+    --color-background-primary: light-dark(rgba(255, 255, 255, 1), rgba(48, 48, 46, 1));
+    --color-background-secondary: light-dark(rgba(245, 244, 237, 1), rgba(38, 38, 36, 1));
+    --color-background-tertiary: light-dark(rgba(250, 249, 245, 1), rgba(20, 20, 19, 1));
+    --color-background-inverse: light-dark(rgba(20, 20, 19, 1), rgba(250, 249, 245, 1));
+    --color-background-ghost: light-dark(rgba(255, 255, 255, 0), rgba(48, 48, 46, 0));
+    --color-background-info: light-dark(rgba(214, 228, 246, 1), rgba(37, 62, 95, 1));
+    --color-background-danger: light-dark(rgba(247, 236, 236, 1), rgba(96, 42, 40, 1));
+    --color-background-success: light-dark(rgba(233, 241, 220, 1), rgba(27, 70, 20, 1));
+    --color-background-warning: light-dark(rgba(246, 238, 223, 1), rgba(72, 58, 15, 1));
+    --color-background-disabled: light-dark(rgba(255, 255, 255, 0.5), rgba(48, 48, 46, 0.5));
+    --color-text-primary: light-dark(rgba(20, 20, 19, 1), rgba(250, 249, 245, 1));
+    --color-text-secondary: light-dark(rgba(61, 61, 58, 1), rgba(194, 192, 182, 1));
+    --color-text-tertiary: light-dark(rgba(115, 114, 108, 1), rgba(156, 154, 146, 1));
+    --color-text-inverse: light-dark(rgba(255, 255, 255, 1), rgba(20, 20, 19, 1));
+    --color-text-info: light-dark(rgba(50, 102, 173, 1), rgba(128, 170, 221, 1));
+    --color-text-danger: light-dark(rgba(127, 44, 40, 1), rgba(238, 136, 132, 1));
+    --color-text-success: light-dark(rgba(38, 91, 25, 1), rgba(122, 185, 72, 1));
+    --color-text-warning: light-dark(rgba(90, 72, 21, 1), rgba(209, 160, 65, 1));
+    --color-text-disabled: light-dark(rgba(20, 20, 19, 0.5), rgba(250, 249, 245, 0.5));
+    --color-text-ghost: light-dark(rgba(115, 114, 108, 0.5), rgba(156, 154, 146, 0.5));
+    --color-border-primary: light-dark(rgba(31, 30, 29, 0.4), rgba(222, 220, 209, 0.4));
+    --color-border-secondary: light-dark(rgba(31, 30, 29, 0.3), rgba(222, 220, 209, 0.3));
+    --color-border-tertiary: light-dark(rgba(31, 30, 29, 0.15), rgba(222, 220, 209, 0.15));
+    --color-border-inverse: light-dark(rgba(255, 255, 255, 0.3), rgba(20, 20, 19, 0.15));
+    --color-border-ghost: light-dark(rgba(31, 30, 29, 0), rgba(222, 220, 209, 0));
+    --color-border-info: light-dark(rgba(70, 130, 213, 1), rgba(70, 130, 213, 1));
+    --color-border-danger: light-dark(rgba(167, 61, 57, 1), rgba(205, 92, 88, 1));
+    --color-border-success: light-dark(rgba(67, 116, 38, 1), rgba(89, 145, 48, 1));
+    --color-border-warning: light-dark(rgba(128, 92, 31, 1), rgba(168, 120, 41, 1));
+    --color-border-disabled: light-dark(rgba(31, 30, 29, 0.1), rgba(222, 220, 209, 0.1));
+    --color-ring-primary: light-dark(rgba(20, 20, 19, 0.7), rgba(250, 249, 245, 0.7));
+    --color-ring-secondary: light-dark(rgba(61, 61, 58, 0.7), rgba(194, 192, 182, 0.7));
+    --color-ring-inverse: light-dark(rgba(255, 255, 255, 0.7), rgba(20, 20, 19, 0.7));
+    --color-ring-info: light-dark(rgba(50, 102, 173, 0.5), rgba(128, 170, 221, 0.5));
+    --color-ring-danger: light-dark(rgba(167, 61, 57, 0.5), rgba(205, 92, 88, 0.5));
+    --color-ring-success: light-dark(rgba(67, 116, 38, 0.5), rgba(89, 145, 48, 0.5));
+    --color-ring-warning: light-dark(rgba(128, 92, 31, 0.5), rgba(168, 120, 41, 0.5));
+    --font-sans: "Segoe UI", -apple-system, sans-serif;
+    --font-mono: ui-monospace, monospace;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-text-xs-size: 12px;
+    --font-text-sm-size: 14px;
+    --font-text-md-size: 16px;
+    --font-text-lg-size: 20px;
+    --font-heading-xs-size: 12px;
+    --font-heading-sm-size: 14px;
+    --font-heading-md-size: 16px;
+    --font-heading-lg-size: 20px;
+    --font-heading-xl-size: 24px;
+    --font-heading-2xl-size: 28px;
+    --font-heading-3xl-size: 36px;
+    --font-text-xs-line-height: 1.4;
+    --font-text-sm-line-height: 1.4;
+    --font-text-md-line-height: 1.4;
+    --font-text-lg-line-height: 1.25;
+    --font-heading-xs-line-height: 1.4;
+    --font-heading-sm-line-height: 1.4;
+    --font-heading-md-line-height: 1.4;
+    --font-heading-lg-line-height: 1.25;
+    --font-heading-xl-line-height: 1.25;
+    --font-heading-2xl-line-height: 1.1;
+    --font-heading-3xl-line-height: 1;
+    --border-radius-xs: 4px;
+    --border-radius-sm: 6px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 10px;
+    --border-radius-xl: 12px;
+    --border-radius-full: 9999px;
+    --border-width-regular: 0.5px;
+    --shadow-hairline: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    color-scheme: light dark;
+}
+body { background: var(--color-background-tertiary); color: var(--color-text-primary); margin: 0; }
+.page-center { max-width: 800px; margin: 0 auto; padding: 16px; }
+</style>
+</head>
+<body>
+<div class="page-center">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.wrap{padding:1rem 0;font-family:var(--font-sans);}
+h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
+.mv{font-size:14px;font-weight:500;color:var(--color-text-primary);}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
+.up{color:#1D9E75;}.dn{color:#D85A30;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
+.b-green{background:#EAF3DE;color:#27500A;}.b-amber{background:#FAEEDA;color:#633806;}
+.b-red{background:#FCEBEB;color:#791F1F;}.b-blue{background:#E6F1FB;color:#0C447C;}
+.b-gray{background:#F1EFE8;color:#444441;}.b-amzn{background:#FAEEDA;color:#412402;}
+.b-teal{background:#E1F5EE;color:#04342C;}.b-coral{background:#FAECE7;color:#4A1B0C;}
+.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
+.ir:last-child{border-bottom:none;}
+.il{color:var(--color-text-secondary);}.iv{font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;}
+.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:6px;}
+.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:12px 14px;margin-top:10px;}
+.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:12px 14px;margin-top:10px;}
+.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
+.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
+.ev-5{background:#FCEBEB;color:#791F1F;}
+.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
+.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
+.ind-row:last-child{border-bottom:none;}
+.ind-nm{font-size:13px;font-weight:500;color:var(--color-text-primary);min-width:100px;}
+.ind-val{font-size:14px;font-weight:500;color:var(--color-text-primary);min-width:80px;text-align:right;}
+.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
+.bar-f{border-radius:4px;height:7px;}
+.stage-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:12px;}
+.stage{text-align:center;padding:12px 6px;border-radius:var(--border-radius-md);}
+.tl{position:relative;padding-left:28px;}
+.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
+.tl-item{position:relative;margin-bottom:18px;}
+.tl-item:last-child{margin-bottom:0;}
+.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid var(--color-background-primary);}
+.dot-big{background:#BA7517;}.dot-pos{background:#1D9E75;}
+.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
+.tl-date{font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:3px;}
+.tl-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
+.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
+.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
+.tag-big{background:#FAEEDA;color:#412402;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
+.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
+.sprow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:12px;}
+.sprow:last-child{border-bottom:none;}
+.box-key{background:#FAEEDA;border:1px solid #EF9F27;border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:10px;}
+</style>
+
+<div class="wrap">
+<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+  <h2>Amazon (AMZN)</h2>
+  <span class="badge b-amzn">S&P 500 시총 5위</span>
+  <span class="badge b-coral">AWS · Retail · Advertising · Anthropic</span>
+  <span class="src">차트 + 분기 재무제표 + SEC 공시</span>
+</div>
+<p class="sub">현재가 $238.51 (-1.07%) · 52주 최저 $198 (2026.02) · 52주 최고 $273 (2026.05) · 시총 $2.5T · EPS(TTM) $8.36 · 52주 수익률 +10.6%</p>
+
+<div class="box-key">
+  <div style="font-size:13px;font-weight:500;color:#633806;margin-bottom:4px;">핵심 구조 — AWS 폭발 성장 vs 역대 최대 Capex $200B · FCF 마이너스 역설</div>
+  <div style="font-size:12px;color:#854F0B;line-height:1.6;">Q1 2026 AWS +28%, 광고 +19% — 수익 구조 최강. 그러나 2026 Capex $200B(역대 최대)로 TTM FCF $1.2B에 불과. Anthropic 투자 $16.8B 평가이익이 순이익 부풀림. EV/EBITDA 16x는 5년 평균 21x 대비 역대 저평가 — MSFT와 유사한 Capex 사이클 논쟁.</div>
+</div>
+
+<div class="g4">
+  <div class="met"><div class="ml">현재가 (06/12)</div><div class="mv">$238.51</div><div class="ms dn">52주 고점 $273 대비 -12.7%</div></div>
+  <div class="met"><div class="ml">52주 범위</div><div class="mv">$198 ~ $273</div><div class="ms">저점 '26.02 · 고점 '26.05</div></div>
+  <div class="met"><div class="ml">Q1 2026 AWS</div><div class="mv">$37.6B</div><div class="ms up">▲28% YoY · 백로그 $244B</div></div>
+  <div class="met"><div class="ml">2026 Capex</div><div class="mv">$200B</div><div class="ms dn">역대 최대 · FCF 일시 압박</div></div>
+</div>
+
+<!-- 1. 기술적 분석 -->
+<div class="card">
+  <div class="sec">1. 기술적 분석 — 실제 차트 기반 (2025.07 ~ 2026.06)</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
+    52주 최저 $198 (2026.02) → 52주 최고 $273 (2026.05) → 현재 $238.51 · 52주 수익률 +10.6%
+  </div>
+  <svg id="amznSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;" role="img" aria-label="AMZN 52주 주가 차트 2025.07~2026.06"></svg>
+
+  <div class="g4" style="font-size:11px;margin-bottom:12px;">
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#633806;font-weight:500;margin-bottom:3px;">2025.07~11 — 박스 횡보</div>
+      <div style="color:#854F0B;line-height:1.6;">$215~$250 박스권<br>AWS 성장 둔화 논쟁<br>Capex 급증 우려<br>방향성 없는 횡보</div>
+    </div>
+    <div style="background:#FCEBEB;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#791F1F;font-weight:500;margin-bottom:3px;">2025.12~2026.02 — 급락</div>
+      <div style="color:#A32D2D;line-height:1.6;">$250→$198 2단 급락<br>Q4 가이던스 실망<br>관세 재확대 충격<br>$198 52주 최저</div>
+    </div>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#27500A;font-weight:500;margin-bottom:3px;">2026.04~05 — 강한 반등</div>
+      <div style="color:#3B6D11;line-height:1.6;">$200→$273 폭등<br>Q1 AWS +28% 서프라이즈<br>Anthropic 협약 확대<br>$273 신고점 경신</div>
+    </div>
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#633806;font-weight:500;margin-bottom:3px;">2026.06 — 조정 중</div>
+      <div style="color:#854F0B;line-height:1.6;">$273→$238 조정<br>FCF 마이너스 우려<br>관세 불확실성 지속<br>Q2 가이던스 관망</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">이동평균선 현황</div>
+      <div class="ir"><span class="il">5일선</span><span class="badge b-amber">단기 조정 지지 테스트</span></div>
+      <div class="ir"><span class="il">20일선</span><span class="badge b-green">상승 지지 유지</span></div>
+      <div class="ir"><span class="il">60일선</span><span class="badge b-green">우상향 반등 중</span></div>
+      <div class="ir"><span class="il">120일선</span><span class="badge b-amber">수렴 중 · 방향 결정 구간</span></div>
+      <div class="ir"><span class="il">배열</span><span class="badge b-green">단기 정배열 회복</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">핵심 가격대</div>
+      <div class="ir"><span class="il">52주 최고</span><span style="font-weight:500;color:#1D9E75;">$273 (2026.05)</span></div>
+      <div class="ir"><span class="il">52주 최저</span><span style="font-weight:500;color:#185FA5;">$198 (2026.02)</span></div>
+      <div class="ir"><span class="il">현재가</span><span style="font-weight:500;color:#854F0B;">$238.51 (고점 대비 -12.7%)</span></div>
+      <div class="ir"><span class="il">52주 수익률</span><span style="font-weight:500;color:#1D9E75;">+10.6%</span></div>
+      <div class="ir"><span class="il">배당</span><span style="font-weight:500;color:var(--color-text-tertiary);">무배당 (전액 성장 재투자)</span></div>
+    </div>
+  </div>
+
+  <div class="sig">
+    <span class="badge b-green">AWS +28% · 광고 +19% — 고마진 사업 폭발</span>
+    <span class="badge b-green">Anthropic 백로그 확대 · AWS 최대 고객으로 성장</span>
+    <span class="badge b-green">EV/EBITDA 16x — 5년 평균 21x 대비 역대 저평가</span>
+    <span class="badge b-amber">FCF TTM $1.2B — Capex $200B에 압도</span>
+    <span class="badge b-red">Q1 FCF 마이너스 $18B · 고점 대비 -12.7% 조정 중</span>
+    <span class="badge b-amzn">관세 리스크 지속 · 리테일 마진 압박</span>
+  </div>
+</div>
+
+<!-- 2. 기본적 분석 -->
+<div class="card">
+  <div class="sec">2. 기본적 분석 — 분기 재무제표 <span class="src">실제 수치</span></div>
+
+  <div style="position:relative;width:100%;height:165px;margin-bottom:12px;">
+    <canvas id="amznRevChart" role="img" aria-label="AMZN 분기 매출 및 영업이익률 추이">분기 매출 및 OPM 차트</canvas>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div class="ir"><span class="il">Q1 2026 매출</span><span class="iv up">$181.5B (▲16.6% YoY) <span class="ev ev-4">높음</span></span></div>
+      <div class="ir"><span class="il">Q1 2026 AWS</span><span class="iv up">$37.6B (▲28% YoY) <span class="ev ev-4">높음</span></span></div>
+      <div class="ir"><span class="il">Q1 2026 영업이익</span><span class="iv up">$23.9B (OPM 13.1%) <span class="ev ev-4">높음</span></span></div>
+      <div class="ir"><span class="il">Q1 2026 순이익</span><span class="iv">$30.3B <span class="badge b-amber" style="font-size:10px;">Anthropic $16.8B 포함</span></span></div>
+      <div class="ir"><span class="il">Q1 2026 실질 운영CF</span><span class="iv up">$26.0B (▲53% YoY) <span class="ev ev-4">높음</span></span></div>
+    </div>
+    <div>
+      <div class="ir"><span class="il">TTM 매출</span><span class="iv up">$742.8B · 세계 최대 매출</span></div>
+      <div class="ir"><span class="il">TTM EPS(희석)</span><span class="iv up">$8.36 (PER 28.5x)</span></div>
+      <div class="ir"><span class="il">AWS 백로그</span><span class="iv up">$244B — 2~3년치 수요 확보</span></div>
+      <div class="ir"><span class="il">Q2 2026 가이던스</span><span class="iv up">$194~199B · OI $20~24B</span></div>
+      <div class="ir"><span class="il">2026 Capex 계획</span><span class="iv dn">$200B — 하이퍼스케일러 최대</span></div>
+    </div>
+  </div>
+
+  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">핵심 성장 동력</div>
+  <div class="g3" style="font-size:12px;margin-bottom:12px;">
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:10px 12px;">
+      <div style="color:#633806;font-weight:500;margin-bottom:3px;">AWS (핵심 수익원)</div>
+      <div style="color:#854F0B;line-height:1.6;">Q1 $37.6B ▲28%<br>OI $14.2B (OPM 37.8%)<br>백로그 $244B<br>Anthropic·OpenAI 최대 클라우드</div>
+    </div>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px 12px;">
+      <div style="color:#27500A;font-weight:500;margin-bottom:3px;">광고 (고마진 성장)</div>
+      <div style="color:#3B6D11;line-height:1.6;">Q1 ~$14B ▲19%<br>아마존닷컴 내 광고 독점<br>프라임 비디오 광고 확대<br>OPM 60%+ 초고마진</div>
+    </div>
+    <div style="background:#E6F1FB;border-radius:var(--border-radius-md);padding:10px 12px;">
+      <div style="color:#0C447C;font-weight:500;margin-bottom:3px;">Anthropic + Kuiper</div>
+      <div style="color:#185FA5;line-height:1.6;">Anthropic 지분 15~19%<br>평가가치 $30B+ (밸류 $183B)<br>Project Kuiper 위성 32개 발사<br>JetBlue 기내 Wi-Fi 파트너십</div>
+    </div>
+  </div>
+
+  <div class="hl">
+    <div style="font-size:13px;font-weight:500;color:#27500A;margin-bottom:4px;">핵심 투자 논리 — AWS 37% OPM · 광고 60% OPM · Capex 정점 후 FCF 폭발 구조</div>
+    <div style="font-size:12px;color:#1D9E75;line-height:1.7;">리테일은 배송·인프라 비용으로 저마진이지만 AWS(OPM 37%)와 광고(OPM 60%+)가 전체 영업이익 대부분을 창출. 2026 Capex $200B는 AI 클라우드 수요를 충족 못할 만큼 급증. Evercore 추정 AWS 2026 $163B(+27%), 2027 $214B(+31%). <strong>Capex 정점 통과 시 연간 FCF $50~80B 복귀 → 현재가 최대 매수 기회.</strong></div>
+  </div>
+</div>
+
+<!-- 3. Per-Share -->
+<div class="card">
+  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">Q1 2026 기준 · 10.74B 주</span></div>
+  <div class="g4">
+    <div class="met"><div class="ml">EPS(희석) · TTM</div><div class="mv">$8.36</div><div class="ms">Anthropic 이익 $1.55 포함</div><div style="margin-top:5px;"><span class="ev ev-4">높음</span></div></div>
+    <div class="met"><div class="ml">BPS · 주당순자산</div><div class="mv">$40.64</div><div class="ms">Q1 2026 · 자기자본 $442B</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+    <div class="met"><div class="ml">운영CF/주 · TTM</div><div class="mv">$13.8</div><div class="ms">TTM 운영CF $148.5B</div><div style="margin-top:5px;"><span class="ev ev-5">매우높음</span></div></div>
+    <div class="met"><div class="ml">FCF/주 · TTM</div><div class="mv">$0.11</div><div class="ms dn">TTM FCF $1.2B — Capex로 압축</div><div style="margin-top:5px;"><span class="ev ev-1">매우낮음</span></div></div>
+  </div>
+  <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:6px;">* 운영CF $148.5B vs FCF $1.2B 괴리 = Capex $144B(TTM) 차액. Capex 사이클 정상화 시 FCF $50~80B 복귀 기대.</div>
+</div>
+
+<!-- 4. 밸류에이션 -->
+<div class="card">
+  <div class="sec">4. 상대 투자지표 (Valuation Multiples) · 현재가 $238.51 · 빅테크 비교</div>
+
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;font-size:11px;">
+    <span style="padding:2px 8px;border-radius:999px;background:#E6F1FB;color:#0C447C;font-weight:500;">1단계 매우낮음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#EAF3DE;color:#27500A;font-weight:500;">2단계 낮음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#F1EFE8;color:#444441;font-weight:500;">3단계 적정</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#FAEEDA;color:#633806;font-weight:500;">4단계 높음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#FCEBEB;color:#791F1F;font-weight:500;">5단계 매우높음</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PER (TTM)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">$238.51÷$8.36 · 빅테크 평균 ~30x<br><span style="color:#854F0B;">EPS에 Anthropic 이익 $1.55 포함 — 실질 영업 EPS 약 $6.8 → 실질 PER ~35x</span></div>
+    <div class="ind-val">28.5x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(15x)</span><span>적정(28x)</span><span>고(55x)</span></div><div class="bar-bg"><div class="bar-f" style="width:34%;background:#F1EFE8;"></div></div></div>
+    <span class="ev ev-3" style="min-width:58px;text-align:center;">3단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PBR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">$238.51÷$40.64 · 자기자본 $442B · ROE 24%</div>
+    <div class="ind-val">5.9x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(2x)</span><span>적정(8x)</span><span>고(25x)</span></div><div class="bar-bg"><div class="bar-f" style="width:26%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PSR (TTM)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">시총 $2.5T÷TTM $742.8B · 리테일+클라우드 혼합 특성으로 낮음</div>
+    <div class="ind-val">3.4x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(1x)</span><span>적정(4x)</span><span>고(12x)</span></div><div class="bar-bg"><div class="bar-f" style="width:22%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PCR (운영CF)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">시총 $2.5T÷TTM 운영CF $148.5B · FCF 대신 운영CF 사용(Capex 급증으로 FCF 왜곡)</div>
+    <div class="ind-val">16.8x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(8x)</span><span>적정(20x)</span><span>고(50x)</span></div><div class="bar-bg"><div class="bar-f" style="width:29%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">EV/EBITDA</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">EV ~$2.6T÷TTM EBITDA $157.9B · <span style="color:#1D9E75;">5년 평균 21x 대비 역대 최저 · 회귀 시 대형 업사이드</span></div>
+    <div class="ind-val">16.5x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(8x)</span><span>적정(18x)</span><span>고(40x)</span></div><div class="bar-bg"><div class="bar-f" style="width:34%;background:#F1EFE8;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+
+  <div style="margin-top:12px;font-size:13px;font-weight:500;margin-bottom:8px;">빅테크 PER 비교</div>
+  <div style="position:relative;width:100%;height:140px;margin-bottom:10px;">
+    <canvas id="peerChart" role="img" aria-label="빅테크 PER 비교 차트">MSFT 23.2x, GOOGL 27.8x, AMZN 28.5x, NVDA 31.3x, AAPL 37.3x</canvas>
+  </div>
+
+  <div class="stage-grid" style="margin-top:14px;">
+    <div class="stage" style="background:#E6F1FB;"><div style="font-size:16px;font-weight:500;color:#0C447C;">1단계</div><div style="font-size:10px;color:#185FA5;margin-top:2px;">매우 저평가</div></div>
+    <div class="stage" style="background:#EAF3DE;border:2px solid #3B6D11;"><div style="font-size:16px;font-weight:500;color:#27500A;">2단계</div><div style="font-size:10px;color:#3B6D11;margin-top:2px;">저평가</div><div style="font-size:9px;color:#3B6D11;background:#C8E6C9;border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PBR·PSR·PCR·EV/EBITDA</div></div>
+    <div class="stage" style="background:#F1EFE8;border:2px solid #5F5E5A;"><div style="font-size:16px;font-weight:500;color:#444441;">3단계</div><div style="font-size:10px;color:#5F5E5A;margin-top:2px;">적정</div><div style="font-size:9px;color:#5F5E5A;background:#D3D1C7;border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PER</div></div>
+    <div class="stage" style="background:#FAEEDA;"><div style="font-size:16px;font-weight:500;color:#633806;">4단계</div><div style="font-size:10px;color:#854F0B;margin-top:2px;">고평가</div></div>
+    <div class="stage" style="background:#FCEBEB;"><div style="font-size:16px;font-weight:500;color:#791F1F;">5단계</div><div style="font-size:10px;color:#A32D2D;margin-top:2px;">매우 고평가</div></div>
+  </div>
+
+  <div class="hl">
+    <div style="font-size:13px;font-weight:500;color:#27500A;margin-bottom:4px;">종합 밸류에이션 — 2~3단계 · EV/EBITDA 역대 최저 · MSFT와 함께 Capex 사이클 저평가 구간</div>
+    <div style="font-size:12px;color:#1D9E75;line-height:1.6;">PER 28.5x → 3단계(Anthropic 이익 제거 시 실질 35x). PBR 5.9x → 2단계. PSR 3.4x → 2단계. PCR(운영CF) 16.8x → 2단계. EV/EBITDA 16.5x → 2단계(5년 평균 21x 대비 최저). <strong>4개 지표 2단계 — MSFT와 함께 빅테크 내 밸류 매력 탑2. Capex 정점 시 FCF 폭발 = 주가 재평가.</strong></div>
+  </div>
+</div>
+
+<!-- 5. US 특화 -->
+<div class="card">
+  <div class="sec">5. US 특화 — S&P 500 상대 성과 · AWS vs 리테일 구조 · Capex vs 운영CF</div>
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:8px;">S&P 500 대비 상대 수익률</div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">AMZN 52주</span><span class="up" style="font-weight:500;">+10.6%</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">S&P 500 52주</span><span style="font-weight:500;">+15.2% (추정)</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">상대 성과</span><span class="dn" style="font-weight:500;">-4.6%p 언더퍼폼</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">S&P500 내 비중</span><span style="font-weight:500;">~2.7% (시총 5위)</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">베타</span><span style="font-weight:500;">1.44 — 고변동성</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">섹터</span><span class="badge b-amzn">Consumer Discretionary</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:8px;">사업부별 OI 구성 (Q1 2026)</div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">AWS OI</span><span class="up" style="font-weight:500;">$14.2B (OPM 37.8%)</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">광고 OI (추정)</span><span class="up" style="font-weight:500;">~$8B (OPM ~60%)</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">북미 리테일 OI</span><span style="font-weight:500;">$8.3B (OPM ~8%)</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">해외 OI</span><span class="up" style="font-weight:500;">$1.4B (흑자 전환 유지)</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">다음 실적</span><span style="font-weight:500;">2026년 7월 30일 (Q2)</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">PEG</span><span class="up" style="font-weight:500;">1.37 — 합리적</span></div>
+    </div>
+  </div>
+
+  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">운영CF vs Capex vs FCF — Capex 사이클의 전모</div>
+  <div style="position:relative;width:100%;height:130px;margin-bottom:10px;">
+    <canvas id="cfChart" role="img" aria-label="AMZN 운영CF vs Capex vs FCF 추이">운영CF vs Capex 차트</canvas>
+  </div>
+  <div class="ib">
+    <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.7;"><strong style="color:var(--color-text-primary);">섹터 ETF:</strong> XLY(소비재 ETF) 최대 비중. QQQ 상위 편입. AMZN은 리테일+클라우드 혼합으로 PER보다 EV/EBITDA가 더 적합한 지표. 관세 협상 진전 → 리테일 마진 회복 시 추가 업사이드.</div>
+  </div>
+</div>
+
+<!-- 6. 뉴스 -->
+<div class="card">
+  <div class="sec">6. 시계열 주요 뉴스 <span class="src">2025.07 ~ 2026.06</span></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;font-size:11px;">
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#BA7517;display:inline-block;"></span>초대형 이벤트</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#1D9E75;display:inline-block;"></span>긍정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#D85A30;display:inline-block;"></span>부정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#888780;display:inline-block;"></span>중립</span>
+  </div>
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2025년 9월 — Anthropic $183B 밸류</div>
+      <div class="tl-title">Anthropic 신규 펀딩 — 밸류 $183B · Amazon 지분 15~19% 가치 $27~35B</div>
+      <div class="tl-body">Anthropic이 신규 자금 조달로 밸류에이션 $183B 달성. Amazon의 추정 지분 가치 $27~35B 수준. JetBlue 기내 Wi-Fi에 Project Kuiper 활용 발표. AWS가 Anthropic의 최대 클라우드 파트너임을 재확인.</div>
+      <span class="tag tag-pos">Anthropic $183B</span><span class="tag tag-pos">Kuiper 파트너십</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 2월 — Q4 2025 실적 후 급락</div>
+      <div class="tl-title">Q4 가이던스 실망 + Capex $200B 계획 발표 — 하루 급락 · $198 52주 최저</div>
+      <div class="tl-body">Q4 2025 매출 $187.8B(▲14%). AWS +18%(둔화 우려). Q1 2026 가이던스 $151~156.5B — 컨센서스 하회. 2026 Capex $200B 계획 발표로 FCF 압박 우려. $233→$198 급락. 역대 최대 하이퍼스케일러 Capex 규모에 시장 충격.</div>
+      <span class="tag tag-neg">AWS 성장 둔화</span><span class="tag tag-neg">$200B Capex</span><span class="tag tag-neg">$198 최저</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 4월 7일 — 관세 재격화</div>
+      <div class="tl-title">트럼프 상호관세 재확대 — $209 2차 저점 · 리테일 마진 충격 우려</div>
+      <div class="tl-body">트럼프 행정부 대중 관세 재확대로 $209 2차 저점. 아마존의 중국 제조 상품 의존도 높은 리테일 부문 마진 압박 우려. 이후 관세 협상 타결 기대감으로 급반등 시작.</div>
+      <span class="tag tag-neg">관세 쇼크</span><span class="tag tag-pos">이후 급반등</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2026년 4월 29일 — Q1 2026 실적</div>
+      <div class="tl-title">Q1 매출 $181.5B(▲17%) · AWS +28% 재가속 · Anthropic $16.8B 평가이익</div>
+      <div class="tl-body">매출 $181.5B(컨센서스 상회), AWS $37.6B(+28%, 전분기 23% 대비 가속). 영업이익 $23.9B. Anthropic 지분 $16.8B 평가이익 포함으로 순이익 $30.3B. Q2 가이던스 $194~199B · OI $20~24B. 발표 후 $200→$273 폭등.</div>
+      <span class="tag tag-big">AWS +28% 재가속</span><span class="tag tag-big">Anthropic $16.8B</span><span class="tag tag-pos">컨센서스 상회</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2026년 5월 — Anthropic 5GW Trainium 협약</div>
+      <div class="tl-title">Anthropic, Amazon Trainium 5GW 공급 계약 · Project Rainier $11B 데이터센터</div>
+      <div class="tl-body">Anthropic이 Amazon Trainium 칩 최대 5GW 공급 계약 체결. $11B 규모 Project Rainier 데이터센터(인디애나) 완공 — Anthropic 전용 AI 인프라. 주가 $273 신고점 달성 후 현재 $238 조정 중.</div>
+      <span class="tag tag-pos">Trainium 5GW</span><span class="tag tag-pos">$273 신고점</span><span class="tag tag-neu">현재 조정 중</span>
+    </div>
+  </div>
+</div>
+
+<!-- 7. 투자 포인트 -->
+<div class="card">
+  <div class="sec">7. 2026년 핵심 투자 포인트</div>
+  <div class="g2">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
+      <div class="ir"><span class="il">EV/EBITDA 16x — 5년 평균 21x 대비 역대 저평가</span><span class="badge b-green">역대 저평가</span></div>
+      <div class="ir"><span class="il">AWS +28% 재가속 · 백로그 $244B</span><span class="badge b-green">클라우드 2위</span></div>
+      <div class="ir"><span class="il">광고 OPM 60%+ · 빠른 성장</span><span class="badge b-green">고마진 확대</span></div>
+      <div class="ir"><span class="il">Anthropic·OpenAI 최대 클라우드 파트너</span><span class="badge b-teal">AI 생태계 허브</span></div>
+      <div class="ir"><span class="il">Capex 정점 후 FCF $50~80B 복귀 기대</span><span class="badge b-teal">FCF 전환 기대</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
+      <div class="ir"><span class="il">FCF TTM $1.2B — Capex에 압도</span><span class="badge b-red">현금 부족</span></div>
+      <div class="ir"><span class="il">관세 리테일 마진 압박 지속</span><span class="badge b-red">이커머스 리스크</span></div>
+      <div class="ir"><span class="il">Anthropic 이익 제거 시 실질 PER 35x</span><span class="badge b-amber">이익 품질 논란</span></div>
+      <div class="ir"><span class="il">AWS Azure·GCP 경쟁 심화</span><span class="badge b-amber">시장점유율</span></div>
+      <div class="ir"><span class="il">주식 수 증가 (희석 계속)</span><span class="badge b-gray">주주가치 희석</span></div>
+    </div>
+  </div>
+  <div class="ib">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--color-text-secondary);">투자의견:</span> <span class="badge b-amzn">Buy (컨센서스 목표가 $287)</span></div>
+      <div><span style="color:var(--color-text-secondary);">다음 실적:</span> <span style="font-weight:500;">2026년 7월 30일 (Q2 2026)</span></div>
+      <div><span style="color:var(--color-text-secondary);">TTM EPS:</span> <span class="up" style="font-weight:500;">$8.36 · PER 28.5x</span></div>
+      <div><span style="color:var(--color-text-secondary);">EV/EBITDA:</span> <span class="up" style="font-weight:500;">16.5x (5년 평균 21x → +27% 업사이드)</span></div>
+    </div>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">차트 + 분기 재무제표 + SEC 공시 기준 · 투자 권고가 아닙니다</div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+(function(){
+  const svg=document.getElementById('amznSvg');
+  const W=720,H=240,pL=72,pR=12,pT=14,pB=24;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const data=[
+    {o:21.5,h:22.5,l:21.0,c:22.0},{o:22.0,h:23.0,l:21.5,c:22.5},
+    {o:22.5,h:23.5,l:22.0,c:23.0},{o:23.0,h:24.0,l:22.5,c:23.5},
+    {o:23.5,h:24.5,l:22.5,c:23.0},{o:23.0,h:24.0,l:22.0,c:23.5},
+    {o:23.5,h:24.5,l:22.5,c:24.0},{o:24.0,h:25.0,l:23.0,c:23.5},
+    {o:23.5,h:24.0,l:22.5,c:23.0},{o:23.0,h:24.0,l:22.0,c:23.5},
+    {o:23.5,h:25.0,l:23.0,c:24.5},{o:24.5,h:25.5,l:23.5,c:24.0},
+    {o:24.0,h:25.0,l:23.0,c:24.5},{o:24.5,h:25.5,l:24.0,c:25.0},
+    {o:25.0,h:26.0,l:24.0,c:24.5},{o:24.5,h:25.5,l:23.5,c:24.0},
+    {o:24.0,h:25.0,l:23.0,c:24.5},{o:24.5,h:25.5,l:24.0,c:25.0},
+    {o:25.0,h:26.0,l:23.5,c:23.8},{o:23.8,h:24.5,l:22.5,c:23.0},
+    {o:23.0,h:23.5,l:21.5,c:22.0},{o:22.0,h:22.5,l:20.5,c:21.0},
+    {o:21.0,h:21.5,l:20.0,c:20.5},{o:20.5,h:21.0,l:19.8,c:19.9},
+    {o:19.9,h:20.5,l:19.5,c:20.2},{o:20.2,h:21.0,l:19.8,c:20.8},
+    {o:20.8,h:21.5,l:20.5,c:21.0},{o:21.0,h:21.5,l:20.5,c:21.2},
+    {o:21.2,h:22.0,l:20.8,c:21.8},{o:21.8,h:23.0,l:21.5,c:22.5},
+    {o:22.5,h:24.0,l:22.0,c:23.5},{o:23.5,h:25.0,l:23.0,c:24.5},
+    {o:24.5,h:26.0,l:24.0,c:25.5},{o:25.5,h:27.0,l:25.0,c:26.5},
+    {o:26.5,h:27.5,l:26.0,c:27.0},{o:27.0,h:27.5,l:26.0,c:26.5},
+    {o:26.5,h:27.0,l:25.5,c:26.0},{o:26.0,h:26.5,l:25.0,c:25.5},
+    {o:25.5,h:26.0,l:24.5,c:25.0},{o:25.0,h:25.5,l:24.2,c:24.5},
+    {o:24.5,h:25.0,l:23.8,c:24.2},{o:24.2,h:24.8,l:23.5,c:24.0},
+    {o:24.0,h:24.5,l:23.5,c:23.9},{o:23.9,h:24.2,l:23.5,c:23.9},
+    {o:23.9,h:24.2,l:23.5,c:23.9},{o:23.9,h:24.2,l:23.5,c:23.9}
+  ];
+  const prices=data.flatMap(d=>[d.h,d.l]);
+  const maxP=Math.max(...prices)+0.5,minP=Math.min(...prices)-0.5;
+  const rng=maxP-minP;
+  function py(v){return pT+cH*(1-(v-minP)/rng);}
+  const colW=cW/data.length,cw=Math.max(colW*.6,7);
+  [20,21,22,23,24,25,26,27].forEach(v=>{
+    const y=py(v);
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+    l.setAttribute('stroke','rgba(128,128,128,.12)');l.setAttribute('stroke-width','1');svg.appendChild(l);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',pL-4);t.setAttribute('y',y+4);t.setAttribute('text-anchor','end');
+    t.setAttribute('font-size','9');t.setAttribute('fill','rgba(128,128,128,.7)');
+    t.textContent='$'+(v*10);svg.appendChild(t);
+  });
+  function calcMA(d,n){return d.map((_,i)=>i<n-1?null:d.slice(i-n+1,i+1).reduce((s,x)=>s+x.c,0)/n);}
+  function drawLine(arr,col,w){
+    let pts=[];arr.forEach((v,i)=>{if(v===null)return;pts.push(`${pL+(i+.5)*colW},${py(v)}`);});
+    if(pts.length<2)return;
+    const p=document.createElementNS('http://www.w3.org/2000/svg','polyline');
+    p.setAttribute('points',pts.join(' '));p.setAttribute('fill','none');p.setAttribute('stroke',col);p.setAttribute('stroke-width',w||1.5);svg.appendChild(p);
+  }
+  data.forEach((d,i)=>{
+    const cx=pL+(i+.5)*colW,isUp=d.c>=d.o,col=isUp?'#D85A30':'#185FA5';
+    const wk=document.createElementNS('http://www.w3.org/2000/svg','line');
+    wk.setAttribute('x1',cx);wk.setAttribute('x2',cx);wk.setAttribute('y1',py(d.h));wk.setAttribute('y2',py(d.l));
+    wk.setAttribute('stroke',col);wk.setAttribute('stroke-width','1.5');svg.appendChild(wk);
+    const bT=py(Math.max(d.o,d.c)),bB=py(Math.min(d.o,d.c));
+    const bd=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    bd.setAttribute('x',cx-cw/2);bd.setAttribute('y',bT);bd.setAttribute('width',cw);
+    bd.setAttribute('height',Math.max(bB-bT,2));bd.setAttribute('fill',col);bd.setAttribute('rx','1');svg.appendChild(bd);
+  });
+  drawLine(calcMA(data,5),'#FF69B4',1.5);
+  drawLine(calcMA(data,20),'#9370DB',1.5);
+  drawLine(calcMA(data,60),'#DAA520',2);
+  drawLine(calcMA(data,120),'#228B22',2);
+  const mk=(idx,lbl,isLow,col)=>{
+    const cx=pL+(idx+.5)*colW;
+    const cy=isLow?py(data[idx].l)+12:py(data[idx].h)-8;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',Math.min(Math.max(cx,40),W-70));t.setAttribute('y',cy);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','9');t.setAttribute('fill',col);t.setAttribute('font-weight','500');
+    t.textContent=lbl;svg.appendChild(t);
+  };
+  mk(23,'$198 최저(\'26.02)',true,'#185FA5');
+  mk(33,'$273 최고(\'26.05)',false,'#D85A30');
+  ['\'25.07','\'25.09','\'25.11','\'26.01','\'26.03','\'26.05'].forEach((m,i)=>{
+    const cx=pL+(i/6)*cW+cW/12;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',cx);t.setAttribute('y',H-4);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','10');t.setAttribute('fill','rgba(128,128,128,.8)');
+    t.textContent=m;svg.appendChild(t);
+  });
+  [{c:'#D85A30',t:'양봉'},{c:'#185FA5',t:'음봉'},{c:'#FF69B4',t:'MA5'},{c:'#9370DB',t:'MA20'},{c:'#DAA520',t:'MA60'},{c:'#228B22',t:'MA120'}].forEach((l,i)=>{
+    const gx=pL+i*90;
+    const r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    r.setAttribute('x',gx);r.setAttribute('y',2);r.setAttribute('width',10);r.setAttribute('height',10);
+    r.setAttribute('fill',l.c);r.setAttribute('rx','2');svg.appendChild(r);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',gx+13);t.setAttribute('y',11);t.setAttribute('font-size','9');
+    t.setAttribute('fill','rgba(128,128,128,.9)');t.textContent=l.t;svg.appendChild(t);
+  });
+})();
+
+new Chart(document.getElementById('amznRevChart'),{
+  type:'bar',
+  data:{
+    labels:['Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26'],
+    datasets:[
+      {label:'매출($B)',data:[155.7,159.3,158.9,187.8,181.5],backgroundColor:'#BA7517',borderRadius:4,yAxisID:'y'},
+      {label:'AWS($B)',data:[29.3,26.3,27.4,28.8,37.6],backgroundColor:'rgba(29,158,117,0.75)',borderRadius:4,yAxisID:'y'},
+      {label:'OPM%',type:'line',data:[11.8,10.1,9.9,13.3,13.1],borderColor:'#EF9F27',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{position:'left',ticks:{font:{size:10},callback:v=>v+'B',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      y2:{position:'right',min:6,max:18,ticks:{font:{size:10},callback:v=>v+'%',color:'#EF9F27'},grid:{display:false}},
+      x:{ticks:{font:{size:11},color:'#888'},grid:{display:false}}
+    }
+  }
+});
+
+new Chart(document.getElementById('peerChart'),{
+  type:'bar',
+  data:{
+    labels:['MSFT','GOOGL','AMZN','NVDA','AAPL'],
+    datasets:[{
+      label:'PER(TTM)',
+      data:[23.2,27.8,28.5,31.3,37.3],
+      backgroundColor:['#B4B2A9','#B4B2A9','#BA7517','#B4B2A9','#B4B2A9'],
+      borderRadius:5,borderSkipped:false
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`PER ${ctx.raw}x`}}},
+    scales:{
+      y:{max:45,ticks:{font:{size:10},callback:v=>v+'x',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      x:{ticks:{font:{size:10},color:'#888'},grid:{display:false}}
+    }
+  }
+});
+
+new Chart(document.getElementById('cfChart'),{
+  type:'bar',
+  data:{
+    labels:['Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26'],
+    datasets:[
+      {label:'운영CF($B)',data:[17.0,25.3,35.5,54.5,26.0],backgroundColor:'rgba(29,158,117,0.7)',borderRadius:4},
+      {label:'Capex($B)',data:[-25.0,-32.2,-35.1,-39.5,-44.2],backgroundColor:'rgba(216,90,48,0.7)',borderRadius:4},
+      {label:'FCF($B)',data:[-8.0,0.3,0.4,14.9,-18.2],backgroundColor:['#FCEBEB','#EAF3DE','#EAF3DE','#EAF3DE','#FCEBEB'],borderColor:['#D85A30','#1D9E75','#1D9E75','#1D9E75','#D85A30'],borderWidth:1,borderRadius:4,type:'bar'}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{ticks:{font:{size:10},callback:v=>v+'B',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      x:{ticks:{font:{size:10},color:'#888'},grid:{display:false}}
+    }
+  }
+});
+</script>
+
+</div>
+</body>
+</html>
