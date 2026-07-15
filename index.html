@@ -69,6 +69,26 @@
   .card-updated { font-size: 10.5px; color: var(--text3); }
   .empty-msg { text-align: center; color: var(--text3); padding: 60px 0; font-size: 14px; }
   footer { text-align: center; color: var(--text3); font-size: 11.5px; padding: 30px 20px; }
+
+  .macro-strip {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px;
+    margin-bottom: 24px;
+  }
+  .macro-tile {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 12px; text-align: center;
+  }
+  .macro-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.6px; }
+  .macro-value { font-size: 16px; font-weight: 700; color: var(--text); margin-top: 3px; }
+  .macro-sub { font-size: 10.5px; color: var(--text3); margin-top: 2px; }
+  .macro-sub.up { color: #2ecc71; }
+  .macro-sub.down { color: #e74c3c; }
+  @media (max-width: 900px) {
+    .macro-strip { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 520px) {
+    .macro-strip { grid-template-columns: repeat(2, 1fr); }
+  }
 </style>
 </head>
 <body>
@@ -80,6 +100,7 @@
 </header>
 
 <div class="wrap">
+  <div class="macro-strip" id="macroStrip"></div>
   <div class="controls">
     <input id="search" type="text" placeholder="티커 또는 종목명 검색...">
     <div class="sector-nav" id="sectorNav"></div>
@@ -240,6 +261,40 @@ const STOCKS = /*STOCKS_JSON_START*/[
     "lastUpdated": "2026-07-15"
   }
 ]/*STOCKS_JSON_END*/;
+const MACRO = /*MACRO_JSON_START*/{
+  "generatedAt": "2026-07-15T19:24:17Z",
+  "sp500": {
+    "value": 7559.03,
+    "changePct": 0.2,
+    "asOf": "2026-07-15"
+  },
+  "vix": {
+    "value": 15.8,
+    "changePct": -4.24,
+    "asOf": "2026-07-15"
+  },
+  "usdkrw": {
+    "value": 1486.17,
+    "changePct": -0.77,
+    "asOf": "2026-07-15"
+  },
+  "fedFunds": {
+    "value": 3.63,
+    "asOf": "2026-06-01"
+  },
+  "nextFomcMeeting": {
+    "start": "2026-07-28",
+    "end": "2026-07-29"
+  },
+  "unemploymentRate": {
+    "value": 4.2,
+    "asOf": "2026-06-01"
+  },
+  "cpiYoy": {
+    "value": 3.5,
+    "asOf": "2026-06-01"
+  }
+}/*MACRO_JSON_END*/;
 
 const SECTORS = [...new Set(STOCKS.map(s => s.sector))].sort();
 const sectorNav = document.getElementById('sectorNav');
@@ -292,10 +347,76 @@ function renderHeaderStats() {
     count ? `${count}개 종목 수록 · 마지막 업데이트 ${latest}` : '';
 }
 
+function fmtChangeSub(changePct) {
+  if (changePct === null || changePct === undefined) return '';
+  const cls = changePct >= 0 ? 'up' : 'down';
+  const sign = changePct >= 0 ? '+' : '';
+  return `<div class="macro-sub ${cls}">${sign}${changePct.toFixed(2)}%</div>`;
+}
+
+function fmtMonth(dateStr) {
+  const [y, m] = dateStr.split('-');
+  return `${y}.${m}`;
+}
+
+function fmtFomcDate(dateStr) {
+  const [, m, d] = dateStr.split('-');
+  return `${parseInt(m)}/${parseInt(d)}`;
+}
+
+function renderMacroStrip() {
+  const el = document.getElementById('macroStrip');
+  if (!MACRO) { el.style.display = 'none'; return; }
+
+  const tiles = [
+    {
+      label: 'S&P 500',
+      value: MACRO.sp500.value.toLocaleString(undefined, {maximumFractionDigits: 0}),
+      sub: fmtChangeSub(MACRO.sp500.changePct),
+    },
+    {
+      label: 'VIX',
+      value: MACRO.vix.value.toFixed(2),
+      sub: fmtChangeSub(MACRO.vix.changePct),
+    },
+    {
+      label: '원/달러',
+      value: MACRO.usdkrw.value.toLocaleString(undefined, {maximumFractionDigits: 0}),
+      sub: fmtChangeSub(MACRO.usdkrw.changePct),
+    },
+    {
+      label: '기준금리',
+      value: MACRO.fedFunds.value.toFixed(2) + '%',
+      sub: MACRO.nextFomcMeeting
+        ? `<div class="macro-sub">다음 FOMC ${fmtFomcDate(MACRO.nextFomcMeeting.start)}</div>`
+        : '',
+    },
+    {
+      label: '실업률',
+      value: MACRO.unemploymentRate.value.toFixed(1) + '%',
+      sub: `<div class="macro-sub">${fmtMonth(MACRO.unemploymentRate.asOf)}</div>`,
+    },
+    {
+      label: 'CPI YoY',
+      value: MACRO.cpiYoy.value.toFixed(1) + '%',
+      sub: `<div class="macro-sub">${fmtMonth(MACRO.cpiYoy.asOf)}</div>`,
+    },
+  ];
+
+  el.innerHTML = tiles.map(t => `
+    <div class="macro-tile">
+      <div class="macro-label">${t.label}</div>
+      <div class="macro-value">${t.value}</div>
+      ${t.sub}
+    </div>
+  `).join('');
+}
+
 searchBox.addEventListener('input', renderGrid);
 renderSectorNav();
 renderGrid();
 renderHeaderStats();
+renderMacroStrip();
 </script>
 
 </body>
