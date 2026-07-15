@@ -376,9 +376,9 @@ function renderMacroStrip() {
   const tiles = [
     {
       label: 'S&P 500',
-      value: MACRO.sp500.value.toLocaleString(undefined, {maximumFractionDigits: 0}) + 'pt',
-      sub: fmtChangeSub(MACRO.sp500.changePct)
-        + (MACRO.spy ? `<div class="macro-sub" style="color: var(--text);">SPY $${MACRO.spy.value.toFixed(2)}</div>` : ''),
+      value: MACRO.spy ? '$' + MACRO.spy.value.toFixed(2) : MACRO.sp500.value.toLocaleString(undefined, {maximumFractionDigits: 0}) + 'pt',
+      sub: fmtChangeSub(MACRO.spy ? MACRO.spy.changePct : MACRO.sp500.changePct)
+        + `<div class="macro-sub" style="color: var(--text);">${MACRO.sp500.value.toLocaleString(undefined, {maximumFractionDigits: 0})}pt</div>`,
     },
     {
       label: 'VIX',
