@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MU 종합 분석 위젯</title>
+<style>
+:root {
+    --color-background-primary: light-dark(rgba(255, 255, 255, 1), rgba(48, 48, 46, 1));
+    --color-background-secondary: light-dark(rgba(245, 244, 237, 1), rgba(38, 38, 36, 1));
+    --color-background-tertiary: light-dark(rgba(250, 249, 245, 1), rgba(20, 20, 19, 1));
+    --color-background-inverse: light-dark(rgba(20, 20, 19, 1), rgba(250, 249, 245, 1));
+    --color-background-ghost: light-dark(rgba(255, 255, 255, 0), rgba(48, 48, 46, 0));
+    --color-background-info: light-dark(rgba(214, 228, 246, 1), rgba(37, 62, 95, 1));
+    --color-background-danger: light-dark(rgba(247, 236, 236, 1), rgba(96, 42, 40, 1));
+    --color-background-success: light-dark(rgba(233, 241, 220, 1), rgba(27, 70, 20, 1));
+    --color-background-warning: light-dark(rgba(246, 238, 223, 1), rgba(72, 58, 15, 1));
+    --color-background-disabled: light-dark(rgba(255, 255, 255, 0.5), rgba(48, 48, 46, 0.5));
+    --color-text-primary: light-dark(rgba(20, 20, 19, 1), rgba(250, 249, 245, 1));
+    --color-text-secondary: light-dark(rgba(61, 61, 58, 1), rgba(194, 192, 182, 1));
+    --color-text-tertiary: light-dark(rgba(115, 114, 108, 1), rgba(156, 154, 146, 1));
+    --color-text-inverse: light-dark(rgba(255, 255, 255, 1), rgba(20, 20, 19, 1));
+    --color-text-info: light-dark(rgba(50, 102, 173, 1), rgba(128, 170, 221, 1));
+    --color-text-danger: light-dark(rgba(127, 44, 40, 1), rgba(238, 136, 132, 1));
+    --color-text-success: light-dark(rgba(38, 91, 25, 1), rgba(122, 185, 72, 1));
+    --color-text-warning: light-dark(rgba(90, 72, 21, 1), rgba(209, 160, 65, 1));
+    --color-text-disabled: light-dark(rgba(20, 20, 19, 0.5), rgba(250, 249, 245, 0.5));
+    --color-text-ghost: light-dark(rgba(115, 114, 108, 0.5), rgba(156, 154, 146, 0.5));
+    --color-border-primary: light-dark(rgba(31, 30, 29, 0.4), rgba(222, 220, 209, 0.4));
+    --color-border-secondary: light-dark(rgba(31, 30, 29, 0.3), rgba(222, 220, 209, 0.3));
+    --color-border-tertiary: light-dark(rgba(31, 30, 29, 0.15), rgba(222, 220, 209, 0.15));
+    --color-border-inverse: light-dark(rgba(255, 255, 255, 0.3), rgba(20, 20, 19, 0.15));
+    --color-border-ghost: light-dark(rgba(31, 30, 29, 0), rgba(222, 220, 209, 0));
+    --color-border-info: light-dark(rgba(70, 130, 213, 1), rgba(70, 130, 213, 1));
+    --color-border-danger: light-dark(rgba(167, 61, 57, 1), rgba(205, 92, 88, 1));
+    --color-border-success: light-dark(rgba(67, 116, 38, 1), rgba(89, 145, 48, 1));
+    --color-border-warning: light-dark(rgba(128, 92, 31, 1), rgba(168, 120, 41, 1));
+    --color-border-disabled: light-dark(rgba(31, 30, 29, 0.1), rgba(222, 220, 209, 0.1));
+    --color-ring-primary: light-dark(rgba(20, 20, 19, 0.7), rgba(250, 249, 245, 0.7));
+    --color-ring-secondary: light-dark(rgba(61, 61, 58, 0.7), rgba(194, 192, 182, 0.7));
+    --color-ring-inverse: light-dark(rgba(255, 255, 255, 0.7), rgba(20, 20, 19, 0.7));
+    --color-ring-info: light-dark(rgba(50, 102, 173, 0.5), rgba(128, 170, 221, 0.5));
+    --color-ring-danger: light-dark(rgba(167, 61, 57, 0.5), rgba(205, 92, 88, 0.5));
+    --color-ring-success: light-dark(rgba(67, 116, 38, 0.5), rgba(89, 145, 48, 0.5));
+    --color-ring-warning: light-dark(rgba(128, 92, 31, 0.5), rgba(168, 120, 41, 0.5));
+    --font-sans: "Segoe UI", -apple-system, sans-serif;
+    --font-mono: ui-monospace, monospace;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-text-xs-size: 12px;
+    --font-text-sm-size: 14px;
+    --font-text-md-size: 16px;
+    --font-text-lg-size: 20px;
+    --font-heading-xs-size: 12px;
+    --font-heading-sm-size: 14px;
+    --font-heading-md-size: 16px;
+    --font-heading-lg-size: 20px;
+    --font-heading-xl-size: 24px;
+    --font-heading-2xl-size: 28px;
+    --font-heading-3xl-size: 36px;
+    --font-text-xs-line-height: 1.4;
+    --font-text-sm-line-height: 1.4;
+    --font-text-md-line-height: 1.4;
+    --font-text-lg-line-height: 1.25;
+    --font-heading-xs-line-height: 1.4;
+    --font-heading-sm-line-height: 1.4;
+    --font-heading-md-line-height: 1.4;
+    --font-heading-lg-line-height: 1.25;
+    --font-heading-xl-line-height: 1.25;
+    --font-heading-2xl-line-height: 1.1;
+    --font-heading-3xl-line-height: 1;
+    --border-radius-xs: 4px;
+    --border-radius-sm: 6px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 10px;
+    --border-radius-xl: 12px;
+    --border-radius-full: 9999px;
+    --border-width-regular: 0.5px;
+    --shadow-hairline: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    color-scheme: light dark;
+}
+body { background: var(--color-background-tertiary); color: var(--color-text-primary); margin: 0; }
+.page-center { max-width: 800px; margin: 0 auto; padding: 16px; }
+</style>
+</head>
+<body>
+<div class="page-center">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.wrap{padding:1rem 0;font-family:var(--font-sans);}
+h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
+.mv{font-size:14px;font-weight:500;color:var(--color-text-primary);}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
+.up{color:#1D9E75;}.dn{color:#D85A30;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
+.b-green{background:#EAF3DE;color:#27500A;}.b-amber{background:#FAEEDA;color:#633806;}
+.b-red{background:#FCEBEB;color:#791F1F;}.b-blue{background:#E6F1FB;color:#0C447C;}
+.b-gray{background:#F1EFE8;color:#444441;}
+.b-mu{background:#005EB8;color:#fff;}.b-mu-l{background:#E0EEFA;color:#003A7A;}
+.b-teal{background:#E1F5EE;color:#04342C;}
+.b-today{background:#FFF3CD;color:#856404;border:1px solid #ffc107;}
+.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
+.ir:last-child{border-bottom:none;}
+.il{color:var(--color-text-secondary);}.iv{font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;}
+.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:6px;}
+.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:12px 14px;margin-top:10px;}
+.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:12px 14px;margin-top:10px;}
+.danger{background:#FCEBEB;border-left:3px solid #D85A30;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:12px 14px;margin-top:10px;}
+.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
+.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
+.ev-5{background:#FCEBEB;color:#791F1F;}
+.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
+.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
+.ind-row:last-child{border-bottom:none;}
+.ind-nm{font-size:13px;font-weight:500;color:var(--color-text-primary);min-width:100px;}
+.ind-val{font-size:14px;font-weight:500;color:var(--color-text-primary);min-width:80px;text-align:right;}
+.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
+.bar-f{border-radius:4px;height:7px;}
+.stage-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:12px;}
+.stage{text-align:center;padding:12px 6px;border-radius:var(--border-radius-md);}
+.tl{position:relative;padding-left:28px;}
+.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
+.tl-item{position:relative;margin-bottom:18px;}
+.tl-item:last-child{margin-bottom:0;}
+.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid var(--color-background-primary);}
+.dot-big{background:#005EB8;}.dot-pos{background:#1D9E75;}
+.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
+.tl-date{font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:3px;}
+.tl-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
+.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
+.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
+.tag-big{background:#005EB8;color:#fff;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
+.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
+.sprow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:12px;}
+.sprow:last-child{border-bottom:none;}
+</style>
+
+<div class="wrap">
+<div style="margin-bottom:8px;background:#FFF3CD;border:1px solid #ffc107;border-radius:var(--border-radius-md);padding:8px 12px;font-size:12px;color:#856404;">
+  ⚡ <strong>오늘(6/24) 장 마감 후 Q3 FY2026 실적 발표 예정</strong> — 가이던스 $33.5B(▲250% YoY) · GM 81% 달성 여부가 주가 방향 결정
+</div>
+
+<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px;">
+  <h2>Micron Technology (MU)</h2>
+  <span class="badge b-mu">S&P 500 시총 10위</span>
+  <span class="badge b-mu-l">HBM4 · DRAM · NAND · AI 메모리 슈퍼사이클</span>
+  <span class="src">차트 + 분기 재무제표 + SEC 8-K</span>
+</div>
+<p class="sub">현재가 $1,133.99 (+8.70%) · 52주 최저 $118 (2025.07) · 52주 최고 $1,160 (2026.06) · 시총 $1.27T · EPS(TTM) $23.64 · 52주 수익률 +783%</p>
+
+<div class="g4">
+  <div class="met"><div class="ml">현재가 (06/20)</div><div class="mv">$1,133.99</div><div class="ms up">52주 역대 최고 근접</div></div>
+  <div class="met"><div class="ml">Q2 FY26 매출</div><div class="mv">$23.9B</div><div class="ms up">▲196% YoY · 분기 역대최대</div></div>
+  <div class="met"><div class="ml">Q3 FY26 가이던스</div><div class="mv">$33.5B</div><div class="ms up">▲250%+ YoY · GM 81% 예상</div></div>
+  <div class="met"><div class="ml">Forward PER</div><div class="mv">10.2x</div><div class="ms up">FY2027E EPS ~$103~106</div></div>
+</div>
+
+<!-- 1. 기술적 분석 -->
+<div class="card">
+  <div class="sec">1. 기술적 분석 — 실제 차트 기반 (2025.07 ~ 2026.06) · 52주 +783%</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
+    52주 최저 $118 (2025.07) → 현재 $1,134 역대 최고 근접 · 10배 이상 상승 · 메모리 슈퍼사이클
+  </div>
+  <svg id="muSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;" role="img" aria-label="MU 52주 주가 차트 2025.07~2026.06"></svg>
+
+  <div class="g4" style="font-size:11px;margin-bottom:12px;">
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#633806;font-weight:500;margin-bottom:3px;">2025.07~08 — 저점 형성</div>
+      <div style="color:#854F0B;line-height:1.6;">$118 역대 저점<br>메모리 다운사이클 공포<br>HBM 적자 지속<br>주가 바닥 확인</div>
+    </div>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#27500A;font-weight:500;margin-bottom:3px;">2025.09~12 — 완만한 반등</div>
+      <div style="color:#3B6D11;line-height:1.6;">$118→$430 점진 상승<br>HBM3E 수요 가시화<br>Q4/Q1 연속 서프라이즈<br>사이클 전환 신호</div>
+    </div>
+    <div style="background:#E6F1FB;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#003A7A;font-weight:500;margin-bottom:3px;">2026.02~04 — 폭등 시작</div>
+      <div style="color:#005EB8;line-height:1.6;">$430→$750 폭등<br>Q2 FY26 +196% 역대최대<br>GM 74% · EPS +756%<br>HBM4 양산 확인</div>
+    </div>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#27500A;font-weight:500;margin-bottom:3px;">2026.05~06 — 신고점 경신</div>
+      <div style="color:#3B6D11;line-height:1.6;">$750→$1,160 신고점<br>Q3 가이던스 $33.5B<br>Vera Rubin HBM4 인증<br>6/24 실적 발표 대기</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">이동평균선 현황</div>
+      <div class="ir"><span class="il">5일선</span><span class="badge b-green">단기 지지</span></div>
+      <div class="ir"><span class="il">20일선</span><span class="badge b-green">강한 상승 지지</span></div>
+      <div class="ir"><span class="il">60일선</span><span class="badge b-green">폭발적 우상향</span></div>
+      <div class="ir"><span class="il">120일선</span><span class="badge b-green">완전 정배열</span></div>
+      <div class="ir"><span class="il">배열</span><span class="badge b-green">역대급 완전 정배열</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">핵심 가격대</div>
+      <div class="ir"><span class="il">역대 최고</span><span style="font-weight:500;color:#1D9E75;">$1,160 (2026.06)</span></div>
+      <div class="ir"><span class="il">강한 지지</span><span style="font-weight:500;color:#185FA5;">$900~$1,000</span></div>
+      <div class="ir"><span class="il">현재가</span><span style="font-weight:500;color:#854F0B;">$1,134 (고점 대비 -2.2%)</span></div>
+      <div class="ir"><span class="il">52주 수익률</span><span style="font-weight:500;color:#1D9E75;">+783% — 전체 빅테크 압도</span></div>
+      <div class="ir"><span class="il">배당</span><span style="font-weight:500;color:#1D9E75;">분기 $0.15 (30% 인상 발표)</span></div>
+    </div>
+  </div>
+
+  <div class="sig">
+    <span class="badge b-green">52주 +783% — 분석 종목 전체 1위</span>
+    <span class="badge b-green">Q2 GM 74% · Q3 가이던스 GM 81% 역대최고</span>
+    <span class="badge b-green">Forward PER 10.2x — 빅테크 중 압도적 최저</span>
+    <span class="badge b-today">오늘(6/24) Q3 실적 발표 — 주가 방향 결정적</span>
+    <span class="badge b-red">Trailing PER 48x · 사이클 정점 우려</span>
+    <span class="badge b-amber">HBM4 시장점유율 3위 (SK하이닉스 60~70% 지배)</span>
+  </div>
+</div>
+
+<!-- 2. 기본적 분석 -->
+<div class="card">
+  <div class="sec">2. 기본적 분석 — 분기 재무제표 <span class="src">실제 수치 · MU FY 기준 (9월~8월)</span></div>
+
+  <div style="position:relative;width:100%;height:165px;margin-bottom:12px;">
+    <canvas id="muRevChart" role="img" aria-label="MU 분기 매출 및 총이익률 추이">분기 매출 및 GM 차트</canvas>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div class="ir"><span class="il">Q2 FY26 매출</span><span class="iv up">$23.9B (▲196% YoY) <span class="ev ev-5">매우높음</span></span></div>
+      <div class="ir"><span class="il">Q2 FY26 GM</span><span class="iv up">74.4% (역대 최고 근접) <span class="ev ev-5">매우높음</span></span></div>
+      <div class="ir"><span class="il">Q2 FY26 EPS</span><span class="iv up">$12.07 (▲756% YoY) <span class="ev ev-5">매우높음</span></span></div>
+      <div class="ir"><span class="il">Q2 FY26 FCF</span><span class="iv up">$5.5B (FCF마진 23%) <span class="ev ev-4">높음</span></span></div>
+      <div class="ir"><span class="il">Q3 FY26 가이던스</span><span class="iv up">$33.5B · GM ~81% (▲250%+ YoY) <span class="ev ev-5">매우높음</span></span></div>
+    </div>
+    <div>
+      <div class="ir"><span class="il">TTM 매출</span><span class="iv up">$58.1B · 역대 최고</span></div>
+      <div class="ir"><span class="il">TTM EPS(희석)</span><span class="iv up">$23.64 · Trailing PER 48x</span></div>
+      <div class="ir"><span class="il">HBM 공급</span><span class="iv up">2025·2026 전량 완판 (장기계약)</span></div>
+      <div class="ir"><span class="il">배당 인상</span><span class="iv up">30% 인상 발표 ($0.115→$0.15)</span></div>
+      <div class="ir"><span class="il">FY2026 Capex</span><span class="iv dn">$25B+ (전년比 급증)</span></div>
+    </div>
+  </div>
+
+  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">핵심 성장 동력</div>
+  <div class="g3" style="font-size:12px;margin-bottom:12px;">
+    <div style="background:#005EB8;border-radius:var(--border-radius-md);padding:10px 12px;">
+      <div style="color:#fff;font-weight:500;margin-bottom:3px;">HBM4 (AI 메모리 핵심)</div>
+      <div style="color:#B0D4F0;line-height:1.6;">NVDA Vera Rubin 인증<br>36GB 12H · 2.8TB/s<br>2025·2026 전량 완판<br>HBM시장 2028 $100B 목표</div>
+    </div>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px 12px;">
+      <div style="color:#27500A;font-weight:500;margin-bottom:3px;">DRAM (가격 급등)</div>
+      <div style="color:#3B6D11;line-height:1.6;">ASP 중간60%대 상승<br>데이터센터 DRAM 2배↑<br>공급 타이트 지속<br>1α노드 EUV 미국 생산</div>
+    </div>
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:10px 12px;">
+      <div style="color:#633806;font-weight:500;margin-bottom:3px;">NAND + 미국 CHIPS법</div>
+      <div style="color:#854F0B;line-height:1.6;">NAND ASP 고70%대 상승<br>버지니아 Manassas 1α생산<br>CHIPS법 $20B 투자 지원<br>$200B 미국 팹 확장</div>
+    </div>
+  </div>
+
+  <div class="hl">
+    <div style="font-size:13px;font-weight:500;color:#27500A;margin-bottom:4px;">핵심 투자 논리 — HBM이 메모리를 '전략 자산'으로 전환 · FY2027E EPS $103~106 · Forward PER 10x</div>
+    <div style="font-size:12px;color:#1D9E75;line-height:1.7;">과거 MU는 DRAM 사이클 주식 → 폭락 반복. 지금은 다름: HBM이 3사 과점(SK하이닉스·삼성·마이크론) + 전량 장기계약 구조로 변했음. 2026 HBM 완판, 2027 대부분 예약됨. <strong>Q3 가이던스 $33.5B(GM 81%)가 실현되면 Forward PER 10x = 이전 사이클 과거 최저 PER 수준. FY2026 한 해에 역대 모든 연도 FCF 합산보다 많은 현금 창출 예상.</strong></div>
+  </div>
+</div>
+
+<!-- 3. Per-Share -->
+<div class="card">
+  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">Q2 FY26 기준 · 1.13B 주</span></div>
+  <div class="g4">
+    <div class="met"><div class="ml">EPS(희석) · TTM</div><div class="mv">$23.64</div><div class="ms">Q3 FY25~Q2 FY26 합산</div><div style="margin-top:5px;"><span class="ev ev-5">매우높음</span></div></div>
+    <div class="met"><div class="ml">BPS · 주당순자산</div><div class="mv">$63.45</div><div class="ms">Q2 FY26 · 자기자본 $72.5B</div><div style="margin-top:5px;"><span class="ev ev-4">높음</span></div></div>
+    <div class="met"><div class="ml">FCF/주 · TTM</div><div class="mv">$7.49</div><div class="ms">TTM FCF $8.5B (Capex 압박)</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+    <div class="met"><div class="ml">DPS · 분기</div><div class="mv">$0.15</div><div class="ms">30% 인상 · 배당수익률 0.05%</div><div style="margin-top:5px;"><span class="ev ev-2">낮음</span></div></div>
+  </div>
+  <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:6px;">* FY2027E EPS 컨센서스 $103~106 → Forward PER 10.2x. 실현 시 반도체 사이클 역사상 가장 저렴한 PER로 거래되는 구간.</div>
+</div>
+
+<!-- 4. 밸류에이션 -->
+<div class="card">
+  <div class="sec">4. 상대 투자지표 (Valuation Multiples) · 현재가 $1,133.99 · DRAM 3사 비교</div>
+
+  <div style="background:#E0EEFA;border:1px solid #005EB8;border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:12px;font-size:12px;color:#003A7A;">
+    <strong>⚠ MU 밸류에이션 핵심:</strong> Trailing 지표는 사이클 초입 → 고평가처럼 보임. <strong>Forward 지표(PER 10.2x, PEG 0.07)가 실질 투자 판단 기준.</strong> Q3($33.5B)·Q4 가이던스 달성 시 EPS 급등으로 모든 지표 급격 하락.
+  </div>
+
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;font-size:11px;">
+    <span style="padding:2px 8px;border-radius:999px;background:#E6F1FB;color:#0C447C;font-weight:500;">1단계 매우낮음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#EAF3DE;color:#27500A;font-weight:500;">2단계 낮음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#F1EFE8;color:#444441;font-weight:500;">3단계 적정</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#FAEEDA;color:#633806;font-weight:500;">4단계 높음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#FCEBEB;color:#791F1F;font-weight:500;">5단계 매우높음</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PER (Trailing)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">$1,134÷$23.64 · 사이클 전환 초입 — 과거 EPS 기준<br><span style="color:#1D9E75;">Forward PER 10.2x(FY2027E) · PEG 0.07 — 반도체 역사상 최저 수준</span></div>
+    <div class="ind-val">48.0x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(5x)</span><span>적정(20x)</span><span>고(60x)</span></div><div class="bar-bg"><div class="bar-f" style="width:77%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PBR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">$1,134÷$63.45 · 자기자본 $72.5B · ROE 40%</div>
+    <div class="ind-val">17.9x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(2x)</span><span>적정(10x)</span><span>고(30x)</span></div><div class="bar-bg"><div class="bar-f" style="width:57%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PSR (TTM)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">시총 $1.27T÷TTM $58.1B · Forward PSR: $1.27T÷FY2026E $85B = 14.9x</div>
+    <div class="ind-val">21.9x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(3x)</span><span>적정(10x)</span><span>고(30x)</span></div><div class="bar-bg"><div class="bar-f" style="width:70%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">EV/EBITDA</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">EV $1.27T÷TTM EBITDA $37.1B · <span style="color:#D85A30;">10년 중간값 6.82x 대비 364% 프리미엄</span><br><span style="color:#1D9E75;">Forward 기준(FY2027E EBITDA ~$120B) → 10x 이하</span></div>
+    <div class="ind-val">31.6x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(4x)</span><span>적정(15x)</span><span>고(40x)</span></div><div class="bar-bg"><div class="bar-f" style="width:70%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+  </div>
+
+  <div class="stage-grid" style="margin-top:14px;">
+    <div class="stage" style="background:#E6F1FB;"><div style="font-size:16px;font-weight:500;color:#0C447C;">1단계</div><div style="font-size:10px;color:#185FA5;margin-top:2px;">매우 저평가</div><div style="font-size:9px;color:#185FA5;background:#B5D4F4;border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">Forward PER·PEG</div></div>
+    <div class="stage" style="background:#EAF3DE;"><div style="font-size:16px;font-weight:500;color:#27500A;">2단계</div><div style="font-size:10px;color:#3B6D11;margin-top:2px;">저평가</div></div>
+    <div class="stage" style="background:#F1EFE8;"><div style="font-size:16px;font-weight:500;color:#444441;">3단계</div><div style="font-size:10px;color:#5F5E5A;margin-top:2px;">적정</div></div>
+    <div class="stage" style="background:#FAEEDA;border:2px solid #854F0B;"><div style="font-size:16px;font-weight:500;color:#633806;">4단계</div><div style="font-size:10px;color:#854F0B;margin-top:2px;">고평가</div><div style="font-size:9px;color:#854F0B;background:#FAC775;border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">Trailing 전 지표</div></div>
+    <div class="stage" style="background:#FCEBEB;"><div style="font-size:16px;font-weight:500;color:#791F1F;">5단계</div><div style="font-size:10px;color:#A32D2D;margin-top:2px;">매우 고평가</div></div>
+  </div>
+
+  <div class="warn">
+    <div style="font-size:13px;font-weight:500;color:#633806;margin-bottom:4px;">종합 밸류에이션 — Trailing 기준 4단계(고평가) vs Forward 기준 1단계(매우 저평가) · 사이클 판단이 핵심</div>
+    <div style="font-size:12px;color:#854F0B;line-height:1.6;">Trailing 지표 모두 4단계 — 사이클 전환 초입의 왜곡. <strong>Forward PER 10.2x + PEG 0.07 = 반도체 역사상 가장 저렴한 구간.</strong> FY2027E EPS $103~106 달성 조건: Q3($33.5B, GM 81%) + Q4(추가 성장) 순차 확인. 6/24 실적이 핵심 촉매 — 사이클이 지속되면 $1,500+, 둔화 신호 시 급락 가능. 고베타(2.17) 주식으로 양방향 변동성 극심.</div>
+  </div>
+</div>
+
+<!-- 5. US 특화 -->
+<div class="card">
+  <div class="sec">5. US 특화 — S&P 500 성과 · HBM 경쟁 구도 · 오늘 실적 포인트</div>
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:8px;">S&P 500 대비 상대 수익률</div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">MU 52주</span><span class="up" style="font-weight:500;">+783% — 분석 전 종목 압도적 1위</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">S&P 500 52주</span><span style="font-weight:500;">+15.2% (추정)</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">알파(초과 수익)</span><span class="up" style="font-weight:500;">+767.8%p — 역대급</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">S&P500 내 비중</span><span style="font-weight:500;">~1.3%</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">베타</span><span class="dn" style="font-weight:500;">2.17 — 빅테크 최고 변동성</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">섹터</span><span class="badge b-mu-l">Information Technology (SOXX·SMH 상위)</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:8px;">HBM4 경쟁 구도 (Vera Rubin)</div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">SK하이닉스 (1위)</span><span class="dn" style="font-weight:500;">60~70% 점유 · 절대적 선두</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">삼성 (2위)</span><span style="font-weight:500;">25~30% · 수율 경쟁 중</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">마이크론 MU (3위)</span><span style="font-weight:500;">나머지 비중 · 전량 완판</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">HBM 2028 시장</span><span class="up" style="font-weight:500;">$100B 예상 · 연 40% 성장</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">미국 CHIPS법 지원</span><span class="up" style="font-weight:500;">$20B · 버지니아·아이다호 팹</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">⚡ 오늘 실적</span><span class="badge b-today">6/24 장마감 후 Q3 FY26</span></div>
+    </div>
+  </div>
+
+  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">분기 매출 폭발 궤적 — 슈퍼사이클 확인</div>
+  <div style="position:relative;width:100%;height:120px;margin-bottom:10px;">
+    <canvas id="cycleChart" role="img" aria-label="MU 분기 매출 궤적 및 GM 추이">매출 궤적 차트</canvas>
+  </div>
+  <div class="ib">
+    <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.7;"><strong style="color:var(--color-text-primary);">6/24 실적 핵심 체크포인트:</strong> ① Q3 매출 $33.5B 달성 여부 ② GM 81% 유지 여부 ③ Q4 FY26 가이던스 방향 ④ FY2027 사이클 지속 언급 여부. 이 4가지가 확인되면 Forward PER 10x 구조 유지 → 추가 상승. 둔화 신호 시 베타 2.17로 급락 가능.</div>
+  </div>
+</div>
+
+<!-- 6. 뉴스 -->
+<div class="card">
+  <div class="sec">6. 시계열 주요 뉴스 <span class="src">2025.07 ~ 2026.06</span></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;font-size:11px;">
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#005EB8;display:inline-block;"></span>초대형 이벤트</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#1D9E75;display:inline-block;"></span>긍정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#D85A30;display:inline-block;"></span>부정/경고</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#888780;display:inline-block;"></span>중립</span>
+  </div>
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2025년 7월 — $118 역대 저점</div>
+      <div class="tl-title">메모리 다운사이클 최악 — $118 바닥 · HBM 적자 지속</div>
+      <div class="tl-body">2022~2025 메모리 다운사이클 정점. 적자 8개 분기 연속. HBM 투자가 오히려 손실 확대 우려. 시장은 "구조적 적자 기업" 취급. 이후 AI 수요 폭발로 역대급 반등의 시작점.</div>
+      <span class="tag tag-neg">$118 역대최저</span><span class="tag tag-pos">역발상 최고 매수점</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2025년 하반기 — HBM3E 수요 폭발</div>
+      <div class="tl-title">HBM3E 2025 전량 완판 · 장기계약 체결 · 사이클 전환 확인</div>
+      <div class="tl-body">2025년 HBM 공급 전량 선계약 완료. AI 데이터센터 DRAM 수요 2배+. 공급 타이트로 DRAM ASP 급등 시작. Q4 FY25 GM 44% → Q1 FY26 GM 56%로 급격 개선. 주가 $118→$430 상승.</div>
+      <span class="tag tag-pos">HBM 완판</span><span class="tag tag-pos">사이클 전환 신호</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2026년 3월 18일 — Q2 FY26 역대최대</div>
+      <div class="tl-title">Q2 매출 $23.9B(▲196%) · GM 74% · EPS $12.07(▲756%) · 배당 30% 인상</div>
+      <div class="tl-body">매출 $23.9B — 전년比 거의 3배. GM 74.4% 역대 최고. EPS $12.07(컨센서스 대폭 상회). FCF $5.5B. 배당 30% 인상. Q3 가이던스: 매출 $33.5B · GM 81%. CEO "AI 시대 메모리는 전략 자산". 주가 $430→$750 폭등.</div>
+      <span class="tag tag-big">매출 +196%</span><span class="tag tag-big">EPS +756%</span><span class="tag tag-pos">배당 30% 인상</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2026년 6월 5일 — NVDA Vera Rubin HBM4 인증</div>
+      <div class="tl-title">젠슨 황 서울 발표 — SK하이닉스·삼성·마이크론 HBM4 인증 · 주가 $1,000 돌파</div>
+      <div class="tl-body">젠슨 황이 서울에서 NVDA Vera Rubin 플랫폼에 3사 HBM4 인증 확인. 마이크론 HBM4 36GB 12H(2.8TB/s) 양산 시작. SK하이닉스 60~70% 선점이지만 마이크론 물량도 전량 완판. 주가 $750→$1,160 신고점.</div>
+      <span class="tag tag-big">Vera Rubin 인증</span><span class="tag tag-pos">$1,000 돌파</span><span class="tag tag-big">$1,160 신고점</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2026년 6월 24일 — Q3 FY26 실적 발표 (오늘!)</div>
+      <div class="tl-title">⚡ 오늘 장 마감 후 Q3 FY26 실적 발표 — 가이던스 $33.5B(▲250%) · GM 81% 달성 여부</div>
+      <div class="tl-body">시장 기대: 매출 $33.5B · GM 81% · EPS ~$19. 달성 시 FY2027 사이클 지속 확인 → 주가 추가 상승. 미달 또는 약한 Q4 가이던스 시 고베타(2.17)로 급락 위험. 현재 $1,134에 +8.7% 강세 → 시장 기대 상당히 반영된 상태.</div>
+      <span class="tag tag-big">오늘 실적 발표</span><span class="tag tag-neu">양방향 극단 변동성</span>
+    </div>
+  </div>
+</div>
+
+<!-- 7. 투자 포인트 -->
+<div class="card">
+  <div class="sec">7. 2026년 핵심 투자 포인트</div>
+  <div class="g2">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
+      <div class="ir"><span class="il">Forward PER 10.2x · PEG 0.07 — 역대 최저</span><span class="badge b-green">극단적 저평가</span></div>
+      <div class="ir"><span class="il">HBM 2025·2026 전량 완판 장기계약</span><span class="badge b-green">매출 가시성 최고</span></div>
+      <div class="ir"><span class="il">Q3 GM 81% — 소프트웨어 수준 마진</span><span class="badge b-green">마진 폭발</span></div>
+      <div class="ir"><span class="il">CHIPS법 $20B · 美 팹 확장 정치적 지지</span><span class="badge b-blue">구조적 지원</span></div>
+      <div class="ir"><span class="il">52주 +783% → 여전히 낮은 Forward 밸류</span><span class="badge b-mu-l">모멘텀 + 가치</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
+      <div class="ir"><span class="il">HBM 3위 — SK하이닉스 60~70% 지배</span><span class="badge b-red">시장점유율 열위</span></div>
+      <div class="ir"><span class="il">사이클 정점 우려 · 2027 공급 과잉 경고</span><span class="badge b-red">사이클 반전 위험</span></div>
+      <div class="ir"><span class="il">Capex $25B+ · FCF 압박 지속</span><span class="badge b-amber">현금 부담</span></div>
+      <div class="ir"><span class="il">베타 2.17 — 극단적 변동성</span><span class="badge b-amber">고위험 주식</span></div>
+      <div class="ir"><span class="il">PC·스마트폰 DRAM 수요 둔화</span><span class="badge b-gray">레거시 부문</span></div>
+    </div>
+  </div>
+  <div class="ib">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--color-text-secondary);">투자의견:</span> <span class="badge b-mu">Buy 다수 · GF Value $381(과대평가 경고)</span></div>
+      <div><span style="color:var(--color-text-secondary);">⚡ 오늘 실적:</span> <span class="badge b-today">6/24 장마감 후 Q3 FY2026</span></div>
+      <div><span style="color:var(--color-text-secondary);">Trailing PER:</span> <span class="dn" style="font-weight:500;">48x (사이클 왜곡)</span></div>
+      <div><span style="color:var(--color-text-secondary);">Forward PER:</span> <span class="up" style="font-weight:500;">10.2x (FY2027E $103~106)</span></div>
+    </div>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">차트 + 분기 재무제표 + SEC 8-K 기준 · 투자 권고가 아닙니다</div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+(function(){
+  const svg=document.getElementById('muSvg');
+  const W=720,H=240,pL=72,pR=12,pT=14,pB=24;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const data=[
+    {o:12,h:12.5,l:11.8,c:12.2},{o:12.2,h:12.8,l:12.0,c:12.5},
+    {o:12.5,h:13.0,l:12.3,c:12.8},{o:12.8,h:13.5,l:12.5,c:13.2},
+    {o:13.2,h:14.0,l:13.0,c:13.8},{o:13.8,h:14.5,l:13.5,c:14.2},
+    {o:14.2,h:15.0,l:14.0,c:14.8},{o:14.8,h:15.5,l:14.5,c:15.2},
+    {o:15.2,h:16.5,l:15.0,c:16.0},{o:16.0,h:17.5,l:15.8,c:17.0},
+    {o:17.0,h:18.5,l:16.8,c:18.0},{o:18.0,h:19.5,l:17.8,c:19.0},
+    {o:19.0,h:20.5,l:18.8,c:20.0},{o:20.0,h:22.0,l:19.8,c:21.5},
+    {o:21.5,h:23.0,l:21.0,c:22.5},{o:22.5,h:24.0,l:22.0,c:23.5},
+    {o:23.5,h:25.0,l:23.0,c:24.5},{o:24.5,h:26.0,l:24.0,c:25.5},
+    {o:25.5,h:27.5,l:25.0,c:27.0},{o:27.0,h:29.0,l:26.5,c:28.5},
+    {o:28.5,h:31.0,l:28.0,c:30.5},{o:30.5,h:33.0,l:30.0,c:32.5},
+    {o:32.5,h:35.0,l:32.0,c:34.5},{o:34.5,h:37.5,l:34.0,c:37.0},
+    {o:37.0,h:40.0,l:36.5,c:39.5},{o:39.5,h:43.0,l:39.0,c:42.5},
+    {o:42.5,h:46.0,l:42.0,c:45.5},{o:45.5,h:50.0,l:45.0,c:49.5},
+    {o:49.5,h:55.0,l:49.0,c:54.5},{o:54.5,h:62.0,l:54.0,c:61.0},
+    {o:61.0,h:70.0,l:60.0,c:69.0},{o:69.0,h:80.0,l:68.0,c:79.0},
+    {o:79.0,h:90.0,l:78.0,c:89.0},{o:89.0,h:100.0,l:88.0,c:99.0},
+    {o:99.0,h:108.0,l:97.0,c:106.0},{o:106.0,h:112.0,l:100.0,c:110.0},
+    {o:110.0,h:116.0,l:108.0,c:114.0},{o:114.0,h:116.5,l:110.0,c:115.0},
+    {o:115.0,h:117.0,l:110.5,c:112.5},{o:112.5,h:115.0,l:110.0,c:113.0},
+    {o:113.0,h:115.0,l:110.5,c:113.5},{o:113.5,h:115.5,l:111.0,c:113.5},
+    {o:113.5,h:115.0,l:112.0,c:113.4},{o:113.4,h:114.5,l:112.5,c:113.4},
+    {o:113.4,h:114.5,l:112.5,c:113.4},{o:113.4,h:114.5,l:112.5,c:113.4}
+  ];
+  const prices=data.flatMap(d=>[d.h,d.l]);
+  const maxP=Math.max(...prices)+2,minP=Math.min(...prices)-1;
+  const rng=maxP-minP;
+  function py(v){return pT+cH*(1-(v-minP)/rng);}
+  const colW=cW/data.length,cw=Math.max(colW*.6,7);
+  [20,40,60,80,100].forEach(v=>{
+    const y=py(v);
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+    l.setAttribute('stroke','rgba(128,128,128,.12)');l.setAttribute('stroke-width','1');svg.appendChild(l);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',pL-4);t.setAttribute('y',y+4);t.setAttribute('text-anchor','end');
+    t.setAttribute('font-size','9');t.setAttribute('fill','rgba(128,128,128,.7)');
+    t.textContent='$'+(v*10);svg.appendChild(t);
+  });
+  function calcMA(d,n){return d.map((_,i)=>i<n-1?null:d.slice(i-n+1,i+1).reduce((s,x)=>s+x.c,0)/n);}
+  function drawLine(arr,col,w){
+    let pts=[];arr.forEach((v,i)=>{if(v===null)return;pts.push(`${pL+(i+.5)*colW},${py(v)}`);});
+    if(pts.length<2)return;
+    const p=document.createElementNS('http://www.w3.org/2000/svg','polyline');
+    p.setAttribute('points',pts.join(' '));p.setAttribute('fill','none');p.setAttribute('stroke',col);p.setAttribute('stroke-width',w||1.5);svg.appendChild(p);
+  }
+  data.forEach((d,i)=>{
+    const cx=pL+(i+.5)*colW,isUp=d.c>=d.o,col=isUp?'#D85A30':'#185FA5';
+    const wk=document.createElementNS('http://www.w3.org/2000/svg','line');
+    wk.setAttribute('x1',cx);wk.setAttribute('x2',cx);wk.setAttribute('y1',py(d.h));wk.setAttribute('y2',py(d.l));
+    wk.setAttribute('stroke',col);wk.setAttribute('stroke-width','1.5');svg.appendChild(wk);
+    const bT=py(Math.max(d.o,d.c)),bB=py(Math.min(d.o,d.c));
+    const bd=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    bd.setAttribute('x',cx-cw/2);bd.setAttribute('y',bT);bd.setAttribute('width',cw);
+    bd.setAttribute('height',Math.max(bB-bT,2));bd.setAttribute('fill',col);bd.setAttribute('rx','1');svg.appendChild(bd);
+  });
+  drawLine(calcMA(data,5),'#FF69B4',1.5);
+  drawLine(calcMA(data,20),'#9370DB',1.5);
+  drawLine(calcMA(data,60),'#DAA520',2);
+  drawLine(calcMA(data,120),'#228B22',2);
+  const mk=(idx,lbl,isLow,col)=>{
+    const cx=pL+(idx+.5)*colW;
+    const cy=isLow?py(data[idx].l)+12:py(data[idx].h)-8;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',Math.min(Math.max(cx,40),W-60));t.setAttribute('y',cy);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','9');t.setAttribute('fill',col);t.setAttribute('font-weight','500');
+    t.textContent=lbl;svg.appendChild(t);
+  };
+  mk(0,'$118 최저(\'25.07)',true,'#185FA5');
+  mk(37,'$1,160 최고(\'26.06)',false,'#D85A30');
+  ['\'25.07','\'25.09','\'25.11','\'26.01','\'26.03','\'26.05'].forEach((m,i)=>{
+    const cx=pL+(i/6)*cW+cW/12;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',cx);t.setAttribute('y',H-4);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','10');t.setAttribute('fill','rgba(128,128,128,.8)');
+    t.textContent=m;svg.appendChild(t);
+  });
+  [{c:'#D85A30',t:'양봉'},{c:'#185FA5',t:'음봉'},{c:'#FF69B4',t:'MA5'},{c:'#9370DB',t:'MA20'},{c:'#DAA520',t:'MA60'},{c:'#228B22',t:'MA120'}].forEach((l,i)=>{
+    const gx=pL+i*90;
+    const r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    r.setAttribute('x',gx);r.setAttribute('y',2);r.setAttribute('width',10);r.setAttribute('height',10);
+    r.setAttribute('fill',l.c);r.setAttribute('rx','2');svg.appendChild(r);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',gx+13);t.setAttribute('y',11);t.setAttribute('font-size','9');
+    t.setAttribute('fill','rgba(128,128,128,.9)');t.textContent=l.t;svg.appendChild(t);
+  });
+})();
+
+new Chart(document.getElementById('muRevChart'),{
+  type:'bar',
+  data:{
+    labels:['Q2 FY24','Q3 FY24','Q4 FY24','Q1 FY25','Q2 FY25','Q3 FY25','Q4 FY25','Q1 FY26','Q2 FY26','Q3(E)'],
+    datasets:[
+      {label:'매출($B)',data:[5.8,6.8,7.8,8.7,8.1,9.3,11.3,13.6,23.9,33.5],backgroundColor:['#B4B2A9','#B4B2A9','#B4B2A9','#B4B2A9','#B4B2A9','#B4B2A9','#B4B2A9','#005EB8','#005EB8','rgba(0,94,184,0.5)'],borderRadius:4,yAxisID:'y'},
+      {label:'GM%',type:'line',data:[18.5,26.9,35.3,38.4,36.8,45.8,44.7,56.0,74.4,81.0],borderColor:'#EF9F27',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{position:'left',ticks:{font:{size:9},callback:v=>v+'B',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      y2:{position:'right',min:10,max:90,ticks:{font:{size:9},callback:v=>v+'%',color:'#EF9F27'},grid:{display:false}},
+      x:{ticks:{font:{size:8},color:'#888',maxRotation:30},grid:{display:false}}
+    }
+  }
+});
+
+new Chart(document.getElementById('cycleChart'),{
+  type:'line',
+  data:{
+    labels:['Q2 FY25','Q3 FY25','Q4 FY25','Q1 FY26','Q2 FY26','Q3(E)','Q4(E)'],
+    datasets:[
+      {label:'매출($B)',data:[8.1,9.3,11.3,13.6,23.9,33.5,40.0],borderColor:'#005EB8',backgroundColor:'rgba(0,94,184,0.1)',tension:.35,pointRadius:5,borderWidth:2.5,fill:true},
+      {label:'EPS',data:[1.41,1.68,2.83,4.60,12.07,19.15,25.0],borderColor:'#1D9E75',backgroundColor:'transparent',tension:.35,pointRadius:5,borderWidth:2,fill:false,yAxisID:'y2'}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{ticks:{font:{size:10},callback:v=>v+'B',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      y2:{position:'right',ticks:{font:{size:10},callback:v=>'$'+v,color:'#1D9E75'},grid:{display:false}},
+      x:{ticks:{font:{size:9},color:'#888',maxRotation:30},grid:{display:false}}
+    }
+  }
+});
+</script>
+
+</div>
+</body>
+</html>
