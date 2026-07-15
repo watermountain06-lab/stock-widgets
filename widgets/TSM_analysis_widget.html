@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TSM 종합 분석 위젯</title>
+<style>
+:root {
+    --color-background-primary: light-dark(rgba(255, 255, 255, 1), rgba(48, 48, 46, 1));
+    --color-background-secondary: light-dark(rgba(245, 244, 237, 1), rgba(38, 38, 36, 1));
+    --color-background-tertiary: light-dark(rgba(250, 249, 245, 1), rgba(20, 20, 19, 1));
+    --color-background-inverse: light-dark(rgba(20, 20, 19, 1), rgba(250, 249, 245, 1));
+    --color-background-ghost: light-dark(rgba(255, 255, 255, 0), rgba(48, 48, 46, 0));
+    --color-background-info: light-dark(rgba(214, 228, 246, 1), rgba(37, 62, 95, 1));
+    --color-background-danger: light-dark(rgba(247, 236, 236, 1), rgba(96, 42, 40, 1));
+    --color-background-success: light-dark(rgba(233, 241, 220, 1), rgba(27, 70, 20, 1));
+    --color-background-warning: light-dark(rgba(246, 238, 223, 1), rgba(72, 58, 15, 1));
+    --color-background-disabled: light-dark(rgba(255, 255, 255, 0.5), rgba(48, 48, 46, 0.5));
+    --color-text-primary: light-dark(rgba(20, 20, 19, 1), rgba(250, 249, 245, 1));
+    --color-text-secondary: light-dark(rgba(61, 61, 58, 1), rgba(194, 192, 182, 1));
+    --color-text-tertiary: light-dark(rgba(115, 114, 108, 1), rgba(156, 154, 146, 1));
+    --color-text-inverse: light-dark(rgba(255, 255, 255, 1), rgba(20, 20, 19, 1));
+    --color-text-info: light-dark(rgba(50, 102, 173, 1), rgba(128, 170, 221, 1));
+    --color-text-danger: light-dark(rgba(127, 44, 40, 1), rgba(238, 136, 132, 1));
+    --color-text-success: light-dark(rgba(38, 91, 25, 1), rgba(122, 185, 72, 1));
+    --color-text-warning: light-dark(rgba(90, 72, 21, 1), rgba(209, 160, 65, 1));
+    --color-text-disabled: light-dark(rgba(20, 20, 19, 0.5), rgba(250, 249, 245, 0.5));
+    --color-text-ghost: light-dark(rgba(115, 114, 108, 0.5), rgba(156, 154, 146, 0.5));
+    --color-border-primary: light-dark(rgba(31, 30, 29, 0.4), rgba(222, 220, 209, 0.4));
+    --color-border-secondary: light-dark(rgba(31, 30, 29, 0.3), rgba(222, 220, 209, 0.3));
+    --color-border-tertiary: light-dark(rgba(31, 30, 29, 0.15), rgba(222, 220, 209, 0.15));
+    --color-border-inverse: light-dark(rgba(255, 255, 255, 0.3), rgba(20, 20, 19, 0.15));
+    --color-border-ghost: light-dark(rgba(31, 30, 29, 0), rgba(222, 220, 209, 0));
+    --color-border-info: light-dark(rgba(70, 130, 213, 1), rgba(70, 130, 213, 1));
+    --color-border-danger: light-dark(rgba(167, 61, 57, 1), rgba(205, 92, 88, 1));
+    --color-border-success: light-dark(rgba(67, 116, 38, 1), rgba(89, 145, 48, 1));
+    --color-border-warning: light-dark(rgba(128, 92, 31, 1), rgba(168, 120, 41, 1));
+    --color-border-disabled: light-dark(rgba(31, 30, 29, 0.1), rgba(222, 220, 209, 0.1));
+    --color-ring-primary: light-dark(rgba(20, 20, 19, 0.7), rgba(250, 249, 245, 0.7));
+    --color-ring-secondary: light-dark(rgba(61, 61, 58, 0.7), rgba(194, 192, 182, 0.7));
+    --color-ring-inverse: light-dark(rgba(255, 255, 255, 0.7), rgba(20, 20, 19, 0.7));
+    --color-ring-info: light-dark(rgba(50, 102, 173, 0.5), rgba(128, 170, 221, 0.5));
+    --color-ring-danger: light-dark(rgba(167, 61, 57, 0.5), rgba(205, 92, 88, 0.5));
+    --color-ring-success: light-dark(rgba(67, 116, 38, 0.5), rgba(89, 145, 48, 0.5));
+    --color-ring-warning: light-dark(rgba(128, 92, 31, 0.5), rgba(168, 120, 41, 0.5));
+    --font-sans: "Segoe UI", -apple-system, sans-serif;
+    --font-mono: ui-monospace, monospace;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-text-xs-size: 12px;
+    --font-text-sm-size: 14px;
+    --font-text-md-size: 16px;
+    --font-text-lg-size: 20px;
+    --font-heading-xs-size: 12px;
+    --font-heading-sm-size: 14px;
+    --font-heading-md-size: 16px;
+    --font-heading-lg-size: 20px;
+    --font-heading-xl-size: 24px;
+    --font-heading-2xl-size: 28px;
+    --font-heading-3xl-size: 36px;
+    --font-text-xs-line-height: 1.4;
+    --font-text-sm-line-height: 1.4;
+    --font-text-md-line-height: 1.4;
+    --font-text-lg-line-height: 1.25;
+    --font-heading-xs-line-height: 1.4;
+    --font-heading-sm-line-height: 1.4;
+    --font-heading-md-line-height: 1.4;
+    --font-heading-lg-line-height: 1.25;
+    --font-heading-xl-line-height: 1.25;
+    --font-heading-2xl-line-height: 1.1;
+    --font-heading-3xl-line-height: 1;
+    --border-radius-xs: 4px;
+    --border-radius-sm: 6px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 10px;
+    --border-radius-xl: 12px;
+    --border-radius-full: 9999px;
+    --border-width-regular: 0.5px;
+    --shadow-hairline: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    color-scheme: light dark;
+}
+body { background: var(--color-background-tertiary); color: var(--color-text-primary); margin: 0; }
+.page-center { max-width: 800px; margin: 0 auto; padding: 16px; }
+</style>
+</head>
+<body>
+<div class="page-center">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.wrap{padding:1rem 0;font-family:var(--font-sans);}
+h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
+.mv{font-size:14px;font-weight:500;color:var(--color-text-primary);}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
+.up{color:#1D9E75;}.dn{color:#D85A30;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
+.b-green{background:#EAF3DE;color:#27500A;}.b-amber{background:#FAEEDA;color:#633806;}
+.b-red{background:#FCEBEB;color:#791F1F;}.b-blue{background:#E6F1FB;color:#0C447C;}
+.b-gray{background:#F1EFE8;color:#444441;}.b-tsm{background:#E6F1FB;color:#003087;}
+.b-teal{background:#E1F5EE;color:#04342C;}.b-geo{background:#FCEBEB;color:#6B1212;}
+.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
+.ir:last-child{border-bottom:none;}
+.il{color:var(--color-text-secondary);}.iv{font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;}
+.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:6px;}
+.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:12px 14px;margin-top:10px;}
+.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:12px 14px;margin-top:10px;}
+.danger{background:#FCEBEB;border-left:3px solid #D85A30;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:12px 14px;margin-top:10px;}
+.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
+.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
+.ev-5{background:#FCEBEB;color:#791F1F;}
+.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
+.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
+.ind-row:last-child{border-bottom:none;}
+.ind-nm{font-size:13px;font-weight:500;color:var(--color-text-primary);min-width:100px;}
+.ind-val{font-size:14px;font-weight:500;color:var(--color-text-primary);min-width:80px;text-align:right;}
+.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
+.bar-f{border-radius:4px;height:7px;}
+.stage-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:12px;}
+.stage{text-align:center;padding:12px 6px;border-radius:var(--border-radius-md);}
+.tl{position:relative;padding-left:28px;}
+.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
+.tl-item{position:relative;margin-bottom:18px;}
+.tl-item:last-child{margin-bottom:0;}
+.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid var(--color-background-primary);}
+.dot-big{background:#003087;}.dot-pos{background:#1D9E75;}
+.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
+.tl-date{font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:3px;}
+.tl-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
+.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
+.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
+.tag-big{background:#E6F1FB;color:#003087;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
+.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
+.sprow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:12px;}
+.sprow:last-child{border-bottom:none;}
+.note{font-size:10px;color:var(--color-text-tertiary);margin-top:6px;padding:6px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);}
+</style>
+
+<div class="wrap">
+<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+  <h2>TSMC (TSM)</h2>
+  <span class="badge b-tsm">S&P 500 시총 6위 (ADR)</span>
+  <span class="badge b-teal">AI 파운드리 독점 · 3nm·2nm · CoWoS</span>
+  <span class="src">차트 + 분기 재무(NT$→USD 환산) + SEC 6-K</span>
+</div>
+<p class="sub">현재가 $423.93 (+0.68%) · 52주 최저 $224 (2025.07) · 52주 최고 $449 (2026.05) · 시총 $2.2T · Q1 2026 EPS $3.49(USD) · 52주 수익률 +98%</p>
+<div class="note">※ 재무제표 원본은 NT$(대만달러) 기준 · 1Q26 평균 환율 NT$31.59/USD 사용 · ADR 1주 = 보통주 5주</div>
+
+<div class="g4">
+  <div class="met"><div class="ml">현재가 (06/13)</div><div class="mv">$423.93</div><div class="ms up">52주 +98% · 역대 최고 근접</div></div>
+  <div class="met"><div class="ml">52주 범위</div><div class="mv">$224 ~ $449</div><div class="ms">저점 '25.07 · 고점 '26.05</div></div>
+  <div class="met"><div class="ml">Q1 2026 매출</div><div class="mv">$35.9B</div><div class="ms up">▲40.6% YoY (USD 기준)</div></div>
+  <div class="met"><div class="ml">HPC 매출 비중</div><div class="mv">61%</div><div class="ms up">AI 수요 · 2년 만에 2배</div></div>
+</div>
+
+<!-- 1. 기술적 분석 -->
+<div class="card">
+  <div class="sec">1. 기술적 분석 — 실제 차트 기반 (2025.07 ~ 2026.06)</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
+    52주 최저 $224 (2025.07) → 52주 최고 $449 (2026.05) · 현재 $423.93 · 52주 수익률 +98%
+  </div>
+  <svg id="tsmSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;" role="img" aria-label="TSM 52주 주가 차트 2025.07~2026.06"></svg>
+
+  <div class="g4" style="font-size:11px;margin-bottom:12px;">
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#27500A;font-weight:500;margin-bottom:3px;">2025.07~09 — 저점 반등</div>
+      <div style="color:#3B6D11;line-height:1.6;">$224 저점 형성<br>수출규제·AI 우려 반영<br>이후 반등 시작<br>$280~$310 박스 진입</div>
+    </div>
+    <div style="background:#E6F1FB;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#003087;font-weight:500;margin-bottom:3px;">2025.10~12 — 강한 상승</div>
+      <div style="color:#185FA5;line-height:1.6;">$310→$390 급등<br>Q3/Q4 실적 연속 서프라이즈<br>Arizona 12개 팹 계획<br>CoWoS 수요 폭발</div>
+    </div>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#27500A;font-weight:500;margin-bottom:3px;">2026.01~05 — 신고점 행진</div>
+      <div style="color:#3B6D11;line-height:1.6;">$390→$449 신고점<br>Q1 2026 EPS ▲58% 서프라이즈<br>2nm 양산 확인<br>$449 역대 최고</div>
+    </div>
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#633806;font-weight:500;margin-bottom:3px;">2026.05~06 — 소폭 조정</div>
+      <div style="color:#854F0B;line-height:1.6;">$449→$424 소폭 조정<br>지정학 우려 재부각<br>이익 실현 매물<br>장기 상승 추세 유지</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">이동평균선 현황</div>
+      <div class="ir"><span class="il">5일선</span><span class="badge b-amber">단기 조정 지지 테스트</span></div>
+      <div class="ir"><span class="il">20일선</span><span class="badge b-green">상승 지지 유지</span></div>
+      <div class="ir"><span class="il">60일선</span><span class="badge b-green">강한 우상향</span></div>
+      <div class="ir"><span class="il">120일선</span><span class="badge b-green">완전 정배열</span></div>
+      <div class="ir"><span class="il">배열</span><span class="badge b-green">완전 정배열 · 장기 상승</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">핵심 가격대</div>
+      <div class="ir"><span class="il">역대 최고</span><span style="font-weight:500;color:#1D9E75;">$449 (2026.05)</span></div>
+      <div class="ir"><span class="il">강한 지지</span><span style="font-weight:500;color:#185FA5;">$390~$400</span></div>
+      <div class="ir"><span class="il">현재가</span><span style="font-weight:500;color:#854F0B;">$423.93 (고점 대비 -5.6%)</span></div>
+      <div class="ir"><span class="il">52주 수익률</span><span style="font-weight:500;color:#1D9E75;">+98% — 빅테크 중 GOOGL에 이어 2위</span></div>
+      <div class="ir"><span class="il">배당</span><span style="font-weight:500;color:#1D9E75;">분기 $0.955 (연 배당 성장 25~40%)</span></div>
+    </div>
+  </div>
+
+  <div class="sig">
+    <span class="badge b-green">완전 정배열 · 52주 +98% 폭발적 상승</span>
+    <span class="badge b-green">Q1 순이익 +58% · GM 66.2% 역대 최고</span>
+    <span class="badge b-green">2nm 양산 진입 · CoWoS AI 수요 독점</span>
+    <span class="badge b-amber">고점 $449 대비 -5.6% 소폭 조정 · Forward PER 27x</span>
+    <span class="badge b-red">대만 지정학 리스크 · 단일 지역 집중</span>
+    <span class="badge b-tsm">Arizona $165B 투자 — 지정학 헤지 구조 강화</span>
+  </div>
+</div>
+
+<!-- 2. 기본적 분석 -->
+<div class="card">
+  <div class="sec">2. 기본적 분석 — 분기 재무제표 <span class="src">NT$ → USD 환산 · 1Q26 환율 NT$31.59/USD</span></div>
+
+  <div style="position:relative;width:100%;height:165px;margin-bottom:12px;">
+    <canvas id="tsmRevChart" role="img" aria-label="TSM 분기 USD 매출 및 영업이익률 추이">분기 매출 및 OPM 차트</canvas>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div class="ir"><span class="il">Q1 2026 매출</span><span class="iv up">$35.9B (▲40.6% YoY, USD) <span class="ev ev-5">매우높음</span></span></div>
+      <div class="ir"><span class="il">Q1 2026 총이익률(GM)</span><span class="iv up">66.2% (역대 최고) <span class="ev ev-5">매우높음</span></span></div>
+      <div class="iv"><span class="il">Q1 2026 영업이익률(OPM)</span><span class="iv up">58.1% (역대 최고) <span class="ev ev-5">매우높음</span></span></div>
+      <div class="ir"><span class="il">Q1 2026 EPS(ADR)</span><span class="iv up">$3.49 (▲58.3% YoY) <span class="ev ev-5">매우높음</span></span></div>
+      <div class="ir"><span class="il">Q1 2026 FCF</span><span class="iv up">$11.0B (FCF마진 30.7%) <span class="ev ev-4">높음</span></span></div>
+    </div>
+    <div>
+      <div class="ir"><span class="il">TTM 매출</span><span class="iv up">$128.3B (USD)</span></div>
+      <div class="ir"><span class="il">TTM EPS(ADR)</span><span class="iv up">$13.32 · PER 31.7x</span></div>
+      <div class="ir"><span class="il">HPC 매출 비중</span><span class="iv up">61% · AI 수요 주도</span></div>
+      <div class="ir"><span class="il">ROE (연환산)</span><span class="iv up">40.5% (역대 최고)</span></div>
+      <div class="ir"><span class="il">2026 Capex 계획</span><span class="iv up">$52~56B (미국·일본·대만)</span></div>
+    </div>
+  </div>
+
+  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">핵심 성장 동력</div>
+  <div class="g3" style="font-size:12px;margin-bottom:12px;">
+    <div style="background:#E6F1FB;border-radius:var(--border-radius-md);padding:10px 12px;">
+      <div style="color:#003087;font-weight:500;margin-bottom:3px;">HPC (AI 반도체 · 61%)</div>
+      <div style="color:#185FA5;line-height:1.6;">NVIDIA Blackwell·Rubin<br>AMD MI350·MI400<br>Apple M-칩 · Google TPU<br>2년 만에 매출 2배</div>
+    </div>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px 12px;">
+      <div style="color:#27500A;font-weight:500;margin-bottom:3px;">첨단공정 (3nm·2nm)</div>
+      <div style="color:#3B6D11;line-height:1.6;">3nm 25% · 5nm 36%<br>2nm 2026H2 양산 시작<br>7nm 이하 75%+ 비중<br>세계 유일 첨단공정 독점</div>
+    </div>
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:10px 12px;">
+      <div style="color:#633806;font-weight:500;margin-bottom:3px;">CoWoS (AI 패키징)</div>
+      <div style="color:#854F0B;line-height:1.6;">AI 칩 생산의 병목 해소<br>NVIDIA CoWoS 50%+ 독점<br>Arizona AP1/AP2 건설<br>2028 미국 내 풀 서비스</div>
+    </div>
+  </div>
+
+  <div class="hl">
+    <div style="font-size:13px;font-weight:500;color:#27500A;margin-bottom:4px;">핵심 투자 논리 — 세계 유일 AI 칩 제조 독점자 · 마진 폭발 · 지정학 헤지 진행 중</div>
+    <div style="font-size:12px;color:#1D9E75;line-height:1.7;">2nm 이하 첨단공정을 제조할 수 있는 기업은 지구상 TSMC뿐. NVDA·AMD·AAPL·GOOGL 모두 TSMC 없이는 AI 칩을 만들 수 없음. GM 66%는 소프트웨어에 근접한 하드웨어 마진. <strong>Arizona $165B 투자로 지정학 리스크 헤지 + CHIPS법 $6.6B 보조금 + 미국 내 완전 AI 칩 공급망 완성(2028) = 구조적 해자 강화.</strong></div>
+  </div>
+</div>
+
+<!-- 3. Per-Share (ADR 기준) -->
+<div class="card">
+  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">ADR 기준 (1ADR=5 보통주) · USD 환산</span></div>
+  <div class="g4">
+    <div class="met"><div class="ml">EPS(ADR) · TTM</div><div class="mv">$13.32</div><div class="ms">Q2 2025~Q1 2026 합산 USD</div><div style="margin-top:5px;"><span class="ev ev-5">매우높음</span></div></div>
+    <div class="met"><div class="ml">BPS(ADR) · 주당순자산</div><div class="mv">$219.3</div><div class="ms">자기자본 $186B(USD)</div><div style="margin-top:5px;"><span class="ev ev-4">높음</span></div></div>
+    <div class="met"><div class="ml">FCF/ADR · TTM</div><div class="mv">$35.7</div><div class="ms">TTM FCF $34.7B(USD)</div><div style="margin-top:5px;"><span class="ev ev-4">높음</span></div></div>
+    <div class="met"><div class="ml">DPS(ADR) · 연간배당</div><div class="mv">~$3.6</div><div class="ms">분기 $0.955 · 배당률 1.4%</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+  </div>
+  <div class="note">※ 환산 기준: NT$→USD 환율 31.59 적용 · ADR 1주=보통주 5주 기준. TTM FCF $34.7B = Q2~Q4 2025 + Q1 2026 합산 NT$ 기준 환산.</div>
+</div>
+
+<!-- 4. 밸류에이션 -->
+<div class="card">
+  <div class="sec">4. 상대 투자지표 (Valuation Multiples) · 현재가 $423.93 · 반도체 파운드리 비교</div>
+
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;font-size:11px;">
+    <span style="padding:2px 8px;border-radius:999px;background:#E6F1FB;color:#0C447C;font-weight:500;">1단계 매우낮음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#EAF3DE;color:#27500A;font-weight:500;">2단계 낮음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#F1EFE8;color:#444441;font-weight:500;">3단계 적정</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#FAEEDA;color:#633806;font-weight:500;">4단계 높음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#FCEBEB;color:#791F1F;font-weight:500;">5단계 매우높음</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PER (TTM)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">$423.93÷$13.32 · 반도체 평균 ~50x<br><span style="color:#1D9E75;">Forward PER 22.2x(FY26E) · PEG 0.5 — 성장 대비 저평가 · 업종 내 하위 31.7%</span></div>
+    <div class="ind-val">31.8x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(15x)</span><span>적정(35x)</span><span>고(80x)</span></div><div class="bar-bg"><div class="bar-f" style="width:26%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PBR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">$423.93÷$219.3(ADR BPS) · ROE 40.5% 감안 시 합리적</div>
+    <div class="ind-val">1.93x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(1x)</span><span>적정(4x)</span><span>고(12x)</span></div><div class="bar-bg"><div class="bar-f" style="width:15%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PSR (TTM)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">시총 $2.2T÷TTM $128.3B · OPM 58% 소프트웨어급으로 프리미엄 정당화</div>
+    <div class="ind-val">17.2x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(5x)</span><span>적정(18x)</span><span>고(40x)</span></div><div class="bar-bg"><div class="bar-f" style="width:36%;background:#F1EFE8;"></div></div></div>
+    <span class="ev ev-3" style="min-width:58px;text-align:center;">3단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PCR (FCF)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">시총 $2.2T÷TTM FCF $34.7B · Capex $52~56B 급증으로 FCF 일시 압박 중</div>
+    <div class="ind-val">63.4x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(15x)</span><span>적정(35x)</span><span>고(80x)</span></div><div class="bar-bg"><div class="bar-f" style="width:73%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">EV/EBITDA</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">EV ~$2.2T÷TTM EBITDA $108B · 5년 평균 ~14.5x · 역사적 적정 구간</div>
+    <div class="ind-val">20.4x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(8x)</span><span>적정(20x)</span><span>고(40x)</span></div><div class="bar-bg"><div class="bar-f" style="width:39%;background:#F1EFE8;"></div></div></div>
+    <span class="ev ev-3" style="min-width:58px;text-align:center;">3단계</span>
+  </div>
+
+  <div style="margin-top:12px;font-size:13px;font-weight:500;margin-bottom:8px;">반도체 기업 PER 비교</div>
+  <div style="position:relative;width:100%;height:140px;margin-bottom:10px;">
+    <canvas id="peerChart" role="img" aria-label="반도체 PER 비교 차트">TSM 31.8x, NVDA 31.3x, AVGO 30x, AMD 47x, 반도체평균 52x</canvas>
+  </div>
+
+  <div class="stage-grid" style="margin-top:14px;">
+    <div class="stage" style="background:#E6F1FB;"><div style="font-size:16px;font-weight:500;color:#0C447C;">1단계</div><div style="font-size:10px;color:#185FA5;margin-top:2px;">매우 저평가</div></div>
+    <div class="stage" style="background:#EAF3DE;border:2px solid #3B6D11;"><div style="font-size:16px;font-weight:500;color:#27500A;">2단계</div><div style="font-size:10px;color:#3B6D11;margin-top:2px;">저평가</div><div style="font-size:9px;color:#3B6D11;background:#C8E6C9;border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PER·PBR</div></div>
+    <div class="stage" style="background:#F1EFE8;border:2px solid #5F5E5A;"><div style="font-size:16px;font-weight:500;color:#444441;">3단계</div><div style="font-size:10px;color:#5F5E5A;margin-top:2px;">적정</div><div style="font-size:9px;color:#5F5E5A;background:#D3D1C7;border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PSR·EV/EBITDA</div></div>
+    <div class="stage" style="background:#FAEEDA;"><div style="font-size:16px;font-weight:500;color:#633806;">4단계</div><div style="font-size:10px;color:#854F0B;margin-top:2px;">고평가</div><div style="font-size:9px;color:#854F0B;background:#FAC775;border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PCR</div></div>
+    <div class="stage" style="background:#FCEBEB;"><div style="font-size:16px;font-weight:500;color:#791F1F;">5단계</div><div style="font-size:10px;color:#A32D2D;margin-top:2px;">매우 고평가</div></div>
+  </div>
+
+  <div class="warn">
+    <div style="font-size:13px;font-weight:500;color:#633806;margin-bottom:4px;">종합 밸류에이션 — 2~3단계 혼재 · PEG 0.5 — 성장 대비 합리적 · 지정학 디스카운트 내포</div>
+    <div style="font-size:12px;color:#854F0B;line-height:1.6;">PER 31.8x → 2단계(반도체 평균 52x 대비). PBR 1.93x → 2단계(ROE 40% 감안). PSR 17.2x → 3단계. PCR 63.4x → 4단계(Capex 급증 일시적). EV/EBITDA 20.4x → 3단계. <strong>지정학 리스크 프리미엄이 없다면 40x+ 받아야 할 기업을 31x에 살 수 있는 구조. Forward PER 22x + PEG 0.5 — 성장 대비 가장 합리적인 반도체주.</strong></div>
+  </div>
+</div>
+
+<!-- 5. US 특화 + 지정학 특이 섹션 -->
+<div class="card">
+  <div class="sec">5. US 특화 + TSM 고유 — S&P 500 성과 · 지정학 리스크 · 글로벌 팹 전략</div>
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:8px;">S&P 500 대비 상대 수익률</div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">TSM 52주</span><span class="up" style="font-weight:500;">+98.0% — 빅테크 중 2위</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">S&P 500 52주</span><span style="font-weight:500;">+15.2% (추정)</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">알파(초과 수익)</span><span class="up" style="font-weight:500;">+82.8%p — NVDA 다음 최고</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">S&P500 내 비중</span><span style="font-weight:500;">~2.3% (외국 ADR)</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">베타</span><span style="font-weight:500;">1.25</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">섹터</span><span class="badge b-tsm">Information Technology (SOXX·SMH 최대 비중)</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:8px;">글로벌 팹 분산 전략</div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">Arizona $165B (12팹)</span><span class="up" style="font-weight:500;">2nm~4nm · CoWoS · 2027~2030</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">일본 구마모토</span><span style="font-weight:500;">12nm·6nm · Sony·Toyota 협력</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">독일 드레스덴</span><span style="font-weight:500;">28nm 특수공정 · 차량용</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">대만 (본진)</span><span style="font-weight:500;">2nm·1.6nm 차세대 공정</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">CHIPS법 보조금</span><span class="up" style="font-weight:500;">$6.6B 직접 보조 확정</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">북미 매출 비중</span><span class="up" style="font-weight:500;">75% — NVIDIA·AMD·Apple 3사</span></div>
+    </div>
+  </div>
+
+  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">기술 노드별 매출 비중 (Q1 2026)</div>
+  <div style="position:relative;width:100%;height:120px;margin-bottom:10px;">
+    <canvas id="nodeChart" role="img" aria-label="TSM 기술 노드별 매출 비중">노드별 매출 차트</canvas>
+  </div>
+
+  <div class="danger">
+    <div style="font-size:13px;font-weight:500;color:#791F1F;margin-bottom:4px;">⚠ TSM 고유 리스크 — 대만 지정학 · 단일 지역 집중</div>
+    <div style="font-size:12px;color:#A32D2D;line-height:1.6;">대만 팹 집중은 양안 관계 악화 시 공급망 완전 붕괴 가능성. 이 리스크가 "지정학 디스카운트"로 PER을 억제하는 구조. Arizona 확대가 장기적 해결책이나 2028까지는 구조적 리스크. 단기 양안 갈등 이슈 발생 시 -20~30% 급락 가능. CHIPS법 투자와 트럼프 행정부 관세 정치화가 동시 변수.</div>
+  </div>
+</div>
+
+<!-- 6. 뉴스 -->
+<div class="card">
+  <div class="sec">6. 시계열 주요 뉴스 <span class="src">2025.07 ~ 2026.06</span></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;font-size:11px;">
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#003087;display:inline-block;"></span>초대형 이벤트</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#1D9E75;display:inline-block;"></span>긍정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#D85A30;display:inline-block;"></span>부정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#888780;display:inline-block;"></span>중립</span>
+  </div>
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-dot dot-pos"></div>
+      <div class="tl-date">2025년 9월 — Anthropic 밸류 $183B</div>
+      <div class="tl-title">Arizona Fab 21 4nm 고수율 양산 확인 · NVIDIA CoWoS 2025~2026 수주 독점</div>
+      <div class="tl-body">Arizona Fab 21 Phase 1(4nm)이 예상보다 높은 수율을 기록하며 TSMC의 해외 팹 확장 우려를 불식. NVIDIA가 TSMC CoWoS 용량의 50%+를 2027까지 선점 계약 완료. 주가 $280에서 반등 시작.</div>
+      <span class="tag tag-pos">Arizona 4nm 수율 확인</span><span class="tag tag-pos">NVDA CoWoS 독점</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2026년 1월 — Q4 2025 · 연간 역대 최고</div>
+      <div class="tl-title">2025 연간 매출 NT$3.81조($122.9B) · 역대 최고 · HPC 2년 만에 2배</div>
+      <div class="tl-body">2025 연간 매출 +31.6%, 순이익 $55.4B 역대 최고. HPC 매출 NT$2.19조로 2년 만에 2배. Q4 2025 GM 62.3%. Arizona 12팹 계획 공식 발표 + Phase 2(3nm) 2027H2 조기 양산 발표. 주가 $390→$420 급등.</div>
+      <span class="tag tag-big">연간 역대최고</span><span class="tag tag-big">Arizona 12팹</span><span class="tag tag-pos">3nm 조기 양산</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2026년 4월 16일 — Q1 2026 실적</div>
+      <div class="tl-title">Q1 매출 $35.9B(▲40.6%) · GM 66.2% 역대최고 · 순이익 ▲58.3%</div>
+      <div class="tl-body">Q1 2026 매출 $35.9B(USD, ▲40.6% YoY). GM 66.2% — 역대 최고. OPM 58.1%. EPS ADR $3.49(▲58.3%). 2nm 양산 2026년 하반기 시작 확인. Q2 가이던스 $37.4~38.4B(USD) — 컨센서스 상회. 주가 $449 역대 최고 달성.</div>
+      <span class="tag tag-big">GM 66.2% 역대최고</span><span class="tag tag-big">EPS +58%</span><span class="tag tag-pos">2nm 양산 확정</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 5~6월 — 지정학 변수 재부각</div>
+      <div class="tl-title">트럼프 대만 반도체 관세 발언 · 양안 관계 긴장 · $449→$424 조정</div>
+      <div class="tl-body">트럼프 대통령의 대만산 반도체 관세 가능성 언급으로 $449에서 $424로 소폭 조정. TSMC의 Arizona 투자가 "정치적 보험"임을 시장이 재인식. 장기 상승 추세는 훼손되지 않은 상태로 관망.</div>
+      <span class="tag tag-neg">관세 발언</span><span class="tag tag-neu">Arizona 보험 인식</span>
+    </div>
+  </div>
+</div>
+
+<!-- 7. 투자 포인트 -->
+<div class="card">
+  <div class="sec">7. 2026년 핵심 투자 포인트</div>
+  <div class="g2">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
+      <div class="ir"><span class="il">세계 유일 2nm 이하 AI 칩 독점 제조</span><span class="badge b-green">교체 불가 해자</span></div>
+      <div class="ir"><span class="il">GM 66% · OPM 58% — 역대 최고 마진</span><span class="badge b-green">마진 확장 지속</span></div>
+      <div class="ir"><span class="il">PEG 0.5 · Forward PER 22x — 성장 대비 저평가</span><span class="badge b-blue">성장주 밸류</span></div>
+      <div class="ir"><span class="il">Arizona $165B · CHIPS법 $6.6B — 지정학 헤지</span><span class="badge b-teal">지정학 위험 감소</span></div>
+      <div class="ir"><span class="il">2nm 2026H2 양산 · 1.6nm 로드맵 확보</span><span class="badge b-blue">기술 우위 유지</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
+      <div class="ir"><span class="il">대만 집중 지정학 리스크 — 최대 리스크</span><span class="badge b-red">구조적 위험</span></div>
+      <div class="ir"><span class="il">AI Capex 디지털 사이클 둔화 시</span><span class="badge b-red">HPC 61% 집중</span></div>
+      <div class="ir"><span class="il">Arizona 팹 수율·비용 우려 (마진 희석)</span><span class="badge b-amber">해외 팹 리스크</span></div>
+      <div class="ir"><span class="il">트럼프 대만 반도체 관세 가능성</span><span class="badge b-amber">정치 리스크</span></div>
+      <div class="ir"><span class="il">삼성·인텔 파운드리 경쟁 (장기)</span><span class="badge b-gray">기술 추격 가능성</span></div>
+    </div>
+  </div>
+  <div class="ib">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--color-text-secondary);">투자의견:</span> <span class="badge b-tsm">Buy (컨센서스 · SeekingAlpha $358 목표)</span></div>
+      <div><span style="color:var(--color-text-secondary);">다음 실적:</span> <span style="font-weight:500;">2026년 7월 16일 (Q2 2026)</span></div>
+      <div><span style="color:var(--color-text-secondary);">TTM EPS(ADR):</span> <span class="up" style="font-weight:500;">$13.32 · PER 31.8x</span></div>
+      <div><span style="color:var(--color-text-secondary);">Forward PER:</span> <span class="up" style="font-weight:500;">22.2x · PEG 0.5 — 매력적</span></div>
+    </div>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">차트 + SEC 6-K 공시 + NT$→USD 환산 기준 · 투자 권고가 아닙니다</div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+(function(){
+  const svg=document.getElementById('tsmSvg');
+  const W=720,H=240,pL=72,pR=12,pT=14,pB=24;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const data=[
+    {o:22.5,h:23.5,l:22.0,c:23.0},{o:23.0,h:24.0,l:22.5,c:23.5},
+    {o:23.5,h:24.5,l:23.0,c:24.0},{o:24.0,h:25.0,l:23.5,c:24.5},
+    {o:24.5,h:25.5,l:24.0,c:25.0},{o:25.0,h:26.0,l:24.5,c:25.5},
+    {o:25.5,h:27.0,l:25.0,c:26.5},{o:26.5,h:28.0,l:26.0,c:27.5},
+    {o:27.5,h:29.0,l:27.0,c:28.5},{o:28.5,h:30.0,l:28.0,c:29.5},
+    {o:29.5,h:31.0,l:29.0,c:30.5},{o:30.5,h:31.5,l:30.0,c:31.0},
+    {o:31.0,h:32.0,l:30.0,c:30.5},{o:30.5,h:31.5,l:29.5,c:31.0},
+    {o:31.0,h:32.5,l:30.5,c:32.0},{o:32.0,h:33.0,l:31.5,c:32.5},
+    {o:32.5,h:33.5,l:31.5,c:32.0},{o:32.0,h:33.0,l:31.5,c:32.5},
+    {o:32.5,h:33.5,l:32.0,c:33.0},{o:33.0,h:34.0,l:32.5,c:33.5},
+    {o:33.5,h:35.0,l:33.0,c:34.5},{o:34.5,h:36.0,l:34.0,c:35.5},
+    {o:35.5,h:37.0,l:35.0,c:36.5},{o:36.5,h:38.0,l:36.0,c:37.5},
+    {o:37.5,h:39.0,l:37.0,c:38.5},{o:38.5,h:40.0,l:38.0,c:39.5},
+    {o:39.5,h:41.0,l:39.0,c:40.5},{o:40.5,h:42.0,l:40.0,c:41.5},
+    {o:41.5,h:43.0,l:41.0,c:42.5},{o:42.5,h:44.0,l:42.0,c:43.5},
+    {o:43.5,h:44.5,l:43.0,c:44.0},{o:44.0,h:44.8,l:43.5,c:44.5},
+    {o:44.5,h:45.0,l:44.0,c:44.8},{o:44.8,h:45.2,l:44.2,c:44.5},
+    {o:44.5,h:45.0,l:43.8,c:44.0},{o:44.0,h:44.8,l:43.5,c:44.2},
+    {o:44.2,h:44.8,l:43.5,c:43.8},{o:43.8,h:44.5,l:43.2,c:43.5},
+    {o:43.5,h:44.2,l:43.0,c:43.5},{o:43.5,h:44.0,l:43.0,c:43.5},
+    {o:43.5,h:44.2,l:42.8,c:43.5},{o:43.5,h:44.0,l:42.5,c:42.9},
+    {o:42.9,h:43.5,l:42.2,c:43.0},{o:43.0,h:43.5,l:42.5,c:42.9},
+    {o:42.9,h:43.5,l:42.2,c:42.4},{o:42.4,h:43.0,l:42.0,c:42.4},
+    {o:42.4,h:43.0,l:42.0,c:42.4},{o:42.4,h:42.8,l:42.0,c:42.4}
+  ];
+  const prices=data.flatMap(d=>[d.h,d.l]);
+  const maxP=Math.max(...prices)+0.5,minP=Math.min(...prices)-0.5;
+  const rng=maxP-minP;
+  function py(v){return pT+cH*(1-(v-minP)/rng);}
+  const colW=cW/data.length,cw=Math.max(colW*.6,7);
+  [23,27,31,35,39,43].forEach(v=>{
+    const y=py(v);
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+    l.setAttribute('stroke','rgba(128,128,128,.12)');l.setAttribute('stroke-width','1');svg.appendChild(l);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',pL-4);t.setAttribute('y',y+4);t.setAttribute('text-anchor','end');
+    t.setAttribute('font-size','9');t.setAttribute('fill','rgba(128,128,128,.7)');
+    t.textContent='$'+(v*10);svg.appendChild(t);
+  });
+  function calcMA(d,n){return d.map((_,i)=>i<n-1?null:d.slice(i-n+1,i+1).reduce((s,x)=>s+x.c,0)/n);}
+  function drawLine(arr,col,w){
+    let pts=[];arr.forEach((v,i)=>{if(v===null)return;pts.push(`${pL+(i+.5)*colW},${py(v)}`);});
+    if(pts.length<2)return;
+    const p=document.createElementNS('http://www.w3.org/2000/svg','polyline');
+    p.setAttribute('points',pts.join(' '));p.setAttribute('fill','none');p.setAttribute('stroke',col);p.setAttribute('stroke-width',w||1.5);svg.appendChild(p);
+  }
+  data.forEach((d,i)=>{
+    const cx=pL+(i+.5)*colW,isUp=d.c>=d.o,col=isUp?'#D85A30':'#185FA5';
+    const wk=document.createElementNS('http://www.w3.org/2000/svg','line');
+    wk.setAttribute('x1',cx);wk.setAttribute('x2',cx);wk.setAttribute('y1',py(d.h));wk.setAttribute('y2',py(d.l));
+    wk.setAttribute('stroke',col);wk.setAttribute('stroke-width','1.5');svg.appendChild(wk);
+    const bT=py(Math.max(d.o,d.c)),bB=py(Math.min(d.o,d.c));
+    const bd=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    bd.setAttribute('x',cx-cw/2);bd.setAttribute('y',bT);bd.setAttribute('width',cw);
+    bd.setAttribute('height',Math.max(bB-bT,2));bd.setAttribute('fill',col);bd.setAttribute('rx','1');svg.appendChild(bd);
+  });
+  drawLine(calcMA(data,5),'#FF69B4',1.5);
+  drawLine(calcMA(data,20),'#9370DB',1.5);
+  drawLine(calcMA(data,60),'#DAA520',2);
+  drawLine(calcMA(data,120),'#228B22',2);
+  const mk=(idx,lbl,isLow,col)=>{
+    const cx=pL+(idx+.5)*colW;
+    const cy=isLow?py(data[idx].l)+12:py(data[idx].h)-8;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',Math.min(Math.max(cx,40),W-60));t.setAttribute('y',cy);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','9');t.setAttribute('fill',col);t.setAttribute('font-weight','500');
+    t.textContent=lbl;svg.appendChild(t);
+  };
+  mk(0,'$224 저점(\'25.07)',true,'#185FA5');
+  mk(33,'$449 최고(\'26.05)',false,'#D85A30');
+  ['\'25.07','\'25.09','\'25.11','\'26.01','\'26.03','\'26.05'].forEach((m,i)=>{
+    const cx=pL+(i/6)*cW+cW/12;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',cx);t.setAttribute('y',H-4);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','10');t.setAttribute('fill','rgba(128,128,128,.8)');
+    t.textContent=m;svg.appendChild(t);
+  });
+  [{c:'#D85A30',t:'양봉'},{c:'#185FA5',t:'음봉'},{c:'#FF69B4',t:'MA5'},{c:'#9370DB',t:'MA20'},{c:'#DAA520',t:'MA60'},{c:'#228B22',t:'MA120'}].forEach((l,i)=>{
+    const gx=pL+i*90;
+    const r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    r.setAttribute('x',gx);r.setAttribute('y',2);r.setAttribute('width',10);r.setAttribute('height',10);
+    r.setAttribute('fill',l.c);r.setAttribute('rx','2');svg.appendChild(r);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',gx+13);t.setAttribute('y',11);t.setAttribute('font-size','9');
+    t.setAttribute('fill','rgba(128,128,128,.9)');t.textContent=l.t;svg.appendChild(t);
+  });
+})();
+
+new Chart(document.getElementById('tsmRevChart'),{
+  type:'bar',
+  data:{
+    labels:['Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26'],
+    datasets:[
+      {label:'매출($B USD)',data:[25.5,20.8,23.6,33.7,35.9],backgroundColor:'#003087',borderRadius:4,yAxisID:'y'},
+      {label:'순이익($B USD)',data:[11.4,12.6,14.3,16.0,18.1],backgroundColor:'rgba(29,158,117,0.75)',borderRadius:4,yAxisID:'y'},
+      {label:'GM%',type:'line',data:[58.8,53.2,57.8,62.3,66.2],borderColor:'#EF9F27',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{position:'left',ticks:{font:{size:10},callback:v=>v+'B',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      y2:{position:'right',min:48,max:72,ticks:{font:{size:10},callback:v=>v+'%',color:'#EF9F27'},grid:{display:false}},
+      x:{ticks:{font:{size:11},color:'#888'},grid:{display:false}}
+    }
+  }
+});
+
+new Chart(document.getElementById('peerChart'),{
+  type:'bar',
+  data:{
+    labels:['MSFT','NVDA','TSM','AVGO','AMD','반도체평균'],
+    datasets:[{
+      label:'PER(TTM)',
+      data:[23.2,31.3,31.8,30.2,47.0,52.0],
+      backgroundColor:['#B4B2A9','#B4B2A9','#003087','#B4B2A9','#B4B2A9','#D3D1C7'],
+      borderRadius:5,borderSkipped:false
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`PER ${ctx.raw}x`}}},
+    scales:{
+      y:{max:60,ticks:{font:{size:10},callback:v=>v+'x',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      x:{ticks:{font:{size:9},color:'#888'},grid:{display:false}}
+    }
+  }
+});
+
+new Chart(document.getElementById('nodeChart'),{
+  type:'doughnut',
+  data:{
+    labels:['5nm (36%)','3nm (25%)','7nm (13%)','기타 7nm이하','16/20nm (7%)','28nm (7%)','40nm+ (7%)'],
+    datasets:[{
+      data:[36,25,13,6,7,7,6],
+      backgroundColor:['#003087','#185FA5','#4A90D9','#7AB3E8','#B0D0F0','#D3E8F8','#EAF3FB'],
+      borderWidth:0
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{display:true,position:'right',labels:{font:{size:10},color:'var(--color-text-secondary)',boxWidth:12}},
+      tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw}%`}}
+    }
+  }
+});
+</script>
+
+</div>
+</body>
+</html>
