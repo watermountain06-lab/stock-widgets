@@ -7,5 +7,14 @@
     "accentColor": "#c8a84b",
     "page": "widgets/BRK_B_analysis_widget.html",
     "lastUpdated": "2026-07-15"
+  },
+  {
+    "rank": 1,
+    "ticker": "NVDA",
+    "name": "NVIDIA",
+    "sector": "Information Technology",
+    "accentColor": "#76b900",
+    "page": "widgets/NVDA_analysis_widget.html",
+    "lastUpdated": "2026-07-15"
   }
 ]

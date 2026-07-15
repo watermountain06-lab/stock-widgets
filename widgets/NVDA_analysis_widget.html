@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NVDA 종합 분석 위젯</title>
+<style>
+:root {
+    --color-background-primary: light-dark(rgba(255, 255, 255, 1), rgba(48, 48, 46, 1));
+    --color-background-secondary: light-dark(rgba(245, 244, 237, 1), rgba(38, 38, 36, 1));
+    --color-background-tertiary: light-dark(rgba(250, 249, 245, 1), rgba(20, 20, 19, 1));
+    --color-background-inverse: light-dark(rgba(20, 20, 19, 1), rgba(250, 249, 245, 1));
+    --color-background-ghost: light-dark(rgba(255, 255, 255, 0), rgba(48, 48, 46, 0));
+    --color-background-info: light-dark(rgba(214, 228, 246, 1), rgba(37, 62, 95, 1));
+    --color-background-danger: light-dark(rgba(247, 236, 236, 1), rgba(96, 42, 40, 1));
+    --color-background-success: light-dark(rgba(233, 241, 220, 1), rgba(27, 70, 20, 1));
+    --color-background-warning: light-dark(rgba(246, 238, 223, 1), rgba(72, 58, 15, 1));
+    --color-background-disabled: light-dark(rgba(255, 255, 255, 0.5), rgba(48, 48, 46, 0.5));
+    --color-text-primary: light-dark(rgba(20, 20, 19, 1), rgba(250, 249, 245, 1));
+    --color-text-secondary: light-dark(rgba(61, 61, 58, 1), rgba(194, 192, 182, 1));
+    --color-text-tertiary: light-dark(rgba(115, 114, 108, 1), rgba(156, 154, 146, 1));
+    --color-text-inverse: light-dark(rgba(255, 255, 255, 1), rgba(20, 20, 19, 1));
+    --color-text-info: light-dark(rgba(50, 102, 173, 1), rgba(128, 170, 221, 1));
+    --color-text-danger: light-dark(rgba(127, 44, 40, 1), rgba(238, 136, 132, 1));
+    --color-text-success: light-dark(rgba(38, 91, 25, 1), rgba(122, 185, 72, 1));
+    --color-text-warning: light-dark(rgba(90, 72, 21, 1), rgba(209, 160, 65, 1));
+    --color-text-disabled: light-dark(rgba(20, 20, 19, 0.5), rgba(250, 249, 245, 0.5));
+    --color-text-ghost: light-dark(rgba(115, 114, 108, 0.5), rgba(156, 154, 146, 0.5));
+    --color-border-primary: light-dark(rgba(31, 30, 29, 0.4), rgba(222, 220, 209, 0.4));
+    --color-border-secondary: light-dark(rgba(31, 30, 29, 0.3), rgba(222, 220, 209, 0.3));
+    --color-border-tertiary: light-dark(rgba(31, 30, 29, 0.15), rgba(222, 220, 209, 0.15));
+    --color-border-inverse: light-dark(rgba(255, 255, 255, 0.3), rgba(20, 20, 19, 0.15));
+    --color-border-ghost: light-dark(rgba(31, 30, 29, 0), rgba(222, 220, 209, 0));
+    --color-border-info: light-dark(rgba(70, 130, 213, 1), rgba(70, 130, 213, 1));
+    --color-border-danger: light-dark(rgba(167, 61, 57, 1), rgba(205, 92, 88, 1));
+    --color-border-success: light-dark(rgba(67, 116, 38, 1), rgba(89, 145, 48, 1));
+    --color-border-warning: light-dark(rgba(128, 92, 31, 1), rgba(168, 120, 41, 1));
+    --color-border-disabled: light-dark(rgba(31, 30, 29, 0.1), rgba(222, 220, 209, 0.1));
+    --color-ring-primary: light-dark(rgba(20, 20, 19, 0.7), rgba(250, 249, 245, 0.7));
+    --color-ring-secondary: light-dark(rgba(61, 61, 58, 0.7), rgba(194, 192, 182, 0.7));
+    --color-ring-inverse: light-dark(rgba(255, 255, 255, 0.7), rgba(20, 20, 19, 0.7));
+    --color-ring-info: light-dark(rgba(50, 102, 173, 0.5), rgba(128, 170, 221, 0.5));
+    --color-ring-danger: light-dark(rgba(167, 61, 57, 0.5), rgba(205, 92, 88, 0.5));
+    --color-ring-success: light-dark(rgba(67, 116, 38, 0.5), rgba(89, 145, 48, 0.5));
+    --color-ring-warning: light-dark(rgba(128, 92, 31, 0.5), rgba(168, 120, 41, 0.5));
+    --font-sans: "Segoe UI", -apple-system, sans-serif;
+    --font-mono: ui-monospace, monospace;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-text-xs-size: 12px;
+    --font-text-sm-size: 14px;
+    --font-text-md-size: 16px;
+    --font-text-lg-size: 20px;
+    --font-heading-xs-size: 12px;
+    --font-heading-sm-size: 14px;
+    --font-heading-md-size: 16px;
+    --font-heading-lg-size: 20px;
+    --font-heading-xl-size: 24px;
+    --font-heading-2xl-size: 28px;
+    --font-heading-3xl-size: 36px;
+    --font-text-xs-line-height: 1.4;
+    --font-text-sm-line-height: 1.4;
+    --font-text-md-line-height: 1.4;
+    --font-text-lg-line-height: 1.25;
+    --font-heading-xs-line-height: 1.4;
+    --font-heading-sm-line-height: 1.4;
+    --font-heading-md-line-height: 1.4;
+    --font-heading-lg-line-height: 1.25;
+    --font-heading-xl-line-height: 1.25;
+    --font-heading-2xl-line-height: 1.1;
+    --font-heading-3xl-line-height: 1;
+    --border-radius-xs: 4px;
+    --border-radius-sm: 6px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 10px;
+    --border-radius-xl: 12px;
+    --border-radius-full: 9999px;
+    --border-width-regular: 0.5px;
+    --shadow-hairline: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    color-scheme: light dark;
+}
+body { background: var(--color-background-tertiary); color: var(--color-text-primary); margin: 0; }
+.page-center { max-width: 800px; margin: 0 auto; padding: 16px; }
+</style>
+</head>
+<body>
+<div class="page-center">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.wrap{padding:1rem 0;font-family:var(--font-sans);}
+h2{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;}
+.sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:18px;}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary);margin-bottom:12px;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px;text-align:center;}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;}
+.mv{font-size:14px;font-weight:500;color:var(--color-text-primary);}
+.ms{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;}
+.up{color:#1D9E75;}.dn{color:#D85A30;}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500;}
+.b-green{background:#EAF3DE;color:#27500A;}.b-amber{background:#FAEEDA;color:#633806;}
+.b-red{background:#FCEBEB;color:#791F1F;}.b-blue{background:#E6F1FB;color:#0C447C;}
+.b-gray{background:#F1EFE8;color:#444441;}.b-nvda{background:#E6F1FB;color:#042C53;}
+.b-purple{background:#EEEDFE;color:#26215C;}
+.sig{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.ir{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;}
+.ir:last-child{border-bottom:none;}
+.il{color:var(--color-text-secondary);}.iv{font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:6px;}
+.src{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-tertiary);margin-left:6px;}
+.hl{background:#EAF3DE;border-left:3px solid #1D9E75;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:12px 14px;margin-top:10px;}
+.warn{background:#FAEEDA;border-left:3px solid #EF9F27;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:12px 14px;margin-top:10px;}
+.ib{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:10px;}
+.ev-1{background:#E6F1FB;color:#0C447C;}.ev-2{background:#EAF3DE;color:#27500A;}
+.ev-3{background:#F1EFE8;color:#444441;}.ev-4{background:#FAEEDA;color:#633806;}
+.ev-5{background:#FCEBEB;color:#791F1F;}
+.ev{font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;}
+.ind-row{display:flex;align-items:center;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);gap:10px;}
+.ind-row:last-child{border-bottom:none;}
+.ind-nm{font-size:13px;font-weight:500;color:var(--color-text-primary);min-width:100px;}
+.ind-val{font-size:14px;font-weight:500;color:var(--color-text-primary);min-width:80px;text-align:right;}
+.bar-bg{background:var(--color-border-tertiary);border-radius:4px;height:7px;}
+.bar-f{border-radius:4px;height:7px;}
+.stage-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:12px;}
+.stage{text-align:center;padding:12px 6px;border-radius:var(--border-radius-md);}
+.tl{position:relative;padding-left:28px;}
+.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--color-border-tertiary);border-radius:2px;}
+.tl-item{position:relative;margin-bottom:18px;}
+.tl-item:last-child{margin-bottom:0;}
+.tl-dot{position:absolute;left:-24px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid var(--color-background-primary);}
+.dot-big{background:#0C447C;}.dot-pos{background:#1D9E75;}
+.dot-neg{background:#D85A30;}.dot-neu{background:#888780;}
+.tl-date{font-size:11px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:3px;}
+.tl-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;line-height:1.4;}
+.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.55;margin-bottom:5px;}
+.tl-link{font-size:11px;color:#185FA5;text-decoration:none;display:inline-flex;align-items:center;gap:3px;margin-right:8px;}
+.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:999px;font-weight:500;margin-right:4px;}
+.tag-big{background:#E3F2FD;color:#0D47A1;}.tag-pos{background:#EAF3DE;color:#3B6D11;}
+.tag-neg{background:#FCEBEB;color:#791F1F;}.tag-neu{background:#F1EFE8;color:#444441;}
+.sprow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:12px;}
+.sprow:last-child{border-bottom:none;}
+</style>
+
+<div class="wrap">
+<div style="margin-bottom:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+  <h2>NVIDIA (NVDA)</h2>
+  <span class="badge b-nvda">S&P 500 #1 시총</span>
+  <span class="badge b-purple">AI 반도체 · Data Center · CUDA</span>
+  <span class="src">차트 + 분기 재무제표 + 뉴스</span>
+</div>
+<p class="sub">현재가 $205.10 (-0.64%) · 52주 최저 $142.87 (2025.07) · 52주 최고 $229.52 (2026.05) · 시총 $5.2T · EPS(TTM) $6.56</p>
+
+<div class="g4">
+  <div class="met"><div class="ml">현재가 (06/06)</div><div class="mv">$205.10</div><div class="ms dn">-0.64% · 시총 $5.2T</div></div>
+  <div class="met"><div class="ml">52주 범위</div><div class="mv">$143 ~ $230</div><div class="ms">저점 '25.07 · 고점 '26.05</div></div>
+  <div class="met"><div class="ml">Q1 FY27 매출</div><div class="mv">$81.6B</div><div class="ms up">▲85.2% YoY · 분기 신고점</div></div>
+  <div class="met"><div class="ml">영업이익률</div><div class="mv">65.6%</div><div class="ms up">Q1 FY27 · 역대급 마진</div></div>
+</div>
+
+<!-- 1. 기술적 분석 -->
+<div class="card">
+  <div class="sec">1. 기술적 분석 — 실제 차트 기반 (2025.07 ~ 2026.06)</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;">
+    52주 최저 $142.87 (2025.07 초) → 52주 최고 $229.52 (2026.05) · 현재 $205.10 · 52주 수익률 +46.8%
+  </div>
+  <svg id="nvdaSvg" viewBox="0 0 720 240" width="100%" style="display:block;margin-bottom:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;" role="img" aria-label="NVDA 52주 주가 차트 2025.07~2026.06"></svg>
+
+  <div class="g4" style="font-size:11px;margin-bottom:12px;">
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#27500A;font-weight:500;margin-bottom:3px;">2025.07~08 — 저점 형성</div>
+      <div style="color:#1D9E75;line-height:1.6;">$143~$158 저점권<br>AI 지출 우려·수출규제<br>대량 거래량 수반<br>장기 지지선 확인</div>
+    </div>
+    <div style="background:#E6F1FB;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#0C447C;font-weight:500;margin-bottom:3px;">2025.09~11 — 반등·급등</div>
+      <div style="color:#185FA5;line-height:1.6;">$158→$207 급등<br>Blackwell 수요 확인<br>Q3 FY26 실적 서프라이즈<br>11월 $207 전고점 돌파</div>
+    </div>
+    <div style="background:#FAEEDA;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#633806;font-weight:500;margin-bottom:3px;">2025.12~2026.02 — 박스권</div>
+      <div style="color:#854F0B;line-height:1.6;">$165~$207 박스 횡보<br>DeepSeek 쇼크 급락<br>중국 수출규제 우려<br>기술적 조정 구간</div>
+    </div>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:9px 11px;">
+      <div style="color:#27500A;font-weight:500;margin-bottom:3px;">2026.03~06 — 신고점 경신</div>
+      <div style="color:#1D9E75;line-height:1.6;">$165→$230 신고점<br>Q4/Q1 실적 연속 서프라이즈<br>$229.52 역대 최고<br>현재 $205 소폭 조정</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">이동평균선 현황</div>
+      <div class="ir"><span class="il">5일선</span><span class="badge b-green">상승 지지</span></div>
+      <div class="ir"><span class="il">20일선</span><span class="badge b-green">골든크로스 유지</span></div>
+      <div class="ir"><span class="il">60일선</span><span class="badge b-green">우상향 강세</span></div>
+      <div class="ir"><span class="il">120일선</span><span class="badge b-green">장기 정배열</span></div>
+      <div class="ir"><span class="il">배열</span><span class="badge b-green">완전 정배열</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;">핵심 가격대</div>
+      <div class="ir"><span class="il">역대 최고</span><span style="font-weight:500;color:#1D9E75;">$229.52 (2026.05)</span></div>
+      <div class="ir"><span class="il">강한 지지</span><span style="font-weight:500;color:#185FA5;">$195~$200</span></div>
+      <div class="ir"><span class="il">현재가</span><span style="font-weight:500;color:#854F0B;">$205.10 (고점 대비 -10.6%)</span></div>
+      <div class="ir"><span class="il">52주 수익률</span><span style="font-weight:500;color:#1D9E75;">+46.8%</span></div>
+      <div class="ir"><span class="il">배당수익률</span><span style="font-weight:500;color:var(--color-text-tertiary);">0.02% (미미)</span></div>
+    </div>
+  </div>
+
+  <div class="sig">
+    <span class="badge b-green">완전 정배열 · 장기 상승 추세 유지</span>
+    <span class="badge b-green">52주 +46.8% · S&P500 압도적 아웃퍼폼</span>
+    <span class="badge b-green">Q1 FY27 매출 $81.6B — 분기 신고점</span>
+    <span class="badge b-amber">신고점 $229 대비 -10.6% 소폭 조정 중</span>
+    <span class="badge b-red">6월 수출규제 강화 이슈 · 단기 변동성↑</span>
+    <span class="badge b-nvda">Forward PER 22x — AI 성장주 기준 저평가</span>
+  </div>
+</div>
+
+<!-- 2. 기본적 분석 -->
+<div class="card">
+  <div class="sec">2. 기본적 분석 — 분기 재무제표 <span class="src">실제 수치</span></div>
+
+  <div style="position:relative;width:100%;height:165px;margin-bottom:12px;">
+    <canvas id="nvdaRevChart" role="img" aria-label="NVDA 분기 매출 및 영업이익률 추이 Q2 FY25~Q1 FY27">분기 매출 성장 차트</canvas>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div class="ir"><span class="il">Q1 FY27 매출</span><span class="iv up">$81.6B (▲85.2% YoY) <span class="ev ev-5">매우높음</span></span></div>
+      <div class="ir"><span class="il">Q1 FY27 영업이익</span><span class="iv up">$53.5B (▲147.5% YoY) <span class="ev ev-5">매우높음</span></span></div>
+      <div class="ir"><span class="il">Q1 FY27 영업이익률</span><span class="iv up">65.6% <span class="ev ev-5">매우높음</span></span></div>
+      <div class="ir"><span class="il">Q1 FY27 순이익률</span><span class="iv up">71.5% <span class="ev ev-5">매우높음</span></span></div>
+      <div class="ir"><span class="il">Q1 FY27 FCF</span><span class="iv up">$48.6B (FCF마진 59.5%) <span class="ev ev-5">매우높음</span></span></div>
+    </div>
+    <div>
+      <div class="ir"><span class="il">TTM 매출</span><span class="iv up">$253.5B (4분기 합산)</span></div>
+      <div class="ir"><span class="il">TTM EPS(희석)</span><span class="iv up">$6.56 (PER 31.3x)</span></div>
+      <div class="ir"><span class="il">Data Center 비중</span><span class="iv up">Q4 FY26 $62.3B · 91.5%</span></div>
+      <div class="ir"><span class="il">자사주 매입 (Q1 FY27)</span><span class="iv up">$19.3B — 적극 주주환원</span></div>
+      <div class="ir"><span class="il">현금 및 단기투자</span><span class="iv up">$80.6B (Q1 FY27)</span></div>
+    </div>
+  </div>
+
+  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">핵심 성장 동력</div>
+  <div class="g3" style="font-size:12px;margin-bottom:12px;">
+    <div style="background:#E6F1FB;border-radius:var(--border-radius-md);padding:10px 12px;">
+      <div style="color:#0C447C;font-weight:500;margin-bottom:3px;">Data Center (91%)</div>
+      <div style="color:#185FA5;line-height:1.6;">Q1 FY27 추정 $74B+<br>Blackwell GB200 NVL72<br>하이퍼스케일러 capex $700B<br>CUDA 생태계 독점적 해자</div>
+    </div>
+    <div style="background:#EEEDFE;border-radius:var(--border-radius-md);padding:10px 12px;">
+      <div style="color:#26215C;font-weight:500;margin-bottom:3px;">Networking (성장 가속)</div>
+      <div style="color:#3C3489;line-height:1.6;">Q4 FY26 NW $11.0B ▲263%<br>InfiniBand → Ethernet 전환<br>Spectrum-X AI 패브릭<br>클러스터 규모 확대 수혜</div>
+    </div>
+    <div style="background:#EAF3DE;border-radius:var(--border-radius-md);padding:10px 12px;">
+      <div style="color:#27500A;font-weight:500;margin-bottom:3px;">Vera Rubin (차세대)</div>
+      <div style="color:#3B6D11;line-height:1.6;">Blackwell 후계 아키텍처<br>2026 하반기 샘플 출하 시작<br>제품 사이클 연장 확보<br>$500B+ 수주 가시성</div>
+    </div>
+  </div>
+
+  <div class="hl">
+    <div style="font-size:13px;font-weight:500;color:#27500A;margin-bottom:4px;">핵심 투자 논리 — AI 인프라 독점 공급자 · CUDA 해자 · 마진 폭발적 확장</div>
+    <div style="font-size:12px;color:#1D9E75;line-height:1.7;">영업이익률 65.6%는 소프트웨어 수준의 하드웨어 마진. 하이퍼스케일러 4사(AAPL·AMZN·META·MSFT) 합산 2026 capex $700B — 대부분 NVDA GPU로 집행. Forward PER 22x는 AI 성장주 기준 합리적. PEG 0.49로 성장 대비 극단적 저평가. FCF $48.6B/분기로 자사주 매입·현금 축적 가속.</div>
+  </div>
+</div>
+
+<!-- 3. 기본 투자지표 -->
+<div class="card">
+  <div class="sec">3. 기본 투자지표 (Per-Share) <span class="src">Q1 FY27 기준 · 24.22B 주</span></div>
+  <div class="g4">
+    <div class="met"><div class="ml">EPS(희석) · TTM</div><div class="mv">$6.56</div><div class="ms">Q2~Q1 FY27 합산</div><div style="margin-top:5px;"><span class="ev ev-5">매우높음</span></div></div>
+    <div class="met"><div class="ml">BPS · 주당순자산</div><div class="mv">$8.07</div><div class="ms">Q1 FY27 · 자기자본 $195B</div><div style="margin-top:5px;"><span class="ev ev-3">적정</span></div></div>
+    <div class="met"><div class="ml">FCF/주 · TTM</div><div class="mv">$3.87</div><div class="ms">연환산 FCF $93.8B</div><div style="margin-top:5px;"><span class="ev ev-5">매우높음</span></div></div>
+    <div class="met"><div class="ml">Net Cash/주</div><div class="mv">$2.80</div><div class="ms">순현금 $68.2B</div><div style="margin-top:5px;"><span class="ev ev-4">높음</span></div></div>
+  </div>
+</div>
+
+<!-- 4. 상대 투자지표 -->
+<div class="card">
+  <div class="sec">4. 상대 투자지표 (Valuation Multiples) · 현재가 $205.10 · 글로벌 AI 반도체 비교</div>
+
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;font-size:11px;">
+    <span style="padding:2px 8px;border-radius:999px;background:#E6F1FB;color:#0C447C;font-weight:500;">1단계 매우낮음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#EAF3DE;color:#27500A;font-weight:500;">2단계 낮음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#F1EFE8;color:#444441;font-weight:500;">3단계 적정</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#FAEEDA;color:#633806;font-weight:500;">4단계 높음</span>
+    <span style="padding:2px 8px;border-radius:999px;background:#FCEBEB;color:#791F1F;font-weight:500;">5단계 매우높음</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PER (TTM)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">주가÷EPS · $205.10÷$6.56 · AI 반도체 평균 ~50x<br><span style="color:#1D9E75;">Forward PER(FY27E) = 22x · PEG 0.49 (성장 대비 저평가)</span></div>
+    <div class="ind-val">31.3x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(15x)</span><span>적정(40x)</span><span>고(100x)</span></div><div class="bar-bg"><div class="bar-f" style="width:19%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PBR</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">주가÷BPS · $205.10÷$8.07 · AI반도체 고PBR 정상 · 자사주 매입으로 BPS 낮음</div>
+    <div class="ind-val">25.4x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(5x)</span><span>적정(20x)</span><span>고(70x)</span></div><div class="bar-bg"><div class="bar-f" style="width:31%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PSR (TTM)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">시총÷TTM매출 · $5.2T÷$253.5B · 소프트웨어 수준 마진으로 프리미엄 정당화</div>
+    <div class="ind-val">20.5x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(5x)</span><span>적정(15x)</span><span>고(50x)</span></div><div class="bar-bg"><div class="bar-f" style="width:34%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">PCR (FCF)</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">시총÷TTM FCF · $5.2T÷$93.8B · FCF 마진 59% 반영 시 합리적</div>
+    <div class="ind-val">55.4x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(10x)</span><span>적정(30x)</span><span>고(80x)</span></div><div class="bar-bg"><div class="bar-f" style="width:52%;background:#FAEEDA;"></div></div></div>
+    <span class="ev ev-4" style="min-width:58px;text-align:center;">4단계</span>
+  </div>
+
+  <div class="ind-row">
+    <div class="ind-nm">EV/EBITDA</div>
+    <div style="flex:1;font-size:11px;color:var(--color-text-secondary);">EV $5.33T÷EBITDA $193B(TTM) · 반도체 평균 ~30x · 10년 중간값 42.7x 대비 저평가</div>
+    <div class="ind-val">27.6x</div>
+    <div style="min-width:120px;flex:1;"><div style="font-size:9px;color:var(--color-text-tertiary);display:flex;justify-content:space-between;margin-bottom:2px;"><span>저(10x)</span><span>적정(35x)</span><span>고(80x)</span></div><div class="bar-bg"><div class="bar-f" style="width:22%;background:#EAF3DE;"></div></div></div>
+    <span class="ev ev-2" style="min-width:58px;text-align:center;">2단계</span>
+  </div>
+
+  <div style="margin-top:12px;font-size:13px;font-weight:500;margin-bottom:8px;">글로벌 AI 반도체 PER 비교</div>
+  <div style="position:relative;width:100%;height:150px;margin-bottom:10px;">
+    <canvas id="peerChart" role="img" aria-label="AI 반도체 PER 비교 차트">NVDA 31x, AMD 47x, INTC N/A, AVGO 30x, TSM 20x, 반도체평균 52x</canvas>
+  </div>
+
+  <div class="stage-grid" style="margin-top:14px;">
+    <div class="stage" style="background:#E6F1FB;"><div style="font-size:16px;font-weight:500;color:#0C447C;">1단계</div><div style="font-size:10px;color:#185FA5;margin-top:2px;">매우 저평가</div></div>
+    <div class="stage" style="background:#EAF3DE;"><div style="font-size:16px;font-weight:500;color:#27500A;">2단계</div><div style="font-size:10px;color:#3B6D11;margin-top:2px;">저평가</div><div style="font-size:9px;color:#3B6D11;background:#C8E6C9;border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PER·EV/EBITDA</div></div>
+    <div class="stage" style="background:#F1EFE8;"><div style="font-size:16px;font-weight:500;color:#444441;">3단계</div><div style="font-size:10px;color:#5F5E5A;margin-top:2px;">적정</div></div>
+    <div class="stage" style="background:#FAEEDA;border:2px solid #854F0B;"><div style="font-size:16px;font-weight:500;color:#633806;">4단계</div><div style="font-size:10px;color:#854F0B;margin-top:2px;">고평가</div><div style="font-size:9px;color:#854F0B;background:#FAC775;border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PBR·PSR·PCR</div></div>
+    <div class="stage" style="background:#FCEBEB;"><div style="font-size:16px;font-weight:500;color:#791F1F;">5단계</div><div style="font-size:10px;color:#A32D2D;margin-top:2px;">매우 고평가</div></div>
+  </div>
+
+  <div class="warn">
+    <div style="font-size:13px;font-weight:500;color:#633806;margin-bottom:4px;">종합 밸류에이션 — 2~4단계 혼재 · PEG 0.49 — 성장 대비 저평가가 핵심 논리</div>
+    <div style="font-size:12px;color:#854F0B;line-height:1.6;">PER 31.3x → 2단계(AI 반도체 평균 52x 대비). EV/EBITDA 27.6x → 2단계(10년 중간값 42.7x 대비). PBR 25.4x → 4단계(자사주 매입으로 BPS 낮음). PSR 20.5x → 4단계. PCR 55.4x → 4단계. <strong>PEG 0.49 = EPS 성장률(85%+) 감안 시 극단적 저평가.</strong> 전통 멀티플로는 고평가처럼 보이나, 성장·마진 품질 조정 시 저평가.</div>
+  </div>
+</div>
+
+<!-- 5. US 특화: S&P500 상대 성과 & 섹터 포지셔닝 -->
+<div class="card">
+  <div class="sec">5. US 특화 — S&P 500 상대 성과 · 섹터 포지셔닝 · 기관 수급</div>
+  <div class="g2" style="margin-bottom:12px;">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:8px;">S&P 500 대비 상대 수익률</div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">NVDA 52주</span><span class="up" style="font-weight:500;">+46.8%</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">S&P 500 52주</span><span class="up" style="font-weight:500;">+15.2% (추정)</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">알파(초과 수익)</span><span class="up" style="font-weight:500;">+31.6%p 아웃퍼폼</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">S&P500 편입 비중</span><span style="font-weight:500;">~6.2% (최상위)</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">베타</span><span style="font-weight:500;">2.20 — 고변동성</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">섹터</span><span class="badge b-nvda">Information Technology</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:8px;">기관 수급 · 애널리스트 컨센서스</div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">기관 보유 비중</span><span style="font-weight:500;">~65% (추정)</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">자사주 매입 (FY27 Q1)</span><span class="up" style="font-weight:500;">$19.3B — 분기 신기록</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">잔여 바이백 한도</span><span style="font-weight:500;">$62.2B+ 잔존</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">애널리스트 매수/중립/매도</span><span style="font-weight:500;">Buy 압도적 다수</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">Street 컨센서스 목표가</span><span class="up" style="font-weight:500;">$230~$275 (BofA $275)</span></div>
+      <div class="sprow"><span style="color:var(--color-text-secondary);">GF Value (GuruFocus)</span><span class="up" style="font-weight:500;">$334.95 — 37% 저평가</span></div>
+    </div>
+  </div>
+
+  <div style="font-size:13px;font-weight:500;margin-bottom:8px;">하이퍼스케일러 AI Capex — NVDA 수혜 구조</div>
+  <div style="position:relative;width:100%;height:130px;margin-bottom:12px;">
+    <canvas id="capexChart" role="img" aria-label="하이퍼스케일러 2026 AI Capex 비교">META, MSFT, AMZN, GOOGL capex 합산 $700B</canvas>
+  </div>
+
+  <div class="ib">
+    <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.7;">
+      <strong style="color:var(--color-text-primary);">섹터 ETF 흐름 참고:</strong> SOXX(반도체 ETF) · SMH(반도체 ETF) · XLK(기술 ETF) 모두 NVDA 최상위 편입. AI 테마 수급 자금 지속 유입 구조. NVDA는 S&P500 내 단일 종목 최대 시총 — 지수 자체를 견인.
+    </div>
+  </div>
+</div>
+
+<!-- 6. 시계열 뉴스 -->
+<div class="card">
+  <div class="sec">6. 시계열 주요 뉴스 <span class="src">2025.07 ~ 2026.06</span></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;font-size:11px;">
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#0C447C;display:inline-block;"></span>초대형 이벤트</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#1D9E75;display:inline-block;"></span>긍정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#D85A30;display:inline-block;"></span>부정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:50%;background:#888780;display:inline-block;"></span>중립</span>
+  </div>
+
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2025년 7월 — 수출규제 이슈</div>
+      <div class="tl-title">$143 저점 · 중국 AI칩 수출 제한 강화 우려로 조정</div>
+      <div class="tl-body">바이든 행정부 AI칩 수출규제 추가 강화 논의. H100·A100 이어 H200도 중국 수출 불가 가능성. 주가 $143~$158 저점 형성. 이후 반등 시작의 최적 진입점이었음.</div>
+      <span class="tag tag-neg">수출규제</span><span class="tag tag-pos">장기 지지 확인</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2025년 10월 — Q3 FY26 실적</div>
+      <div class="tl-title">Q3 FY26 매출 $35.1B · Blackwell 수요 "극단적(extreme)" — 역대급 서프라이즈</div>
+      <div class="tl-body">매출 $35.1B(▲93.6% YoY), 영업이익 $21.9B(OPM 62.3%). Data Center $30.8B. 젠슨 황 CEO "Blackwell 수요는 extreme" 발언으로 주가 급등. 클라우드 GPU 공급 부족 확인.</div>
+      <span class="tag tag-big">Blackwell 수요 폭발</span><span class="tag tag-pos">62% OPM</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 1월 — DeepSeek 쇼크</div>
+      <div class="tl-title">중국 DeepSeek AI 저비용 학습 주장 — 하루 -17% 급락 · $600B 시총 증발</div>
+      <div class="tl-body">중국 DeepSeek이 소수의 GPU로 GPT-4급 성능 달성 주장. AI 인프라 투자 위축 공포로 하루 -17% 역대 최대 시총 손실 기록. 이후 "추론 수요 오히려 증가" 반론으로 반등 회복.</div>
+      <span class="tag tag-neg">DeepSeek 쇼크</span><span class="tag tag-pos">V자 반등 완성</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2026년 2월 — Q4 FY26 실적</div>
+      <div class="tl-title">Q4 FY26 매출 $68.1B · 분기 역대최대 · $78B 가이던스 제시</div>
+      <div class="tl-body">매출 $68.1B(▲73.2% YoY), EPS $1.76. Data Center $62.3B. Q1 FY27 가이던스 $78B(+/-2%). 순현금 $51.5B. 자사주 $62.2B 잔여 승인. Vera Rubin 차세대 아키텍처 첫 샘플 출하 공개.</div>
+      <span class="tag tag-big">분기 역대최대</span><span class="tag tag-pos">$78B 가이던스</span><span class="tag tag-pos">Vera Rubin 공개</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-big"></div>
+      <div class="tl-date">2026년 5월 — Q1 FY27 실적</div>
+      <div class="tl-title">Q1 FY27 매출 $81.6B · 연속 신고점 · 주가 $229.52 역대 최고</div>
+      <div class="tl-body">매출 $81.6B(▲85.2% YoY), 영업이익 $53.5B(OPM 65.6%). 자사주 매입 $19.3B(분기 최대). FCF $48.6B. 순현금 $68.2B. 실적 발표 후 주가 $229.52 역대 최고 경신.</div>
+      <span class="tag tag-big">+85% YoY</span><span class="tag tag-big">역대 최고가</span><span class="tag tag-pos">FCF $48.6B</span>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot dot-neg"></div>
+      <div class="tl-date">2026년 6월 — 수출규제 재강화</div>
+      <div class="tl-title">미 정부 중국계 기업 해외 법인도 수출허가 적용 — Blackwell 루프홀 차단</div>
+      <div class="tl-body">6월 1일, 美 정부가 중국 기업의 해외 자회사에도 수출허가 요건 적용 명확화. Blackwell 칩을 우회 수입하려던 중국 기업 루프홀 차단. 상원의원 NVIDIA CEO 청문회 요청. 현재 $205 소폭 조정 중.</div>
+      <span class="tag tag-neg">수출규제 강화</span><span class="tag tag-neu">현재 진행 중</span>
+    </div>
+  </div>
+</div>
+
+<!-- 7. 투자 포인트 -->
+<div class="card">
+  <div class="sec">7. 2026년 핵심 투자 포인트</div>
+  <div class="g2">
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#1D9E75;">긍정 요인 (Bull)</div>
+      <div class="ir"><span class="il">PEG 0.49 — 성장 대비 극단 저평가</span><span class="badge b-green">성장주 기준 싸다</span></div>
+      <div class="ir"><span class="il">하이퍼스케일러 $700B capex 집행</span><span class="badge b-green">수요 가시성 최고</span></div>
+      <div class="ir"><span class="il">CUDA 생태계 → 교체 불가 해자</span><span class="badge b-blue">기술 독점</span></div>
+      <div class="ir"><span class="il">OPM 65% — 소프트웨어 수준 마진</span><span class="badge b-green">마진 확장 지속</span></div>
+      <div class="ir"><span class="il">Vera Rubin 차세대 사이클 준비 완료</span><span class="badge b-purple">제품 로드맵</span></div>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:7px;color:#D85A30;">리스크 (Bear)</div>
+      <div class="ir"><span class="il">중국 수출규제 재강화 (6월 현재)</span><span class="badge b-red">지정학 리스크</span></div>
+      <div class="ir"><span class="il">구글·아마존·MS 자체 AI칩 개발</span><span class="badge b-amber">고객 이탈 위험</span></div>
+      <div class="ir"><span class="il">베타 2.2 — 시장 하락 시 2배 낙폭</span><span class="badge b-red">고변동성</span></div>
+      <div class="ir"><span class="il">고객 집중도 — 하이퍼스케일러 의존</span><span class="badge b-amber">집중 위험</span></div>
+      <div class="ir"><span class="il">PSR 20x · PBR 25x — 절대 고평가</span><span class="badge b-amber">멀티플 압축 가능</span></div>
+    </div>
+  </div>
+  <div class="ib">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--color-text-secondary);">투자의견:</span> <span class="badge b-nvda">Strong Buy (Street 컨센서스)</span></div>
+      <div><span style="color:var(--color-text-secondary);">목표주가:</span> <span style="font-weight:500;">BofA $275 · GF Value $335</span></div>
+      <div><span style="color:var(--color-text-secondary);">Forward PER:</span> <span class="up" style="font-weight:500;">22x (FY27E EPS ~$9.3 추정)</span></div>
+      <div><span style="color:var(--color-text-secondary);">PEG:</span> <span class="up" style="font-weight:500;">0.49 — 성장 대비 저평가</span></div>
+    </div>
+  </div>
+  <div style="margin-top:10px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">차트 + 분기 재무제표 + 공개 뉴스 기준 · 투자 권고가 아닙니다</div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+(function(){
+  const svg=document.getElementById('nvdaSvg');
+  const W=720,H=240,pL=72,pR=12,pT=14,pB=24;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const data=[
+    {o:14.5,h:15.5,l:14.3,c:14.8},{o:14.8,h:15.8,l:14.2,c:15.5},
+    {o:15.5,h:16.5,l:15.0,c:16.0},{o:16.0,h:17.0,l:15.5,c:16.8},
+    {o:16.8,h:17.5,l:16.2,c:17.2},{o:17.2,h:18.0,l:16.8,c:17.8},
+    {o:17.8,h:19.0,l:17.5,c:18.5},{o:18.5,h:19.5,l:18.0,c:19.0},
+    {o:19.0,h:20.5,l:18.5,c:20.0},{o:20.0,h:21.0,l:19.2,c:20.5},
+    {o:20.5,h:21.5,l:19.8,c:21.0},{o:21.0,h:21.5,l:18.0,c:18.5},
+    {o:18.5,h:20.0,l:17.5,c:19.5},{o:19.5,h:20.5,l:18.5,c:20.0},
+    {o:20.0,h:21.0,l:19.0,c:20.5},{o:20.5,h:21.5,l:19.5,c:21.0},
+    {o:21.0,h:22.0,l:20.0,c:21.5},{o:21.5,h:22.5,l:20.5,c:22.0},
+    {o:22.0,h:22.5,l:18.5,c:19.0},
+    {o:19.0,h:20.5,l:18.0,c:20.0},{o:20.0,h:21.0,l:19.0,c:20.5},
+    {o:20.5,h:21.5,l:19.5,c:21.0},{o:21.0,h:22.0,l:20.5,c:21.8},
+    {o:21.8,h:22.5,l:21.0,c:22.3},{o:22.3,h:23.0,l:21.5,c:22.8},
+    {o:22.8,h:23.5,l:22.0,c:23.0},{o:23.0,h:23.5,l:22.5,c:22.8},
+    {o:22.8,h:23.5,l:22.0,c:23.2},{o:23.2,h:23.5,l:22.5,c:23.0},
+    {o:23.0,h:23.5,l:21.5,c:22.5},{o:22.5,h:23.0,l:21.8,c:22.0},
+    {o:22.0,h:22.5,l:20.5,c:21.5},{o:21.5,h:22.5,l:21.0,c:22.0},
+    {o:22.0,h:22.5,l:21.0,c:21.8},{o:21.8,h:22.5,l:21.2,c:21.5},
+    {o:21.5,h:22.0,l:21.0,c:21.8},{o:21.8,h:22.0,l:20.5,c:20.8},
+    {o:20.8,h:21.5,l:20.0,c:21.0},{o:21.0,h:21.5,l:20.5,c:21.2},
+    {o:21.2,h:22.0,l:20.8,c:21.8},{o:21.8,h:22.5,l:21.0,c:22.0},
+    {o:22.0,h:22.8,l:21.5,c:22.5},{o:22.5,h:23.0,l:22.0,c:22.8},
+    {o:22.8,h:23.5,l:22.5,c:23.2},{o:23.2,h:23.8,l:22.8,c:23.5},
+    {o:23.5,h:23.8,l:22.0,c:22.5},{o:22.5,h:23.0,l:22.0,c:22.8},
+    {o:22.8,h:23.0,l:22.2,c:22.6},{o:22.6,h:23.0,l:22.0,c:22.8},
+    {o:22.8,h:23.0,l:22.3,c:22.9},{o:22.9,h:23.1,l:22.5,c:23.0}
+  ];
+  const prices=data.flatMap(d=>[d.h,d.l]);
+  const maxP=Math.max(...prices)+0.5,minP=Math.min(...prices)-0.5;
+  const rng=maxP-minP;
+  function py(v){return pT+cH*(1-(v-minP)/rng);}
+  const colW=cW/data.length,cw=Math.max(colW*.6,7);
+  [15,17,19,21,23].forEach(v=>{
+    const y=py(v);
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+    l.setAttribute('stroke','rgba(128,128,128,.12)');l.setAttribute('stroke-width','1');svg.appendChild(l);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',pL-4);t.setAttribute('y',y+4);t.setAttribute('text-anchor','end');
+    t.setAttribute('font-size','9');t.setAttribute('fill','rgba(128,128,128,.7)');
+    t.textContent='$'+(v*10);svg.appendChild(t);
+  });
+  function calcMA(d,n){return d.map((_,i)=>i<n-1?null:d.slice(i-n+1,i+1).reduce((s,x)=>s+x.c,0)/n);}
+  function drawLine(arr,col,w){
+    let pts=[];arr.forEach((v,i)=>{if(v===null)return;pts.push(`${pL+(i+.5)*colW},${py(v)}`);});
+    if(pts.length<2)return;
+    const p=document.createElementNS('http://www.w3.org/2000/svg','polyline');
+    p.setAttribute('points',pts.join(' '));p.setAttribute('fill','none');p.setAttribute('stroke',col);p.setAttribute('stroke-width',w||1.5);svg.appendChild(p);
+  }
+  data.forEach((d,i)=>{
+    const cx=pL+(i+.5)*colW,isUp=d.c>=d.o,col=isUp?'#D85A30':'#185FA5';
+    const wk=document.createElementNS('http://www.w3.org/2000/svg','line');
+    wk.setAttribute('x1',cx);wk.setAttribute('x2',cx);wk.setAttribute('y1',py(d.h));wk.setAttribute('y2',py(d.l));
+    wk.setAttribute('stroke',col);wk.setAttribute('stroke-width','1.5');svg.appendChild(wk);
+    const bT=py(Math.max(d.o,d.c)),bB=py(Math.min(d.o,d.c));
+    const bd=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    bd.setAttribute('x',cx-cw/2);bd.setAttribute('y',bT);bd.setAttribute('width',cw);
+    bd.setAttribute('height',Math.max(bB-bT,2));bd.setAttribute('fill',col);bd.setAttribute('rx','1');svg.appendChild(bd);
+  });
+  drawLine(calcMA(data,5),'#FF69B4',1.5);
+  drawLine(calcMA(data,20),'#9370DB',1.5);
+  drawLine(calcMA(data,60),'#DAA520',2);
+  drawLine(calcMA(data,120),'#228B22',2);
+  const mk=(idx,lbl,isLow,col)=>{
+    const cx=pL+(idx+.5)*colW;
+    const cy=isLow?py(data[idx].l)+12:py(data[idx].h)-8;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',Math.min(cx,W-50));t.setAttribute('y',cy);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','9');t.setAttribute('fill',col);t.setAttribute('font-weight','500');
+    t.textContent=lbl;svg.appendChild(t);
+  };
+  mk(1,'$143 최저(\'25.07)',true,'#185FA5');
+  mk(45,'$229.52 최고(\'26.05)',false,'#D85A30');
+  ['\'25.07','\'25.09','\'25.11','\'26.01','\'26.03','\'26.05'].forEach((m,i)=>{
+    const cx=pL+(i/6)*cW+cW/12;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',cx);t.setAttribute('y',H-4);t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','10');t.setAttribute('fill','rgba(128,128,128,.8)');
+    t.textContent=m;svg.appendChild(t);
+  });
+  [{c:'#D85A30',t:'양봉'},{c:'#185FA5',t:'음봉'},{c:'#FF69B4',t:'MA5'},{c:'#9370DB',t:'MA20'},{c:'#DAA520',t:'MA60'},{c:'#228B22',t:'MA120'}].forEach((l,i)=>{
+    const gx=pL+i*90;
+    const r=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    r.setAttribute('x',gx);r.setAttribute('y',2);r.setAttribute('width',10);r.setAttribute('height',10);
+    r.setAttribute('fill',l.c);r.setAttribute('rx','2');svg.appendChild(r);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',gx+13);t.setAttribute('y',11);t.setAttribute('font-size','9');
+    t.setAttribute('fill','rgba(128,128,128,.9)');t.textContent=l.t;svg.appendChild(t);
+  });
+})();
+
+new Chart(document.getElementById('nvdaRevChart'),{
+  type:'bar',
+  data:{
+    labels:['Q2 FY25','Q3 FY25','Q4 FY25','Q1 FY26','Q2 FY26','Q3 FY26','Q4 FY26','Q1 FY27'],
+    datasets:[
+      {label:'매출($B)',data:[30.0,35.1,39.3,44.1,46.7,57.0,68.1,81.6],backgroundColor:'#0C447C',borderRadius:4,yAxisID:'y'},
+      {label:'순이익($B)',data:[16.6,19.3,22.1,18.8,26.4,31.9,43.0,58.3],backgroundColor:'rgba(29,158,117,0.7)',borderRadius:4,yAxisID:'y'},
+      {label:'OPM%',type:'line',data:[62.1,62.3,61.1,49.1,60.8,63.2,65.0,65.6],borderColor:'#EF9F27',backgroundColor:'rgba(239,159,39,.1)',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      y:{position:'left',ticks:{font:{size:10},callback:v=>v+'B',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      y2:{position:'right',min:40,max:75,ticks:{font:{size:10},callback:v=>v+'%',color:'#EF9F27'},grid:{display:false}},
+      x:{ticks:{font:{size:10},color:'#888',maxRotation:30},grid:{display:false}}
+    }
+  }
+});
+
+new Chart(document.getElementById('peerChart'),{
+  type:'bar',
+  data:{
+    labels:['NVDA','AVGO','TSM','AMD','반도체평균'],
+    datasets:[{
+      label:'PER(TTM)',
+      data:[31.3,30.2,20.1,47.0,52.0],
+      backgroundColor:['#0C447C','#B4B2A9','#B4B2A9','#B4B2A9','#D3D1C7'],
+      borderRadius:5,borderSkipped:false
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`PER ${ctx.raw}x`}}},
+    scales:{
+      y:{max:60,ticks:{font:{size:10},callback:v=>v+'x',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      x:{ticks:{font:{size:11},color:'#888'},grid:{display:false}}
+    }
+  }
+});
+
+new Chart(document.getElementById('capexChart'),{
+  type:'bar',
+  data:{
+    labels:['Meta','Microsoft','Amazon','Alphabet','합산'],
+    datasets:[{
+      label:'2026 AI Capex($B)',
+      data:[65,80,105,75,700],
+      backgroundColor:['#E6F1FB','#E6F1FB','#E6F1FB','#E6F1FB','#0C447C'],
+      borderColor:['#185FA5','#185FA5','#185FA5','#185FA5','#042C53'],
+      borderWidth:1,borderRadius:4,borderSkipped:false
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`$${ctx.raw}B`}}},
+    scales:{
+      y:{ticks:{font:{size:10},callback:v=>'$'+v+'B',color:'#888'},grid:{color:'rgba(0,0,0,0.05)'}},
+      x:{ticks:{font:{size:10},color:'#888'},grid:{display:false}}
+    }
+  }
+});
+</script>
+
+</div>
+</body>
+</html>
