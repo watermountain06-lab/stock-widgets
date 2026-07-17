@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JNJ 종합 분석 위젯</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117; --bg2: #1a1d27; --bg3: #22263a; --border: #2e3347;
+    --text: #e8eaf0; --text2: #9aa0b8; --text3: #5c6282;
+    --accent: #a01d3a; --accent2: #d15772; --accent3: #4a0e1c;
+    --bull: #D85A30; --bear: #185FA5; --ma5: #ff6b9d; --ma20: #9b59b6; --ma60: #f0c040; --ma120: #27ae60;
+    --green: #2ecc71; --red: #e74c3c; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
+  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; }
+  .header { background: linear-gradient(135deg, #250810 0%, #0f1117 40%, #1a1d27 100%); border-bottom: 2px solid var(--accent3); padding: 28px 32px 24px; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(209,87,114,0.14) 0%, transparent 70%); pointer-events: none; }
+  .header-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .ticker-block { display: flex; align-items: center; gap: 16px; }
+  .ticker-badge { background: linear-gradient(135deg, var(--accent3), var(--accent)); color: #fff; font-size: 13px; font-weight: 800; padding: 5px 12px; border-radius: 6px; letter-spacing: 1px; }
+  .company-name { font-size: 22px; font-weight: 700; color: var(--text); }
+  .company-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .price-block { text-align: right; }
+  .price-main { font-size: 32px; font-weight: 800; color: var(--accent2); letter-spacing: -1px; }
+  .price-change { font-size: 13px; color: var(--green); font-weight: 600; }
+  .header-meta { display: flex; gap: 24px; margin-top: 16px; flex-wrap: wrap; }
+  .meta-item { display: flex; flex-direction: column; }
+  .meta-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .meta-value { font-size: 13px; font-weight: 600; color: var(--text2); margin-top: 2px; }
+  .meta-value.highlight { color: var(--accent2); }
+  .nav { display: flex; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
+  .nav-btn:hover { color: var(--text); background: var(--bg3); }
+  .nav-btn.active { background: var(--accent3); color: var(--accent2); }
+  .section { display: none; padding: 28px 32px; }
+  .section.active { display: block; }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--accent2); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; display: inline-block; }
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px; }
+  .card-title { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; font-weight: 600; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .chart-wrap { position: relative; }
+  .chart-wrap canvas { max-width: 100%; }
+  .price-chart-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+  .stat-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .stat-value { font-size: 20px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
+  .stat-sub { font-size: 11px; color: var(--text3); }
+  .stat-value.up { color: var(--green); }
+  .stat-value.down { color: var(--red); }
+  .stat-value.gold { color: var(--accent2); }
+  .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .ma-row:last-child { border-bottom: none; }
+  .ma-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+  .ma-name { display: flex; align-items: center; font-size: 13px; color: var(--text2); }
+  .ma-val { font-size: 13px; font-weight: 600; }
+  .ma-status { font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
+  .status-above { background: rgba(46,204,113,0.15); color: var(--green); }
+  .status-below { background: rgba(231,76,60,0.15); color: var(--red); }
+  .status-amber { background: rgba(240,192,64,0.18); color: var(--ma60); }
+  .zone-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .zone-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg3); border-radius: 6px; }
+  .zone-label { font-size: 12px; color: var(--text2); }
+  .zone-val { font-size: 13px; font-weight: 700; color: var(--accent2); }
+  .zone-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
+  .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
+  .tag-current { background: rgba(209,87,114,0.2); color: var(--accent2); }
+  .val-item { margin-bottom: 18px; }
+  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
+  .val-track { height: 8px; background: var(--bg3); border-radius: 4px; position: relative; overflow: hidden; }
+  .val-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+  .val-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+  .val-low { font-size: 10px; color: var(--green); }
+  .val-mid { font-size: 10px; color: var(--accent2); text-align: center; }
+  .val-high { font-size: 10px; color: var(--red); }
+  .stage-badge { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
+  .stage-1 { background: rgba(46,204,113,0.2); color: #2ecc71; }
+  .stage-2 { background: rgba(39,174,96,0.2); color: #27ae60; }
+  .stage-3 { background: rgba(209,87,114,0.2); color: var(--accent2); }
+  .stage-4 { background: rgba(231,126,35,0.2); color: #e67e22; }
+  .stage-5 { background: rgba(231,76,60,0.2); color: var(--red); }
+  .stage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .stage-mini { text-align: center; padding: 10px 4px; border-radius: 8px; }
+  .stage-mini-num { font-size: 15px; font-weight: 700; }
+  .stage-mini-label { font-size: 9px; margin-top: 2px; }
+  .scenario-card { border-radius: 8px; padding: 14px; }
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent2); border: 2px solid var(--bg); }
+  .tl-dot.red { background: var(--red); }
+  .tl-dot.green { background: var(--green); }
+  .tl-dot.blue { background: var(--blue); }
+  .tl-dot.gold { background: var(--accent2); }
+  .tl-dot.today { background: #ffc107; }
+  .tl-date { font-size: 10px; color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+  .tl-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 3px 0; }
+  .tl-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .bull-bear { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .bb-box { background: var(--bg3); border-radius: var(--radius); padding: 16px; }
+  .bb-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .bb-bull { color: var(--bull); }
+  .bb-bear { color: var(--bear); }
+  .bb-item { display: flex; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .bb-icon { flex-shrink: 0; margin-top: 2px; }
+  .driver-item { display: flex; gap: 12px; padding: 12px; background: var(--bg3); border-radius: 8px; margin-bottom: 10px; }
+  .driver-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent3); color: var(--accent2); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .driver-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .driver-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
+  .per-share-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .ps-card { background: var(--bg3); border-radius: 8px; padding: 16px; text-align: center; }
+  .ps-icon { font-size: 22px; margin-bottom: 6px; }
+  .ps-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .ps-value { font-size: 22px; font-weight: 800; color: var(--accent2); }
+  .ps-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
+  .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+  .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
+  .disclaimer { margin: 28px 32px 16px; padding: 12px 16px; background: rgba(209,87,114,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
+  .info-box { background: rgba(209,87,114,0.1); border: 1px solid var(--accent3); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; color: var(--text2); }
+  @media (max-width: 600px) {
+    .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
+    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; }
+    .per-share-grid { grid-template-columns: 1fr 1fr; } .stage-grid { grid-template-columns: 1fr 1fr; } .price-main { font-size: 24px; }
+  }
+  body { padding-top: 34px; }
+  .back-bar { position: fixed; top: 0; left: 0; right: 0; height: 34px; background: rgba(10,11,22,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 16px; }
+  .back-bar a { color: var(--text2); font-size: 12px; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 6px; transition: color 0.2s; }
+  .back-bar a:hover { color: var(--accent2); }
+</style>
+</head>
+<body>
+<div class="back-bar"><a href="../index.html">&#8592; 전체 종목 목록</a></div>
+
+<div class="today-banner">✅ <strong>7/15(수) Q2 FY2026 실적 발표 완료</strong> — 매출 $25.31B(+6.6%) · Adj EPS $2.90(+4.7%), FY2026 가이던스 상향(Adj EPS $11.68) · 다음 실적은 10월 중순 Q3 FY2026 예상</div>
+
+<div class="header">
+  <div class="header-top">
+    <div class="ticker-block">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+          <span class="ticker-badge">JNJ</span>
+          <span style="font-size:11px;color:var(--accent2);font-weight:600;">NYSE · 140년 역사 헬스케어 · 64년 연속 배당 증가 Dividend King</span>
+        </div>
+        <div class="company-name">Johnson & Johnson</div>
+        <div class="company-sub">Innovative Medicine(Oncology·면역·신경과학)·MedTech(수술·심혈관·시력·정형외과) 2대 사업부 · S&P 500 시총 20위권</div>
+      </div>
+    </div>
+    <div class="price-block">
+      <div class="price-main">$253.04</div>
+      <div class="price-change">▲ +1.23% (2026.07.17 기준)</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px;">52주 최저 $162.78 (2025.07.21) · 최고 $269.43 (2026.07.07)</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$609.8B</span></div>
+    <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Health Care</span></div>
+    <div class="meta-item"><span class="meta-label">Q2 FY26 매출</span><span class="meta-value">$25.3B (+6.6%)</span></div>
+    <div class="meta-item"><span class="meta-label">P/E (TTM)</span><span class="meta-value">29.3x</span></div>
+    <div class="meta-item"><span class="meta-label">GAAP EPS (TTM)</span><span class="meta-value">$8.63</span></div>
+    <div class="meta-item"><span class="meta-label">분기 배당</span><span class="meta-value">$1.34 (+3.1%)</span></div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
+  <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
+  <button class="nav-btn" onclick="showSection('pershare')">💰 Per-Share</button>
+  <button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button>
+  <button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button>
+  <button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button>
+  <button class="nav-btn" onclick="showSection('invest')">🎯 투자 포인트</button>
+</div>
+
+<!-- ===================== SECTION 1: 기술적 분석 ===================== -->
+<div id="tech" class="section active">
+  <div class="section-title">기술적 분석 — 월별 종가 기준 (2025.07 ~ 2026.07) · 52주 수익률 +54.6%</div>
+  <div class="price-chart-container">
+    <div style="font-size:11px;color:var(--text3);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
+      <span>52주 최저 $162.78 (2025.07) → 52주 최고 $269.43 (2026.07) → 현재 $253.04</span>
+      <span style="color:var(--accent2);font-weight:600;">현재가 $253.04</span>
+    </div>
+    <svg id="jnjSvg" viewBox="0 0 720 220" width="100%" style="display:block;background:var(--bg3);border-radius:8px;padding:4px;" role="img" aria-label="JNJ 52주 주가 차트"></svg>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">핵심 가격대</div>
+      <div class="zone-list">
+        <div class="zone-item"><span class="zone-label">52주 최고</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$269.43 (2026.07.07)</span><span class="zone-tag tag-resist">저항선</span></div></div>
+        <div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$253.04 (고점 대비 -6.1%)</span><span class="zone-tag tag-current">현재</span></div></div>
+        <div class="zone-item"><span class="zone-label">MA20 지지</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$251.82</span><span class="zone-tag tag-support">지지선</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$162.78 (2025.07.21)</span><span class="zone-tag tag-support">강지지</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--green);">+54.6%</span></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">이동평균선 현황</div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기) $252.33</span><span class="ma-status status-above">상승 지지</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기) $251.82</span><span class="ma-status status-above">상승 지지</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기) $236.74</span><span class="ma-status status-above">상승 지지</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기) $237.95</span><span class="ma-status status-above">상승 지지</span></div>
+      <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">
+        ⚠️ 현재가&gt;MA5&gt;MA20&gt;MA120≈MA60 순 — 거의 완전 정배열(MA60·MA120은 근소한 역전). 7/7 신고가 경신 후 실적 발표(-2.7%)로 단기 조정, 여전히 전 이평선 위에서 견조
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">구간별 패턴 분석</div>
+    <div class="grid-4">
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.07~09 — 저점 반등 $163→$185</div><div style="font-size:12px;color:var(--text2);">52주 저점($162.78) 형성 후 반등. Q3 2025 실적(EPS $2.12, 전년 소송충당금 기저효과로 +91% YoY) 호조.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.10~12 — 랠리 $185→$207</div><div style="font-size:12px;color:var(--text2);">Q4 실적 서프라이즈 기대감 확산, 배당 인상 기대와 함께 견조한 상승 지속.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.01~03 — 신고가 랠리 $207→$251</div><div style="font-size:12px;color:var(--text2);">FY2025 GAAP EPS +90.5% 서프라이즈, DARZALEX·CARVYKTI 등 파이프라인 강세로 신고가 랠리.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.04~07 — 조정 후 신고가 재경신</div><div style="font-size:12px;color:var(--text2);">4~5월 $220대까지 조정 후 6~7월 급반등, 7/7 52주 신고가 $269.43. 7/15 실적 발표 후 MedTech 부진 우려로 -2.7% 조정, $253.04.</div></div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;">
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">64년 연속 배당 증가 — 사상 최장급 Dividend King</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">DARZALEX·CARVYKTI·TREMFYA 고성장, FY26 가이던스 상향</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">52주 수익률 +54.6% — S&P500(+19.6%) 대비 +34.9%p 압도적 아웃퍼폼</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(255,193,7,0.18);color:#ffc107;">다음 실적 10월 중순 Q3 FY2026 예상</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">MedTech 심혈관 부문 부진 — 실적일 -2.7% 조정 요인</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">STELARA 특허절벽 지속 — 성장률 -760bp 하방압력</span>
+  </div>
+</div>
+
+<!-- ===================== SECTION 2: 기본적 분석 ===================== -->
+<div id="fund" class="section">
+  <div class="section-title">기본적 분석 — 분기 재무제표 (SEC 8-K 실적발표 기준)</div>
+  <div class="card">
+    <div class="card-title">분기 매출 및 GAAP/Adjusted EPS 추이</div>
+    <div class="chart-wrap" style="height:260px;"><canvas id="jnjRevChart"></canvas></div>
+  </div>
+  <div class="grid-3">
+    <div class="stat-box"><div class="stat-label">Q2 FY26 매출</div><div class="stat-value up">$25.31B</div><div class="stat-sub">▲6.6% YoY</div></div>
+    <div class="stat-box"><div class="stat-label">Q2 FY26 GAAP 순이익</div><div class="stat-value">$5.53B</div><div class="stat-sub">▼0.1% YoY (거의 flat)</div></div>
+    <div class="stat-box"><div class="stat-label">Q2 FY26 GAAP EPS</div><div class="stat-value">$2.27</div><div class="stat-sub">▼0.9% YoY</div></div>
+    <div class="stat-box"><div class="stat-label">Q2 FY26 Adjusted EPS</div><div class="stat-value up">$2.90</div><div class="stat-sub">▲4.7% YoY</div></div>
+    <div class="stat-box"><div class="stat-label">Innovative Medicine 매출</div><div class="stat-value up">$16.38B</div><div class="stat-sub">▲7.8% (Oncology·면역 견인)</div></div>
+    <div class="stat-box"><div class="stat-label">MedTech 매출</div><div class="stat-value up">$8.93B</div><div class="stat-sub">▲4.5% (심혈관 부문은 부진)</div></div>
+    <div class="stat-box"><div class="stat-label">FY2026(E) 매출 가이던스</div><div class="stat-value up">$101.1B</div><div class="stat-sub">▲7.3% · 창사 140년 첫 $100B 돌파 전망</div></div>
+    <div class="stat-box"><div class="stat-label">FY2026(E) Adj EPS 가이던스</div><div class="stat-value up">$11.68</div><div class="stat-sub">▲8.2% (이번에 상향)</div></div>
+    <div class="stat-box"><div class="stat-label">분기배당</div><div class="stat-value up">$1.34</div><div class="stat-sub">▲3.1% — 64년 연속 인상(2026.04)</div></div>
+  </div>
+  <div style="margin-top:12px;font-size:12px;color:var(--text3);">Q2 FY26 조정순이익 $7.08B(+5.7%) · CEO Joaquin Duato "분기 매출 $25B 돌파, 2026년 사상 최초 연매출 $100B 목표 궤도"</div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">핵심 성장 동력 — Innovative Medicine 신약 vs MedTech 부문별 vs 소송 리스크 정상화</div>
+    <div class="grid-3">
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">Innovative Medicine (신약 파이프라인)</div><div style="font-size:12px;color:var(--text2);">DARZALEX·CARVYKTI·TECVAYLI Oncology 고성장<br>TREMFYA 면역질환 확대<br>STELARA(-760bp)·REMICADE 특허절벽 역풍<br>RYBREVANT/LAZCLUZE 폐암 신규 성장축</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--blue);font-weight:700;margin-bottom:6px;">MedTech (의료기기)</div><div style="font-size:12px;color:var(--text2);">Surgery(창상봉합·생체수술) 견조<br>Cardiovascular(전기생리·Shockwave) 성장하나 심장회복 부진<br>Vision(콘택트렌즈)·Orthopaedics(외상) 안정적<br>실적일 주가 조정의 핵심 원인</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">소송 리스크 정상화 (개선 추세)</div><div style="font-size:12px;color:var(--text2);">탈크 소송충당금 2023년 $7B→2024년 $5.1B로 감소<br>다수 합의로 불확실성 점진 해소<br>최근 4개 분기 GAAP·Adj EPS 갭 축소<br>완전 해소까지는 시간 필요</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">핵심 투자 논리 — 소송發 GAAP 변동성이 실질 펀더멘털을 가리는가</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.7;">FY2024 GAAP EPS $5.79는 대규모 탈크 소송충당금(약 $5.1B)으로 Adjusted EPS $9.98 대비 -42% 괴리를 보였고, FY2025엔 GAAP EPS $11.03이 오히려 Adjusted EPS $10.79를 상회하는 등(1분기 일회성 항목 영향) 연도별 GAAP 지표의 변동성이 매우 크다. <strong style="color:var(--text);">그러나 최근 4개 분기(Q3 FY25~Q2 FY26)는 GAAP·Adjusted EPS 모두 꾸준히 우상향하며 소송 노이즈가 점차 잦아드는 모습 — 핵심 논쟁은 "소송 리스크가 아직 안 끝났는가"인지 "혁신신약 파이프라인 성장이 이를 압도하는가"이다.</strong></div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 3: Per-Share ===================== -->
+<div id="pershare" class="section">
+  <div class="section-title">Per-Share 지표 (TTM 기준 · 약 24.1억 주)</div>
+  <div class="per-share-grid">
+    <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS · TTM</div><div class="ps-value">$8.63</div><div class="ps-sub">'25.Q3~'26.Q2 합산 · PER 29.3x</div><div style="margin-top:5px;"><span class="stage-badge stage-3">적정(PER 상단)</span></div></div>
+    <div class="ps-card"><div class="ps-icon">📊</div><div class="ps-label">Adjusted EPS · TTM</div><div class="ps-value">$10.86</div><div class="ps-sub">Adj PER 23.3x</div><div style="margin-top:5px;"><span class="stage-badge stage-3">적정(Adj PER)</span></div></div>
+    <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS · 주당순자산</div><div class="ps-value">$33.84</div><div class="ps-sub">'25 자기자본 $81.5B</div><div style="margin-top:5px;"><span class="stage-badge stage-4">높음(PBR 7.48x)</span></div></div>
+    <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 · FY2025</div><div class="ps-value">$8.17</div><div class="ps-sub">FY25 FCF $19.7B</div><div style="margin-top:5px;"><span class="stage-badge stage-3">적정(FCF수익률)</span></div></div>
+  </div>
+  <div style="font-size:11px;color:var(--text3);margin-top:10px;">* PBR 7.48x가 높은 것은 Shockwave·Abiomed 등 대형 M&A로 인한 대규모 영업권·무형자산 때문 — 자산경량이 아니라 인수합병 중심 성장전략의 회계적 결과. GAAP EPS는 탈크 소송충당금 규모에 따라 분기별 변동성이 크므로 Adjusted EPS가 사업의 실질 밸류에이션에 더 가깝다.</div>
+</div>
+
+<!-- ===================== SECTION 4: 밸류에이션 ===================== -->
+<div id="valuation" class="section">
+  <div class="section-title">상대 투자지표 — 소송 노이즈를 걷어내면 대형 제약 피어 중 합리적 밸류에이션</div>
+  <div class="info-box">
+    <strong>핵심 전제:</strong> JNJ의 GAAP EPS는 탈크 소송 충당금 규모에 따라 분기·연도별 변동성이 크다 — Adjusted EPS 기준 23.3x가 사업의 실질 밸류에이션에 더 가깝다. Forward P/E 21.7x(가이던스 기준)는 대형 제약 피어 대비 합리적인 수준.
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">멀티플 5단계 평가</div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PER (GAAP TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">29.3x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:66%;background:linear-gradient(90deg,#2ecc71,#d15772);"></div></div>
+        <div class="val-labels"><span class="val-low">저(15x)</span><span class="val-mid">적정(22x)</span><span class="val-high">고(32x)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">$253.04÷$8.63 · 대형 제약 피어 밴드 상단에 위치</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">Forward P/E (가이던스)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">21.7x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:50%;background:linear-gradient(90deg,#2ecc71,#27ae60);"></div></div>
+        <div class="val-labels"><span class="val-low">저(15x)</span><span class="val-mid">적정(22x)</span><span class="val-high">고(32x)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">FY2026 Adj EPS 가이던스 $11.68 기준 — Trailing PER보다 안정적인 밴드 중심부</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">7.48x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:80%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-labels"><span class="val-low">저(2x)</span><span class="val-mid">적정(4x)</span><span class="val-high">고(8x)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">Shockwave·Abiomed 등 대형 M&A로 쌓인 영업권·무형자산이 자기자본을 압축시킨 결과</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">15.9x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:59%;background:linear-gradient(90deg,#2ecc71,#d15772);"></div></div>
+        <div class="val-labels"><span class="val-low">저(10x)</span><span class="val-mid">적정(14x)</span><span class="val-high">고(20x)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV $638.1B÷FY25 EBITDA $40.1B · 10년 평균(15.5x)과 거의 일치하는 수준</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">대형 제약 피어 P/E 비교</div>
+      <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text2);">JNJ의 P/E 29.3x는 실적 부진에 시달리는 Pfizer(7.9x)보다 훨씬 높지만, GLP-1發 고성장주 Eli Lilly(40.5x)·Merck(36.0x)보다는 낮은 합리적 중간 지대에 위치.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">밸류에이션 5단계</div>
+    <div class="stage-grid">
+      <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div></div>
+      <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div></div>
+      <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:8px;color:var(--accent2);background:rgba(209,87,114,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PER·Fwd P/E·EV/EBITDA</div></div>
+      <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:8px;color:#e67e22;background:rgba(231,126,35,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PBR</div></div>
+      <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">시나리오별 공정가치 분석</div>
+    <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — 소송 추가 악재·MedTech 부진 지속</div>
+      <div style="font-size:12px;color:var(--text2);">탈크 소송 추가 충당금 발생, MedTech 심혈관 부문 부진 장기화, STELARA 절벽 심화 시 → 공정가치 <strong style="color:var(--red);">$210~230/주</strong></div>
+    </div>
+    <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 가이던스 달성·멀티플 유지</div>
+      <div style="font-size:12px;color:var(--text2);">FY2026 매출 $101.1B·Adj EPS $11.68 가이던스 달성, Adj P/E 22~24x 유지 → 공정가치 <strong style="color:var(--text);">$255~280/주</strong> (애널리스트 평균 목표가 $269.95와 부합)</div>
+    </div>
+    <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — 신약 모멘텀 가속·소송 리스크 완전 해소</div>
+      <div style="font-size:12px;color:var(--text2);">DARZALEX·CARVYKTI 등 신약 성장 가속, 탈크 소송 리스크 완전 해소로 GAAP·Adj EPS 갭 소멸, 멀티플 재평가 → 공정가치 <strong style="color:var(--green);">$300~330/주</strong></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">종합 밸류에이션 — 소송 리스크가 유일한 핵심 변수</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;">PBR만 보면 4단계(높음)로 보이지만 이는 M&A 중심 성장전략의 회계적 결과. <strong style="color:var(--text);">Adjusted P/E 23.3x·EV/EBITDA 15.9x는 3단계(적정)로 64년 연속 배당 증가 기업 특유의 안정성 프리미엄을 반영한 수준이다.</strong> 공정가치 $210(Bear)~$330(Bull) — 실질 리스크는 밸류에이션이 아니라 탈크 소송의 최종 해소 여부.</div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 5: US 특화 ===================== -->
+<div id="us" class="section">
+  <div class="section-title">US 특화 — S&P 500 성과 · 경쟁 구도 · 다가오는 실적 체크포인트</div>
+  <div class="rel-container">
+    <div class="rel-title">S&P 500 상대 수익률</div>
+    <div class="grid-3">
+      <div class="stat-box"><div class="stat-label">JNJ 52주</div><div class="stat-value up">+54.6%</div></div>
+      <div class="stat-box"><div class="stat-label">S&P 500 52주</div><div class="stat-value">+19.6%</div></div>
+      <div class="stat-box"><div class="stat-label">알파 (초과수익)</div><div class="stat-value up">+34.9%p</div><div class="stat-sub">압도적 아웃퍼폼</div></div>
+    </div>
+    <div class="zone-list" style="margin-top:12px;">
+      <div class="zone-item"><span class="zone-label">시가총액 순위</span><span class="zone-val">S&P500 내 약 20위권</span></div>
+      <div class="zone-item"><span class="zone-label">배당수익률</span><span class="zone-val">2.12% (분기 $1.34)</span></div>
+      <div class="zone-item"><span class="zone-label">섹터</span><span class="zone-val">Health Care · Pharmaceuticals(다각화)</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">대형 제약 경쟁 구도</div>
+    <div class="zone-list">
+      <div class="zone-item"><span class="zone-label">Eli Lilly (GLP-1 고성장)</span><span class="zone-val">P/E 40.5x — 훨씬 높은 밸류에이션, 시총 더 큼</span></div>
+      <div class="zone-item"><span class="zone-label">Merck (직접 경쟁)</span><span class="zone-val">P/E 36.0x — JNJ보다 높은 멀티플</span></div>
+      <div class="zone-item"><span class="zone-label">Pfizer (실적 부진)</span><span class="zone-val" style="color:var(--red);">P/E 7.9x — 극도로 저평가, 성장 정체 우려</span></div>
+      <div class="zone-item"><span class="zone-label">AbbVie (특허절벽 왜곡)</span><span class="zone-val" style="color:var(--red);">P/E 115x+ — 일회성 요인으로 GAAP 왜곡</span></div>
+      <div class="zone-item"><span class="zone-label">탈크 소송</span><span class="zone-val" style="color:var(--green);">충당금 감소 추세 — 리스크 점진 해소</span></div>
+      <div class="zone-item"><span class="zone-label">MedTech M&A(Shockwave·Abiomed)</span><span class="zone-val">통합 진행 중 — 심혈관 부문 성장 동력</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">분기 순이익 추이 (GAAP)</div>
+    <div class="chart-wrap" style="height:200px;"><canvas id="niChart"></canvas></div>
+    <div style="margin-top:12px;font-size:12px;color:var(--text2);line-height:1.8;">
+      <strong style="color:var(--text);">10월 Q3 실적 4대 체크포인트:</strong><br>
+      ① DARZALEX·CARVYKTI 등 신약 성장률 지속 여부 → Oncology 모멘텀 검증<br>
+      ② MedTech 심혈관(Cardiovascular) 부문 개선 여부 → 7/15 조정 요인 해소 확인<br>
+      ③ STELARA 특허절벽 영향 축소 추이 → 면역질환 포트폴리오 재편 속도<br>
+      ④ 탈크 소송 추가 충당금 발생 여부 → GAAP·Adjusted EPS 갭 추이
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 6: 시계열 뉴스 ===================== -->
+<div id="news" class="section">
+  <div class="section-title">시계열 주요 뉴스 (2025.07 ~ 2026.07)</div>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;color:var(--text2);">
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent2);display:inline-block;"></span>초대형 이벤트</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;"></span>긍정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block;"></span>부정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--text3);display:inline-block;"></span>중립</span>
+  </div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2025년 7월 21일 — 52주 저점 $162.78</div>
+      <div class="tl-title">저점 형성 후 반등 시작</div>
+      <div class="tl-desc">탈크 소송 우려가 정점에 달했던 시기의 저점을 형성. 이후 완만한 반등 국면 진입.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">2025년 10월 — Q3 FY2025 실적</div>
+      <div class="tl-title">GAAP EPS $2.12(+91% YoY, 전년 소송충당금 기저효과) · Adj EPS $2.80</div>
+      <div class="tl-desc">전년 동기 대규모 소송충당금 기저효과로 GAAP EPS가 급증. 2025년 매출 가이던스 상향.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot gold"></div>
+      <div class="tl-date">2026년 1월 21일 — Q4·FY2025 실적</div>
+      <div class="tl-title">FY2025 GAAP EPS $11.03(+90.5%) · FY2026 가이던스 최초 제시</div>
+      <div class="tl-desc">FY2025 매출 $94.2B(+6.0%), GAAP EPS가 전년 대비 90.5% 급증(소송충당금 감소 효과). FY2026 매출 $100.5B·Adj EPS $11.53 가이던스 최초 제시.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">2026년 4월 — Q1 FY2026 실적 · 배당 인상</div>
+      <div class="tl-title">분기배당 $1.34로 3.1% 인상 — 64년 연속 증배</div>
+      <div class="tl-desc">이사회가 분기 배당을 3.1% 인상하며 64년 연속 배당 증가 기록 수립. Q1 매출 $24.06B(+9.9%), FY2026 가이던스 추가 상향.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot gold"></div>
+      <div class="tl-date">2026년 7월 7일 — 52주 신고가 $269.43</div>
+      <div class="tl-title">신약 파이프라인 모멘텀 지속으로 사상 최고가 경신</div>
+      <div class="tl-desc">DARZALEX·CARVYKTI 등 Oncology 성장과 실적 기대감으로 52주 신고가 달성.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-date">2026년 7월 15일 — Q2 FY2026 실적, 주가 조정</div>
+      <div class="tl-title">매출 $25.31B 가이던스 상향에도 MedTech 부진 우려로 -2.7%</div>
+      <div class="tl-desc">매출·Adjusted EPS 모두 컨센서스 상회, FY2026 가이던스 재차 상향에도 MedTech 심혈관(특히 heart recovery) 부문 부진 우려로 주가는 오히려 -2.7% 하락. 이후 2거래일간 $253.04까지 재반등.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 7: 투자 포인트 ===================== -->
+<div id="invest" class="section">
+  <div class="section-title">2026년 핵심 투자 포인트</div>
+  <div class="bull-bear">
+    <div class="bb-box">
+      <div class="bb-title bb-bull">🐂 Bull 요인</div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>64년 연속 배당 증가:</strong> S&P500 내에서도 최장 기록급 Dividend King.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>DARZALEX·CARVYKTI·TREMFYA 고성장·가이던스 상향:</strong> 신약 파이프라인 모멘텀.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>52주 수익률 +54.6% — S&P500 대비 +34.9%p:</strong> 압도적 아웃퍼폼.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>탈크 소송 충당금 감소 추세:</strong> GAAP 변동성 완화 국면 진입.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Adj P/E 23.3x·EV/EBITDA 15.9x:</strong> 대형 제약 피어 대비 합리적 밸류에이션.</span></div>
+    </div>
+    <div class="bb-box">
+      <div class="bb-title bb-bear">🐻 Bear 요인</div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>MedTech 심혈관(Cardiovascular) 부문 부진:</strong> 실적일 주가 조정 요인.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>STELARA 특허절벽 지속:</strong> 매출 성장률 -760bp 하방 압력.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>PBR 7.48x:</strong> M&A 중심 성장으로 절대 밸류에이션 부담.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>탈크 소송 리스크 완전 해소 안 됨:</strong> 추가 충당금 가능성 상존.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>52주 신고가 대비 -6.1%:</strong> 최근 실적 발표 후 조정 국면.</span></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">투자의견 요약</div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--text2);">애널리스트 컨센서스:</span> <strong style="color:var(--green)">Buy (23명 분석)</strong></div>
+      <div><span style="color:var(--text2);">평균 목표가:</span> <strong style="color:var(--accent2)">$269.95 (+6.7% 상승여력)</strong></div>
+      <div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107">10월 중순 Q3 FY2026 (예상)</strong></div>
+      <div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">64년 연속 배당 증가의 안정성 + 신약 파이프라인 성장 — 탈크 소송 리스크가 유일한 핵심 변수</strong></div>
+    </div>
+  </div>
+</div>
+
+<div class="disclaimer">
+  ⚠️ 본 위젯은 SEC EDGAR 공시(10-K/10-Q/8-K), Yahoo Finance 주가 데이터 및 공개 뉴스를 기반으로 작성된 정보 제공 목적의 분석 자료입니다. 투자 권고 또는 매매 추천이 아니며, 모든 투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다. 과거 실적이 미래 수익을 보장하지 않습니다.
+</div>
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  renderCharts(id);
+}
+const charts = {};
+
+(function(){
+  const svg=document.getElementById('jnjSvg');
+  if(!svg)return;
+  const W=720,H=220,pL=45,pR=12,pT=12,pB=22;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const prices=[164.74,177.17,185.42,188.87,206.92,206.95,227.25,248.43,244.44,229.85,225.33,253.97,253.04];
+  const mn=Math.min(...prices,162.78)-4, mx=Math.max(...prices,269.43)+4, rng=mx-mn;
+  function py(v){return pT+cH*(1-(v-mn)/rng);}
+  const colW=cW/prices.length;
+
+  [170,200,230,260].forEach(v=>{
+    const y=py(v);
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+    l.setAttribute('stroke','rgba(255,255,255,.08)');l.setAttribute('stroke-width','1');svg.appendChild(l);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',pL-4);t.setAttribute('y',y+4);t.setAttribute('text-anchor','end');
+    t.setAttribute('font-size','9');t.setAttribute('fill','rgba(154,160,184,.8)');
+    t.textContent='$'+v;svg.appendChild(t);
+  });
+
+  const apts=prices.map((v,i)=>`${pL+(i+.5)*colW},${py(v)}`).join(' ');
+  const area=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+  area.setAttribute('points',`${pL+0.5*colW},${pT+cH} ${apts} ${pL+(prices.length-.5)*colW},${pT+cH}`);
+  area.setAttribute('fill','rgba(209,87,114,0.12)');svg.appendChild(area);
+
+  const line=document.createElementNS('http://www.w3.org/2000/svg','polyline');
+  line.setAttribute('points',apts);
+  line.setAttribute('fill','none');line.setAttribute('stroke','#d15772');line.setAttribute('stroke-width','2');
+  svg.appendChild(line);
+
+  const addMark=(idx,y,label,isLow)=>{
+    const cx=pL+(idx+.5)*colW;
+    const cy=isLow?y+13:y-9;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',Math.min(Math.max(cx,40),W-50));t.setAttribute('y',cy);
+    t.setAttribute('text-anchor','middle');t.setAttribute('font-size','9');
+    t.setAttribute('fill',isLow?'#5aa4e8':'#ff8a94');t.setAttribute('font-weight','500');
+    t.textContent=label;svg.appendChild(t);
+  };
+  addMark(0,py(162.78),'$162.78 최저(\'25.07)',true);
+  addMark(12,py(269.43),'$269.43 최고(\'26.07)',false);
+
+  [["'25.07",0],["'25.10",3],["'26.01",6],["'26.04",9],["'26.07",12]].forEach(([m,i])=>{
+    const cx=pL+(i+.5)*colW;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',Math.min(cx,W-20));t.setAttribute('y',H-3);
+    t.setAttribute('text-anchor','middle');t.setAttribute('font-size','9');
+    t.setAttribute('fill','rgba(154,160,184,.8)');t.textContent=m;svg.appendChild(t);
+  });
+})();
+
+function renderFundChart() {
+  const ctx = document.getElementById('jnjRevChart');
+  if (!ctx || charts['fund']) return;
+  charts['fund'] = new Chart(ctx,{
+    data:{
+      labels:['Q3 \'25','Q4 \'25','Q1 \'26','Q2 \'26'],
+      datasets:[
+        {type:'bar',label:'매출($B)',data:[23.99,24.56,24.06,25.31],backgroundColor:'#a01d3a',borderRadius:4,yAxisID:'y'},
+        {type:'line',label:'GAAP EPS($)',data:[2.12,2.10,2.14,2.27],borderColor:'#2ecc71',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'},
+        {type:'line',label:'Adjusted EPS($)',data:[2.80,2.46,2.70,2.90],borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:3,borderWidth:2,fill:false,yAxisID:'y2',borderDash:[4,4]}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#9aa0b8',font:{size:10}}}},
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}},
+        y2:{position:'right',min:0,max:3.5,grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v}}
+      }
+    }
+  });
+}
+
+function renderPeerChart() {
+  const ctx = document.getElementById('peerChart');
+  if (!ctx || charts['peer']) return;
+  charts['peer'] = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['PFE','JNJ','MRK','LLY'],
+      datasets:[{
+        label:'P/E (TTM)',
+        data:[7.9,29.3,36.0,40.5],
+        backgroundColor:['rgba(154,160,184,0.4)','#d15772','rgba(154,160,184,0.4)','rgba(154,160,184,0.4)'],
+        borderRadius:4,borderSkipped:false
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`P/E ${ctx.raw}x`}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{max:46,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
+      }
+    }
+  });
+}
+
+function renderNiChart() {
+  const ctx = document.getElementById('niChart');
+  if (!ctx || charts['ni']) return;
+  charts['ni'] = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['Q3 \'25','Q4 \'25','Q1 \'26','Q2 \'26'],
+      datasets:[{
+        label:'GAAP 순이익($B)',
+        data:[5.15,5.12,5.24,5.53],
+        backgroundColor:['rgba(154,160,184,0.4)','rgba(154,160,184,0.4)','rgba(154,160,184,0.4)','#a01d3a'],
+        borderRadius:4,borderSkipped:false
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`$${ctx.raw}B`}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}}
+      }
+    }
+  });
+}
+
+function renderCharts(sectionId) {
+  setTimeout(() => {
+    if (sectionId === 'fund') renderFundChart();
+    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'us') renderNiChart();
+  }, 50);
+}
+</script>
+</body>
+</html>
