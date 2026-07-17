@@ -142,9 +142,14 @@
     .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; }
     .per-share-grid { grid-template-columns: 1fr 1fr; } .stage-grid { grid-template-columns: 1fr 1fr; } .price-main { font-size: 24px; }
   }
+  body { padding-top: 34px; }
+  .back-bar { position: fixed; top: 0; left: 0; right: 0; height: 34px; background: rgba(10,11,22,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 16px; }
+  .back-bar a { color: var(--text2); font-size: 12px; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 6px; transition: color 0.2s; }
+  .back-bar a:hover { color: var(--accent2); }
 </style>
 </head>
 <body>
+<div class="back-bar"><a href="../index.html">&#8592; 전체 종목 목록</a></div>
 
 <div class="header">
   <div class="header-top">
