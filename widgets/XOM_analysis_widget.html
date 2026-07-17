@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XOM 종합 분석 위젯</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117; --bg2: #1a1d27; --bg3: #22263a; --border: #2e3347;
+    --text: #e8eaf0; --text2: #9aa0b8; --text3: #5c6282;
+    --accent: #2a5c8a; --accent2: #5b90c2; --accent3: #14293d;
+    --bull: #D85A30; --bear: #185FA5; --ma5: #ff6b9d; --ma20: #9b59b6; --ma60: #f0c040; --ma120: #27ae60;
+    --green: #2ecc71; --red: #e74c3c; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
+  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; }
+  .header { background: linear-gradient(135deg, #0a1620 0%, #0f1117 40%, #1a1d27 100%); border-bottom: 2px solid var(--accent3); padding: 28px 32px 24px; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(91,144,194,0.14) 0%, transparent 70%); pointer-events: none; }
+  .header-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .ticker-block { display: flex; align-items: center; gap: 16px; }
+  .ticker-badge { background: linear-gradient(135deg, var(--accent3), var(--accent)); color: #fff; font-size: 13px; font-weight: 800; padding: 5px 12px; border-radius: 6px; letter-spacing: 1px; }
+  .company-name { font-size: 22px; font-weight: 700; color: var(--text); }
+  .company-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .price-block { text-align: right; }
+  .price-main { font-size: 32px; font-weight: 800; color: var(--accent2); letter-spacing: -1px; }
+  .price-change { font-size: 13px; color: var(--green); font-weight: 600; }
+  .header-meta { display: flex; gap: 24px; margin-top: 16px; flex-wrap: wrap; }
+  .meta-item { display: flex; flex-direction: column; }
+  .meta-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .meta-value { font-size: 13px; font-weight: 600; color: var(--text2); margin-top: 2px; }
+  .meta-value.highlight { color: var(--accent2); }
+  .nav { display: flex; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
+  .nav-btn:hover { color: var(--text); background: var(--bg3); }
+  .nav-btn.active { background: var(--accent3); color: var(--accent2); }
+  .section { display: none; padding: 28px 32px; }
+  .section.active { display: block; }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--accent2); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; display: inline-block; }
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px; }
+  .card-title { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; font-weight: 600; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .chart-wrap { position: relative; }
+  .chart-wrap canvas { max-width: 100%; }
+  .price-chart-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+  .stat-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .stat-value { font-size: 20px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
+  .stat-sub { font-size: 11px; color: var(--text3); }
+  .stat-value.up { color: var(--green); }
+  .stat-value.down { color: var(--red); }
+  .stat-value.gold { color: var(--accent2); }
+  .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .ma-row:last-child { border-bottom: none; }
+  .ma-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+  .ma-name { display: flex; align-items: center; font-size: 13px; color: var(--text2); }
+  .ma-val { font-size: 13px; font-weight: 600; }
+  .ma-status { font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
+  .status-above { background: rgba(46,204,113,0.15); color: var(--green); }
+  .status-below { background: rgba(231,76,60,0.15); color: var(--red); }
+  .status-amber { background: rgba(240,192,64,0.18); color: var(--ma60); }
+  .zone-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .zone-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg3); border-radius: 6px; }
+  .zone-label { font-size: 12px; color: var(--text2); }
+  .zone-val { font-size: 13px; font-weight: 700; color: var(--accent2); }
+  .zone-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
+  .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
+  .tag-current { background: rgba(91,144,194,0.2); color: var(--accent2); }
+  .val-item { margin-bottom: 18px; }
+  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
+  .val-track { height: 8px; background: var(--bg3); border-radius: 4px; position: relative; overflow: hidden; }
+  .val-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+  .val-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+  .val-low { font-size: 10px; color: var(--green); }
+  .val-mid { font-size: 10px; color: var(--accent2); text-align: center; }
+  .val-high { font-size: 10px; color: var(--red); }
+  .stage-badge { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
+  .stage-1 { background: rgba(46,204,113,0.2); color: #2ecc71; }
+  .stage-2 { background: rgba(39,174,96,0.2); color: #27ae60; }
+  .stage-3 { background: rgba(91,144,194,0.2); color: var(--accent2); }
+  .stage-4 { background: rgba(231,126,35,0.2); color: #e67e22; }
+  .stage-5 { background: rgba(231,76,60,0.2); color: var(--red); }
+  .stage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .stage-mini { text-align: center; padding: 10px 4px; border-radius: 8px; }
+  .stage-mini-num { font-size: 15px; font-weight: 700; }
+  .stage-mini-label { font-size: 9px; margin-top: 2px; }
+  .scenario-card { border-radius: 8px; padding: 14px; }
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent2); border: 2px solid var(--bg); }
+  .tl-dot.red { background: var(--red); }
+  .tl-dot.green { background: var(--green); }
+  .tl-dot.blue { background: var(--blue); }
+  .tl-dot.gold { background: var(--accent2); }
+  .tl-dot.today { background: #ffc107; }
+  .tl-date { font-size: 10px; color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+  .tl-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 3px 0; }
+  .tl-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .bull-bear { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .bb-box { background: var(--bg3); border-radius: var(--radius); padding: 16px; }
+  .bb-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .bb-bull { color: var(--bull); }
+  .bb-bear { color: var(--bear); }
+  .bb-item { display: flex; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .bb-icon { flex-shrink: 0; margin-top: 2px; }
+  .driver-item { display: flex; gap: 12px; padding: 12px; background: var(--bg3); border-radius: 8px; margin-bottom: 10px; }
+  .driver-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent3); color: var(--accent2); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .driver-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .driver-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
+  .per-share-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .ps-card { background: var(--bg3); border-radius: 8px; padding: 16px; text-align: center; }
+  .ps-icon { font-size: 22px; margin-bottom: 6px; }
+  .ps-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .ps-value { font-size: 22px; font-weight: 800; color: var(--accent2); }
+  .ps-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
+  .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+  .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
+  .disclaimer { margin: 28px 32px 16px; padding: 12px 16px; background: rgba(91,144,194,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
+  .info-box { background: rgba(91,144,194,0.1); border: 1px solid var(--accent3); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; color: var(--text2); }
+  @media (max-width: 600px) {
+    .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
+    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; }
+    .per-share-grid { grid-template-columns: 1fr 1fr; } .stage-grid { grid-template-columns: 1fr 1fr; } .price-main { font-size: 24px; }
+  }
+  body { padding-top: 34px; }
+  .back-bar { position: fixed; top: 0; left: 0; right: 0; height: 34px; background: rgba(10,11,22,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; padding: 0 16px; }
+  .back-bar a { color: var(--text2); font-size: 12px; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 6px; transition: color 0.2s; }
+  .back-bar a:hover { color: var(--accent2); }
+</style>
+</head>
+<body>
+<div class="back-bar"><a href="../index.html">&#8592; 전체 종목 목록</a></div>
+
+<div class="today-banner">📅 <strong>D-14 · 7/31(금) 개장 전 FY2026 Q2 실적 발표 예정</strong> — 컨센서스 EPS $1.93 · 중동發 유가 급등으로 Upstream 부문 전분기 대비 $3.5~3.9B 증익 가이던스 사전공시</div>
+
+<div class="header">
+  <div class="header-top">
+    <div class="ticker-block">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+          <span class="ticker-badge">XOM</span>
+          <span style="font-size:11px;color:var(--accent2);font-weight:600;">NYSE · 글로벌 통합 에너지 기업 · 156년 역사의 Dividend King</span>
+        </div>
+        <div class="company-name">Exxon Mobil Corporation</div>
+        <div class="company-sub">Upstream(원유·가스 생산)·Product Solutions(정제·화학)·Low Carbon Solutions · 43년 연속 배당 증가 · S&P 500 시총 19위권</div>
+      </div>
+    </div>
+    <div class="price-block">
+      <div class="price-main">$147.36</div>
+      <div class="price-change">▲ +0.97% (2026.07.17 기준)</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px;">52주 최저 $105.53 (2025.08.11) · 최고 $176.41 (2026.03.30)</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$610.1B</span></div>
+    <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Energy</span></div>
+    <div class="meta-item"><span class="meta-label">Q1 FY26 매출</span><span class="meta-value">$85.1B (+2.4%)</span></div>
+    <div class="meta-item"><span class="meta-label">P/E (TTM)</span><span class="meta-value">24.8x</span></div>
+    <div class="meta-item"><span class="meta-label">GAAP EPS (TTM)</span><span class="meta-value">$5.94</span></div>
+    <div class="meta-item"><span class="meta-label">분기 배당</span><span class="meta-value">$1.03 (+4%)</span></div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
+  <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
+  <button class="nav-btn" onclick="showSection('pershare')">💰 Per-Share</button>
+  <button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button>
+  <button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button>
+  <button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button>
+  <button class="nav-btn" onclick="showSection('invest')">🎯 투자 포인트</button>
+</div>
+
+<!-- ===================== SECTION 1: 기술적 분석 ===================== -->
+<div id="tech" class="section active">
+  <div class="section-title">기술적 분석 — 월별 종가 기준 (2025.07 ~ 2026.07) · 52주 수익률 +36.7%</div>
+  <div class="price-chart-container">
+    <div style="font-size:11px;color:var(--text3);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
+      <span>52주 최저 $105.53 (2025.08) → 52주 최고 $176.41 (2026.03) → 현재 $147.36</span>
+      <span style="color:var(--accent2);font-weight:600;">현재가 $147.36</span>
+    </div>
+    <svg id="xomSvg" viewBox="0 0 720 220" width="100%" style="display:block;background:var(--bg3);border-radius:8px;padding:4px;" role="img" aria-label="XOM 52주 주가 차트"></svg>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">핵심 가격대</div>
+      <div class="zone-list">
+        <div class="zone-item"><span class="zone-label">52주 최고</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$176.41 (2026.03.30)</span><span class="zone-tag tag-resist">저항선</span></div></div>
+        <div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$147.36 (고점 대비 -16.5%)</span><span class="zone-tag tag-current">현재</span></div></div>
+        <div class="zone-item"><span class="zone-label">MA60 지지</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$146.97</span><span class="zone-tag tag-support">지지선</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$105.53 (2025.08.11)</span><span class="zone-tag tag-support">강지지</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--green);">+36.7%</span></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">이동평균선 현황</div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기) $145.48</span><span class="ma-status status-below">현재가 하회</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기) $139.81</span><span class="ma-status status-above">상승 지지</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기) $146.97</span><span class="ma-status status-amber">현재가와 거의 일치</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기) $149.75</span><span class="ma-status status-below">현재가 소폭 상회 저항</span></div>
+      <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">
+        ⚠️ MA20&lt;MA5&lt;MA60&lt;현재가&lt;MA120 — 완전 정배열은 아니며 3월 고점($176.41) 이후 조정을 거쳐 단기/중기선 사이에서 방향을 탐색 중인 구간
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">구간별 패턴 분석</div>
+    <div class="grid-4">
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.07~10 — $111~115 박스권</div><div style="font-size:12px;color:var(--text2);">안정적 유가 환경 속 완만한 등락. Q3 2025 실적(매출 $85.3B·EPS $1.76)은 견조했으나 특별한 모멘텀 부재.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.11~12 — 반등 시작</div><div style="font-size:12px;color:var(--text2);">배당 4% 인상(43년 연속, Dividend King) 발표. 연말 랠리로 $120대 진입.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.01~03 — 52주 신고가 $176.41</div><div style="font-size:12px;color:var(--text2);">Permian 1.8M boe/d·Guyana 900K+bbl/d 생산 기록. Argus 등 목표가 상향. 유가 강세 랠리로 신고가 경신.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.04~07 — 조정 후 지정학 반등</div><div style="font-size:12px;color:var(--text2);">차익실현으로 -22%까지 조정, 5/4 Q1 실적서 GAAP EPS -43%(파생상품 손실). 7월 이란發 지정학 긴장으로 유가 급등, $147.36로 재반등.</div></div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;">
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">43년 연속 배당 증가 — Dividend King</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">Permian·Guyana 생산 기록 경신</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">52주 수익률 +36.7% — S&P500(+19.6%) 대비 +17.1%p 아웃퍼폼</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(255,193,7,0.18);color:#ffc107;">7/31 Q2 FY2026 실적 발표 예정 — Upstream 증익 가이던스 기공시</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">Q1 FY26 GAAP EPS -43% YoY — 파생상품 타이밍 손실(일회성) 영향</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">52주 고점 대비 -16.5% — 아직 신고가 미회복</span>
+  </div>
+</div>
+
+<!-- ===================== SECTION 2: 기본적 분석 ===================== -->
+<div id="fund" class="section">
+  <div class="section-title">기본적 분석 — 분기 재무제표 (SEC 10-Q/10-K 기준)</div>
+  <div class="card">
+    <div class="card-title">분기 매출 및 GAAP EPS 추이 (Q1 FY26 파생상품 타이밍 손실 영향 표시)</div>
+    <div class="chart-wrap" style="height:260px;"><canvas id="xomRevChart"></canvas></div>
+  </div>
+  <div class="grid-3">
+    <div class="stat-box"><div class="stat-label">Q1 FY26 매출</div><div class="stat-value up">$85.1B</div><div class="stat-sub">▲2.4% YoY</div></div>
+    <div class="stat-box"><div class="stat-label">Q1 FY26 GAAP 순이익</div><div class="stat-value down">$4.18B</div><div class="stat-sub">▼45.8% YoY (파생상품 타이밍 손실 $3.9B 영향)</div></div>
+    <div class="stat-box"><div class="stat-label">Q1 FY26 GAAP EPS</div><div class="stat-value down">$1.00</div><div class="stat-sub">▼43.2% YoY</div></div>
+    <div class="stat-box"><div class="stat-label">Q1 FY26 조정(Non-GAAP) EPS</div><div class="stat-value up">$1.16</div><div class="stat-sub">컨센서스 상회</div></div>
+    <div class="stat-box"><div class="stat-label">Permian 생산량</div><div class="stat-value up">1.8M boe/d</div><div class="stat-sub">FY2025 Q4 기록 경신</div></div>
+    <div class="stat-box"><div class="stat-label">Guyana 생산량</div><div class="stat-value up">900K+ bbl/d</div><div class="stat-sub">총생산 기록</div></div>
+    <div class="stat-box"><div class="stat-label">Q1 FY26 자사주매입</div><div class="stat-value up">$4.9B</div><div class="stat-sub">연간 $20B 프로그램 온페이스</div></div>
+    <div class="stat-box"><div class="stat-label">Q2 FY26(E) 컨센서스 EPS</div><div class="stat-value up">$1.93</div><div class="stat-sub">전분기 대비 회복 전망</div></div>
+    <div class="stat-box"><div class="stat-label">Q2 Upstream 증익 가이던스</div><div class="stat-value up">+$3.5~3.9B</div><div class="stat-sub">전분기 대비(QoQ), 유가 상승 효과</div></div>
+  </div>
+  <div style="margin-top:12px;font-size:12px;color:var(--text3);">Q1 FY26 자사주매입 $4.9B · 2026년 연간 $20.0B 규모 자사주 매입 프로그램 온페이스 진행 중 · 43년 연속 배당 증가 유지</div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">핵심 성장 동력 — Upstream 저원가 자산 vs Product Solutions 마진 vs 지정학 프리미엄</div>
+    <div class="grid-3">
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">Upstream (원유·가스 생산)</div><div style="font-size:12px;color:var(--text2);">Permian 1.8M boe/d 기록<br>Guyana 900K+bbl/d 기록<br>저원가 자산 비중 확대<br>사이클 저점에서도 견조한 마진</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--blue);font-weight:700;margin-bottom:6px;">Product Solutions (정제·화학)</div><div style="font-size:12px;color:var(--text2);">정제마진 변동성 지속<br>화학 부문 약세 국면<br>Q1 실적 부진 요인 중 하나<br>마진 정상화 시 반등 여력</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">중동 지정학 프리미엄 (단기 촉매)</div><div style="font-size:12px;color:var(--text2);">이란 관련 긴장으로 유가 급등<br>Q2 Upstream 단기 windfall<br>공급망 리스크와 동전의 양면<br>지속성은 지정학 상황에 좌우</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">핵심 투자 논리 — GAAP 실적 급락은 사업 악화인가, 회계상 타이밍 효과인가</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.7;">Q1 FY2026 GAAP EPS는 $1.00으로 전년 동기($1.76) 대비 43% 급락했지만, 이 중 상당 부분은 원유 파생상품에 대한 $3.9B 규모의 마크투마켓 타이밍 효과(실제 현금흐름과 무관한 회계상 손실)에서 비롯됐다. 같은 분기 조정(Non-GAAP) EPS $1.16은 오히려 컨센서스를 상회했다. <strong style="color:var(--text);">Permian·Guyana의 저원가 자산 생산 기록 경신은 유가 사이클과 무관하게 구조적 수익성이 개선되고 있음을 시사 — "유가에 베팅하는 기업"인지 "저원가 포트폴리오로 사이클을 방어하는 기업"인지가 핵심 논쟁점.</strong></div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 3: Per-Share ===================== -->
+<div id="pershare" class="section">
+  <div class="section-title">Per-Share 지표 (TTM 기준 · 약 41.4억 주)</div>
+  <div class="per-share-grid">
+    <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS · TTM</div><div class="ps-value">$5.94</div><div class="ps-sub">'25.Q2~'26.Q1 합산 · PER 24.8x</div><div style="margin-top:5px;"><span class="stage-badge stage-4">높음(일회성 손실 왜곡)</span></div></div>
+    <div class="ps-card"><div class="ps-icon">📊</div><div class="ps-label">Forward EPS(컨센서스)</div><div class="ps-value">~$12.52</div><div class="ps-sub">Forward P/E 11.8x</div><div style="margin-top:5px;"><span class="stage-badge stage-2">저평가(Fwd P/E)</span></div></div>
+    <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS · 주당순자산</div><div class="ps-value">$62.65</div><div class="ps-sub">'25 자기자본 $259.4B</div><div style="margin-top:5px;"><span class="stage-badge stage-3">적정(PBR 2.35x)</span></div></div>
+    <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 · FY2025</div><div class="ps-value">$5.68</div><div class="ps-sub">FY25 FCF $23.61B</div><div style="margin-top:5px;"><span class="stage-badge stage-3">적정(FCF수익률)</span></div></div>
+  </div>
+  <div style="font-size:11px;color:var(--text3);margin-top:10px;">* Trailing GAAP PER 24.8x가 높아 보이는 것은 Q1 FY2026 $3.9B 파생상품 타이밍 손실로 분모(EPS)가 일시적으로 낮아진 착시 효과 — Forward P/E는 11.8x로 정상 궤도. PBR·EV/EBITDA는 에너지 섹터 내 견조한 수준.</div>
+</div>
+
+<!-- ===================== SECTION 4: 밸류에이션 ===================== -->
+<div id="valuation" class="section">
+  <div class="section-title">상대 투자지표 — Trailing PER의 착시를 걷어내면 저평가~적정 구간</div>
+  <div class="info-box">
+    <strong>핵심 전제:</strong> Trailing GAAP EPS는 Q1 2026 일회성 파생상품 손실로 왜곡되어 있어 PER 24.8x가 실제보다 비싸 보이는 착시가 존재. Forward P/E 11.8x·EV/EBITDA 9.6x 등 정상화 지표 기준으로는 에너지 섹터 내에서도 오히려 저평가~적정 구간.
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">멀티플 5단계 평가</div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PER (GAAP TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">24.8x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:82%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-labels"><span class="val-low">저(8x)</span><span class="val-mid">적정(14x)</span><span class="val-high">고(22x)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">$147.36÷$5.94 · 일회성 파생상품 손실로 분모(EPS)가 눌린 결과, 정상화 시 크게 낮아질 값</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">Forward P/E</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">11.8x</span><span class="stage-badge stage-2">2단계 저평가</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:35%;background:linear-gradient(90deg,#2ecc71,#27ae60);"></div></div>
+        <div class="val-labels"><span class="val-low">저(8x)</span><span class="val-mid">적정(14x)</span><span class="val-high">고(22x)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">애널리스트 컨센서스 EPS 기준 — Trailing PER 대비 훨씬 정상화된 밸류에이션</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">2.35x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:52%;background:linear-gradient(90deg,#2ecc71,#5b90c2);"></div></div>
+        <div class="val-labels"><span class="val-low">저(1x)</span><span class="val-mid">적정(2x)</span><span class="val-high">고(4x)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">에너지 슈퍼메이저 평균 대비 견조, ROE 두자릿수 유지</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">9.6x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:60%;background:linear-gradient(90deg,#2ecc71,#5b90c2);"></div></div>
+        <div class="val-labels"><span class="val-low">저(5x)</span><span class="val-mid">적정(8x)</span><span class="val-high">고(12x)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV $642.9B÷FY25 EBITDA $66.9B · Trailing PER과 달리 왜곡되지 않은 정상 지표</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">에너지 슈퍼메이저 피어 P/E 비교</div>
+      <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text2);">XOM의 Trailing P/E 24.8x는 Shell(15.0x)보다 높고 Chevron(31.5x)보다는 낮은 수준. 다만 이는 일회성 손실로 왜곡된 값 — Forward P/E(11.8x) 기준으로는 피어 그룹 내 가장 저평가된 수준으로 재평가됨.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">밸류에이션 5단계</div>
+    <div class="stage-grid">
+      <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div></div>
+      <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div><div style="font-size:8px;color:#2ecc71;background:rgba(46,204,113,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">Fwd P/E</div></div>
+      <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:8px;color:var(--accent2);background:rgba(91,144,194,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PBR·EV/EBITDA</div></div>
+      <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:8px;color:#e67e22;background:rgba(231,126,35,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">Trailing PER</div></div>
+      <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">시나리오별 공정가치 분석</div>
+    <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — 지정학 리스크 완화·유가 재하락</div>
+      <div style="font-size:12px;color:var(--text2);">이란 관련 긴장 완화로 유가가 중기 평균 수준(WTI $60대)으로 복귀, 파생상품 변동성이 반복될 경우 → 공정가치 <strong style="color:var(--red);">$115~130/주</strong> (52주 저점 재테스트권)</div>
+    </div>
+    <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 현 유가 레벨 유지·자사주 매입 지속</div>
+      <div style="font-size:12px;color:var(--text2);">중동 프리미엄 일부 유지, Permian·Guyana 생산 증가 지속, $20B 자사주 매입 온페이스 → 공정가치 <strong style="color:var(--text);">$155~172/주</strong> (애널리스트 평균 목표가 $167.4와 부합)</div>
+    </div>
+    <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — 구조적 고유가 지속·Forward 멀티플 재평가</div>
+      <div style="font-size:12px;color:var(--text2);">중동 공급 차질 장기화로 고유가 국면 지속, 저원가 자산 마진 극대화, Forward P/E 14x대 재평가 → 공정가치 <strong style="color:var(--green);">$185~210/주</strong></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">종합 밸류에이션 — Trailing PER 착시를 걷어내면 저평가~적정 구간</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;">Trailing PER만 보면 4단계(높음)로 보이지만, 이는 Q1 2026 일회성 파생상품 손실에 따른 착시. <strong style="color:var(--text);">Forward P/E 11.8x·EV/EBITDA 9.6x는 오히려 2~3단계(저평가~적정)로, 실질 리스크는 밸류에이션 수준이 아니라 유가 변동성 그 자체다.</strong> 공정가치 $115(Bear)~$210(Bull) — 저원가 자산 포트폴리오와 강력한 주주환원이 하방을 지지하는 구조.</div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 5: US 특화 ===================== -->
+<div id="us" class="section">
+  <div class="section-title">US 특화 — S&P 500 성과 · 경쟁 구도 · 다가오는 실적 체크포인트</div>
+  <div class="rel-container">
+    <div class="rel-title">S&P 500 상대 수익률</div>
+    <div class="grid-3">
+      <div class="stat-box"><div class="stat-label">XOM 52주</div><div class="stat-value up">+36.7%</div></div>
+      <div class="stat-box"><div class="stat-label">S&P 500 52주</div><div class="stat-value">+19.6%</div></div>
+      <div class="stat-box"><div class="stat-label">알파 (초과수익)</div><div class="stat-value up">+17.1%p</div><div class="stat-sub">뚜렷한 아웃퍼폼</div></div>
+    </div>
+    <div class="zone-list" style="margin-top:12px;">
+      <div class="zone-item"><span class="zone-label">시가총액 순위</span><span class="zone-val">S&P500 내 약 19위권</span></div>
+      <div class="zone-item"><span class="zone-label">배당수익률</span><span class="zone-val">2.80% (분기 $1.03)</span></div>
+      <div class="zone-item"><span class="zone-label">섹터</span><span class="zone-val">Energy · Oil & Gas Integrated</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">에너지 슈퍼메이저 경쟁 구도</div>
+    <div class="zone-list">
+      <div class="zone-item"><span class="zone-label">Chevron (직접 경쟁)</span><span class="zone-val">시총 $330.7B · P/E 31.5x — 더 높은 밸류에이션</span></div>
+      <div class="zone-item"><span class="zone-label">Shell (글로벌 슈퍼메이저)</span><span class="zone-val">시총 $213.8B · P/E 15.0x — 낮은 밸류에이션</span></div>
+      <div class="zone-item"><span class="zone-label">ConocoPhillips (순수 E&P)</span><span class="zone-val">시총 $126.0B · P/E 19.8x — 업스트림 특화</span></div>
+      <div class="zone-item"><span class="zone-label">이란發 지정학 긴장</span><span class="zone-val" style="color:var(--green);">유가 상단 지지 요인이자 공급망 리스크 — 양면적</span></div>
+      <div class="zone-item"><span class="zone-label">Permian·Guyana 저원가 자산</span><span class="zone-val" style="color:var(--green);">구조적 경쟁우위 — 사이클 저점 방어력</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">분기 순이익 추이 (GAAP)</div>
+    <div class="chart-wrap" style="height:200px;"><canvas id="niChart"></canvas></div>
+    <div style="margin-top:12px;font-size:12px;color:var(--text2);line-height:1.8;">
+      <strong style="color:var(--text);">7/31 실적 4대 체크포인트:</strong><br>
+      ① Upstream 증익 가이던스($3.5~3.9B) 실현 여부 → 유가 windfall의 실제 반영 규모<br>
+      ② Permian·Guyana 생산량 추가 기록 여부 → 저원가 자산 확대 속도<br>
+      ③ $20B 자사주 매입 프로그램 진행 속도 → 주주환원 지속성<br>
+      ④ 파생상품 마크투마켓 영향 정상화 여부 → GAAP·Non-GAAP 갭 축소 확인
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 6: 시계열 뉴스 ===================== -->
+<div id="news" class="section">
+  <div class="section-title">시계열 주요 뉴스 (2025.07 ~ 2026.07)</div>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;color:var(--text2);">
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent2);display:inline-block;"></span>초대형 이벤트</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;"></span>긍정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block;"></span>부정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--text3);display:inline-block;"></span>중립</span>
+  </div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2025년 7월 — Q3 FY2025 실적 (2025.11.03 발표분 기준 반영)</div>
+      <div class="tl-title">매출 $85.3B · GAAP EPS $1.76 · $111~115 박스권</div>
+      <div class="tl-desc">안정적 유가 환경 속 견조한 실적. 특별한 모멘텀 없이 완만한 등락 지속.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">2025년 11월 — 배당 4% 인상</div>
+      <div class="tl-title">43년 연속 배당 증가 — Dividend King 지위 유지</div>
+      <div class="tl-desc">이사회가 분기 배당을 4% 인상. 반세기 가까운 연속 증배 기록을 이어가며 연말 랠리의 기점이 됨.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot gold"></div>
+      <div class="tl-date">2026년 3월 30일 — 52주 신고가 $176.41</div>
+      <div class="tl-title">Permian·Guyana 생산 기록 · Argus 목표가 $169로 상향</div>
+      <div class="tl-desc">Permian 1.8M boe/d, Guyana 900K+bbl/d 생산 기록 경신을 배경으로 애널리스트 목표가 상향 랠리 지속, 52주 신고가 경신.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-date">2026년 4~5월 — 조정 및 Q1 실적 발표</div>
+      <div class="tl-title">차익실현으로 -22% 조정 · 5/4 Q1 실적 GAAP EPS -43% YoY</div>
+      <div class="tl-desc">3월 고점 이후 유가 조정과 차익실현으로 $136대까지 하락. Q1 실적에서 GAAP EPS $1.00(-43% YoY)을 발표했으나, $3.9B 규모 파생상품 타이밍 손실이 핵심 원인이었고 조정(Non-GAAP) EPS $1.16은 컨센서스를 상회.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2026년 5월 — 자사주 매입 지속</div>
+      <div class="tl-title">Q1 자사주매입 $4.9B · 연간 $20B 프로그램 온페이스</div>
+      <div class="tl-desc">일회성 GAAP 손실에도 불구하고 자사주 매입 속도는 유지, 연간 $20.0B 프로그램 궤도 유지를 재확인.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot gold"></div>
+      <div class="tl-date">2026년 7월 — 이란發 지정학 긴장, 유가 급등</div>
+      <div class="tl-title">Q2 Upstream 증익 가이던스(+$3.5~3.9B) 사전공시 · $147.36 반등</div>
+      <div class="tl-desc">미국-이란 갈등과 유조선 항로 차질로 원유가 4% 이상 급등. Exxon은 이를 반영해 Q2 Upstream 부문이 전분기 대비 $3.5~3.9B 증익할 것이라는 가이던스를 사전 공시, 주가는 $130대에서 $147.36까지 반등.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 7: 투자 포인트 ===================== -->
+<div id="invest" class="section">
+  <div class="section-title">2026년 핵심 투자 포인트</div>
+  <div class="bull-bear">
+    <div class="bb-box">
+      <div class="bb-title bb-bull">🐂 Bull 요인</div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Permian 1.8M boe/d·Guyana 900K+bbl/d 생산 기록:</strong> 저원가 자산 구조적 확대.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>43년 연속 배당 증가 + $20B 자사주 매입 온페이스:</strong> 강력한 주주환원.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Forward P/E 11.8x·EV/EBITDA 9.6x:</strong> Trailing PER과 달리 정상화 지표는 저평가.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>중동發 유가 강세·Q2 Upstream 증익 가이던스 사전공시:</strong> 단기 실적 모멘텀.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>52주 수익률 +36.7% — S&P500 대비 +17.1%p 아웃퍼폼:</strong> 검증된 주가 흐름.</span></div>
+    </div>
+    <div class="bb-box">
+      <div class="bb-title bb-bear">🐻 Bear 요인</div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>Q1 GAAP EPS -43% YoY:</strong> 파생상품 타이밍 손실 변동성이 반복될 리스크.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>Trailing PER 24.8x:</strong> 절대 레벨은 에너지 섹터 평균 상단.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>유가 의존적 비즈니스:</strong> 지정학 리스크 완화 시 Upstream 증익분 소멸 가능.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>Product Solutions(정제·화학) 마진 약세 지속:</strong> 실적 발목.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>52주 고점 대비 -16.5%:</strong> 아직 신고가 미회복, 변동성 큰 구간.</span></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">투자의견 요약</div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--text2);">애널리스트 컨센서스:</span> <strong style="color:var(--green)">Moderate Buy (24명 분석)</strong></div>
+      <div><span style="color:var(--text2);">평균 목표가:</span> <strong style="color:var(--accent2)">$167.38 (+13.6% 상승여력)</strong></div>
+      <div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107">7/31 개장 전 Q2 FY2026</strong></div>
+      <div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">저원가 자산 구조 + 유가 사이클 수혜 — Trailing PER 착시를 걷어내면 매력적인 밸류에이션</strong></div>
+    </div>
+  </div>
+</div>
+
+<div class="disclaimer">
+  ⚠️ 본 위젯은 SEC EDGAR 공시(10-K/10-Q/8-K), Yahoo Finance 주가 데이터 및 공개 뉴스를 기반으로 작성된 정보 제공 목적의 분석 자료입니다. 투자 권고 또는 매매 추천이 아니며, 모든 투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다. 과거 실적이 미래 수익을 보장하지 않습니다.
+</div>
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  renderCharts(id);
+}
+const charts = {};
+
+(function(){
+  const svg=document.getElementById('xomSvg');
+  if(!svg)return;
+  const W=720,H=220,pL=45,pR=12,pT=12,pB=22;
+  const cW=W-pL-pR,cH=H-pT-pB;
+  const prices=[111.64,114.29,112.75,114.36,115.92,120.34,141.4,152.5,169.66,154.33,145.26,136.72,147.36];
+  const mn=Math.min(...prices,105.53)-4, mx=Math.max(...prices,176.41)+4, rng=mx-mn;
+  function py(v){return pT+cH*(1-(v-mn)/rng);}
+  const colW=cW/prices.length;
+
+  [110,130,150,170].forEach(v=>{
+    const y=py(v);
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+    l.setAttribute('stroke','rgba(255,255,255,.08)');l.setAttribute('stroke-width','1');svg.appendChild(l);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',pL-4);t.setAttribute('y',y+4);t.setAttribute('text-anchor','end');
+    t.setAttribute('font-size','9');t.setAttribute('fill','rgba(154,160,184,.8)');
+    t.textContent='$'+v;svg.appendChild(t);
+  });
+
+  const apts=prices.map((v,i)=>`${pL+(i+.5)*colW},${py(v)}`).join(' ');
+  const area=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+  area.setAttribute('points',`${pL+0.5*colW},${pT+cH} ${apts} ${pL+(prices.length-.5)*colW},${pT+cH}`);
+  area.setAttribute('fill','rgba(91,144,194,0.12)');svg.appendChild(area);
+
+  const line=document.createElementNS('http://www.w3.org/2000/svg','polyline');
+  line.setAttribute('points',apts);
+  line.setAttribute('fill','none');line.setAttribute('stroke','#5b90c2');line.setAttribute('stroke-width','2');
+  svg.appendChild(line);
+
+  const addMark=(idx,y,label,isLow)=>{
+    const cx=pL+(idx+.5)*colW;
+    const cy=isLow?y+13:y-9;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',Math.min(Math.max(cx,40),W-50));t.setAttribute('y',cy);
+    t.setAttribute('text-anchor','middle');t.setAttribute('font-size','9');
+    t.setAttribute('fill',isLow?'#5aa4e8':'#ff8a94');t.setAttribute('font-weight','500');
+    t.textContent=label;svg.appendChild(t);
+  };
+  addMark(1,py(105.53),'$105.53 최저(\'25.08)',true);
+  addMark(8,py(176.41),'$176.41 최고(\'26.03)',false);
+
+  [["'25.07",0],["'25.10",3],["'26.01",6],["'26.04",9],["'26.07",12]].forEach(([m,i])=>{
+    const cx=pL+(i+.5)*colW;
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',Math.min(cx,W-20));t.setAttribute('y',H-3);
+    t.setAttribute('text-anchor','middle');t.setAttribute('font-size','9');
+    t.setAttribute('fill','rgba(154,160,184,.8)');t.textContent=m;svg.appendChild(t);
+  });
+})();
+
+function renderFundChart() {
+  const ctx = document.getElementById('xomRevChart');
+  if (!ctx || charts['fund']) return;
+  charts['fund'] = new Chart(ctx,{
+    data:{
+      labels:['Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26'],
+      datasets:[
+        {type:'bar',label:'매출($B)',data:[81.51,85.29,82.31,85.14],backgroundColor:'#2a5c8a',borderRadius:4,yAxisID:'y'},
+        {type:'line',label:'GAAP EPS($)',data:[1.64,1.76,1.54,1.00],borderColor:'#e74c3c',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'},
+        {type:'line',label:'조정(Non-GAAP) EPS($)',data:[null,null,null,1.16],borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:5,borderWidth:2,fill:false,yAxisID:'y2',borderDash:[4,4]}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#9aa0b8',font:{size:10}}}},
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}},
+        y2:{position:'right',min:0,max:2.5,grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v}}
+      }
+    }
+  });
+}
+
+function renderPeerChart() {
+  const ctx = document.getElementById('peerChart');
+  if (!ctx || charts['peer']) return;
+  charts['peer'] = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['SHEL','COP','XOM','CVX'],
+      datasets:[{
+        label:'P/E (TTM)',
+        data:[15.0,19.8,24.8,31.5],
+        backgroundColor:['rgba(154,160,184,0.4)','rgba(154,160,184,0.4)','#5b90c2','rgba(154,160,184,0.4)'],
+        borderRadius:4,borderSkipped:false
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`P/E ${ctx.raw}x`}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{max:36,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
+      }
+    }
+  });
+}
+
+function renderNiChart() {
+  const ctx = document.getElementById('niChart');
+  if (!ctx || charts['ni']) return;
+  charts['ni'] = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26'],
+      datasets:[{
+        label:'GAAP 순이익($B)',
+        data:[7.08,7.55,6.50,4.18],
+        backgroundColor:['rgba(154,160,184,0.4)','rgba(154,160,184,0.4)','rgba(154,160,184,0.4)','#2a5c8a'],
+        borderRadius:4,borderSkipped:false
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`$${ctx.raw}B`}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}}
+      }
+    }
+  });
+}
+
+function renderCharts(sectionId) {
+  setTimeout(() => {
+    if (sectionId === 'fund') renderFundChart();
+    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'us') renderNiChart();
+  }, 50);
+}
+</script>
+</body>
+</html>
