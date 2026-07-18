@@ -141,12 +141,20 @@
   .back-bar a:hover { color: var(--accent2); }
   .back-bar .brand-icon { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 6px; background: var(--accent3); color: var(--accent2); font-size: 12px; }
   .back-bar .back-bar-ticker { font-size: 11px; color: var(--text3); font-weight: 600; letter-spacing: 0.4px; }
+  .back-bar-nav { display: flex; align-items: center; gap: 10px; }
+  .peer-nav-link { color: var(--text2); font-size: 11px; font-weight: 700; text-decoration: none; padding: 4px 9px; border-radius: 6px; border: 1px solid var(--border); transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+  .peer-nav-link:hover { color: var(--accent2); border-color: var(--accent); }
+  .peer-nav-link.disabled { color: var(--text3); opacity: 0.4; pointer-events: none; border-color: var(--border); }
 </style>
 </head>
 <body>
 <div class="back-bar">
   <a href="../index.html"><span class="brand-icon">◧</span>US Stock Widgets · 전체 종목 목록</a>
-  <span class="back-bar-ticker">JNJ · 시총 20위</span>
+  <div class="back-bar-nav">
+    <a class="peer-nav-link" href="XOM_analysis_widget.html">◀ XOM</a>
+    <span class="back-bar-ticker">JNJ · 시총 20위</span>
+    <span class="peer-nav-link disabled">다음 &#9654;</span>
+  </div>
 </div>
 
 <div class="today-banner">✅ <strong>7/15(수) Q2 FY2026 실적 발표 완료</strong> — 매출 $25.31B(+6.6%) · Adj EPS $2.90(+4.7%), FY2026 가이던스 상향(Adj EPS $11.68) · 다음 실적은 10월 중순 Q3 FY2026 예상</div>
