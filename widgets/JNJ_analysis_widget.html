@@ -132,9 +132,9 @@
   .range-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--text3); font-size: 10.5px; font-weight: 600; padding: 4px 10px; border-radius: 999px; cursor: pointer; transition: all .15s; }
   .range-btn:hover { color: var(--text); border-color: var(--text2); }
   .range-btn.active { background: var(--accent3); color: var(--accent2); border-color: var(--accent); }
-  .ma-toggle-btn { background: var(--bg3); border: 1px solid; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer; transition: all .15s; }
-  .ma-toggle-btn:hover { filter: brightness(1.2); }
-  .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
+  .ma-check { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; cursor: pointer; user-select: none; transition: opacity .15s; }
+  .ma-check input[type="checkbox"] { width: 14px; height: 14px; cursor: pointer; }
+  .ma-check.ma-off { opacity: 0.35; }
   @media (max-width: 600px) {
     .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
     .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; }
@@ -216,11 +216,11 @@
     </div>
     <svg id="jnjCandleSvg" viewBox="0 0 720 240" width="100%" style="display:block;background:var(--bg3);border-radius:8px 8px 0 0;padding:4px;" role="img" aria-label="JNJ 일봉 캔들스틱 차트"></svg>
     <svg id="jnjVolumeSvg" viewBox="0 0 720 70" width="100%" style="display:block;background:var(--bg3);border-radius:0 0 8px 8px;padding:0 4px 4px;" role="img" aria-label="JNJ 거래량 차트"></svg>
-    <div id="jnjMaToggle" style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-      <button class="ma-toggle-btn" data-ma="ma5" style="color:var(--ma5);border-color:var(--ma5);">● MA5</button>
-      <button class="ma-toggle-btn" data-ma="ma20" style="color:var(--ma20);border-color:var(--ma20);">● MA20</button>
-      <button class="ma-toggle-btn" data-ma="ma60" style="color:var(--ma60);border-color:var(--ma60);">● MA60</button>
-      <button class="ma-toggle-btn" data-ma="ma120" style="color:var(--ma120);border-color:var(--ma120);">● MA120</button>
+    <div id="jnjMaToggle" style="display:flex;gap:18px;margin-top:10px;flex-wrap:wrap;align-items:center;">
+      <label class="ma-check" data-ma="ma5"><input type="checkbox" checked style="accent-color:var(--ma5);"><span style="color:var(--ma5);">MA5</span></label>
+      <label class="ma-check" data-ma="ma20"><input type="checkbox" checked style="accent-color:var(--ma20);"><span style="color:var(--ma20);">MA20</span></label>
+      <label class="ma-check" data-ma="ma60"><input type="checkbox" checked style="accent-color:var(--ma60);"><span style="color:var(--ma60);">MA60</span></label>
+      <label class="ma-check" data-ma="ma120"><input type="checkbox" checked style="accent-color:var(--ma120);"><span style="color:var(--ma120);">MA120</span></label>
     </div>
   </div>
 
@@ -672,11 +672,12 @@ const JNJ_MA120 = [156.61,156.7,156.85,157.0,157.14,157.27,157.39,157.51,157.62,
   });
 
   if (maToggle) {
-    maToggle.querySelectorAll('.ma-toggle-btn').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const key = btn.dataset.ma;
-        maState[key] = !maState[key];
-        btn.classList.toggle('ma-off', !maState[key]);
+    maToggle.querySelectorAll('.ma-check').forEach(label=>{
+      const key = label.dataset.ma;
+      const cb = label.querySelector('input[type="checkbox"]');
+      cb.addEventListener('change', ()=>{
+        maState[key] = cb.checked;
+        label.classList.toggle('ma-off', !cb.checked);
         draw(currentRange);
       });
     });
