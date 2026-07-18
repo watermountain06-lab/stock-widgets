@@ -205,8 +205,13 @@
 <div id="tech" class="section active">
   <div class="section-title">기술적 분석 — 일봉 캔들스틱 (2025.07 ~ 2026.07) · 52주 수익률 +54.6%</div>
   <div class="price-chart-container">
-    <div style="font-size:11px;color:var(--text3);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-      <span>52주 최저 $162.78 (2025.07) → 52주 최고 $269.43 (2026.07) → 현재 $253.04</span>
+    <div style="margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+      <div id="jnjMaToggle" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="ma-toggle-btn" data-ma="ma5" style="color:var(--ma5);border-color:var(--ma5);">● MA5</button>
+        <button class="ma-toggle-btn" data-ma="ma20" style="color:var(--ma20);border-color:var(--ma20);">● MA20</button>
+        <button class="ma-toggle-btn" data-ma="ma60" style="color:var(--ma60);border-color:var(--ma60);">● MA60</button>
+        <button class="ma-toggle-btn" data-ma="ma120" style="color:var(--ma120);border-color:var(--ma120);">● MA120</button>
+      </div>
       <div class="range-toggle" id="jnjRangeToggle">
         <button class="range-btn" data-range="1M">1개월</button>
         <button class="range-btn" data-range="3M">3개월</button>
@@ -216,12 +221,7 @@
     </div>
     <svg id="jnjCandleSvg" viewBox="0 0 720 240" width="100%" style="display:block;background:var(--bg3);border-radius:8px 8px 0 0;padding:4px;" role="img" aria-label="JNJ 일봉 캔들스틱 차트"></svg>
     <svg id="jnjVolumeSvg" viewBox="0 0 720 70" width="100%" style="display:block;background:var(--bg3);border-radius:0 0 8px 8px;padding:0 4px 4px;" role="img" aria-label="JNJ 거래량 차트"></svg>
-    <div id="jnjMaToggle" style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-      <button class="ma-toggle-btn" data-ma="ma5" style="color:var(--ma5);border-color:var(--ma5);">● MA5</button>
-      <button class="ma-toggle-btn" data-ma="ma20" style="color:var(--ma20);border-color:var(--ma20);">● MA20</button>
-      <button class="ma-toggle-btn" data-ma="ma60" style="color:var(--ma60);border-color:var(--ma60);">● MA60</button>
-      <button class="ma-toggle-btn" data-ma="ma120" style="color:var(--ma120);border-color:var(--ma120);">● MA120</button>
-    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">52주 최저 $162.78 (2025.07) → 52주 최고 $269.43 (2026.07) → 현재 $253.04</div>
   </div>
 
   <div class="grid-2">
