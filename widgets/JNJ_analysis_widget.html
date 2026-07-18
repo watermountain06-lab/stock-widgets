@@ -190,7 +190,6 @@
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
-  <button class="nav-btn" onclick="showSection('pershare')">💰 Per-Share</button>
   <button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button>
   <button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button>
   <button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button>
@@ -305,21 +304,18 @@
   </div>
 </div>
 
-<!-- ===================== SECTION 3: Per-Share ===================== -->
-<div id="pershare" class="section">
-  <div class="section-title">Per-Share 지표 (TTM 기준 · 약 24.1억 주)</div>
-  <div class="per-share-grid">
-    <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS · TTM</div><div class="ps-value">$8.63</div><div class="ps-sub">'25.Q3~'26.Q2 합산 · PER 29.3x</div><div style="margin-top:5px;"><span class="stage-badge stage-3">적정(PER 상단)</span></div></div>
-    <div class="ps-card"><div class="ps-icon">📊</div><div class="ps-label">Adjusted EPS · TTM</div><div class="ps-value">$10.86</div><div class="ps-sub">Adj PER 23.3x</div><div style="margin-top:5px;"><span class="stage-badge stage-3">적정(Adj PER)</span></div></div>
-    <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS · 주당순자산</div><div class="ps-value">$33.84</div><div class="ps-sub">'25 자기자본 $81.5B</div><div style="margin-top:5px;"><span class="stage-badge stage-4">높음(PBR 7.48x)</span></div></div>
-    <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 · FY2025</div><div class="ps-value">$8.17</div><div class="ps-sub">FY25 FCF $19.7B</div><div style="margin-top:5px;"><span class="stage-badge stage-3">적정(FCF수익률)</span></div></div>
-  </div>
-  <div style="font-size:11px;color:var(--text3);margin-top:10px;">* PBR 7.48x가 높은 것은 Shockwave·Abiomed 등 대형 M&A로 인한 대규모 영업권·무형자산 때문 — 자산경량이 아니라 인수합병 중심 성장전략의 회계적 결과. GAAP EPS는 탈크 소송충당금 규모에 따라 분기별 변동성이 크므로 Adjusted EPS가 사업의 실질 밸류에이션에 더 가깝다.</div>
-</div>
-
-<!-- ===================== SECTION 4: 밸류에이션 ===================== -->
+<!-- ===================== SECTION 3: 밸류에이션 (Per-Share 통합) ===================== -->
 <div id="valuation" class="section">
-  <div class="section-title">상대 투자지표 — 소송 노이즈를 걷어내면 대형 제약 피어 중 합리적 밸류에이션</div>
+  <div class="section-title">Per-Share & 밸류에이션 — 소송 노이즈를 걷어내면 대형 제약 피어 중 합리적 밸류에이션</div>
+  <div class="card">
+    <div class="card-title">Per-Share 데이터 (TTM 기준 · 약 24.1억 주)</div>
+    <div class="per-share-grid">
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS · TTM</div><div class="ps-value">$8.63</div><div class="ps-sub">'25.Q3~'26.Q2 합산</div></div>
+      <div class="ps-card"><div class="ps-icon">📊</div><div class="ps-label">Adjusted EPS · TTM</div><div class="ps-value">$10.86</div><div class="ps-sub">탈크 소송 노이즈 제거</div></div>
+      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS · 주당순자산</div><div class="ps-value">$33.84</div><div class="ps-sub">'25 자기자본 $81.5B</div></div>
+      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 · FY2025</div><div class="ps-value">$8.17</div><div class="ps-sub">FY25 FCF $19.7B</div></div>
+    </div>
+  </div>
   <div class="info-box">
     <strong>핵심 전제:</strong> JNJ의 GAAP EPS는 탈크 소송 충당금 규모에 따라 분기·연도별 변동성이 크다 — Adjusted EPS 기준 23.3x가 사업의 실질 밸류에이션에 더 가깝다. Forward P/E 21.7x(가이던스 기준)는 대형 제약 피어 대비 합리적인 수준.
   </div>
@@ -391,7 +387,7 @@
   </div>
 </div>
 
-<!-- ===================== SECTION 5: US 특화 ===================== -->
+<!-- ===================== SECTION 4: US 특화 ===================== -->
 <div id="us" class="section">
   <div class="section-title">US 특화 — S&P 500 성과 · 경쟁 구도 · 다가오는 실적 체크포인트</div>
   <div class="rel-container">
@@ -433,7 +429,7 @@
   </div>
 </div>
 
-<!-- ===================== SECTION 6: 시계열 뉴스 ===================== -->
+<!-- ===================== SECTION 5: 시계열 뉴스 ===================== -->
 <div id="news" class="section">
   <div class="section-title">시계열 주요 뉴스 (2025.07 ~ 2026.07)</div>
   <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;color:var(--text2);">
@@ -482,7 +478,7 @@
   </div>
 </div>
 
-<!-- ===================== SECTION 7: 투자 포인트 ===================== -->
+<!-- ===================== SECTION 6: 투자 포인트 ===================== -->
 <div id="invest" class="section">
   <div class="section-title">2026년 핵심 투자 포인트</div>
   <div class="bull-bear">
