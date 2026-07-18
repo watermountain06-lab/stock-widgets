@@ -267,8 +267,9 @@
 <div id="fund" class="section">
   <div class="section-title">기본적 분석 — 분기 재무제표 (SEC 8-K 실적발표 기준)</div>
   <div class="card">
-    <div class="card-title">분기 매출 및 GAAP/Adjusted EPS 추이</div>
+    <div class="card-title">분기 매출 및 GAAP/Adjusted EPS 추이 (Q3 FY24 ~ Q2 FY26, 2년치)</div>
     <div class="chart-wrap" style="height:260px;"><canvas id="jnjRevChart"></canvas></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--text3);">* Q1 FY25 GAAP EPS $4.54 급등은 $7B 규모 탈크 소송충당금 환입(reversal) 영향 — Adjusted EPS $2.77이 해당 분기의 실질 실적에 더 가까움</div>
   </div>
   <div class="grid-3">
     <div class="stat-box"><div class="stat-label">Q2 FY26 매출</div><div class="stat-value up">$25.31B</div><div class="stat-sub">▲6.6% YoY</div></div>
@@ -660,11 +661,11 @@ function renderFundChart() {
   if (!ctx || charts['fund']) return;
   charts['fund'] = new Chart(ctx,{
     data:{
-      labels:['Q3 \'25','Q4 \'25','Q1 \'26','Q2 \'26'],
+      labels:['Q3 \'24','Q4 \'24','Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26','Q2 \'26'],
       datasets:[
-        {type:'bar',label:'매출($B)',data:[23.99,24.56,24.06,25.31],backgroundColor:'#a01d3a',borderRadius:4,yAxisID:'y'},
-        {type:'line',label:'GAAP EPS($)',data:[2.12,2.10,2.14,2.27],borderColor:'#2ecc71',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'},
-        {type:'line',label:'Adjusted EPS($)',data:[2.80,2.46,2.70,2.90],borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:3,borderWidth:2,fill:false,yAxisID:'y2',borderDash:[4,4]}
+        {type:'bar',label:'매출($B)',data:[22.47,22.52,21.89,23.74,23.99,24.56,24.06,25.31],backgroundColor:'#a01d3a',borderRadius:4,barPercentage:0.55,categoryPercentage:0.7,yAxisID:'y'},
+        {type:'line',label:'GAAP EPS($)',data:[1.11,1.41,4.54,2.29,2.12,2.10,2.14,2.27],borderColor:'#2ecc71',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'},
+        {type:'line',label:'Adjusted EPS($)',data:[2.42,2.04,2.77,2.77,2.80,2.46,2.70,2.90],borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:3,borderWidth:2,fill:false,yAxisID:'y2',borderDash:[4,4]}
       ]
     },
     options:{
@@ -673,7 +674,7 @@ function renderFundChart() {
       scales:{
         x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10}}},
         y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}},
-        y2:{position:'right',min:0,max:3.5,grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v}}
+        y2:{position:'right',min:0,max:5,grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v}}
       }
     }
   });
