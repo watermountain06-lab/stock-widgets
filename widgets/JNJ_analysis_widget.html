@@ -302,6 +302,17 @@
     <div class="card-title">핵심 투자 논리 — 소송發 GAAP 변동성이 실질 펀더멘털을 가리는가</div>
     <div style="font-size:12px;color:var(--text2);line-height:1.7;">FY2024 GAAP EPS $5.79는 대규모 탈크 소송충당금(약 $5.1B)으로 Adjusted EPS $9.98 대비 -42% 괴리를 보였고, FY2025엔 GAAP EPS $11.03이 오히려 Adjusted EPS $10.79를 상회하는 등(1분기 일회성 항목 영향) 연도별 GAAP 지표의 변동성이 매우 크다. <strong style="color:var(--text);">그러나 최근 4개 분기(Q3 FY25~Q2 FY26)는 GAAP·Adjusted EPS 모두 꾸준히 우상향하며 소송 노이즈가 점차 잦아드는 모습 — 핵심 논쟁은 "소송 리스크가 아직 안 끝났는가"인지 "혁신신약 파이프라인 성장이 이를 압도하는가"이다.</strong></div>
   </div>
+
+  <div class="card">
+    <div class="card-title">다음 실적 체크포인트</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+      <strong style="color:var(--text);">10월 Q3 실적 4대 체크포인트:</strong><br>
+      ① DARZALEX·CARVYKTI 등 신약 성장률 지속 여부 → Oncology 모멘텀 검증<br>
+      ② MedTech 심혈관(Cardiovascular) 부문 개선 여부 → 7/15 조정 요인 해소 확인<br>
+      ③ STELARA 특허절벽 영향 축소 추이 → 면역질환 포트폴리오 재편 속도<br>
+      ④ 탈크 소송 추가 충당금 발생 여부 → GAAP·Adjusted EPS 갭 추이
+    </div>
+  </div>
 </div>
 
 <!-- ===================== SECTION 3: 밸류에이션 (Per-Share 통합) ===================== -->
@@ -390,7 +401,7 @@
 
 <!-- ===================== SECTION 4: US 특화 ===================== -->
 <div id="us" class="section">
-  <div class="section-title">US 특화 — S&P 500 성과 · 경쟁 구도 · 다가오는 실적 체크포인트</div>
+  <div class="section-title">US 특화 — S&P 500 성과 · 경쟁 구도</div>
   <div class="rel-container">
     <div class="rel-title">S&P 500 상대 수익률</div>
     <div class="grid-3">
@@ -417,17 +428,6 @@
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-title">분기 순이익 추이 (GAAP)</div>
-    <div class="chart-wrap" style="height:200px;"><canvas id="niChart"></canvas></div>
-    <div style="margin-top:12px;font-size:12px;color:var(--text2);line-height:1.8;">
-      <strong style="color:var(--text);">10월 Q3 실적 4대 체크포인트:</strong><br>
-      ① DARZALEX·CARVYKTI 등 신약 성장률 지속 여부 → Oncology 모멘텀 검증<br>
-      ② MedTech 심혈관(Cardiovascular) 부문 개선 여부 → 7/15 조정 요인 해소 확인<br>
-      ③ STELARA 특허절벽 영향 축소 추이 → 면역질환 포트폴리오 재편 속도<br>
-      ④ 탈크 소송 추가 충당금 발생 여부 → GAAP·Adjusted EPS 갭 추이
-    </div>
-  </div>
 </div>
 
 <!-- ===================== SECTION 5: 시계열 뉴스 ===================== -->
@@ -708,36 +708,10 @@ function renderPeerChart() {
   });
 }
 
-function renderNiChart() {
-  const ctx = document.getElementById('niChart');
-  if (!ctx || charts['ni']) return;
-  charts['ni'] = new Chart(ctx,{
-    type:'bar',
-    data:{
-      labels:['Q3 \'25','Q4 \'25','Q1 \'26','Q2 \'26'],
-      datasets:[{
-        label:'GAAP 순이익($B)',
-        data:[5.15,5.12,5.24,5.53],
-        backgroundColor:['rgba(154,160,184,0.4)','rgba(154,160,184,0.4)','rgba(154,160,184,0.4)','#a01d3a'],
-        borderRadius:4,borderSkipped:false
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`$${ctx.raw}B`}}},
-      scales:{
-        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
-        y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}}
-      }
-    }
-  });
-}
-
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
     if (sectionId === 'valuation') renderPeerChart();
-    if (sectionId === 'us') renderNiChart();
   }, 50);
 }
 </script>
