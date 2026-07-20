@@ -251,7 +251,6 @@
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech',event)">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund',event)">📊 기본적 분석</button>
-  <button class="nav-btn" onclick="showSection('pershare',event)">💰 Per-Share</button>
   <button class="nav-btn" onclick="showSection('valuation',event)">⚖️ 밸류에이션</button>
   <button class="nav-btn" onclick="showSection('us',event)">🇺🇸 US 특화</button>
   <button class="nav-btn" onclick="showSection('news',event)">📰 시계열 뉴스</button>
@@ -378,17 +377,18 @@
 </div>
 
 <!-- ===================== S3: Per-Share ===================== -->
-<div id="pershare" class="section">
-  <div class="section-title">Per-Share 지표</div>
-  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px;">
-    <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (TTM 기본)</div><div class="ps-value">$27.94</div><div class="ps-sub">Q2~Q1(26) 합산 / YoY +110%</div></div>
-    <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (Q1 2026)</div><div class="ps-value">$34.82</div><div class="ps-sub">순자산 $31.2B ÷ 896M주</div></div>
-    <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$12.16</div><div class="ps-sub">TTM FCF $10.9B ÷ 898M주</div></div>
-    <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">배당금 (분기)</div><div class="ps-value">$1.73</div><div class="ps-sub">연 $6.92 / 배당수익률 ~0.6%</div></div>
-  </div>
+<!-- ===================== S4: 밸류에이션 ===================== -->
+<div id="valuation" class="section">
+  <div class="section-title">밸류에이션 — 5단계 멀티플 평가 (헬스케어·고성장 기준)</div>
 
   <div class="card">
-    <div class="card-title">EPS / FCF/주 추이 (최근 8분기)</div>
+    <div class="card-title">Per-Share 지표</div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px;">
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (TTM 기본)</div><div class="ps-value">$27.94</div><div class="ps-sub">Q2~Q1(26) 합산 / YoY +110%</div></div>
+      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (Q1 2026)</div><div class="ps-value">$34.82</div><div class="ps-sub">순자산 $31.2B ÷ 896M주</div></div>
+      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$12.16</div><div class="ps-sub">TTM FCF $10.9B ÷ 898M주</div></div>
+      <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">배당금 (분기)</div><div class="ps-value">$1.73</div><div class="ps-sub">연 $6.92 / 배당수익률 ~0.6%</div></div>
+    </div>
     <div class="chart-wrap" style="height:220px;"><canvas id="perShareChart"></canvas></div>
   </div>
 
@@ -400,11 +400,6 @@
       <div class="stat-box"><div class="stat-label">순이익률</div><div class="stat-value blue">37.4%</div><div class="stat-sub">규모의 경제 효과 극대화</div></div>
     </div>
   </div>
-</div>
-
-<!-- ===================== S4: 밸류에이션 ===================== -->
-<div id="valuation" class="section">
-  <div class="section-title">밸류에이션 — 5단계 멀티플 평가 (헬스케어·고성장 기준)</div>
 
   <div class="grid-2">
     <div class="card">
@@ -685,8 +680,7 @@ function showSection(id, e) {
 
 function renderCharts(id) {
   if (id === 'fund') renderFundChart();
-  if (id === 'pershare') renderPerShareChart();
-  if (id === 'valuation') renderPeerChart();
+  if (id === 'valuation') { renderPeerChart(); renderPerShareChart(); }
   if (id === 'us') { renderRelChart(); renderGlpChart(); renderCapexChart(); }
 }
 
