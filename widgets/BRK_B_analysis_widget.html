@@ -258,6 +258,7 @@
     color: var(--text3);
     line-height: 1.6;
   }
+  .scenario-card { border-radius: 8px; padding: 14px; }
 
   @media (max-width: 600px) {
     .header { padding: 20px 16px; }
@@ -634,6 +635,22 @@
           FCF 기준 PCR 38.3x는 다소 높은 편. GAAP 순이익이 투자평가손익에 크게 좌우되어 전통적 PER 해석에 주의 필요. 아벨 체제 프리미엄 불확실성도 잠재 리스크.
         </div>
       </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">시나리오별 공정가치 분석</div>
+    <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — 경기침체·대규모 보험 손실(CAT)</div>
+      <div style="font-size:12px;color:var(--text2);">경기침체로 투자평가손익이 악화되고 대형 자연재해 손실이 발생할 경우 → 공정가치 <strong style="color:var(--red);">$440~460/주</strong></div>
+    </div>
+    <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 아벨 체제 안착·현 밸류에이션 유지</div>
+      <div style="font-size:12px;color:var(--text2);">PER 13.6x·PBR 1.41x 밴드 유지, 아벨 CEO 체제가 순조롭게 안착할 경우 → 공정가치 <strong style="color:var(--text);">$490~520/주</strong></div>
+    </div>
+    <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — $268B 순현금 활용 대형 M&A 성공</div>
+      <div style="font-size:12px;color:var(--text2);">대규모 순현금을 활용한 대형 인수가 성공적으로 이뤄질 경우 → 공정가치 <strong style="color:var(--green);">$540~580/주</strong></div>
     </div>
   </div>
 </div>
