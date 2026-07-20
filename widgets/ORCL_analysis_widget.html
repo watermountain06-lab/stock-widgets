@@ -171,6 +171,8 @@
   .rpo-sub { font-size: 12px; color: var(--text2); }
 
   .disclaimer { margin: 28px 32px 16px; padding: 12px 16px; background: rgba(192,64,64,0.05); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
+  .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+  .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
 
   @media (max-width:600px) {
     .header, .section { padding: 20px 16px; }
@@ -457,8 +459,8 @@
     <div class="rpo-sub">FY2026 연매출($67.4B)의 9.5배 | Q4 단기간에 $85B 추가 | YoY +438%</div>
   </div>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:16px;">
-    <div style="font-size:12px;color:var(--text3);margin-bottom:12px;font-weight:600;">S&P500 대비 상대 성과 (2025.07 ~ 2026.06, 기준=100)</div>
+  <div class="rel-container">
+    <div class="rel-title">S&P500 대비 상대 성과 (2025.07 ~ 2026.06, 기준=100)</div>
     <div class="chart-wrap" style="height:200px;"><canvas id="relChart"></canvas></div>
     <div class="grid-3" style="margin-top:12px;">
       <div class="stat-box"><div class="stat-label">ORCL 1년 수익률</div><div class="stat-value up">+103%</div><div class="stat-sub">$140→$284</div></div>
