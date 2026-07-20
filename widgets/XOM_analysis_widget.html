@@ -194,7 +194,6 @@
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
-  <button class="nav-btn" onclick="showSection('pershare')">💰 Per-Share</button>
   <button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button>
   <button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button>
   <button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button>
@@ -303,20 +302,20 @@
 </div>
 
 <!-- ===================== SECTION 3: Per-Share ===================== -->
-<div id="pershare" class="section">
-  <div class="section-title">Per-Share 지표 (TTM 기준 · 약 41.4억 주)</div>
-  <div class="per-share-grid">
-    <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS · TTM</div><div class="ps-value">$5.94</div><div class="ps-sub">'25.Q2~'26.Q1 합산 · PER 24.8x</div><div style="margin-top:5px;"><span class="stage-badge stage-4">높음(일회성 손실 왜곡)</span></div></div>
-    <div class="ps-card"><div class="ps-icon">📊</div><div class="ps-label">Forward EPS(컨센서스)</div><div class="ps-value">~$12.52</div><div class="ps-sub">Forward P/E 11.8x</div><div style="margin-top:5px;"><span class="stage-badge stage-2">저평가(Fwd P/E)</span></div></div>
-    <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS · 주당순자산</div><div class="ps-value">$62.65</div><div class="ps-sub">'25 자기자본 $259.4B</div><div style="margin-top:5px;"><span class="stage-badge stage-3">적정(PBR 2.35x)</span></div></div>
-    <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 · FY2025</div><div class="ps-value">$5.68</div><div class="ps-sub">FY25 FCF $23.61B</div><div style="margin-top:5px;"><span class="stage-badge stage-3">적정(FCF수익률)</span></div></div>
-  </div>
-  <div style="font-size:11px;color:var(--text3);margin-top:10px;">* Trailing GAAP PER 24.8x가 높아 보이는 것은 Q1 FY2026 $3.9B 파생상품 타이밍 손실로 분모(EPS)가 일시적으로 낮아진 착시 효과 — Forward P/E는 11.8x로 정상 궤도. PBR·EV/EBITDA는 에너지 섹터 내 견조한 수준.</div>
-</div>
-
 <!-- ===================== SECTION 4: 밸류에이션 ===================== -->
 <div id="valuation" class="section">
   <div class="section-title">상대 투자지표 — Trailing PER의 착시를 걷어내면 저평가~적정 구간</div>
+
+  <div class="card">
+    <div class="card-title">Per-Share 지표 (TTM 기준 · 약 41.4억 주)</div>
+    <div class="per-share-grid">
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS · TTM</div><div class="ps-value">$5.94</div><div class="ps-sub">'25.Q2~'26.Q1 합산 · PER 24.8x</div><div style="margin-top:5px;"><span class="stage-badge stage-4">높음(일회성 손실 왜곡)</span></div></div>
+      <div class="ps-card"><div class="ps-icon">📊</div><div class="ps-label">Forward EPS(컨센서스)</div><div class="ps-value">~$12.52</div><div class="ps-sub">Forward P/E 11.8x</div><div style="margin-top:5px;"><span class="stage-badge stage-2">저평가(Fwd P/E)</span></div></div>
+      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS · 주당순자산</div><div class="ps-value">$62.65</div><div class="ps-sub">'25 자기자본 $259.4B</div><div style="margin-top:5px;"><span class="stage-badge stage-3">적정(PBR 2.35x)</span></div></div>
+      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 · FY2025</div><div class="ps-value">$5.68</div><div class="ps-sub">FY25 FCF $23.61B</div><div style="margin-top:5px;"><span class="stage-badge stage-3">적정(FCF수익률)</span></div></div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">* Trailing GAAP PER 24.8x가 높아 보이는 것은 Q1 FY2026 $3.9B 파생상품 타이밍 손실로 분모(EPS)가 일시적으로 낮아진 착시 효과 — Forward P/E는 11.8x로 정상 궤도. PBR·EV/EBITDA는 에너지 섹터 내 견조한 수준.</div>
+  </div>
   <div class="info-box">
     <strong>핵심 전제:</strong> Trailing GAAP EPS는 Q1 2026 일회성 파생상품 손실로 왜곡되어 있어 PER 24.8x가 실제보다 비싸 보이는 착시가 존재. Forward P/E 11.8x·EV/EBITDA 9.6x 등 정상화 지표 기준으로는 에너지 섹터 내에서도 오히려 저평가~적정 구간.
   </div>
