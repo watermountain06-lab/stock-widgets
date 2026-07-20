@@ -186,6 +186,8 @@
   .tl-date { font-size: 10px; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
   .tl-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 3px 0; }
   .tl-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .tl-source { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 11px; font-weight: 600; color: var(--accent2); text-decoration: none; }
+  .tl-source:hover { text-decoration: underline; }
   .bull-bear { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .bb-box { background: var(--bg3); border-radius: var(--radius); padding: 16px; }
   .bb-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
@@ -557,34 +559,39 @@
   </div>
   <div class="timeline">
     <div class="tl-item">
-      <div class="tl-dot red"></div>
-      <div class="tl-date">2025년 7월 — 저점 $156</div>
-      <div class="tl-title">DOJ 반독점 판결 공포 + 매크로 우려 — $156 52주 저점</div>
-      <div class="tl-desc">검색 독점 관련 DOJ 반독점 판결 및 구제책 논의로 최악의 시나리오 공포. 관세 불확실성과 맞물려 $156 저점 형성. 이후 AI 우수성 확인으로 반등 시작.</div>
-    </div>
-    <div class="tl-item">
       <div class="tl-dot gold"></div>
-      <div class="tl-date">2025년 5월 — Google I/O</div>
+      <div class="tl-date">2025년 5월 20일 — Google I/O</div>
       <div class="tl-title">Google I/O 2025 — Gemini 2.5, AI Overviews 15억, Project Astra 발표</div>
       <div class="tl-desc">Gemini 2.5 Pro 출시로 벤치마크 1위 달성. AI Overviews가 검색 잠식 우려를 불식하고 오히려 이용량 증가 확인. Project Astra·Veo3 등 AI 혁신 발표로 주가 급반등.</div>
+      <a class="tl-source" href="https://techcrunch.com/2025/05/20/project-astra-comes-to-google-search-gemini-and-developers/" target="_blank" rel="noopener">관련 뉴스 보기 (TechCrunch) →</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-date">2025년 7월 — 저점 $180</div>
+      <div class="tl-title">DOJ 반독점 판결 공포 + 매크로 우려 — $180 52주 저점</div>
+      <div class="tl-desc">검색 독점 관련 DOJ 반독점 판결(8/8 예정) 및 구제책 논의로 최악의 시나리오(Chrome 강제매각) 공포. 관세 불확실성과 맞물려 $180.48 저점 형성(7/17). 9월 판결에서 Chrome 매각 불요 확정되며 반등 시작.</div>
+      <a class="tl-source" href="https://finance.yahoo.com/news/alphabet-google-googl-likely-avoid-225809362.html" target="_blank" rel="noopener">관련 뉴스 보기 (Yahoo Finance) →</a>
     </div>
     <div class="tl-item">
       <div class="tl-dot gold"></div>
       <div class="tl-date">2026년 2월 — Q4 FY25 실적</div>
       <div class="tl-title">연매출 $400B 첫 돌파 · Cloud +48% · Gemini 3 출시 · Waymo 50만 라이드</div>
-      <div class="tl-desc">Q4 FY25 매출 $113.8B(▲18%), 연간 매출 사상 첫 $400B 돌파. Cloud $17.7B(+48%). Gemini 3 대규모 모델 출시. Waymo 자율주행 주 50만+ 달성. 주가 $270→$400 급등.</div>
+      <div class="tl-desc">Q4 FY25 매출 $113.8B(▲18%), 연간 매출 $403B로 사상 첫 $400B 돌파. Cloud $17.7B(+48%), 백로그 $240B. Gemini 3 대규모 모델 출시. Waymo 주 50만+ 라이드 달성. 주가 $270→$400 급등.</div>
+      <a class="tl-source" href="https://www.cnbc.com/2026/02/04/alphabet-googl-q4-2025-earnings.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
     </div>
     <div class="tl-item">
       <div class="tl-dot gold"></div>
       <div class="tl-date">2026년 4월 — Q1 2026 실적</div>
       <div class="tl-title">Q1 매출 $109.9B(▲22%) · Cloud +63% 가속 · 백로그 $460B QoQ 2배</div>
       <div class="tl-desc">매출 $109.9B(▲21.8%), OPM 36.1%(▲2%p), 11연속 두 자릿수 성장. Cloud $20.0B(+63%)으로 성장 가속. 백로그 $460B로 QoQ 거의 2배. 유료 구독자 3.5억명 달성.</div>
+      <a class="tl-source" href="https://www.cnbc.com/2026/04/29/alphabet-googl-q1-2026-earnings.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
     </div>
     <div class="tl-item">
       <div class="tl-dot red"></div>
       <div class="tl-date">2026년 6월 1일 — $80B 유상증자</div>
       <div class="tl-title">$80B 초대형 유상증자 발표 — Berkshire $10B 참여 · AI 인프라 집중 투자</div>
       <div class="tl-desc">AI 인프라 투자 자금 조달을 위해 $80B 규모 유상증자 발표(전환우선주 $15B + 보통주 $15B + 사모 $50B). 버크셔 해서웨이 $10B 참여로 신뢰도 확보. 단기 희석 우려로 $400→$368 조정.</div>
+      <a class="tl-source" href="https://www.cnbc.com/2026/06/01/alphabet-to-raise-80-billion-from-stock-sales-to-fund-ai-buildout.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
     </div>
   </div>
 </div>
