@@ -122,6 +122,7 @@
   .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
   .disclaimer { margin: 28px 32px 16px; padding: 12px 16px; background: rgba(255,153,0,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
   .box-key { background: rgba(255,153,0,0.1); border: 1px solid var(--accent3); border-radius: var(--radius); padding: 12px 16px; margin: 0 32px 16px; }
+  .scenario-card { border-radius: 8px; padding: 14px; }
   @media (max-width: 600px) {
     .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
     .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; }
@@ -352,6 +353,22 @@
   <div class="card">
     <div class="card-title">종합 밸류에이션 — 2~3단계 · EV/EBITDA 역대 최저 · MSFT와 함께 Capex 사이클 저평가 구간</div>
     <div style="font-size:12px;color:var(--text2);line-height:1.6;">PER 28.5x → 3단계(Anthropic 이익 제거 시 실질 35x). PBR 5.9x → 2단계. PSR 3.4x → 2단계. PCR(운영CF) 16.8x → 2단계. EV/EBITDA 16.5x → 2단계(5년 평균 21x 대비 최저). 4개 지표 2단계 — MSFT와 함께 빅테크 내 밸류 매력 탑2. Capex 정점 시 FCF 폭발 = 주가 재평가.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">시나리오별 공정가치 분석</div>
+    <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — Capex 부담 지속·클라우드 성장 둔화</div>
+      <div style="font-size:12px;color:var(--text2);">AWS 성장률 둔화와 대규모 Capex가 FCF를 계속 압박할 경우 → 공정가치 <strong style="color:var(--red);">$196~230/주</strong></div>
+    </div>
+    <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 컨센서스 목표가 수준 유지</div>
+      <div style="font-size:12px;color:var(--text2);">EV/EBITDA 16.5x가 5년 평균(21x)로 점진 회귀할 경우 → 공정가치 <strong style="color:var(--text);">$270~320/주</strong> (애널리스트 평균 목표가 $314와 부합)</div>
+    </div>
+    <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — Capex 정점 통과·FCF 급반등</div>
+      <div style="font-size:12px;color:var(--text2);">Capex 사이클이 정점을 지나 FCF가 폭발적으로 회복될 경우 → 공정가치 <strong style="color:var(--green);">$350~370/주</strong></div>
+    </div>
   </div>
 </div>
 
