@@ -335,7 +335,6 @@
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
-  <button class="nav-btn" onclick="showSection('pershare')">💰 Per-Share</button>
   <button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button>
   <button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button>
   <button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button>
@@ -478,42 +477,41 @@
 </div>
 
 <!-- ===================== SECTION 3: Per-Share ===================== -->
-<div id="pershare" class="section">
-  <div class="section-title">Per-Share 지표 (BRK.B 기준)</div>
+<!-- ===================== SECTION 4: 밸류에이션 ===================== -->
+<div id="valuation" class="section">
+  <div class="section-title">밸류에이션 — 5단계 멀티플 평가</div>
 
-  <div style="background:rgba(200,168,75,0.08);border:1px solid var(--accent3);border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--text2);">
-    ⚠️ BRK.B는 BRK.A의 1/1500 가치. EPS·BPS 원래 수치는 BRK.A 기준이므로 아래는 BRK.B 환산값
-  </div>
-
-  <div class="per-share-grid">
-    <div class="ps-card">
-      <div class="ps-icon">📈</div>
-      <div class="ps-label">EPS (TTM, BRK.B 환산)</div>
-      <div class="ps-value">$34.96</div>
-      <div class="ps-sub">BRK.A EPS $52,413 ÷ 1500</div>
+  <div class="card">
+    <div class="card-title">Per-Share 지표 (BRK.B 기준)</div>
+    <div style="background:rgba(200,168,75,0.08);border:1px solid var(--accent3);border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--text2);">
+      ⚠️ BRK.B는 BRK.A의 1/1500 가치. EPS·BPS 원래 수치는 BRK.A 기준이므로 아래는 BRK.B 환산값
     </div>
-    <div class="ps-card">
-      <div class="ps-icon">📚</div>
-      <div class="ps-label">BPS (Q1 2026, BRK.B 환산)</div>
-      <div class="ps-value">$337.10</div>
-      <div class="ps-sub">BRK.A BPS $505,646 ÷ 1500</div>
+    <div class="per-share-grid">
+      <div class="ps-card">
+        <div class="ps-icon">📈</div>
+        <div class="ps-label">EPS (TTM, BRK.B 환산)</div>
+        <div class="ps-value">$34.96</div>
+        <div class="ps-sub">BRK.A EPS $52,413 ÷ 1500</div>
+      </div>
+      <div class="ps-card">
+        <div class="ps-icon">📚</div>
+        <div class="ps-label">BPS (Q1 2026, BRK.B 환산)</div>
+        <div class="ps-value">$337.10</div>
+        <div class="ps-sub">BRK.A BPS $505,646 ÷ 1500</div>
+      </div>
+      <div class="ps-card">
+        <div class="ps-icon">💵</div>
+        <div class="ps-label">FCF/주 (TTM, BRK.B 환산)</div>
+        <div class="ps-value">$15.92</div>
+        <div class="ps-sub">BRK.A FCF/주 $23,877 ÷ 1500</div>
+      </div>
+      <div class="ps-card">
+        <div class="ps-icon">🚫</div>
+        <div class="ps-label">배당금 (DPS)</div>
+        <div class="ps-value">$0.00</div>
+        <div class="ps-sub">1967년 이후 무배당 유지</div>
+      </div>
     </div>
-    <div class="ps-card">
-      <div class="ps-icon">💵</div>
-      <div class="ps-label">FCF/주 (TTM, BRK.B 환산)</div>
-      <div class="ps-value">$15.92</div>
-      <div class="ps-sub">BRK.A FCF/주 $23,877 ÷ 1500</div>
-    </div>
-    <div class="ps-card">
-      <div class="ps-icon">🚫</div>
-      <div class="ps-label">배당금 (DPS)</div>
-      <div class="ps-value">$0.00</div>
-      <div class="ps-sub">1967년 이후 무배당 유지</div>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:16px;">
-    <div class="card-title">Per-Share 추이 (BRK.B 환산 기준)</div>
     <div class="chart-wrap" style="height:220px;">
       <canvas id="perShareChart"></canvas>
     </div>
@@ -539,11 +537,6 @@
       </div>
     </div>
   </div>
-</div>
-
-<!-- ===================== SECTION 4: 밸류에이션 ===================== -->
-<div id="valuation" class="section">
-  <div class="section-title">밸류에이션 — 5단계 멀티플 평가</div>
 
   <div class="grid-2">
     <div class="card">
@@ -1250,8 +1243,7 @@ function renderCashChart() {
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
-    if (sectionId === 'pershare') renderPerShareChart();
-    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'valuation') { renderPeerChart(); renderPerShareChart(); }
     if (sectionId === 'us') { renderRelChart(); renderCashChart(); }
   }, 50);
 }
