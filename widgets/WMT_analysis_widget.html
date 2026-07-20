@@ -242,7 +242,6 @@
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech',event)">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund',event)">📊 기본적 분석</button>
-  <button class="nav-btn" onclick="showSection('pershare',event)">💰 Per-Share</button>
   <button class="nav-btn" onclick="showSection('valuation',event)">⚖️ 밸류에이션</button>
   <button class="nav-btn" onclick="showSection('us',event)">🇺🇸 US 특화</button>
   <button class="nav-btn" onclick="showSection('news',event)">📰 시계열 뉴스</button>
@@ -371,18 +370,19 @@
 </div>
 
 <!-- ===================== S3: Per-Share ===================== -->
-<div id="pershare" class="section">
-  <div class="section-title">Per-Share 지표</div>
-  <div class="fy-note">⚠️ WMT는 2024년 2월 주식분할(3:1) 완료. 과거 수치는 소급 수정된 기준. FY회계연도 기준 집계.</div>
-  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px;">
-    <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (FY2026 기본)</div><div class="ps-value">$2.76</div><div class="ps-sub">Q2~Q1 FY26 합산 / YoY +0.7%</div></div>
-    <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (Q1 FY27)</div><div class="ps-value">$11.79</div><div class="ps-sub">순자산 $94.3B ÷ 7.97B주</div></div>
-    <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (FY2026)</div><div class="ps-value">$1.85</div><div class="ps-sub">FCF $14.9B ÷ ~8.0B주</div></div>
-    <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">배당금 (분기 최신)</div><div class="ps-value">$0.247</div><div class="ps-sub">연 ~$0.94 / 배당수익률 ~0.8%</div></div>
-  </div>
+<!-- ===================== S4: 밸류에이션 ===================== -->
+<div id="valuation" class="section">
+  <div class="section-title">밸류에이션 — 5단계 멀티플 평가 (리테일 기준)</div>
 
   <div class="card">
-    <div class="card-title">EPS / FCF/주 추이 (최근 8분기)</div>
+    <div class="card-title">Per-Share 지표</div>
+    <div class="fy-note">⚠️ WMT는 2024년 2월 주식분할(3:1) 완료. 과거 수치는 소급 수정된 기준. FY회계연도 기준 집계.</div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px;">
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (FY2026 기본)</div><div class="ps-value">$2.76</div><div class="ps-sub">Q2~Q1 FY26 합산 / YoY +0.7%</div></div>
+      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (Q1 FY27)</div><div class="ps-value">$11.79</div><div class="ps-sub">순자산 $94.3B ÷ 7.97B주</div></div>
+      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (FY2026)</div><div class="ps-value">$1.85</div><div class="ps-sub">FCF $14.9B ÷ ~8.0B주</div></div>
+      <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">배당금 (분기 최신)</div><div class="ps-value">$0.247</div><div class="ps-sub">연 ~$0.94 / 배당수익률 ~0.8%</div></div>
+    </div>
     <div class="chart-wrap" style="height:220px;"><canvas id="perShareChart"></canvas></div>
   </div>
 
@@ -394,11 +394,6 @@
       <div class="stat-box"><div class="stat-label">EBITDA Margin</div><div class="stat-value">6.4%</div><div class="stat-sub">D&A 포함 실질 현금흐름</div></div>
     </div>
   </div>
-</div>
-
-<!-- ===================== S4: 밸류에이션 ===================== -->
-<div id="valuation" class="section">
-  <div class="section-title">밸류에이션 — 5단계 멀티플 평가 (리테일 기준)</div>
 
   <div class="grid-2">
     <div class="card">
@@ -691,8 +686,7 @@ function showSection(id, e) {
 }
 function renderCharts(id) {
   if(id==='fund') renderFund();
-  if(id==='pershare') renderPS();
-  if(id==='valuation') renderPeer();
+  if(id==='valuation') { renderPeer(); renderPS(); }
   if(id==='us') { renderRel(); renderEcom(); }
 }
 
