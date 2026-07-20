@@ -178,5 +178,14 @@
     "accentColor": "#ef4444",
     "page": "widgets/JNJ_analysis_widget.html",
     "lastUpdated": "2026-07-17"
+  },
+  {
+    "rank": 21,
+    "ticker": "INTC",
+    "name": "Intel Corporation",
+    "sector": "Information Technology",
+    "accentColor": "#3b82f6",
+    "page": "widgets/INTC_analysis_widget.html",
+    "lastUpdated": "2026-07-20"
   }
 ]
