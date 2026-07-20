@@ -121,12 +121,12 @@
   .val-low { font-size: 10px; color: var(--green); }
   .val-mid { font-size: 10px; color: var(--accent2); text-align: center; }
   .val-high { font-size: 10px; color: var(--red); }
-  .stg { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
-  .s1 { background: rgba(46,204,113,0.2); color: #2ecc71; }
-  .s2 { background: rgba(39,174,96,0.2); color: #27ae60; }
-  .s3 { background: rgba(46,125,212,0.15); color: var(--accent2); }
-  .s4 { background: rgba(231,126,35,0.2); color: #e67e22; }
-  .s5 { background: rgba(231,76,60,0.2); color: var(--red); }
+  .stage-badge { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
+  .stage-1 { background: rgba(46,204,113,0.2); color: #2ecc71; }
+  .stage-2 { background: rgba(39,174,96,0.2); color: #27ae60; }
+  .stage-3 { background: rgba(46,125,212,0.15); color: var(--accent2); }
+  .stage-4 { background: rgba(231,126,35,0.2); color: #e67e22; }
+  .stage-5 { background: rgba(231,76,60,0.2); color: var(--red); }
 
   /* SEGMENT */
   .seg-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
@@ -405,31 +405,31 @@
       <div class="card-title">멀티플 5단계 평가 (대형은행 기준)</div>
 
       <div class="val-item">
-        <div class="val-header"><span class="val-name">PER (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">14.7x</span><span class="stg s2">2단계 낮음</span></div></div>
+        <div class="val-header"><span class="val-name">PER (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">14.7x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:28%;background:linear-gradient(90deg,#27ae60,#2e7dd4);"></div></div>
         <div class="val-labels"><span class="val-low">저 8x</span><span class="val-mid">적정 13x</span><span class="val-high">고 20x</span></div>
       </div>
 
       <div class="val-item">
-        <div class="val-header"><span class="val-name">PBR (순자산 기준)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">2.21x</span><span class="stg s4">4단계 높음</span></div></div>
+        <div class="val-header"><span class="val-name">PBR (순자산 기준)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">2.21x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:74%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저 0.8x</span><span class="val-mid">적정 1.5x</span><span class="val-high">고 2.5x</span></div>
       </div>
 
       <div class="val-item">
-        <div class="val-header"><span class="val-name">P/TBV (유형순자산)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">2.81x</span><span class="stg s4">4단계 높음</span></div></div>
+        <div class="val-header"><span class="val-name">P/TBV (유형순자산)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">2.81x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:80%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저 1.0x</span><span class="val-mid">적정 1.8x</span><span class="val-high">고 3.0x</span></div>
       </div>
 
       <div class="val-item">
-        <div class="val-header"><span class="val-name">배당수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">1.94%</span><span class="stg s2">2단계 적정</span></div></div>
+        <div class="val-header"><span class="val-name">배당수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">1.94%</span><span class="stage-badge stage-2">2단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:40%;background:linear-gradient(90deg,#27ae60,#2e7dd4);"></div></div>
         <div class="val-labels"><span class="val-low">고 3%+</span><span class="val-mid">적정 2%</span><span class="val-high">저 1%</span></div>
       </div>
 
       <div class="val-item">
-        <div class="val-header"><span class="val-name">ROTCE (은행 효율)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">21%</span><span class="stg s1">최우수</span></div></div>
+        <div class="val-header"><span class="val-name">ROTCE (은행 효율)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">21%</span><span class="stage-badge stage-1">최우수</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:84%;background:linear-gradient(90deg,#2ecc71,#27ae60);"></div></div>
         <div class="val-labels"><span class="val-low">저 10%</span><span class="val-mid">적정 15%</span><span class="val-high">고 20%+</span></div>
       </div>
