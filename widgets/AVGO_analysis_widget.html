@@ -197,7 +197,6 @@
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
-  <button class="nav-btn" onclick="showSection('pershare')">💰 Per-Share</button>
   <button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button>
   <button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button>
   <button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button>
@@ -291,19 +290,18 @@
   </div>
 </div>
 
-<div id="pershare" class="section">
-  <div class="section-title">Per-Share 지표 (Q2 FY26 기준 · 4.76B 주)</div>
-  <div class="per-share-grid">
-    <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS (희석, TTM)</div><div class="ps-value">$6.20</div><div class="ps-sub">VMware 상각 왜곡 포함</div></div>
-    <div class="ps-card"><div class="ps-icon">💎</div><div class="ps-label">Non-GAAP EPS (TTM)</div><div class="ps-value">$8.41</div><div class="ps-sub">실질 수익력 지표</div></div>
-    <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$7.30</div><div class="ps-sub">TTM FCF $34.8B</div></div>
-    <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS (연간배당)</div><div class="ps-value">$2.60</div><div class="ps-sub">분기 $0.65 · 매년 10%+ 인상</div></div>
-  </div>
-  <div style="font-size:11px;color:var(--text3);margin-top:10px;">* GAAP EPS vs Non-GAAP EPS 괴리의 이유: VMware $69B 인수 관련 분기 $2.2B 무형자산 상각(D&A) — 현금 지출 없는 회계 비용. Non-GAAP 기준이 실질 수익력을 반영.</div>
-</div>
-
 <div id="valuation" class="section">
   <div class="section-title">밸류에이션 (Valuation Multiples) — 현재가 $411.35 · GAAP vs Non-GAAP 분리 분석</div>
+  <div class="card">
+    <div class="card-title">Per-Share 지표 (Q2 FY26 기준 · 4.76B 주)</div>
+    <div class="per-share-grid">
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS (희석, TTM)</div><div class="ps-value">$6.20</div><div class="ps-sub">VMware 상각 왜곡 포함</div></div>
+      <div class="ps-card"><div class="ps-icon">💎</div><div class="ps-label">Non-GAAP EPS (TTM)</div><div class="ps-value">$8.41</div><div class="ps-sub">실질 수익력 지표</div></div>
+      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$7.30</div><div class="ps-sub">TTM FCF $34.8B</div></div>
+      <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS (연간배당)</div><div class="ps-value">$2.60</div><div class="ps-sub">분기 $0.65 · 매년 10%+ 인상</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">* GAAP EPS vs Non-GAAP EPS 괴리의 이유: VMware $69B 인수 관련 분기 $2.2B 무형자산 상각(D&A) — 현금 지출 없는 회계 비용. Non-GAAP 기준이 실질 수익력을 반영.</div>
+  </div>
   <div class="info-box">
     <strong>⚠ AVGO 밸류에이션 주의:</strong> VMware 인수 무형자산 상각($2.2B/분기)으로 GAAP EPS·PER이 크게 왜곡됨. Non-GAAP 기준(Forward PER 25x, PEG 0.55)이 실질 투자지표.
   </div>
