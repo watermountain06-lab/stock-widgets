@@ -242,7 +242,6 @@
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech',event)">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund',event)">📊 기본적 분석</button>
-  <button class="nav-btn" onclick="showSection('pershare',event)">💰 Per-Share</button>
   <button class="nav-btn" onclick="showSection('valuation',event)">⚖️ 밸류에이션</button>
   <button class="nav-btn" onclick="showSection('us',event)">☁️ 클라우드 특화</button>
   <button class="nav-btn" onclick="showSection('news',event)">📰 시계열 뉴스</button>
@@ -372,18 +371,19 @@
 </div>
 
 <!-- ===================== S3: Per-Share ===================== -->
-<div id="pershare" class="section">
-  <div class="section-title">Per-Share 지표</div>
-  <div class="fy-note">⚠️ FCF는 AI 데이터센터 Capex($16.5B/분기)로 음수 정상. 오라클 특성상 FCF보다 <strong>운영현금흐름(OCF)</strong>이 실질 현금창출력 지표.</div>
-  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px;">
-    <div class="ps-card"><div class="ps-label">EPS (FY2026 GAAP 기본)</div><div class="ps-value">$5.83</div><div class="ps-sub">YoY +34% / 역대최고</div></div>
-    <div class="ps-card"><div class="ps-label">EPS (FY2026 Non-GAAP)</div><div class="ps-value">$7.63</div><div class="ps-sub">YoY +27% / SBC 제외</div></div>
-    <div class="ps-card"><div class="ps-label">OCF/주 (FY2026)</div><div class="ps-value">$11.26</div><div class="ps-sub">연간 OCF $32.5B ÷ 2.89B주</div></div>
-    <div class="ps-card"><div class="ps-label">배당금 (분기)</div><div class="ps-value">$0.50</div><div class="ps-sub">연 $2.00 / 배당수익률 ~0.7%</div></div>
-  </div>
+<!-- ===================== S4: 밸류에이션 ===================== -->
+<div id="valuation" class="section">
+  <div class="section-title">밸류에이션 — 5단계 멀티플 평가</div>
 
   <div class="card">
-    <div class="card-title">분기 EPS / 운영현금흐름 추이 (최근 8분기)</div>
+    <div class="card-title">Per-Share 지표</div>
+    <div class="fy-note">⚠️ FCF는 AI 데이터센터 Capex($16.5B/분기)로 음수 정상. 오라클 특성상 FCF보다 <strong>운영현금흐름(OCF)</strong>이 실질 현금창출력 지표.</div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px;">
+      <div class="ps-card"><div class="ps-label">EPS (FY2026 GAAP 기본)</div><div class="ps-value">$5.83</div><div class="ps-sub">YoY +34% / 역대최고</div></div>
+      <div class="ps-card"><div class="ps-label">EPS (FY2026 Non-GAAP)</div><div class="ps-value">$7.63</div><div class="ps-sub">YoY +27% / SBC 제외</div></div>
+      <div class="ps-card"><div class="ps-label">OCF/주 (FY2026)</div><div class="ps-value">$11.26</div><div class="ps-sub">연간 OCF $32.5B ÷ 2.89B주</div></div>
+      <div class="ps-card"><div class="ps-label">배당금 (분기)</div><div class="ps-value">$0.50</div><div class="ps-sub">연 $2.00 / 배당수익률 ~0.7%</div></div>
+    </div>
     <div class="chart-wrap" style="height:220px;"><canvas id="perShareChart"></canvas></div>
   </div>
 
@@ -395,11 +395,6 @@
       <div class="stat-box"><div class="stat-label">연간 OCF (FY26)</div><div class="stat-value up">$32.5B</div><div class="stat-sub">OCF 마진 ~48%</div></div>
     </div>
   </div>
-</div>
-
-<!-- ===================== S4: 밸류에이션 ===================== -->
-<div id="valuation" class="section">
-  <div class="section-title">밸류에이션 — 5단계 멀티플 평가</div>
 
   <div class="fy-note">⚠️ FCF 음수(AI 데이터센터 Capex 투자 사이클) — PCR(FCF 기준) 적용 불가. 운영현금흐름 기준 PCR 대체. PBR은 공격적 자사주 매입으로 마이너스 가능 — 특수 처리.</div>
 
@@ -683,8 +678,7 @@ function showSection(id, e) {
 }
 function renderCharts(id) {
   if(id==='fund') renderFund();
-  if(id==='pershare') renderPS();
-  if(id==='valuation') renderPeer();
+  if(id==='valuation') { renderPeer(); renderPS(); }
   if(id==='us') { renderRel(); renderOCI(); }
 }
 
