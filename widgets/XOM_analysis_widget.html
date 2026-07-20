@@ -105,6 +105,8 @@
   .tl-date { font-size: 10px; color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
   .tl-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 3px 0; }
   .tl-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .tl-source { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 11px; font-weight: 600; color: var(--accent2); text-decoration: none; }
+  .tl-source:hover { text-decoration: underline; }
   .bull-bear { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .bb-box { background: var(--bg3); border-radius: var(--radius); padding: 16px; }
   .bb-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
@@ -169,7 +171,7 @@
       <div>
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
           <span class="ticker-badge">XOM</span>
-          <span style="font-size:11px;color:var(--accent2);font-weight:600;">NYSE · 글로벌 통합 에너지 기업 · 156년 역사의 Dividend King</span>
+          <span style="font-size:11px;color:var(--accent2);font-weight:600;">NYSE · 글로벌 통합 에너지 기업 · 156년 역사 · 43년 연속 배당 증가</span>
         </div>
         <div class="company-name">Exxon Mobil Corporation</div>
         <div class="company-sub">Upstream(원유·가스 생산)·Product Solutions(정제·화학)·Low Carbon Solutions · 43년 연속 배당 증가 · S&P 500 시총 19위권</div>
@@ -250,14 +252,14 @@
     <div class="card-title">구간별 패턴 분석</div>
     <div class="grid-4">
       <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.07~10 — $111~115 박스권</div><div style="font-size:12px;color:var(--text2);">안정적 유가 환경 속 완만한 등락. Q3 2025 실적(매출 $85.3B·EPS $1.76)은 견조했으나 특별한 모멘텀 부재.</div></div>
-      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.11~12 — 반등 시작</div><div style="font-size:12px;color:var(--text2);">배당 4% 인상(43년 연속, Dividend King) 발표. 연말 랠리로 $120대 진입.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.11~12 — 반등 시작</div><div style="font-size:12px;color:var(--text2);">배당 4% 인상(43년 연속 증가) 발표. 연말 랠리로 $120대 진입.</div></div>
       <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.01~03 — 52주 신고가 $176.41</div><div style="font-size:12px;color:var(--text2);">Permian 1.8M boe/d·Guyana 900K+bbl/d 생산 기록. Argus 등 목표가 상향. 유가 강세 랠리로 신고가 경신.</div></div>
       <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.04~07 — 조정 후 지정학 반등</div><div style="font-size:12px;color:var(--text2);">차익실현으로 -22%까지 조정, 5/4 Q1 실적서 GAAP EPS -43%(파생상품 손실). 7월 이란發 지정학 긴장으로 유가 급등, $147.36로 재반등.</div></div>
     </div>
   </div>
 
   <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;">
-    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">43년 연속 배당 증가 — Dividend King</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">43년 연속 배당 증가</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">Permian·Guyana 생산 기록 경신</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">52주 수익률 +32.0% — S&P500(+19.6%) 대비 +12.4%p 아웃퍼폼</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(255,193,7,0.18);color:#ffc107;">7/31 Q2 FY2026 실적 발표 예정 — Upstream 증익 가이던스 기공시</span>
@@ -440,39 +442,43 @@
   <div class="timeline">
     <div class="tl-item">
       <div class="tl-dot"></div>
-      <div class="tl-date">2025년 7월 — Q3 FY2025 실적 (2025.11.03 발표분 기준 반영)</div>
+      <div class="tl-date">2025년 10월 31일 — Q3 2025 실적</div>
       <div class="tl-title">매출 $85.3B · GAAP EPS $1.76 · $111~115 박스권</div>
-      <div class="tl-desc">안정적 유가 환경 속 견조한 실적. 특별한 모멘텀 없이 완만한 등락 지속.</div>
+      <div class="tl-desc">매출 $85.3B(전년比 -5%, 유가 약세·화학 마진 둔화 영향), 순이익 $7.55B(-12%). 일회성 항목 제외 시 EPS $1.88로 컨센서스 상회 — Guyana·Permian 증산과 구조적 비용절감이 상쇄. 영업CF $39.3B, Capex $20.9B, 배당 $12.9B, 자사주 $14.9B.</div>
+      <a class="tl-source" href="https://www.cnbc.com/2025/10/31/exxon-xom-q3-2025-earnings.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
     </div>
     <div class="tl-item">
       <div class="tl-dot green"></div>
-      <div class="tl-date">2025년 11월 — 배당 4% 인상</div>
-      <div class="tl-title">43년 연속 배당 증가 — Dividend King 지위 유지</div>
-      <div class="tl-desc">이사회가 분기 배당을 4% 인상. 반세기 가까운 연속 증배 기록을 이어가며 연말 랠리의 기점이 됨.</div>
+      <div class="tl-date">2025년 10월 31일 — 배당 4% 인상</div>
+      <div class="tl-title">43년 연속 배당 증가 — Dividend Aristocrat 기록 지속</div>
+      <div class="tl-desc">Q3 실적 발표와 함께 이사회가 4분기 배당을 $1.03로 4% 인상(11/14 기준일, 12/10 지급) 승인 — 43년 연속 연간 배당 증가 기록. 참고로 'Dividend King'(50년 연속) 등재까지는 앞으로 7~8년 더 필요.</div>
     </div>
     <div class="tl-item">
       <div class="tl-dot gold"></div>
       <div class="tl-date">2026년 3월 30일 — 52주 신고가 $176.41</div>
-      <div class="tl-title">Permian·Guyana 생산 기록 · Argus 목표가 $169로 상향</div>
-      <div class="tl-desc">Permian 1.8M boe/d, Guyana 900K+bbl/d 생산 기록 경신을 배경으로 애널리스트 목표가 상향 랠리 지속, 52주 신고가 경신.</div>
+      <div class="tl-title">Permian·Guyana 생산 기록 경신 랠리</div>
+      <div class="tl-desc">Permian Q4 2025 1.8M boe/d, Guyana 900K+ gross bpd 생산 기록(Yellowtail 4개월 조기 가동) 배경으로 52주 신고가 $176.41 경신 — 유가 자체는 오히려 약세였던 구간에도 생산 증가 모멘텀이 주가를 견인.</div>
+      <a class="tl-source" href="https://finance.yahoo.com/news/why-exxon-mobil-stock-just-153022986.html" target="_blank" rel="noopener">관련 뉴스 보기 (Yahoo Finance) →</a>
     </div>
     <div class="tl-item">
       <div class="tl-dot red"></div>
       <div class="tl-date">2026년 4~5월 — 조정 및 Q1 실적 발표</div>
-      <div class="tl-title">차익실현으로 -22% 조정 · 5/4 Q1 실적 GAAP EPS -43% YoY</div>
-      <div class="tl-desc">3월 고점 이후 유가 조정과 차익실현으로 $136대까지 하락. Q1 실적에서 GAAP EPS $1.00(-43% YoY)을 발표했으나, $3.9B 규모 파생상품 타이밍 손실이 핵심 원인이었고 조정(Non-GAAP) EPS $1.16은 컨센서스를 상회.</div>
+      <div class="tl-title">차익실현으로 -22% 조정 · 5/1 Q1 실적 GAAP EPS -43% YoY</div>
+      <div class="tl-desc">3월 고점 이후 유가 조정과 차익실현으로 $136대까지 하락. Q1 실적 순이익 $4.2B·EPS $1.00 — 2월 28일 발발한 이란 전쟁으로 인한 $3.9B 규모 파생상품 타이밍 손실이 핵심 원인(일회성 항목 전부 제외 시 실질 EPS $2.09). 조정(Non-GAAP) EPS $1.16은 컨센서스($1.0074) 대비 15% 상회.</div>
+      <a class="tl-source" href="https://finance.yahoo.com/sectors/energy/articles/exxonmobil-q1-2026-earnings-beat-114559774.html" target="_blank" rel="noopener">관련 뉴스 보기 (Yahoo Finance) →</a>
     </div>
     <div class="tl-item">
       <div class="tl-dot"></div>
       <div class="tl-date">2026년 5월 — 자사주 매입 지속</div>
       <div class="tl-title">Q1 자사주매입 $4.9B · 연간 $20B 프로그램 온페이스</div>
-      <div class="tl-desc">일회성 GAAP 손실에도 불구하고 자사주 매입 속도는 유지, 연간 $20.0B 프로그램 궤도 유지를 재확인.</div>
+      <div class="tl-desc">일회성 GAAP 손실에도 불구하고 자사주 매입 속도는 유지, 연간 $20.0B 프로그램 궤도 유지를 재확인. CEO Woods "호르무즈 해협 통한 세계 원유·LNG 공급의 약 20%가 걸린 전례 없는 공급 차질" 경고, 유가 추가 상승 가능성 시사.</div>
     </div>
     <div class="tl-item">
       <div class="tl-dot gold"></div>
-      <div class="tl-date">2026년 7월 — 이란發 지정학 긴장, 유가 급등</div>
-      <div class="tl-title">Q2 Upstream 증익 가이던스(+$3.5~3.9B) 사전공시 · $147.36 반등</div>
-      <div class="tl-desc">미국-이란 갈등과 유조선 항로 차질로 원유가 4% 이상 급등. Exxon은 이를 반영해 Q2 Upstream 부문이 전분기 대비 $3.5~3.9B 증익할 것이라는 가이던스를 사전 공시, 주가는 $130대에서 $147.36까지 반등.</div>
+      <div class="tl-date">2026년 7월 — 이란發 지정학 긴장 재점화, 유가 급등</div>
+      <div class="tl-title">호르무즈 해협 공격 재개로 유가 4%+ 급등 · $147.36 반등</div>
+      <div class="tl-desc">미국-이란 호르무즈 해협 공격 주고받기로 원유가 한 달래 최고치로 급등, Exxon 등 에너지주 동반 강세. 사우디 정제·석유화학, 카타르 LNG, UAE 생산 등 중동 사업 일부는 여전히 차질 중이나 고유가가 이를 상쇄. 주가는 $130대에서 $147.36까지 반등. 7월 초 텍사스 재본거지 이전(redomiciliation) 완료도 겹침.</div>
+      <a class="tl-source" href="https://www.fool.com/investing/2026/07/14/oil-climbs-to-a-1-month-high-as-the-u-s-and-iran-trade-attacks-in-the-strait-of-hormuz-here-s-what-it-means-for-energy-investors/" target="_blank" rel="noopener">관련 뉴스 보기 (Motley Fool) →</a>
     </div>
   </div>
 </div>
