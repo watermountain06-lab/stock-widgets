@@ -229,6 +229,7 @@
         <button class="ma-toggle-btn" data-ma="ma20" style="color:var(--ma20);border-color:var(--ma20);">● MA20</button>
         <button class="ma-toggle-btn" data-ma="ma60" style="color:var(--ma60);border-color:var(--ma60);">● MA60</button>
         <button class="ma-toggle-btn" data-ma="ma120" style="color:var(--ma120);border-color:var(--ma120);">● MA120</button>
+        <button class="ma-toggle-btn" data-ma="pricelabels" style="color:var(--text2);border-color:var(--text2);margin-left:4px;">◆ 가격라벨</button>
       </div>
     </div>
     <svg id="aaplCandleSvg" viewBox="0 0 720 240" width="100%" style="display:block;background:var(--bg3);border-radius:8px 8px 0 0;padding:4px;" role="img" aria-label="AAPL 일봉 캔들스틱 차트"></svg>
@@ -553,7 +554,7 @@ const AAPL_MA120 = [213.83,213.73,213.59,213.39,213.18,212.98,212.8,212.68,212.5
   const NS = 'http://www.w3.org/2000/svg';
   const UP='#2ecc71', DOWN='#e74c3c';
   const maColors = {ma5:'#ff6b9d', ma20:'#9b59b6', ma60:'#f0c040', ma120:'#22d3ee'};
-  const maState = {ma5:true, ma20:true, ma60:true, ma120:true};
+  const maState = {ma5:true, ma20:true, ma60:true, ma120:true, pricelabels:true};
   let currentRange = '1Y';
 
   function draw(rangeKey){
@@ -633,6 +634,57 @@ const AAPL_MA120 = [213.83,213.73,213.59,213.39,213.18,212.98,212.8,212.68,212.5
     if (maState.ma20) drawMaLine(ma20, maColors.ma20);
     if (maState.ma60) drawMaLine(ma60, maColors.ma60);
     if (maState.ma120) drawMaLine(ma120, maColors.ma120);
+
+    if (maState.pricelabels) {
+    const closeIdx = data.length-1;
+    const closeVal = data[closeIdx][4];
+    const periodHigh = Math.max(...highs);
+    const periodLow = Math.min(...lows);
+    const highIdx = highs.indexOf(periodHigh);
+    const lowIdx = lows.indexOf(periodLow);
+    const markers = [
+      {idx: highIdx, v: periodHigh, color: UP, label:'최고', side:'above'},
+      {idx: lowIdx, v: periodLow, color: DOWN, label:'최저', side:'below'},
+      {idx: closeIdx, v: closeVal, color:'#60a5fa', label:'종가', side:'left'}
+    ];
+    markers.forEach(m=>{
+      const cx = pL + (m.idx+0.5)*colW;
+      const cy = py(m.v);
+      const dot=document.createElementNS(NS,'circle');
+      dot.setAttribute('cx',cx);dot.setAttribute('cy',cy);dot.setAttribute('r','3.5');
+      dot.setAttribute('fill',m.color);dot.setAttribute('stroke','#0f1117');dot.setAttribute('stroke-width','1.5');
+      svgCandle.appendChild(dot);
+
+      const labelText = `${m.label} $${m.v.toFixed(2)}`;
+      const labelW = labelText.length*5.2+6;
+      let tx, ty, anchor;
+      if (m.side === 'left') {
+        anchor = 'end'; tx = cx-7; ty = cy+3;
+      } else if (m.side === 'above') {
+        ty = cy-9;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      } else {
+        ty = cy+16;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      }
+      const bgX = anchor==='end' ? tx-labelW : anchor==='middle' ? tx-labelW/2 : tx;
+      const bg=document.createElementNS(NS,'rect');
+      bg.setAttribute('x', bgX);bg.setAttribute('y', ty-8);
+      bg.setAttribute('width', labelW);bg.setAttribute('height', 12);
+      bg.setAttribute('fill','rgba(15,17,23,0.85)');bg.setAttribute('rx','2');
+      svgCandle.appendChild(bg);
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x', tx);t.setAttribute('y', ty+2);
+      t.setAttribute('text-anchor',anchor);t.setAttribute('font-size','9');
+      t.setAttribute('font-weight','700');t.setAttribute('fill', m.color);
+      t.textContent = labelText;
+      svgCandle.appendChild(t);
+    });
+    }
 
     const labelCount = Math.min(5, data.length);
     for(let i=0;i<labelCount;i++){
