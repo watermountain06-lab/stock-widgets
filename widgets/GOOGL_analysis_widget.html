@@ -215,6 +215,7 @@
     color: var(--text3);
     line-height: 1.6;
   }
+  .scenario-card { border-radius: 8px; padding: 14px; }
   @media (max-width: 600px) {
     .header { padding: 20px 16px; }
     .section { padding: 20px 16px; }
@@ -490,6 +491,22 @@
         <div style="font-size:12px;color:var(--accent2);font-weight:700;margin-bottom:6px;">주의 요소</div>
         <div style="font-size:12px;color:var(--text2);line-height:1.6;">PSR 10.6x → 3단계. EV/EBITDA 26.8x → 3단계. PCR 69.3x → 4단계(Capex급증 일시 영향).</div>
       </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">시나리오별 공정가치 분석</div>
+    <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — 검색 광고 잠식·규제 리스크</div>
+      <div style="font-size:12px;color:var(--text2);">AI 검색 대체 우려가 현실화되고 반독점 규제가 강화될 경우 → 공정가치 <strong style="color:var(--red);">$300~340/주</strong></div>
+    </div>
+    <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — Cloud 성장 지속·컨센서스 목표가 수준</div>
+      <div style="font-size:12px;color:var(--text2);">Cloud +63% 성장세와 PER 27.8x 밴드가 유지될 경우 → 공정가치 <strong style="color:var(--text);">$400~460/주</strong> (애널리스트 평균 목표가 $433와 부합)</div>
+    </div>
+    <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — Cloud 백로그 수익화 가속</div>
+      <div style="font-size:12px;color:var(--text2);">$460B Cloud 백로그가 빠르게 매출로 전환되며 멀티플이 재평가될 경우 → 공정가치 <strong style="color:var(--green);">$480~515/주</strong></div>
     </div>
   </div>
 </div>
