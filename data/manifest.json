@@ -67,7 +67,7 @@
     "ticker": "NVDA",
     "name": "NVIDIA",
     "sector": "Information Technology",
-    "accentColor": "#76b900",
+    "accentColor": "#3b82f6",
     "page": "widgets/NVDA_analysis_widget.html",
     "lastUpdated": "2026-07-15"
   },

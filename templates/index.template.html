@@ -58,7 +58,7 @@
     transition: transform .15s, box-shadow .15s, border-color .15s;
   }
   .card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,.35); }
-  .card-rank { font-size: 11px; color: var(--text3); font-weight: 600; margin-bottom: 10px; }
+  .card-rank { font-size: 14px; color: var(--text2); font-weight: 700; margin-bottom: 10px; }
   .card-ticker { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 4px; }
   .card-name { font-size: 12.5px; color: var(--text2); margin-bottom: 10px;
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -115,6 +115,15 @@
 </footer>
 
 <script>
+const SECTOR_COLORS = {
+  "Information Technology": "#3b82f6",
+  "Communication Services": "#a855f7",
+  "Consumer Discretionary": "#f97316",
+  "Consumer Staples": "#eab308",
+  "Financials": "#14b8a6",
+  "Health Care": "#ef4444",
+  "Energy": "#22c55e"
+};
 const STOCKS = /*STOCKS_JSON_START*/[]/*STOCKS_JSON_END*/;
 const MACRO = /*MACRO_JSON_START*/null/*MACRO_JSON_END*/;
 
