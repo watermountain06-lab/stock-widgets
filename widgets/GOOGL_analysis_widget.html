@@ -289,7 +289,6 @@
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
-  <button class="nav-btn" onclick="showSection('pershare')">💰 Per-Share</button>
   <button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button>
   <button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button>
   <button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button>
@@ -419,20 +418,19 @@
 </div>
 
 <!-- SECTION 3 -->
-<div id="pershare" class="section">
-  <div class="section-title">Per-Share 지표 (Q1 2026 기준 · 12.12B 주)</div>
-  <div class="per-share-grid">
-    <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석, TTM)</div><div class="ps-value">$13.24</div><div class="ps-sub">Q2 2025~Q1 2026 합산</div></div>
-    <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (주당순자산)</div><div class="ps-value">$39.51</div><div class="ps-sub">Q1 2026 · 자기자본 $479B</div></div>
-    <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$5.36</div><div class="ps-sub">TTM FCF $64.9B</div></div>
-    <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">Net Cash/주</div><div class="ps-value">$2.53</div><div class="ps-sub">순현금 $31.0B (Q1 2026)</div></div>
-  </div>
-  <div style="font-size:11px;color:var(--text3);margin-top:10px;">* FCF Q1 2026 단독 $10.1B — Capex 급증($35.7B)으로 분기 FCF 일시 압축. TTM 기준 $64.9B.</div>
-</div>
-
 <!-- SECTION 4 -->
 <div id="valuation" class="section">
   <div class="section-title">밸류에이션 (Valuation Multiples) — 현재가 $368.53 · 빅테크 비교</div>
+  <div class="card">
+    <div class="card-title">Per-Share 지표 (Q1 2026 기준 · 12.12B 주)</div>
+    <div class="per-share-grid">
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석, TTM)</div><div class="ps-value">$13.24</div><div class="ps-sub">Q2 2025~Q1 2026 합산</div></div>
+      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (주당순자산)</div><div class="ps-value">$39.51</div><div class="ps-sub">Q1 2026 · 자기자본 $479B</div></div>
+      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$5.36</div><div class="ps-sub">TTM FCF $64.9B</div></div>
+      <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">Net Cash/주</div><div class="ps-value">$2.53</div><div class="ps-sub">순현금 $31.0B (Q1 2026)</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">* FCF Q1 2026 단독 $10.1B — Capex 급증($35.7B)으로 분기 FCF 일시 압축. TTM 기준 $64.9B.</div>
+  </div>
   <div class="grid-2">
     <div class="card">
       <div class="card-title">멀티플 5단계 평가</div>
