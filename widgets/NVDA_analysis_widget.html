@@ -209,6 +209,8 @@
   .tl-date { font-size: 10px; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
   .tl-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 3px 0; }
   .tl-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .tl-source { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 11px; font-weight: 600; color: var(--accent2); text-decoration: none; }
+  .tl-source:hover { text-decoration: underline; }
 
   /* BULL/BEAR */
   .bull-bear { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -383,8 +385,8 @@
     <div class="card-title">구간별 패턴 분석</div>
     <div class="grid-4">
       <div style="background:var(--bg3);padding:12px;border-radius:8px;">
-        <div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.07~08 저점 형성</div>
-        <div style="font-size:12px;color:var(--text2);">$143~$158 저점권. AI 지출 우려·수출규제. 대량 거래량 수반. 장기 지지선 확인.</div>
+        <div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.08~09 저점 형성</div>
+        <div style="font-size:12px;color:var(--text2);">$164~$180 저점권(9/5 $164.07 52주 최저). AI 지출 우려·수출규제. 대량 거래량 수반. 장기 지지선 확인.</div>
       </div>
       <div style="background:var(--bg3);padding:12px;border-radius:8px;">
         <div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.09~11 반등·급등</div>
@@ -392,7 +394,7 @@
       </div>
       <div style="background:var(--bg3);padding:12px;border-radius:8px;">
         <div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.12~2026.02 박스권</div>
-        <div style="font-size:12px;color:var(--text2);">$165~$207 박스 횡보. DeepSeek 쇼크 급락. 중국 수출규제 우려. 기술적 조정 구간.</div>
+        <div style="font-size:12px;color:var(--text2);">$165~$207 박스 횡보. AI 지출 지속가능성 논쟁. 중국 수출규제 우려. 기술적 조정 구간.</div>
       </div>
       <div style="background:var(--bg3);padding:12px;border-radius:8px;">
         <div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.03~07 신고점 후 조정</div>
@@ -739,39 +741,37 @@
   <div class="timeline">
     <div class="tl-item">
       <div class="tl-dot red"></div>
-      <div class="tl-date">2025년 7월 — 수출규제 이슈</div>
-      <div class="tl-title">$143 저점 · 중국 AI칩 수출 제한 강화 우려로 조정</div>
-      <div class="tl-desc">바이든 행정부 AI칩 수출규제 추가 강화 논의. H100·A100 이어 H200도 중국 수출 불가 가능성. 주가 $143~$158 저점 형성. 이후 반등 시작의 최적 진입점이었음.</div>
+      <div class="tl-date">2025년 9월 5일 — 52주 최저</div>
+      <div class="tl-title">$164.07 52주 최저 · 중국향 수출규제 불확실성 지속</div>
+      <div class="tl-desc">H20 중국向 라이선스 요건(2025년 4월 부과, Q1 FY26에 $4.5B 재고손실 충당) 여파와 추가 규제 불확실성이 지속되며 주가 $164.07로 52주 최저 형성. 이후 반등 시작의 최적 진입점이었음.</div>
     </div>
     <div class="tl-item">
       <div class="tl-dot gold"></div>
-      <div class="tl-date">2025년 10월 — Q3 FY26 실적</div>
-      <div class="tl-title">매출 $35.1B · Blackwell 수요 "극단적(extreme)" — 역대급 서프라이즈</div>
-      <div class="tl-desc">매출 $35.1B(▲93.6% YoY), 영업이익 $21.9B(OPM 62.3%). Data Center $30.8B. 젠슨 황 CEO "Blackwell 수요는 extreme" 발언으로 주가 급등. 클라우드 GPU 공급 부족 확인.</div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot red"></div>
-      <div class="tl-date">2026년 1월 — DeepSeek 쇼크</div>
-      <div class="tl-title">중국 DeepSeek AI 저비용 학습 주장 — 하루 -17% 급락 · $600B 시총 증발</div>
-      <div class="tl-desc">중국 DeepSeek이 소수의 GPU로 GPT-4급 성능 달성 주장. AI 인프라 투자 위축 공포로 하루 -17% 역대 최대 시총 손실 기록. 이후 "추론 수요 오히려 증가" 반론으로 반등 회복.</div>
+      <div class="tl-date">2025년 11월 19일 — Q3 FY26 실적</div>
+      <div class="tl-title">매출 $57.0B 역대최대 · Blackwell "품절(sold out)" — 역대급 서프라이즈</div>
+      <div class="tl-desc">매출 $57.0B(▲62% YoY, 전분기比 +22%). Data Center $51.2B(▲66% YoY). 젠슨 황 CEO "Blackwell 판매는 차트를 벗어났고, 클라우드 GPU는 품절(sold out)" 발언. 주당 Blackwell 랙 1,000개 이상 출하 중이라고 공개.</div>
+      <a class="tl-source" href="https://mysweetretirement.com/nvidia-q3-fy2026-earnings" target="_blank" rel="noopener">관련 뉴스 보기 →</a>
     </div>
     <div class="tl-item">
       <div class="tl-dot gold"></div>
-      <div class="tl-date">2026년 2월 — Q4 FY26 실적</div>
+      <div class="tl-date">2026년 2월 25일 — Q4 FY26 실적</div>
       <div class="tl-title">매출 $68.1B · 분기 역대최대 · $78B 가이던스 제시</div>
-      <div class="tl-desc">매출 $68.1B(▲73.2% YoY), EPS $1.76. Data Center $62.3B. Q1 FY27 가이던스 $78B(+/-2%). 순현금 $51.5B. 자사주 $62.2B 잔여 승인. Vera Rubin 차세대 아키텍처 첫 샘플 출하 공개.</div>
+      <div class="tl-desc">매출 $68.1B(▲73% YoY, 컨센서스 $60.4B 상회). FY2026 연간 매출 $215.9B(+65%). Data Center $62.3B(+75%). GAAP EPS $1.76. Q1 FY27 가이던스 $78B(컨센서스 대비 $5B+ 상회).</div>
+      <a class="tl-source" href="https://futurumgroup.com/insights/nvidia-q4-fy-2026-earnings-highlight-durable-ai-infrastructure-demand/" target="_blank" rel="noopener">관련 뉴스 보기 (Futurum) →</a>
     </div>
     <div class="tl-item">
       <div class="tl-dot gold"></div>
-      <div class="tl-date">2026년 5월 — Q1 FY27 실적</div>
-      <div class="tl-title">매출 $81.6B · 연속 신고점 · 주가 $229.52 역대 최고</div>
-      <div class="tl-desc">매출 $81.6B(▲85.2% YoY), 영업이익 $53.5B(OPM 65.6%). 자사주 매입 $19.3B(분기 최대). FCF $48.6B. 순현금 $68.2B. 실적 발표 후 주가 $229.52 역대 최고 경신.</div>
+      <div class="tl-date">2026년 5월 20일 — Q1 FY27 실적</div>
+      <div class="tl-title">매출 $81.6B · 연속 신고점 · 배당 25배 인상 + $80B 자사주 승인</div>
+      <div class="tl-desc">매출 $81.6B(▲85% YoY, 컨센서스 $78.8B 상회). Data Center $75.2B(+92%). EPS $1.87(컨센서스 $1.76 상회). 분기배당 $0.01→$0.25로 25배 인상 + $80B 추가 자사주 매입 승인. 주가 $220대 신고점권 진입.</div>
+      <a class="tl-source" href="https://www.tikr.com/blog/nvidia-q1-2027-earnings-81-6b-revenue-and-three-straight-quarters-of-acceleration" target="_blank" rel="noopener">관련 뉴스 보기 (TIKR) →</a>
     </div>
     <div class="tl-item">
       <div class="tl-dot red"></div>
-      <div class="tl-date">2026년 6월 — 수출규제 재강화</div>
+      <div class="tl-date">2026년 6월 1일 — 수출규제 재강화</div>
       <div class="tl-title">미 정부 중국계 기업 해외 법인도 수출허가 적용 — Blackwell 루프홀 차단</div>
-      <div class="tl-desc">6월 1일, 美 정부가 중국 기업의 해외 자회사에도 수출허가 요건 적용 명확화. Blackwell 칩을 우회 수입하려던 중국 기업 루프홀 차단. 상원의원 NVIDIA CEO 청문회 요청. 현재 $205 소폭 조정 중.</div>
+      <div class="tl-desc">6월 1일, 美 상무부(BIS)가 중국 본사·모기업 소재 기업의 해외 자회사(말레이시아·싱가포르·UAE 등)에도 수출허가 요건 적용 명확화 — 우회 수입 루프홀 차단. Warren 상원의원이 젠슨 황에 6/11 청문회 출석 요청.</div>
+      <a class="tl-source" href="https://www.cnbc.com/2026/06/04/nvidia-ceo-jensen-huang-warren-senate-hearing-china-ai-chips.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
     </div>
   </div>
 </div>
