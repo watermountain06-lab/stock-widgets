@@ -234,7 +234,6 @@
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech',event)">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund',event)">📊 기본적 분석</button>
-  <button class="nav-btn" onclick="showSection('pershare',event)">💰 Per-Share</button>
   <button class="nav-btn" onclick="showSection('valuation',event)">⚖️ 밸류에이션</button>
   <button class="nav-btn" onclick="showSection('us',event)">🌍 글로벌 특화</button>
   <button class="nav-btn" onclick="showSection('news',event)">📰 시계열 뉴스</button>
@@ -369,18 +368,19 @@
 </div>
 
 <!-- ===================== S3: Per-Share ===================== -->
-<div id="pershare" class="section">
-  <div class="section-title">Per-Share 지표 (EUR 기준 / ADR USD 환산)</div>
-  <div class="eur-note">💱 ASML EPS·BPS는 EUR 기준. ADR USD 환산 시 EUR/USD 1.08 적용. 배당은 연 2회 지급(3월·9월), EUR 표기.</div>
-  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px;">
-    <div class="ps-card"><div class="ps-label">EPS (TTM 기본, EUR)</div><div class="ps-value">€25.97</div><div class="ps-sub">Q2\'25~Q1\'26 / $28.0 USD 환산</div></div>
-    <div class="ps-card"><div class="ps-label">BPS (Q1 2026, EUR)</div><div class="ps-value">€54.04</div><div class="ps-sub">순자산 €20.8B ÷ 385M주</div></div>
-    <div class="ps-card"><div class="ps-label">FCF/주 (TTM, EUR)</div><div class="ps-value">€23.86</div><div class="ps-sub">연간 FCF €9.2B ÷ 386M주</div></div>
-    <div class="ps-card"><div class="ps-label">배당금 (연간, EUR)</div><div class="ps-value">€12.24</div><div class="ps-sub">2025년 연간(€7.5+€1.6×3) / 배당수익률 ~0.7%</div></div>
-  </div>
+<!-- ===================== S4: 밸류에이션 ===================== -->
+<div id="valuation" class="section">
+  <div class="section-title">밸류에이션 — 5단계 멀티플 평가 (반도체 장비 기준 상향)</div>
 
   <div class="card">
-    <div class="card-title">EPS / FCF/주 분기 추이 (EUR 기준)</div>
+    <div class="card-title">Per-Share 지표 (EUR 기준 / ADR USD 환산)</div>
+    <div class="eur-note">💱 ASML EPS·BPS는 EUR 기준. ADR USD 환산 시 EUR/USD 1.08 적용. 배당은 연 2회 지급(3월·9월), EUR 표기.</div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px;">
+      <div class="ps-card"><div class="ps-label">EPS (TTM 기본, EUR)</div><div class="ps-value">€25.97</div><div class="ps-sub">Q2\'25~Q1\'26 / $28.0 USD 환산</div></div>
+      <div class="ps-card"><div class="ps-label">BPS (Q1 2026, EUR)</div><div class="ps-value">€54.04</div><div class="ps-sub">순자산 €20.8B ÷ 385M주</div></div>
+      <div class="ps-card"><div class="ps-label">FCF/주 (TTM, EUR)</div><div class="ps-value">€23.86</div><div class="ps-sub">연간 FCF €9.2B ÷ 386M주</div></div>
+      <div class="ps-card"><div class="ps-label">배당금 (연간, EUR)</div><div class="ps-value">€12.24</div><div class="ps-sub">2025년 연간(€7.5+€1.6×3) / 배당수익률 ~0.7%</div></div>
+    </div>
     <div class="chart-wrap" style="height:220px;"><canvas id="perShareChart"></canvas></div>
   </div>
 
@@ -392,11 +392,6 @@
       <div class="stat-box"><div class="stat-label">순이익률 (Q1 2026)</div><div class="stat-value cy">30.3%</div><div class="stat-sub">저세율(17%) + 고마진 유지</div></div>
     </div>
   </div>
-</div>
-
-<!-- ===================== S4: 밸류에이션 ===================== -->
-<div id="valuation" class="section">
-  <div class="section-title">밸류에이션 — 5단계 멀티플 평가 (반도체 장비 기준 상향)</div>
 
   <div class="grid-2">
     <div class="card">
@@ -676,8 +671,7 @@ function showSection(id, e) {
 }
 function renderCharts(id) {
   if(id==='fund') renderFund();
-  if(id==='pershare') renderPS();
-  if(id==='valuation') renderPeer();
+  if(id==='valuation') { renderPeer(); renderPS(); }
   if(id==='us') { renderRel(); renderBook(); }
 }
 
