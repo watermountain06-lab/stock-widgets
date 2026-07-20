@@ -145,6 +145,7 @@
   .ma-toggle-btn { background: var(--bg3); border: 1px solid; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer; transition: all .15s; }
   .ma-toggle-btn:hover { filter: brightness(1.2); }
   .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
+  .scenario-card { border-radius: 8px; padding: 14px; }
   @media (max-width: 600px) {
     .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
     .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; }
@@ -372,6 +373,22 @@
         <div style="font-size:12px;color:var(--red);font-weight:700;margin-bottom:6px;">주의 요소</div>
         <div style="font-size:12px;color:var(--text2);line-height:1.6;">PER 40.5x → 4단계(빅테크 최고). PBR 46.2x → 5단계(자사주 구조적). PCR 43.2x·EV/EBITDA 30.3x → 4단계. 5개 지표 평균 4단계 — PEG 3.3으로 성장 대비 가장 비싼 빅테크. 사상 최고가 부근 신규 매수는 신중 필요.</div>
       </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">시나리오별 공정가치 분석</div>
+    <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — 멀티플 정상화·아이폰 수요 둔화</div>
+      <div style="font-size:12px;color:var(--text2);">PEG 3.3의 프리미엄이 축소되고 하드웨어 성장 정체 시 → 공정가치 <strong style="color:var(--red);">$215~270/주</strong></div>
+    </div>
+    <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 현 밸류에이션·성장세 유지</div>
+      <div style="font-size:12px;color:var(--text2);">PER 40.5x 밴드 유지, Services 고마진 성장 지속 시 → 공정가치 <strong style="color:var(--text);">$290~345/주</strong></div>
+    </div>
+    <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — Services 고성장 지속·멀티플 추가 확장</div>
+      <div style="font-size:12px;color:var(--text2);">Services 매출 비중 확대와 AI 기능(Apple Intelligence) 채택 가속으로 재평가 시 → 공정가치 <strong style="color:var(--green);">$365~400/주</strong></div>
     </div>
   </div>
 </div>
