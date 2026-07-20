@@ -173,6 +173,7 @@
   .disclaimer { margin: 28px 32px 16px; padding: 12px 16px; background: rgba(46,125,212,0.05); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
   .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
   .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
+  .scenario-card { border-radius: 8px; padding: 14px; }
 
   @media (max-width:600px) {
     .header, .section { padding: 20px 16px; }
@@ -445,6 +446,22 @@
       <div class="card-title">대형은행 피어 비교 (P/TBV 기준)</div>
       <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
       <div style="margin-top:10px;font-size:12px;color:var(--text2);">* JPM P/TBV 2.81x는 피어 최고 수준 — ROTCE 업계 1위 반영. BAC·WFC·C 대비 현저한 프리미엄.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">시나리오별 공정가치 분석</div>
+    <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — 신용 사이클 악화·대손충당금 급증</div>
+      <div style="font-size:12px;color:var(--text2);">경기 둔화로 신용 사이클이 악화되고 대손충당금이 급증할 경우 → 공정가치 <strong style="color:var(--red);">$240~275/주</strong></div>
+    </div>
+    <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 순이자이익(NII) 안정</div>
+      <div style="font-size:12px;color:var(--text2);">P/TBV 2.81x·ROTCE 21% 밴드가 유지되며 NII가 안정적으로 유지될 경우 → 공정가치 <strong style="color:var(--text);">$330~360/주</strong></div>
+    </div>
+    <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — 연착륙 성공·M&A 붐 도래</div>
+      <div style="font-size:12px;color:var(--text2);">경기 연착륙이 성공하고 IB 부문 M&A 딜플로우가 붐을 이룰 경우 → 공정가치 <strong style="color:var(--green);">$390~420/주</strong></div>
     </div>
   </div>
 </div>
