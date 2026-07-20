@@ -196,7 +196,6 @@
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
-  <button class="nav-btn" onclick="showSection('pershare')">💰 Per-Share</button>
   <button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button>
   <button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button>
   <button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button>
@@ -291,19 +290,18 @@
   </div>
 </div>
 
-<div id="pershare" class="section">
-  <div class="section-title">Per-Share 지표 (Q3 FY26 기준 · 7.43B 주)</div>
-  <div class="per-share-grid">
-    <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석, TTM)</div><div class="ps-value">$16.86</div><div class="ps-sub">Q4 FY25~Q3 FY26 합산</div></div>
-    <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (주당순자산)</div><div class="ps-value">$55.66</div><div class="ps-sub">Q3 FY26 · 자기자본 $414B</div></div>
-    <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$9.07</div><div class="ps-sub">TTM FCF $67.4B</div></div>
-    <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS (연간배당)</div><div class="ps-value">$3.32</div><div class="ps-sub">분기 $0.83→$0.91 인상 지속</div></div>
-  </div>
-  <div style="font-size:11px;color:var(--text3);margin-top:10px;">* TTM FCF는 분기별 변동 큼(매출/비용 선인식 특성). Q3 FY26 Capex $30.9B 급증으로 단기 FCF 압축 — 정상화 시 연 $80~90B 기대.</div>
-</div>
-
 <div id="valuation" class="section">
   <div class="section-title">밸류에이션 (Valuation Multiples) — 현재가 $390.74 · 빅테크 비교</div>
+  <div class="card">
+    <div class="card-title">Per-Share 지표 (Q3 FY26 기준 · 7.43B 주)</div>
+    <div class="per-share-grid">
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석, TTM)</div><div class="ps-value">$16.86</div><div class="ps-sub">Q4 FY25~Q3 FY26 합산</div></div>
+      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (주당순자산)</div><div class="ps-value">$55.66</div><div class="ps-sub">Q3 FY26 · 자기자본 $414B</div></div>
+      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$9.07</div><div class="ps-sub">TTM FCF $67.4B</div></div>
+      <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS (연간배당)</div><div class="ps-value">$3.32</div><div class="ps-sub">분기 $0.83→$0.91 인상 지속</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">* TTM FCF는 분기별 변동 큼(매출/비용 선인식 특성). Q3 FY26 Capex $30.9B 급증으로 단기 FCF 압축 — 정상화 시 연 $80~90B 기대.</div>
+  </div>
   <div class="grid-2">
     <div class="card">
       <div class="card-title">멀티플 5단계 평가</div>
