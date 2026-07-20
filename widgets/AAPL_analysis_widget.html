@@ -205,7 +205,6 @@
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
-  <button class="nav-btn" onclick="showSection('pershare')">💰 Per-Share</button>
   <button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button>
   <button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button>
   <button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button>
@@ -302,19 +301,18 @@
   </div>
 </div>
 
-<div id="pershare" class="section">
-  <div class="section-title">Per-Share 지표 (Q2 FY26 기준 · 14.67B 주)</div>
-  <div class="per-share-grid">
-    <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석, TTM)</div><div class="ps-value">$8.25</div><div class="ps-sub">Q3 FY25~Q2 FY26 합산</div></div>
-    <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (주당순자산)</div><div class="ps-value">$7.23</div><div class="ps-sub">Q2 FY26 · 자본 $106.5B</div></div>
-    <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$7.72</div><div class="ps-sub">TTM FCF $113.4B</div></div>
-    <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS (연간배당)</div><div class="ps-value">$1.04</div><div class="ps-sub">분기 $0.26 → $0.27 인상</div></div>
-  </div>
-  <div style="font-size:11px;color:var(--text3);margin-top:10px;">* BPS가 낮은 이유: 수십년간 자사주 매입으로 순자산이 압축됨 — PBR 46x는 자본의 극단적 효율성 반영.</div>
-</div>
-
 <div id="valuation" class="section">
   <div class="section-title">밸류에이션 (Valuation Multiples) — 현재가 $333.74 · 빅테크 비교</div>
+  <div class="card">
+    <div class="card-title">Per-Share 지표 (Q2 FY26 기준 · 14.67B 주)</div>
+    <div class="per-share-grid">
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석, TTM)</div><div class="ps-value">$8.25</div><div class="ps-sub">Q3 FY25~Q2 FY26 합산</div></div>
+      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (주당순자산)</div><div class="ps-value">$7.23</div><div class="ps-sub">Q2 FY26 · 자본 $106.5B</div></div>
+      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$7.72</div><div class="ps-sub">TTM FCF $113.4B</div></div>
+      <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS (연간배당)</div><div class="ps-value">$1.04</div><div class="ps-sub">분기 $0.26 → $0.27 인상</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">* BPS가 낮은 이유: 수십년간 자사주 매입으로 순자산이 압축됨 — PBR 46x는 자본의 극단적 효율성 반영.</div>
+  </div>
   <div class="grid-2">
     <div class="card">
       <div class="card-title">멀티플 5단계 평가</div>
