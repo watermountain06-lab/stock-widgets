@@ -191,7 +191,6 @@
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
-  <button class="nav-btn" onclick="showSection('pershare')">💰 Per-Share</button>
   <button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button>
   <button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button>
   <button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button>
@@ -286,19 +285,18 @@
   </div>
 </div>
 
-<div id="pershare" class="section">
-  <div class="section-title">Per-Share 지표 (Q2 FY26 기준 · 1.13B 주)</div>
-  <div class="per-share-grid">
-    <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석, TTM)</div><div class="ps-value">$23.64</div><div class="ps-sub">Q3 FY25~Q2 FY26 합산</div></div>
-    <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (주당순자산)</div><div class="ps-value">$63.45</div><div class="ps-sub">Q2 FY26 · 자기자본 $72.5B</div></div>
-    <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$7.49</div><div class="ps-sub">TTM FCF $8.5B(Capex 압박)</div></div>
-    <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS (분기)</div><div class="ps-value">$0.15</div><div class="ps-sub">$0.115에서 30% 인상 · 수익률 0.05%</div></div>
-  </div>
-  <div style="font-size:11px;color:var(--text3);margin-top:10px;">* FY2027E EPS 컨센서스 $103~106 → Forward PER 10.2x. 실현 시 반도체 사이클 역사상 가장 저렴한 PER로 거래되는 구간.</div>
-</div>
-
 <div id="valuation" class="section">
   <div class="section-title">밸류에이션 (Valuation Multiples) — 현재가 $1,133.99 · DRAM 3사 비교</div>
+  <div class="card">
+    <div class="card-title">Per-Share 지표 (Q2 FY26 기준 · 1.13B 주)</div>
+    <div class="per-share-grid">
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석, TTM)</div><div class="ps-value">$23.64</div><div class="ps-sub">Q3 FY25~Q2 FY26 합산</div></div>
+      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (주당순자산)</div><div class="ps-value">$63.45</div><div class="ps-sub">Q2 FY26 · 자기자본 $72.5B</div></div>
+      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$7.49</div><div class="ps-sub">TTM FCF $8.5B(Capex 압박)</div></div>
+      <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS (분기)</div><div class="ps-value">$0.15</div><div class="ps-sub">$0.115에서 30% 인상 · 수익률 0.05%</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">* FY2027E EPS 컨센서스 $103~106 → Forward PER 10.2x. 실현 시 반도체 사이클 역사상 가장 저렴한 PER로 거래되는 구간.</div>
+  </div>
   <div class="info-box">
     <strong>⚠ MU 밸류에이션 핵심:</strong> Trailing 지표는 사이클 초입 → 고평가처럼 보임. Forward 지표(PER 10.2x, PEG 0.07)가 실질 투자 판단 기준. Q3($33.5B)·Q4 가이던스 달성 시 EPS 급등으로 모든 지표 급격 하락.
   </div>
