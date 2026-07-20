@@ -975,30 +975,50 @@ const NVDA_MA120 = [128.42,128.67,129.11,129.42,129.82,130.23,130.67,131.17,131.
     if (maState.ma60) drawMaLine(ma60, maColors.ma60);
     if (maState.ma120) drawMaLine(ma120, maColors.ma120);
 
-    const closeVal = data[data.length-1][4];
+    const closeIdx = data.length-1;
+    const closeVal = data[closeIdx][4];
     const periodHigh = Math.max(...highs);
     const periodLow = Math.min(...lows);
-    [
-      {v: closeVal, color:'#60a5fa', label:'종가'},
-      {v: periodHigh, color:UP, label:'최고'},
-      {v: periodLow, color:DOWN, label:'최저'}
-    ].forEach(m=>{
-      const y = py(m.v);
-      const dl = document.createElementNS(NS,'line');
-      dl.setAttribute('x1',pL);dl.setAttribute('x2',W-pR);dl.setAttribute('y1',y);dl.setAttribute('y2',y);
-      dl.setAttribute('stroke',m.color);dl.setAttribute('stroke-width','1');
-      dl.setAttribute('stroke-dasharray','3,3');dl.setAttribute('opacity','0.55');
-      svgCandle.appendChild(dl);
+    const highIdx = highs.indexOf(periodHigh);
+    const lowIdx = lows.indexOf(periodLow);
+    const markers = [
+      {idx: highIdx, v: periodHigh, color: UP, label:'최고', side:'above'},
+      {idx: lowIdx, v: periodLow, color: DOWN, label:'최저', side:'below'},
+      {idx: closeIdx, v: closeVal, color:'#60a5fa', label:'종가', side:'left'}
+    ];
+    markers.forEach(m=>{
+      const cx = pL + (m.idx+0.5)*colW;
+      const cy = py(m.v);
+      const dot=document.createElementNS(NS,'circle');
+      dot.setAttribute('cx',cx);dot.setAttribute('cy',cy);dot.setAttribute('r','3.5');
+      dot.setAttribute('fill',m.color);dot.setAttribute('stroke','#0f1117');dot.setAttribute('stroke-width','1.5');
+      svgCandle.appendChild(dot);
+
       const labelText = `${m.label} $${m.v.toFixed(2)}`;
       const labelW = labelText.length*5.2+6;
+      let tx, ty, anchor;
+      if (m.side === 'left') {
+        anchor = 'end'; tx = cx-7; ty = cy+3;
+      } else if (m.side === 'above') {
+        ty = cy-9;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      } else {
+        ty = cy+16;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      }
+      const bgX = anchor==='end' ? tx-labelW : anchor==='middle' ? tx-labelW/2 : tx;
       const bg=document.createElementNS(NS,'rect');
-      bg.setAttribute('x', W-pR-labelW);bg.setAttribute('y', y-8);
+      bg.setAttribute('x', bgX);bg.setAttribute('y', ty-8);
       bg.setAttribute('width', labelW);bg.setAttribute('height', 12);
       bg.setAttribute('fill','rgba(15,17,23,0.85)');bg.setAttribute('rx','2');
       svgCandle.appendChild(bg);
       const t=document.createElementNS(NS,'text');
-      t.setAttribute('x', W-pR-3);t.setAttribute('y', y+2);
-      t.setAttribute('text-anchor','end');t.setAttribute('font-size','9');
+      t.setAttribute('x', tx);t.setAttribute('y', ty+2);
+      t.setAttribute('text-anchor',anchor);t.setAttribute('font-size','9');
       t.setAttribute('font-weight','700');t.setAttribute('fill', m.color);
       t.textContent = labelText;
       svgCandle.appendChild(t);
