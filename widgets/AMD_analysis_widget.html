@@ -176,6 +176,7 @@
   .disclaimer { margin: 28px 32px 16px; padding: 12px 16px; background: rgba(224,90,32,0.05); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
   .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
   .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
+  .scenario-card { border-radius: 8px; padding: 14px; }
 
   @media (max-width:600px) {
     .header, .section { padding: 20px 16px; }
@@ -442,6 +443,22 @@
       <div class="card-title">AI 반도체 피어 비교 (Forward PER 기준)</div>
       <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
       <div style="margin-top:10px;font-size:12px;color:var(--text2);">* AMD Forward PER ~38x는 NVDA(~30x) 대비 다소 높지만, 성장 모멘텀 가속도 감안 시 합리적 범위.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">시나리오별 공정가치 분석</div>
+    <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — MI400 출시 지연·규제 강화</div>
+      <div style="font-size:12px;color:var(--text2);">MI400 Helios 출시가 지연되고 대중국 수출 규제가 강화될 경우 → 공정가치 <strong style="color:var(--red);">$350~430/주</strong></div>
+    </div>
+    <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — Forward 전망치 부합</div>
+      <div style="font-size:12px;color:var(--text2);">Forward PER ~38x 밴드 유지, MI400 양산이 전망치대로 진행될 경우 → 공정가치 <strong style="color:var(--text);">$550~650/주</strong></div>
+    </div>
+    <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — MI400 수요 초과 달성</div>
+      <div style="font-size:12px;color:var(--text2);">MI400 Helios 수요가 공급을 초과하며 AI GPU 점유율이 확대될 경우 → 공정가치 <strong style="color:var(--green);">$700~850/주</strong></div>
     </div>
   </div>
 </div>
