@@ -193,7 +193,6 @@
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
-  <button class="nav-btn" onclick="showSection('pershare')">💰 Per-Share</button>
   <button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button>
   <button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button>
   <button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button>
@@ -289,19 +288,18 @@
   </div>
 </div>
 
-<div id="pershare" class="section">
-  <div class="section-title">Per-Share 지표 (ADR 기준, 1ADR=5 보통주 · USD 환산)</div>
-  <div class="per-share-grid">
-    <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (ADR, TTM)</div><div class="ps-value">$13.32</div><div class="ps-sub">Q2 2025~Q1 2026 합산 USD</div></div>
-    <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (ADR)</div><div class="ps-value">$219.3</div><div class="ps-sub">자기자본 $186B(USD)</div></div>
-    <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/ADR (TTM)</div><div class="ps-value">$35.7</div><div class="ps-sub">TTM FCF $34.7B(USD)</div></div>
-    <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS (ADR, 연간배당)</div><div class="ps-value">~$3.6</div><div class="ps-sub">분기 $0.955 · 배당률 1.4%</div></div>
-  </div>
-  <div style="font-size:11px;color:var(--text3);margin-top:10px;">※ 환산 기준: NT$→USD 환율 31.59 적용 · ADR 1주=보통주 5주 기준. TTM FCF $34.7B = Q2~Q4 2025 + Q1 2026 합산 NT$ 기준 환산.</div>
-</div>
-
 <div id="valuation" class="section">
   <div class="section-title">밸류에이션 (Valuation Multiples) — 현재가 $423.93 · 반도체 파운드리 비교</div>
+  <div class="card">
+    <div class="card-title">Per-Share 지표 (ADR 기준, 1ADR=5 보통주 · USD 환산)</div>
+    <div class="per-share-grid">
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (ADR, TTM)</div><div class="ps-value">$13.32</div><div class="ps-sub">Q2 2025~Q1 2026 합산 USD</div></div>
+      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (ADR)</div><div class="ps-value">$219.3</div><div class="ps-sub">자기자본 $186B(USD)</div></div>
+      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/ADR (TTM)</div><div class="ps-value">$35.7</div><div class="ps-sub">TTM FCF $34.7B(USD)</div></div>
+      <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS (ADR, 연간배당)</div><div class="ps-value">~$3.6</div><div class="ps-sub">분기 $0.955 · 배당률 1.4%</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">※ 환산 기준: NT$→USD 환율 31.59 적용 · ADR 1주=보통주 5주 기준. TTM FCF $34.7B = Q2~Q4 2025 + Q1 2026 합산 NT$ 기준 환산.</div>
+  </div>
   <div class="grid-2">
     <div class="card">
       <div class="card-title">멀티플 5단계 평가</div>
