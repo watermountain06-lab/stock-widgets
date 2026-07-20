@@ -123,6 +123,7 @@
   .disclaimer { margin: 28px 32px 16px; padding: 12px 16px; background: rgba(91,143,214,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
   .note-box { font-size: 11px; color: var(--text3); margin: 0 32px 16px; padding: 8px 14px; background: var(--bg2); border-radius: 8px; }
   .danger-box { background: rgba(231,76,60,0.08); border-left: 3px solid var(--red); border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 12px; }
+  .scenario-card { border-radius: 8px; padding: 14px; }
   @media (max-width: 600px) {
     .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
     .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; }
@@ -351,6 +352,22 @@
   <div class="card">
     <div class="card-title">종합 밸류에이션 — 2~3단계 혼재 · PEG 0.5 — 성장 대비 합리적 · 지정학 디스카운트 내포</div>
     <div style="font-size:12px;color:var(--text2);line-height:1.6;">PER 31.8x → 2단계(반도체 평균 52x 대비). PBR 1.93x → 2단계(ROE 40% 감안). PSR 17.2x → 3단계. PCR 63.4x → 4단계(Capex 급증 일시적). EV/EBITDA 20.4x → 3단계. 지정학 리스크 프리미엄이 없다면 40x+ 받아야 할 기업을 31x에 살 수 있는 구조. Forward PER 22x + PEG 0.5 — 성장 대비 가장 합리적인 반도체주.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">시나리오별 공정가치 분석</div>
+    <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — 지정학 리스크 심화·대만 프리미엄 축소</div>
+      <div style="font-size:12px;color:var(--text2);">지정학 리스크 프리미엄이 확대되고 첨단 노드 수요가 둔화될 경우 → 공정가치 <strong style="color:var(--red);">$354~400/주</strong> (애널리스트 목표가 하단)</div>
+    </div>
+    <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — Forward PER 22x·PEG 0.5 밴드 유지</div>
+      <div style="font-size:12px;color:var(--text2);">현재 Forward PER 22x·PEG 0.5 밸류에이션이 유지될 경우 → 공정가치 <strong style="color:var(--text);">$490~550/주</strong> (애널리스트 평균 목표가 $520.37과 부합)</div>
+    </div>
+    <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — 지정학 디스카운트 해소·AI 파운드리 수요 가속</div>
+      <div style="font-size:12px;color:var(--text2);">지정학 리스크 프리미엄이 해소되고 AI 파운드리 수요가 가속될 경우 → 공정가치 <strong style="color:var(--green);">$650~700/주</strong> (애널리스트 목표가 상단)</div>
+    </div>
   </div>
 </div>
 
