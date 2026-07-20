@@ -194,7 +194,6 @@
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
-  <button class="nav-btn" onclick="showSection('pershare')">💰 Per-Share</button>
   <button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button>
   <button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button>
   <button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button>
@@ -303,20 +302,20 @@
 </div>
 
 <!-- ===================== SECTION 3: Per-Share ===================== -->
-<div id="pershare" class="section">
-  <div class="section-title">Per-Share 지표 (TTM 기준 · 약 18.8억 주)</div>
-  <div class="per-share-grid">
-    <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS · TTM</div><div class="ps-value">$11.47</div><div class="ps-sub">'25.Q3~'26.Q2 합산 · PER 31.2x</div><div style="margin-top:5px;"><span class="stage-badge stage-3">적정(PER 기준)</span></div></div>
-    <div class="ps-card"><div class="ps-icon">📊</div><div class="ps-label">Non-GAAP EPS · TTM</div><div class="ps-value">$12.44</div><div class="ps-sub">Non-GAAP PER 28.8x</div><div style="margin-top:5px;"><span class="stage-badge stage-3">적정(PER)</span></div></div>
-    <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS · 주당순자산</div><div class="ps-value">$18.97</div><div class="ps-sub">'26.Q2 자기자본 $35.7B</div><div style="margin-top:5px;"><span class="stage-badge stage-4">높음(PBR 19.6x)</span></div></div>
-    <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 · FY2025</div><div class="ps-value">$11.48</div><div class="ps-sub">FY25 FCF $21.58B · 매출 대비 54%</div><div style="margin-top:5px;"><span class="stage-badge stage-2">저평가(FCF수익률)</span></div></div>
-  </div>
-  <div style="font-size:11px;color:var(--text3);margin-top:10px;">* BPS가 낮고 PBR이 높은 것은 저평가가 아니라 Visa 특유의 자산경량(asset-light) 구조와 대규모 자사주 매입으로 자기자본이 얇아진 결과 — ROE는 오히려 매우 높음(순이익/자기자본 비율 50%대). PER·EV/EBITDA는 5년 평균 대비 적정~약간 낮은 구간.</div>
-</div>
-
 <!-- ===================== SECTION 4: 밸류에이션 ===================== -->
 <div id="valuation" class="section">
   <div class="section-title">상대 투자지표 — 고마진 네트워크 사업의 적정~약간 낮은 밸류에이션</div>
+
+  <div class="card">
+    <div class="card-title">Per-Share 지표 (TTM 기준 · 약 18.8억 주)</div>
+    <div class="per-share-grid">
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS · TTM</div><div class="ps-value">$11.47</div><div class="ps-sub">'25.Q3~'26.Q2 합산 · PER 31.2x</div><div style="margin-top:5px;"><span class="stage-badge stage-3">적정(PER 기준)</span></div></div>
+      <div class="ps-card"><div class="ps-icon">📊</div><div class="ps-label">Non-GAAP EPS · TTM</div><div class="ps-value">$12.44</div><div class="ps-sub">Non-GAAP PER 28.8x</div><div style="margin-top:5px;"><span class="stage-badge stage-3">적정(PER)</span></div></div>
+      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS · 주당순자산</div><div class="ps-value">$18.97</div><div class="ps-sub">'26.Q2 자기자본 $35.7B</div><div style="margin-top:5px;"><span class="stage-badge stage-4">높음(PBR 19.6x)</span></div></div>
+      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 · FY2025</div><div class="ps-value">$11.48</div><div class="ps-sub">FY25 FCF $21.58B · 매출 대비 54%</div><div style="margin-top:5px;"><span class="stage-badge stage-2">저평가(FCF수익률)</span></div></div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">* BPS가 낮고 PBR이 높은 것은 저평가가 아니라 Visa 특유의 자산경량(asset-light) 구조와 대규모 자사주 매입으로 자기자본이 얇아진 결과 — ROE는 오히려 매우 높음(순이익/자기자본 비율 50%대). PER·EV/EBITDA는 5년 평균 대비 적정~약간 낮은 구간.</div>
+  </div>
   <div class="info-box">
     <strong>핵심 전제:</strong> Visa는 TSLA류 성장주와 달리 <strong>영업이익률 60%의 초고마진 검증된 사업</strong>. PER 31.2x·EV/EBITDA 22.8x는 자체 5년 평균 대비 오히려 낮은 편 — 2026년 초 규제 우려·거시 불안으로 밸류에이션이 한 차례 압축된 뒤 아직 완전히 재평가되지 않은 상태.
   </div>
