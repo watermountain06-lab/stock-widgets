@@ -131,6 +131,7 @@
   .ma-toggle-btn { background: var(--bg3); border: 1px solid; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer; transition: all .15s; }
   .ma-toggle-btn:hover { filter: brightness(1.2); }
   .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
+  .scenario-card { border-radius: 8px; padding: 14px; }
   @media (max-width: 600px) {
     .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
     .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; }
@@ -353,6 +354,22 @@
   <div class="card">
     <div class="card-title">종합 밸류에이션 — 2단계 압도적 (5개 지표 중 4개 저평가) · 빅테크 5개 중 가장 저렴</div>
     <div style="font-size:12px;color:var(--text2);line-height:1.6;">PER 23.2x → 2단계(3년 평균 33x 대비 -29%). PBR 7.0x → 2단계. PSR 9.1x → 2단계. PCR 43.0x → 3단계(Capex 일시적). EV/EBITDA 16.2x → 2단계(3년 평균 22.4x 대비 역대 저평가). 5개 지표 모두 2~3단계 — 빅테크 5개 종목 중 밸류에이션 1위(가장 저렴). Capex 사이클이 문제이지 비즈니스가 아님.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">시나리오별 공정가치 분석</div>
+    <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — Capex 부담 지속·Azure 성장 둔화</div>
+      <div style="font-size:12px;color:var(--text2);">대규모 Capex가 FCF를 계속 압박하고 Azure 성장률이 둔화될 경우 → 공정가치 <strong style="color:var(--red);">$360~400/주</strong></div>
+    </div>
+    <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 멀티플 정상화</div>
+      <div style="font-size:12px;color:var(--text2);">PER 23.2x가 3년 평균(33x) 방향으로 점진 회복될 경우 → 공정가치 <strong style="color:var(--text);">$450~520/주</strong></div>
+    </div>
+    <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — Capex 정점 통과·AI 수익화 가속</div>
+      <div style="font-size:12px;color:var(--text2);">Capex 사이클이 정점을 지나 Copilot·Azure AI 수익화가 가속될 경우 → 공정가치 <strong style="color:var(--green);">$560~620/주</strong></div>
+    </div>
   </div>
 </div>
 
