@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABBV 종합 분석 위젯</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117; --bg2: #1a1d27; --bg3: #22263a; --border: #2e3347;
+    --text: #e8eaf0; --text2: #9aa0b8; --text3: #5c6282;
+    --accent: #1f4e8c; --accent2: #4a90d9; --accent3: #0d2340;
+    --bull: #D85A30; --bear: #185FA5; --ma5: #ff6b9d; --ma20: #9b59b6; --ma60: #f0c040; --ma120: #22d3ee;
+    --green: #2ecc71; --red: #e74c3c; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
+  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; max-width: 1100px; margin: 0 auto; }
+  .header { background: linear-gradient(135deg, #061527 0%, #0f1117 40%, #1a1d27 100%); border-bottom: 2px solid var(--accent3); padding: 28px 32px 24px; position: relative; overflow: hidden; max-width: 1100px; margin: 0 auto; }
+  .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(74,144,217,0.14) 0%, transparent 70%); pointer-events: none; }
+  .header-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .ticker-block { display: flex; align-items: center; gap: 16px; }
+  .ticker-badge { background: linear-gradient(135deg, var(--accent3), var(--accent)); color: #fff; font-size: 13px; font-weight: 800; padding: 5px 12px; border-radius: 6px; letter-spacing: 1px; }
+  .company-name { font-size: 22px; font-weight: 700; color: var(--text); }
+  .company-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .price-block { text-align: right; }
+  .price-main { font-size: 32px; font-weight: 800; color: var(--accent2); letter-spacing: -1px; }
+  .price-change { font-size: 13px; color: var(--green); font-weight: 600; }
+  .header-meta { display: flex; justify-content: space-between; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+  .meta-item { display: flex; flex-direction: column; }
+  .meta-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .meta-value { font-size: 13px; font-weight: 600; color: var(--text2); margin-top: 2px; }
+  .meta-value.highlight { color: var(--accent2); }
+  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
+  .nav-btn:hover { color: var(--text); background: var(--bg3); }
+  .nav-btn.active { background: var(--accent3); color: var(--accent2); }
+  .section { display: none; padding: 28px 32px; max-width: 1100px; margin: 0 auto; }
+  .section.active { display: block; }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--accent2); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; display: inline-block; }
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px; }
+  .card-title { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; font-weight: 600; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .chart-wrap { position: relative; }
+  .chart-wrap canvas { max-width: 100%; }
+  .price-chart-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+  .stat-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .stat-value { font-size: 20px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
+  .stat-sub { font-size: 11px; color: var(--text3); }
+  .stat-value.up { color: var(--green); }
+  .stat-value.down { color: var(--red); }
+  .stat-value.gold { color: var(--accent2); }
+  .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .ma-row:last-child { border-bottom: none; }
+  .ma-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+  .ma-name { display: flex; align-items: center; font-size: 13px; color: var(--text2); }
+  .ma-val { font-size: 13px; font-weight: 600; }
+  .ma-status { font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
+  .status-above { background: rgba(46,204,113,0.15); color: var(--green); }
+  .status-below { background: rgba(231,76,60,0.15); color: var(--red); }
+  .status-amber { background: rgba(240,192,64,0.18); color: var(--ma60); }
+  .zone-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .zone-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg3); border-radius: 6px; }
+  .zone-label { font-size: 12px; color: var(--text2); }
+  .zone-val { font-size: 13px; font-weight: 700; color: var(--accent2); }
+  .zone-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
+  .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
+  .tag-current { background: rgba(74,144,217,0.2); color: var(--accent2); }
+  .val-item { margin-bottom: 18px; }
+  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
+  .val-track { height: 8px; background: var(--bg3); border-radius: 4px; position: relative; overflow: hidden; }
+  .val-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+  .val-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+  .val-low { font-size: 10px; color: var(--green); }
+  .val-mid { font-size: 10px; color: var(--accent2); text-align: center; }
+  .val-high { font-size: 10px; color: var(--red); }
+  .stage-badge { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
+  .stage-1 { background: rgba(46,204,113,0.2); color: #2ecc71; }
+  .stage-2 { background: rgba(39,174,96,0.2); color: #27ae60; }
+  .stage-3 { background: rgba(74,144,217,0.2); color: var(--accent2); }
+  .stage-4 { background: rgba(231,126,35,0.2); color: #e67e22; }
+  .stage-5 { background: rgba(231,76,60,0.2); color: var(--red); }
+  .stage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .stage-mini { text-align: center; padding: 10px 4px; border-radius: 8px; }
+  .stage-mini-num { font-size: 15px; font-weight: 700; }
+  .stage-mini-label { font-size: 9px; margin-top: 2px; }
+  .scenario-card { border-radius: 8px; padding: 14px; }
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent2); border: 2px solid var(--bg); }
+  .tl-dot.red { background: var(--red); }
+  .tl-dot.green { background: var(--green); }
+  .tl-dot.blue { background: var(--blue); }
+  .tl-dot.gold { background: var(--accent2); }
+  .tl-dot.today { background: #ffc107; }
+  .tl-date { font-size: 10px; color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+  .tl-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 3px 0; }
+  .tl-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .tl-source { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 11px; font-weight: 600; color: var(--accent2); text-decoration: none; }
+  .tl-source:hover { text-decoration: underline; }
+  .bull-bear { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .bb-box { background: var(--bg3); border-radius: var(--radius); padding: 16px; }
+  .bb-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .bb-bull { color: var(--bull); }
+  .bb-bear { color: var(--bear); }
+  .bb-item { display: flex; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .bb-icon { flex-shrink: 0; margin-top: 2px; }
+  .driver-item { display: flex; gap: 12px; padding: 12px; background: var(--bg3); border-radius: 8px; margin-bottom: 10px; }
+  .driver-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent3); color: var(--accent2); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .driver-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .driver-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
+  .per-share-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .ps-card { background: var(--bg3); border-radius: 8px; padding: 16px; text-align: center; }
+  .ps-icon { font-size: 22px; margin-bottom: 6px; }
+  .ps-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .ps-value { font-size: 22px; font-weight: 800; color: var(--accent2); }
+  .ps-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
+  .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+  .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
+  .disclaimer { max-width: 1100px; margin: 28px auto 16px; padding: 12px 16px; background: rgba(74,144,217,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
+  .info-box { background: rgba(74,144,217,0.1); border: 1px solid var(--accent3); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; color: var(--text2); }
+  .range-toggle { display: flex; gap: 4px; }
+  .range-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--text3); font-size: 11px; font-weight: 700; padding: 4px 11px; border-radius: 999px; cursor: pointer; transition: all .15s; }
+  .range-btn:hover { color: var(--text); border-color: var(--text2); }
+  .range-btn.active { background: var(--accent3); color: var(--accent2); border-color: var(--accent); }
+  .ma-toggle-btn { background: var(--bg3); border: 1px solid; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer; transition: all .15s; }
+  .ma-toggle-btn:hover { filter: brightness(1.2); }
+  .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
+  @media (max-width: 600px) {
+    .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
+    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; }
+    .per-share-grid { grid-template-columns: 1fr 1fr; } .stage-grid { grid-template-columns: 1fr 1fr; } .price-main { font-size: 24px; }
+  }
+  body { padding-top: 46px; }
+  .back-bar { position: fixed; top: 0; left: 0; right: 0; height: 46px; background: rgba(10,11,22,0.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.25); }
+  .back-bar a { color: var(--text2); font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+  .back-bar a:hover { color: var(--accent2); }
+  .back-bar .brand-icon { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 6px; background: var(--accent3); color: var(--accent2); font-size: 12px; }
+  .back-bar .back-bar-ticker { font-size: 11px; color: var(--text3); font-weight: 600; letter-spacing: 0.4px; }
+  .back-bar-nav { display: flex; align-items: center; gap: 10px; }
+  .peer-nav-link { color: var(--text2); font-size: 11px; font-weight: 700; text-decoration: none; padding: 4px 9px; border-radius: 6px; border: 1px solid var(--border); transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+  .peer-nav-link:hover { color: var(--accent2); border-color: var(--accent); }
+  .peer-nav-link.disabled { color: var(--text3); opacity: 0.4; pointer-events: none; border-color: var(--border); }
+</style>
+</head>
+<body>
+<div class="back-bar">
+  <a href="../index.html"><span class="brand-icon">◧</span>US Stock Widgets · 전체 종목 목록</a>
+  <div class="back-bar-nav">
+    <a class="peer-nav-link" href="MA_analysis_widget.html">◀ MA</a>
+    <span class="back-bar-ticker">ABBV · 시총 25위</span>
+    <span class="peer-nav-link disabled">다음 ▶</span>
+  </div>
+</div>
+
+<div class="today-banner">🗓️ <strong>D-10 · 7/31(금) 장 개장 전 Q2 FY2026 실적 발표 예정</strong> — 자체 가이던스 조정 EPS $3.57~3.61(컨센서스 $3.77 하회, 2026.07.06 발표) · 애널리스트 25명 평균 목표가 $256.67 (Moderate Buy 컨센서스)</div>
+
+<div class="header">
+  <div class="header-top">
+    <div class="ticker-block">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+          <span class="ticker-badge">ABBV</span>
+          <span style="font-size:11px;color:var(--accent2);font-weight:600;">NYSE · Humira 특허절벽을 Skyrizi·Rinvoq로 성공적으로 대체한 면역질환 강자</span>
+        </div>
+        <div class="company-name">AbbVie Inc.</div>
+        <div class="company-sub">Immunology(Skyrizi·Rinvoq·Humira)·Oncology·Neuroscience·Aesthetics(보톡스) 등 다각화 포트폴리오 · S&P 500 시총 25위권</div>
+      </div>
+    </div>
+    <div class="price-block">
+      <div class="price-main">$253.38</div>
+      <div class="price-change" style="color:var(--red);">▼ -0.44% (2026.07.20 기준)</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px;">52주 최저 $184.63 (2025.07.21) · 최고 $261.64 (2026.07.02)</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$451.9B</span></div>
+    <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Health Care</span></div>
+    <div class="meta-item"><span class="meta-label">Q1 FY26 매출</span><span class="meta-value">$15.00B (+13%)</span></div>
+    <div class="meta-item"><span class="meta-label">P/E (TTM, Adj)</span><span class="meta-value">24.9x</span></div>
+    <div class="meta-item"><span class="meta-label">GAAP EPS (TTM)</span><span class="meta-value">$2.03</span></div>
+    <div class="meta-item"><span class="meta-label">분기 배당</span><span class="meta-value">$1.73 (+약 4%)</span></div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
+  <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
+  <button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button>
+  <button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button>
+  <button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button>
+  <button class="nav-btn" onclick="showSection('invest')">🎯 투자 포인트</button>
+</div>
+
+<!-- ===================== SECTION 1: 기술적 분석 ===================== -->
+<div id="tech" class="section active">
+  <div class="section-title">기술적 분석 — 일봉 캔들스틱 (2025.07 ~ 2026.07) · 52주 수익률 +33.9%</div>
+  <div class="price-chart-container">
+    <div style="margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+      <div class="range-toggle" id="abbvRangeToggle">
+        <button class="range-btn" data-range="1M">1개월</button>
+        <button class="range-btn" data-range="3M">3개월</button>
+        <button class="range-btn" data-range="6M">6개월</button>
+        <button class="range-btn active" data-range="1Y">1년</button>
+      </div>
+      <div id="abbvMaToggle" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="ma-toggle-btn" data-ma="ma5" style="color:var(--ma5);border-color:var(--ma5);">● MA5</button>
+        <button class="ma-toggle-btn" data-ma="ma20" style="color:var(--ma20);border-color:var(--ma20);">● MA20</button>
+        <button class="ma-toggle-btn" data-ma="ma60" style="color:var(--ma60);border-color:var(--ma60);">● MA60</button>
+        <button class="ma-toggle-btn" data-ma="ma120" style="color:var(--ma120);border-color:var(--ma120);">● MA120</button>
+        <button class="ma-toggle-btn" data-ma="pricelabels" style="color:var(--text2);border-color:var(--text2);margin-left:4px;">◆ 가격라벨</button>
+      </div>
+    </div>
+    <svg id="abbvCandleSvg" viewBox="0 0 720 240" width="100%" style="display:block;background:var(--bg3);border-radius:8px 8px 0 0;padding:4px;" role="img" aria-label="ABBV 일봉 캔들스틱 차트"></svg>
+    <svg id="abbvVolumeSvg" viewBox="0 0 720 70" width="100%" style="display:block;background:var(--bg3);border-radius:0 0 8px 8px;padding:0 4px 4px;" role="img" aria-label="ABBV 거래량 차트"></svg>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">52주 최저 $184.63 (2025.07) → 52주 최고 $261.64 (2026.07) → 현재 $253.38</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">핵심 가격대</div>
+      <div class="zone-list">
+        <div class="zone-item"><span class="zone-label">52주 최고</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$261.64 (2026.07.02)</span><span class="zone-tag tag-resist">저항선</span></div></div>
+        <div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$253.38 (고점 대비 -3.2%)</span><span class="zone-tag tag-current">현재</span></div></div>
+        <div class="zone-item"><span class="zone-label">MA20 지지</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$248.68</span><span class="zone-tag tag-support">지지선</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$184.63 (2025.07.21)</span><span class="zone-tag tag-support">강지지</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--green);">+33.9%</span></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">이동평균선 현황</div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기) $250.23</span><span class="ma-status status-above">상승 지지</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기) $248.68</span><span class="ma-status status-above">상승 지지</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기) $224.83</span><span class="ma-status status-above">상승 지지</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기) $221.74</span><span class="ma-status status-above">상승 지지</span></div>
+      <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">
+        ⚠️ 현재가&gt;MA5&gt;MA20&gt;MA60&gt;MA120 순 — 완전 정배열 유지. 6월 Apogee 인수 발표 이후 형성된 상승갭이 그대로 유지되며 견조한 상승추세 지속.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">구간별 패턴 분석</div>
+    <div class="grid-4">
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.07~09 — 저점 반등 $185→$212</div><div style="font-size:12px;color:var(--text2);">7/21 52주 저점($184.63) 형성 후 Skyrizi·Rinvoq 모멘텀으로 완만한 반등.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.09~10 — 급등 후 연중 고점 $212→$244</div><div style="font-size:12px;color:var(--text2);">9월 말 이틀간 +9% 넘게 급등한 뒤 10/1 연중 최고권($244.38) 형성. 이후 조정 국면 진입.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.11~2026.05 — 장기 조정 $244→$197</div><div style="font-size:12px;color:var(--text2);">Q3 IPR&D 충당금發 실적 변동성(조정 EPS $1.86로 급감)과 전반적 약세장 속에 8개월간 하락추세 지속.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.06~07 — Apogee 인수 후 신고가 랠리 $197→$262</div><div style="font-size:12px;color:var(--text2);">6/22 Apogee Therapeutics 인수($10.9B) 발표로 파이프라인 확장 기대감 유입, 6/26 거래량 폭증과 함께 급등. 7/2 52주 신고가 경신 후 Q2 실적(7/31) 대기.</div></div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;">
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">52주 수익률 +33.9% — S&P500(+19.6%) 대비 +14.3%p 아웃퍼폼</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">Skyrizi·Rinvoq 고성장 지속, Humira 특허절벽 영향 축소</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">Apogee Therapeutics 인수($10.9B)로 면역·호흡기 파이프라인 확장</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(255,193,7,0.18);color:#ffc107;">다음 실적 7/31(금) Q2 FY2026 — D-10, 가이던스 컨센서스 하회</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">GAAP EPS(TTM) $2.03 — Allergan 인수발 무형자산상각으로 Adjusted EPS와 극단적 괴리</span>
+  </div>
+</div>
+
+<!-- ===================== SECTION 2: 기본적 분석 ===================== -->
+<div id="fund" class="section">
+  <div class="section-title">기본적 분석 — 분기 재무제표 (SEC 8-K 실적발표 기준)</div>
+  <div class="card">
+    <div class="card-title">분기 매출 및 GAAP/Adjusted EPS 추이 (Q3 FY24 ~ Q2 FY26, 2년치)</div>
+    <div class="chart-wrap" style="height:260px;"><canvas id="abbvRevChart"></canvas></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--text3);">* GAAP EPS는 2020년 Allergan 인수($63B)에 따른 대규모 무형자산 상각비와 반복적인 인수 IPR&D(연구개발 자산) 충당금이 반영되어 Adjusted EPS 대비 극단적으로 낮음 — Adjusted EPS가 실질 영업실적에 훨씬 가까움. Q3 FY25 Adjusted EPS $1.86 급감은 Apogee 이전 시점의 대형 IPR&D 충당금 영향. Q2 FY26은 7/31 발표 예정(자체 가이던스 기준 표시).</div>
+  </div>
+  <div class="info-box">
+    <strong>GAAP EPS vs Adjusted EPS란?</strong>
+    <div style="margin-top:8px;">· <strong style="color:var(--text);">GAAP EPS</strong> — 미국 회계기준을 그대로 적용한 주당순이익. Allergan 인수발 무형자산 상각·인수 IPR&D 충당금 등이 모두 반영됨.</div>
+    <div style="margin-top:6px;">· <strong style="color:var(--text);">Adjusted(비GAAP) EPS</strong> — 무형자산 상각·일회성 인수 비용을 제외하고 계산한 지표. 사업의 실질 실적을 보는 데 흔히 쓰임.</div>
+    <div style="margin-top:8px;">AbbVie는 대형 M&A(Allergan·Apogee·Cerevel 등)를 반복해온 회사라 두 지표의 괴리가 업종 내에서도 특히 크므로, 반드시 Adjusted EPS 기준으로 밸류에이션을 봐야 한다.</div>
+  </div>
+  <div class="grid-3">
+    <div class="stat-box"><div class="stat-label">Q1 FY26 매출</div><div class="stat-value up">$15.00B</div><div class="stat-sub">▲13% YoY</div></div>
+    <div class="stat-box"><div class="stat-label">Q1 FY26 GAAP 순이익</div><div class="stat-value">$695M</div><div class="stat-sub">무형자산상각 반영 후 수치</div></div>
+    <div class="stat-box"><div class="stat-label">Q1 FY26 GAAP EPS</div><div class="stat-value">$0.39</div><div class="stat-sub">Adjusted 대비 낮음(상각비 영향)</div></div>
+    <div class="stat-box"><div class="stat-label">Q1 FY26 Adjusted EPS</div><div class="stat-value up">$2.65</div><div class="stat-sub">▲7.7% YoY, 컨센서스 상회</div></div>
+    <div class="stat-box"><div class="stat-label">Skyrizi 매출 (Q1 FY26)</div><div class="stat-value up">$4.5B</div><div class="stat-sub">▲29.2% — 단일분기 사상 최대</div></div>
+    <div class="stat-box"><div class="stat-label">면역(Immunology) 매출</div><div class="stat-value up">$7.3B</div><div class="stat-sub">Q1 FY26, 전체 매출 견인</div></div>
+    <div class="stat-box"><div class="stat-label">FY2026(E) 매출 가이던스</div><div class="stat-value gold">~$67.3B</div><div class="stat-sub">Q1 실적 발표 시 상향</div></div>
+    <div class="stat-box"><div class="stat-label">FY2026(E) Adj EPS 가이던스</div><div class="stat-value gold">$14.08~14.28</div><div class="stat-sub">Q1 실적 발표 시 상향</div></div>
+    <div class="stat-box"><div class="stat-label">분기배당</div><div class="stat-value up">$1.73</div><div class="stat-sub">▲약 4% — Dividend King(53년+)</div></div>
+  </div>
+  <div style="margin-top:12px;font-size:12px;color:var(--text3);">Q1 FY26 매출 $15.0B(+13% YoY, 컨센서스 $14.7B 상회) · 면역질환(Skyrizi·Rinvoq)이 성장의 핵심 축</div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">핵심 성장 동력 — Immunology(Skyrizi·Rinvoq) vs Humira 특허절벽 vs M&A 파이프라인</div>
+    <div class="grid-3">
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">Immunology (Skyrizi·Rinvoq)</div><div style="font-size:12px;color:var(--text2);">Skyrizi Q1 FY26 $4.5B(+29.2%) — 건선·궤양성대장염 등 적응증 확대<br>Rinvoq도 두 자릿수 고성장 지속<br>2027년까지 Humira 전성기 매출을 상회할 전망</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">Humira 특허절벽 (완화 추세)</div><div style="font-size:12px;color:var(--text2);">2023년 바이오시밀러 진입 이후 美 매출 급감<br>기저효과 소멸로 전체 실적에 미치는 하방압력 축소<br>Skyrizi·Rinvoq가 이미 매출 공백을 상당폭 대체</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--blue);font-weight:700;margin-bottom:6px;">M&A 파이프라인 확장</div><div style="font-size:12px;color:var(--text2);">Apogee Therapeutics($10.9B, 2026.06.22) — 아토피피부염·천식 후보물질 zumilokibart<br>Cerevel(조현병 emraclidine·파킨슨 tavapadon)<br>공격적 M&A로 차세대 파이프라인 지속 구축</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">핵심 투자 논리 — GAAP 적자성 지표가 실제 사업 부실을 의미하는가</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.7;">GAAP EPS(TTM) $2.03은 Allergan 인수발 무형자산 상각과 반복적 인수 IPR&D 충당금이 만든 회계상 수치로, PER을 계산하면 124.8x라는 왜곡된 값이 나온다. 반면 Adjusted EPS(TTM) $10.19 기준 PER은 24.9x로 대형 제약 피어 밴드 내에 있다. <strong style="color:var(--text);">핵심 논쟁은 "Humira 특허절벽 이후에도 Skyrizi·Rinvoq가 성장을 지속할 수 있는가" 그리고 "Apogee 등 반복적 M&A가 실제 파이프라인 가치를 창출하는가, 단순히 상각비만 늘리는가"이다.</strong></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">다음 실적 체크포인트</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+      <strong style="color:var(--text);">7/31 Q2 실적 4대 체크포인트:</strong><br>
+      ① Skyrizi·Rinvoq 고성장 지속 여부 → Immunology 모멘텀 검증<br>
+      ② 자체 가이던스(컨센서스 하회) 실제 결과 부합 여부<br>
+      ③ Apogee 인수 마무리 진행상황(2026 Q3 종료 예정)<br>
+      ④ Humira 매출 감소폭 축소 추이
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 3: 밸류에이션 (Per-Share 통합) ===================== -->
+<div id="valuation" class="section">
+  <div class="section-title">Per-Share & 밸류에이션 — GAAP PER은 왜곡, Adjusted 기준으로는 대형 제약 피어 대비 합리적</div>
+  <div class="info-box">
+    <strong>핵심 전제:</strong> GAAP TTM PER 124.8x는 Allergan 인수발 무형자산상각으로 왜곡된 수치다 — Adjusted EPS(TTM) $10.19 기준 PER 24.9x가 실질 밸류에이션에 가깝고, Forward P/E 17.9x는 대형 제약 피어 대비 오히려 저평가된 수준이다.
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">멀티플 5단계 평가</div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PER (GAAP TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">124.8x</span><span class="stage-badge" style="background:rgba(154,160,184,0.2);color:var(--text2);">무형자산상각 왜곡</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:100%;background:rgba(154,160,184,0.35);"></div></div>
+        <div class="val-labels"><span class="val-low">&nbsp;</span><span class="val-mid">GAAP EPS(TTM) $2.03</span><span class="val-high">&nbsp;</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">Allergan 인수발 무형자산 상각·반복적 IPR&D 충당금이 GAAP 순이익을 지속 압박</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PER (Adjusted TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">24.9x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:49%;background:linear-gradient(90deg,#2ecc71,#f0c040,#e74c3c);background-size:204.1% 100%;"></div></div>
+        <div class="val-labels"><span class="val-low">저(18x)</span><span class="val-mid">적정(24x)</span><span class="val-high">고(32x)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">$253.38÷Adjusted EPS(TTM) $10.19 · JNJ(Adjusted 23.3x)와 거의 동일한 대형제약 밸류에이션</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">Forward P/E (2026E 가이던스)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">17.9x</span><span class="stage-badge stage-2">2단계 저평가</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:19%;background:linear-gradient(90deg,#2ecc71,#f0c040,#e74c3c);background-size:333.3% 100%;"></div></div>
+        <div class="val-labels"><span class="val-low">저(15x)</span><span class="val-mid">적정(22x)</span><span class="val-high">고(30x)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">FY2026(E) Adjusted EPS 가이던스 중간값($14.18) 기준 · 대형 제약 피어 대비 할인된 밸류에이션</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">N/A</span><span class="stage-badge" style="background:rgba(231,76,60,0.2);color:var(--red);">자기자본 마이너스</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:100%;background:rgba(231,76,60,0.35);"></div></div>
+        <div class="val-labels"><span class="val-low">&nbsp;</span><span class="val-mid">자기자본 -$6.66B(2026.03.31)</span><span class="val-high">&nbsp;</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">Allergan 인수 부채·자사주매입 누적으로 장부상 자기자본이 마이너스 — PBR 산출 자체가 불가능(부실이 아닌 회계·자본배분 구조의 결과)</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">대형 제약 피어 P/E 비교 (GAAP 왜곡 조정)</div>
+      <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text2);">AbbVie의 Adjusted P/E 24.9x는 JNJ(Adjusted 23.3x)와 거의 동일하며, GLP-1發 고성장주 Eli Lilly(40.5x, GAAP)보다 낮고, 실적 부진의 Pfizer(7.9x, GAAP)보다는 높은 합리적 중간 지대에 위치한다.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">밸류에이션 5단계</div>
+    <div class="stage-grid">
+      <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div></div>
+      <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div><div style="font-size:8px;color:var(--accent2);background:rgba(74,144,217,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">Forward P/E</div></div>
+      <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:8px;color:var(--accent2);background:rgba(74,144,217,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">Adjusted PER</div></div>
+      <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div></div>
+      <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Per-Share 데이터 (참고 · TTM 기준 · 약 17.8억 주)</div>
+    <div class="grid-4">
+      <div class="stat-box"><div class="stat-label">GAAP EPS</div><div class="stat-value">$2.03</div></div>
+      <div class="stat-box"><div class="stat-label">Adjusted EPS</div><div class="stat-value up">$10.19</div></div>
+      <div class="stat-box"><div class="stat-label">BPS</div><div class="stat-value down">N/A (음수)</div></div>
+      <div class="stat-box"><div class="stat-label">매출/주</div><div class="stat-value">$35.25</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">시나리오별 공정가치 분석</div>
+    <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — Humira 감소세 재가속·M&A 통합 비용 부담</div>
+      <div style="font-size:12px;color:var(--text2);">Humira 매출 감소폭 재확대, Apogee·Cerevel 등 M&A 통합비용 부담 확대, 가이던스 지속 미달 시 → 공정가치 <strong style="color:var(--red);">$190~210/주</strong></div>
+    </div>
+    <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 가이던스 달성·Skyrizi·Rinvoq 성장 지속</div>
+      <div style="font-size:12px;color:var(--text2);">FY2026 Adj EPS $14.08~14.28 가이던스 달성, Skyrizi·Rinvoq 고성장 지속 시 → 공정가치 <strong style="color:var(--text);">$245~270/주</strong> (애널리스트 평균 목표가 $256.67와 부합)</div>
+    </div>
+    <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — Apogee 파이프라인 조기 성과·밸류에이션 리레이팅</div>
+      <div style="font-size:12px;color:var(--text2);">Apogee 파이프라인(zumilokibart 등) 조기 임상 성과, Skyrizi·Rinvoq 시장 예상 상회, Forward P/E 리레이팅 시 → 공정가치 <strong style="color:var(--green);">$290~320/주</strong></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">종합 밸류에이션 — Humira 이후 성장 스토리의 지속 여부가 핵심 변수</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;">GAAP PER·PBR만 보면 각각 극단적 고평가·산출불가로 보이지만, 이는 Allergan 인수발 회계상 왜곡일 뿐이다. <strong style="color:var(--text);">Adjusted PER 24.9x·Forward P/E 17.9x는 대형 제약 피어 밴드 내(3단계 적정)~할인(2단계 저평가) 수준으로, 시장은 Humira 이후 성장 스토리를 이미 합리적으로 반영하고 있다.</strong> 공정가치 $190(Bear)~$320(Bull) — 실질 리스크는 밸류에이션이 아니라 Skyrizi·Rinvoq의 성장 지속과 M&A 파이프라인의 실제 가치 창출 여부.</div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 4: US 특화 ===================== -->
+<div id="us" class="section">
+  <div class="section-title">US 특화 — S&P 500 성과 · 경쟁 구도</div>
+  <div class="rel-container">
+    <div class="rel-title">S&P 500 상대 수익률</div>
+    <div class="grid-3">
+      <div class="stat-box"><div class="stat-label">ABBV 52주</div><div class="stat-value up">+33.9%</div></div>
+      <div class="stat-box"><div class="stat-label">S&P 500 52주</div><div class="stat-value">+19.6%</div></div>
+      <div class="stat-box"><div class="stat-label">알파 (초과수익)</div><div class="stat-value up">+14.3%p</div><div class="stat-sub">아웃퍼폼</div></div>
+    </div>
+    <div class="zone-list" style="margin-top:12px;">
+      <div class="zone-item"><span class="zone-label">시가총액 순위</span><span class="zone-val">S&P500 내 약 25위권(신규 편입)</span></div>
+      <div class="zone-item"><span class="zone-label">배당수익률</span><span class="zone-val">2.73% (분기 $1.73) · Dividend King(53년+ 연속 인상)</span></div>
+      <div class="zone-item"><span class="zone-label">섹터</span><span class="zone-val">Health Care · Biopharmaceuticals(면역질환 중심)</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">대형 제약 경쟁 구도</div>
+    <div class="zone-list">
+      <div class="zone-item"><span class="zone-label">Eli Lilly (GLP-1 고성장)</span><span class="zone-val">P/E 40.5x — 훨씬 높은 밸류에이션, 시총 더 큼</span></div>
+      <div class="zone-item"><span class="zone-label">Johnson & Johnson (다각화 경쟁)</span><span class="zone-val">Adjusted P/E 23.3x — 거의 동일한 밸류에이션</span></div>
+      <div class="zone-item"><span class="zone-label">Pfizer (실적 부진)</span><span class="zone-val" style="color:var(--red);">P/E 7.9x — 극도로 저평가, 성장 정체 우려</span></div>
+      <div class="zone-item"><span class="zone-label">Humira 바이오시밀러 경쟁사</span><span class="zone-val" style="color:var(--red);">Amgen 등 다수 — 특허절벽 지속 압박</span></div>
+      <div class="zone-item"><span class="zone-label">Apogee·Cerevel 인수</span><span class="zone-val" style="color:var(--green);">면역·신경과학 파이프라인 확장 — 차세대 성장동력 구축</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 5: 시계열 뉴스 ===================== -->
+<div id="news" class="section">
+  <div class="section-title">시계열 주요 뉴스 (2025.07 ~ 2026.07)</div>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;color:var(--text2);">
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent2);display:inline-block;"></span>초대형 이벤트</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;"></span>긍정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block;"></span>부정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--text3);display:inline-block;"></span>중립</span>
+  </div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2025년 7월 21일 — 52주 저점 $184.63</div>
+      <div class="tl-title">Humira 특허절벽 우려 속 연중 최저가 형성</div>
+      <div class="tl-desc">바이오시밀러 경쟁으로 인한 Humira 매출 감소 우려가 정점에 달했던 시기의 저점. 이후 Skyrizi·Rinvoq 모멘텀으로 반등 국면 진입.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">2025년 10월 31일 — Q3 FY2025 실적 발표</div>
+      <div class="tl-title">매출 $15.8B, Adjusted EPS $1.86(IPR&D 충당금 영향 급감)</div>
+      <div class="tl-desc">9개월 누적 매출 $44.5B, 영업이익 $10.5B, GAAP 희석 EPS $1.34 기록. 대형 인수 관련 IPR&D 비용이 해당 분기 Adjusted EPS를 크게 압박.</div>
+      <a class="tl-source" href="https://investors.abbvie.com/news-releases/news-release-details/abbvie-reports-third-quarter-2025-financial-results" target="_blank" rel="noopener">관련 뉴스 보기 (AbbVie IR) →</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2026년 2월 4일 — Q4·FY2025 실적 발표</div>
+      <div class="tl-title">FY2025 매출 $61.16B(+8.6%), Adjusted EPS $10.00</div>
+      <div class="tl-desc">Q4 매출 $16.618B(+10.0%), Adjusted EPS $2.71. FY2025 전체 IPR&D·마일스톤 비용이 조정 EPS에 -$2.76 영향을 미쳤음에도 매출 성장세는 견조하게 유지.</div>
+      <a class="tl-source" href="https://news.abbvie.com/2026-02-04-AbbVie-Reports-Full-Year-and-Fourth-Quarter-2025-Financial-Results" target="_blank" rel="noopener">관련 뉴스 보기 (AbbVie Newsroom) →</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">2026년 4월 29일 — Q1 FY2026 실적 발표</div>
+      <div class="tl-title">매출 $15.0B(+12.4%), Skyrizi 단일분기 $4.5B 돌파</div>
+      <div class="tl-desc">Adjusted EPS $2.65(컨센서스 $2.59 상회), Skyrizi 매출 $4.5B(+29.2%)로 사상 최대. FY2026 Adjusted EPS 가이던스를 $14.08~14.28로, 매출 가이던스를 약 $67.3B로 상향.</div>
+      <a class="tl-source" href="https://news.abbvie.com/2026-04-29-AbbVie-Reports-First-Quarter-2026-Financial-Results" target="_blank" rel="noopener">관련 뉴스 보기 (AbbVie Newsroom) →</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot gold"></div>
+      <div class="tl-date">2026년 6월 22일 — Apogee Therapeutics 인수 발표</div>
+      <div class="tl-title">$10.9B에 아토피피부염·천식 파이프라인 인수</div>
+      <div class="tl-desc">주당 $135.11 현금 인수(6/18 종가 대비 약 49% 프리미엄)로 Apogee의 아토피피부염 후보물질 zumilokibart 등을 확보. 면역·호흡기 파이프라인을 확장하는 AbbVie 역사상 주요 M&A 중 하나로 평가되며 발표 이후 주가가 강하게 반응.</div>
+      <a class="tl-source" href="https://www.statnews.com/2026/06/22/abbvie-apogee-acquisition-immunology-zumilokibart/" target="_blank" rel="noopener">관련 뉴스 보기 (STAT News) →</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2026년 7월 2일 — 52주 신고가 $261.64</div>
+      <div class="tl-title">Apogee 인수 발표 여진 속 연중 최고가 경신</div>
+      <div class="tl-desc">M&A 파이프라인 확장 기대감과 Skyrizi·Rinvoq 고성장 스토리가 겹치며 연중 최고가를 기록. 이후 Q2 실적(7/31)을 앞두고 소폭 조정.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-date">2026년 7월 6일 — Q2 가이던스 컨센서스 하회</div>
+      <div class="tl-title">자체 Adjusted EPS 가이던스 $3.57~3.61 제시, 컨센서스 $3.77 밑돌아</div>
+      <div class="tl-desc">AbbVie가 Q2 실적 발표(7/31)에 앞서 자체 가이던스를 컨센서스보다 낮게 제시하며 시장의 경계감이 일부 형성. 실제 실적이 가이던스를 상회할지가 관전 포인트.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot today"></div>
+      <div class="tl-date">2026년 7월 20일 — 현재, Q2 실적 D-10</div>
+      <div class="tl-title">52주 고점 대비 -3.2% 조정, $253.38에서 Q2 실적 대기</div>
+      <div class="tl-desc">4개 이평선을 모두 상회하는 정배열을 유지한 채 소폭 조정. 7/31 Q2 FY2026 실적 발표를 앞두고 있으며, 가이던스 하회 우려를 실제 실적으로 얼마나 상쇄할지가 다음 방향성을 결정할 전망.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 6: 투자 포인트 ===================== -->
+<div id="invest" class="section">
+  <div class="section-title">2026년 핵심 투자 포인트</div>
+  <div class="bull-bear">
+    <div class="bb-box">
+      <div class="bb-title bb-bull">🐂 Bull 요인</div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Skyrizi·Rinvoq 고성장:</strong> Humira 특허절벽을 성공적으로 대체, Skyrizi 단일분기 $4.5B 돌파.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Apogee Therapeutics 인수($10.9B):</strong> 면역·호흡기 파이프라인 확장.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Forward P/E 17.9x:</strong> 대형 제약 피어 대비 오히려 저평가.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>52주 수익률 +33.9%:</strong> S&P500 대비 +14.3%p 아웃퍼폼.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Dividend King(53년+ 연속 인상):</strong> 배당수익률 2.73%의 안정적 현금흐름.</span></div>
+    </div>
+    <div class="bb-box">
+      <div class="bb-title bb-bear">🐻 Bear 요인</div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>GAAP EPS(TTM) $2.03:</strong> Allergan 인수발 무형자산상각으로 극단적 왜곡.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>자기자본 마이너스:</strong> PBR 산출 불가, 공격적 M&A·자사주매입의 결과.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>Q2 가이던스 컨센서스 하회:</strong> $3.57~3.61 vs 컨센서스 $3.77.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>Humira 매출 감소 지속:</strong> 완전한 기저효과 소멸까지 시간 필요.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>반복적 M&A 리스크:</strong> Apogee·Cerevel 등 대형 인수의 실제 가치 창출 여부 미확정.</span></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">목표가 밴드 — 시나리오별 공정가치 vs 현재가 · 애널리스트 목표가</div>
+    <div style="position:relative;height:70px;margin:28px 6px 6px;">
+      <div style="position:absolute;top:28px;left:0;right:0;height:10px;border-radius:5px;overflow:hidden;display:flex;">
+        <div style="width:15.4%;height:100%;background:rgba(231,76,60,0.45);"></div>
+        <div style="width:26.9%;height:100%;background:var(--bg3);"></div>
+        <div style="width:19.2%;height:100%;background:var(--bg3);"></div>
+        <div style="width:15.4%;height:100%;background:var(--bg3);"></div>
+        <div style="width:23.1%;height:100%;background:rgba(46,204,113,0.45);"></div>
+      </div>
+      <div style="position:absolute;top:10px;left:48.8%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
+      <div style="position:absolute;top:-6px;left:48.8%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $253.38</div>
+      <div style="position:absolute;top:22px;left:51.3%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
+      <div style="position:absolute;top:48px;left:51.3%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $256.67 (+1.3%)</div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-top:4px;">
+      <span style="color:var(--red);">Bear $190~210 (Humira 재악화)</span>
+      <span>Base $245~270 (가이던스 달성)</span>
+      <span style="color:var(--green);">Bull $290~320 (파이프라인 조기성과)</span>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">기술적 분석(완전 정배열)과 기본적 분석(견조한 면역질환 성장)을 반영한 밸류에이션 탭 시나리오 기준 — 현재가는 애널리스트 평균 목표가와 거의 동일한 수준으로, 시장은 이미 Base 시나리오를 상당폭 반영 중.</div>
+
+    <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
+      <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">애널리스트 25명 투자의견 분포</div>
+      <div style="height:8px;border-radius:4px;overflow:hidden;display:flex;">
+        <div style="width:76%;height:100%;background:var(--green);"></div>
+        <div style="width:24%;height:100%;background:#f0c040;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10.5px;margin-top:6px;">
+        <span style="color:var(--green);">매수 19명 (Strong Buy 2·Buy 17)</span>
+        <span style="color:#f0c040;">유지 6명 (Hold)</span>
+        <span style="color:var(--red);">매도 0명</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">5개 분석 종합 — 한눈에 보기</div>
+    <div class="zone-list">
+      <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:var(--green);">현재가&gt;MA5&gt;MA20&gt;MA60&gt;MA120 완전 정배열 유지</span></div>
+      <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">Skyrizi $4.5B 사상 최대, 면역질환 매출 견인 지속</span></div>
+      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:#f0c040;">Adjusted PER 3단계(적정), Forward P/E 2단계(저평가)</span></div>
+      <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:var(--green);">S&P500 대비 +14.3%p 아웃퍼폼, Dividend King</span></div>
+      <div class="zone-item"><span class="zone-label">📰 시계열 뉴스</span><span class="zone-val" style="color:#f0c040;">Apogee 인수가 랠리 견인, Q2 가이던스 하회가 다음 변수</span></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">투자의견 요약</div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107">7/31(금) Q2 FY2026 — D-10</strong></div>
+      <div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">Humira 특허절벽을 Skyrizi·Rinvoq로 성공적으로 대체한 실적 모멘텀에 Apogee 인수까지 더해지며 파이프라인이 확장 중이나, GAAP 지표 왜곡과 Q2 가이던스 하회는 여전히 주의가 필요 — Adjusted 실적 기준 성장 지속 여부가 핵심 변수</strong></div>
+    </div>
+  </div>
+</div>
+
+<div class="disclaimer">
+  ⚠️ 본 위젯은 SEC EDGAR 공시(10-K/10-Q/8-K), Yahoo Finance 주가 데이터 및 공개 뉴스를 기반으로 작성된 정보 제공 목적의 분석 자료입니다. 투자 권고 또는 매매 추천이 아니며, 모든 투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다. 과거 실적이 미래 수익을 보장하지 않습니다.
+</div>
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  renderCharts(id);
+}
+const charts = {};
+
+const ABBV_DAILY = [["2025-07-18",191.51,192.34,188.57,189.26,5332000],["2025-07-21",189.62,189.9,184.63,184.85,4954800],["2025-07-22",184.94,188.2,184.9,187.11,4432100],["2025-07-23",187.05,190.8,186.77,190.55,4344500],["2025-07-24",190.76,192.24,189.99,190.83,3462700],["2025-07-25",191.4,191.4,188.53,190.28,3786800],["2025-07-28",191.21,191.21,187.64,188.52,3776900],["2025-07-29",189.15,192.49,187.86,191.22,6715500],["2025-07-30",191.77,192.7,188.01,189.31,5008400],["2025-07-31",197.06,198.83,187.62,189.02,10347900],["2025-08-01",189.92,197.06,189.79,195.22,8082000],["2025-08-04",194.81,197.37,193.72,197.19,4217500],["2025-08-05",197.55,199.89,196.48,198.55,4153400],["2025-08-06",197.23,198.05,194.67,196.3,4057200],["2025-08-07",197.05,199.83,196.5,198.86,4683300],["2025-08-08",199.08,200.33,197.14,198.05,4101700],["2025-08-11",198.18,199.43,196.89,198.64,6067800],["2025-08-12",198.09,200.02,197.05,198.64,3049800],["2025-08-13",199.76,201.72,199.21,201.47,3558500],["2025-08-14",201.8,205.06,200.86,204.68,4635400],["2025-08-15",205.91,206.84,204.32,206.69,4430900],["2025-08-18",206.6,208.34,205.96,206.57,6083500],["2025-08-19",206.53,207.8,205.1,206.19,3975500],["2025-08-20",206.65,211.69,206.65,209.15,5782100],["2025-08-21",209.14,212.45,208.87,209.5,5323900],["2025-08-22",210.84,211.47,207.12,210.6,5516900],["2025-08-25",210.3,211.3,207.05,207.55,2796200],["2025-08-26",207.52,208.58,206.57,208.36,3702900],["2025-08-27",208.82,210.42,207.81,208.06,3459100],["2025-08-28",207.65,208.01,205.49,207.92,4523100],["2025-08-29",208.0,211.0,207.9,210.4,4264700],["2025-09-02",210.14,212.16,208.99,211.92,4335500],["2025-09-03",212.42,213.42,211.48,211.86,3973500],["2025-09-04",212.25,214.19,211.66,213.0,3531600],["2025-09-05",212.55,214.34,211.0,212.56,4465400],["2025-09-08",210.99,212.0,207.61,209.79,5525500],["2025-09-09",209.53,210.72,209.12,210.42,3097100],["2025-09-10",210.23,212.27,208.44,211.64,4520600],["2025-09-11",220.35,221.77,216.75,220.22,7647700],["2025-09-12",219.12,220.38,218.23,218.34,4418800],["2025-09-15",219.6,219.6,214.31,217.61,5162100],["2025-09-16",218.33,218.71,215.84,216.26,4251000],["2025-09-17",219.1,221.55,217.3,220.81,5258400],["2025-09-18",221.07,222.07,219.92,221.99,4445600],["2025-09-19",222.42,223.49,221.59,222.47,14415100],["2025-09-22",222.46,225.16,221.43,222.59,5990700],["2025-09-23",222.01,224.4,221.93,222.61,4629900],["2025-09-24",222.0,222.24,218.54,219.99,5074500],["2025-09-25",220.1,222.26,218.03,218.54,6666000],["2025-09-26",220.63,221.48,217.67,220.61,4185600],["2025-09-29",220.75,223.24,219.79,223.16,4958400],["2025-09-30",223.06,232.35,222.57,231.54,9187300],["2025-10-01",233.64,244.81,232.0,244.38,12243100],["2025-10-02",240.89,242.67,234.52,236.56,8107700],["2025-10-03",236.9,238.84,233.71,233.91,6547300],["2025-10-06",231.71,232.95,227.92,230.19,11940300],["2025-10-07",231.29,234.08,227.59,232.83,4901000],["2025-10-08",231.48,233.0,229.68,231.24,5412800],["2025-10-09",233.27,233.79,230.62,230.69,4607600],["2025-10-10",231.51,234.68,230.5,230.5,6156900],["2025-10-13",230.0,233.81,229.22,230.3,5411900],["2025-10-14",228.07,230.65,227.51,229.13,5527600],["2025-10-15",227.2,228.95,225.32,226.22,5459400],["2025-10-16",226.22,228.11,225.46,226.87,4737500],["2025-10-17",227.52,230.71,226.81,229.57,7150000],["2025-10-20",231.0,232.26,230.0,232.06,5246700],["2025-10-21",232.15,232.81,229.83,231.39,3298100],["2025-10-22",231.67,232.16,228.43,228.68,3523500],["2025-10-23",228.99,229.86,227.25,228.25,5818000],["2025-10-24",228.78,229.04,226.25,227.99,3554700],["2025-10-27",227.95,228.6,227.12,228.03,2784400],["2025-10-28",227.0,228.4,224.31,227.54,3724200],["2025-10-29",227.62,228.0,224.04,225.14,5469300],["2025-10-30",227.05,229.65,226.41,228.2,5020700],["2025-10-31",223.0,223.87,216.0,218.04,10825300],["2025-11-03",216.68,219.0,211.69,211.96,8874300],["2025-11-04",212.37,217.08,212.37,215.89,6184000],["2025-11-05",215.74,217.43,212.6,216.77,4928200],["2025-11-06",215.89,219.68,215.65,219.04,6615300],["2025-11-07",219.31,220.99,217.09,219.16,4647900],["2025-11-10",217.0,219.86,216.15,218.71,4530800],["2025-11-11",219.0,225.42,219.0,225.17,4802400],["2025-11-12",225.4,234.0,225.29,233.23,8583200],["2025-11-13",233.74,239.29,232.16,232.29,7968500],["2025-11-14",233.61,235.0,230.32,232.36,5461500],["2025-11-17",233.26,235.35,229.23,234.0,5023100],["2025-11-18",235.0,237.19,232.11,233.87,6232600],["2025-11-19",233.54,238.15,230.36,232.91,7618400],["2025-11-20",233.26,234.95,228.0,229.45,4283600],["2025-11-21",230.55,238.01,230.14,236.28,8017600],["2025-11-24",236.0,237.62,228.48,229.51,10225900],["2025-11-25",230.32,234.08,230.31,231.8,7134100],["2025-11-26",232.04,232.48,226.64,227.66,5920800],["2025-11-28",226.85,228.09,225.51,227.7,2655600],["2025-12-01",227.19,229.49,223.98,225.11,5208300],["2025-12-02",224.82,226.63,223.11,224.37,5096700],["2025-12-03",224.84,230.79,224.52,230.24,4872900],["2025-12-04",230.11,230.94,227.59,228.71,3732900],["2025-12-05",228.93,229.25,225.05,226.08,3985200],["2025-12-08",226.08,226.12,222.39,223.12,4006100],["2025-12-09",223.89,224.82,220.23,222.99,4267900],["2025-12-10",225.0,225.98,221.0,225.18,8735200],["2025-12-11",225.54,225.96,222.24,223.98,4170600],["2025-12-12",223.69,223.82,221.1,223.32,5467600],["2025-12-15",224.24,228.3,223.56,227.45,5971900],["2025-12-16",226.41,226.84,221.91,223.67,6405900],["2025-12-17",223.88,226.41,222.86,224.31,5243400],["2025-12-18",224.0,226.26,222.79,222.82,4760400],["2025-12-19",222.95,229.47,222.35,226.82,18968800],["2025-12-22",226.11,228.65,224.25,227.91,4828100],["2025-12-23",228.22,230.79,227.91,228.79,3612100],["2025-12-24",229.46,230.8,228.98,229.89,1744900],["2025-12-26",229.82,230.61,228.68,229.98,1593900],["2025-12-29",230.15,232.02,229.74,230.84,3803000],["2025-12-30",230.77,231.21,228.62,229.74,2348000],["2025-12-31",229.74,230.25,228.43,228.49,3196900],["2026-01-02",228.74,230.74,225.71,229.31,3336800],["2026-01-05",227.0,227.24,217.86,220.18,9341300],["2026-01-06",219.75,224.2,219.55,223.93,9151700],["2026-01-07",225.24,237.04,224.74,233.42,10285400],["2026-01-08",231.13,231.54,223.12,224.13,9365900],["2026-01-09",223.75,225.12,219.0,220.08,6714200],["2026-01-12",221.19,222.49,218.39,220.04,6546100],["2026-01-13",219.53,220.75,215.85,220.75,4872600],["2026-01-14",221.0,223.34,217.0,221.89,8426400],["2026-01-15",222.52,223.03,215.83,216.75,6954200],["2026-01-16",215.61,217.35,213.88,214.35,8649700],["2026-01-20",211.7,214.04,209.96,214.04,8251400],["2026-01-21",212.47,218.0,211.57,216.15,10727100],["2026-01-22",216.28,219.05,214.76,218.11,5650900],["2026-01-23",217.26,219.82,215.88,219.26,5816400],["2026-01-26",219.11,221.48,218.5,220.77,6553400],["2026-01-27",220.88,226.86,220.65,223.93,5747400],["2026-01-28",223.6,224.03,216.7,218.67,5215800],["2026-01-29",218.0,224.14,218.0,220.43,7834000],["2026-01-30",220.51,224.02,219.56,223.01,6622200],["2026-02-02",224.85,229.79,224.42,225.64,5413000],["2026-02-03",223.95,228.7,223.64,225.66,8158500],["2026-02-04",209.78,220.85,204.27,217.11,15319700],["2026-02-05",216.9,219.87,214.04,219.02,10794000],["2026-02-06",218.75,225.82,218.5,223.43,6067100],["2026-02-09",223.42,223.96,220.12,223.26,6767700],["2026-02-10",223.75,225.81,221.94,222.44,6044500],["2026-02-11",222.27,224.15,218.05,220.89,8072400],["2026-02-12",221.57,229.05,220.91,227.5,8712000],["2026-02-13",228.42,234.74,228.0,231.5,8252200],["2026-02-17",232.66,235.25,231.19,232.86,7336400],["2026-02-18",234.0,234.0,226.07,228.72,5495100],["2026-02-19",228.97,229.37,223.02,224.35,5410800],["2026-02-20",225.04,226.69,223.11,224.81,6830300],["2026-02-23",225.82,231.43,225.79,229.48,5463200],["2026-02-24",229.0,230.76,227.67,228.44,4880800],["2026-02-25",229.71,232.55,226.48,226.92,5410900],["2026-02-26",227.59,227.78,221.13,224.69,5331300],["2026-02-27",225.1,232.27,225.06,232.08,8018100],["2026-03-02",233.66,235.66,231.9,234.26,7438800],["2026-03-03",233.36,235.71,230.24,233.86,6595700],["2026-03-04",233.56,237.11,232.08,236.19,5380800],["2026-03-05",233.42,234.8,228.0,232.35,9423100],["2026-03-06",230.36,231.6,226.8,230.11,6139600],["2026-03-09",229.97,230.68,223.23,227.45,7915800],["2026-03-10",227.66,231.27,226.16,227.01,6466800],["2026-03-11",226.05,229.29,225.3,227.68,5299200],["2026-03-12",225.12,227.81,223.57,225.37,7607000],["2026-03-13",226.89,228.62,219.44,219.68,5676100],["2026-03-16",221.09,224.37,220.32,221.45,3991800],["2026-03-17",222.04,223.28,219.76,219.76,4405700],["2026-03-18",218.5,219.0,207.6,208.34,8597000],["2026-03-19",208.37,210.43,204.3,206.23,7006800],["2026-03-20",206.27,207.78,203.06,205.07,27982400],["2026-03-23",207.36,208.62,203.22,204.93,7419900],["2026-03-24",203.04,206.01,201.8,205.2,6990500],["2026-03-25",206.86,209.68,205.86,207.18,6000100],["2026-03-26",207.19,211.45,205.76,211.12,4576300],["2026-03-27",211.42,213.49,209.12,209.4,5654000],["2026-03-30",212.26,213.94,210.78,213.12,7491200],["2026-03-31",215.06,219.17,214.85,217.49,8311700],["2026-04-01",218.37,220.45,213.75,214.98,5702800],["2026-04-02",213.99,214.56,207.71,208.84,5151100],["2026-04-06",207.04,209.0,205.3,206.69,4929100],["2026-04-07",206.23,206.49,201.66,206.37,8801600],["2026-04-08",206.26,212.22,204.56,211.59,5477500],["2026-04-09",209.48,213.51,208.74,212.4,4477800],["2026-04-10",213.55,214.1,207.75,207.94,4633200],["2026-04-13",206.43,208.08,203.01,206.47,7532500],["2026-04-14",204.8,210.42,204.06,210.26,6199400],["2026-04-15",208.99,209.82,205.55,208.42,5952100],["2026-04-16",207.78,209.66,206.52,208.99,5075400],["2026-04-17",209.66,212.35,207.82,208.38,8986600],["2026-04-20",207.94,208.33,202.84,203.71,5774300],["2026-04-21",204.01,206.2,200.92,205.12,7772100],["2026-04-22",205.17,205.99,199.81,200.5,7646200],["2026-04-23",201.05,202.76,200.41,200.95,7461100],["2026-04-24",198.93,200.25,197.14,198.71,7605800],["2026-04-27",198.0,201.42,196.23,197.38,7467600],["2026-04-28",198.67,199.18,196.44,197.69,6313100],["2026-04-29",192.0,205.83,190.75,203.89,10406300],["2026-04-30",209.0,214.87,208.17,211.32,10319200],["2026-05-01",211.0,211.0,205.57,206.6,6343100],["2026-05-04",205.71,208.34,204.87,208.16,4579300],["2026-05-05",208.97,209.52,205.83,206.11,4490500],["2026-05-06",206.11,207.01,203.56,205.03,7290000],["2026-05-07",204.92,207.0,202.03,202.71,6681100],["2026-05-08",201.92,202.4,200.02,201.55,4915400],["2026-05-11",202.01,205.38,202.01,202.78,4931700],["2026-05-12",204.59,211.32,203.51,207.86,7044100],["2026-05-13",206.86,209.53,204.3,208.5,5705700],["2026-05-14",209.5,213.51,208.35,210.77,5006500],["2026-05-15",213.1,214.92,209.02,210.39,5385000],["2026-05-18",210.37,211.36,207.68,209.41,5069000],["2026-05-19",209.9,215.8,208.73,213.76,7220300],["2026-05-20",213.36,214.5,211.5,212.3,5129000],["2026-05-21",210.95,215.64,209.5,214.5,3813800],["2026-05-22",217.0,220.01,215.7,215.7,5406100],["2026-05-26",215.92,217.05,211.91,213.12,4706700],["2026-05-27",213.12,215.94,211.36,215.4,4640100],["2026-05-28",215.9,219.38,215.9,218.63,5189300],["2026-05-29",219.02,219.6,214.9,217.72,7618500],["2026-06-01",215.26,216.5,211.51,212.93,4858400],["2026-06-02",211.01,216.57,208.99,215.4,5861800],["2026-06-03",214.8,219.54,213.73,217.13,5667500],["2026-06-04",222.5,224.99,219.84,224.94,6782000],["2026-06-05",227.37,230.47,226.0,227.23,6248900],["2026-06-08",226.75,228.58,221.17,223.07,4915600],["2026-06-09",224.8,227.14,221.72,225.42,4257500],["2026-06-10",226.93,227.14,224.12,224.95,4147300],["2026-06-11",226.01,227.55,224.04,224.77,4569000],["2026-06-12",227.5,228.4,224.32,227.73,4086500],["2026-06-15",226.0,226.5,220.0,221.59,5261900],["2026-06-16",223.31,223.5,219.15,222.47,5945500],["2026-06-17",222.4,222.84,218.83,221.23,5624200],["2026-06-18",221.37,222.35,215.37,216.49,9646100],["2026-06-22",221.94,232.32,221.94,230.01,9912800],["2026-06-23",232.97,235.31,231.3,234.76,7365600],["2026-06-24",236.35,237.36,232.85,234.89,7311000],["2026-06-25",233.66,244.61,233.66,243.14,10278100],["2026-06-26",245.26,253.35,244.66,253.35,52635100],["2026-06-29",253.05,255.99,249.2,254.31,9760500],["2026-06-30",255.0,255.5,250.1,251.64,6999700],["2026-07-01",250.75,251.8,247.56,251.06,6988000],["2026-07-02",252.3,261.64,250.51,261.07,7113400],["2026-07-06",259.92,260.92,253.6,254.76,8580200],["2026-07-07",257.21,260.35,254.27,254.65,8238300],["2026-07-08",253.25,255.82,250.7,252.74,7578700],["2026-07-09",251.2,254.86,247.99,249.91,5526000],["2026-07-10",251.01,251.66,245.05,248.08,5780700],["2026-07-13",248.37,249.74,244.61,248.0,4156400],["2026-07-14",245.99,246.42,243.19,244.78,5246800],["2026-07-15",243.32,247.75,243.07,244.11,6389000],["2026-07-16",244.75,254.54,243.5,254.39,6555500],["2026-07-17",257.0,260.96,254.29,254.49,6872400],["2026-07-20",253.1,256.15,252.68,253.38,4332400]];
+const ABBV_MA5 = [189.83,188.5,188.64,188.63,188.52,188.72,189.46,190.28,190.03,189.67,190.66,192.39,193.86,195.26,197.22,197.79,198.08,198.1,199.13,200.3,202.02,203.61,205.12,206.66,207.62,208.4,208.6,209.03,208.81,208.5,208.46,209.33,210.03,211.02,211.95,211.83,211.53,211.48,212.93,214.08,215.65,216.81,218.65,219.0,219.83,220.82,222.09,221.93,221.24,220.87,220.98,222.77,227.65,231.25,233.91,235.32,235.57,232.95,231.77,231.09,231.11,230.37,229.37,228.6,228.42,228.77,229.22,229.71,229.99,229.67,228.87,228.1,227.39,227.38,225.39,222.18,219.85,218.17,216.34,216.56,217.91,219.77,223.06,225.71,228.35,231.41,233.15,233.09,232.52,233.3,232.4,231.99,230.94,230.59,228.36,227.33,227.02,227.23,226.9,226.5,226.23,225.22,224.27,223.72,224.58,224.72,224.55,224.31,225.01,225.11,226.13,227.25,228.68,229.48,229.85,229.79,229.67,227.71,226.33,227.07,226.19,224.35,224.32,223.68,221.38,219.9,218.76,217.56,216.64,215.88,216.38,217.67,219.64,220.15,220.61,221.36,222.34,222.68,222.37,222.09,222.17,221.7,221.05,221.81,223.5,225.12,227.04,228.29,228.99,228.45,228.04,227.16,226.8,226.87,228.32,229.28,230.36,232.22,233.75,233.35,231.99,230.62,228.92,227.52,225.44,224.24,222.79,218.92,215.09,212.17,208.87,205.95,205.72,206.7,207.57,209.2,211.66,213.22,212.77,212.22,210.87,209.69,209.18,209.0,208.95,209.73,209.1,208.42,208.5,207.95,206.92,205.34,203.73,201.8,200.53,199.05,199.72,201.8,203.38,205.53,207.22,207.44,205.72,204.71,203.64,203.99,204.68,206.29,208.06,209.39,210.57,211.33,212.07,213.13,213.88,214.2,215.47,216.11,215.56,216.02,216.36,217.62,219.53,221.55,223.56,225.12,225.09,225.19,224.89,224.3,223.56,221.9,222.36,224.99,227.48,231.86,239.23,244.09,247.47,250.7,254.29,254.57,254.64,254.86,254.63,252.03,250.68,248.7,246.98,247.87,249.15,250.23];
+const ABBV_MA20 = [188.47,188.45,188.61,188.86,189.13,189.31,189.62,189.9,189.87,189.78,190.08,190.55,190.99,191.28,191.47,191.75,192.11,192.72,193.26,193.93,194.8,195.89,196.84,197.77,198.7,199.72,200.67,201.53,202.46,203.41,204.17,204.91,205.57,206.41,207.09,207.68,208.27,208.92,209.85,210.54,211.08,211.57,212.3,212.94,213.59,214.19,214.94,215.52,216.05,216.68,217.32,218.3,219.93,221.1,222.17,223.19,224.31,225.29,225.82,226.42,227.06,227.7,227.97,228.22,228.57,229.04,229.48,229.92,230.4,230.77,231.02,230.82,229.85,229.44,228.64,227.73,226.88,226.16,225.58,225.01,224.43,224.23,224.58,224.86,224.99,225.09,225.22,225.43,225.49,225.9,225.98,226.19,226.31,226.29,226.64,227.26,227.98,228.58,228.93,229.13,229.34,229.34,228.88,228.43,228.19,227.67,227.19,226.69,226.56,226.14,226.1,226.01,226.12,226.28,226.51,226.72,226.67,226.24,226.14,226.65,226.71,226.45,226.26,226.13,225.85,225.5,225.01,224.57,224.03,223.54,223.07,222.61,222.31,221.7,221.23,220.96,220.78,221.05,220.71,219.99,219.95,220.11,220.23,220.24,220.52,221.26,222.18,222.92,223.33,223.66,224.17,224.56,224.71,225.01,225.59,226.15,226.56,227.09,227.85,228.41,228.61,228.8,229.06,229.28,228.89,228.39,227.73,226.71,225.81,224.82,223.59,222.43,221.44,220.77,219.63,218.57,217.76,216.7,215.52,214.35,213.3,212.52,211.76,210.89,210.23,209.67,209.1,209.13,209.24,209.17,209.18,208.95,208.64,208.02,207.42,206.64,205.96,205.78,205.67,205.74,205.73,205.4,204.92,204.6,204.41,204.29,204.3,204.39,204.49,204.77,205.2,205.79,206.47,207.32,208.11,208.99,209.73,210.05,210.37,210.73,211.28,212.28,213.5,214.58,215.71,216.56,217.38,218.22,218.78,219.44,219.81,220.02,220.8,221.75,222.84,224.22,225.96,227.79,229.73,231.51,233.71,235.2,236.57,238.05,239.28,240.43,241.59,242.45,243.57,245.17,246.83,248.68];
+const ABBV_MA60 = [187.69,187.82,187.93,188.01,187.98,187.93,187.82,187.78,187.63,187.51,187.65,187.8,188.01,188.21,188.36,188.52,188.88,189.16,189.45,189.77,190.13,190.54,190.94,191.37,191.77,192.22,192.59,192.96,193.31,193.66,194.04,194.45,194.82,195.21,195.6,195.9,196.2,196.54,197.03,197.58,198.12,198.63,199.25,199.86,200.48,201.07,201.74,202.32,202.79,203.29,203.85,204.59,205.5,206.26,206.91,207.54,208.23,208.98,209.64,210.3,210.98,211.72,212.37,212.98,213.62,214.32,215.03,215.66,216.31,216.95,217.5,218.01,218.45,218.98,219.3,219.53,219.82,220.12,220.42,220.66,220.86,221.17,221.62,222.0,222.39,222.78,223.21,223.62,223.98,224.45,224.77,225.1,225.37,225.61,225.82,226.06,226.39,226.68,226.78,226.85,226.94,227.09,227.15,227.17,227.25,227.27,227.3,227.34,227.48,227.6,227.7,227.67,227.43,227.34,227.27,227.24,227.18,226.99,226.88,226.93,226.83,226.68,226.57,226.47,226.34,226.09,225.8,225.56,225.36,225.19,225.05,224.94,224.91,224.76,224.8,224.98,225.14,225.29,225.26,225.26,225.34,225.3,225.12,224.93,224.85,224.81,224.79,224.72,224.64,224.45,224.45,224.39,224.38,224.33,224.45,224.61,224.67,224.79,224.9,225.02,225.09,225.12,225.18,225.22,225.09,225.05,224.97,224.73,224.39,224.01,223.61,223.2,222.82,222.49,222.15,221.9,221.7,221.61,221.36,220.92,220.62,220.48,220.35,220.14,219.88,219.77,219.67,219.59,219.46,219.22,218.98,218.65,218.26,217.93,217.55,217.12,216.76,216.52,216.35,216.17,215.88,215.57,215.25,214.92,214.51,214.12,213.71,213.41,213.18,212.92,212.66,212.39,212.18,212.03,211.72,211.4,211.15,210.84,210.52,210.27,210.1,210.07,210.06,210.02,210.12,210.18,210.26,210.58,210.84,211.13,211.4,211.59,211.97,212.36,212.79,213.29,213.89,214.54,215.25,215.99,216.91,217.62,218.33,219.08,219.8,220.43,221.09,221.69,222.28,223.13,223.95,224.83];
+const ABBV_MA120 = [191.97,192.03,192.13,192.26,192.39,192.44,192.43,192.44,192.42,192.39,192.42,192.48,192.54,192.56,192.61,192.65,192.67,192.68,192.69,192.71,192.73,192.75,192.78,192.81,192.82,192.81,192.81,192.78,192.76,192.71,192.65,192.64,192.64,192.65,192.66,192.62,192.59,192.58,192.65,192.72,192.79,192.92,193.08,193.24,193.38,193.49,193.63,193.75,193.89,194.17,194.48,194.94,195.48,196.0,196.49,196.92,197.38,197.88,198.36,198.86,199.33,199.77,200.15,200.49,200.8,201.12,201.42,201.72,201.97,202.23,202.57,202.9,203.23,203.6,203.83,204.03,204.35,204.64,204.93,205.21,205.49,205.86,206.28,206.69,207.08,207.5,207.9,208.29,208.65,209.05,209.41,209.78,210.09,210.41,210.71,210.98,211.3,211.61,211.9,212.22,212.53,212.86,213.2,213.51,213.86,214.17,214.52,214.83,215.14,215.45,215.78,216.13,216.46,216.8,217.09,217.39,217.7,217.99,218.26,218.61,218.9,219.2,219.47,219.72,219.98,220.2,220.42,220.61,220.83,221.07,221.27,221.47,221.68,221.87,222.05,222.26,222.48,222.71,222.84,222.96,223.1,223.24,223.37,223.47,223.62,223.79,224.0,224.17,224.31,224.45,224.61,224.75,224.87,224.97,225.13,225.34,225.53,225.74,225.84,225.94,226.02,226.11,226.16,226.19,226.17,226.16,226.14,226.04,225.94,225.81,225.65,225.44,225.13,224.91,224.71,224.57,224.44,224.3,224.12,223.92,223.72,223.58,223.46,223.3,223.11,222.93,222.74,222.57,222.41,222.21,222.02,221.79,221.59,221.34,221.17,221.05,220.95,220.91,220.8,220.71,220.61,220.44,220.18,219.93,219.68,219.46,219.25,219.07,218.91,218.69,218.55,218.39,218.28,218.18,218.08,218.01,217.91,217.82,217.71,217.64,217.6,217.59,217.62,217.62,217.6,217.61,217.62,217.66,217.61,217.57,217.51,217.39,217.39,217.43,217.47,217.59,217.79,218.08,218.31,218.45,218.76,219.05,219.34,219.61,219.84,220.1,220.38,220.64,220.87,221.17,221.47,221.74];
+
+(function(){
+  const svgCandle = document.getElementById('abbvCandleSvg');
+  const svgVol = document.getElementById('abbvVolumeSvg');
+  const toggle = document.getElementById('abbvRangeToggle');
+  const maToggle = document.getElementById('abbvMaToggle');
+  if(!svgCandle || !svgVol || !toggle) return;
+  const RANGES = {'1M':21,'3M':63,'6M':126,'1Y':252};
+  const NS = 'http://www.w3.org/2000/svg';
+  const UP='#2ecc71', DOWN='#e74c3c';
+  const maColors = {ma5:'#ff6b9d', ma20:'#9b59b6', ma60:'#f0c040', ma120:'#22d3ee'};
+  const maState = {ma5:true, ma20:true, ma60:true, ma120:true, pricelabels:true};
+  let currentRange = '1Y';
+
+  function draw(rangeKey){
+    currentRange = rangeKey;
+    const n = RANGES[rangeKey];
+    const data = ABBV_DAILY.slice(-n);
+    const ma5 = ABBV_MA5.slice(-n), ma20 = ABBV_MA20.slice(-n), ma60 = ABBV_MA60.slice(-n), ma120 = ABBV_MA120.slice(-n);
+    while(svgCandle.firstChild) svgCandle.removeChild(svgCandle.firstChild);
+    while(svgVol.firstChild) svgVol.removeChild(svgVol.firstChild);
+
+    const W=720,H=240,pL=45,pR=12,pT=10,pB=20;
+    const cW=W-pL-pR,cH=H-pT-pB;
+    const highs=data.map(d=>d[2]), lows=data.map(d=>d[3]);
+    const maVals=[...ma5,...ma20,...ma60,...ma120].filter(v=>v!=null);
+    const mx=Math.max(...highs,...maVals), mn=Math.min(...lows,...maVals);
+    const pad=(mx-mn)*0.06 || mx*0.02;
+    const top=mx+pad, bot=mn-pad, rng=(top-bot)||1;
+    const py = v => pT + cH*(1-(v-bot)/rng);
+    const colW = cW/data.length;
+    const bodyW = Math.max(colW*0.62, 1);
+
+    for(let i=0;i<=3;i++){
+      const v = bot + rng*i/3;
+      const y = py(v);
+      const l=document.createElementNS(NS,'line');
+      l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+      l.setAttribute('stroke','rgba(255,255,255,.08)');l.setAttribute('stroke-width','1');
+      svgCandle.appendChild(l);
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x',pL-4);t.setAttribute('y',y+3);t.setAttribute('text-anchor','end');
+      t.setAttribute('font-size','9');t.setAttribute('fill','rgba(154,160,184,.8)');
+      t.textContent='$'+v.toFixed(0);
+      svgCandle.appendChild(t);
+    }
+
+    data.forEach((d,i)=>{
+      const [,o,h,l,c] = d;
+      const cx = pL + (i+0.5)*colW;
+      const up = c >= o;
+      const col = up ? UP : DOWN;
+      const wick=document.createElementNS(NS,'line');
+      wick.setAttribute('x1',cx);wick.setAttribute('x2',cx);
+      wick.setAttribute('y1',py(h));wick.setAttribute('y2',py(l));
+      wick.setAttribute('stroke',col);wick.setAttribute('stroke-width', Math.max(colW*0.12,0.6));
+      svgCandle.appendChild(wick);
+      const yTop = py(Math.max(o,c));
+      const yBot = py(Math.min(o,c));
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x', cx - bodyW/2);
+      rect.setAttribute('y', yTop);
+      rect.setAttribute('width', bodyW);
+      rect.setAttribute('height', Math.max(yBot-yTop, 1));
+      rect.setAttribute('fill', col);
+      svgCandle.appendChild(rect);
+    });
+
+    const drawMaLine = (vals, color) => {
+      let seg = [];
+      const flush = () => {
+        if (seg.length > 1) {
+          const pl = document.createElementNS(NS,'polyline');
+          pl.setAttribute('points', seg.join(' '));
+          pl.setAttribute('fill','none'); pl.setAttribute('stroke',color);
+          pl.setAttribute('stroke-width','1.7'); pl.setAttribute('opacity','0.95');
+          pl.setAttribute('stroke-linejoin','round'); pl.setAttribute('stroke-linecap','round');
+          svgCandle.appendChild(pl);
+        }
+        seg = [];
+      };
+      vals.forEach((v,i) => {
+        if (v == null) { flush(); return; }
+        seg.push(`${pL+(i+0.5)*colW},${py(v)}`);
+      });
+      flush();
+    };
+    if (maState.ma5) drawMaLine(ma5, maColors.ma5);
+    if (maState.ma20) drawMaLine(ma20, maColors.ma20);
+    if (maState.ma60) drawMaLine(ma60, maColors.ma60);
+    if (maState.ma120) drawMaLine(ma120, maColors.ma120);
+
+    if (maState.pricelabels) {
+    const closeIdx = data.length-1;
+    const closeVal = data[closeIdx][4];
+    const periodHigh = Math.max(...highs);
+    const periodLow = Math.min(...lows);
+    const highIdx = highs.indexOf(periodHigh);
+    const lowIdx = lows.indexOf(periodLow);
+    const markers = [
+      {idx: highIdx, v: periodHigh, color: UP, label:'최고', side:'above'},
+      {idx: lowIdx, v: periodLow, color: DOWN, label:'최저', side:'below'},
+      {idx: closeIdx, v: closeVal, color:'#60a5fa', label:'종가', side:'left'}
+    ];
+    markers.forEach(m=>{
+      const cx = pL + (m.idx+0.5)*colW;
+      const cy = py(m.v);
+      const dot=document.createElementNS(NS,'circle');
+      dot.setAttribute('cx',cx);dot.setAttribute('cy',cy);dot.setAttribute('r','3.5');
+      dot.setAttribute('fill',m.color);dot.setAttribute('stroke','#0f1117');dot.setAttribute('stroke-width','1.5');
+      svgCandle.appendChild(dot);
+
+      const labelText = `${m.label} $${m.v.toFixed(2)}`;
+      const labelW = labelText.length*5.2+6;
+      let tx, ty, anchor;
+      if (m.side === 'left') {
+        anchor = 'end'; tx = cx-7; ty = cy+3;
+      } else if (m.side === 'above') {
+        ty = cy-9;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      } else {
+        ty = cy+16;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      }
+      const bgX = anchor==='end' ? tx-labelW : anchor==='middle' ? tx-labelW/2 : tx;
+      const bg=document.createElementNS(NS,'rect');
+      bg.setAttribute('x', bgX);bg.setAttribute('y', ty-8);
+      bg.setAttribute('width', labelW);bg.setAttribute('height', 12);
+      bg.setAttribute('fill','rgba(15,17,23,0.85)');bg.setAttribute('rx','2');
+      svgCandle.appendChild(bg);
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x', tx);t.setAttribute('y', ty+2);
+      t.setAttribute('text-anchor',anchor);t.setAttribute('font-size','9');
+      t.setAttribute('font-weight','700');t.setAttribute('fill', m.color);
+      t.textContent = labelText;
+      svgCandle.appendChild(t);
+    });
+    }
+
+    const labelCount = Math.min(5, data.length);
+    for(let i=0;i<labelCount;i++){
+      const idx = Math.round(i*(data.length-1)/((labelCount-1)||1));
+      const cx = pL + (idx+0.5)*colW;
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x', Math.min(Math.max(cx,pL+10), W-20));
+      t.setAttribute('y', H-4);
+      t.setAttribute('text-anchor','middle');t.setAttribute('font-size','9');
+      t.setAttribute('fill','rgba(154,160,184,.8)');
+      t.textContent = data[idx][0].slice(2).replace(/-/g,'.');
+      svgCandle.appendChild(t);
+    }
+
+    const VW=720,VH=70,vpT=6,vpB=4;
+    const vcH=VH-vpT-vpB;
+    const maxV = Math.max(...data.map(d=>d[5]));
+    data.forEach((d,i)=>{
+      const [,o,,,c,v] = d;
+      const cx = pL + (i+0.5)*colW;
+      const up = c >= o;
+      const col = up ? 'rgba(46,204,113,0.55)' : 'rgba(231,76,60,0.55)';
+      const h = (v/maxV)*vcH;
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x', cx - bodyW/2);
+      rect.setAttribute('y', vpT + (vcH-h));
+      rect.setAttribute('width', bodyW);
+      rect.setAttribute('height', Math.max(h,1));
+      rect.setAttribute('fill', col);
+      svgVol.appendChild(rect);
+    });
+  }
+
+  toggle.querySelectorAll('.range-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      toggle.querySelectorAll('.range-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      draw(btn.dataset.range);
+    });
+  });
+
+  if (maToggle) {
+    maToggle.querySelectorAll('.ma-toggle-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const key = btn.dataset.ma;
+        maState[key] = !maState[key];
+        btn.classList.toggle('ma-off', !maState[key]);
+        draw(currentRange);
+      });
+    });
+  }
+
+  draw('1Y');
+})();
+
+function renderFundChart() {
+  const ctx = document.getElementById('abbvRevChart');
+  if (!ctx || charts['fund']) return;
+  charts['fund'] = new Chart(ctx,{
+    data:{
+      labels:['Q3 \'24','Q4 \'24','Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26','Q2 \'26(E)'],
+      datasets:[
+        {type:'bar',label:'매출($B)',data:[14.46,15.10,13.3,15.4,15.8,16.618,15.0,16.4],backgroundColor:'#1f4e8c',borderRadius:4,barPercentage:0.7,categoryPercentage:0.7,yAxisID:'y'},
+        {type:'line',label:'GAAP EPS($)',data:[0.87,-0.02,0.72,0.52,0.10,1.02,0.39,null],borderColor:'#e74c3c',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'},
+        {type:'line',label:'Adjusted EPS($)',data:[3.00,2.16,2.46,2.97,1.86,2.71,2.65,3.59],borderColor:'#4a90d9',backgroundColor:'transparent',tension:.35,pointRadius:3,borderWidth:2,fill:false,yAxisID:'y2',borderDash:[4,4]}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#9aa0b8',font:{size:10}}}},
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}},
+        y2:{position:'right',min:-0.5,max:4,grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v}}
+      }
+    }
+  });
+}
+
+function renderPeerChart() {
+  const ctx = document.getElementById('peerChart');
+  if (!ctx || charts['peer']) return;
+  charts['peer'] = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['PFE','ABBV','JNJ','LLY'],
+      datasets:[{
+        label:'P/E',
+        data:[7.9,24.9,23.3,40.5],
+        backgroundColor:['rgba(154,160,184,0.4)','#4a90d9','rgba(154,160,184,0.4)','rgba(154,160,184,0.4)'],
+        borderRadius:4,borderSkipped:false
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`P/E ${ctx.raw}x`}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{max:45,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
+      }
+    }
+  });
+}
+
+function renderCharts(sectionId) {
+  setTimeout(() => {
+    if (sectionId === 'fund') renderFundChart();
+    if (sectionId === 'valuation') renderPeerChart();
+  }, 50);
+}
+</script>
+</body>
+</html>

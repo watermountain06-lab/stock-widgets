@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MA 종합 분석 위젯</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117; --bg2: #1a1d27; --bg3: #22263a; --border: #2e3347;
+    --text: #e8eaf0; --text2: #9aa0b8; --text3: #5c6282;
+    --accent: #eb1626; --accent2: #ff8c42; --accent3: #3d0a10;
+    --bull: #D85A30; --bear: #185FA5; --ma5: #ff6b9d; --ma20: #9b59b6; --ma60: #f0c040; --ma120: #22d3ee;
+    --green: #2ecc71; --red: #e74c3c; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
+  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; max-width: 1100px; margin: 0 auto; }
+  .header { background: linear-gradient(135deg, #2b0508 0%, #0f1117 40%, #1a1d27 100%); border-bottom: 2px solid var(--accent3); padding: 28px 32px 24px; position: relative; overflow: hidden; max-width: 1100px; margin: 0 auto; }
+  .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(255,140,66,0.14) 0%, transparent 70%); pointer-events: none; }
+  .header-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .ticker-block { display: flex; align-items: center; gap: 16px; }
+  .ticker-badge { background: linear-gradient(135deg, var(--accent3), var(--accent)); color: #fff; font-size: 13px; font-weight: 800; padding: 5px 12px; border-radius: 6px; letter-spacing: 1px; }
+  .company-name { font-size: 22px; font-weight: 700; color: var(--text); }
+  .company-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .price-block { text-align: right; }
+  .price-main { font-size: 32px; font-weight: 800; color: var(--accent2); letter-spacing: -1px; }
+  .price-change { font-size: 13px; color: var(--green); font-weight: 600; }
+  .header-meta { display: flex; justify-content: space-between; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+  .meta-item { display: flex; flex-direction: column; }
+  .meta-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .meta-value { font-size: 13px; font-weight: 600; color: var(--text2); margin-top: 2px; }
+  .meta-value.highlight { color: var(--accent2); }
+  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
+  .nav-btn:hover { color: var(--text); background: var(--bg3); }
+  .nav-btn.active { background: var(--accent3); color: var(--accent2); }
+  .section { display: none; padding: 28px 32px; max-width: 1100px; margin: 0 auto; }
+  .section.active { display: block; }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--accent2); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; display: inline-block; }
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px; }
+  .card-title { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; font-weight: 600; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .chart-wrap { position: relative; }
+  .chart-wrap canvas { max-width: 100%; }
+  .price-chart-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+  .stat-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .stat-value { font-size: 20px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
+  .stat-sub { font-size: 11px; color: var(--text3); }
+  .stat-value.up { color: var(--green); }
+  .stat-value.down { color: var(--red); }
+  .stat-value.gold { color: var(--accent2); }
+  .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .ma-row:last-child { border-bottom: none; }
+  .ma-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+  .ma-name { display: flex; align-items: center; font-size: 13px; color: var(--text2); }
+  .ma-val { font-size: 13px; font-weight: 600; }
+  .ma-status { font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
+  .status-above { background: rgba(46,204,113,0.15); color: var(--green); }
+  .status-below { background: rgba(231,76,60,0.15); color: var(--red); }
+  .status-amber { background: rgba(240,192,64,0.18); color: var(--ma60); }
+  .zone-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .zone-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg3); border-radius: 6px; }
+  .zone-label { font-size: 12px; color: var(--text2); }
+  .zone-val { font-size: 13px; font-weight: 700; color: var(--accent2); }
+  .zone-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
+  .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
+  .tag-current { background: rgba(255,140,66,0.2); color: var(--accent2); }
+  .val-item { margin-bottom: 18px; }
+  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
+  .val-track { height: 8px; background: var(--bg3); border-radius: 4px; position: relative; overflow: hidden; }
+  .val-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+  .val-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+  .val-low { font-size: 10px; color: var(--green); }
+  .val-mid { font-size: 10px; color: var(--accent2); text-align: center; }
+  .val-high { font-size: 10px; color: var(--red); }
+  .stage-badge { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
+  .stage-1 { background: rgba(46,204,113,0.2); color: #2ecc71; }
+  .stage-2 { background: rgba(39,174,96,0.2); color: #27ae60; }
+  .stage-3 { background: rgba(255,140,66,0.2); color: var(--accent2); }
+  .stage-4 { background: rgba(231,126,35,0.2); color: #e67e22; }
+  .stage-5 { background: rgba(231,76,60,0.2); color: var(--red); }
+  .stage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .stage-mini { text-align: center; padding: 10px 4px; border-radius: 8px; }
+  .stage-mini-num { font-size: 15px; font-weight: 700; }
+  .stage-mini-label { font-size: 9px; margin-top: 2px; }
+  .scenario-card { border-radius: 8px; padding: 14px; }
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent2); border: 2px solid var(--bg); }
+  .tl-dot.red { background: var(--red); }
+  .tl-dot.green { background: var(--green); }
+  .tl-dot.blue { background: var(--blue); }
+  .tl-dot.gold { background: var(--accent2); }
+  .tl-dot.today { background: #ffc107; }
+  .tl-date { font-size: 10px; color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+  .tl-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 3px 0; }
+  .tl-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .tl-source { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 11px; font-weight: 600; color: var(--accent2); text-decoration: none; }
+  .tl-source:hover { text-decoration: underline; }
+  .bull-bear { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .bb-box { background: var(--bg3); border-radius: var(--radius); padding: 16px; }
+  .bb-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .bb-bull { color: var(--bull); }
+  .bb-bear { color: var(--bear); }
+  .bb-item { display: flex; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .bb-icon { flex-shrink: 0; margin-top: 2px; }
+  .driver-item { display: flex; gap: 12px; padding: 12px; background: var(--bg3); border-radius: 8px; margin-bottom: 10px; }
+  .driver-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent3); color: var(--accent2); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .driver-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .driver-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
+  .per-share-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .ps-card { background: var(--bg3); border-radius: 8px; padding: 16px; text-align: center; }
+  .ps-icon { font-size: 22px; margin-bottom: 6px; }
+  .ps-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .ps-value { font-size: 22px; font-weight: 800; color: var(--accent2); }
+  .ps-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
+  .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+  .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
+  .disclaimer { max-width: 1100px; margin: 28px auto 16px; padding: 12px 16px; background: rgba(255,140,66,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
+  .info-box { background: rgba(255,140,66,0.1); border: 1px solid var(--accent3); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; color: var(--text2); }
+  .range-toggle { display: flex; gap: 4px; }
+  .range-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--text3); font-size: 11px; font-weight: 700; padding: 4px 11px; border-radius: 999px; cursor: pointer; transition: all .15s; }
+  .range-btn:hover { color: var(--text); border-color: var(--text2); }
+  .range-btn.active { background: var(--accent3); color: var(--accent2); border-color: var(--accent); }
+  .ma-toggle-btn { background: var(--bg3); border: 1px solid; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer; transition: all .15s; }
+  .ma-toggle-btn:hover { filter: brightness(1.2); }
+  .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
+  @media (max-width: 600px) {
+    .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
+    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; }
+    .per-share-grid { grid-template-columns: 1fr 1fr; } .stage-grid { grid-template-columns: 1fr 1fr; } .price-main { font-size: 24px; }
+  }
+  body { padding-top: 46px; }
+  .back-bar { position: fixed; top: 0; left: 0; right: 0; height: 46px; background: rgba(10,11,22,0.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.25); }
+  .back-bar a { color: var(--text2); font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+  .back-bar a:hover { color: var(--accent2); }
+  .back-bar .brand-icon { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 6px; background: var(--accent3); color: var(--accent2); font-size: 12px; }
+  .back-bar .back-bar-ticker { font-size: 11px; color: var(--text3); font-weight: 600; letter-spacing: 0.4px; }
+  .back-bar-nav { display: flex; align-items: center; gap: 10px; }
+  .peer-nav-link { color: var(--text2); font-size: 11px; font-weight: 700; text-decoration: none; padding: 4px 9px; border-radius: 6px; border: 1px solid var(--border); transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+  .peer-nav-link:hover { color: var(--accent2); border-color: var(--accent); }
+  .peer-nav-link.disabled { color: var(--text3); opacity: 0.4; pointer-events: none; border-color: var(--border); }
+</style>
+</head>
+<body>
+<div class="back-bar">
+  <a href="../index.html"><span class="brand-icon">◧</span>US Stock Widgets · 전체 종목 목록</a>
+  <div class="back-bar-nav">
+    <a class="peer-nav-link" href="INTC_analysis_widget.html">◀ INTC</a>
+    <span class="back-bar-ticker">MA · 시총 24위</span>
+    <a class="peer-nav-link" href="ABBV_analysis_widget.html">다음 ABBV ▶</a>
+  </div>
+</div>
+
+<div class="today-banner">🗓️ <strong>D-9 · 7/30(목) 장 개장 전 Q2 FY2026 실적 발표 예정</strong> — 컨센서스 EPS $4.75(전년 $4.15 대비 +14.5%), 가이던스는 순매출 저(低)두자릿수 성장(비GAAP·환율중립) · 애널리스트 41명 평균 목표가 $643.84 (Strong Buy 컨센서스, +17.6%)</div>
+
+<div class="header">
+  <div class="header-top">
+    <div class="ticker-block">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+          <span class="ticker-badge">MA</span>
+          <span style="font-size:11px;color:var(--accent2);font-weight:600;">NYSE · Visa와 결제네트워크 듀오폴리 · 스테이블코인·에이전틱커머스 디스럽션 우려로 밸류에이션 압박</span>
+        </div>
+        <div class="company-name">Mastercard Incorporated</div>
+        <div class="company-sub">Payments Network(카드 결제망)·Value-Added Services & Solutions(사이버보안·데이터분석·컨설팅) 2대 부문 · S&P 500 시총 24위권</div>
+      </div>
+    </div>
+    <div class="price-block">
+      <div class="price-main">$547.44</div>
+      <div class="price-change">▲ +0.71% (2026.07.20 기준)</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px;">52주 최저 $464.52 (2026.06.03) · 최고 $601.77 (2025.08.22)</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$489.4B</span></div>
+    <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Financials</span></div>
+    <div class="meta-item"><span class="meta-label">Q1 FY26 매출</span><span class="meta-value">$8.40B (+12%)</span></div>
+    <div class="meta-item"><span class="meta-label">P/E (TTM)</span><span class="meta-value">31.5x</span></div>
+    <div class="meta-item"><span class="meta-label">EPS (TTM)</span><span class="meta-value">$17.36</span></div>
+    <div class="meta-item"><span class="meta-label">분기 배당</span><span class="meta-value">$0.87 (+14%)</span></div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
+  <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
+  <button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button>
+  <button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button>
+  <button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button>
+  <button class="nav-btn" onclick="showSection('invest')">🎯 투자 포인트</button>
+</div>
+
+<!-- ===================== SECTION 1: 기술적 분석 ===================== -->
+<div id="tech" class="section active">
+  <div class="section-title">기술적 분석 — 일봉 캔들스틱 (2025.07 ~ 2026.07) · 52주 수익률 -0.9%</div>
+  <div class="price-chart-container">
+    <div style="margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+      <div class="range-toggle" id="maRangeToggle">
+        <button class="range-btn" data-range="1M">1개월</button>
+        <button class="range-btn" data-range="3M">3개월</button>
+        <button class="range-btn" data-range="6M">6개월</button>
+        <button class="range-btn active" data-range="1Y">1년</button>
+      </div>
+      <div id="maMaToggle" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="ma-toggle-btn" data-ma="ma5" style="color:var(--ma5);border-color:var(--ma5);">● MA5</button>
+        <button class="ma-toggle-btn" data-ma="ma20" style="color:var(--ma20);border-color:var(--ma20);">● MA20</button>
+        <button class="ma-toggle-btn" data-ma="ma60" style="color:var(--ma60);border-color:var(--ma60);">● MA60</button>
+        <button class="ma-toggle-btn" data-ma="ma120" style="color:var(--ma120);border-color:var(--ma120);">● MA120</button>
+        <button class="ma-toggle-btn" data-ma="pricelabels" style="color:var(--text2);border-color:var(--text2);margin-left:4px;">◆ 가격라벨</button>
+      </div>
+    </div>
+    <svg id="maCandleSvg" viewBox="0 0 720 240" width="100%" style="display:block;background:var(--bg3);border-radius:8px 8px 0 0;padding:4px;" role="img" aria-label="MA 일봉 캔들스틱 차트"></svg>
+    <svg id="maVolumeSvg" viewBox="0 0 720 70" width="100%" style="display:block;background:var(--bg3);border-radius:0 0 8px 8px;padding:0 4px 4px;" role="img" aria-label="MA 거래량 차트"></svg>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">52주 최저 $464.52 (2026.06) → 52주 최고 $601.77 (2025.08) → 현재 $547.44</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">핵심 가격대</div>
+      <div class="zone-list">
+        <div class="zone-item"><span class="zone-label">52주 최고</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$601.77 (2025.08.22)</span><span class="zone-tag tag-resist">저항선</span></div></div>
+        <div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$547.44 (고점 대비 -9.0%)</span><span class="zone-tag tag-current">현재</span></div></div>
+        <div class="zone-item"><span class="zone-label">MA5 지지</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$543.16</span><span class="zone-tag tag-support">지지선</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$464.52 (2026.06.03)</span><span class="zone-tag tag-support">강지지</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--red);">-0.9%</span></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">이동평균선 현황</div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기) $543.16</span><span class="ma-status status-above">상승 지지</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기) $521.38</span><span class="ma-status status-above">상승 지지</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기) $504.17</span><span class="ma-status status-above">상승 지지</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기) $509.65</span><span class="ma-status status-above">상승 지지</span></div>
+      <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">
+        ⚠️ 현재가&gt;MA5&gt;MA20&gt;MA120&gt;MA60 순 — 완전 정배열로 전환. 6/3 52주 저점($464.52) 이후 반등 랠리가 4개 이평선을 모두 돌파하며 기술적 반등 국면 진입.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">구간별 패턴 분석</div>
+    <div class="grid-4">
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.07~08 — 52주 신고가 랠리 $553→$602</div><div style="font-size:12px;color:var(--text2);">견조한 실적(Q3 매출 +17%)과 크로스보더 볼륨 성장에 힘입어 8/22 사상 최고권($601.77) 경신.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.09~2026.02 — 완만한 하락추세 $602→$526</div><div style="font-size:12px;color:var(--text2);">실적은 견조했으나 스테이블코인·에이전틱커머스發 인터체인지 디스럽션 우려가 부상하며 밸류에이션 압박 시작.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.02~06 — 급락 후 바닥 확인 $526→$465</div><div style="font-size:12px;color:var(--text2);">2/23 Citrini Research "AI 에이전틱커머스" 보고서로 단일 최대 낙폭(-5.8%) 기록. 3/17 BVNK 인수 발표에도 6/3 52주 신저가($464.52)까지 추가 하락.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.07 — Q2 실적 앞두고 반등 $495→$547</div><div style="font-size:12px;color:var(--text2);">저가 매수세 유입, 4개 이평선을 모두 돌파하며 정배열 전환. 7/30 Q2 실적 발표 대기.</div></div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;">
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">Q1 FY26 매출 +12%·EPS +21% YoY — 견조한 실적 지속</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">BVNK 인수·Mastercard Agent Pay로 스테이블코인·에이전틱커머스 선제 대응</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(255,193,7,0.18);color:#ffc107;">다음 실적 7/30(목) Q2 FY2026 — D-9</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">52주 수익률 -0.9% — S&P500(+19.6%) 대비 -20.5%p 대폭 언더퍼폼</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">Citrini Research 등 AI 에이전틱커머스發 인터체인지 디스럽션 우려가 최대 리스크</span>
+  </div>
+</div>
+
+<!-- ===================== SECTION 2: 기본적 분석 ===================== -->
+<div id="fund" class="section">
+  <div class="section-title">기본적 분석 — 분기 재무제표 (SEC 8-K 실적발표 기준)</div>
+  <div class="card">
+    <div class="card-title">분기 매출·EPS 추이 (Q3 FY24 ~ Q2 FY26, 2년치)</div>
+    <div class="chart-wrap" style="height:260px;"><canvas id="maRevChart"></canvas></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--text3);">* Mastercard는 JNJ·INTC·ABBV와 달리 대규모 일회성 손상·충당금이 드물어 GAAP·조정 EPS 괴리가 작음(연간 1~3% 내외) — 그래프의 EPS는 각 분기 발표 기준(조정 포함) 수치. Q2 FY26은 7/30 발표 예정(컨센서스 기준 표시).</div>
+  </div>
+  <div class="info-box">
+    <strong>Mastercard 비즈니스 모델이란?</strong>
+    <div style="margin-top:8px;">· <strong style="color:var(--text);">Payments Network</strong> — 카드 발급사·가맹점 사이의 결제망을 운영하며 거래액(GDV)·크로스보더 볼륨에 연동된 수수료를 수취. 카드를 직접 발급하지 않는 "4자 모델".</div>
+    <div style="margin-top:6px;">· <strong style="color:var(--text);">Value-Added Services & Solutions</strong> — 사이버보안·데이터분석·컨설팅 등 비카드 매출. 카드 거래량과 무관하게 고마진으로 빠르게 성장 중.</div>
+    <div style="margin-top:8px;">두 부문 모두 스테이블코인·AI 에이전틱커머스가 기존 인터체인지 수수료 모델을 얼마나 잠식할지가 최대 리스크 변수로 부상.</div>
+  </div>
+  <div class="grid-3">
+    <div class="stat-box"><div class="stat-label">Q1 FY26 매출</div><div class="stat-value up">$8.40B</div><div class="stat-sub">▲12% YoY (비GAAP 환율중립)</div></div>
+    <div class="stat-box"><div class="stat-label">Q1 FY26 순이익</div><div class="stat-value up">$3.88B</div><div class="stat-sub">▲약 23% YoY (추정)</div></div>
+    <div class="stat-box"><div class="stat-label">Q1 FY26 EPS</div><div class="stat-value up">$4.35</div><div class="stat-sub">▲21% YoY (전년 $3.59)</div></div>
+    <div class="stat-box"><div class="stat-label">Q3 FY25 크로스보더 볼륨</div><div class="stat-value up">+15%</div><div class="stat-sub">전세계 기준, 최근 확인된 수치</div></div>
+    <div class="stat-box"><div class="stat-label">Q2 FY26(E) 매출 컨센서스</div><div class="stat-value gold">~$9.0B</div><div class="stat-sub">가이던스 기준(저두자릿수 성장) 추정</div></div>
+    <div class="stat-box"><div class="stat-label">Q2 FY26(E) EPS 컨센서스</div><div class="stat-value gold">$4.75</div><div class="stat-sub">▲14.5% YoY (전년 $4.15)</div></div>
+    <div class="stat-box"><div class="stat-label">TTM EPS</div><div class="stat-value">$17.36</div><div class="stat-sub">Q2'25~Q1'26 합산</div></div>
+    <div class="stat-box"><div class="stat-label">FY2025 매출</div><div class="stat-value up">$32.79B</div><div class="stat-sub">▲16% YoY</div></div>
+    <div class="stat-box"><div class="stat-label">분기배당</div><div class="stat-value up">$0.87</div><div class="stat-sub">▲약 14% YoY(2025년 대비)</div></div>
+  </div>
+  <div style="margin-top:12px;font-size:12px;color:var(--text3);">FY2025 순매출 $32.8B(+16%) · CEO Michael Miebach "Agent Pay와 BVNK 인수로 만든 스테이블코인 솔루션이 다음 성장축"</div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">핵심 성장 동력 — Payments Network vs Value-Added Services vs 스테이블코인 대응</div>
+    <div class="grid-3">
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--ma20);font-weight:700;margin-bottom:6px;">Payments Network (핵심 카드결제망)</div><div style="font-size:12px;color:var(--text2);">크로스보더 볼륨 견조 성장(Q3 FY25 +15%)<br>전세계 GDV(총거래액) 성장 지속<br>여전히 매출 최대 비중 사업부</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--blue);font-weight:700;margin-bottom:6px;">Value-Added Services & Solutions</div><div style="font-size:12px;color:var(--text2);">사이버보안·데이터분석·컨설팅 등 비카드 매출 확대<br>카드 거래량과 무관한 고마진 성장동력<br>전체 매출 성장률을 상회하는 속도로 확대 중</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">스테이블코인·에이전틱커머스 대응</div><div style="font-size:12px;color:var(--text2);">BVNK 인수($1.8B)로 스테이블코인 인프라 내재화<br>Mastercard Agent Pay — AI 에이전트 결제 표준 선점 시도<br>Crypto Partner Program(85+ 파트너사)으로 생태계 확장</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">핵심 투자 논리 — 인터체인지 모델이 구조적으로 잠식되는가, Mastercard가 성공적으로 전환하는가</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.7;">Q1 FY26 매출 +12%·EPS +21%로 펀더멘털은 계속 견조하지만, 주가는 52주 기준 -0.9%로 S&P500 대비 큰 폭 소외됐다. 2/23 Citrini Research가 "AI 에이전트가 2~3% 인터체인지 수수료를 회피해 스테이블코인 결제로 우회할 것"이라는 시나리오를 제시하며 주가가 단일 최대폭(-5.8%) 급락했고, 이후 Visa·Mastercard·Amex가 동반 조정을 겪었다. <strong style="color:var(--text);">핵심 논쟁은 "AI 에이전틱커머스·스테이블코인이 실제로 카드 네트워크의 수수료 기반을 잠식할 것인가" 아니면 "Mastercard가 BVNK·Agent Pay로 스테이블코인 정산까지 사업모델에 내재화해 위협을 기회로 전환할 것인가"이다.</strong></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">다음 실적 체크포인트</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+      <strong style="color:var(--text);">7/30 Q2 실적 4대 체크포인트:</strong><br>
+      ① 크로스보더 볼륨 성장률 지속 여부<br>
+      ② BVNK 인수 통합 진행상황 및 스테이블코인 정산 매출 기여 언급 여부<br>
+      ③ Value-Added Services 매출 비중 확대 추이<br>
+      ④ 가이던스(저두자릿수 성장) 달성 여부 → 디스럽션 우려 완화 신호
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 3: 밸류에이션 (Per-Share 통합) ===================== -->
+<div id="valuation" class="section">
+  <div class="section-title">Per-Share & 밸류에이션 — Forward P/E는 오히려 자체 평균 대비 할인, 디스럽션 우려가 선반영</div>
+  <div class="info-box">
+    <strong>핵심 전제:</strong> PER(TTM) 31.5x는 결제네트워크 피어 밴드 내에 있으나, Forward P/E 27.8x는 Mastercard 자체 5년 평균(약 35x) 대비 오히려 낮은 수준이다 — 스테이블코인·에이전틱커머스 디스럽션 우려가 이미 밸류에이션에 상당폭 반영된 것으로 해석할 수 있다.
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">멀티플 5단계 평가</div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PER (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">31.5x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:59%;background:linear-gradient(90deg,#2ecc71,#f0c040,#e74c3c);background-size:169.5% 100%;"></div></div>
+        <div class="val-labels"><span class="val-low">저(22x)</span><span class="val-mid">적정(30x)</span><span class="val-high">고(38x)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">$547.44÷TTM EPS $17.36(Q2FY25~Q1FY26 합산) · Visa(31.2x)와 거의 동일한 듀오폴리 밸류에이션</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">Forward P/E (2026E 컨센서스)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">27.8x</span><span class="stage-badge stage-2">2단계 저평가</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:43%;background:linear-gradient(90deg,#2ecc71,#f0c040,#e74c3c);background-size:227.5% 100%;"></div></div>
+        <div class="val-labels"><span class="val-low">저(20x)</span><span class="val-mid">적정(28x)</span><span class="val-high">고(38x)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">2026(E) 컨센서스 EPS $19.7 기준 · 자체 5년 평균 Forward P/E(~35x) 대비 할인 — 디스럽션 내러티브 선반영</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">63.1x</span><span class="stage-badge" style="background:rgba(154,160,184,0.2);color:var(--text2);">참고용 — 해석 제한적</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:100%;background:rgba(154,160,184,0.35);"></div></div>
+        <div class="val-labels"><span class="val-low">&nbsp;</span><span class="val-mid">BPS $8.67</span><span class="val-high">&nbsp;</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">자기자본 $7.74B÷약 8.92억 주 · 공격적 자사주매입으로 장부가치가 극도로 희석 — 카드네트워크 업종(Visa 포함) 공통 특징으로 전통적 PBR 해석이 어려움</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">P/S (Price/Sales, TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">14.4x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:44%;background:linear-gradient(90deg,#2ecc71,#f0c040,#e74c3c);background-size:227.3% 100%;"></div></div>
+        <div class="val-labels"><span class="val-low">저(10x)</span><span class="val-mid">적정(15x)</span><span class="val-high">고(20x)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">시가총액 $489B÷TTM매출 $33.9B · 고마진·자산경량 비즈니스모델 특성 반영</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">결제 네트워크 피어 P/E 비교</div>
+      <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text2);">Mastercard의 P/E 31.5x는 듀오폴리 파트너 Visa(31.2x)와 사실상 동일하며, 폐쇄형 네트워크 American Express(22.6x)보다 높고, 성장 둔화 우려의 PayPal(10.6x) 대비 압도적 프리미엄에서 거래된다.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">밸류에이션 5단계</div>
+    <div class="stage-grid">
+      <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div></div>
+      <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div><div style="font-size:8px;color:var(--accent2);background:rgba(255,140,66,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">Forward P/E</div></div>
+      <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:8px;color:var(--accent2);background:rgba(255,140,66,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PER·P/S</div></div>
+      <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div></div>
+      <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Per-Share 데이터 (참고 · TTM 기준 · 약 8.92억 주)</div>
+    <div class="grid-4">
+      <div class="stat-box"><div class="stat-label">EPS (TTM)</div><div class="stat-value">$17.36</div></div>
+      <div class="stat-box"><div class="stat-label">BPS</div><div class="stat-value">$8.67</div></div>
+      <div class="stat-box"><div class="stat-label">매출/주</div><div class="stat-value">$38.03</div></div>
+      <div class="stat-box"><div class="stat-label">분기배당</div><div class="stat-value">$0.87</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">시나리오별 공정가치 분석</div>
+    <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — 스테이블코인·에이전틱커머스 디스럽션 현실화</div>
+      <div style="font-size:12px;color:var(--text2);">AI 에이전트 결제가 실제로 인터체인지 매출을 잠식하기 시작, 크로스보더 볼륨 성장 둔화 시 → 공정가치 <strong style="color:var(--red);">$380~430/주</strong></div>
+    </div>
+    <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 가이던스 달성·디스럽션 우려는 내러티브 수준 유지</div>
+      <div style="font-size:12px;color:var(--text2);">Q2 실적이 가이던스에 부합, BVNK 통합 순항, Forward P/E가 자체 평균 수준으로 점진 회복 시 → 공정가치 <strong style="color:var(--text);">$560~610/주</strong></div>
+    </div>
+    <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — 디스럽션 우려 해소·스테이블코인 정산 매출화 성공</div>
+      <div style="font-size:12px;color:var(--text2);">BVNK·Agent Pay가 실제 매출로 연결되며 디스럽션 우려가 성장 스토리로 전환, 밸류에이션 리레이팅 시 → 공정가치 <strong style="color:var(--green);">$650~720/주</strong> (애널리스트 평균 목표가 $643.84가 이 밴드 하단과 부합)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">종합 밸류에이션 — 밸류에이션 자체보다 디스럽션 내러티브의 방향 전환이 핵심 변수</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;">PER·P/S 모두 3단계(적정)로 결제네트워크 피어 밴드 내에 있고, Forward P/E는 오히려 2단계(저평가) — 자체 역사적 평균보다 할인된 상태다. <strong style="color:var(--text);">PBR 63x는 자사주매입으로 장부가치가 희석된 결과로 카드네트워크 업종 공통 현상이며 큰 의미를 두기 어렵다.</strong> 공정가치 $380(Bear)~$720(Bull) — 실질 변수는 밸류에이션 재산정이 아니라 AI 에이전틱커머스·스테이블코인 디스럽션 내러티브가 실제로 현실화되는지 여부.</div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 4: US 특화 ===================== -->
+<div id="us" class="section">
+  <div class="section-title">US 특화 — S&P 500 성과 · 결제네트워크 듀오폴리 경쟁구도</div>
+  <div class="rel-container">
+    <div class="rel-title">S&P 500 상대 수익률</div>
+    <div class="grid-3">
+      <div class="stat-box"><div class="stat-label">MA 52주</div><div class="stat-value down">-0.9%</div></div>
+      <div class="stat-box"><div class="stat-label">S&P 500 52주</div><div class="stat-value">+19.6%</div></div>
+      <div class="stat-box"><div class="stat-label">알파 (초과수익)</div><div class="stat-value down">-20.5%p</div><div class="stat-sub">대폭 언더퍼폼</div></div>
+    </div>
+    <div class="zone-list" style="margin-top:12px;">
+      <div class="zone-item"><span class="zone-label">시가총액 순위</span><span class="zone-val">S&P500 내 약 24위권</span></div>
+      <div class="zone-item"><span class="zone-label">배당수익률</span><span class="zone-val">0.64% (분기 $0.87)</span></div>
+      <div class="zone-item"><span class="zone-label">섹터</span><span class="zone-val">Financials · 결제네트워크(Payments Network)</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">결제 네트워크 듀오폴리 경쟁구도</div>
+    <div class="zone-list">
+      <div class="zone-item"><span class="zone-label">Visa (직접 경쟁)</span><span class="zone-val">P/E 31.2x — 사실상 동일한 밸류에이션, 듀오폴리 지위 공유</span></div>
+      <div class="zone-item"><span class="zone-label">American Express (폐쇄형)</span><span class="zone-val">P/E 22.6x — 프리미엄 카드 전략으로 차별화</span></div>
+      <div class="zone-item"><span class="zone-label">PayPal (핀테크 경쟁)</span><span class="zone-val" style="color:var(--red);">P/E 10.6x — 성장 둔화 우려로 큰 폭 저평가</span></div>
+      <div class="zone-item"><span class="zone-label">스테이블코인 신생기업(Circle 등)</span><span class="zone-val" style="color:var(--red);">USDC 등 스테이블코인 정산 인프라 — 장기 침투 리스크</span></div>
+      <div class="zone-item"><span class="zone-label">BVNK 인수</span><span class="zone-val" style="color:var(--green);">스테이블코인 인프라 내재화로 선제 대응(2026.03.17)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 5: 시계열 뉴스 ===================== -->
+<div id="news" class="section">
+  <div class="section-title">시계열 주요 뉴스 (2025.07 ~ 2026.07)</div>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;color:var(--text2);">
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent2);display:inline-block;"></span>초대형 이벤트</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;"></span>긍정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block;"></span>부정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--text3);display:inline-block;"></span>중립</span>
+  </div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2025년 8월 22일 — 52주 신고가 $601.77</div>
+      <div class="tl-title">견조한 실적·크로스보더 성장으로 사상 최고권 경신</div>
+      <div class="tl-desc">Q3 실적 발표(10월)를 앞두고 크로스보더 볼륨 성장과 안정적 소비지출에 힘입어 연중 최고가를 기록. 이후 스테이블코인 디스럽션 우려가 부상하며 장기 하락추세 전환.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">2025년 10월 30일 — Q3 FY2025 실적 발표</div>
+      <div class="tl-title">매출 $8.6B(+17%), EPS $4.34로 컨센서스 상회</div>
+      <div class="tl-desc">크로스보더 볼륨 +15%, 전세계 거래액(GDV) +9% 성장. CEO Michael Miebach는 "건전한 소비·비즈니스 지출과 차별화된 서비스 성과"를 견조한 실적의 배경으로 제시.</div>
+      <a class="tl-source" href="https://www.fool.com/earnings/call-transcripts/2025/10/30/mastercard-q3-2025-earnings-call-transcript/" target="_blank" rel="noopener">관련 뉴스 보기 (Motley Fool) →</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">2026년 1월 29일 — Q4·FY2025 실적 발표</div>
+      <div class="tl-title">Q4 매출 $8.81B(+18%), FY2025 매출 $32.8B(+16%)</div>
+      <div class="tl-desc">Q4 순이익 $4.1B, GAAP 희석 EPS $4.52(조정 EPS $4.76, +25% YoY). FY2025 전체 EPS $16.52로 마감하며 6개 분기 연속 두 자릿수 매출 성장 기록.</div>
+      <a class="tl-source" href="https://www.fool.com/earnings/call-transcripts/2026/01/29/mastercard-ma-q4-2025-earnings-call-transcript/" target="_blank" rel="noopener">관련 뉴스 보기 (Motley Fool) →</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-date">2026년 2월 23일 — Citrini Research "AI 에이전틱커머스" 보고서 충격</div>
+      <div class="tl-title">단일 최대폭 -5.8% 급락, 스테이블코인 디스럽션 우려 본격화</div>
+      <div class="tl-desc">Citrini Research가 "AI 에이전트가 2~3% 인터체인지 수수료를 회피해 스테이블코인 결제로 우회할 것"이라는 시나리오를 담은 보고서를 발표하며 Visa·Mastercard·Amex·Capital One이 동반 급락. Mastercard는 하루 만에 -5.8% 하락하며 이후 장기 조정의 기폭제가 됨.</div>
+      <a class="tl-source" href="https://www.benzinga.com/crypto/cryptocurrency/26/02/50788580/mastercard-in-crosshairs-citrini-models-ai-agents-bypassing-interchange-as-stablecoins-threaten-card-economics" target="_blank" rel="noopener">관련 뉴스 보기 (Benzinga) →</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot gold"></div>
+      <div class="tl-date">2026년 3월 17일 — BVNK 인수 발표</div>
+      <div class="tl-title">최대 $1.8B에 스테이블코인 인프라 스타트업 BVNK 인수</div>
+      <div class="tl-desc">BVNK는 130개국 이상에서 주요 블록체인 네트워크 기반 결제 송수신을 지원하는 스테이블코인 인프라 기업. 이번 인수로 Mastercard 역사상 최대 규모의 디지털자산 딜을 성사시키며 스테이블코인 정산 역량을 내재화.</div>
+      <a class="tl-source" href="https://www.cnbc.com/2026/03/17/mastercard-acquiring-stablecoin-startup-bvnk-in-crypto-bet.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">2026년 4월 30일 — Q1 FY2026 실적 발표</div>
+      <div class="tl-title">매출 $8.40B(+12%), EPS $4.35(+18~21% YoY)로 컨센서스 상회</div>
+      <div class="tl-desc">순매출 +12%(비GAAP 환율중립), 순이익 +15% YoY, 자사주매입 기여분(+$0.10) 포함 EPS +18% 성장. 디스럽션 우려 속에서도 펀더멘털 자체는 계속 견조함을 재확인.</div>
+      <a class="tl-source" href="https://www.investing.com/news/transcripts/earnings-call-transcript-mastercard-beats-q1-2026-estimates-stock-dips-93CH-4650202" target="_blank" rel="noopener">관련 뉴스 보기 (Investing.com) →</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2026년 6월 3일 — 52주 신저가 $464.52</div>
+      <div class="tl-title">디스럽션 우려 정점 — 연중 최저가 형성</div>
+      <div class="tl-desc">BVNK 인수 발표에도 스테이블코인·에이전틱커머스 디스럽션 우려가 지속되며 8월 고점 대비 -22.8%까지 조정. 이후 저가 매수세가 유입되며 반등 국면 진입.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot today"></div>
+      <div class="tl-date">2026년 7월 20일 — 현재, Q2 실적 D-9</div>
+      <div class="tl-title">저점 대비 +17.8% 반등, $547.44에서 Q2 실적 대기</div>
+      <div class="tl-desc">6월 저점 이후 4개 이평선을 모두 돌파하는 정배열 반등을 보이며 $547.44까지 회복. 7/30 Q2 FY2026 실적 발표를 앞두고 있으며, 가이던스 달성 여부와 BVNK 통합 진행상황이 디스럽션 내러티브 완화의 분수령이 될 전망.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 6: 투자 포인트 ===================== -->
+<div id="invest" class="section">
+  <div class="section-title">2026년 핵심 투자 포인트</div>
+  <div class="bull-bear">
+    <div class="bb-box">
+      <div class="bb-title bb-bull">🐂 Bull 요인</div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>BVNK 인수·Mastercard Agent Pay:</strong> 스테이블코인·에이전틱커머스에 선제 대응.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Q1 FY26 매출 +12%·EPS +21%:</strong> 디스럽션 우려 속에서도 펀더멘털은 견조.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Forward P/E 27.8x:</strong> 자체 5년 평균(~35x) 대비 오히려 할인된 상태.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Visa와 사실상 동일 밸류에이션:</strong> 듀오폴리 프리미엄 유지.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>41명 애널리스트 Strong Buy 컨센서스:</strong> 평균 목표가 $643.84(+17.6%).</span></div>
+    </div>
+    <div class="bb-box">
+      <div class="bb-title bb-bear">🐻 Bear 요인</div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>52주 수익률 -0.9%:</strong> S&P500 대비 -20.5%p 대폭 언더퍼폼.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>Citrini Research 등 AI 에이전틱커머스 디스럽션 우려:</strong> 인터체인지 모델의 구조적 리스크.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>PBR 63x:</strong> 자사주매입으로 재무건전성 지표 해석이 제한적.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>52주 저점(6/3, $464.52) 형성:</strong> 변동성 확대 국면.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>7/30 Q2 실적 결과:</strong> 가이던스 미달 시 추가 조정 가능.</span></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">목표가 밴드 — 시나리오별 공정가치 vs 현재가 · 애널리스트 목표가</div>
+    <div style="position:relative;height:70px;margin:28px 6px 6px;">
+      <div style="position:absolute;top:28px;left:0;right:0;height:10px;border-radius:5px;overflow:hidden;display:flex;">
+        <div style="width:14.7%;height:100%;background:rgba(231,76,60,0.45);"></div>
+        <div style="width:38.2%;height:100%;background:var(--bg3);"></div>
+        <div style="width:14.7%;height:100%;background:var(--bg3);"></div>
+        <div style="width:11.8%;height:100%;background:var(--bg3);"></div>
+        <div style="width:20.6%;height:100%;background:rgba(46,204,113,0.45);"></div>
+      </div>
+      <div style="position:absolute;top:10px;left:49.2%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
+      <div style="position:absolute;top:-6px;left:49.2%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $547.44</div>
+      <div style="position:absolute;top:22px;left:77.6%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
+      <div style="position:absolute;top:48px;left:77.6%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $643.84 (+17.6%)</div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-top:4px;">
+      <span style="color:var(--red);">Bear $380~430 (디스럽션 현실화)</span>
+      <span>Base $560~610 (가이던스 달성)</span>
+      <span style="color:var(--green);">Bull $650~720 (디스럽션 우려 해소)</span>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">기술적 분석(정배열 반등)과 기본적 분석(견조한 실적)을 반영한 밸류에이션 탭 시나리오 기준 — 현재가는 Bear·Base 사이, 애널리스트 평균 목표가는 Bull 밴드 하단과 부합.</div>
+
+    <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
+      <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">애널리스트 41명 투자의견 분포</div>
+      <div style="height:8px;border-radius:4px;overflow:hidden;display:flex;">
+        <div style="width:95.1%;height:100%;background:var(--green);"></div>
+        <div style="width:4.9%;height:100%;background:#f0c040;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10.5px;margin-top:6px;">
+        <span style="color:var(--green);">매수 39명 (Strong Buy 22·Buy 17)</span>
+        <span style="color:#f0c040;">유지 2명 (Hold)</span>
+        <span style="color:var(--red);">매도 0명</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">5개 분석 종합 — 한눈에 보기</div>
+    <div class="zone-list">
+      <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:var(--green);">현재가&gt;MA5&gt;MA20&gt;MA120&gt;MA60 완전 정배열 — 6월 저점 이후 반등</span></div>
+      <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">매출+12%·EPS+21% 견조, VAS 부문 고마진 성장 지속</span></div>
+      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:#f0c040;">PER·P/S 3단계(적정), Forward P/E는 2단계(자체평균 대비 할인)</span></div>
+      <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:var(--red);">S&P500 대비 -20.5%p 언더퍼폼 — 20개 기존 티커 중 유일한 부진주</span></div>
+      <div class="zone-item"><span class="zone-label">📰 시계열 뉴스</span><span class="zone-val" style="color:#f0c040;">Citrini 보고서發 디스럽션 우려가 하락 견인, BVNK 인수로 대응 중</span></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">투자의견 요약</div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107">7/30(목) Q2 FY2026 — D-9</strong></div>
+      <div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">듀오폴리 지위와 견조한 실적에도 불구, AI 에이전틱커머스·스테이블코인發 인터체인지 디스럽션 우려가 밸류에이션을 짓누르고 있다 — BVNK 통합과 스테이블코인 정산 매출화 성공 여부가 리레이팅의 핵심 변수</strong></div>
+    </div>
+  </div>
+</div>
+
+<div class="disclaimer">
+  ⚠️ 본 위젯은 SEC EDGAR 공시(10-K/10-Q/8-K), Yahoo Finance 주가 데이터 및 공개 뉴스를 기반으로 작성된 정보 제공 목적의 분석 자료입니다. 투자 권고 또는 매매 추천이 아니며, 모든 투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다. 과거 실적이 미래 수익을 보장하지 않습니다.
+</div>
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  renderCharts(id);
+}
+const charts = {};
+
+const MA_DAILY = [["2025-07-18",555.26,556.35,550.88,552.66,2579600],["2025-07-21",553.4,558.08,552.04,554.65,2194400],["2025-07-22",555.81,560.21,555.24,558.76,2010400],["2025-07-23",557.01,562.49,554.5,562.09,2180400],["2025-07-24",562.0,567.84,561.9,563.5,1874700],["2025-07-25",564.36,569.96,563.85,568.22,1513300],["2025-07-28",567.37,571.65,566.22,568.28,2492400],["2025-07-29",570.03,573.0,563.0,563.32,2393800],["2025-07-30",560.33,565.61,555.21,559.11,2833200],["2025-07-31",568.57,579.44,562.51,566.47,4568300],["2025-08-01",563.86,564.87,556.1,559.89,3316700],["2025-08-04",564.29,569.92,562.5,569.81,2984700],["2025-08-05",569.6,571.83,562.13,566.04,2883200],["2025-08-06",568.99,570.36,563.97,569.13,2245200],["2025-08-07",572.97,573.9,553.86,561.22,2979600],["2025-08-08",563.75,576.16,562.69,574.32,2907700],["2025-08-11",575.0,576.59,569.44,573.59,2116600],["2025-08-12",575.18,578.32,570.46,574.18,2593800],["2025-08-13",577.33,580.27,574.04,577.9,2352900],["2025-08-14",577.47,584.4,575.5,583.76,2642300],["2025-08-15",585.0,589.56,581.11,581.7,2263800],["2025-08-18",582.02,585.49,580.69,584.14,1812000],["2025-08-19",584.41,590.57,584.22,585.51,2334500],["2025-08-20",585.91,593.88,585.91,592.68,2884600],["2025-08-21",589.04,592.21,583.93,591.92,2349200],["2025-08-22",595.3,601.77,593.08,598.96,2388900],["2025-08-25",597.82,599.04,592.86,593.21,1984300],["2025-08-26",593.08,596.0,586.29,591.61,4774600],["2025-08-27",591.21,594.62,589.82,590.66,1480900],["2025-08-28",590.82,593.53,589.72,590.48,2159800],["2025-08-29",592.0,596.83,590.26,595.29,2111200],["2025-09-02",595.62,595.62,586.0,591.87,2284500],["2025-09-03",591.83,594.0,588.96,593.28,1959400],["2025-09-04",593.03,595.89,589.29,595.64,1653700],["2025-09-05",595.47,598.58,579.03,584.22,2432100],["2025-09-08",582.62,589.79,580.7,586.6,1948200],["2025-09-09",583.54,591.18,583.3,584.0,2266000],["2025-09-10",582.13,582.13,571.0,579.38,2535200],["2025-09-11",580.88,589.97,580.01,588.73,2407000],["2025-09-12",586.44,589.21,580.0,580.41,2242800],["2025-09-15",582.73,586.5,581.5,582.96,2222600],["2025-09-16",578.01,588.11,576.83,586.42,2537000],["2025-09-17",587.71,598.89,587.44,598.63,2930800],["2025-09-18",596.08,601.62,585.88,586.05,3294600],["2025-09-19",588.62,588.87,581.51,584.16,6745300],["2025-09-22",580.97,587.35,580.14,584.49,3241700],["2025-09-23",585.45,586.86,568.25,569.97,3223000],["2025-09-24",571.28,571.66,564.95,568.81,2867200],["2025-09-25",565.0,572.39,564.57,567.3,2700600],["2025-09-26",566.62,569.66,564.06,565.13,2106500],["2025-09-29",566.0,569.32,562.51,568.14,2615600],["2025-09-30",565.81,570.63,563.65,568.81,2379200],["2025-10-01",565.68,575.47,565.01,573.77,3685100],["2025-10-02",572.73,579.84,570.77,577.33,2483500],["2025-10-03",576.43,583.22,576.43,580.45,2331600],["2025-10-06",579.23,581.14,569.26,578.81,2573500],["2025-10-07",578.99,586.08,578.91,579.84,2120700],["2025-10-08",581.32,583.07,576.08,576.44,1934700],["2025-10-09",577.24,579.4,562.51,564.55,2579800],["2025-10-10",567.58,569.42,556.69,557.48,3553900],["2025-10-13",558.0,565.0,553.01,559.24,2996500],["2025-10-14",556.0,569.81,556.0,567.92,2627300],["2025-10-15",564.3,568.69,559.4,562.81,2262400],["2025-10-16",562.8,564.65,547.39,549.88,3210600],["2025-10-17",552.49,562.8,552.01,560.97,2756700],["2025-10-20",561.7,567.42,553.79,566.36,2046400],["2025-10-21",562.16,575.98,560.77,572.03,2722400],["2025-10-22",571.05,576.43,568.58,571.36,1820500],["2025-10-23",574.36,576.99,571.67,573.77,2187500],["2025-10-24",577.24,580.82,573.08,573.67,1839600],["2025-10-27",575.72,575.72,566.48,572.36,2981000],["2025-10-28",573.08,573.99,565.45,565.93,2916000],["2025-10-29",561.63,566.81,551.23,554.58,3763400],["2025-10-30",551.56,562.92,545.64,553.68,4284700],["2025-10-31",548.89,554.43,543.53,551.99,3567100],["2025-11-03",550.0,551.0,540.36,544.07,3175500],["2025-11-04",544.83,554.03,542.48,552.75,2653900],["2025-11-05",553.0,556.33,549.37,553.31,2198500],["2025-11-06",550.18,555.0,547.86,553.28,2593600],["2025-11-07",553.8,558.67,550.67,551.97,2510400],["2025-11-10",552.28,554.7,548.58,552.96,1978300],["2025-11-11",553.0,558.53,548.01,558.35,1832400],["2025-11-12",560.0,565.91,558.41,561.23,1761500],["2025-11-13",559.88,563.6,554.86,555.57,2031300],["2025-11-14",556.04,557.0,544.05,545.73,2567800],["2025-11-17",546.0,549.32,536.21,536.85,2557900],["2025-11-18",533.56,536.0,524.7,527.58,3594700],["2025-11-19",528.15,531.0,524.98,530.36,2723100],["2025-11-20",533.29,538.46,527.18,527.88,3240300],["2025-11-21",532.54,544.41,531.67,540.4,3807500],["2025-11-24",543.44,544.04,535.11,537.85,5941000],["2025-11-25",541.5,550.4,539.0,546.47,3132600],["2025-11-26",548.48,548.67,544.17,544.93,2185300],["2025-11-28",548.13,551.4,545.42,550.53,1254800],["2025-12-01",547.64,549.78,543.39,543.97,2227000],["2025-12-02",547.28,554.75,541.04,545.91,3076000],["2025-12-03",547.32,555.07,546.5,553.73,2687900],["2025-12-04",557.03,559.0,539.56,542.31,2878800],["2025-12-05",541.71,550.44,541.25,545.52,2126700],["2025-12-08",546.72,547.33,537.39,540.44,2453800],["2025-12-09",538.71,541.9,535.92,537.55,1965300],["2025-12-10",538.09,544.95,537.5,538.86,3023400],["2025-12-11",542.77,565.13,542.65,563.37,3659900],["2025-12-12",566.0,573.71,565.89,571.93,3515400],["2025-12-15",572.88,573.3,567.16,569.13,2714000],["2025-12-16",570.7,571.0,562.48,566.02,2748700],["2025-12-17",565.52,571.76,563.56,565.47,3287100],["2025-12-18",565.0,569.13,563.04,566.21,2259000],["2025-12-19",566.22,572.94,565.2,572.23,7262100],["2025-12-22",572.23,579.45,571.0,575.7,2500200],["2025-12-23",575.89,581.72,575.75,576.35,1794700],["2025-12-24",577.25,582.29,577.0,579.45,1058900],["2025-12-26",579.75,581.2,578.68,579.6,972300],["2025-12-29",579.6,581.99,577.41,577.9,1274900],["2025-12-30",576.08,577.78,574.25,577.42,1512800],["2025-12-31",576.56,577.98,570.62,570.88,1736500],["2026-01-02",570.71,570.88,559.49,563.13,3901900],["2026-01-05",559.62,576.26,558.45,568.57,2865000],["2026-01-06",569.0,581.37,567.94,580.34,4056100],["2026-01-07",579.27,585.28,577.62,579.92,3653900],["2026-01-08",577.51,589.67,573.5,580.07,3390200],["2026-01-09",578.11,581.31,575.34,575.54,2221100],["2026-01-12",564.03,567.88,555.89,566.28,3486400],["2026-01-13",558.95,558.95,533.7,544.99,8721600],["2026-01-14",544.5,548.59,538.15,546.82,3943700],["2026-01-15",548.52,549.88,539.0,542.65,4005600],["2026-01-16",540.24,544.03,538.68,539.49,3496200],["2026-01-20",530.6,536.41,528.51,531.74,4098700],["2026-01-21",533.52,537.4,524.77,527.57,4937700],["2026-01-22",529.92,533.19,523.81,532.86,5114900],["2026-01-23",531.41,532.14,520.16,524.74,5002900],["2026-01-26",526.71,530.39,522.65,527.36,4839700],["2026-01-27",527.65,529.11,519.55,520.41,3850800],["2026-01-28",521.96,523.83,518.27,521.37,5483000],["2026-01-29",531.79,544.24,520.11,543.73,5488300],["2026-01-30",541.01,543.76,535.23,538.79,4306900],["2026-02-02",540.99,557.12,540.95,555.37,4603300],["2026-02-03",554.33,560.11,549.03,550.72,5706700],["2026-02-04",549.73,556.6,541.01,553.52,4448000],["2026-02-05",554.85,561.92,549.95,551.89,4621600],["2026-02-06",553.07,556.79,539.8,548.74,3779700],["2026-02-09",543.71,546.56,534.2,535.33,4110300],["2026-02-10",536.27,547.0,535.0,540.39,2222700],["2026-02-11",538.15,540.7,533.11,537.46,3691000],["2026-02-12",539.93,543.0,527.15,527.46,3466200],["2026-02-13",529.06,533.99,516.02,518.36,4017700],["2026-02-17",515.0,525.86,515.0,521.93,3178000],["2026-02-18",522.49,530.76,519.4,527.98,3575900],["2026-02-19",524.81,526.53,516.05,520.26,3009400],["2026-02-20",520.25,527.5,518.59,526.41,2838500],["2026-02-23",520.47,522.72,490.0,496.03,6312300],["2026-02-24",493.74,499.25,491.26,498.0,5292900],["2026-02-25",502.82,510.54,502.42,509.39,4139100],["2026-02-26",510.95,519.9,509.01,514.77,4843600],["2026-02-27",509.47,518.76,506.75,517.21,5121100],["2026-03-02",509.48,526.16,507.34,521.0,3827000],["2026-03-03",513.61,526.8,513.0,524.32,4199700],["2026-03-04",524.16,526.16,520.28,522.92,3154700],["2026-03-05",521.1,525.32,512.75,524.66,3879300],["2026-03-06",519.64,522.55,512.2,522.34,2872900],["2026-03-09",516.27,520.89,509.11,517.72,3546600],["2026-03-10",516.95,519.33,511.0,514.72,2759800],["2026-03-11",513.08,515.31,502.72,504.0,2873200],["2026-03-12",500.0,505.62,496.29,497.31,2702500],["2026-03-13",496.56,501.86,495.4,497.99,2809300],["2026-03-16",498.62,508.58,498.62,508.5,3450300],["2026-03-17",510.55,516.96,506.5,506.58,2834300],["2026-03-18",503.75,503.75,487.92,488.47,3458700],["2026-03-19",490.52,497.08,487.31,491.14,3284500],["2026-03-20",492.47,499.22,491.01,496.32,5762900],["2026-03-23",506.05,507.04,500.38,500.38,2985900],["2026-03-24",495.64,502.73,493.24,498.93,2278900],["2026-03-25",501.29,506.25,494.56,502.76,2422000],["2026-03-26",500.51,504.8,499.05,500.75,3995400],["2026-03-27",499.45,500.05,480.5,484.24,3963300],["2026-03-30",488.03,495.54,487.0,494.0,3629500],["2026-03-31",500.0,501.41,490.58,499.66,4417600],["2026-04-01",502.23,503.0,485.65,491.65,4607100],["2026-04-02",488.13,499.88,487.75,493.44,2926000],["2026-04-06",493.75,501.91,491.18,501.5,2466000],["2026-04-07",498.29,502.6,495.67,498.28,3593200],["2026-04-08",508.0,511.82,505.86,507.12,3874900],["2026-04-09",504.46,506.67,497.76,503.57,3301800],["2026-04-10",502.01,504.39,495.67,498.66,2842200],["2026-04-13",496.23,508.87,495.0,508.58,3318100],["2026-04-14",508.0,513.98,506.69,513.16,2744600],["2026-04-15",516.0,522.44,513.2,519.96,2910800],["2026-04-16",518.03,522.23,517.01,518.54,2967400],["2026-04-17",521.5,527.47,518.74,521.3,3617200],["2026-04-20",520.76,524.48,514.54,516.65,2503500],["2026-04-21",516.93,523.11,510.17,511.35,3444900],["2026-04-22",512.07,513.79,505.72,510.16,2288500],["2026-04-23",507.37,509.65,498.37,502.38,2724000],["2026-04-24",499.0,505.61,495.63,504.17,2406900],["2026-04-27",500.76,509.05,500.76,506.43,2531300],["2026-04-28",512.25,517.0,507.24,507.62,3892500],["2026-04-29",529.99,534.21,520.89,525.23,5876700],["2026-04-30",504.5,514.15,498.96,502.92,5975100],["2026-05-01",506.0,509.0,492.15,495.46,4531800],["2026-05-04",495.0,507.29,493.88,504.74,4419900],["2026-05-05",501.03,503.88,493.26,497.08,4216700],["2026-05-06",499.14,500.74,489.73,491.89,4363300],["2026-05-07",492.7,503.52,492.7,500.94,4964100],["2026-05-08",500.13,500.41,491.73,495.48,4143400],["2026-05-11",495.0,501.66,492.01,497.81,3959400],["2026-05-12",500.61,506.31,499.75,499.81,3296000],["2026-05-13",495.61,498.6,490.32,490.64,3322800],["2026-05-14",491.28,494.5,488.01,489.94,2584900],["2026-05-15",493.5,502.28,492.33,494.2,3416500],["2026-05-18",491.49,506.23,490.95,505.79,4076600],["2026-05-19",507.56,512.9,498.5,499.7,3378300],["2026-05-20",493.5,499.7,490.8,498.04,3615700],["2026-05-21",496.0,501.38,490.07,499.62,2474600],["2026-05-22",499.11,504.26,497.32,498.54,1959300],["2026-05-26",496.0,496.85,492.06,493.01,1947300],["2026-05-27",493.01,499.35,492.51,495.04,2834900],["2026-05-28",493.34,494.58,486.35,493.75,3924100],["2026-05-29",494.5,500.11,492.84,493.98,5693100],["2026-06-01",494.25,497.13,488.65,495.25,4653400],["2026-06-02",493.06,493.99,477.68,477.68,5028300],["2026-06-03",477.35,481.96,464.52,471.55,5227200],["2026-06-04",479.56,488.55,477.46,481.76,4020600],["2026-06-05",484.0,494.0,484.0,491.08,4230700],["2026-06-08",486.76,489.52,483.7,485.67,3091900],["2026-06-09",483.89,495.42,482.0,495.24,3309600],["2026-06-10",497.47,498.8,486.5,489.08,3239900],["2026-06-11",488.66,491.47,484.39,486.51,3801000],["2026-06-12",488.88,492.37,484.54,489.98,3984200],["2026-06-15",490.5,493.55,486.66,490.64,3888500],["2026-06-16",491.86,501.5,489.51,501.33,4006000],["2026-06-17",502.93,504.64,492.4,492.99,2927100],["2026-06-18",494.77,495.99,488.91,489.79,6674700],["2026-06-22",488.16,495.66,483.14,484.09,3955600],["2026-06-23",488.83,491.56,484.42,488.07,3936400],["2026-06-24",488.08,498.44,486.22,494.41,3609700],["2026-06-25",496.0,504.8,488.65,488.92,3722000],["2026-06-26",488.58,504.36,488.58,499.02,9200900],["2026-06-29",502.5,515.45,502.5,509.64,4812000],["2026-06-30",511.9,514.0,507.14,513.6,4696300],["2026-07-01",517.25,530.41,513.42,522.44,4412800],["2026-07-02",529.73,539.63,526.07,539.39,3900200],["2026-07-06",540.74,541.89,522.68,533.1,3578000],["2026-07-07",533.84,543.65,530.0,531.62,3516600],["2026-07-08",531.11,531.62,517.21,519.86,2723800],["2026-07-09",518.03,523.23,515.11,523.2,2843700],["2026-07-10",527.26,528.94,519.65,526.74,1616900],["2026-07-13",530.71,539.93,530.71,537.7,2871500],["2026-07-14",534.99,543.46,532.06,538.02,3323800],["2026-07-15",538.54,541.24,529.08,535.21,3128500],["2026-07-16",541.5,551.68,539.69,551.54,2925400],["2026-07-17",550.5,551.72,540.23,543.6,3221600],["2026-07-20",540.0,547.91,538.01,547.44,2571900]];
+const MA_MA5 = [553.43,553.76,555.44,556.75,558.33,561.44,564.17,565.08,564.49,565.08,563.41,563.72,564.26,566.27,565.22,568.1,568.86,570.49,572.24,576.75,578.23,580.34,582.6,585.56,587.19,590.64,592.46,593.68,593.27,592.98,592.25,591.98,592.32,593.31,592.06,590.32,588.75,585.97,584.59,583.82,583.1,583.58,587.43,586.89,587.64,587.95,584.66,578.7,574.95,571.14,567.87,567.64,568.63,570.64,573.7,575.83,578.04,578.57,576.02,571.42,567.51,565.13,562.4,559.47,560.16,561.59,562.41,564.12,568.9,571.44,572.64,571.42,568.06,564.04,559.71,554.05,551.41,551.16,551.08,551.08,552.85,553.97,555.56,556.02,554.77,551.55,545.39,539.22,533.68,532.61,532.81,536.59,539.51,544.04,544.75,546.36,547.81,547.29,546.29,545.58,543.91,540.94,545.15,550.43,556.17,561.86,567.18,567.75,567.81,569.13,571.19,573.99,576.67,577.8,578.14,577.05,573.79,571.58,572.07,572.57,574.41,576.89,576.43,569.36,562.74,555.26,548.05,541.14,537.65,534.86,531.28,528.85,526.59,525.35,527.52,530.33,535.93,542.0,548.43,550.06,552.05,548.04,545.97,542.76,537.88,531.8,529.12,526.64,523.2,522.99,518.52,513.74,510.02,508.92,507.08,512.07,517.34,520.04,522.02,523.05,522.39,520.47,516.69,511.22,506.35,504.5,502.88,499.77,498.54,498.2,496.58,495.05,497.91,499.83,497.41,496.14,496.28,494.06,492.6,496.05,496.91,498.4,500.78,501.83,503.24,506.22,508.79,511.78,516.31,517.92,517.56,515.6,512.37,508.94,506.9,506.15,509.17,509.27,507.53,507.19,505.09,498.42,498.02,498.03,496.64,497.19,496.94,494.74,494.48,496.08,496.05,497.53,499.47,500.34,497.78,496.85,495.99,494.86,494.21,491.14,486.44,484.04,483.46,481.55,485.06,488.57,489.52,489.3,490.29,491.51,492.29,492.95,491.77,491.25,489.87,489.06,490.9,496.01,501.12,506.72,516.82,523.63,528.03,529.28,529.43,526.9,527.82,529.1,532.17,537.84,541.21,543.16];
+const MA_MA20 = [555.48,556.56,557.38,557.61,558.3,559.42,560.32,560.39,560.11,560.36,559.89,560.13,560.31,560.51,560.39,561.6,562.63,563.82,564.94,566.35,567.8,569.27,570.61,572.14,573.56,575.1,576.34,577.76,579.34,580.54,582.31,583.41,584.77,586.1,587.25,587.86,588.38,588.64,589.18,589.01,589.08,589.19,589.85,589.52,589.13,588.4,587.24,586.1,584.93,583.67,582.31,581.16,580.18,579.27,579.08,578.69,578.48,578.33,577.12,575.98,574.79,573.87,572.08,570.27,569.11,568.2,568.3,568.43,568.75,569.18,569.39,569.25,568.29,567.11,565.68,563.95,562.59,561.44,560.87,560.6,560.28,559.8,559.73,560.01,559.25,557.77,555.55,553.5,551.21,549.54,547.82,546.84,546.36,546.2,545.8,545.89,545.94,545.39,545.0,544.43,543.66,542.68,542.79,543.61,544.78,546.24,548.13,549.92,552.14,553.91,555.83,557.48,559.21,560.58,562.25,563.5,563.97,565.29,567.03,569.0,571.13,572.96,573.11,571.76,570.64,569.48,568.18,566.45,564.22,562.08,559.5,556.89,553.93,551.11,549.42,547.82,547.43,546.54,545.2,543.8,542.23,540.22,538.92,538.55,537.58,536.37,535.49,535.3,534.93,534.61,533.18,531.71,531.16,530.83,529.5,528.61,527.06,525.67,524.23,522.75,521.2,520.17,518.35,516.34,514.87,514.37,513.61,511.63,510.17,508.67,508.89,508.93,508.6,507.9,506.25,504.9,503.67,502.11,500.54,499.5,498.53,498.15,498.13,498.2,498.73,498.96,499.63,501.13,502.64,503.66,504.21,504.77,504.75,504.92,506.03,506.71,507.99,508.55,508.65,508.81,508.75,507.99,507.86,507.7,507.16,506.5,505.03,503.6,502.25,501.7,501.12,500.51,500.38,500.09,499.42,498.79,497.22,496.77,496.76,495.41,494.13,493.63,493.13,492.64,492.51,491.98,491.77,491.77,491.6,491.37,491.04,490.62,489.85,489.32,489.39,489.09,489.35,490.14,491.05,493.29,496.68,499.25,501.28,502.99,504.38,506.27,508.83,511.23,513.46,515.97,518.5,521.38];
+const MA_MA60 = [564.21,564.62,565.01,565.49,565.97,566.45,566.79,567.06,567.06,567.15,567.16,567.22,567.2,567.21,566.93,566.89,566.89,566.76,566.67,566.63,566.64,566.88,567.14,567.62,567.91,568.3,568.55,568.65,568.81,568.95,569.14,569.24,569.3,569.49,569.4,569.33,569.24,569.53,569.86,570.05,570.78,571.67,572.61,573.09,573.66,574.31,574.63,574.75,574.79,574.85,574.84,574.9,575.09,575.29,575.57,576.05,576.5,576.93,577.08,577.11,577.22,577.44,577.51,577.31,577.26,577.23,577.3,577.43,577.67,577.79,578.0,577.94,577.75,577.49,577.34,576.83,576.48,576.14,575.73,575.2,574.72,574.29,573.88,573.26,572.49,571.46,570.37,569.34,568.3,567.46,566.51,565.75,564.94,564.19,563.52,562.84,562.34,561.72,561.0,560.33,559.58,558.78,558.2,557.96,557.71,557.4,557.33,557.28,557.37,557.54,557.68,557.86,557.95,557.96,557.91,557.78,557.5,557.37,557.63,558.01,558.36,558.48,558.54,558.46,558.22,557.83,557.29,556.63,555.86,555.18,554.38,553.74,553.17,552.63,552.49,552.41,552.45,552.41,552.41,552.41,552.34,551.95,551.61,551.31,551.0,550.69,550.6,550.56,550.43,550.2,549.5,548.69,548.1,547.51,547.06,546.64,546.15,545.83,545.48,545.18,544.85,544.45,543.46,542.22,541.03,540.07,539.09,537.79,536.44,535.12,533.85,532.51,531.23,529.95,528.39,527.11,526.05,524.77,523.32,522.02,520.65,519.51,518.47,517.69,517.06,516.57,516.24,516.02,515.92,515.65,515.42,515.14,514.84,514.55,513.93,513.41,512.91,512.11,511.14,510.35,509.49,508.77,508.11,507.41,506.92,506.61,506.09,505.45,505.02,504.68,504.74,504.74,504.57,504.3,503.9,503.47,502.96,502.48,501.99,501.24,500.47,499.92,499.71,499.51,499.47,499.14,498.81,498.84,498.83,498.91,498.79,498.63,498.32,498.11,498.28,498.2,498.19,498.49,498.82,499.17,499.86,500.29,500.76,501.11,501.35,501.58,501.88,502.2,502.43,503.01,503.55,504.17];
+const MA_MA120 = [553.54,553.59,553.69,553.8,553.78,553.89,553.92,553.96,553.9,553.89,553.87,553.9,553.92,553.95,553.91,553.99,554.03,554.08,554.2,554.42,554.61,554.78,554.98,555.21,555.34,555.54,555.86,556.14,556.48,556.84,557.33,557.88,558.45,559.08,559.55,560.01,560.46,560.82,561.25,561.62,561.95,562.3,562.71,562.95,563.31,563.61,563.79,563.97,564.28,564.9,565.59,566.33,566.82,567.47,568.06,568.61,569.13,569.66,570.05,570.45,570.72,571.03,571.26,571.4,571.62,571.84,572.04,572.25,572.37,572.47,572.58,572.58,572.48,572.35,572.13,571.86,571.69,571.45,571.2,570.91,570.68,570.58,570.51,570.44,570.2,569.88,569.46,569.0,568.55,568.21,567.82,567.5,567.12,566.84,566.46,566.09,565.79,565.62,565.43,565.19,565.18,565.23,565.4,565.52,565.69,565.86,565.98,566.02,566.08,566.2,566.26,566.38,566.52,566.63,566.74,566.92,567.0,567.15,567.36,567.56,567.79,567.96,568.03,567.88,567.74,567.53,567.29,567.03,566.77,566.49,566.19,565.84,565.46,565.06,564.91,564.62,564.47,564.27,564.07,563.8,563.53,563.12,562.74,562.28,561.75,561.08,560.48,559.95,559.36,558.83,558.0,557.22,556.52,555.85,555.29,554.74,554.25,553.78,553.24,552.76,552.21,551.62,550.83,550.09,549.37,548.74,548.21,547.54,546.9,546.33,545.77,545.18,544.59,543.95,543.15,542.45,541.78,541.07,540.48,540.01,539.5,539.0,538.5,538.08,537.64,537.2,536.76,536.32,535.89,535.41,534.9,534.44,534.0,533.59,533.21,532.91,532.68,532.26,531.78,531.38,530.92,530.36,529.86,529.36,528.96,528.65,528.34,528.01,527.73,527.44,527.12,526.72,526.34,525.9,525.48,525.06,524.56,524.15,523.73,523.21,522.66,522.19,521.58,520.86,520.25,519.61,518.95,518.31,517.63,517.01,516.32,515.57,514.78,514.03,513.34,512.65,512.12,511.63,511.07,510.59,510.25,509.9,509.61,509.4,509.21,509.07,509.06,509.11,509.17,509.33,509.49,509.65];
+
+(function(){
+  const svgCandle = document.getElementById('maCandleSvg');
+  const svgVol = document.getElementById('maVolumeSvg');
+  const toggle = document.getElementById('maRangeToggle');
+  const maToggle = document.getElementById('maMaToggle');
+  if(!svgCandle || !svgVol || !toggle) return;
+  const RANGES = {'1M':21,'3M':63,'6M':126,'1Y':252};
+  const NS = 'http://www.w3.org/2000/svg';
+  const UP='#2ecc71', DOWN='#e74c3c';
+  const maColors = {ma5:'#ff6b9d', ma20:'#9b59b6', ma60:'#f0c040', ma120:'#22d3ee'};
+  const maState = {ma5:true, ma20:true, ma60:true, ma120:true, pricelabels:true};
+  let currentRange = '1Y';
+
+  function draw(rangeKey){
+    currentRange = rangeKey;
+    const n = RANGES[rangeKey];
+    const data = MA_DAILY.slice(-n);
+    const ma5 = MA_MA5.slice(-n), ma20 = MA_MA20.slice(-n), ma60 = MA_MA60.slice(-n), ma120 = MA_MA120.slice(-n);
+    while(svgCandle.firstChild) svgCandle.removeChild(svgCandle.firstChild);
+    while(svgVol.firstChild) svgVol.removeChild(svgVol.firstChild);
+
+    const W=720,H=240,pL=45,pR=12,pT=10,pB=20;
+    const cW=W-pL-pR,cH=H-pT-pB;
+    const highs=data.map(d=>d[2]), lows=data.map(d=>d[3]);
+    const maVals=[...ma5,...ma20,...ma60,...ma120].filter(v=>v!=null);
+    const mx=Math.max(...highs,...maVals), mn=Math.min(...lows,...maVals);
+    const pad=(mx-mn)*0.06 || mx*0.02;
+    const top=mx+pad, bot=mn-pad, rng=(top-bot)||1;
+    const py = v => pT + cH*(1-(v-bot)/rng);
+    const colW = cW/data.length;
+    const bodyW = Math.max(colW*0.62, 1);
+
+    for(let i=0;i<=3;i++){
+      const v = bot + rng*i/3;
+      const y = py(v);
+      const l=document.createElementNS(NS,'line');
+      l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+      l.setAttribute('stroke','rgba(255,255,255,.08)');l.setAttribute('stroke-width','1');
+      svgCandle.appendChild(l);
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x',pL-4);t.setAttribute('y',y+3);t.setAttribute('text-anchor','end');
+      t.setAttribute('font-size','9');t.setAttribute('fill','rgba(154,160,184,.8)');
+      t.textContent='$'+v.toFixed(0);
+      svgCandle.appendChild(t);
+    }
+
+    data.forEach((d,i)=>{
+      const [,o,h,l,c] = d;
+      const cx = pL + (i+0.5)*colW;
+      const up = c >= o;
+      const col = up ? UP : DOWN;
+      const wick=document.createElementNS(NS,'line');
+      wick.setAttribute('x1',cx);wick.setAttribute('x2',cx);
+      wick.setAttribute('y1',py(h));wick.setAttribute('y2',py(l));
+      wick.setAttribute('stroke',col);wick.setAttribute('stroke-width', Math.max(colW*0.12,0.6));
+      svgCandle.appendChild(wick);
+      const yTop = py(Math.max(o,c));
+      const yBot = py(Math.min(o,c));
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x', cx - bodyW/2);
+      rect.setAttribute('y', yTop);
+      rect.setAttribute('width', bodyW);
+      rect.setAttribute('height', Math.max(yBot-yTop, 1));
+      rect.setAttribute('fill', col);
+      svgCandle.appendChild(rect);
+    });
+
+    const drawMaLine = (vals, color) => {
+      let seg = [];
+      const flush = () => {
+        if (seg.length > 1) {
+          const pl = document.createElementNS(NS,'polyline');
+          pl.setAttribute('points', seg.join(' '));
+          pl.setAttribute('fill','none'); pl.setAttribute('stroke',color);
+          pl.setAttribute('stroke-width','1.7'); pl.setAttribute('opacity','0.95');
+          pl.setAttribute('stroke-linejoin','round'); pl.setAttribute('stroke-linecap','round');
+          svgCandle.appendChild(pl);
+        }
+        seg = [];
+      };
+      vals.forEach((v,i) => {
+        if (v == null) { flush(); return; }
+        seg.push(`${pL+(i+0.5)*colW},${py(v)}`);
+      });
+      flush();
+    };
+    if (maState.ma5) drawMaLine(ma5, maColors.ma5);
+    if (maState.ma20) drawMaLine(ma20, maColors.ma20);
+    if (maState.ma60) drawMaLine(ma60, maColors.ma60);
+    if (maState.ma120) drawMaLine(ma120, maColors.ma120);
+
+    if (maState.pricelabels) {
+    const closeIdx = data.length-1;
+    const closeVal = data[closeIdx][4];
+    const periodHigh = Math.max(...highs);
+    const periodLow = Math.min(...lows);
+    const highIdx = highs.indexOf(periodHigh);
+    const lowIdx = lows.indexOf(periodLow);
+    const markers = [
+      {idx: highIdx, v: periodHigh, color: UP, label:'최고', side:'above'},
+      {idx: lowIdx, v: periodLow, color: DOWN, label:'최저', side:'below'},
+      {idx: closeIdx, v: closeVal, color:'#60a5fa', label:'종가', side:'left'}
+    ];
+    markers.forEach(m=>{
+      const cx = pL + (m.idx+0.5)*colW;
+      const cy = py(m.v);
+      const dot=document.createElementNS(NS,'circle');
+      dot.setAttribute('cx',cx);dot.setAttribute('cy',cy);dot.setAttribute('r','3.5');
+      dot.setAttribute('fill',m.color);dot.setAttribute('stroke','#0f1117');dot.setAttribute('stroke-width','1.5');
+      svgCandle.appendChild(dot);
+
+      const labelText = `${m.label} $${m.v.toFixed(2)}`;
+      const labelW = labelText.length*5.2+6;
+      let tx, ty, anchor;
+      if (m.side === 'left') {
+        anchor = 'end'; tx = cx-7; ty = cy+3;
+      } else if (m.side === 'above') {
+        ty = cy-9;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      } else {
+        ty = cy+16;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      }
+      const bgX = anchor==='end' ? tx-labelW : anchor==='middle' ? tx-labelW/2 : tx;
+      const bg=document.createElementNS(NS,'rect');
+      bg.setAttribute('x', bgX);bg.setAttribute('y', ty-8);
+      bg.setAttribute('width', labelW);bg.setAttribute('height', 12);
+      bg.setAttribute('fill','rgba(15,17,23,0.85)');bg.setAttribute('rx','2');
+      svgCandle.appendChild(bg);
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x', tx);t.setAttribute('y', ty+2);
+      t.setAttribute('text-anchor',anchor);t.setAttribute('font-size','9');
+      t.setAttribute('font-weight','700');t.setAttribute('fill', m.color);
+      t.textContent = labelText;
+      svgCandle.appendChild(t);
+    });
+    }
+
+    const labelCount = Math.min(5, data.length);
+    for(let i=0;i<labelCount;i++){
+      const idx = Math.round(i*(data.length-1)/((labelCount-1)||1));
+      const cx = pL + (idx+0.5)*colW;
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x', Math.min(Math.max(cx,pL+10), W-20));
+      t.setAttribute('y', H-4);
+      t.setAttribute('text-anchor','middle');t.setAttribute('font-size','9');
+      t.setAttribute('fill','rgba(154,160,184,.8)');
+      t.textContent = data[idx][0].slice(2).replace(/-/g,'.');
+      svgCandle.appendChild(t);
+    }
+
+    const VW=720,VH=70,vpT=6,vpB=4;
+    const vcH=VH-vpT-vpB;
+    const maxV = Math.max(...data.map(d=>d[5]));
+    data.forEach((d,i)=>{
+      const [,o,,,c,v] = d;
+      const cx = pL + (i+0.5)*colW;
+      const up = c >= o;
+      const col = up ? 'rgba(46,204,113,0.55)' : 'rgba(231,76,60,0.55)';
+      const h = (v/maxV)*vcH;
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x', cx - bodyW/2);
+      rect.setAttribute('y', vpT + (vcH-h));
+      rect.setAttribute('width', bodyW);
+      rect.setAttribute('height', Math.max(h,1));
+      rect.setAttribute('fill', col);
+      svgVol.appendChild(rect);
+    });
+  }
+
+  toggle.querySelectorAll('.range-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      toggle.querySelectorAll('.range-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      draw(btn.dataset.range);
+    });
+  });
+
+  if (maToggle) {
+    maToggle.querySelectorAll('.ma-toggle-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const key = btn.dataset.ma;
+        maState[key] = !maState[key];
+        btn.classList.toggle('ma-off', !maState[key]);
+        draw(currentRange);
+      });
+    });
+  }
+
+  draw('1Y');
+})();
+
+function renderFundChart() {
+  const ctx = document.getElementById('maRevChart');
+  if (!ctx || charts['fund']) return;
+  charts['fund'] = new Chart(ctx,{
+    data:{
+      labels:['Q3 \'24','Q4 \'24','Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26','Q2 \'26(E)'],
+      datasets:[
+        {type:'bar',label:'매출($B)',data:[7.4,7.5,7.25,8.13,8.6,8.81,8.40,9.0],backgroundColor:'#eb1626',borderRadius:4,barPercentage:0.7,categoryPercentage:0.7,yAxisID:'y'},
+        {type:'line',label:'EPS($)',data:[3.89,3.82,3.59,4.15,4.34,4.52,4.35,4.75],borderColor:'#ff8c42',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#9aa0b8',font:{size:10}}}},
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}},
+        y2:{position:'right',min:3,max:5,grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v}}
+      }
+    }
+  });
+}
+
+function renderPeerChart() {
+  const ctx = document.getElementById('peerChart');
+  if (!ctx || charts['peer']) return;
+  charts['peer'] = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['V','MA','AXP','PYPL'],
+      datasets:[{
+        label:'P/E (TTM)',
+        data:[31.2,31.5,22.6,10.6],
+        backgroundColor:['rgba(154,160,184,0.4)','#ff8c42','rgba(154,160,184,0.4)','rgba(154,160,184,0.4)'],
+        borderRadius:4,borderSkipped:false
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`P/E ${ctx.raw}x`}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{max:36,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
+      }
+    }
+  });
+}
+
+function renderCharts(sectionId) {
+  setTimeout(() => {
+    if (sectionId === 'fund') renderFundChart();
+    if (sectionId === 'valuation') renderPeerChart();
+  }, 50);
+}
+</script>
+</body>
+</html>
