@@ -11,7 +11,7 @@
     --text: #e8eaf0; --text2: #9aa0b8; --text3: #5c6282;
     --accent: #005288; --accent2: #4da6ff; --accent3: #0a2438;
     --bull: #D85A30; --bear: #185FA5; --ma5: #ff6b9d; --ma20: #9b59b6; --ma60: #f0c040; --ma120: #22d3ee;
-    --green: #2ecc71; --red: #e74c3c; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+    --green: #2ecc71; --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
@@ -80,11 +80,12 @@
   .timeline { position: relative; padding-left: 24px; }
   .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
   .tl-item { position: relative; margin-bottom: 20px; }
-  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent2); border: 2px solid var(--bg); }
+  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--event-major); border: 2px solid var(--bg); }
   .tl-dot.red { background: var(--red); }
   .tl-dot.green { background: var(--green); }
   .tl-dot.blue { background: var(--blue); }
-  .tl-dot.gold { background: var(--accent2); }
+  .tl-dot.gold { background: var(--event-major); }
+  .tl-dot.neutral { background: var(--event-neutral); }
   .tl-dot.today { background: #ffc107; }
   .tl-date { font-size: 10px; color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
   .tl-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 3px 0; }
@@ -234,8 +235,8 @@
   </div>
   <div class="info-box">
     <strong>SpaceX는 왜 영업적자인가?</strong>
-    <div style="margin-top:8px;">· <strong style="color:var(--text);">Connectivity(Starlink)</strong> — 소비자·기업·정부용 위성 브로드밴드. 2025년 $11.39B 매출(+50% YoY)로 유일하게 확실한 흑자 사업부.</div>
-    <div style="margin-top:6px;">· <strong style="color:var(--text);">AI(xAI)</strong> — Grok LLM·X 플랫폼·AI 인프라. 2025년 매출 $3.2B이나 대규모 데이터센터·GPU 투자로 손실 견인의 핵심.</div>
+    <div style="margin-top:8px;">· <strong style="color:var(--text);">Connectivity(Starlink)</strong> — 소비자·기업·정부용 위성 브로드밴드. 2025년 $11.39B 매출(+50% YoY), 영업이익 +$4.4B로 유일하게 확실한 흑자 사업부.</div>
+    <div style="margin-top:6px;">· <strong style="color:var(--text);">AI(xAI)</strong> — Grok LLM·X 플랫폼·AI 인프라. 2025년 매출 $3.2B, 영업손실 -$6.4B로 대규모 데이터센터·GPU 투자가 손실 견인의 핵심.</div>
     <div style="margin-top:6px;">· <strong style="color:var(--text);">Space</strong> — Falcon·Dragon·Starship 발사 사업. 2025년 매출 $4.09B, 영업손실 -$657M로 이 부문 자체도 적자.</div>
     <div style="margin-top:8px;">즉 Starlink의 흑자가 AI·우주발사 부문의 적자를 상당폭 상쇄하고 있으나, 전체로는 여전히 영업손실 상태.</div>
   </div>
@@ -317,9 +318,10 @@
 <div id="news" class="section">
   <div class="section-title">시계열 주요 뉴스 (2026.02 ~ 2026.07)</div>
   <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;color:var(--text2);">
-    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent2);display:inline-block;"></span>초대형 이벤트</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--event-major);display:inline-block;"></span>초대형 이벤트</span>
     <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;"></span>긍정</span>
     <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block;"></span>부정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--event-neutral);display:inline-block;"></span>중립</span>
   </div>
   <div class="timeline">
     <div class="tl-item">
@@ -608,7 +610,7 @@ function renderFundChart() {
       labels:['Connectivity(Starlink)','AI(xAI)','Space(발사)'],
       datasets:[
         {label:'매출($B)',data:[11.39,3.2,4.09],backgroundColor:'#4da6ff',borderRadius:4,yAxisID:'y'},
-        {label:'영업손익($B)',data:[null,null,-0.657],backgroundColor:'#e74c3c',borderRadius:4,yAxisID:'y'}
+        {label:'영업손익($B)',data:[4.4,-6.4,-0.657],backgroundColor:'#e74c3c',borderRadius:4,yAxisID:'y'}
       ]
     },
     options:{

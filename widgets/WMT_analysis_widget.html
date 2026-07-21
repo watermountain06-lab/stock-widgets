@@ -24,7 +24,7 @@
     --ma60: #f0c040;
     --ma120: #22d3ee;
     --green: #2ecc71;
-    --red: #e74c3c;
+    --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f;
     --blue: #3498db;
     --yellow: #f1c40f;
     --radius: 10px;
@@ -141,8 +141,9 @@
   .timeline { position: relative; padding-left: 24px; }
   .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
   .tl-item { position: relative; margin-bottom: 20px; }
-  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg); }
+  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--event-major); border: 2px solid var(--bg); }
   .tl-dot.red { background: var(--red); }
+  .tl-dot.neutral { background: var(--event-neutral); }
   .tl-dot.green { background: var(--green); }
   .tl-dot.blue { background: var(--blue); }
   .tl-dot.yellow { background: var(--yellow); }
@@ -534,6 +535,12 @@
 <!-- ===================== S6: 시계열 뉴스 ===================== -->
 <div id="news" class="section">
   <div class="section-title">시계열 뉴스 — 2025.07 ~ 2026.06 주요 이벤트</div>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;color:var(--text2);">
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--event-major);display:inline-block;"></span>초대형 이벤트</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;"></span>긍정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block;"></span>부정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--event-neutral);display:inline-block;"></span>중립</span>
+  </div>
   <div class="timeline">
     <div class="tl-item">
       <div class="tl-dot green"></div>
@@ -543,14 +550,14 @@
       <a class="tl-source" href="https://pocketoption.com/blog/en/events/walmart-q2-fy2026-earnings-report-what-to-expect-on-august-15/" target="_blank" rel="noopener">관련 뉴스 보기 →</a>
     </div>
     <div class="tl-item">
-      <div class="tl-dot blue"></div>
+      <div class="tl-dot green"></div>
       <div class="tl-date">2025년 9월</div>
       <div class="tl-title">인베스터 데이 — 이커머스 2년 연속 20%+ 성장 확인</div>
       <div class="tl-desc">4개년 성장 청사진 제시. 93% 미국 인구 3시간 배달 달성 공표. 글로벌 광고 $4.4B 돌파, 인도 Flipkart 고성장 계속(Flipkart CEO Kalyan Krishnamurthy 발표). 옴니채널 전략 설명회. 주가 $93→$104 상승.</div>
       <a class="tl-source" href="https://corporate.walmart.com/content/dam/corporate/documents/newsroom/events/walmart-investment-community-meeting-and-q-and-a-session/icm-2025-prepared-remarks-and-q-and-a.pdf" target="_blank" rel="noopener">관련 뉴스 보기 (Walmart IR) →</a>
     </div>
     <div class="tl-item">
-      <div class="tl-dot blue"></div>
+      <div class="tl-dot neutral"></div>
       <div class="tl-date">2025년 11월 14일</div>
       <div class="tl-title">리더십 교체 발표 — Doug McMillon 은퇴, John Furner 후임 지명</div>
       <div class="tl-desc">Doug McMillon 12년 CEO직에서 2026년 1월 31일 은퇴 발표, John Furner(당시 Walmart US 대표)를 후임으로 지명 — 2월 1일부로 사장 겸 CEO 취임 예정. McMillon은 이사회에 남아 FY2027까지 자문 지속. Furner는 2019년부터 4,600개+ 매장의 미국 사업을 총괄해온 32년 경력자.</div>
@@ -564,7 +571,7 @@
       <a class="tl-source" href="https://yourstory.com/2025/11/walmart-says-flipkarts-big-billion-days-boosted-q3-growth-will-weigh-on-q4" target="_blank" rel="noopener">관련 뉴스 보기 (YourStory) →</a>
     </div>
     <div class="tl-item">
-      <div class="tl-dot blue"></div>
+      <div class="tl-dot green"></div>
       <div class="tl-date">2025년 12월</div>
       <div class="tl-title">VIZIO 인수 1주년 — 스마트TV 광고 통합 성과 공개</div>
       <div class="tl-desc">2024년 12월 완료된 VIZIO 인수(스마트TV 광고 플랫폼, $2.3B) 1주년 시점에서 Walmart Connect와의 통합 성과 공개. 스마트TV 기반 거실 광고 생태계로 리테일 미디어 경쟁력 강화 확인.</div>
@@ -591,7 +598,7 @@
       <a class="tl-source" href="https://www.cnbc.com/2026/05/21/walmart-wmt-earnings-q1-2027.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
     </div>
     <div class="tl-item">
-      <div class="tl-dot blue"></div>
+      <div class="tl-dot"></div>
       <div class="tl-date">2026년 6월 4일</div>
       <div class="tl-title">제56회 정기 주주총회 + 아젠틱 커머스 전략 공개</div>
       <div class="tl-desc">Furner의 CEO 취임 후 첫 주주 서한 공개 — 기존 사업모델에 대한 확신과 직원·AI 투자 지속 강조. Sparky AI 쇼핑 에이전트가 아젠틱 커머스(AI 에이전트가 대신 쇼핑하는) 초기 단계를 주도 중이라고 소개 — 앱 사용자 절반가량이 이미 Sparky를 사용.</div>

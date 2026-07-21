@@ -11,7 +11,7 @@
     --text: #e8eaf0; --text2: #9aa0b8; --text3: #5c6282;
     --accent: #a01d3a; --accent2: #d15772; --accent3: #4a0e1c;
     --bull: #D85A30; --bear: #185FA5; --ma5: #ff6b9d; --ma20: #9b59b6; --ma60: #f0c040; --ma120: #22d3ee;
-    --green: #2ecc71; --red: #e74c3c; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+    --green: #2ecc71; --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
@@ -96,11 +96,12 @@
   .timeline { position: relative; padding-left: 24px; }
   .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
   .tl-item { position: relative; margin-bottom: 20px; }
-  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent2); border: 2px solid var(--bg); }
+  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--event-major); border: 2px solid var(--bg); }
   .tl-dot.red { background: var(--red); }
   .tl-dot.green { background: var(--green); }
   .tl-dot.blue { background: var(--blue); }
-  .tl-dot.gold { background: var(--accent2); }
+  .tl-dot.gold { background: var(--event-major); }
+  .tl-dot.neutral { background: var(--event-neutral); }
   .tl-dot.today { background: #ffc107; }
   .tl-date { font-size: 10px; color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
   .tl-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 3px 0; }
@@ -329,7 +330,7 @@
   </div>
   <div class="grid-2">
     <div class="card">
-      <div class="card-title">멀티플 5단계 평가</div>
+      <div class="card-title">멀티플 5종 · 5단계 평가</div>
       <div class="val-item">
         <div class="val-header"><span class="val-name">PER (GAAP TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">29.3x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:66%;background:linear-gradient(90deg,#2ecc71,#f0c040,#e74c3c);background-size:151.5% 100%;"></div></div>
@@ -354,6 +355,12 @@
         <div class="val-labels"><span class="val-low">저(10x)</span><span class="val-mid">적정(14x)</span><span class="val-high">고(20x)</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV $638.1B÷FY25 EBITDA $40.1B · 10년 평균(15.5x)과 거의 일치하는 수준</div>
       </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PSR (시총/매출)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">6.23x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:75%;background:linear-gradient(90deg,#2ecc71,#f0c040,#e74c3c);background-size:133% 100%;"></div></div>
+        <div class="val-labels"><span class="val-low">저(3x)</span><span class="val-mid">적정(4.5x)</span><span class="val-high">고(6x)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">시총 $609.8B÷TTM 매출 $97.93B · 대형 제약 역사적 밴드(3~6x) 상단 초과</div>
+      </div>
     </div>
     <div class="card">
       <div class="card-title">대형 제약 피어 P/E 비교</div>
@@ -368,9 +375,10 @@
       <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div></div>
       <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div></div>
       <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:8px;color:var(--accent2);background:rgba(209,87,114,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PER·Fwd P/E·EV/EBITDA</div></div>
-      <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:8px;color:#e67e22;background:rgba(231,126,35,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PBR</div></div>
+      <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:8px;color:#e67e22;background:rgba(231,126,35,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PBR·PSR</div></div>
       <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div></div>
     </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">* 1·2·5단계가 비어 있는 것은 데이터 누락이 아니라, JNJ가 추적하는 5개 멀티플(PER·Fwd P/E·PBR·EV/EBITDA·PSR) 중 현재 "매우 저평가/저평가/매우 고평가"에 해당하는 지표가 하나도 없기 때문 — 소송 노이즈를 걷어내면 대형 제약 피어 중 적정~약간 고평가 구간에 고르게 몰려 있는 상태.</div>
   </div>
 
   <div class="card">
@@ -440,10 +448,10 @@
 <div id="news" class="section">
   <div class="section-title">시계열 주요 뉴스 (2025.07 ~ 2026.07)</div>
   <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;color:var(--text2);">
-    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent2);display:inline-block;"></span>초대형 이벤트</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--event-major);display:inline-block;"></span>초대형 이벤트</span>
     <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;"></span>긍정</span>
     <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block;"></span>부정</span>
-    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--text3);display:inline-block;"></span>중립</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--event-neutral);display:inline-block;"></span>중립</span>
   </div>
   <div class="timeline">
     <div class="tl-item">

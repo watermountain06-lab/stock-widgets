@@ -24,7 +24,7 @@
     --ma60: #f0c040;
     --ma120: #22d3ee;
     --green: #2ecc71;
-    --red: #e74c3c;
+    --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f;
     --blue: #3498db;
     --purple: #9b59b6;
     --radius: 10px;
@@ -151,8 +151,9 @@
   .timeline { position: relative; padding-left: 24px; }
   .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
   .tl-item { position: relative; margin-bottom: 20px; }
-  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg); }
+  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--event-major); border: 2px solid var(--bg); }
   .tl-dot.red { background: var(--red); }
+  .tl-dot.neutral { background: var(--event-neutral); }
   .tl-dot.green { background: var(--green); }
   .tl-dot.blue { background: var(--blue); }
   .tl-dot.orange { background: var(--accent2); }
@@ -528,6 +529,12 @@
 <!-- ===================== S6: 시계열 뉴스 ===================== -->
 <div id="news" class="section">
   <div class="section-title">시계열 뉴스 — 2025.07 ~ 2026.06 주요 이벤트</div>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;color:var(--text2);">
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--event-major);display:inline-block;"></span>초대형 이벤트</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;"></span>긍정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block;"></span>부정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--event-neutral);display:inline-block;"></span>중립</span>
+  </div>
   <div class="timeline">
     <div class="tl-item">
       <div class="tl-dot red"></div>
@@ -537,7 +544,7 @@
       <a class="tl-source" href="https://www.fool.com/investing/2025/09/10/is-amd-stock-a-buy/" target="_blank" rel="noopener">관련 뉴스 보기 (Motley Fool) →</a>
     </div>
     <div class="tl-item">
-      <div class="tl-dot orange"></div>
+      <div class="tl-dot"></div>
       <div class="tl-date">2025년 6월 12일</div>
       <div class="tl-title">Advancing AI 2025 이벤트 — MI350·Helios 프리뷰</div>
       <div class="tl-desc">Lisa Su, MI355X "Llama 3.1-405B에서 엔비디아 B200 대비 20~30% 우위" 발표. ROCm7 공개. OpenAI·Meta·Oracle CEO 무대 등장 — 협력 공개. 주가 $180→$265 단기 급등.</div>
@@ -558,7 +565,7 @@
       <a class="tl-source" href="https://www.datacenterdynamics.com/en/news/amd-posts-record-data-center-revenue-for-q3-2025-as-compute-demand-shows-no-signs-of-slowing/" target="_blank" rel="noopener">관련 뉴스 보기 (DataCenterDynamics) →</a>
     </div>
     <div class="tl-item">
-      <div class="tl-dot orange"></div>
+      <div class="tl-dot"></div>
       <div class="tl-date">2026년 1월 5일 (CES)</div>
       <div class="tl-title">MI400 시리즈 + Helios 랙 정식 공개</div>
       <div class="tl-desc">CES 2026에서 MI400(CDNA5·2nm·HBM4) 5종 라인업 공개. Helios 랙 — MI400 72개, EPYC Venice, Pensando Vulcano NICs 통합. MI430X 유럽 Alice Recoque 슈퍼컴퓨터 수주. Ryzen AI·ROCm 확장 발표.</div>
@@ -572,14 +579,14 @@
       <a class="tl-source" href="https://www.datacenterdynamics.com/en/news/sam-altman-says-openai-will-use-amds-latest-gpus/" target="_blank" rel="noopener">관련 뉴스 보기 (DataCenterDynamics) →</a>
     </div>
     <div class="tl-item">
-      <div class="tl-dot blue"></div>
+      <div class="tl-dot green"></div>
       <div class="tl-date">2026년 2월</div>
       <div class="tl-title">Q4 2025 실적 — 데이터센터 $5.4B 분기 최고</div>
       <div class="tl-desc">매출 $10.27B(+34.1%). 데이터센터 $5.4B. EPS $0.92(+210%). FCF $2.38B. ZT Systems 매각(Sanmina에 자산경량화). 주가 $380→$500 돌파.</div>
       <a class="tl-source" href="https://counterpointresearch.com/en/insights/amd-caps-a-breakout-2025-with-record-q4-2025-results-ai-and-data-center-momentum-accelerating" target="_blank" rel="noopener">관련 뉴스 보기 (Counterpoint Research) →</a>
     </div>
     <div class="tl-item">
-      <div class="tl-dot blue"></div>
+      <div class="tl-dot green"></div>
       <div class="tl-date">2026년 4월</div>
       <div class="tl-title">MLPerf 추론 6.0 — MI355X 벤치마크 압도적 결과</div>
       <div class="tl-desc">MLPerf Inference v6.0에서 MI355X가 특정 추론 워크로드에서 엔비디아 B200 성능 상회. ROCm 소프트웨어 생태계 성숙도 확인. "생산 준비 완료" 공인.</div>
@@ -593,7 +600,7 @@
       <a class="tl-source" href="https://finance.yahoo.com/markets/stocks/articles/amd-q1-2026-earnings-revenue-203331768.html" target="_blank" rel="noopener">관련 뉴스 보기 (Yahoo Finance) →</a>
     </div>
     <div class="tl-item">
-      <div class="tl-dot orange"></div>
+      <div class="tl-dot"></div>
       <div class="tl-date">2026년 5월</div>
       <div class="tl-title">IBM Think 2026 — Sovereign Core 파트너십 + MI400 양산 준비</div>
       <div class="tl-desc">MI400 시리즈 H2 양산 준비 확인. IBM Think 2026에서 IBM Sovereign Core 정식 출시 — AMD가 런치 파트너로 참여, watsonx·Red Hat 플랫폼에 AMD GPU 공식 채택. 소버린 AI 인프라 확장. 주가 $552 52주 신고가.</div>
