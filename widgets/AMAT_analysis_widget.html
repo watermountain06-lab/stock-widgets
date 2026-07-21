@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMAT 종합 분석 위젯</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117; --bg2: #1a1d27; --bg3: #22263a; --border: #2e3347;
+    --text: #e8eaf0; --text2: #9aa0b8; --text3: #5c6282;
+    --accent: #3b82f6; --accent2: #60a5fa; --accent3: #4a0e1c;
+    --bull: #D85A30; --bear: #185FA5; --ma5: #ff6b9d; --ma20: #9b59b6; --ma60: #f0c040; --ma120: #22d3ee;
+    --green: #2ecc71; --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
+  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; max-width: 1100px; margin: 0 auto; }
+  .header { background: linear-gradient(135deg, #250810 0%, #0f1117 40%, #1a1d27 100%); border-bottom: 2px solid var(--accent3); padding: 28px 32px 24px; position: relative; overflow: hidden; max-width: 1100px; margin: 0 auto; }
+  .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(209,87,114,0.14) 0%, transparent 70%); pointer-events: none; }
+  .header-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .ticker-block { display: flex; align-items: center; gap: 16px; }
+  .ticker-badge { background: linear-gradient(135deg, var(--accent3), var(--accent)); color: #fff; font-size: 13px; font-weight: 800; padding: 5px 12px; border-radius: 6px; letter-spacing: 1px; }
+  .company-name { font-size: 22px; font-weight: 700; color: var(--text); }
+  .company-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .price-block { text-align: right; }
+  .price-main { font-size: 32px; font-weight: 800; color: var(--accent2); letter-spacing: -1px; }
+  .price-change { font-size: 13px; color: var(--green); font-weight: 600; }
+  .header-meta { display: flex; justify-content: space-between; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+  .meta-item { display: flex; flex-direction: column; }
+  .meta-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .meta-value { font-size: 13px; font-weight: 600; color: var(--text2); margin-top: 2px; }
+  .meta-value.highlight { color: var(--accent2); }
+  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
+  .nav-btn:hover { color: var(--text); background: var(--bg3); }
+  .nav-btn.active { background: var(--accent3); color: var(--accent2); }
+  .section { display: none; padding: 28px 32px; max-width: 1100px; margin: 0 auto; }
+  .section.active { display: block; }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--accent2); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; display: inline-block; }
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px; }
+  .card-title { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; font-weight: 600; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .chart-wrap { position: relative; }
+  .chart-wrap canvas { max-width: 100%; }
+  .price-chart-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+  .stat-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .stat-value { font-size: 20px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
+  .stat-sub { font-size: 11px; color: var(--text3); }
+  .stat-value.up { color: var(--green); }
+  .stat-value.down { color: var(--red); }
+  .stat-value.gold { color: var(--accent2); }
+  .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .ma-row:last-child { border-bottom: none; }
+  .ma-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+  .ma-name { display: flex; align-items: center; font-size: 13px; color: var(--text2); }
+  .ma-val { font-size: 13px; font-weight: 600; }
+  .ma-status { font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
+  .status-above { background: rgba(46,204,113,0.15); color: var(--green); }
+  .status-below { background: rgba(231,76,60,0.15); color: var(--red); }
+  .status-amber { background: rgba(240,192,64,0.18); color: var(--ma60); }
+  .zone-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .zone-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg3); border-radius: 6px; }
+  .zone-label { font-size: 12px; color: var(--text2); }
+  .zone-val { font-size: 13px; font-weight: 700; color: var(--accent2); }
+  .zone-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
+  .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
+  .tag-current { background: rgba(209,87,114,0.2); color: var(--accent2); }
+  .val-item { margin-bottom: 18px; }
+  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
+  .val-track { height: 8px; background: var(--bg3); border-radius: 4px; position: relative; overflow: hidden; }
+  .val-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+  .val-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+  .val-low { font-size: 10px; color: var(--green); }
+  .val-mid { font-size: 10px; color: var(--accent2); text-align: center; }
+  .val-high { font-size: 10px; color: var(--red); }
+  .stage-badge { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
+  .stage-1 { background: rgba(46,204,113,0.2); color: #2ecc71; }
+  .stage-2 { background: rgba(39,174,96,0.2); color: #27ae60; }
+  .stage-3 { background: rgba(209,87,114,0.2); color: var(--accent2); }
+  .stage-4 { background: rgba(231,126,35,0.2); color: #e67e22; }
+  .stage-5 { background: rgba(231,76,60,0.2); color: var(--red); }
+  .stage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .stage-mini { text-align: center; padding: 10px 4px; border-radius: 8px; }
+  .stage-mini-num { font-size: 15px; font-weight: 700; }
+  .stage-mini-label { font-size: 9px; margin-top: 2px; }
+  .scenario-card { border-radius: 8px; padding: 14px; }
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--event-major); border: 2px solid var(--bg); }
+  .tl-dot.red { background: var(--red); }
+  .tl-dot.green { background: var(--green); }
+  .tl-dot.blue { background: var(--blue); }
+  .tl-dot.gold { background: var(--event-major); }
+  .tl-dot.neutral { background: var(--event-neutral); }
+  .tl-dot.today { background: #ffc107; }
+  .tl-date { font-size: 10px; color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+  .tl-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 3px 0; }
+  .tl-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .tl-source { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 11px; font-weight: 600; color: var(--accent2); text-decoration: none; }
+  .tl-source:hover { text-decoration: underline; }
+  .bull-bear { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .bb-box { background: var(--bg3); border-radius: var(--radius); padding: 16px; }
+  .bb-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .bb-bull { color: var(--bull); }
+  .bb-bear { color: var(--bear); }
+  .bb-item { display: flex; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .bb-icon { flex-shrink: 0; margin-top: 2px; }
+  .driver-item { display: flex; gap: 12px; padding: 12px; background: var(--bg3); border-radius: 8px; margin-bottom: 10px; }
+  .driver-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent3); color: var(--accent2); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .driver-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .driver-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
+  .per-share-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .ps-card { background: var(--bg3); border-radius: 8px; padding: 16px; text-align: center; }
+  .ps-icon { font-size: 22px; margin-bottom: 6px; }
+  .ps-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .ps-value { font-size: 22px; font-weight: 800; color: var(--accent2); }
+  .ps-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
+  .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+  .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
+  .disclaimer { max-width: 1100px; margin: 28px auto 16px; padding: 12px 16px; background: rgba(209,87,114,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
+  .info-box { background: rgba(209,87,114,0.1); border: 1px solid var(--accent3); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; color: var(--text2); }
+  .range-toggle { display: flex; gap: 4px; }
+  .range-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--text3); font-size: 11px; font-weight: 700; padding: 4px 11px; border-radius: 999px; cursor: pointer; transition: all .15s; }
+  .range-btn:hover { color: var(--text); border-color: var(--text2); }
+  .range-btn.active { background: var(--accent3); color: var(--accent2); border-color: var(--accent); }
+  .ma-toggle-btn { background: var(--bg3); border: 1px solid; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer; transition: all .15s; }
+  .ma-toggle-btn:hover { filter: brightness(1.2); }
+  .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
+  @media (max-width: 600px) {
+    .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
+    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; }
+    .per-share-grid { grid-template-columns: 1fr 1fr; } .stage-grid { grid-template-columns: 1fr 1fr; } .price-main { font-size: 24px; }
+  }
+  body { padding-top: 46px; }
+  .back-bar { position: fixed; top: 0; left: 0; right: 0; height: 46px; background: rgba(10,11,22,0.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.25); }
+  .back-bar a { color: var(--text2); font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+  .back-bar a:hover { color: var(--accent2); }
+  .back-bar .brand-icon { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 6px; background: var(--accent3); color: var(--accent2); font-size: 12px; }
+  .back-bar .back-bar-ticker { font-size: 11px; color: var(--text3); font-weight: 600; letter-spacing: 0.4px; }
+  .back-bar-nav { display: flex; align-items: center; gap: 10px; }
+  .peer-nav-link { color: var(--text2); font-size: 11px; font-weight: 700; text-decoration: none; padding: 4px 9px; border-radius: 6px; border: 1px solid var(--border); transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+  .peer-nav-link:hover { color: var(--accent2); border-color: var(--accent); }
+  .peer-nav-link.disabled { color: var(--text3); opacity: 0.4; pointer-events: none; border-color: var(--border); }
+</style>
+</head>
+<body>
+<div class="back-bar"><a href="../index.html"><span class="brand-icon">◧</span>US Stock Widgets · 전체 종목 목록</a><div class="back-bar-nav"><a class="peer-nav-link" href="BAC_analysis_widget.html">◀ BAC</a><span class="back-bar-ticker">AMAT · 시총 28위</span><span class="peer-nav-link disabled">다음 종목 ▶</span></div></div>
+<div class="today-banner">✅ <strong>2026년 7월 21일 종가 기준</strong> — $570.69 (+8.56%), 52주 최고 $739.67 대비 -22.8%. 가격·이동평균은 Yahoo Finance 실제 2년 원천 데이터에서 최근 252거래일을 사용.</div>
+<div class="header"><div class="header-top"><div><div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;"><span class="ticker-badge">AMAT</span><span style="font-size:11px;color:var(--accent);font-weight:600;">NASDAQ · 반도체 장비 · 🇺🇸 미국</span></div><div class="company-name">Applied Materials, Inc.</div><div class="company-sub">재료공학 기반 반도체·디스플레이 제조장비 선도기업 · CEO Gary Dickerson</div></div><div style="text-align:right;"><div class="price-main">$570.69</div><div class="price-change" style="color:var(--green);">+8.56% (2026.07.21)</div><div style="font-size:11px;color:var(--text3);margin-top:2px;">52주 최저 $154.47 · 최고 $739.67 · 기간 수익률 +196.3%</div></div></div>
+<div class="header-meta"><div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value hl">약 $452B</span></div><div class="meta-item"><span class="meta-label">FY2025 매출</span><span class="meta-value hl">$28.37B</span></div><div class="meta-item"><span class="meta-label">FY2025 순이익</span><span class="meta-value hl">$7.00B</span></div><div class="meta-item"><span class="meta-label">Q2 FY2026 매출</span><span class="meta-value hl">$7.91B</span></div><div class="meta-item"><span class="meta-label">Q2 GAAP EPS</span><span class="meta-value hl">$3.51</span></div><div class="meta-item"><span class="meta-label">Q2 총이익률</span><span class="meta-value hl">49.9%</span></div></div></div>
+<div class="nav"><button class="nav-btn active" onclick="showSection('tech',event)">📈 기술적 분석</button><button class="nav-btn" onclick="showSection('fund',event)">📊 기본적 분석</button><button class="nav-btn" onclick="showSection('valuation',event)">⚖️ 밸류에이션</button><button class="nav-btn" onclick="showSection('us',event)">🇺🇸 US 특화</button><button class="nav-btn" onclick="showSection('news',event)">📰 시계열 뉴스</button><button class="nav-btn" onclick="showSection('invest',event)">🎯 투자 포인트</button></div>
+
+<div id="tech" class="section active"><div class="section-title">기술적 분석 — 일봉 캔들스틱 (최근 252거래일) · 기간 수익률 +196.3%</div><div class="price-chart-container"><div style="margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;"><div class="range-toggle" id="amatRangeToggle"><button class="range-btn" data-range="1M">1개월</button><button class="range-btn" data-range="3M">3개월</button><button class="range-btn" data-range="6M">6개월</button><button class="range-btn active" data-range="1Y">1년</button></div><div id="amatMaToggle" style="display:flex;gap:8px;flex-wrap:wrap;"><button class="ma-toggle-btn" data-ma="ma5" style="color:var(--ma5);border-color:var(--ma5);">● MA5</button><button class="ma-toggle-btn" data-ma="ma20" style="color:var(--ma20);border-color:var(--ma20);">● MA20</button><button class="ma-toggle-btn" data-ma="ma60" style="color:var(--ma60);border-color:var(--ma60);">● MA60</button><button class="ma-toggle-btn" data-ma="ma120" style="color:var(--ma120);border-color:var(--ma120);">● MA120</button><button class="ma-toggle-btn" data-ma="pricelabels" style="color:var(--text2);border-color:var(--text2);">◆ 가격라벨</button></div></div><svg id="amatCandleSvg" viewBox="0 0 720 240" width="100%" style="display:block;background:var(--bg3);border-radius:8px 8px 0 0;padding:4px;"></svg><svg id="amatVolumeSvg" viewBox="0 0 720 70" width="100%" style="display:block;background:var(--bg3);border-radius:0 0 8px 8px;padding:0 4px 4px;"></svg><div style="font-size:11px;color:var(--text3);margin-top:10px;">52주 최저 $154.47 (2025-09-03) → 최고 $739.67 (2026-06-30) → 현재 $570.69</div></div>
+<div class="grid-2"><div class="card"><div class="card-title">핵심 가격대</div><div class="zone-list"><div class="zone-item"><span class="zone-label">52주 최고</span><span class="zone-val">$739.67</span></div><div class="zone-item"><span class="zone-label">현재가</span><span class="zone-val">$570.69</span></div><div class="zone-item"><span class="zone-label">52주 최저</span><span class="zone-val">$154.47</span></div></div></div><div class="card"><div class="card-title">이동평균선 현황</div><div class="ma-row"><span class="ma-name">MA5</span><span style="font-size:13px;font-weight:600;">$553.28</span><span class="ma-status above">상회 중</span></div><div class="ma-row"><span class="ma-name">MA20</span><span style="font-size:13px;font-weight:600;">$599.39</span><span class="ma-status below">하회 중</span></div><div class="ma-row"><span class="ma-name">MA60</span><span style="font-size:13px;font-weight:600;">$509.14</span><span class="ma-status above">상회 중</span></div><div class="ma-row"><span class="ma-name">MA120</span><span style="font-size:13px;font-weight:600;">$433.37</span><span class="ma-status above">상회 중</span></div></div></div></div>
+
+<div id="fund" class="section"><div class="section-title">기본적 분석 — 최근 8분기 매출·GAAP 순이익·EPS</div><div class="card"><div class="card-title">분기 실적 (SEC 10-Q 및 10-K, $B)</div><div class="chart-wrap" style="height:280px;"><canvas id="amatRevChart"></canvas></div></div><div class="grid-3"><div class="stat-box"><div class="stat-label">Q2 FY2026 매출</div><div class="stat-value up">$7.91B</div><div class="stat-sub">YoY +11%</div></div><div class="stat-box"><div class="stat-label">GAAP 영업이익</div><div class="stat-value up">$2.52B</div><div class="stat-sub">영업이익률 31.9%</div></div><div class="stat-box"><div class="stat-label">GAAP 순이익</div><div class="stat-value up">$2.81B</div><div class="stat-sub">EPS $3.51</div></div></div><div class="card"><div class="card-title">핵심 성장 동력</div><div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">AI용 첨단 로직·HBM 투자</div><div class="driver-desc">게이트올어라운드, 첨단 배선, DRAM·HBM 공정 복잡도 상승은 웨이퍼당 재료공학 단계와 장비 수요를 확대.</div></div></div><div class="driver-item"><div class="driver-num">2</div><div><div class="driver-title">EPIC Center 공동개발</div><div class="driver-desc">고객·파트너와 차세대 공정을 조기에 공동 최적화해 신제품 상용화 시간을 단축하는 전략.</div></div></div><div class="driver-item"><div class="driver-num">3</div><div><div class="driver-title">서비스 매출의 반복성</div><div class="driver-desc">대규모 설치 기반을 활용한 Applied Global Services가 장비 사이클 변동성을 완화.</div></div></div></div></div>
+
+<div id="valuation" class="section"><div class="section-title">밸류에이션 — 멀티플 5종 · 5단계 평가</div><div class="grid-2"><div class="card"><div class="card-title">멀티플 5종 · 5단계 평가</div>
+<div class="val-item"><div class="val-header"><span class="val-name">PER (TTM)</span><div><span class="val-number">56.0x</span> <span class="stage-badge stage-5">5단계 매우높음</span></div></div><div class="val-track"><div class="val-fill" style="width:100%;background:linear-gradient(90deg,#f0c040,#e74c3c);"></div></div><div class="val-labels"><span>낮음</span><span>적정</span><span>높음</span></div></div><div class="val-item"><div class="val-header"><span class="val-name">Forward PER</span><div><span class="val-number">39.9x</span> <span class="stage-badge stage-4">4단계 높음</span></div></div><div class="val-track"><div class="val-fill" style="width:82%;background:linear-gradient(90deg,#f0c040,#e74c3c);"></div></div><div class="val-labels"><span>낮음</span><span>적정</span><span>높음</span></div></div><div class="val-item"><div class="val-header"><span class="val-name">PBR (시총/순자산)</span><div><span class="val-number">18.9x</span> <span class="stage-badge stage-5">5단계 매우높음</span></div></div><div class="val-track"><div class="val-fill" style="width:100%;background:linear-gradient(90deg,#f0c040,#e74c3c);"></div></div><div class="val-labels"><span>낮음</span><span>적정</span><span>높음</span></div></div><div class="val-item"><div class="val-header"><span class="val-name">PSR (시총/FY25 매출)</span><div><span class="val-number">15.9x</span> <span class="stage-badge stage-5">5단계 매우높음</span></div></div><div class="val-track"><div class="val-fill" style="width:100%;background:linear-gradient(90deg,#f0c040,#e74c3c);"></div></div><div class="val-labels"><span>낮음</span><span>적정</span><span>높음</span></div></div><div class="val-item"><div class="val-header"><span class="val-name">EV/EBITDA</span><div><span class="val-number">48.8x</span> <span class="stage-badge stage-5">5단계 매우높음</span></div></div><div class="val-track"><div class="val-fill" style="width:100%;background:linear-gradient(90deg,#f0c040,#e74c3c);"></div></div><div class="val-labels"><span>낮음</span><span>적정</span><span>높음</span></div></div>
+<div style="font-size:11px;color:var(--text3);">* 모든 값은 2026-07-21 조회 시점 기준. 주가 급등으로 1·2·3단계 해당 지표가 없음.</div></div><div class="card"><div class="card-title">반도체 장비 피어 Forward PER</div><div class="chart-wrap" style="height:250px;"><canvas id="peerChart"></canvas></div><div style="font-size:11px;color:var(--text3);">AMAT은 성장 기대를 반영해 역사적·피어 대비 높은 프리미엄 구간.</div></div></div></div>
+
+<div id="us" class="section"><div class="section-title">US 특화 — 미국 반도체 공급망과 정책 민감도</div><div class="grid-2"><div class="card"><div class="card-title">미국 내 전략적 위치</div><div class="zone-list"><div class="zone-item"><span class="zone-label">본사</span><span class="zone-val">Santa Clara, CA</span></div><div class="zone-item"><span class="zone-label">핵심 고객군</span><span class="zone-val">파운드리·메모리·로직</span></div><div class="zone-item"><span class="zone-label">사업 특성</span><span class="zone-val">장비 + 서비스</span></div></div></div><div class="card"><div class="card-title">정책·지역 리스크</div><div class="bb-item"><span>▼</span><span>대중국 수출통제 강화는 출하 가능 제품과 지역 매출 믹스에 직접 영향.</span></div><div class="bb-item"><span>▲</span><span>미국·동맹국의 첨단 팹 투자는 장기 장비 수요를 지지.</span></div><div class="bb-item"><span>◆</span><span>첨단 패키징과 HBM 투자 속도가 단기 실적의 핵심 선행지표.</span></div></div></div></div>
+
+<div id="news" class="section"><div class="section-title">시계열 뉴스 — 주요 이벤트</div><div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;color:var(--text2);"><span><i style="width:10px;height:10px;border-radius:50%;background:var(--event-major);display:inline-block;"></i> 초대형 이벤트</span><span><i style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;"></i> 긍정</span><span><i style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block;"></i> 부정</span><span><i style="width:10px;height:10px;border-radius:50%;background:var(--event-neutral);display:inline-block;"></i> 중립</span></div><div class="timeline">
+<div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2025년 11월</div><div class="tl-title">FY2025 매출 $28.37B</div><div class="tl-desc">연간 매출은 전년 대비 증가했지만 GAAP 순이익은 $7.00B로 소폭 감소.</div><a class="tl-source" href="https://ir.appliedmaterials.com/news-releases/news-release-details/applied-materials-announces-fourth-quarter-and-fiscal-year-2025/" target="_blank" rel="noopener">공식 발표 →</a></div>
+<div class="tl-item"><div class="tl-dot red"></div><div class="tl-date">2026년 2월 12일</div><div class="tl-title">대중국 수출 관련 $252M 합의</div><div class="tl-desc">미 상무부와 과거 SMIC 관련 수출 건에 대해 민사 벌금과 컴플라이언스 조치에 합의.</div><a class="tl-source" href="https://www.bis.gov/press-release/applied-materials-pay-252-million-penalty-bis-illegally-exporting-semiconductor-manufacturing-equipment" target="_blank" rel="noopener">BIS 발표 →</a></div>
+<div class="tl-item"><div class="tl-dot"></div><div class="tl-date">2026년 5월 14일</div><div class="tl-title">Q2 FY2026 사상 최대 매출·GAAP EPS</div><div class="tl-desc">매출 $7.91B, GAAP EPS $3.51, 비GAAP EPS $2.86. EPIC Center 신규 파트너십도 발표.</div><a class="tl-source" href="https://ir.appliedmaterials.com/news-releases/news-release-details/applied-materials-announces-second-quarter-2026-results" target="_blank" rel="noopener">공식 발표 →</a></div>
+<div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2026년 7월</div><div class="tl-title">AI 장비 기대와 주가 재평가</div><div class="tl-desc">첨단 로직·메모리 투자 기대가 이어지며 주가가 52주 고점권에 진입. 동시에 밸류에이션 부담도 확대.</div></div></div></div>
+
+<div id="invest" class="section"><div class="section-title">투자 포인트 — Bull / Bear</div><div class="bull-bear"><div class="bb-box"><div class="bb-title bb-bull">🐂 Bull 요인</div><div class="bb-item"><span>▲</span><span>AI·HBM·첨단 패키징이 재료공학 장비 수요를 구조적으로 확대.</span></div><div class="bb-item"><span>▲</span><span>Q2 FY2026 매출·GAAP EPS 사상 최고와 49.9% 총이익률.</span></div><div class="bb-item"><span>▲</span><span>장비 설치 기반에서 발생하는 서비스 매출의 반복성.</span></div></div><div class="bb-box"><div class="bb-title bb-bear">🐻 Bear 요인</div><div class="bb-item"><span>▼</span><span>TTM PER 56x 등 전 지표가 높은 밸류에이션 구간.</span></div><div class="bb-item"><span>▼</span><span>대중국 수출규제와 컴플라이언스 비용·매출 믹스 위험.</span></div><div class="bb-item"><span>▼</span><span>반도체 설비투자 사이클 둔화 시 주문 변동성이 확대될 수 있음.</span></div></div></div><div class="card"><div class="card-title">확인 포인트</div><div class="zone-list"><div class="zone-item"><span class="zone-label">다음 실적 예정</span><span class="zone-val">2026년 8월 13일</span></div><div class="zone-item"><span class="zone-label">핵심 KPI</span><span class="zone-val">매출 성장·총이익률·중국 비중</span></div><div class="zone-item"><span class="zone-label">결론</span><span class="zone-val">최고 실적과 높은 가격표의 대결</span></div></div></div></div>
+<div class="disclaimer">⚠️ SEC EDGAR, Applied Materials IR, Yahoo Finance 및 공개 자료 기반 정보 제공용 분석입니다. 투자 권고가 아닙니다.</div>
+
+<script>
+function showSection(id, event) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  renderCharts(id);
+}
+const charts = {};
+
+const AMAT_DAILY = [["2025-07-21",190.79,194.4,190.78,192.61,5061500],["2025-07-22",192.27,192.5,185.13,187.14,7074500],["2025-07-23",187.68,189.4,186.14,187.01,5419800],["2025-07-24",188.16,190.04,187.07,188.12,4819900],["2025-07-25",185.81,186.52,184.1,185.69,6608700],["2025-07-28",189.01,190.5,188.63,190.27,4913000],["2025-07-29",191.62,192.45,187.95,188.41,4605400],["2025-07-30",189.73,190.87,187.74,189.39,4018500],["2025-07-31",177.88,181.47,174.51,180.06,11375400],["2025-08-01",176.6,181.63,176.25,179.99,8393200],["2025-08-04",182.0,183.0,180.5,182.82,4189300],["2025-08-05",182.67,183.26,177.4,179.15,5292000],["2025-08-06",178.88,179.24,175.48,178.14,5857800],["2025-08-07",184.35,186.8,181.86,183.15,6616600],["2025-08-08",183.15,185.38,182.62,184.87,4338400],["2025-08-11",187.15,189.72,183.78,184.38,7816000],["2025-08-12",185.73,189.73,184.28,188.45,5915400],["2025-08-13",189.8,191.14,188.73,190.03,5923400],["2025-08-14",187.86,190.03,186.78,188.24,10992400],["2025-08-15",162.7,167.5,161.71,161.76,31803300],["2025-08-18",161.81,164.55,161.75,163.53,10125800],["2025-08-19",164.24,165.2,161.49,162.22,8921500],["2025-08-20",161.8,161.97,157.94,160.96,9323300],["2025-08-21",159.94,161.29,159.08,159.84,8294900],["2025-08-22",160.68,165.0,159.98,162.49,7448100],["2025-08-25",162.31,162.62,160.75,161.99,4186800],["2025-08-26",162.01,164.81,161.68,164.51,6770200],["2025-08-27",163.26,164.65,162.55,164.39,4633500],["2025-08-28",164.72,166.16,163.74,165.27,7899500],["2025-08-29",162.87,163.66,159.43,160.76,7202100],["2025-09-02",156.72,158.3,156.01,157.57,7683400],["2025-09-03",158.05,158.05,154.47,156.25,7335000],["2025-09-04",155.94,159.67,155.4,158.24,6245100],["2025-09-05",160.26,162.85,158.82,162.75,7046800],["2025-09-08",163.81,164.65,161.85,162.05,7933600],["2025-09-09",161.92,164.26,161.75,163.5,5315400],["2025-09-10",164.3,165.4,162.55,163.42,5690200],["2025-09-11",164.0,170.66,164.0,170.15,8999900],["2025-09-12",167.91,169.67,167.18,167.8,5170600],["2025-09-15",169.11,171.06,168.53,170.93,5597600],["2025-09-16",172.46,174.1,171.58,173.54,6447500],["2025-09-17",174.25,179.55,173.97,178.13,9588300],["2025-09-18",188.0,191.55,183.83,189.76,15473700],["2025-09-19",190.82,191.85,188.66,190.1,18903500],["2025-09-22",193.19,201.15,192.43,200.52,15475500],["2025-09-23",201.23,204.1,198.8,200.87,12417900],["2025-09-24",199.08,203.75,197.4,201.44,6360500],["2025-09-25",199.04,200.72,196.2,199.6,6027600],["2025-09-26",200.0,205.2,197.39,203.92,7363300],["2025-09-29",206.34,210.5,204.68,204.95,9295400],["2025-09-30",204.36,210.27,202.87,204.74,12253800],["2025-10-01",204.74,218.44,203.61,217.74,12699200],["2025-10-02",225.0,226.41,218.73,223.59,11166000],["2025-10-03",219.91,220.5,215.6,217.53,9269800],["2025-10-06",222.34,226.49,220.77,223.91,7891900],["2025-10-07",223.91,224.83,211.27,211.56,10543300],["2025-10-08",210.0,218.65,209.0,217.51,7875500],["2025-10-09",217.0,220.86,215.51,220.3,6701400],["2025-10-10",220.7,224.47,209.73,209.95,12829700],["2025-10-13",220.35,221.13,217.03,219.48,7853000],["2025-10-14",213.9,221.65,213.71,218.19,8260000],["2025-10-15",223.96,228.1,220.52,227.58,8033600],["2025-10-16",230.6,232.07,224.03,227.72,7742800],["2025-10-17",226.47,227.36,222.7,224.99,5272800],["2025-10-20",227.15,231.33,226.53,228.13,5494800],["2025-10-21",225.92,228.16,225.21,226.0,4557500],["2025-10-22",226.0,226.77,216.07,220.56,7498100],["2025-10-23",218.39,230.55,218.12,228.47,7001900],["2025-10-24",229.0,230.72,226.29,228.75,5346700],["2025-10-27",233.0,235.79,231.13,231.33,7671700],["2025-10-28",229.68,231.02,227.08,227.64,6118500],["2025-10-29",232.9,237.39,232.0,235.75,7784500],["2025-10-30",237.78,242.5,232.08,232.55,7317700],["2025-10-31",233.74,237.91,230.45,233.1,6532600],["2025-11-03",235.67,239.79,234.0,237.71,6160600],["2025-11-04",231.42,236.97,229.77,230.19,6896400],["2025-11-05",230.19,241.91,230.1,240.89,7230800],["2025-11-06",240.77,240.77,232.93,233.53,9278400],["2025-11-07",232.27,232.52,223.38,230.07,6892800],["2025-11-10",236.23,236.54,232.06,235.08,7673700],["2025-11-11",232.57,233.25,227.0,228.67,6237600],["2025-11-12",231.23,231.84,228.9,230.73,5955400],["2025-11-13",227.39,229.0,219.63,223.23,13465900],["2025-11-14",203.75,226.16,203.4,226.01,15254400],["2025-11-17",224.2,231.71,223.26,228.71,8713600],["2025-11-18",226.48,227.62,219.42,225.12,12167400],["2025-11-19",227.29,235.91,226.5,235.13,8870500],["2025-11-20",238.79,240.76,218.96,220.23,9264000],["2025-11-21",219.2,228.16,215.5,224.01,8596800],["2025-11-24",222.86,233.2,222.86,230.91,8806600],["2025-11-25",237.55,244.62,233.14,242.46,8330300],["2025-11-26",242.83,252.66,242.83,249.97,8791100],["2025-11-28",250.8,252.48,247.85,252.25,2916300],["2025-12-01",250.23,255.79,248.53,254.75,6842400],["2025-12-02",255.63,267.05,255.63,265.33,9196800],["2025-12-03",265.3,269.15,259.71,268.63,7999600],["2025-12-04",268.34,272.76,266.0,269.44,6348800],["2025-12-05",269.79,273.59,267.36,268.0,5373400],["2025-12-08",269.5,272.16,266.54,268.16,5338100],["2025-12-09",266.07,268.71,264.73,267.14,4062600],["2025-12-10",266.77,276.1,265.86,275.15,6244600],["2025-12-11",271.22,271.99,262.83,270.11,7061200],["2025-12-12",267.26,269.71,257.13,259.21,6739300],["2025-12-15",263.43,265.69,259.79,261.27,6406000],["2025-12-16",259.79,261.58,255.3,258.84,5859700],["2025-12-17",258.16,260.1,246.92,248.27,7855400],["2025-12-18",259.09,260.82,252.23,253.5,8741200],["2025-12-19",255.71,261.32,253.58,256.41,25749700],["2025-12-22",262.83,262.83,257.6,259.01,4182000],["2025-12-23",258.16,260.45,257.88,260.23,3791500],["2025-12-24",260.23,261.48,259.33,260.78,1279500],["2025-12-26",261.84,262.94,260.2,261.9,1836000],["2025-12-29",260.82,264.65,260.0,263.05,2601600],["2025-12-30",264.19,265.01,259.78,259.97,2185100],["2025-12-31",261.47,261.83,255.96,256.99,3025800],["2026-01-02",267.08,271.23,265.1,268.87,7553200],["2026-01-05",276.12,287.74,276.12,284.32,10398700],["2026-01-06",285.43,298.22,285.43,296.01,7237900],["2026-01-07",292.0,295.25,290.0,292.2,6148400],["2026-01-08",290.7,291.92,279.45,281.64,5500700],["2026-01-09",288.4,302.78,286.5,301.18,9427600],["2026-01-12",301.72,309.5,300.59,307.24,6612800],["2026-01-13",307.06,310.64,302.59,304.87,7146500],["2026-01-14",301.47,301.94,297.0,301.89,6545200],["2026-01-15",328.08,331.0,318.83,319.08,11262800],["2026-01-16",325.72,330.19,320.17,327.01,11399300],["2026-01-20",316.1,324.49,315.7,318.23,9387300],["2026-01-21",319.48,328.69,316.91,325.24,7914000],["2026-01-22",332.99,333.03,317.46,318.79,6036100],["2026-01-23",318.98,323.64,311.07,322.38,6201000],["2026-01-26",322.0,322.0,316.57,319.46,4777200],["2026-01-27",324.45,336.47,323.29,332.71,8033000],["2026-01-28",341.93,344.04,332.96,336.75,8470000],["2026-01-29",340.74,344.6,328.88,341.34,7350500],["2026-01-30",332.93,340.95,321.54,322.32,9814100],["2026-02-02",320.6,330.44,319.85,328.4,7409600],["2026-02-03",336.94,338.44,311.95,318.67,10697000],["2026-02-04",323.99,323.99,287.49,297.6,14719400],["2026-02-05",300.07,304.35,292.32,303.99,8514300],["2026-02-06",309.41,324.4,308.3,322.51,8344400],["2026-02-09",317.56,332.4,316.1,330.57,7458900],["2026-02-10",329.86,334.61,321.52,329.07,6785800],["2026-02-11",337.91,344.34,330.89,339.88,7160900],["2026-02-12",339.88,341.07,325.56,328.39,9764400],["2026-02-13",364.95,376.32,353.26,354.91,15706000],["2026-02-17",351.0,362.63,347.66,359.13,8791300],["2026-02-18",361.63,374.0,359.26,369.3,8784300],["2026-02-19",362.2,370.07,360.4,369.83,6640100],["2026-02-20",366.27,377.11,366.27,375.38,8178700],["2026-02-23",372.4,378.86,369.68,373.55,6077400],["2026-02-24",376.59,380.51,368.0,377.93,5711800],["2026-02-25",385.0,395.95,384.0,394.95,9745000],["2026-02-26",391.8,393.47,366.54,375.72,7717100],["2026-02-27",365.94,378.58,365.61,372.3,9041400],["2026-03-02",366.58,373.81,363.28,372.18,5802100],["2026-03-03",350.9,359.53,348.59,351.32,7982000],["2026-03-04",359.22,362.34,350.7,357.76,5980400],["2026-03-05",351.04,354.76,336.3,346.53,5899700],["2026-03-06",329.52,341.4,321.74,324.74,8655200],["2026-03-09",320.48,339.16,316.66,338.94,9504100],["2026-03-10",339.85,355.28,339.0,345.88,6121100],["2026-03-11",348.0,353.0,343.53,351.07,4517200],["2026-03-12",344.19,345.48,334.01,337.27,5978200],["2026-03-13",342.47,349.25,340.28,341.53,5332200],["2026-03-16",347.7,350.75,343.57,346.18,4427000],["2026-03-17",346.18,352.81,343.01,352.46,4833900],["2026-03-18",353.39,357.86,349.23,349.47,5170500],["2026-03-19",340.74,359.05,338.09,357.21,6459700],["2026-03-20",359.77,362.0,346.66,357.06,17587900],["2026-03-23",367.82,374.25,361.45,361.79,6490700],["2026-03-24",358.16,379.99,358.0,373.99,6406200],["2026-03-25",371.0,375.68,360.66,369.34,5052000],["2026-03-26",358.37,359.48,337.53,338.55,9261000],["2026-03-27",337.63,345.69,334.34,337.17,5984800],["2026-03-30",344.0,344.54,320.69,323.12,6568100],["2026-03-31",328.83,342.06,325.46,341.79,8335600],["2026-04-01",345.29,359.0,341.43,353.8,5974800],["2026-04-02",338.0,354.31,337.25,348.47,4269400],["2026-04-06",351.02,353.5,345.83,352.62,2505500],["2026-04-07",348.15,356.0,345.5,354.31,4024800],["2026-04-08",378.89,389.3,377.78,385.72,7628500],["2026-04-09",385.25,398.74,385.13,397.81,5373600],["2026-04-10",402.5,407.29,398.98,399.49,6399900],["2026-04-13",397.85,400.5,389.59,395.73,5246600],["2026-04-14",400.0,401.05,391.01,395.64,5353200],["2026-04-15",389.21,394.61,379.68,394.26,5925100],["2026-04-16",388.95,393.51,384.3,389.9,5113000],["2026-04-17",397.75,400.5,390.41,396.94,6017900],["2026-04-20",397.6,398.49,390.38,391.62,3747500],["2026-04-21",393.0,397.51,391.06,394.33,5414900],["2026-04-22",399.87,404.08,391.26,403.48,5268100],["2026-04-23",406.17,413.82,397.14,403.91,4420800],["2026-04-24",412.5,420.5,410.31,417.04,6159600],["2026-04-27",416.0,417.0,398.0,404.86,5663400],["2026-04-28",386.0,390.07,377.8,381.11,10396200],["2026-04-29",383.87,386.01,377.07,382.59,5116400],["2026-04-30",385.54,396.01,384.56,394.49,7050000],["2026-05-01",389.45,398.64,386.2,389.08,4586500],["2026-05-04",387.16,401.0,385.65,391.38,5062300],["2026-05-05",404.39,414.5,400.25,410.82,6321100],["2026-05-06",421.0,432.81,417.75,428.62,7241200],["2026-05-07",426.36,427.7,406.01,410.64,7741800],["2026-05-08",423.11,438.04,417.9,435.44,8165200],["2026-05-11",439.25,448.45,437.27,443.62,8324000],["2026-05-12",436.8,437.05,416.56,431.2,9319400],["2026-05-13",435.91,440.5,422.3,436.61,7839400],["2026-05-14",443.34,448.45,438.0,440.56,14936200],["2026-05-15",428.42,444.5,421.56,436.62,12768700],["2026-05-18",441.31,441.71,408.09,413.57,8265000],["2026-05-19",404.37,415.46,397.37,406.91,8418700],["2026-05-20",416.45,427.5,415.85,426.85,6888400],["2026-05-21",424.19,430.98,421.61,427.36,5682900],["2026-05-22",434.35,438.13,430.29,432.16,4889300],["2026-05-26",444.74,456.78,438.0,454.89,8044400],["2026-05-27",461.22,462.4,441.12,448.25,5047600],["2026-05-28",446.13,457.68,438.25,449.68,5675600],["2026-05-29",452.77,460.46,445.7,450.06,8546800],["2026-06-01",444.54,463.88,438.22,458.17,6613700],["2026-06-02",465.3,491.51,461.45,490.05,10440700],["2026-06-03",487.95,508.26,487.36,500.77,8964900],["2026-06-04",485.66,510.75,480.11,501.7,6729000],["2026-06-05",479.71,484.9,452.91,453.01,11909400],["2026-06-08",476.0,497.71,471.12,492.17,9726900],["2026-06-09",501.72,525.98,466.51,499.21,11731700],["2026-06-10",502.79,534.44,494.88,497.01,11393800],["2026-06-11",522.49,557.62,519.9,552.64,12427700],["2026-06-12",548.62,569.95,544.07,567.25,8055800],["2026-06-15",589.98,599.62,580.51,585.78,11664400],["2026-06-16",581.99,600.91,567.65,568.23,10906100],["2026-06-17",592.02,623.35,590.83,592.92,11045500],["2026-06-18",622.52,638.9,612.5,617.11,16781200],["2026-06-22",626.22,641.18,620.69,640.18,10737300],["2026-06-23",581.93,592.5,573.51,585.88,12035100],["2026-06-24",585.24,594.27,569.49,588.97,10726700],["2026-06-25",637.74,669.22,609.7,668.0,16477800],["2026-06-26",642.76,660.19,622.0,626.84,28138600],["2026-06-29",635.43,708.99,632.11,694.64,14165300],["2026-06-30",697.5,739.67,696.0,723.0,16461200],["2026-07-01",668.41,693.78,639.06,650.91,16089200],["2026-07-02",656.69,657.0,581.9,603.04,15071700],["2026-07-06",627.76,629.0,591.68,592.79,8622800],["2026-07-07",545.35,558.28,527.63,554.5,12552400],["2026-07-08",547.1,578.14,546.18,570.5,7535700],["2026-07-09",627.31,629.98,585.45,588.66,14418000],["2026-07-10",578.24,609.22,573.39,602.5,6279300],["2026-07-13",582.01,590.02,568.15,575.39,7561700],["2026-07-14",613.9,614.14,584.0,595.7,6513900],["2026-07-15",610.38,611.72,557.16,579.43,8168200],["2026-07-16",562.54,591.09,557.27,560.93,8406100],["2026-07-17",532.4,551.18,513.22,529.66,10326500],["2026-07-20",545.63,554.99,522.96,525.7,6550800],["2026-07-21",564.71,571.41,552.0,570.69,2748887]];
+const AMAT_MA5 = [193.93,191.5,189.94,189.06,188.11,187.65,187.9,188.38,186.76,185.62,184.13,182.28,180.03,180.65,181.63,181.94,183.8,186.18,187.19,182.57,178.4,173.16,167.34,161.66,161.81,161.5,161.96,162.64,163.73,163.38,162.5,160.85,159.62,159.11,159.37,160.56,161.99,164.37,165.38,167.16,169.17,172.11,176.03,180.49,186.41,191.88,196.54,198.51,201.27,202.16,202.93,206.19,210.99,213.71,217.5,218.87,218.82,218.16,216.65,215.76,217.09,219.1,220.58,223.59,225.32,226.88,225.48,225.63,226.38,227.02,227.35,230.39,231.2,232.07,233.35,233.86,234.89,235.08,234.48,233.95,233.65,231.62,229.56,228.74,227.47,226.76,227.64,227.04,226.64,227.08,230.55,233.52,239.92,246.07,252.95,258.19,262.08,265.23,267.91,268.27,269.58,269.71,267.95,266.58,264.92,259.54,256.22,255.66,255.21,255.48,257.99,259.67,260.99,261.19,260.54,262.16,266.64,273.23,279.68,284.61,291.07,295.65,297.43,299.36,306.85,312.02,314.22,318.29,321.67,322.33,320.82,323.72,326.02,330.53,330.52,332.3,329.5,321.67,314.2,314.23,314.67,316.75,325.2,330.08,336.56,342.28,350.32,356.31,365.71,369.44,373.2,378.33,379.51,378.89,378.62,373.29,365.86,360.02,350.51,343.86,342.77,341.43,339.58,342.94,344.39,345.7,345.38,349.37,352.48,355.6,359.9,363.88,360.15,356.17,348.43,341.99,338.89,340.87,343.96,350.2,358.98,367.79,377.99,386.61,394.88,396.59,395.0,394.49,393.67,393.41,395.25,398.06,402.08,404.72,402.08,397.9,396.02,390.43,387.73,393.67,402.88,406.11,415.38,425.83,429.9,431.5,437.49,437.72,431.71,426.85,424.9,422.26,421.37,429.63,437.9,442.47,447.01,452.21,459.24,469.75,480.15,480.74,487.54,489.37,488.62,498.81,521.66,540.38,554.18,573.36,586.26,600.84,600.86,605.01,620.03,621.97,632.87,660.29,672.68,659.69,652.88,624.85,594.35,581.9,581.79,578.31,586.55,588.34,582.79,568.22,558.28,553.28];
+const AMAT_MA20 = [189.69,190.44,190.79,191.04,191.15,191.5,191.77,192.05,191.55,191.0,190.6,189.81,188.95,188.2,187.55,186.91,186.37,186.13,185.92,184.48,183.03,181.78,180.48,179.07,177.91,176.49,175.3,174.05,173.31,172.35,171.08,169.94,168.94,167.93,166.78,165.74,164.49,163.49,162.47,162.93,163.43,164.23,165.67,167.18,169.08,171.03,172.87,174.63,176.56,178.77,181.13,184.21,187.47,190.21,193.31,195.71,198.41,200.92,203.03,205.46,207.69,210.16,212.06,213.8,215.19,216.44,217.4,218.84,220.08,221.4,222.55,223.45,223.89,224.67,225.36,226.29,227.46,228.13,229.13,229.91,230.44,230.59,230.37,230.42,230.45,230.4,231.13,230.72,230.48,230.46,231.2,231.92,232.9,233.98,235.36,237.29,238.71,240.44,242.34,243.94,246.27,248.24,250.04,251.8,253.31,254.46,255.38,257.19,258.94,260.41,261.32,261.92,262.46,262.72,262.3,262.31,263.06,264.46,265.66,266.39,267.69,269.54,271.83,273.86,276.87,280.81,284.04,287.49,290.47,293.58,296.52,300.06,303.74,307.81,311.08,314.05,315.77,315.85,316.44,318.48,319.95,321.04,322.79,324.12,325.91,327.52,330.07,332.3,335.13,337.69,340.61,343.72,345.67,347.22,349.71,350.86,352.81,355.26,356.3,357.12,357.88,358.98,358.85,359.51,359.07,358.74,357.75,357.12,356.2,355.61,355.42,354.14,352.28,350.52,348.07,347.59,347.39,347.49,348.89,349.65,351.65,353.98,357.09,359.8,362.28,364.37,366.39,368.38,370.1,371.73,373.2,374.93,378.86,382.24,385.14,387.18,389.22,391.25,393.18,396.01,398.16,398.8,400.59,402.99,404.77,406.88,409.42,411.4,412.5,413.13,414.3,415.47,416.22,418.73,422.08,425.44,428.22,431.67,436.6,441.1,444.76,446.87,449.71,452.49,455.78,461.58,467.92,475.37,483.11,492.41,501.92,512.56,520.25,526.95,537.94,546.8,559.03,572.27,580.31,585.42,589.98,595.05,598.97,603.44,608.72,609.85,611.28,610.96,610.59,607.43,602.86,599.39];
+const AMAT_MA60 = [171.66,172.27,172.86,173.49,174.09,174.75,175.41,175.98,176.4,176.85,177.3,177.69,178.06,178.31,178.51,178.68,178.91,179.32,179.69,179.62,179.65,179.67,179.73,179.7,179.71,179.76,179.88,180.0,180.06,180.04,179.93,179.76,179.56,179.38,179.2,179.01,178.89,178.78,178.68,178.65,178.72,178.82,178.98,179.1,179.38,179.67,179.98,180.24,180.48,180.71,180.94,181.32,181.79,182.11,182.55,182.79,183.09,183.52,183.81,184.29,184.72,185.39,186.07,186.68,187.39,187.99,188.52,189.17,189.99,190.84,191.59,192.53,193.44,194.27,195.15,195.91,196.79,197.51,198.21,199.43,200.52,201.66,202.7,203.8,204.91,205.96,207.13,208.06,209.04,210.21,211.63,213.19,214.76,216.29,218.01,219.76,221.53,223.16,224.83,226.44,228.13,229.66,230.82,232.01,232.98,233.77,234.64,235.58,236.5,237.42,238.36,239.09,239.75,240.46,241.01,241.97,243.08,244.34,245.71,246.75,248.13,249.46,250.74,252.03,253.54,255.22,256.85,258.47,259.97,261.48,263.01,264.63,266.37,268.17,269.58,271.22,272.51,273.58,274.81,276.27,277.97,279.61,281.55,283.26,285.36,287.6,289.83,292.33,294.85,297.23,299.48,301.9,303.96,305.92,307.7,309.08,310.55,311.86,312.8,314.0,315.18,316.52,317.83,319.16,320.62,322.36,323.95,325.63,327.27,328.96,330.85,332.64,333.9,335.18,336.29,337.5,338.66,339.53,340.54,341.75,343.16,344.67,346.25,347.81,349.09,350.21,351.4,352.6,353.81,355.01,356.41,357.6,358.94,359.99,360.97,361.88,363.14,364.67,366.12,367.59,369.23,370.59,372.18,374.1,375.37,376.66,377.85,378.96,379.6,380.16,380.97,381.51,382.45,383.83,385.1,386.74,388.28,390.14,392.89,395.59,398.19,399.88,402.47,405.09,407.61,410.94,414.57,418.38,421.9,425.76,429.81,434.32,438.44,442.64,448.39,453.14,458.82,465.06,470.03,474.18,477.63,480.24,483.09,486.31,489.75,492.77,496.2,499.25,502.07,504.32,506.36,509.14];
+const AMAT_MA120 = [164.52,164.64,164.74,164.79,164.84,164.93,165.02,165.09,165.07,165.07,165.06,165.03,165.0,164.99,165.12,165.23,165.35,165.46,165.6,165.54,165.53,165.47,165.51,165.52,165.61,165.69,165.76,165.87,165.95,166.04,166.13,166.19,166.26,166.32,166.37,166.45,166.53,166.66,166.79,166.92,167.09,167.32,167.67,168.05,168.51,168.97,169.41,169.95,170.59,171.19,171.82,172.39,173.1,173.71,174.37,174.92,175.58,176.27,176.89,177.57,178.19,178.83,179.47,180.09,180.74,181.37,181.96,182.58,183.19,183.85,184.44,185.11,185.75,186.29,186.83,187.3,187.85,188.42,188.95,189.53,190.08,190.67,191.22,191.75,192.31,192.86,193.51,194.03,194.55,195.13,195.78,196.47,197.16,197.84,198.61,199.39,200.21,200.97,201.76,202.54,203.42,204.24,204.9,205.55,206.18,206.72,207.31,207.91,208.49,209.07,209.65,210.21,210.77,211.29,211.78,212.38,213.09,213.93,214.76,215.52,216.42,217.42,218.41,219.35,220.47,221.61,222.69,223.82,224.98,226.16,227.3,228.58,229.9,231.22,232.37,233.57,234.65,235.55,236.51,237.85,239.24,240.63,242.13,243.53,245.13,246.78,248.48,250.2,251.95,253.72,255.56,257.54,259.36,261.1,262.85,264.42,266.04,267.51,268.82,270.22,271.65,273.09,274.32,275.59,276.8,278.06,279.3,280.61,281.89,283.19,284.6,285.87,286.82,287.82,288.65,289.73,290.87,291.94,293.13,294.25,295.65,297.06,298.5,299.92,301.31,302.72,304.13,305.53,306.89,308.25,309.71,311.11,312.65,314.08,315.28,316.55,317.83,319.12,320.47,321.93,323.6,325.1,326.87,328.68,330.37,332.13,333.84,335.65,337.22,338.69,340.23,341.71,343.21,344.87,346.4,347.91,349.41,351.0,352.85,354.79,356.68,358.2,360.15,362.13,364.11,366.65,369.26,372.01,374.59,377.36,380.33,383.48,386.17,388.91,392.34,395.32,398.74,402.3,405.29,407.97,410.4,412.46,414.67,417.06,419.42,421.49,423.8,425.92,427.94,429.67,431.39,433.37];
+
+(function(){
+  const svgCandle = document.getElementById('amatCandleSvg');
+  const svgVol = document.getElementById('amatVolumeSvg');
+  const toggle = document.getElementById('amatRangeToggle');
+  const maToggle = document.getElementById('amatMaToggle');
+  if(!svgCandle || !svgVol || !toggle) return;
+  const RANGES = {'1M':21,'3M':63,'6M':126,'1Y':252};
+  const NS = 'http://www.w3.org/2000/svg';
+  const UP='#2ecc71', DOWN='#e74c3c';
+  const maColors = {ma5:'#ff6b9d', ma20:'#9b59b6', ma60:'#f0c040', ma120:'#22d3ee'};
+  const maState = {ma5:true, ma20:true, ma60:true, ma120:true, pricelabels:true};
+  let currentRange = '1Y';
+
+  function draw(rangeKey){
+    currentRange = rangeKey;
+    const n = RANGES[rangeKey];
+    const data = AMAT_DAILY.slice(-n);
+    const ma5 = AMAT_MA5.slice(-n), ma20 = AMAT_MA20.slice(-n), ma60 = AMAT_MA60.slice(-n), ma120 = AMAT_MA120.slice(-n);
+    while(svgCandle.firstChild) svgCandle.removeChild(svgCandle.firstChild);
+    while(svgVol.firstChild) svgVol.removeChild(svgVol.firstChild);
+
+    const W=720,H=240,pL=45,pR=12,pT=10,pB=20;
+    const cW=W-pL-pR,cH=H-pT-pB;
+    const highs=data.map(d=>d[2]), lows=data.map(d=>d[3]);
+    const maVals=[...ma5,...ma20,...ma60,...ma120].filter(v=>v!=null);
+    const mx=Math.max(...highs,...maVals), mn=Math.min(...lows,...maVals);
+    const pad=(mx-mn)*0.06 || mx*0.02;
+    const top=mx+pad, bot=mn-pad, rng=(top-bot)||1;
+    const py = v => pT + cH*(1-(v-bot)/rng);
+    const colW = cW/data.length;
+    const bodyW = Math.max(colW*0.62, 1);
+
+    for(let i=0;i<=3;i++){
+      const v = bot + rng*i/3;
+      const y = py(v);
+      const l=document.createElementNS(NS,'line');
+      l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+      l.setAttribute('stroke','rgba(255,255,255,.08)');l.setAttribute('stroke-width','1');
+      svgCandle.appendChild(l);
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x',pL-4);t.setAttribute('y',y+3);t.setAttribute('text-anchor','end');
+      t.setAttribute('font-size','9');t.setAttribute('fill','rgba(154,160,184,.8)');
+      t.textContent='$'+v.toFixed(0);
+      svgCandle.appendChild(t);
+    }
+
+    data.forEach((d,i)=>{
+      const [,o,h,l,c] = d;
+      const cx = pL + (i+0.5)*colW;
+      const up = c >= o;
+      const col = up ? UP : DOWN;
+      const wick=document.createElementNS(NS,'line');
+      wick.setAttribute('x1',cx);wick.setAttribute('x2',cx);
+      wick.setAttribute('y1',py(h));wick.setAttribute('y2',py(l));
+      wick.setAttribute('stroke',col);wick.setAttribute('stroke-width', Math.max(colW*0.12,0.6));
+      svgCandle.appendChild(wick);
+      const yTop = py(Math.max(o,c));
+      const yBot = py(Math.min(o,c));
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x', cx - bodyW/2);
+      rect.setAttribute('y', yTop);
+      rect.setAttribute('width', bodyW);
+      rect.setAttribute('height', Math.max(yBot-yTop, 1));
+      rect.setAttribute('fill', col);
+      svgCandle.appendChild(rect);
+    });
+
+    const drawMaLine = (vals, color) => {
+      let seg = [];
+      const flush = () => {
+        if (seg.length > 1) {
+          const pl = document.createElementNS(NS,'polyline');
+          pl.setAttribute('points', seg.join(' '));
+          pl.setAttribute('fill','none'); pl.setAttribute('stroke',color);
+          pl.setAttribute('stroke-width','1.7'); pl.setAttribute('opacity','0.95');
+          pl.setAttribute('stroke-linejoin','round'); pl.setAttribute('stroke-linecap','round');
+          svgCandle.appendChild(pl);
+        }
+        seg = [];
+      };
+      vals.forEach((v,i) => {
+        if (v == null) { flush(); return; }
+        seg.push(`${pL+(i+0.5)*colW},${py(v)}`);
+      });
+      flush();
+    };
+    if (maState.ma5) drawMaLine(ma5, maColors.ma5);
+    if (maState.ma20) drawMaLine(ma20, maColors.ma20);
+    if (maState.ma60) drawMaLine(ma60, maColors.ma60);
+    if (maState.ma120) drawMaLine(ma120, maColors.ma120);
+
+    if (maState.pricelabels) {
+    const closeIdx = data.length-1;
+    const closeVal = data[closeIdx][4];
+    const periodHigh = Math.max(...highs);
+    const periodLow = Math.min(...lows);
+    const highIdx = highs.indexOf(periodHigh);
+    const lowIdx = lows.indexOf(periodLow);
+    const markers = [
+      {idx: highIdx, v: periodHigh, color: UP, label:'최고', side:'above'},
+      {idx: lowIdx, v: periodLow, color: DOWN, label:'최저', side:'below'},
+      {idx: closeIdx, v: closeVal, color:'#60a5fa', label:'종가', side:'left'}
+    ];
+    markers.forEach(m=>{
+      const cx = pL + (m.idx+0.5)*colW;
+      const cy = py(m.v);
+      const dot=document.createElementNS(NS,'circle');
+      dot.setAttribute('cx',cx);dot.setAttribute('cy',cy);dot.setAttribute('r','3.5');
+      dot.setAttribute('fill',m.color);dot.setAttribute('stroke','#0f1117');dot.setAttribute('stroke-width','1.5');
+      svgCandle.appendChild(dot);
+
+      const labelText = `${m.label} $${m.v.toFixed(2)}`;
+      const labelW = labelText.length*5.2+6;
+      let tx, ty, anchor;
+      if (m.side === 'left') {
+        anchor = 'end'; tx = cx-7; ty = cy+3;
+      } else if (m.side === 'above') {
+        ty = cy-9;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      } else {
+        ty = cy+16;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      }
+      const bgX = anchor==='end' ? tx-labelW : anchor==='middle' ? tx-labelW/2 : tx;
+      const bg=document.createElementNS(NS,'rect');
+      bg.setAttribute('x', bgX);bg.setAttribute('y', ty-8);
+      bg.setAttribute('width', labelW);bg.setAttribute('height', 12);
+      bg.setAttribute('fill','rgba(15,17,23,0.85)');bg.setAttribute('rx','2');
+      svgCandle.appendChild(bg);
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x', tx);t.setAttribute('y', ty+2);
+      t.setAttribute('text-anchor',anchor);t.setAttribute('font-size','9');
+      t.setAttribute('font-weight','700');t.setAttribute('fill', m.color);
+      t.textContent = labelText;
+      svgCandle.appendChild(t);
+    });
+    }
+
+    const labelCount = Math.min(5, data.length);
+    for(let i=0;i<labelCount;i++){
+      const idx = Math.round(i*(data.length-1)/((labelCount-1)||1));
+      const cx = pL + (idx+0.5)*colW;
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x', Math.min(Math.max(cx,pL+10), W-20));
+      t.setAttribute('y', H-4);
+      t.setAttribute('text-anchor','middle');t.setAttribute('font-size','9');
+      t.setAttribute('fill','rgba(154,160,184,.8)');
+      t.textContent = data[idx][0].slice(2).replace(/-/g,'.');
+      svgCandle.appendChild(t);
+    }
+
+    const VW=720,VH=70,vpT=6,vpB=4;
+    const vcH=VH-vpT-vpB;
+    const maxV = Math.max(...data.map(d=>d[5]));
+    data.forEach((d,i)=>{
+      const [,o,,,c,v] = d;
+      const cx = pL + (i+0.5)*colW;
+      const up = c >= o;
+      const col = up ? 'rgba(46,204,113,0.55)' : 'rgba(231,76,60,0.55)';
+      const h = (v/maxV)*vcH;
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x', cx - bodyW/2);
+      rect.setAttribute('y', vpT + (vcH-h));
+      rect.setAttribute('width', bodyW);
+      rect.setAttribute('height', Math.max(h,1));
+      rect.setAttribute('fill', col);
+      svgVol.appendChild(rect);
+    });
+  }
+
+  toggle.querySelectorAll('.range-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      toggle.querySelectorAll('.range-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      draw(btn.dataset.range);
+    });
+  });
+
+  if (maToggle) {
+    maToggle.querySelectorAll('.ma-toggle-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const key = btn.dataset.ma;
+        maState[key] = !maState[key];
+        btn.classList.toggle('ma-off', !maState[key]);
+        draw(currentRange);
+      });
+    });
+  }
+
+  draw('1Y');
+})();
+
+function renderFundChart() {
+  const ctx=document.getElementById('amatRevChart'); if(!ctx||charts.fund)return;
+  charts.fund=new Chart(ctx,{data:{labels:["Q3 '24","Q4 '24","Q1 '25","Q2 '25","Q3 '25","Q4 '25","Q1 '26","Q2 '26"],datasets:[{type:'bar',label:'매출($B)',data:[6.778,7.045,7.166,7.100,7.302,6.800,7.012,7.910],backgroundColor:'#3b82f6',borderRadius:4,yAxisID:'y'},{type:'bar',label:'GAAP 순이익($B)',data:[1.705,1.731,1.185,2.137,1.779,1.897,2.026,2.806],backgroundColor:'rgba(240,192,64,.55)',borderRadius:4,yAxisID:'y'},{type:'line',label:'GAAP EPS($)',data:[2.05,2.09,1.45,2.63,2.22,2.36,2.54,3.51],borderColor:'#2ecc71',tension:.3,pointRadius:4,yAxisID:'y2'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#9aa0b8'}}},scales:{x:{ticks:{color:'#9aa0b8'}},y:{ticks:{color:'#9aa0b8',callback:v=>'$'+v+'B'}},y2:{position:'right',grid:{display:false},ticks:{color:'#9aa0b8',callback:v=>'$'+v}}}}});
+}
+
+function renderPeerChart() { const ctx=document.getElementById('peerChart'); if(!ctx||charts.peer)return; charts.peer=new Chart(ctx,{type:'bar',data:{labels:['LRCX','KLAC','AMAT','ASML'],datasets:[{label:'Forward P/E',data:[35,36,39.9,42],backgroundColor:['rgba(154,160,184,.45)','rgba(154,160,184,.45)','#3b82f6','rgba(154,160,184,.45)'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#9aa0b8'}},y:{ticks:{color:'#9aa0b8',callback:v=>v+'x'}}}}}); }
+
+function renderCharts(sectionId) {
+  setTimeout(() => {
+    if (sectionId === 'fund') renderFundChart();
+    if (sectionId === 'valuation') renderPeerChart();
+  }, 50);
+}
+</script>
+</body>
+</html>
