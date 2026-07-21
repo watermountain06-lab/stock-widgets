@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BAC 종합 분석 위젯</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117; --bg2: #1a1d27; --bg3: #22263a; --border: #2e3347;
+    --text: #e8eaf0; --text2: #9aa0b8; --text3: #5c6282;
+    --accent: #e31837; --accent2: #ff5a72; --accent3: #3d0810;
+    --bull: #D85A30; --bear: #185FA5; --ma5: #ff6b9d; --ma20: #9b59b6; --ma60: #f0c040; --ma120: #22d3ee;
+    --green: #2ecc71; --red: #e74c3c; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
+  .today-banner { background: rgba(46,204,113,0.12); border: 1px solid #2ecc71; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #6fdc9a; max-width: 1100px; margin: 0 auto; }
+  .header { background: linear-gradient(135deg, #2b0509 0%, #0f1117 40%, #1a1d27 100%); border-bottom: 2px solid var(--accent3); padding: 28px 32px 24px; position: relative; overflow: hidden; max-width: 1100px; margin: 0 auto; }
+  .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(255,90,114,0.14) 0%, transparent 70%); pointer-events: none; }
+  .header-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .ticker-block { display: flex; align-items: center; gap: 16px; }
+  .ticker-badge { background: linear-gradient(135deg, var(--accent3), var(--accent)); color: #fff; font-size: 13px; font-weight: 800; padding: 5px 12px; border-radius: 6px; letter-spacing: 1px; }
+  .company-name { font-size: 22px; font-weight: 700; color: var(--text); }
+  .company-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .price-block { text-align: right; }
+  .price-main { font-size: 32px; font-weight: 800; color: var(--accent2); letter-spacing: -1px; }
+  .price-change { font-size: 13px; color: var(--green); font-weight: 600; }
+  .header-meta { display: flex; justify-content: space-between; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+  .meta-item { display: flex; flex-direction: column; }
+  .meta-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .meta-value { font-size: 13px; font-weight: 600; color: var(--text2); margin-top: 2px; }
+  .meta-value.highlight { color: var(--accent2); }
+  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
+  .nav-btn:hover { color: var(--text); background: var(--bg3); }
+  .nav-btn.active { background: var(--accent3); color: var(--accent2); }
+  .section { display: none; padding: 28px 32px; max-width: 1100px; margin: 0 auto; }
+  .section.active { display: block; }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--accent2); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; display: inline-block; }
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px; }
+  .card-title { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; font-weight: 600; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .chart-wrap { position: relative; }
+  .chart-wrap canvas { max-width: 100%; }
+  .price-chart-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+  .stat-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .stat-value { font-size: 20px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
+  .stat-sub { font-size: 11px; color: var(--text3); }
+  .stat-value.up { color: var(--green); }
+  .stat-value.down { color: var(--red); }
+  .stat-value.gold { color: var(--accent2); }
+  .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .ma-row:last-child { border-bottom: none; }
+  .ma-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+  .ma-name { display: flex; align-items: center; font-size: 13px; color: var(--text2); }
+  .ma-val { font-size: 13px; font-weight: 600; }
+  .ma-status { font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
+  .status-above { background: rgba(46,204,113,0.15); color: var(--green); }
+  .status-below { background: rgba(231,76,60,0.15); color: var(--red); }
+  .zone-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .zone-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg3); border-radius: 6px; }
+  .zone-label { font-size: 12px; color: var(--text2); }
+  .zone-val { font-size: 13px; font-weight: 700; color: var(--accent2); }
+  .zone-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
+  .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
+  .tag-current { background: rgba(255,90,114,0.2); color: var(--accent2); }
+  .val-item { margin-bottom: 18px; }
+  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
+  .val-track { height: 8px; background: var(--bg3); border-radius: 4px; position: relative; overflow: hidden; }
+  .val-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+  .val-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+  .val-low { font-size: 10px; color: var(--green); }
+  .val-mid { font-size: 10px; color: var(--accent2); text-align: center; }
+  .val-high { font-size: 10px; color: var(--red); }
+  .stage-badge { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
+  .stage-1 { background: rgba(46,204,113,0.2); color: #2ecc71; }
+  .stage-2 { background: rgba(39,174,96,0.2); color: #27ae60; }
+  .stage-3 { background: rgba(255,90,114,0.2); color: var(--accent2); }
+  .stage-4 { background: rgba(231,126,35,0.2); color: #e67e22; }
+  .stage-5 { background: rgba(231,76,60,0.2); color: var(--red); }
+  .stage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .stage-mini { text-align: center; padding: 10px 4px; border-radius: 8px; }
+  .stage-mini-num { font-size: 15px; font-weight: 700; }
+  .stage-mini-label { font-size: 9px; margin-top: 2px; }
+  .scenario-card { border-radius: 8px; padding: 14px; }
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent2); border: 2px solid var(--bg); }
+  .tl-dot.red { background: var(--red); }
+  .tl-dot.green { background: var(--green); }
+  .tl-dot.blue { background: var(--blue); }
+  .tl-dot.gold { background: var(--accent2); }
+  .tl-dot.today { background: #ffc107; }
+  .tl-date { font-size: 10px; color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+  .tl-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 3px 0; }
+  .tl-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .tl-source { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 11px; font-weight: 600; color: var(--accent2); text-decoration: none; }
+  .tl-source:hover { text-decoration: underline; }
+  .bull-bear { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .bb-box { background: var(--bg3); border-radius: var(--radius); padding: 16px; }
+  .bb-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .bb-bull { color: var(--bull); }
+  .bb-bear { color: var(--bear); }
+  .bb-item { display: flex; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .bb-icon { flex-shrink: 0; margin-top: 2px; }
+  .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+  .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
+  .disclaimer { max-width: 1100px; margin: 28px auto 16px; padding: 12px 16px; background: rgba(255,90,114,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
+  .info-box { background: rgba(255,90,114,0.1); border: 1px solid var(--accent3); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; color: var(--text2); }
+  .range-toggle { display: flex; gap: 4px; }
+  .range-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--text3); font-size: 11px; font-weight: 700; padding: 4px 11px; border-radius: 999px; cursor: pointer; transition: all .15s; }
+  .range-btn:hover { color: var(--text); border-color: var(--text2); }
+  .range-btn.active { background: var(--accent3); color: var(--accent2); border-color: var(--accent); }
+  .ma-toggle-btn { background: var(--bg3); border: 1px solid; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer; transition: all .15s; }
+  .ma-toggle-btn:hover { filter: brightness(1.2); }
+  .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
+  @media (max-width: 600px) {
+    .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
+    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; } .price-main { font-size: 24px; }
+  }
+  body { padding-top: 46px; }
+  .back-bar { position: fixed; top: 0; left: 0; right: 0; height: 46px; background: rgba(10,11,22,0.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.25); }
+  .back-bar a { color: var(--text2); font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+  .back-bar a:hover { color: var(--accent2); }
+  .back-bar .brand-icon { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 6px; background: var(--accent3); color: var(--accent2); font-size: 12px; }
+  .back-bar .back-bar-ticker { font-size: 11px; color: var(--text3); font-weight: 600; letter-spacing: 0.4px; }
+  .back-bar-nav { display: flex; align-items: center; gap: 10px; }
+  .peer-nav-link { color: var(--text2); font-size: 11px; font-weight: 700; text-decoration: none; padding: 4px 9px; border-radius: 6px; border: 1px solid var(--border); transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+  .peer-nav-link:hover { color: var(--accent2); border-color: var(--accent); }
+  .peer-nav-link.disabled { color: var(--text3); opacity: 0.4; pointer-events: none; border-color: var(--border); }
+</style>
+</head>
+<body>
+<div class="back-bar">
+  <a href="../index.html"><span class="brand-icon">◧</span>US Stock Widgets · 전체 종목 목록</a>
+  <div class="back-bar-nav">
+    <a class="peer-nav-link" href="CSCO_analysis_widget.html">◀ CSCO</a>
+    <span class="back-bar-ticker">BAC · 시총 27위</span>
+    <span class="peer-nav-link disabled">다음 ▶</span>
+  </div>
+</div>
+
+<div class="today-banner">✅ <strong>7/14(화) Q2 FY2026 실적 발표 완료</strong> — 매출 $31.6B(+15%) · EPS $1.21(+34%, 20년래 최고 분기 EPS), 트레이딩 부문 사상 최대 실적 · 다음 실적은 10월 중순 Q3 FY2026 예상</div>
+
+<div class="header">
+  <div class="header-top">
+    <div class="ticker-block">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+          <span class="ticker-badge">BAC</span>
+          <span style="font-size:11px;color:var(--accent2);font-weight:600;">NYSE · 17분기 연속 트레이딩 매출 성장 · 20년래 최고 분기 EPS</span>
+        </div>
+        <div class="company-name">Bank of America Corporation</div>
+        <div class="company-sub">Consumer Banking·Global Wealth & Investment Management·Global Banking·Global Markets(트레이딩) 4대 사업부 · S&P 500 시총 27위권</div>
+      </div>
+    </div>
+    <div class="price-block">
+      <div class="price-main">$60.42</div>
+      <div class="price-change" style="color:var(--red);">▼ -1.39% (2026.07.20 기준)</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px;">52주 최저 $44.75 (2025.08.05) · 최고 $62.12 (2026.07.17)</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$454.4B</span></div>
+    <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Financials</span></div>
+    <div class="meta-item"><span class="meta-label">Q2 FY26 매출</span><span class="meta-value">$31.6B (+15%)</span></div>
+    <div class="meta-item"><span class="meta-label">P/E (TTM)</span><span class="meta-value">13.9x</span></div>
+    <div class="meta-item"><span class="meta-label">EPS (TTM)</span><span class="meta-value">$4.34</span></div>
+    <div class="meta-item"><span class="meta-label">분기 배당</span><span class="meta-value">$0.28</span></div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
+  <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
+  <button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button>
+  <button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button>
+  <button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button>
+  <button class="nav-btn" onclick="showSection('invest')">🎯 투자 포인트</button>
+</div>
+
+<!-- ===================== SECTION 1: 기술적 분석 ===================== -->
+<div id="tech" class="section active">
+  <div class="section-title">기술적 분석 — 일봉 캔들스틱 (2025.07 ~ 2026.07) · 52주 수익률 +27.7%</div>
+  <div class="price-chart-container">
+    <div style="margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+      <div class="range-toggle" id="bacRangeToggle">
+        <button class="range-btn" data-range="1M">1개월</button>
+        <button class="range-btn" data-range="3M">3개월</button>
+        <button class="range-btn" data-range="6M">6개월</button>
+        <button class="range-btn active" data-range="1Y">1년</button>
+      </div>
+      <div id="bacMaToggle" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="ma-toggle-btn" data-ma="ma5" style="color:var(--ma5);border-color:var(--ma5);">● MA5</button>
+        <button class="ma-toggle-btn" data-ma="ma20" style="color:var(--ma20);border-color:var(--ma20);">● MA20</button>
+        <button class="ma-toggle-btn" data-ma="ma60" style="color:var(--ma60);border-color:var(--ma60);">● MA60</button>
+        <button class="ma-toggle-btn" data-ma="ma120" style="color:var(--ma120);border-color:var(--ma120);">● MA120</button>
+        <button class="ma-toggle-btn" data-ma="pricelabels" style="color:var(--text2);border-color:var(--text2);margin-left:4px;">◆ 가격라벨</button>
+      </div>
+    </div>
+    <svg id="bacCandleSvg" viewBox="0 0 720 240" width="100%" style="display:block;background:var(--bg3);border-radius:8px 8px 0 0;padding:4px;" role="img" aria-label="BAC 일봉 캔들스틱 차트"></svg>
+    <svg id="bacVolumeSvg" viewBox="0 0 720 70" width="100%" style="display:block;background:var(--bg3);border-radius:0 0 8px 8px;padding:0 4px 4px;" role="img" aria-label="BAC 거래량 차트"></svg>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">52주 최저 $44.75 (2025.08) → 52주 최고 $62.12 (2026.07) → 현재 $60.42</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">핵심 가격대</div>
+      <div class="zone-list">
+        <div class="zone-item"><span class="zone-label">52주 최고</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$62.12 (2026.07.17)</span><span class="zone-tag tag-resist">저항선</span></div></div>
+        <div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$60.42 (고점 대비 -2.7%)</span><span class="zone-tag tag-current">현재</span></div></div>
+        <div class="zone-item"><span class="zone-label">MA20 지지</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$59.15</span><span class="zone-tag tag-support">지지선</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$44.75 (2025.08.05)</span><span class="zone-tag tag-support">강지지</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--green);">+27.7%</span></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">이동평균선 현황</div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기) $61.08</span><span class="ma-status status-below">저항(근접)</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기) $59.15</span><span class="ma-status status-above">상승 지지</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기) $54.85</span><span class="ma-status status-above">상승 지지</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기) $52.98</span><span class="ma-status status-above">상승 지지</span></div>
+      <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">
+        ⚠️ MA120&lt;MA60&lt;MA20&lt;현재가≈MA5 순 — 거의 완전한 정배열. 7/14 Q2 실적 서프라이즈로 사상 최대 트레이딩 실적을 기록하며 52주 신고가를 경신한 직후 소폭 조정.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">구간별 패턴 분석</div>
+    <div class="grid-4">
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.07~08 — 저점 형성 $47→$45</div><div style="font-size:12px;color:var(--text2);">52주 저점($44.75, 8/5) 형성. 시장 전반의 조정 국면 속 밸류에이션 바닥권 형성.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.09~2026.01 — 완만한 랠리 $45→$57</div><div style="font-size:12px;color:var(--text2);">견조한 트레이딩·투자은행 실적과 금리 환경 개선 기대감으로 꾸준한 상승세.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.02~05 — 조정 $57→$47</div><div style="font-size:12px;color:var(--text2);">시장 전반의 변동성 확대 속 은행주 조정, 4/15 Q1 실적(EPS $1.11, 20년래 최고) 발표로 반등 시작.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.06~07 — Q2 실적 서프라이즈 후 신고가 $52→$62</div><div style="font-size:12px;color:var(--text2);">7/14 Q2 실적 발표(매출+15%·EPS+34%, 트레이딩 사상 최대)로 급등, 7/17 52주 신고가 $62.12 경신.</div></div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;">
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">52주 수익률 +27.7% — S&P500(+19.6%) 대비 +8.1%p 아웃퍼폼</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">17분기 연속 트레이딩 매출 성장, Q2 주식트레이딩 매출 +70% YoY</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">Q2 EPS $1.21 — 20년래 최고 분기 실적</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(255,193,7,0.18);color:#ffc107;">다음 실적 10월 중순 Q3 FY2026 예상</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">52주 신고가 직후 조정 — 트레이딩 실적 의존도가 높은 이익구조 리스크</span>
+  </div>
+</div>
+
+<!-- ===================== SECTION 2: 기본적 분석 ===================== -->
+<div id="fund" class="section">
+  <div class="section-title">기본적 분석 — 분기 재무제표 (SEC 8-K 실적발표 기준)</div>
+  <div class="card">
+    <div class="card-title">분기 매출·EPS 추이 (Q3 FY24 ~ Q2 FY26, 2년치)</div>
+    <div class="chart-wrap" style="height:260px;"><canvas id="bacRevChart"></canvas></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--text3);">* 대형 은행은 대체로 GAAP·조정 실적 괴리가 크지 않아 단일 EPS 라인으로 표시. 8개 분기 연속 매출·EPS 우상향 추세가 뚜렷.</div>
+  </div>
+  <div class="grid-3">
+    <div class="stat-box"><div class="stat-label">Q2 FY26 매출</div><div class="stat-value up">$31.6B</div><div class="stat-sub">▲15% YoY</div></div>
+    <div class="stat-box"><div class="stat-label">Q2 FY26 순이익</div><div class="stat-value up">$9.1B</div><div class="stat-sub">▲27% YoY</div></div>
+    <div class="stat-box"><div class="stat-label">Q2 FY26 EPS</div><div class="stat-value up">$1.21</div><div class="stat-sub">▲34% YoY, 컨센서스($1.12) 상회</div></div>
+    <div class="stat-box"><div class="stat-label">주식 트레이딩 매출</div><div class="stat-value up">$3.6B</div><div class="stat-sub">▲70% YoY, Q2 기준</div></div>
+    <div class="stat-box"><div class="stat-label">투자은행 수수료</div><div class="stat-value up">$2.1B</div><div class="stat-sub">▲50% YoY, Q2 기준</div></div>
+    <div class="stat-box"><div class="stat-label">전체 트레이딩 매출</div><div class="stat-value up">$7.1B</div><div class="stat-sub">▲33% YoY, 17분기 연속 성장</div></div>
+    <div class="stat-box"><div class="stat-label">순이자마진(NII) 성장</div><div class="stat-value gold">6~8% 상단</div><div class="stat-sub">FY2026 가이던스 상향</div></div>
+    <div class="stat-box"><div class="stat-label">영업 레버리지 목표</div><div class="stat-value gold">300~400bp</div><div class="stat-sub">FY2026 가이던스 상향</div></div>
+    <div class="stat-box"><div class="stat-label">분기배당</div><div class="stat-value up">$0.28</div><div class="stat-sub">배당수익률 약 1.9%</div></div>
+  </div>
+  <div style="margin-top:12px;font-size:12px;color:var(--text3);">CEO Brian Moynihan "소비자 은행 부문은 건전하며, 광범위한 사업부에서 고른 성장을 보이고 있다"</div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">핵심 성장 동력 — Global Markets(트레이딩) vs Global Banking(투자은행) vs Consumer Banking</div>
+    <div class="grid-3">
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--ma20);font-weight:700;margin-bottom:6px;">Global Markets (트레이딩)</div><div style="font-size:12px;color:var(--text2);">주식 트레이딩 매출 +70% YoY로 사상 최대<br>파생상품·현물 모두 견조한 고객 활동<br>17분기 연속 YoY 성장 — 가장 강력한 성장동력</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--blue);font-weight:700;margin-bottom:6px;">Global Banking (투자은행)</div><div style="font-size:12px;color:var(--text2);">투자은행 수수료 +50% YoY(자기주도 딜 제외)<br>부채 인수·자문·주식 인수 전반 고른 성장<br>M&A·IPO 시장 회복의 직접 수혜</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">Consumer Banking</div><div style="font-size:12px;color:var(--text2);">순이자마진(NII) 가이던스 상단(6~8%)으로 상향<br>CEO "소비자 은행 부문 건전" 발언<br>안정적 기반 사업으로 트레이딩 변동성 상쇄</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">핵심 투자 논리 — 트레이딩·IB 슈퍼사이클이 지속되는가, 순환적 정점인가</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.7;">BAC의 Q2 FY26 실적은 순이자수익(전통 예대마진)뿐 아니라 트레이딩·투자은행 부문에서 광범위한 성장을 보였다. 주식 트레이딩 매출 +70%, 투자은행 수수료 +50%는 시장 활동성이 극도로 활발했던 결과로, 17분기 연속 성장이라는 기록은 구조적 추세일 가능성을 시사하지만 동시에 시장 변동성·거래량에 크게 의존하는 이익구조라는 리스크도 내포한다. <strong style="color:var(--text);">핵심 논쟁은 "트레이딩·IB 호황이 구조적으로 지속되는가" 아니면 "역대급 시장 활동성이 만든 일시적 정점인가"이다.</strong></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">다음 실적 체크포인트</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+      <strong style="color:var(--text);">10월 Q3 실적 4대 체크포인트:</strong><br>
+      ① 트레이딩 매출 성장세(17분기 연속) 지속 여부<br>
+      ② 투자은행 수수료 파이프라인 견조성<br>
+      ③ 순이자마진 가이던스(6~8% 상단) 달성 여부<br>
+      ④ 영업 레버리지 300~400bp 목표 진행상황
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 3: 밸류에이션 (Per-Share 통합) ===================== -->
+<div id="valuation" class="section">
+  <div class="section-title">Per-Share & 밸류에이션 — 대형은행 중 합리적 밸류에이션, PBR은 장부가 부근</div>
+  <div class="info-box">
+    <strong>핵심 전제:</strong> PER(TTM) 13.9x는 대형 은행 피어 밴드 내에서 합리적인 수준이다. PBR 1.51x는 자기자본 대비 소폭 프리미엄으로 은행주 특성상 매우 안정적인 밸류에이션 구간에 위치.
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">멀티플 5단계 평가</div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PER (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">13.9x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:55%;background:linear-gradient(90deg,#2ecc71,#f0c040,#e74c3c);background-size:181.8% 100%;"></div></div>
+        <div class="val-labels"><span class="val-low">저(9x)</span><span class="val-mid">적정(13x)</span><span class="val-high">고(17x)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">$60.42÷TTM EPS $4.34(Q3FY25~Q2FY26 합산) · 대형은행 피어 밴드 중상단</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">Forward P/E (추정)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">약 13.0x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:50%;background:linear-gradient(90deg,#2ecc71,#f0c040,#e74c3c);background-size:200% 100%;"></div></div>
+        <div class="val-labels"><span class="val-low">저(9x)</span><span class="val-mid">적정(13x)</span><span class="val-high">고(17x)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">상반기(Q1+Q2) EPS $2.32 연환산 추정치 기준 · 트레이딩 호조가 하반기에도 이어질 경우의 보수적 추정</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">1.51x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:50%;background:linear-gradient(90deg,#2ecc71,#f0c040,#e74c3c);background-size:200% 100%;"></div></div>
+        <div class="val-labels"><span class="val-low">저(0.8x)</span><span class="val-mid">적정(1.5x)</span><span class="val-high">고(2.2x)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">BPS $39.98(자기자본 $300.7B÷약 75.2억 주) · 대형은행 치고는 자기자본 대비 소폭 프리미엄 수준</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">배당수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">1.9%</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:52%;background:linear-gradient(90deg,#2ecc71,#f0c040,#e74c3c);background-size:192.3% 100%;"></div></div>
+        <div class="val-labels"><span class="val-low">저(1%)</span><span class="val-mid">적정(2%)</span><span class="val-high">고(3.5%)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">분기 $0.28 · 자사주매입($7.2B, Q1 기준)까지 포함하면 주주환원 규모는 더 큼</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">대형은행 피어 P/E 비교</div>
+      <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text2);">BAC의 P/E 13.9x는 Wells Fargo(13.0x)와 비슷한 수준이며, JPMorgan(15.9x)·Goldman Sachs(17.2x, IB·트레이딩 비중이 높아 프리미엄) 대비 낮아 대형은행 피어 밴드 하단에 위치 — 트레이딩·투자은행 부문의 견조한 성장이 밸류에이션에 아직 충분히 반영되지 않았다는 시각도 존재.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">밸류에이션 5단계</div>
+    <div class="stage-grid">
+      <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div></div>
+      <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div></div>
+      <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:8px;color:var(--accent2);background:rgba(255,90,114,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PER·PBR·Forward P/E·배당수익률</div></div>
+      <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div></div>
+      <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Per-Share 데이터 (참고 · TTM 기준 · 약 75.2억 주)</div>
+    <div class="grid-4">
+      <div class="stat-box"><div class="stat-label">EPS (TTM)</div><div class="stat-value">$4.34</div></div>
+      <div class="stat-box"><div class="stat-label">BPS</div><div class="stat-value">$39.98</div></div>
+      <div class="stat-box"><div class="stat-label">매출/주</div><div class="stat-value">$15.83</div></div>
+      <div class="stat-box"><div class="stat-label">분기배당</div><div class="stat-value">$0.28</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">시나리오별 공정가치 분석</div>
+    <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — 트레이딩·IB 호황 정점 통과·시장 변동성 급감</div>
+      <div style="font-size:12px;color:var(--text2);">시장 활동성 급감으로 트레이딩·투자은행 매출 정상화, 순이자마진 가이던스 미달 시 → 공정가치 <strong style="color:var(--red);">$45~52/주</strong></div>
+    </div>
+    <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 현 수준 실적 유지·안정적 성장</div>
+      <div style="font-size:12px;color:var(--text2);">트레이딩·IB 매출 현 수준 유지, NII 가이던스(6~8% 상단) 달성 시 → 공정가치 <strong style="color:var(--text);">$60~65/주</strong> (애널리스트 평균 목표가 $65.31과 부합)</div>
+    </div>
+    <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — 트레이딩·IB 슈퍼사이클 지속·영업레버리지 확대</div>
+      <div style="font-size:12px;color:var(--text2);">M&A·IPO 시장 추가 회복, 영업 레버리지 목표 초과 달성 시 → 공정가치 <strong style="color:var(--green);">$70~78/주</strong></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">종합 밸류에이션 — 대형은행 중 합리적 수준, 트레이딩 이익구조의 지속성이 핵심 변수</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;">PER·PBR·Forward P/E·배당수익률 모두 3단계(적정)로 일관되게 나타나며, 밸류에이션 자체는 대형은행 중에서도 합리적인 수준이다. <strong style="color:var(--text);">17분기 연속 트레이딩 매출 성장이라는 기록은 인상적이나, 이 성장이 구조적인지 시장 활동성에 의존한 순환적 호황인지가 향후 밸류에이션 재평가의 핵심 변수다.</strong> 공정가치 $45(Bear)~$78(Bull) — 현재가는 Base 밴드 내에 위치.</div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 4: US 특화 ===================== -->
+<div id="us" class="section">
+  <div class="section-title">US 특화 — S&P 500 성과 · 대형은행 경쟁 구도</div>
+  <div class="rel-container">
+    <div class="rel-title">S&P 500 상대 수익률</div>
+    <div class="grid-3">
+      <div class="stat-box"><div class="stat-label">BAC 52주</div><div class="stat-value up">+27.7%</div></div>
+      <div class="stat-box"><div class="stat-label">S&P 500 52주</div><div class="stat-value">+19.6%</div></div>
+      <div class="stat-box"><div class="stat-label">알파 (초과수익)</div><div class="stat-value up">+8.1%p</div><div class="stat-sub">아웃퍼폼</div></div>
+    </div>
+    <div class="zone-list" style="margin-top:12px;">
+      <div class="zone-item"><span class="zone-label">시가총액 순위</span><span class="zone-val">S&P500 내 약 27위권(신규 편입)</span></div>
+      <div class="zone-item"><span class="zone-label">배당수익률</span><span class="zone-val">1.9% (분기 $0.28)</span></div>
+      <div class="zone-item"><span class="zone-label">섹터</span><span class="zone-val">Financials · 종합 상업은행(Universal Bank)</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">대형은행 경쟁 구도</div>
+    <div class="zone-list">
+      <div class="zone-item"><span class="zone-label">JPMorgan Chase (최대 경쟁사)</span><span class="zone-val">시총 더 큼 — 업계 최대 규모 유지</span></div>
+      <div class="zone-item"><span class="zone-label">Wells Fargo·Citigroup (직접 경쟁)</span><span class="zone-val">유사한 종합은행 모델 — 밸류에이션 밴드 유사</span></div>
+      <div class="zone-item"><span class="zone-label">Goldman Sachs·Morgan Stanley (IB·트레이딩 특화)</span><span class="zone-val">투자은행 중심 — BAC은 소비자금융까지 아우르는 종합모델</span></div>
+      <div class="zone-item"><span class="zone-label">규제 환경</span><span class="zone-val">CET1 자본비율 11.2% — 자사주매입·배당 확대 여력 확보</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 5: 시계열 뉴스 ===================== -->
+<div id="news" class="section">
+  <div class="section-title">시계열 주요 뉴스 (2025.07 ~ 2026.07)</div>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;color:var(--text2);">
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent2);display:inline-block;"></span>초대형 이벤트</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;"></span>긍정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block;"></span>부정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--text3);display:inline-block;"></span>중립</span>
+  </div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2025년 8월 5일 — 52주 저점 $44.75</div>
+      <div class="tl-title">시장 전반 조정 속 바닥 형성</div>
+      <div class="tl-desc">거시 불확실성 속 은행주 전반의 조정 국면에서 저점을 형성. 이후 견조한 트레이딩·IB 실적이 이어지며 반등 국면 진입.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">2026년 4월 15일 — Q1 FY2026 실적 발표</div>
+      <div class="tl-title">EPS $1.11로 20년래 최고, 소비자은행 "건전"</div>
+      <div class="tl-desc">매출 $30.3B(+7%), 순이익 $8.6B(+25%)로 EPS가 거의 20년 만의 최고 수준을 기록. CEO Brian Moynihan은 소비자 부문이 "건전한" 상태라고 평가.</div>
+      <a class="tl-source" href="https://www.cnbc.com/2026/04/15/bank-of-america-bac-earnings-q1-2026.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot gold"></div>
+      <div class="tl-date">2026년 7월 14일 — Q2 FY2026 실적 발표</div>
+      <div class="tl-title">매출 $31.6B(+15%)·EPS $1.21(+34%) — 트레이딩 사상 최대</div>
+      <div class="tl-desc">주식 트레이딩 매출 +70% YoY($3.6B), 투자은행 수수료 +50% YoY($2.1B)로 전체 트레이딩 매출이 17분기 연속 성장. 순이자마진 가이던스도 상단으로 상향하며 실적 발표 당일 주가 급등.</div>
+      <a class="tl-source" href="https://qz.com/bank-of-america-earnings-record-equities-trading-investment-banking-071426" target="_blank" rel="noopener">관련 뉴스 보기 (Quartz) →</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2026년 7월 17일 — 52주 신고가 $62.12</div>
+      <div class="tl-title">Q2 실적 서프라이즈 여진 — 연중 최고가 경신</div>
+      <div class="tl-desc">Q2 실적 발표 이후 매수세가 이어지며 연중 최고가를 기록. 이후 소폭 조정을 겪으며 $60선에서 등락.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot today"></div>
+      <div class="tl-date">2026년 7월 20일 — 현재</div>
+      <div class="tl-title">고점 대비 -2.7% 소폭 조정, $60.42에서 거래 중</div>
+      <div class="tl-desc">거의 완전한 이평선 정배열을 유지한 채 신고가 이후 소폭 숨고르기 중. 다음 실적(10월 Q3)까지는 트레이딩·IB 부문의 매크로 환경 변화가 주가의 핵심 변수가 될 전망.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 6: 투자 포인트 ===================== -->
+<div id="invest" class="section">
+  <div class="section-title">2026년 핵심 투자 포인트</div>
+  <div class="bull-bear">
+    <div class="bb-box">
+      <div class="bb-title bb-bull">🐂 Bull 요인</div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>17분기 연속 트레이딩 매출 성장:</strong> 구조적 경쟁력 입증.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Q2 EPS $1.21 — 20년래 최고:</strong> 광범위한 사업부 고른 성장.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>PER 13.9x·PBR 1.51x:</strong> 대형은행 중 합리적 밸류에이션.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>52주 수익률 +27.7%:</strong> S&P500 대비 +8.1%p 아웃퍼폼.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>CET1 11.2%:</strong> 자사주매입·배당 확대 여력 충분.</span></div>
+    </div>
+    <div class="bb-box">
+      <div class="bb-title bb-bear">🐻 Bear 요인</div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>트레이딩·IB 의존도 확대:</strong> 시장 변동성 급감 시 이익 정상화 리스크.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>52주 신고가 직후 조정:</strong> 단기 과열 우려.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>금리 환경 변화 민감도:</strong> 순이자마진이 금리 경로에 좌우.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>거시 불확실성:</strong> 소비자·기업 신용 사이클 반전 리스크.</span></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">목표가 밴드 — 시나리오별 공정가치 vs 현재가 · 애널리스트 목표가</div>
+    <div style="position:relative;height:70px;margin:28px 6px 6px;">
+      <div style="position:absolute;top:28px;left:0;right:0;height:10px;border-radius:5px;overflow:hidden;display:flex;">
+        <div style="width:21.2%;height:100%;background:rgba(231,76,60,0.45);"></div>
+        <div style="width:24.2%;height:100%;background:var(--bg3);"></div>
+        <div style="width:15.2%;height:100%;background:var(--bg3);"></div>
+        <div style="width:15.2%;height:100%;background:var(--bg3);"></div>
+        <div style="width:24.2%;height:100%;background:rgba(46,204,113,0.45);"></div>
+      </div>
+      <div style="position:absolute;top:10px;left:47%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
+      <div style="position:absolute;top:-6px;left:47%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $60.42</div>
+      <div style="position:absolute;top:22px;left:53.9%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
+      <div style="position:absolute;top:48px;left:53.9%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $65.31 (+8.1%)</div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-top:4px;">
+      <span style="color:var(--red);">Bear $45~52 (트레이딩 정상화)</span>
+      <span>Base $60~65 (현 수준 유지)</span>
+      <span style="color:var(--green);">Bull $70~78 (슈퍼사이클 지속)</span>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">기술적 분석(정배열 유지)과 기본적 분석(견조한 트레이딩·IB 실적)을 반영한 밸류에이션 탭 시나리오 기준 — 현재가는 Base 밴드 내, 애널리스트 평균 목표가까지 +8.1% 여력.</div>
+
+    <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
+      <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">애널리스트 24명 투자의견 분포</div>
+      <div style="height:8px;border-radius:4px;overflow:hidden;display:flex;">
+        <div style="width:95.8%;height:100%;background:var(--green);"></div>
+        <div style="width:4.2%;height:100%;background:#f0c040;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10.5px;margin-top:6px;">
+        <span style="color:var(--green);">매수 23명 (Strong Buy 10·Buy 13)</span>
+        <span style="color:#f0c040;">유지 1명 (Hold)</span>
+        <span style="color:var(--red);">매도 0명</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">5개 분석 종합 — 한눈에 보기</div>
+    <div class="zone-list">
+      <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:var(--green);">거의 완전한 정배열 — 신고가 이후 숨고르기</span></div>
+      <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">트레이딩·IB 전방위 고성장, 8분기 연속 실적 개선</span></div>
+      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:var(--green);">PER·PBR 모두 3단계(적정) — 대형은행 중 합리적</span></div>
+      <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:var(--green);">S&P500 대비 +8.1%p 아웃퍼폼, CET1 여력 충분</span></div>
+      <div class="zone-item"><span class="zone-label">📰 시계열 뉴스</span><span class="zone-val" style="color:var(--green);">Q2 실적 서프라이즈가 랠리 견인, 10월 Q3가 다음 분수령</span></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">투자의견 요약</div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:var(--text2)">10월 중순 Q3 FY2026 예상</strong></div>
+      <div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">트레이딩·투자은행 부문의 광범위한 호조와 합리적인 밸류에이션이 결합된 견조한 흐름 — 다만 17분기 연속 성장한 트레이딩 이익구조가 시장 활동성 둔화 시 얼마나 방어력을 보일지가 다음 국면의 핵심 변수</strong></div>
+    </div>
+  </div>
+</div>
+
+<div class="disclaimer">
+  ⚠️ 본 위젯은 SEC EDGAR 공시(10-K/10-Q/8-K), Yahoo Finance 주가 데이터 및 공개 뉴스를 기반으로 작성된 정보 제공 목적의 분석 자료입니다. 투자 권고 또는 매매 추천이 아니며, 모든 투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다. 과거 실적이 미래 수익을 보장하지 않습니다.
+</div>
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  renderCharts(id);
+}
+const charts = {};
+
+const BAC_DAILY = [["2025-07-18",47.01,47.38,46.9,47.32,48314200],["2025-07-21",47.54,48.04,47.2,47.48,32199700],["2025-07-22",47.6,48.17,47.46,47.77,34749400],["2025-07-23",48.01,48.31,47.81,48.14,31380100],["2025-07-24",48.49,49.0,48.21,48.39,42967600],["2025-07-25",48.39,48.55,47.94,48.45,24461200],["2025-07-28",48.45,48.54,48.08,48.23,20590400],["2025-07-29",48.39,48.51,47.89,47.95,26216500],["2025-07-30",48.26,48.5,47.74,47.96,32265900],["2025-07-31",47.76,48.03,47.19,47.27,40016300],["2025-08-01",46.36,46.41,45.32,45.66,52310400],["2025-08-04",45.96,46.11,45.64,45.85,31038900],["2025-08-05",45.95,46.0,44.75,45.56,36798300],["2025-08-06",45.71,45.94,45.39,45.42,27916800],["2025-08-07",45.71,45.76,44.78,44.92,30609900],["2025-08-08",45.15,46.3,44.98,46.01,37131600],["2025-08-11",46.06,46.52,45.81,46.16,35559400],["2025-08-12",46.48,47.66,46.36,47.5,35481200],["2025-08-13",47.68,47.76,46.99,47.24,29465100],["2025-08-14",47.09,47.73,46.89,47.71,21073800],["2025-08-15",47.75,47.82,46.9,46.94,26276900],["2025-08-18",46.92,48.04,46.79,47.92,43125100],["2025-08-19",47.82,48.12,47.63,48.08,33783400],["2025-08-20",48.17,48.5,47.87,48.35,30822200],["2025-08-21",48.27,48.49,47.81,48.26,28713200],["2025-08-22",48.52,49.66,48.46,49.48,45078900],["2025-08-25",49.39,49.66,49.21,49.48,34715700],["2025-08-26",49.25,50.26,49.25,50.25,40609300],["2025-08-27",50.03,50.63,49.99,50.38,42428200],["2025-08-28",50.55,50.64,50.28,50.49,32949400],["2025-08-29",50.51,50.92,50.51,50.74,32496500],["2025-09-02",50.22,50.47,49.67,50.42,52719800],["2025-09-03",50.4,50.57,49.7,50.06,38344200],["2025-09-04",50.24,50.83,50.12,50.62,34796900],["2025-09-05",50.44,50.79,49.23,49.77,40063300],["2025-09-08",49.8,49.91,48.88,49.46,48033100],["2025-09-09",49.5,50.56,49.46,50.29,40060100],["2025-09-10",50.37,50.63,49.97,50.13,31706300],["2025-09-11",50.14,50.96,49.99,50.75,28055200],["2025-09-12",50.7,50.93,50.46,50.58,27851100],["2025-09-15",50.85,51.09,50.46,50.59,29043600],["2025-09-16",50.64,50.88,50.21,50.66,31624400],["2025-09-17",50.86,51.63,50.79,51.4,38337900],["2025-09-18",51.49,52.19,51.3,52.13,35246900],["2025-09-19",52.15,52.66,51.76,52.25,98970700],["2025-09-22",51.76,52.35,51.76,51.92,27468000],["2025-09-23",52.0,52.88,51.52,51.7,28278200],["2025-09-24",51.85,52.25,51.46,51.7,27010400],["2025-09-25",51.48,52.33,51.44,51.85,22957900],["2025-09-26",52.11,52.62,51.98,52.21,20025800],["2025-09-29",52.36,52.55,52.11,52.42,23701000],["2025-09-30",52.48,52.57,51.02,51.59,29945000],["2025-10-01",51.3,51.68,50.56,50.68,27709100],["2025-10-02",50.65,50.85,50.07,50.48,22757200],["2025-10-03",50.62,51.13,50.55,50.64,24565700],["2025-10-06",50.93,51.32,49.89,50.39,25386300],["2025-10-07",50.55,50.91,50.13,50.29,24107300],["2025-10-08",50.4,50.51,49.78,49.84,24014200],["2025-10-09",50.0,50.28,49.67,49.79,21816900],["2025-10-10",49.93,50.14,48.55,48.65,31831900],["2025-10-13",49.2,49.4,48.81,48.86,34462800],["2025-10-14",48.85,50.5,48.53,50.09,42462600],["2025-10-15",51.57,52.85,51.23,52.28,69992200],["2025-10-16",52.6,52.76,50.0,50.44,49027700],["2025-10-17",50.95,51.77,50.33,51.28,48915400],["2025-10-20",51.44,52.28,51.37,52.04,25786000],["2025-10-21",52.09,52.37,51.44,51.52,27303400],["2025-10-22",51.5,51.58,50.44,51.1,34955000],["2025-10-23",51.48,51.8,51.11,51.76,26028800],["2025-10-24",51.85,52.82,51.85,52.57,38923900],["2025-10-27",52.8,53.07,52.53,53.02,27345800],["2025-10-28",53.0,53.28,52.34,52.87,29575200],["2025-10-29",52.66,53.01,52.32,52.58,29158800],["2025-10-30",52.67,53.44,52.56,53.03,37548600],["2025-10-31",52.79,53.64,52.77,53.45,39295700],["2025-11-03",53.26,53.64,52.71,53.56,31252300],["2025-11-04",53.02,54.0,52.72,53.54,47226600],["2025-11-05",52.96,53.07,51.74,52.45,54353600],["2025-11-06",53.42,53.75,52.77,53.29,55296000],["2025-11-07",53.15,53.58,52.71,53.2,40537700],["2025-11-10",53.41,53.99,53.34,53.42,26094600],["2025-11-11",53.75,53.98,53.28,53.63,22244300],["2025-11-12",53.89,54.69,53.77,54.11,40536700],["2025-11-13",53.79,54.21,52.77,52.87,37716100],["2025-11-14",52.86,52.9,52.03,52.61,32363100],["2025-11-17",52.58,52.58,51.39,51.48,35546800],["2025-11-18",51.28,52.18,51.15,51.64,35189500],["2025-11-19",51.67,52.49,51.67,52.02,28112300],["2025-11-20",52.5,52.95,50.97,51.0,36661600],["2025-11-21",51.29,51.78,50.7,51.56,43867200],["2025-11-24",51.65,52.24,51.4,51.93,52852100],["2025-11-25",52.25,52.88,51.86,52.48,41310100],["2025-11-26",52.7,53.25,52.55,52.99,32045600],["2025-11-28",53.11,53.94,53.05,53.65,18920800],["2025-12-01",53.5,53.9,53.21,53.24,30536500],["2025-12-02",53.53,53.64,52.97,53.19,46073500],["2025-12-03",53.25,54.24,53.18,54.09,37134400],["2025-12-04",54.21,54.69,54.0,54.16,38529600],["2025-12-05",53.93,54.83,53.74,53.95,33986500],["2025-12-08",53.9,54.21,53.49,53.9,34386600],["2025-12-09",53.97,54.28,53.27,53.54,47189300],["2025-12-10",53.59,54.55,53.34,54.08,54424400],["2025-12-11",53.95,54.65,53.75,54.56,35686900],["2025-12-12",54.78,55.3,54.35,55.14,40539400],["2025-12-15",55.41,56.07,55.07,55.33,32881300],["2025-12-16",55.14,55.35,54.69,54.81,32931900],["2025-12-17",55.12,55.57,54.46,54.55,35304100],["2025-12-18",54.8,55.15,53.77,54.26,87452700],["2025-12-19",54.52,55.31,54.38,55.27,73001900],["2025-12-22",55.37,56.11,55.34,55.88,33408800],["2025-12-23",55.81,56.22,55.81,55.97,22274600],["2025-12-24",56.13,56.5,55.89,56.25,13634400],["2025-12-26",56.28,56.55,56.03,56.17,15259400],["2025-12-29",56.11,56.25,55.27,55.35,21040100],["2025-12-30",55.49,55.64,55.17,55.28,17427600],["2025-12-31",55.32,55.42,54.93,55.0,16293000],["2026-01-02",55.03,55.99,54.88,55.95,25503600],["2026-01-05",56.17,57.55,56.14,56.89,36096600],["2026-01-06",57.01,57.41,56.75,57.25,31791900],["2026-01-07",56.69,56.81,55.44,55.64,49695500],["2026-01-08",55.48,56.58,55.47,56.18,30933700],["2026-01-09",56.17,56.61,55.79,55.85,30768800],["2026-01-12",55.29,55.45,54.73,55.19,45860600],["2026-01-13",55.27,55.52,54.3,54.54,43542200],["2026-01-14",52.88,53.48,51.66,52.48,84750000],["2026-01-15",52.72,53.04,52.23,52.59,51018300],["2026-01-16",52.69,53.38,52.25,52.97,52178400],["2026-01-20",52.32,53.48,51.96,52.1,49172700],["2026-01-21",52.23,52.86,52.05,52.07,36340000],["2026-01-22",52.47,53.13,52.33,52.45,31229200],["2026-01-23",52.11,52.2,51.38,51.72,34553500],["2026-01-26",51.8,52.28,51.67,52.02,27728400],["2026-01-27",52.21,52.25,51.81,52.17,26494300],["2026-01-28",51.95,52.14,51.31,51.81,35030200],["2026-01-29",51.98,53.09,51.95,53.08,35200500],["2026-01-30",52.87,53.41,52.77,53.2,34549100],["2026-02-02",53.2,54.09,52.95,54.03,34624500],["2026-02-03",54.2,55.12,53.68,54.45,41208400],["2026-02-04",54.78,56.04,54.71,55.38,54522500],["2026-02-05",55.02,55.29,54.25,54.94,32959700],["2026-02-06",55.55,56.87,55.29,56.53,42468000],["2026-02-09",56.39,56.72,56.18,56.41,31968400],["2026-02-10",56.44,56.83,54.27,55.39,48304700],["2026-02-11",55.97,56.11,53.24,53.85,48973500],["2026-02-12",53.91,53.94,51.79,52.52,55481600],["2026-02-13",51.91,52.82,51.44,52.55,31772100],["2026-02-17",53.04,53.55,52.62,52.74,35542400],["2026-02-18",52.99,53.61,52.79,53.36,30698900],["2026-02-19",51.91,52.81,51.83,52.77,47148600],["2026-02-20",52.53,53.09,51.83,53.06,33552000],["2026-02-23",52.84,53.26,50.89,51.07,50602500],["2026-02-24",50.74,50.88,49.47,50.41,53062700],["2026-02-25",50.33,51.77,50.31,51.69,41375000],["2026-02-26",51.88,52.67,51.74,52.3,52418500],["2026-02-27",51.08,51.41,49.32,49.83,77728700],["2026-03-02",48.78,50.42,48.58,49.81,40595200],["2026-03-03",48.76,50.51,48.5,49.97,51242900],["2026-03-04",49.89,50.41,49.21,50.3,34208500],["2026-03-05",49.82,50.43,49.33,49.81,39073900],["2026-03-06",48.55,48.7,47.62,48.64,47016000],["2026-03-09",47.94,48.15,46.77,47.9,62752800],["2026-03-10",48.28,49.15,47.6,48.56,50271100],["2026-03-11",48.36,48.65,47.78,48.52,42185800],["2026-03-12",47.7,47.78,46.79,47.13,58354500],["2026-03-13",47.52,47.82,46.66,46.72,45473100],["2026-03-16",47.12,47.68,46.9,47.06,38055600],["2026-03-17",47.66,48.08,47.2,47.28,33427800],["2026-03-18",47.22,47.88,46.69,46.83,40251800],["2026-03-19",46.42,47.19,46.12,47.01,38601400],["2026-03-20",47.13,47.46,46.69,47.16,78060900],["2026-03-23",48.34,48.39,47.48,47.52,42333200],["2026-03-24",47.05,48.46,47.02,48.14,39804100],["2026-03-25",48.52,49.11,48.18,48.75,29988300],["2026-03-26",48.71,48.87,48.03,48.24,32502600],["2026-03-27",48.07,48.25,46.84,46.97,36781900],["2026-03-30",47.55,47.86,46.93,47.23,43375900],["2026-03-31",47.68,48.77,47.37,48.75,49060600],["2026-04-01",49.7,50.05,48.78,49.27,32947000],["2026-04-02",48.75,49.57,48.16,49.38,27548200],["2026-04-06",49.43,50.12,49.25,50.06,28507200],["2026-04-07",49.8,50.48,49.62,50.28,28473200],["2026-04-08",51.94,52.26,51.37,51.88,36473500],["2026-04-09",51.63,52.84,51.63,52.71,32008000],["2026-04-10",52.8,52.83,52.2,52.54,25225300],["2026-04-13",52.18,53.44,51.85,53.35,27835300],["2026-04-14",53.1,53.57,52.8,53.35,40178500],["2026-04-15",54.25,55.4,53.71,54.32,63838200],["2026-04-16",54.04,54.51,53.47,53.51,35206700],["2026-04-17",54.16,54.6,53.75,53.91,43484700],["2026-04-20",53.5,53.95,53.18,53.95,43999200],["2026-04-21",54.0,54.65,53.21,53.48,34266300],["2026-04-22",53.67,53.8,53.0,53.12,24097600],["2026-04-23",53.06,53.52,52.25,52.47,31956300],["2026-04-24",52.32,52.51,51.93,52.05,30265400],["2026-04-27",51.99,52.93,51.83,52.63,28043700],["2026-04-28",53.02,53.43,52.63,52.66,21164100],["2026-04-29",52.43,53.02,51.83,52.88,26250700],["2026-04-30",52.61,53.66,52.15,53.46,27089200],["2026-05-01",53.69,54.06,53.09,53.24,24825000],["2026-05-04",53.07,53.07,52.0,52.19,42929000],["2026-05-05",52.57,53.36,52.28,53.12,28458600],["2026-05-06",53.82,54.2,53.47,53.6,27541200],["2026-05-07",53.55,54.0,52.5,52.75,28682100],["2026-05-08",52.98,53.01,51.1,51.31,36111200],["2026-05-11",51.21,51.39,50.27,50.55,33132200],["2026-05-12",50.86,51.08,49.84,50.78,33518800],["2026-05-13",50.36,50.78,49.8,49.84,29838000],["2026-05-14",50.06,50.47,49.49,49.85,37671800],["2026-05-15",49.62,49.99,49.3,49.77,46282300],["2026-05-18",49.72,50.92,49.72,50.69,33404100],["2026-05-19",50.73,51.28,50.38,50.7,44154600],["2026-05-20",50.99,51.58,50.49,51.23,47739400],["2026-05-21",51.0,51.5,50.76,51.49,27461900],["2026-05-22",51.69,52.15,51.65,51.8,26683700],["2026-05-26",52.22,52.5,51.88,52.2,27397600],["2026-05-27",52.39,52.49,50.76,51.1,48581500],["2026-05-28",50.92,51.5,50.64,50.77,48550100],["2026-05-29",50.97,51.8,50.61,51.6,57930600],["2026-06-01",51.31,51.83,50.85,51.51,34303700],["2026-06-02",51.26,52.71,51.26,52.48,42126500],["2026-06-03",52.26,52.55,51.22,52.4,48065400],["2026-06-04",53.13,54.33,52.8,54.17,51883600],["2026-06-05",54.17,54.28,53.32,53.83,38829400],["2026-06-08",53.72,54.35,53.57,53.63,30332100],["2026-06-09",54.0,54.62,53.65,54.42,32329000],["2026-06-10",54.54,55.3,54.22,54.54,37025500],["2026-06-11",54.72,55.31,54.07,55.16,31746300],["2026-06-12",55.36,56.19,55.26,56.02,32989000],["2026-06-15",56.62,57.0,55.74,55.87,31666500],["2026-06-16",56.5,57.07,56.23,56.84,33409800],["2026-06-17",57.14,57.98,56.3,56.53,40439300],["2026-06-18",57.23,57.33,56.03,56.2,70438800],["2026-06-22",56.85,57.73,56.81,57.37,38653800],["2026-06-23",57.52,58.01,57.2,57.91,30045700],["2026-06-24",58.21,58.33,57.39,57.73,30324900],["2026-06-25",57.85,59.2,57.85,58.19,33747400],["2026-06-26",58.54,58.63,57.44,57.88,48757600],["2026-06-29",57.76,58.34,57.61,57.88,28920800],["2026-06-30",57.47,57.75,56.84,56.98,41324600],["2026-07-01",57.13,58.48,56.85,58.36,35288400],["2026-07-02",58.94,59.0,57.94,58.73,29329700],["2026-07-06",59.14,59.94,58.92,59.9,34645400],["2026-07-07",60.29,60.83,59.79,59.86,29306100],["2026-07-08",59.37,59.57,58.3,58.3,29802400],["2026-07-09",58.45,59.43,58.41,59.25,29203400],["2026-07-10",59.64,59.87,59.39,59.67,21916600],["2026-07-13",59.7,60.05,58.85,59.5,27837800],["2026-07-14",59.0,61.21,58.67,60.62,49432700],["2026-07-15",61.32,62.03,61.11,61.59,43361000],["2026-07-16",61.98,62.0,60.99,61.49,37351900],["2026-07-17",61.25,62.12,60.66,61.27,45045200],["2026-07-20",61.35,61.49,60.37,60.42,30726300]];
+const BAC_MA5 = [46.72,46.8,47.12,47.55,47.82,48.05,48.2,48.23,48.2,47.97,47.41,46.94,46.46,45.95,45.48,45.55,45.61,46.0,46.37,46.92,47.11,47.46,47.58,47.8,47.91,48.42,48.73,49.16,49.57,50.02,50.27,50.46,50.42,50.47,50.32,50.07,50.04,50.05,50.08,50.24,50.47,50.54,50.8,51.07,51.41,51.67,51.88,51.94,51.88,51.88,51.98,51.95,51.75,51.48,51.16,50.76,50.5,50.33,50.19,49.79,49.49,49.45,49.93,50.06,50.59,51.23,51.51,51.28,51.54,51.8,51.99,52.26,52.56,52.81,52.99,53.1,53.23,53.21,53.26,53.21,53.18,53.2,53.53,53.45,53.33,52.94,52.54,52.12,51.75,51.54,51.63,51.8,51.99,52.52,52.86,53.11,53.43,53.67,53.73,53.86,53.93,53.93,54.01,54.24,54.53,54.78,54.88,54.82,54.84,54.95,55.19,55.53,55.91,55.92,55.8,55.61,55.55,55.69,56.07,56.15,56.38,56.36,56.02,55.48,54.85,54.13,53.55,52.94,52.44,52.44,52.26,52.07,52.09,52.03,52.16,52.46,52.86,53.31,54.03,54.4,55.07,55.54,55.73,55.42,54.94,54.14,53.41,53.0,52.79,52.9,52.6,52.13,51.8,51.71,51.06,50.81,50.72,50.44,49.94,49.71,49.32,49.04,48.69,48.15,47.77,47.6,47.34,47.0,46.98,47.07,47.16,47.33,47.72,47.96,47.92,47.87,47.99,48.09,48.32,48.94,49.55,50.17,50.86,51.49,52.15,52.77,53.25,53.41,53.69,53.81,53.83,53.59,53.39,53.01,52.75,52.59,52.54,52.74,52.97,52.89,52.98,53.12,52.98,52.59,52.27,51.8,51.05,50.47,50.16,50.19,50.17,50.45,50.78,51.18,51.48,51.56,51.47,51.49,51.44,51.49,51.75,52.43,52.88,53.3,53.69,54.12,54.32,54.75,55.2,55.69,56.08,56.29,56.56,56.97,57.15,57.48,57.82,57.92,57.73,57.86,57.97,58.37,58.77,59.03,59.21,59.4,59.32,59.47,60.13,60.57,60.89,61.08];
+const BAC_MA20 = [47.15,47.25,47.32,47.39,47.47,47.52,47.58,47.61,47.6,47.53,47.36,47.22,47.14,47.07,46.97,46.93,46.89,46.95,47.02,47.05,47.03,47.05,47.07,47.08,47.07,47.12,47.19,47.3,47.42,47.58,47.84,48.07,48.29,48.55,48.79,48.97,49.17,49.3,49.48,49.62,49.8,49.94,50.11,50.3,50.5,50.62,50.73,50.8,50.88,50.96,51.05,51.1,51.14,51.13,51.17,51.22,51.22,51.2,51.16,51.06,50.97,50.94,50.99,50.9,50.86,50.86,50.85,50.82,50.82,50.84,50.87,50.93,51.02,51.15,51.29,51.45,51.61,51.74,51.92,52.15,52.37,52.55,52.64,52.76,52.83,52.8,52.81,52.85,52.82,52.77,52.71,52.69,52.71,52.74,52.73,52.71,52.74,52.83,52.86,52.9,52.9,52.92,52.95,53.06,53.2,53.36,53.51,53.62,53.83,54.05,54.25,54.44,54.6,54.68,54.79,54.88,54.97,55.11,55.27,55.36,55.49,55.58,55.61,55.58,55.44,55.33,55.25,55.14,54.98,54.81,54.6,54.38,54.18,54.01,53.9,53.81,53.71,53.59,53.5,53.46,53.48,53.51,53.52,53.48,53.48,53.48,53.47,53.53,53.57,53.6,53.57,53.49,53.46,53.49,53.32,53.15,52.95,52.74,52.47,52.15,51.72,51.33,50.98,50.65,50.36,50.08,49.81,49.48,49.2,48.9,48.72,48.61,48.46,48.26,48.12,47.99,47.93,47.87,47.85,47.92,48.04,48.21,48.42,48.69,49.02,49.34,49.69,50.02,50.37,50.71,51.0,51.25,51.44,51.63,51.91,52.18,52.39,52.6,52.79,52.9,53.04,53.13,53.13,53.07,52.93,52.8,52.58,52.39,52.19,52.02,51.88,51.79,51.74,51.73,51.71,51.63,51.52,51.43,51.34,51.36,51.32,51.35,51.4,51.52,51.71,51.9,52.17,52.48,52.78,53.09,53.38,53.63,53.92,54.23,54.5,54.86,55.21,55.53,55.8,56.1,56.41,56.7,57.0,57.23,57.48,57.73,57.95,58.18,58.46,58.7,58.93,59.15];
+const BAC_MA60 = [44.42,44.56,44.7,44.84,44.98,45.12,45.26,45.39,45.51,45.61,45.69,45.77,45.84,45.9,45.92,45.95,45.98,46.03,46.07,46.12,46.16,46.24,46.32,46.4,46.47,46.56,46.65,46.75,46.85,46.95,47.06,47.16,47.24,47.34,47.42,47.5,47.59,47.69,47.8,47.9,47.99,48.08,48.17,48.26,48.35,48.42,48.5,48.57,48.63,48.69,48.75,48.8,48.86,48.92,48.98,49.04,49.09,49.15,49.22,49.24,49.27,49.31,49.39,49.43,49.47,49.53,49.59,49.64,49.71,49.79,49.92,50.03,50.15,50.28,50.42,50.54,50.67,50.75,50.85,50.94,51.05,51.15,51.25,51.32,51.39,51.43,51.46,51.49,51.5,51.52,51.54,51.58,51.62,51.67,51.73,51.79,51.86,51.93,51.98,52.03,52.08,52.14,52.19,52.24,52.29,52.34,52.39,52.43,52.49,52.55,52.61,52.69,52.78,52.86,52.94,53.01,53.11,53.23,53.35,53.47,53.59,53.68,53.73,53.8,53.82,53.83,53.86,53.87,53.88,53.88,53.85,53.84,53.83,53.81,53.81,53.8,53.81,53.84,53.88,53.91,53.96,54.0,54.02,54.04,54.04,54.06,54.08,54.1,54.13,54.15,54.14,54.1,54.08,54.06,54.0,53.95,53.88,53.81,53.74,53.66,53.56,53.47,53.37,53.24,53.09,52.96,52.84,52.72,52.58,52.44,52.29,52.16,52.04,51.92,51.78,51.65,51.53,51.4,51.27,51.18,51.08,51.01,50.97,50.94,50.95,50.97,50.99,51.01,51.04,51.07,51.1,51.12,51.12,51.12,51.12,51.11,51.09,51.07,51.04,50.99,50.93,50.89,50.84,50.8,50.77,50.74,50.69,50.63,50.58,50.54,50.54,50.55,50.55,50.54,50.58,50.6,50.61,50.63,50.66,50.73,50.8,50.9,50.98,51.09,51.22,51.34,51.48,51.63,51.78,51.94,52.09,52.22,52.37,52.53,52.71,52.89,53.04,53.19,53.31,53.45,53.59,53.73,53.84,53.94,54.04,54.14,54.23,54.35,54.48,54.6,54.73,54.85];
+const BAC_MA120 = [43.41,43.42,43.42,43.43,43.45,43.47,43.48,43.49,43.5,43.5,43.48,43.48,43.47,43.46,43.45,43.44,43.44,43.45,43.46,43.49,43.51,43.54,43.58,43.61,43.63,43.66,43.72,43.79,43.86,43.94,44.03,44.12,44.2,44.29,44.37,44.43,44.51,44.57,44.64,44.71,44.77,44.83,44.9,44.98,45.08,45.16,45.25,45.33,45.45,45.6,45.74,45.88,45.99,46.11,46.23,46.35,46.45,46.55,46.66,46.76,46.84,46.94,47.04,47.13,47.23,47.33,47.43,47.52,47.61,47.7,47.8,47.9,47.99,48.09,48.17,48.25,48.32,48.39,48.46,48.53,48.6,48.69,48.78,48.86,48.93,48.99,49.05,49.12,49.18,49.24,49.3,49.37,49.43,49.51,49.57,49.64,49.72,49.81,49.89,49.97,50.04,50.11,50.18,50.25,50.32,50.38,50.44,50.5,50.56,50.62,50.68,50.74,50.82,50.89,50.96,51.03,51.1,51.19,51.28,51.36,51.43,51.5,51.56,51.61,51.65,51.68,51.72,51.76,51.79,51.83,51.88,51.94,51.99,52.04,52.11,52.17,52.24,52.3,52.36,52.42,52.5,52.57,52.64,52.68,52.72,52.74,52.77,52.8,52.82,52.84,52.84,52.84,52.85,52.87,52.87,52.87,52.87,52.87,52.86,52.85,52.82,52.81,52.78,52.74,52.69,52.65,52.62,52.58,52.54,52.49,52.45,52.42,52.41,52.39,52.36,52.33,52.32,52.31,52.31,52.32,52.33,52.35,52.35,52.37,52.39,52.4,52.42,52.44,52.46,52.47,52.48,52.48,52.48,52.47,52.46,52.45,52.45,52.46,52.46,52.45,52.45,52.45,52.43,52.42,52.4,52.4,52.38,52.37,52.35,52.35,52.34,52.33,52.31,52.3,52.29,52.27,52.25,52.22,52.2,52.19,52.18,52.18,52.18,52.16,52.16,52.15,52.16,52.17,52.18,52.19,52.19,52.19,52.2,52.22,52.24,52.27,52.29,52.29,52.29,52.31,52.34,52.37,52.41,52.44,52.5,52.56,52.61,52.68,52.76,52.84,52.91,52.98];
+
+(function(){
+  const svgCandle = document.getElementById('bacCandleSvg');
+  const svgVol = document.getElementById('bacVolumeSvg');
+  const toggle = document.getElementById('bacRangeToggle');
+  const maToggle = document.getElementById('bacMaToggle');
+  if(!svgCandle || !svgVol || !toggle) return;
+  const RANGES = {'1M':21,'3M':63,'6M':126,'1Y':252};
+  const NS = 'http://www.w3.org/2000/svg';
+  const UP='#2ecc71', DOWN='#e74c3c';
+  const maColors = {ma5:'#ff6b9d', ma20:'#9b59b6', ma60:'#f0c040', ma120:'#22d3ee'};
+  const maState = {ma5:true, ma20:true, ma60:true, ma120:true, pricelabels:true};
+  let currentRange = '1Y';
+
+  function draw(rangeKey){
+    currentRange = rangeKey;
+    const n = RANGES[rangeKey];
+    const data = BAC_DAILY.slice(-n);
+    const ma5 = BAC_MA5.slice(-n), ma20 = BAC_MA20.slice(-n), ma60 = BAC_MA60.slice(-n), ma120 = BAC_MA120.slice(-n);
+    while(svgCandle.firstChild) svgCandle.removeChild(svgCandle.firstChild);
+    while(svgVol.firstChild) svgVol.removeChild(svgVol.firstChild);
+
+    const W=720,H=240,pL=45,pR=12,pT=10,pB=20;
+    const cW=W-pL-pR,cH=H-pT-pB;
+    const highs=data.map(d=>d[2]), lows=data.map(d=>d[3]);
+    const maVals=[...ma5,...ma20,...ma60,...ma120].filter(v=>v!=null);
+    const mx=Math.max(...highs,...maVals), mn=Math.min(...lows,...maVals);
+    const pad=(mx-mn)*0.06 || mx*0.02;
+    const top=mx+pad, bot=mn-pad, rng=(top-bot)||1;
+    const py = v => pT + cH*(1-(v-bot)/rng);
+    const colW = cW/data.length;
+    const bodyW = Math.max(colW*0.62, 1);
+
+    for(let i=0;i<=3;i++){
+      const v = bot + rng*i/3;
+      const y = py(v);
+      const l=document.createElementNS(NS,'line');
+      l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+      l.setAttribute('stroke','rgba(255,255,255,.08)');l.setAttribute('stroke-width','1');
+      svgCandle.appendChild(l);
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x',pL-4);t.setAttribute('y',y+3);t.setAttribute('text-anchor','end');
+      t.setAttribute('font-size','9');t.setAttribute('fill','rgba(154,160,184,.8)');
+      t.textContent='$'+v.toFixed(0);
+      svgCandle.appendChild(t);
+    }
+
+    data.forEach((d,i)=>{
+      const [,o,h,l,c] = d;
+      const cx = pL + (i+0.5)*colW;
+      const up = c >= o;
+      const col = up ? UP : DOWN;
+      const wick=document.createElementNS(NS,'line');
+      wick.setAttribute('x1',cx);wick.setAttribute('x2',cx);
+      wick.setAttribute('y1',py(h));wick.setAttribute('y2',py(l));
+      wick.setAttribute('stroke',col);wick.setAttribute('stroke-width', Math.max(colW*0.12,0.6));
+      svgCandle.appendChild(wick);
+      const yTop = py(Math.max(o,c));
+      const yBot = py(Math.min(o,c));
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x', cx - bodyW/2);
+      rect.setAttribute('y', yTop);
+      rect.setAttribute('width', bodyW);
+      rect.setAttribute('height', Math.max(yBot-yTop, 1));
+      rect.setAttribute('fill', col);
+      svgCandle.appendChild(rect);
+    });
+
+    const drawMaLine = (vals, color) => {
+      let seg = [];
+      const flush = () => {
+        if (seg.length > 1) {
+          const pl = document.createElementNS(NS,'polyline');
+          pl.setAttribute('points', seg.join(' '));
+          pl.setAttribute('fill','none'); pl.setAttribute('stroke',color);
+          pl.setAttribute('stroke-width','1.7'); pl.setAttribute('opacity','0.95');
+          pl.setAttribute('stroke-linejoin','round'); pl.setAttribute('stroke-linecap','round');
+          svgCandle.appendChild(pl);
+        }
+        seg = [];
+      };
+      vals.forEach((v,i) => {
+        if (v == null) { flush(); return; }
+        seg.push(`${pL+(i+0.5)*colW},${py(v)}`);
+      });
+      flush();
+    };
+    if (maState.ma5) drawMaLine(ma5, maColors.ma5);
+    if (maState.ma20) drawMaLine(ma20, maColors.ma20);
+    if (maState.ma60) drawMaLine(ma60, maColors.ma60);
+    if (maState.ma120) drawMaLine(ma120, maColors.ma120);
+
+    if (maState.pricelabels) {
+    const closeIdx = data.length-1;
+    const closeVal = data[closeIdx][4];
+    const periodHigh = Math.max(...highs);
+    const periodLow = Math.min(...lows);
+    const highIdx = highs.indexOf(periodHigh);
+    const lowIdx = lows.indexOf(periodLow);
+    const markers = [
+      {idx: highIdx, v: periodHigh, color: UP, label:'최고', side:'above'},
+      {idx: lowIdx, v: periodLow, color: DOWN, label:'최저', side:'below'},
+      {idx: closeIdx, v: closeVal, color:'#60a5fa', label:'종가', side:'left'}
+    ];
+    markers.forEach(m=>{
+      const cx = pL + (m.idx+0.5)*colW;
+      const cy = py(m.v);
+      const dot=document.createElementNS(NS,'circle');
+      dot.setAttribute('cx',cx);dot.setAttribute('cy',cy);dot.setAttribute('r','3.5');
+      dot.setAttribute('fill',m.color);dot.setAttribute('stroke','#0f1117');dot.setAttribute('stroke-width','1.5');
+      svgCandle.appendChild(dot);
+
+      const labelText = `${m.label} $${m.v.toFixed(2)}`;
+      const labelW = labelText.length*5.2+6;
+      let tx, ty, anchor;
+      if (m.side === 'left') {
+        anchor = 'end'; tx = cx-7; ty = cy+3;
+      } else if (m.side === 'above') {
+        ty = cy-9;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      } else {
+        ty = cy+16;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      }
+      const bgX = anchor==='end' ? tx-labelW : anchor==='middle' ? tx-labelW/2 : tx;
+      const bg=document.createElementNS(NS,'rect');
+      bg.setAttribute('x', bgX);bg.setAttribute('y', ty-8);
+      bg.setAttribute('width', labelW);bg.setAttribute('height', 12);
+      bg.setAttribute('fill','rgba(15,17,23,0.85)');bg.setAttribute('rx','2');
+      svgCandle.appendChild(bg);
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x', tx);t.setAttribute('y', ty+2);
+      t.setAttribute('text-anchor',anchor);t.setAttribute('font-size','9');
+      t.setAttribute('font-weight','700');t.setAttribute('fill', m.color);
+      t.textContent = labelText;
+      svgCandle.appendChild(t);
+    });
+    }
+
+    const labelCount = Math.min(5, data.length);
+    for(let i=0;i<labelCount;i++){
+      const idx = Math.round(i*(data.length-1)/((labelCount-1)||1));
+      const cx = pL + (idx+0.5)*colW;
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x', Math.min(Math.max(cx,pL+10), W-20));
+      t.setAttribute('y', H-4);
+      t.setAttribute('text-anchor','middle');t.setAttribute('font-size','9');
+      t.setAttribute('fill','rgba(154,160,184,.8)');
+      t.textContent = data[idx][0].slice(2).replace(/-/g,'.');
+      svgCandle.appendChild(t);
+    }
+
+    const VW=720,VH=70,vpT=6,vpB=4;
+    const vcH=VH-vpT-vpB;
+    const maxV = Math.max(...data.map(d=>d[5]));
+    data.forEach((d,i)=>{
+      const [,o,,,c,v] = d;
+      const cx = pL + (i+0.5)*colW;
+      const up = c >= o;
+      const col = up ? 'rgba(46,204,113,0.55)' : 'rgba(231,76,60,0.55)';
+      const h = (v/maxV)*vcH;
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x', cx - bodyW/2);
+      rect.setAttribute('y', vpT + (vcH-h));
+      rect.setAttribute('width', bodyW);
+      rect.setAttribute('height', Math.max(h,1));
+      rect.setAttribute('fill', col);
+      svgVol.appendChild(rect);
+    });
+  }
+
+  toggle.querySelectorAll('.range-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      toggle.querySelectorAll('.range-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      draw(btn.dataset.range);
+    });
+  });
+
+  if (maToggle) {
+    maToggle.querySelectorAll('.ma-toggle-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const key = btn.dataset.ma;
+        maState[key] = !maState[key];
+        btn.classList.toggle('ma-off', !maState[key]);
+        draw(currentRange);
+      });
+    });
+  }
+
+  draw('1Y');
+})();
+
+function renderFundChart() {
+  const ctx = document.getElementById('bacRevChart');
+  if (!ctx || charts['fund']) return;
+  charts['fund'] = new Chart(ctx,{
+    data:{
+      labels:['Q3 \'24','Q4 \'24','Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26','Q2 \'26'],
+      datasets:[
+        {type:'bar',label:'매출($B)',data:[25.3,25.5,28.2,27.4,29.0,28.4,30.3,31.6],backgroundColor:'#e31837',borderRadius:4,barPercentage:0.7,categoryPercentage:0.7,yAxisID:'y'},
+        {type:'line',label:'EPS($)',data:[0.81,0.82,0.89,0.90,1.04,0.98,1.11,1.21],borderColor:'#ff5a72',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#9aa0b8',font:{size:10}}}},
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}},
+        y2:{position:'right',min:0,max:1.5,grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v}}
+      }
+    }
+  });
+}
+
+function renderPeerChart() {
+  const ctx = document.getElementById('peerChart');
+  if (!ctx || charts['peer']) return;
+  charts['peer'] = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['BAC','JPM','WFC','GS'],
+      datasets:[{
+        label:'P/E (TTM)',
+        data:[13.9,15.9,13.0,17.2],
+        backgroundColor:['#ff5a72','rgba(154,160,184,0.4)','rgba(154,160,184,0.4)','rgba(154,160,184,0.4)'],
+        borderRadius:4,borderSkipped:false
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`P/E ${ctx.raw}x`}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{max:18,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
+      }
+    }
+  });
+}
+
+function renderCharts(sectionId) {
+  setTimeout(() => {
+    if (sectionId === 'fund') renderFundChart();
+    if (sectionId === 'valuation') renderPeerChart();
+  }, 50);
+}
+</script>
+</body>
+</html>

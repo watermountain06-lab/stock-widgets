@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSCO 종합 분석 위젯</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117; --bg2: #1a1d27; --bg3: #22263a; --border: #2e3347;
+    --text: #e8eaf0; --text2: #9aa0b8; --text3: #5c6282;
+    --accent: #049fd9; --accent2: #5cc9f5; --accent3: #063040;
+    --bull: #D85A30; --bear: #185FA5; --ma5: #ff6b9d; --ma20: #9b59b6; --ma60: #f0c040; --ma120: #22d3ee;
+    --green: #2ecc71; --red: #e74c3c; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
+  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; max-width: 1100px; margin: 0 auto; }
+  .header { background: linear-gradient(135deg, #041d29 0%, #0f1117 40%, #1a1d27 100%); border-bottom: 2px solid var(--accent3); padding: 28px 32px 24px; position: relative; overflow: hidden; max-width: 1100px; margin: 0 auto; }
+  .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(92,201,245,0.14) 0%, transparent 70%); pointer-events: none; }
+  .header-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .ticker-block { display: flex; align-items: center; gap: 16px; }
+  .ticker-badge { background: linear-gradient(135deg, var(--accent3), var(--accent)); color: #fff; font-size: 13px; font-weight: 800; padding: 5px 12px; border-radius: 6px; letter-spacing: 1px; }
+  .company-name { font-size: 22px; font-weight: 700; color: var(--text); }
+  .company-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .price-block { text-align: right; }
+  .price-main { font-size: 32px; font-weight: 800; color: var(--accent2); letter-spacing: -1px; }
+  .price-change { font-size: 13px; color: var(--green); font-weight: 600; }
+  .header-meta { display: flex; justify-content: space-between; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+  .meta-item { display: flex; flex-direction: column; }
+  .meta-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .meta-value { font-size: 13px; font-weight: 600; color: var(--text2); margin-top: 2px; }
+  .meta-value.highlight { color: var(--accent2); }
+  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
+  .nav-btn:hover { color: var(--text); background: var(--bg3); }
+  .nav-btn.active { background: var(--accent3); color: var(--accent2); }
+  .section { display: none; padding: 28px 32px; max-width: 1100px; margin: 0 auto; }
+  .section.active { display: block; }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--accent2); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; display: inline-block; }
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px; }
+  .card-title { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; font-weight: 600; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .chart-wrap { position: relative; }
+  .chart-wrap canvas { max-width: 100%; }
+  .price-chart-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+  .stat-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .stat-value { font-size: 20px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
+  .stat-sub { font-size: 11px; color: var(--text3); }
+  .stat-value.up { color: var(--green); }
+  .stat-value.down { color: var(--red); }
+  .stat-value.gold { color: var(--accent2); }
+  .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .ma-row:last-child { border-bottom: none; }
+  .ma-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+  .ma-name { display: flex; align-items: center; font-size: 13px; color: var(--text2); }
+  .ma-val { font-size: 13px; font-weight: 600; }
+  .ma-status { font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
+  .status-above { background: rgba(46,204,113,0.15); color: var(--green); }
+  .status-below { background: rgba(231,76,60,0.15); color: var(--red); }
+  .zone-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .zone-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg3); border-radius: 6px; }
+  .zone-label { font-size: 12px; color: var(--text2); }
+  .zone-val { font-size: 13px; font-weight: 700; color: var(--accent2); }
+  .zone-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
+  .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
+  .tag-current { background: rgba(92,201,245,0.2); color: var(--accent2); }
+  .val-item { margin-bottom: 18px; }
+  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
+  .val-track { height: 8px; background: var(--bg3); border-radius: 4px; position: relative; overflow: hidden; }
+  .val-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+  .val-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+  .val-low { font-size: 10px; color: var(--green); }
+  .val-mid { font-size: 10px; color: var(--accent2); text-align: center; }
+  .val-high { font-size: 10px; color: var(--red); }
+  .stage-badge { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
+  .stage-1 { background: rgba(46,204,113,0.2); color: #2ecc71; }
+  .stage-2 { background: rgba(39,174,96,0.2); color: #27ae60; }
+  .stage-3 { background: rgba(92,201,245,0.2); color: var(--accent2); }
+  .stage-4 { background: rgba(231,126,35,0.2); color: #e67e22; }
+  .stage-5 { background: rgba(231,76,60,0.2); color: var(--red); }
+  .stage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .stage-mini { text-align: center; padding: 10px 4px; border-radius: 8px; }
+  .stage-mini-num { font-size: 15px; font-weight: 700; }
+  .stage-mini-label { font-size: 9px; margin-top: 2px; }
+  .scenario-card { border-radius: 8px; padding: 14px; }
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent2); border: 2px solid var(--bg); }
+  .tl-dot.red { background: var(--red); }
+  .tl-dot.green { background: var(--green); }
+  .tl-dot.blue { background: var(--blue); }
+  .tl-dot.gold { background: var(--accent2); }
+  .tl-dot.today { background: #ffc107; }
+  .tl-date { font-size: 10px; color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+  .tl-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 3px 0; }
+  .tl-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .tl-source { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 11px; font-weight: 600; color: var(--accent2); text-decoration: none; }
+  .tl-source:hover { text-decoration: underline; }
+  .bull-bear { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .bb-box { background: var(--bg3); border-radius: var(--radius); padding: 16px; }
+  .bb-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .bb-bull { color: var(--bull); }
+  .bb-bear { color: var(--bear); }
+  .bb-item { display: flex; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .bb-icon { flex-shrink: 0; margin-top: 2px; }
+  .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+  .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
+  .disclaimer { max-width: 1100px; margin: 28px auto 16px; padding: 12px 16px; background: rgba(92,201,245,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
+  .info-box { background: rgba(92,201,245,0.1); border: 1px solid var(--accent3); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; color: var(--text2); }
+  .range-toggle { display: flex; gap: 4px; }
+  .range-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--text3); font-size: 11px; font-weight: 700; padding: 4px 11px; border-radius: 999px; cursor: pointer; transition: all .15s; }
+  .range-btn:hover { color: var(--text); border-color: var(--text2); }
+  .range-btn.active { background: var(--accent3); color: var(--accent2); border-color: var(--accent); }
+  .ma-toggle-btn { background: var(--bg3); border: 1px solid; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer; transition: all .15s; }
+  .ma-toggle-btn:hover { filter: brightness(1.2); }
+  .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
+  @media (max-width: 600px) {
+    .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
+    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; } .price-main { font-size: 24px; }
+  }
+  body { padding-top: 46px; }
+  .back-bar { position: fixed; top: 0; left: 0; right: 0; height: 46px; background: rgba(10,11,22,0.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.25); }
+  .back-bar a { color: var(--text2); font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+  .back-bar a:hover { color: var(--accent2); }
+  .back-bar .brand-icon { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 6px; background: var(--accent3); color: var(--accent2); font-size: 12px; }
+  .back-bar .back-bar-ticker { font-size: 11px; color: var(--text3); font-weight: 600; letter-spacing: 0.4px; }
+  .back-bar-nav { display: flex; align-items: center; gap: 10px; }
+  .peer-nav-link { color: var(--text2); font-size: 11px; font-weight: 700; text-decoration: none; padding: 4px 9px; border-radius: 6px; border: 1px solid var(--border); transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+  .peer-nav-link:hover { color: var(--accent2); border-color: var(--accent); }
+  .peer-nav-link.disabled { color: var(--text3); opacity: 0.4; pointer-events: none; border-color: var(--border); }
+</style>
+</head>
+<body>
+<div class="back-bar">
+  <a href="../index.html"><span class="brand-icon">◧</span>US Stock Widgets · 전체 종목 목록</a>
+  <div class="back-bar-nav">
+    <a class="peer-nav-link" href="ABBV_analysis_widget.html">◀ ABBV</a>
+    <span class="back-bar-ticker">CSCO · 시총 26위</span>
+    <a class="peer-nav-link" href="BAC_analysis_widget.html">다음 BAC ▶</a>
+  </div>
+</div>
+
+<div class="today-banner">🗓️ <strong>D-29 · 8/19(수) Q4 FY2026(회계연도 7/25 마감) 실적 발표 예정</strong> — 가이던스 매출 $16.7~16.9B, FY2026 매출 $60.2~61B·EPS $4.08~4.14 목표 · 애널리스트 26명 평균 목표가 $127.18 (Buy 컨센서스)</div>
+
+<div class="header">
+  <div class="header-top">
+    <div class="ticker-block">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+          <span class="ticker-badge">CSCO</span>
+          <span style="font-size:11px;color:var(--accent2);font-weight:600;">NASDAQ · AI 데이터센터 네트워킹 수요로 52주 +62.7%, 사상 최고가 경신</span>
+        </div>
+        <div class="company-name">Cisco Systems, Inc.</div>
+        <div class="company-sub">Networking(스위치·라우터)·Security(Splunk 포함)·Collaboration·Observability 등 종합 네트워크 인프라 기업 · S&P 500 시총 26위권</div>
+      </div>
+    </div>
+    <div class="price-block">
+      <div class="price-main">$110.70</div>
+      <div class="price-change" style="color:var(--red);">▼ -1.11% (2026.07.20 기준)</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px;">52주 최저 $65.75 (2025.08.18) · 최고 $130.37 (2026.06.04)</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$439.2B</span></div>
+    <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Information Technology</span></div>
+    <div class="meta-item"><span class="meta-label">Q3 FY26 매출</span><span class="meta-value">$15.84B (+12%)</span></div>
+    <div class="meta-item"><span class="meta-label">P/E (TTM)</span><span class="meta-value">35.9x</span></div>
+    <div class="meta-item"><span class="meta-label">GAAP EPS (TTM)</span><span class="meta-value">$3.08</span></div>
+    <div class="meta-item"><span class="meta-label">분기 배당</span><span class="meta-value">$0.42</span></div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
+  <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
+  <button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button>
+  <button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button>
+  <button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button>
+  <button class="nav-btn" onclick="showSection('invest')">🎯 투자 포인트</button>
+</div>
+
+<!-- ===================== SECTION 1: 기술적 분석 ===================== -->
+<div id="tech" class="section active">
+  <div class="section-title">기술적 분석 — 일봉 캔들스틱 (2025.07 ~ 2026.07) · 52주 수익률 +62.7%</div>
+  <div class="price-chart-container">
+    <div style="margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+      <div class="range-toggle" id="cscoRangeToggle">
+        <button class="range-btn" data-range="1M">1개월</button>
+        <button class="range-btn" data-range="3M">3개월</button>
+        <button class="range-btn" data-range="6M">6개월</button>
+        <button class="range-btn active" data-range="1Y">1년</button>
+      </div>
+      <div id="cscoMaToggle" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="ma-toggle-btn" data-ma="ma5" style="color:var(--ma5);border-color:var(--ma5);">● MA5</button>
+        <button class="ma-toggle-btn" data-ma="ma20" style="color:var(--ma20);border-color:var(--ma20);">● MA20</button>
+        <button class="ma-toggle-btn" data-ma="ma60" style="color:var(--ma60);border-color:var(--ma60);">● MA60</button>
+        <button class="ma-toggle-btn" data-ma="ma120" style="color:var(--ma120);border-color:var(--ma120);">● MA120</button>
+        <button class="ma-toggle-btn" data-ma="pricelabels" style="color:var(--text2);border-color:var(--text2);margin-left:4px;">◆ 가격라벨</button>
+      </div>
+    </div>
+    <svg id="cscoCandleSvg" viewBox="0 0 720 240" width="100%" style="display:block;background:var(--bg3);border-radius:8px 8px 0 0;padding:4px;" role="img" aria-label="CSCO 일봉 캔들스틱 차트"></svg>
+    <svg id="cscoVolumeSvg" viewBox="0 0 720 70" width="100%" style="display:block;background:var(--bg3);border-radius:0 0 8px 8px;padding:0 4px 4px;" role="img" aria-label="CSCO 거래량 차트"></svg>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">52주 최저 $65.75 (2025.08) → 52주 최고 $130.37 (2026.06) → 현재 $110.70</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">핵심 가격대</div>
+      <div class="zone-list">
+        <div class="zone-item"><span class="zone-label">52주 최고</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$130.37 (2026.06.04)</span><span class="zone-tag tag-resist">저항선</span></div></div>
+        <div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$110.70 (고점 대비 -15.1%)</span><span class="zone-tag tag-current">현재</span></div></div>
+        <div class="zone-item"><span class="zone-label">MA120 지지</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$96.26</span><span class="zone-tag tag-support">지지선</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$65.75 (2025.08.18)</span><span class="zone-tag tag-support">강지지</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--green);">+62.7%</span></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">이동평균선 현황</div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기) $112.23</span><span class="ma-status status-below">저항</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기) $115.98</span><span class="ma-status status-below">저항</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기) $112.01</span><span class="ma-status status-below">저항</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기) $96.26</span><span class="ma-status status-above">상승 지지</span></div>
+      <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">
+        ⚠️ MA120&lt;현재가&lt;MA60&lt;MA5&lt;MA20 순 — 5월 AI 실적 서프라이즈 후 단기 조정 국면(단·중기 이평선 저항), 다만 장기추세선(MA120)은 여전히 하단에서 견고히 지지하며 52주 기준 압도적 상승추세 유지.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">구간별 패턴 분석</div>
+    <div class="grid-4">
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.07~08 — 저점 형성 $68→$66</div><div style="font-size:12px;color:var(--text2);">52주 저점($65.75, 8/18) 형성. 네트워킹 업황 둔화 우려 속 밸류에이션 바닥권 형성.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.09~2026.04 — 완만한 우상향 $66→$89</div><div style="font-size:12px;color:var(--text2);">캠퍼스 네트워킹 주문 회복과 AI 인프라 수주 증가 기대감이 누적되며 꾸준한 상승세.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.05 — Q3 실적 서프라이즈 후 급등 $90→$121</div><div style="font-size:12px;color:var(--text2);">5/13 Q3 실적 발표 후 AI 주문 목표 상향(가이던스 $5B→$9B) 소식에 +15% 단일일 급등, 5/14 추가로 +13% 급등.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.06~07 — 사상 최고가 후 조정 $121→$130→$111</div><div style="font-size:12px;color:var(--text2);">6/4 사상 최고가 $130.37 경신 후 차익실현 매물로 조정, 8/19 Q4 실적 발표를 앞두고 $111 부근에서 등락.</div></div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;">
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">52주 수익률 +62.7% — S&P500(+19.6%) 대비 +43.1%p 압도적 아웃퍼폼</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">AI 인프라 주문 목표 $5B→$9B 상향, 캠퍼스 네트워킹 주문 +25% YoY</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(255,193,7,0.18);color:#ffc107;">다음 실적 8/19(수) Q4 FY2026 — D-29</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">52주 고점 대비 -15.1% 조정 — 단·중기 이평선 저항 국면</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">Splunk 부문 온프레미스→클라우드 전환 매출 믹스 역풍 지속</span>
+  </div>
+</div>
+
+<!-- ===================== SECTION 2: 기본적 분석 ===================== -->
+<div id="fund" class="section">
+  <div class="section-title">기본적 분석 — 분기 재무제표 (SEC 8-K 실적발표 기준)</div>
+  <div class="card">
+    <div class="card-title">분기 매출·GAAP EPS 추이 (Q4 FY24 ~ Q3 FY26, 회계연도 기준 2년치)</div>
+    <div class="chart-wrap" style="height:260px;"><canvas id="cscoRevChart"></canvas></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--text3);">* Cisco 회계연도는 8월 시작~7월 종료. Q4 FY24(2024.07 마감) 매출 급감(-10% YoY)은 주문 정상화 국면, 이후 5개 분기 연속 매출 성장 가속. Q4 FY26은 8/19 발표 예정(가이던스 기준 표시).</div>
+  </div>
+  <div class="grid-3">
+    <div class="stat-box"><div class="stat-label">Q3 FY26 매출</div><div class="stat-value up">$15.84B</div><div class="stat-sub">▲12% YoY, 가이던스 상단 상회</div></div>
+    <div class="stat-box"><div class="stat-label">Q3 FY26 순이익</div><div class="stat-value up">$3.37B</div><div class="stat-sub">GAAP 기준</div></div>
+    <div class="stat-box"><div class="stat-label">Q3 FY26 GAAP EPS</div><div class="stat-value up">$0.85</div><div class="stat-sub">6분기 연속 개선</div></div>
+    <div class="stat-box"><div class="stat-label">AI 인프라 수주(FY26 누적)</div><div class="stat-value up">목표 $9B</div><div class="stat-sub">기존 목표 $5B에서 상향</div></div>
+    <div class="stat-box"><div class="stat-label">캠퍼스 네트워킹 주문</div><div class="stat-value up">+25% YoY</div><div class="stat-sub">Q3 FY26 기준, 사상 최대</div></div>
+    <div class="stat-box"><div class="stat-label">제품 주문 성장률</div><div class="stat-value up">+20% YoY</div><div class="stat-sub">Q3 FY25 기준, 이후에도 견조</div></div>
+    <div class="stat-box"><div class="stat-label">FY2026(E) 매출 가이던스</div><div class="stat-value gold">$60.2~61B</div><div class="stat-sub">EPS $4.08~4.14</div></div>
+    <div class="stat-box"><div class="stat-label">Q4 FY26(E) 매출 가이던스</div><div class="stat-value gold">$16.7~16.9B</div><div class="stat-sub">8/19 발표 예정</div></div>
+    <div class="stat-box"><div class="stat-label">분기배당</div><div class="stat-value up">$0.42</div><div class="stat-sub">배당수익률 약 1.5%</div></div>
+  </div>
+  <div style="margin-top:12px;font-size:12px;color:var(--text3);">CEO Chuck Robbins "Cisco는 AI 시대의 핵심 인프라" — 하이퍼스케일러를 넘어 neocloud·소버린·엔터프라이즈 고객까지 AI 인프라 수요 확산 중, Q3 FY26 한 분기에만 약 $300M 신규 수주</div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">핵심 성장 동력 — AI 데이터센터 네트워킹 vs 캠퍼스 네트워킹 vs Security(Splunk)</div>
+    <div class="grid-3">
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--ma20);font-weight:700;margin-bottom:6px;">AI 데이터센터 네트워킹</div><div style="font-size:12px;color:var(--text2);">하이퍼스케일러·neocloud·소버린·엔터프라이즈 전방위 확산<br>FY26 AI 인프라 수주 목표 $5B→$9B 상향<br>실적 서프라이즈의 핵심 동력</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--blue);font-weight:700;margin-bottom:6px;">캠퍼스 네트워킹</div><div style="font-size:12px;color:var(--text2);">AI發 트래픽 증가에 대비한 기업 네트워크 현대화 수요<br>Q3 FY26 주문 +25% YoY로 사상 최대<br>전통 네트워킹 사업의 재가속</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">Security (Splunk 포함)</div><div style="font-size:12px;color:var(--text2);">Splunk 고객의 온프레미스→클라우드 구독 전환이 매출 믹스 역풍<br>CFO는 "일시적" 현상으로 FY2027 상반기 정상화 전망<br>단기 실적의 유일한 약점</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">핵심 투자 논리 — AI 네트워킹 수요가 구조적 성장인가, 일시적 특수 수요인가</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.7;">Cisco는 전통적으로 저성장·안정형 네트워크 인프라 기업으로 평가받아 왔으나, FY2026 들어 AI 데이터센터 네트워킹 수요가 실적을 견인하며 6분기 연속 매출·EPS 성장이 가속되고 있다. AI 인프라 수주 목표가 한 분기 만에 $5B에서 $9B로 상향된 점은 이례적이다. <strong style="color:var(--text);">핵심 논쟁은 "하이퍼스케일러를 넘어 neocloud·엔터프라이즈까지 확산되는 AI 네트워킹 수요가 구조적으로 지속되는가" 그리고 "Splunk 매출 믹스 역풍이 CFO 전망대로 FY2027 상반기에 정상화될 것인가"이다.</strong></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">다음 실적 체크포인트</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+      <strong style="color:var(--text);">8/19 Q4 실적 4대 체크포인트:</strong><br>
+      ① AI 인프라 수주 $9B 목표 달성 여부<br>
+      ② 캠퍼스 네트워킹 +25% 고성장 지속 여부<br>
+      ③ Splunk 매출 믹스 역풍 완화 신호<br>
+      ④ FY2027 가이던스 최초 제시 내용
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 3: 밸류에이션 (Per-Share 통합) ===================== -->
+<div id="valuation" class="section">
+  <div class="section-title">Per-Share & 밸류에이션 — AI 재평가로 자체 역사적 평균 대비 프리미엄 구간 진입</div>
+  <div class="info-box">
+    <strong>핵심 전제:</strong> PER(TTM) 35.9x는 Cisco의 과거 평균(10년 평균 약 17~20x) 대비 크게 높은 수준이다 — 52주 +62.7% 랠리는 전통적 네트워킹 기업에서 AI 인프라 수혜주로의 밸류에이션 재평가(리레이팅)를 반영한 결과로 해석해야 한다.
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">멀티플 5단계 평가</div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PER (GAAP TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">35.9x</span><span class="stage-badge stage-5">5단계 매우 고평가</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:100%;background:linear-gradient(90deg,#2ecc71,#f0c040,#e74c3c);background-size:130.9% 100%;"></div></div>
+        <div class="val-labels"><span class="val-low">저(15x)</span><span class="val-mid">적정(22x)</span><span class="val-high">고(28x)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">$110.70÷TTM EPS $3.08(Q4FY25~Q3FY26 합산) · 자체 역사적 평균(17~20x) 대비 약 2배 프리미엄</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">Forward P/E (FY26E 가이던스)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">26.9x</span><span class="stage-badge stage-4">4단계 고평가</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:74.5%;background:linear-gradient(90deg,#2ecc71,#f0c040,#e74c3c);background-size:170.6% 100%;"></div></div>
+        <div class="val-labels"><span class="val-low">저(15x)</span><span class="val-mid">적정(20x)</span><span class="val-high">고(28x)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">FY2026(E) EPS 가이던스 중간값($4.11) 기준 · TTM보다는 완화되나 여전히 프리미엄 구간</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">9.0x</span><span class="stage-badge stage-5">5단계 매우 고평가</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:100%;background:linear-gradient(90deg,#2ecc71,#f0c040,#e74c3c);background-size:112.5% 100%;"></div></div>
+        <div class="val-labels"><span class="val-low">저(2x)</span><span class="val-mid">적정(4x)</span><span class="val-high">고(8x)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">BPS $12.31(자기자본 $48.9B÷약 39.7억 주) · Splunk 인수 영업권 반영, 자사주매입도 장부가치 압축 요인</div>
+      </div>
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">배당수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">1.5%</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:50%;background:linear-gradient(90deg,#2ecc71,#f0c040,#e74c3c);background-size:200% 100%;"></div></div>
+        <div class="val-labels"><span class="val-low">저(0.5%)</span><span class="val-mid">적정(1.5%)</span><span class="val-high">고(3%)</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">주가 급등으로 배당수익률은 낮아졌으나 대형 하드웨어 기업 대비 여전히 안정적 배당 정책 유지</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">네트워킹·하드웨어 피어 P/E 비교</div>
+      <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text2);">Cisco의 P/E 35.9x는 자체 역사적 평균은 물론, 전통 네트워킹 피어 대비로도 높은 수준 — AI 인프라 프리미엄이 상당폭 반영된 결과로, 향후 실적이 이 밸류에이션을 뒷받침할 수 있는지가 관건.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">밸류에이션 5단계</div>
+    <div class="stage-grid">
+      <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div></div>
+      <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div></div>
+      <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:8px;color:var(--accent2);background:rgba(92,201,245,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">배당수익률</div></div>
+      <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:8px;color:#e67e22;background:rgba(231,126,35,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">Forward P/E</div></div>
+      <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div><div style="font-size:8px;color:var(--red);background:rgba(231,76,60,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PER·PBR</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Per-Share 데이터 (참고 · TTM 기준 · 약 39.7억 주)</div>
+    <div class="grid-4">
+      <div class="stat-box"><div class="stat-label">GAAP EPS</div><div class="stat-value">$3.08</div></div>
+      <div class="stat-box"><div class="stat-label">BPS</div><div class="stat-value">$12.31</div></div>
+      <div class="stat-box"><div class="stat-label">매출/주</div><div class="stat-value">$15.49</div></div>
+      <div class="stat-box"><div class="stat-label">분기배당</div><div class="stat-value">$0.42</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">시나리오별 공정가치 분석</div>
+    <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — AI 인프라 수요 둔화·Splunk 역풍 장기화</div>
+      <div style="font-size:12px;color:var(--text2);">AI 데이터센터 투자 사이클 둔화, Splunk 매출 믹스 역풍이 FY2027까지 지속 시 → 공정가치 <strong style="color:var(--red);">$75~90/주</strong></div>
+    </div>
+    <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 가이던스 달성·AI 성장 지속</div>
+      <div style="font-size:12px;color:var(--text2);">FY2026 가이던스(매출 $60.2~61B·EPS $4.08~4.14) 달성, 캠퍼스 네트워킹 고성장 유지 시 → 공정가치 <strong style="color:var(--text);">$115~130/주</strong> (애널리스트 평균 목표가 $127.18과 부합)</div>
+    </div>
+    <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — AI 인프라 수요 가속·Splunk 조기 정상화</div>
+      <div style="font-size:12px;color:var(--green);">neocloud·소버린 고객 수주 추가 확대, Splunk 클라우드 전환 조기 완료로 매출 믹스 개선 시 → 공정가치 <strong style="color:var(--green);">$140~160/주</strong></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">종합 밸류에이션 — 밸류에이션보다 AI 네트워킹 수요의 지속가능성이 핵심 변수</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;">PER·PBR 모두 5단계(매우 고평가)로 자체 역사적 평균을 크게 상회한다. <strong style="color:var(--text);">이는 전통 네트워킹 기업에서 AI 인프라 수혜주로의 밸류에이션 리레이팅이 진행 중임을 보여주지만, 동시에 향후 실적이 뒷받침되지 못하면 밸류에이션 되돌림 리스크도 크다는 의미다.</strong> 공정가치 $75(Bear)~$160(Bull) — 실질 변수는 밸류에이션 그 자체가 아니라 AI 데이터센터 네트워킹 수요가 하이퍼스케일러를 넘어 얼마나 폭넓게 지속되는지 여부.</div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 4: US 특화 ===================== -->
+<div id="us" class="section">
+  <div class="section-title">US 특화 — S&P 500 성과 · 경쟁 구도</div>
+  <div class="rel-container">
+    <div class="rel-title">S&P 500 상대 수익률</div>
+    <div class="grid-3">
+      <div class="stat-box"><div class="stat-label">CSCO 52주</div><div class="stat-value up">+62.7%</div></div>
+      <div class="stat-box"><div class="stat-label">S&P 500 52주</div><div class="stat-value">+19.6%</div></div>
+      <div class="stat-box"><div class="stat-label">알파 (초과수익)</div><div class="stat-value up">+43.1%p</div><div class="stat-sub">압도적 아웃퍼폼</div></div>
+    </div>
+    <div class="zone-list" style="margin-top:12px;">
+      <div class="zone-item"><span class="zone-label">시가총액 순위</span><span class="zone-val">S&P500 내 약 26위권</span></div>
+      <div class="zone-item"><span class="zone-label">배당수익률</span><span class="zone-val">1.5% (분기 $0.42)</span></div>
+      <div class="zone-item"><span class="zone-label">섹터</span><span class="zone-val">Information Technology · 네트워킹 인프라(AI 데이터센터 수혜)</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">네트워킹·AI 인프라 경쟁 구도</div>
+    <div class="zone-list">
+      <div class="zone-item"><span class="zone-label">Arista Networks (데이터센터 네트워킹 경쟁)</span><span class="zone-val">고성장 프리미엄 밸류에이션 — 하이퍼스케일러 중심 고객 구조</span></div>
+      <div class="zone-item"><span class="zone-label">Juniper Networks (전통 네트워킹 경쟁)</span><span class="zone-val">HPE 인수 완료 — 규모의 경쟁 심화</span></div>
+      <div class="zone-item"><span class="zone-label">Nvidia·Broadcom (AI 인프라 공급망)</span><span class="zone-val">GPU·커스텀 실리콘 — Cisco와는 보완 관계이자 일부 경쟁</span></div>
+      <div class="zone-item"><span class="zone-label">Splunk 통합</span><span class="zone-val" style="color:var(--red);">클라우드 전환 매출 믹스 역풍 — FY2027 상반기 정상화 전망</span></div>
+      <div class="zone-item"><span class="zone-label">일자리 구조조정</span><span class="zone-val">약 4,000명 감원 발표(2026.05) — 효율화·AI 투자 재배분</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 5: 시계열 뉴스 ===================== -->
+<div id="news" class="section">
+  <div class="section-title">시계열 주요 뉴스 (2025.07 ~ 2026.07)</div>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;color:var(--text2);">
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent2);display:inline-block;"></span>초대형 이벤트</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;"></span>긍정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block;"></span>부정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--text3);display:inline-block;"></span>중립</span>
+  </div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2025년 8월 18일 — 52주 저점 $65.75</div>
+      <div class="tl-title">네트워킹 업황 둔화 우려 속 바닥 형성</div>
+      <div class="tl-desc">일반 네트워킹 시장 성장 둔화 우려와 Splunk 통합 초기 매출 믹스 부담이 겹치며 저점을 형성. 이후 캠퍼스 네트워킹 회복과 함께 완만한 반등 시작.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot gold"></div>
+      <div class="tl-date">2026년 5월 13일 — Q3 FY2026 실적 발표, 단일일 +15% 급등</div>
+      <div class="tl-title">매출 $15.8B(+12%) 서프라이즈, AI 수주 목표 $5B→$9B 상향</div>
+      <div class="tl-desc">Q3 실적이 가이던스 상단을 크게 상회하며 발표 다음날 주가가 +15% 급등. 동시에 약 4,000명 감원 계획도 발표되며 비용 효율화와 AI 투자 확대를 병행하는 전략을 시사.</div>
+      <a class="tl-source" href="https://www.cnbc.com/2026/05/13/cisco-csco-q3-earnings-report-2026.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">2026년 5월 15일 — CEO "AI 시대의 핵심 인프라" 발언</div>
+      <div class="tl-title">실적 발표 후 주가 사상 최고가 랠리 지속</div>
+      <div class="tl-desc">CEO Chuck Robbins가 실적 발표 후 인터뷰에서 Cisco를 "AI 시대의 핵심 인프라"로 규정하며 하이퍼스케일러를 넘어 소버린·엔터프라이즈 고객까지 AI 네트워킹 수요가 확산되고 있다고 강조.</div>
+      <a class="tl-source" href="https://fortune.com/2026/05/15/critical-infrastructure-ai-era-cisco-ceo-earnings-beat-shares-record/" target="_blank" rel="noopener">관련 뉴스 보기 (Fortune) →</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2026년 6월 4일 — 52주 신고가 $130.37</div>
+      <div class="tl-title">AI 랠리 정점 — 사상 최고가 경신</div>
+      <div class="tl-desc">5월 실적 서프라이즈 이후 AI 네트워킹 수혜 기대감이 정점에 달하며 사상 최고가를 기록. 이후 차익실현 매물 출회로 조정 국면 진입.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot today"></div>
+      <div class="tl-date">2026년 7월 20일 — 현재, Q4 실적 D-29</div>
+      <div class="tl-title">고점 대비 -15.1% 조정, $110.70에서 Q4 실적 대기</div>
+      <div class="tl-desc">사상 최고가 이후 단·중기 이평선(MA5·20·60)이 저항으로 작용하는 조정 국면. 8/19 Q4 FY2026(회계연도 마감) 실적 발표를 앞두고 있으며, AI 인프라 수주 $9B 목표 달성 여부와 Splunk 매출 믹스 정상화 신호가 다음 방향성을 결정할 전망.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 6: 투자 포인트 ===================== -->
+<div id="invest" class="section">
+  <div class="section-title">2026년 핵심 투자 포인트</div>
+  <div class="bull-bear">
+    <div class="bb-box">
+      <div class="bb-title bb-bull">🐂 Bull 요인</div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>AI 인프라 수주 목표 상향($5B→$9B):</strong> 하이퍼스케일러를 넘어 전방위 고객 확산.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>캠퍼스 네트워킹 +25%:</strong> 전통 사업의 재가속, AI發 트래픽 증가 수혜.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>6분기 연속 매출·EPS 성장 가속:</strong> 실적 모멘텀 뚜렷.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>52주 수익률 +62.7%:</strong> S&P500 대비 +43.1%p 압도적 아웃퍼폼.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>26명 애널리스트 Buy 컨센서스:</strong> 평균 목표가 $127.18(+14.9%).</span></div>
+    </div>
+    <div class="bb-box">
+      <div class="bb-title bb-bear">🐻 Bear 요인</div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>PER 35.9x, PBR 9.0x:</strong> 자체 역사적 평균 대비 약 2배 프리미엄.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>Splunk 매출 믹스 역풍:</strong> 온프레미스→클라우드 전환이 실적 발목.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>52주 고점 대비 -15.1% 조정:</strong> 단·중기 이평선 저항 국면.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>약 4,000명 감원:</strong> 비용구조 재편 진행 중, 실행 리스크 존재.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>AI 수요 사이클 리스크:</strong> 데이터센터 투자 둔화 시 밸류에이션 되돌림 가능.</span></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">목표가 밴드 — 시나리오별 공정가치 vs 현재가 · 애널리스트 목표가</div>
+    <div style="position:relative;height:70px;margin:28px 6px 6px;">
+      <div style="position:absolute;top:28px;left:0;right:0;height:10px;border-radius:5px;overflow:hidden;display:flex;">
+        <div style="width:17.6%;height:100%;background:rgba(231,76,60,0.45);"></div>
+        <div style="width:29.4%;height:100%;background:var(--bg3);"></div>
+        <div style="width:17.6%;height:100%;background:var(--bg3);"></div>
+        <div style="width:11.8%;height:100%;background:var(--bg3);"></div>
+        <div style="width:23.6%;height:100%;background:rgba(46,204,113,0.45);"></div>
+      </div>
+      <div style="position:absolute;top:10px;left:41.6%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
+      <div style="position:absolute;top:-6px;left:41.6%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $110.70</div>
+      <div style="position:absolute;top:22px;left:47.5%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
+      <div style="position:absolute;top:48px;left:47.5%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $127.18 (+14.9%)</div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-top:4px;">
+      <span style="color:var(--red);">Bear $75~90 (AI 수요 둔화)</span>
+      <span>Base $115~130 (가이던스 달성)</span>
+      <span style="color:var(--green);">Bull $140~160 (AI 수요 가속)</span>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">기술적 분석(단기 조정)과 기본적 분석(AI 인프라 고성장)을 반영한 밸류에이션 탭 시나리오 기준 — 현재가는 Base 밴드 하단에 근접, 애널리스트 평균 목표가까지 +14.9% 여력.</div>
+
+    <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
+      <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">애널리스트 26명 투자의견 분포</div>
+      <div style="height:8px;border-radius:4px;overflow:hidden;display:flex;">
+        <div style="width:65.4%;height:100%;background:var(--green);"></div>
+        <div style="width:30.8%;height:100%;background:#f0c040;"></div>
+        <div style="width:3.8%;height:100%;background:var(--red);"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10.5px;margin-top:6px;">
+        <span style="color:var(--green);">매수 17명 (Buy)</span>
+        <span style="color:#f0c040;">유지 8명 (Hold)</span>
+        <span style="color:var(--red);">매도 1명 (Sell)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">5개 분석 종합 — 한눈에 보기</div>
+    <div class="zone-list">
+      <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:#f0c040;">단·중기 이평선 저항, 장기추세(MA120)는 지지 — 단기 조정 국면</span></div>
+      <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">AI 인프라 수주 목표 상향, 6분기 연속 성장 가속</span></div>
+      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:var(--red);">PER·PBR 5단계(매우 고평가) — AI 리레이팅 반영</span></div>
+      <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:var(--green);">S&P500 대비 +43.1%p 알파, AI 네트워킹 수혜주 재평가</span></div>
+      <div class="zone-item"><span class="zone-label">📰 시계열 뉴스</span><span class="zone-val" style="color:#f0c040;">5월 실적 서프라이즈가 랠리 견인, 8/19 Q4 실적이 다음 분수령</span></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">투자의견 요약</div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107">8/19(수) Q4 FY2026 — D-29</strong></div>
+      <div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">전통 네트워킹 기업에서 AI 인프라 수혜주로의 밸류에이션 리레이팅이 진행 중이나, 자체 역사적 평균 대비 2배 프리미엄에 거래되고 있어 향후 실적이 이를 뒷받침하지 못하면 되돌림 리스크가 큼 — AI 수주 목표 달성과 Splunk 매출 믹스 정상화가 핵심 변수</strong></div>
+    </div>
+  </div>
+</div>
+
+<div class="disclaimer">
+  ⚠️ 본 위젯은 SEC EDGAR 공시(10-K/10-Q/8-K), Yahoo Finance 주가 데이터 및 공개 뉴스를 기반으로 작성된 정보 제공 목적의 분석 자료입니다. 투자 권고 또는 매매 추천이 아니며, 모든 투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다. 과거 실적이 미래 수익을 보장하지 않습니다.
+</div>
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  renderCharts(id);
+}
+const charts = {};
+
+const CSCO_DAILY = [["2025-07-18",68.78,68.84,67.96,68.05,16145100],["2025-07-21",67.9,68.62,67.79,68.34,14674200],["2025-07-22",68.34,68.6,68.08,68.16,14527200],["2025-07-23",68.35,68.83,68.06,68.62,13042300],["2025-07-24",68.36,68.59,67.92,68.29,13534000],["2025-07-25",68.38,68.82,68.07,68.69,11590000],["2025-07-28",67.75,67.96,67.37,67.92,20558400],["2025-07-29",68.23,68.72,67.83,67.96,15261800],["2025-07-30",67.84,68.58,67.35,68.28,15518200],["2025-07-31",68.31,69.15,67.88,68.08,18529200],["2025-08-01",67.51,67.61,66.52,67.11,21650000],["2025-08-04",67.77,68.51,67.61,68.49,17052200],["2025-08-05",68.69,68.87,67.44,67.52,15434500],["2025-08-06",67.96,69.35,67.77,69.21,23107800],["2025-08-07",69.8,70.14,69.21,69.9,22579600],["2025-08-08",70.24,72.02,70.22,71.79,31662400],["2025-08-11",72.3,72.55,70.34,70.67,28911400],["2025-08-12",70.79,71.5,70.56,71.38,21912100],["2025-08-13",71.86,72.03,70.25,70.4,38096400],["2025-08-14",68.0,70.61,67.48,69.3,39317300],["2025-08-15",68.45,68.65,65.86,66.2,40877300],["2025-08-18",66.08,67.11,65.75,66.95,20903400],["2025-08-19",66.76,67.52,66.48,66.76,18746600],["2025-08-20",66.82,67.19,66.54,67.11,14946400],["2025-08-21",67.1,67.22,66.47,67.02,12456600],["2025-08-22",67.33,68.04,67.01,67.32,16830600],["2025-08-25",67.28,67.5,67.11,67.14,11724500],["2025-08-26",67.17,68.75,67.11,68.39,28307900],["2025-08-27",68.32,68.75,68.15,68.44,13876700],["2025-08-28",68.36,69.58,68.35,69.43,15256000],["2025-08-29",69.11,69.46,68.83,69.09,14953000],["2025-09-02",68.11,68.32,67.38,67.8,18928800],["2025-09-03",68.05,68.13,67.33,67.67,14320100],["2025-09-04",68.1,68.41,67.41,67.99,14388500],["2025-09-05",67.72,68.1,66.48,66.9,21050800],["2025-09-08",66.72,67.01,66.35,66.88,14038000],["2025-09-09",66.74,67.44,66.64,67.34,11649400],["2025-09-10",67.59,68.32,67.12,68.13,14689500],["2025-09-11",68.31,68.57,67.51,67.69,17560800],["2025-09-12",66.88,67.34,66.13,66.53,18529200],["2025-09-15",66.51,67.2,66.35,67.02,16203100],["2025-09-16",67.02,67.38,66.55,66.93,18019300],["2025-09-17",67.0,67.88,66.38,67.72,18652100],["2025-09-18",67.9,68.76,67.48,68.68,20279000],["2025-09-19",68.92,68.92,67.18,68.21,47822500],["2025-09-22",67.86,68.0,67.3,67.75,20396700],["2025-09-23",67.58,68.22,67.07,67.54,22240000],["2025-09-24",67.7,67.86,66.89,67.32,17433100],["2025-09-25",67.32,68.24,67.11,67.85,22351700],["2025-09-26",67.87,67.91,66.85,67.22,15077400],["2025-09-29",67.72,67.95,67.44,67.72,14358300],["2025-09-30",67.71,68.77,67.69,68.42,20498900],["2025-10-01",67.9,68.82,67.69,68.75,15530700],["2025-10-02",69.18,69.49,68.26,68.31,15708300],["2025-10-03",67.95,68.58,67.65,67.92,11113200],["2025-10-06",68.44,68.95,67.81,68.91,21952700],["2025-10-07",68.92,69.22,68.44,68.99,16493200],["2025-10-08",69.81,70.76,69.0,70.33,34246300],["2025-10-09",70.31,70.62,69.03,69.96,21209500],["2025-10-10",70.41,70.81,67.89,67.94,20961500],["2025-10-13",68.55,68.89,67.13,67.46,14127900],["2025-10-14",67.11,69.16,66.81,68.66,15402000],["2025-10-15",69.31,70.3,68.82,69.52,16260500],["2025-10-16",69.78,70.07,68.57,69.09,13950600],["2025-10-17",69.06,70.77,68.95,70.13,16286900],["2025-10-20",70.12,70.97,70.12,70.65,12183500],["2025-10-21",70.58,71.24,70.38,70.72,15763300],["2025-10-22",70.86,70.97,69.85,70.66,14967200],["2025-10-23",70.6,71.24,70.23,70.27,14614100],["2025-10-24",70.64,70.94,70.06,70.63,13075600],["2025-10-27",70.54,71.46,70.43,71.39,15986800],["2025-10-28",71.2,72.68,71.03,72.62,19896800],["2025-10-29",72.68,72.82,70.92,71.33,18020600],["2025-10-30",71.37,73.11,71.34,72.91,18101800],["2025-10-31",72.72,73.48,72.43,73.11,24008000],["2025-11-03",74.61,74.84,73.62,74.45,21733400],["2025-11-04",73.9,73.99,71.98,72.32,22345000],["2025-11-05",72.22,72.58,71.34,72.1,16113500],["2025-11-06",71.71,72.23,70.69,71.04,16469900],["2025-11-07",71.39,71.59,70.54,71.07,16913700],["2025-11-10",71.76,72.5,71.15,72.09,22201200],["2025-11-11",71.74,72.25,71.1,71.71,21412900],["2025-11-12",71.91,74.21,71.72,73.96,57591600],["2025-11-13",77.95,79.5,76.65,77.38,57638500],["2025-11-14",76.58,78.67,75.84,78.0,38819600],["2025-11-17",77.89,79.39,77.47,77.78,28720100],["2025-11-18",77.55,78.2,76.45,77.37,26025500],["2025-11-19",77.3,78.93,77.16,78.39,24759700],["2025-11-20",79.12,80.06,75.32,75.44,27381900],["2025-11-21",75.64,76.94,75.47,76.1,24428800],["2025-11-24",76.49,76.88,75.68,76.24,26691500],["2025-11-25",76.49,77.06,76.08,76.32,18818800],["2025-11-26",76.46,76.6,75.34,76.07,15972600],["2025-11-28",76.14,76.96,75.81,76.94,7320900],["2025-12-01",76.67,76.82,75.93,76.04,15529600],["2025-12-02",76.16,77.0,75.76,76.87,14619100],["2025-12-03",76.59,77.82,75.65,77.75,16088400],["2025-12-04",77.69,77.86,77.17,77.76,12572600],["2025-12-05",77.97,78.19,77.4,77.97,12579400],["2025-12-08",78.21,79.38,78.12,78.86,17454500],["2025-12-09",78.79,79.88,78.51,79.51,15737500],["2025-12-10",78.83,80.82,78.8,80.25,21302700],["2025-12-11",80.24,80.37,78.83,79.27,18652300],["2025-12-12",79.46,79.56,77.72,77.8,16672300],["2025-12-15",78.21,78.71,77.54,78.25,17646000],["2025-12-16",78.11,78.61,77.38,77.55,17737200],["2025-12-17",77.9,78.2,75.92,76.0,26094400],["2025-12-18",76.33,77.81,76.26,76.95,19249400],["2025-12-19",76.97,79.17,76.79,78.42,84881900],["2025-12-22",79.02,79.15,77.96,78.11,18016100],["2025-12-23",77.61,78.12,77.59,78.02,16712600],["2025-12-24",78.02,78.29,77.85,78.02,9104400],["2025-12-26",78.1,78.28,77.93,78.16,10158000],["2025-12-29",78.03,78.3,77.52,77.79,17941800],["2025-12-30",77.81,77.81,77.17,77.41,13952200],["2025-12-31",77.34,77.82,76.88,77.03,13570500],["2026-01-02",76.65,76.95,75.61,76.04,15749800],["2026-01-05",76.45,76.77,75.21,75.58,16328800],["2026-01-06",75.53,75.73,74.81,75.23,17017200],["2026-01-07",75.12,75.38,74.2,74.72,20347400],["2026-01-08",74.31,74.46,73.55,73.96,17192200],["2026-01-09",73.45,74.33,73.34,73.88,19104100],["2026-01-12",72.91,74.05,72.8,74.01,20985700],["2026-01-13",73.99,75.5,73.86,75.47,17809900],["2026-01-14",74.93,75.11,73.82,74.41,17801300],["2026-01-15",75.22,76.05,74.91,75.25,18213000],["2026-01-16",75.64,75.99,74.6,75.19,25743300],["2026-01-20",74.52,74.87,73.21,73.35,23999700],["2026-01-21",73.95,74.36,73.01,73.69,18210200],["2026-01-22",74.11,74.78,73.88,74.33,12879800],["2026-01-23",73.95,75.07,73.71,74.59,13125500],["2026-01-26",76.47,77.42,75.64,77.01,24714400],["2026-01-27",77.19,78.91,77.05,78.68,17756700],["2026-01-28",78.93,79.04,78.02,78.96,14022900],["2026-01-29",79.11,79.48,77.63,78.43,22642900],["2026-01-30",78.09,78.8,77.72,78.32,26458400],["2026-02-02",78.12,81.16,78.0,80.64,28238600],["2026-02-03",80.81,83.25,80.81,83.11,34962100],["2026-02-04",83.98,84.24,81.14,81.16,39765700],["2026-02-05",80.86,83.31,80.81,82.36,24236500],["2026-02-06",83.56,85.0,82.81,84.82,23936600],["2026-02-09",84.73,87.25,84.31,86.78,22908400],["2026-02-10",86.97,88.19,86.13,86.29,32113800],["2026-02-11",86.06,87.14,85.13,85.54,34455800],["2026-02-12",79.61,80.37,74.09,75.0,68098600],["2026-02-13",74.38,77.3,73.42,76.85,42886400],["2026-02-17",76.95,77.57,76.48,76.85,24792700],["2026-02-18",76.55,78.6,76.49,78.18,20648800],["2026-02-19",77.99,79.16,77.87,78.56,18443200],["2026-02-20",78.13,79.33,78.13,79.2,29461600],["2026-02-23",78.85,79.48,76.94,77.74,24485900],["2026-02-24",77.74,78.71,77.47,78.14,19485100],["2026-02-25",78.45,79.42,78.26,79.12,22721800],["2026-02-26",78.94,79.34,77.72,78.1,19608000],["2026-02-27",77.65,79.53,77.07,79.46,27498000],["2026-03-02",78.75,79.52,77.69,79.42,18540400],["2026-03-03",78.38,79.44,77.57,78.96,17521100],["2026-03-04",79.2,80.96,78.53,80.87,20388100],["2026-03-05",79.99,81.17,79.05,80.01,26844800],["2026-03-06",78.52,79.52,78.35,78.64,20621200],["2026-03-09",77.18,77.56,75.2,76.21,32855900],["2026-03-10",77.14,79.01,77.1,77.7,24836000],["2026-03-11",77.64,78.5,77.12,78.1,14719900],["2026-03-12",76.95,78.13,76.95,77.74,19969500],["2026-03-13",78.07,79.26,77.94,78.33,19080400],["2026-03-16",78.92,79.17,78.19,78.9,14715100],["2026-03-17",79.18,80.05,78.82,79.27,16210500],["2026-03-18",79.74,80.03,77.53,77.6,18827600],["2026-03-19",77.55,78.88,76.92,78.51,17519600],["2026-03-20",78.45,79.04,76.71,77.65,90380800],["2026-03-23",78.64,79.51,78.42,78.82,20072200],["2026-03-24",78.37,80.94,78.13,80.86,23528000],["2026-03-25",81.0,82.68,80.89,81.83,23146000],["2026-03-26",82.07,83.11,81.81,82.16,26649600],["2026-03-27",81.98,82.12,79.4,79.92,20557400],["2026-03-30",79.86,80.39,76.59,77.04,24306300],["2026-03-31",77.89,78.19,76.31,77.59,25105700],["2026-04-01",78.0,79.12,77.81,77.93,21309000],["2026-04-02",76.73,79.1,76.54,79.02,12634900],["2026-04-06",79.12,80.48,79.02,80.44,16388600],["2026-04-07",80.02,80.89,79.42,80.68,13428100],["2026-04-08",82.31,83.74,81.5,83.7,19621900],["2026-04-09",83.85,84.77,82.15,83.17,17611700],["2026-04-10",83.89,84.56,81.62,82.22,17571100],["2026-04-13",82.04,82.39,81.25,82.35,19997500],["2026-04-14",82.03,82.65,81.36,82.61,17856800],["2026-04-15",82.53,82.66,80.88,82.36,15066400],["2026-04-16",82.08,84.53,82.0,84.5,14609000],["2026-04-17",85.19,86.38,84.6,86.25,20321900],["2026-04-20",86.2,88.35,85.86,87.71,16695600],["2026-04-21",87.92,89.8,87.16,89.7,18653400],["2026-04-22",89.93,90.45,89.48,89.8,16986100],["2026-04-23",89.32,90.0,88.27,88.59,21156700],["2026-04-24",87.41,89.73,87.41,89.01,18969900],["2026-04-27",89.28,89.5,87.64,88.26,13810500],["2026-04-28",88.55,88.55,85.78,86.86,16889300],["2026-04-29",87.32,89.63,86.84,89.57,15427900],["2026-04-30",89.82,91.67,89.32,91.5,21686700],["2026-05-01",91.75,92.92,91.16,91.85,16095700],["2026-05-04",91.85,93.1,91.19,92.63,12684800],["2026-05-05",93.82,94.72,93.38,94.3,13456200],["2026-05-06",92.64,93.42,91.0,91.64,27026600],["2026-05-07",92.0,92.73,91.61,92.16,17062300],["2026-05-08",93.33,97.02,93.14,96.57,24652500],["2026-05-11",96.35,98.83,95.33,98.72,31852500],["2026-05-12",99.52,99.93,97.77,99.29,28810800],["2026-05-13",99.4,102.01,99.29,101.87,45241600],["2026-05-14",117.55,119.36,113.97,115.53,70932300],["2026-05-15",114.61,118.83,114.0,118.21,38519600],["2026-05-18",118.8,119.39,116.03,118.88,24763500],["2026-05-19",117.04,118.5,114.79,115.38,32525500],["2026-05-20",115.69,116.92,113.85,114.35,26154800],["2026-05-21",114.13,118.6,113.57,118.2,22700600],["2026-05-22",118.46,120.79,117.68,120.41,22237200],["2026-05-26",120.54,120.77,117.1,118.33,26607200],["2026-05-27",117.94,120.39,116.77,119.67,21705100],["2026-05-28",120.53,120.72,117.96,118.64,20631300],["2026-05-29",117.82,121.43,117.01,120.42,42179300],["2026-06-01",119.8,121.95,118.3,121.33,23966800],["2026-06-02",122.49,128.22,122.49,128.0,26451500],["2026-06-03",126.16,129.42,124.92,126.5,29972500],["2026-06-04",126.06,130.37,124.14,130.0,23339500],["2026-06-05",128.66,128.84,121.55,121.64,33169300],["2026-06-08",123.56,126.44,122.0,124.15,24288200],["2026-06-09",123.26,124.22,117.1,120.36,22744100],["2026-06-10",119.72,120.95,118.36,118.8,19740500],["2026-06-11",117.18,122.55,116.5,121.83,24625500],["2026-06-12",122.35,122.79,120.73,121.1,18222800],["2026-06-15",122.56,122.59,119.53,120.17,23148000],["2026-06-16",120.29,120.77,119.2,119.57,16644300],["2026-06-17",118.96,119.66,116.94,117.33,18472000],["2026-06-18",118.6,120.32,117.3,119.54,52284400],["2026-06-22",119.6,122.09,119.6,121.53,20174100],["2026-06-23",118.54,122.34,117.65,121.15,22654400],["2026-06-24",120.57,122.89,119.03,119.73,21752900],["2026-06-25",120.81,121.14,117.56,118.97,26918700],["2026-06-26",117.18,117.18,112.86,113.77,51641400],["2026-06-29",114.98,118.18,114.73,117.7,22447200],["2026-06-30",116.78,119.1,116.2,117.46,32465500],["2026-07-01",116.54,117.43,114.99,117.01,32016000],["2026-07-02",117.03,117.14,111.9,112.69,24251000],["2026-07-06",113.05,115.48,112.68,113.98,22920000],["2026-07-07",112.79,114.03,111.67,111.79,16650900],["2026-07-08",111.68,114.05,111.33,113.82,18314100],["2026-07-09",115.28,119.48,115.28,118.31,21293400],["2026-07-10",117.63,121.61,117.03,121.31,26178700],["2026-07-13",119.97,120.34,117.26,119.25,17569200],["2026-07-14",119.75,120.06,116.56,117.09,21935600],["2026-07-15",117.2,117.5,110.22,111.77,23829100],["2026-07-16",110.22,111.24,107.53,109.66,25222400],["2026-07-17",109.15,113.23,108.91,111.94,28459500],["2026-07-20",112.28,113.23,110.65,110.7,15816700]];
+const CSCO_MA5 = [67.74,67.85,68.04,68.29,68.29,68.42,68.34,68.3,68.23,68.19,67.87,67.98,67.9,68.08,68.45,69.38,69.82,70.59,70.83,70.71,69.59,68.85,67.92,67.26,66.81,67.03,67.07,67.4,67.66,68.14,68.5,68.63,68.49,68.4,67.89,67.45,67.36,67.45,67.39,67.31,67.34,67.26,67.18,67.38,67.71,67.86,67.98,67.9,67.73,67.54,67.53,67.71,67.99,68.08,68.22,68.46,68.58,68.89,69.22,69.23,68.94,68.87,68.71,68.53,68.97,69.61,70.02,70.25,70.49,70.59,70.73,71.11,71.25,71.78,72.27,72.88,72.82,72.98,72.6,72.2,71.72,71.6,71.97,73.24,74.63,75.77,76.9,77.78,77.4,77.02,76.71,76.5,76.03,76.33,76.32,76.45,76.73,77.07,77.28,77.84,78.37,78.87,79.17,79.14,79.02,78.62,77.77,77.31,77.43,77.41,77.5,77.9,78.15,78.02,77.88,77.68,77.29,76.77,76.26,75.72,75.11,74.67,74.36,74.41,74.35,74.6,74.87,74.73,74.38,74.36,74.23,74.59,75.66,76.71,77.53,78.28,79.01,79.89,80.33,81.12,82.42,83.65,84.28,85.16,83.69,82.09,80.11,78.48,77.09,77.93,78.11,78.36,78.55,78.46,78.51,78.85,79.01,79.36,79.74,79.58,78.94,78.69,78.13,77.68,77.62,78.15,78.47,78.37,78.52,78.39,78.37,78.69,79.53,80.26,80.72,80.36,79.71,78.93,78.3,78.4,79.13,80.35,81.4,82.04,82.42,82.81,82.54,82.81,83.61,84.69,86.1,87.59,88.41,88.96,89.07,88.5,88.46,89.04,89.61,90.48,91.97,92.38,92.52,93.46,94.68,95.68,97.72,102.4,106.72,110.76,113.97,116.47,117.0,117.44,117.33,118.19,119.05,119.49,119.68,121.61,122.98,125.25,125.49,126.06,124.53,122.99,121.36,121.25,120.45,120.29,120.0,119.54,119.63,119.82,119.86,120.18,119.03,118.26,117.53,116.98,115.73,115.77,114.59,113.86,114.12,115.84,116.9,117.96,117.55,115.82,113.94,112.23];
+const CSCO_MA20 = [68.3,68.4,68.44,68.48,68.48,68.47,68.43,68.36,68.32,68.3,68.18,68.16,68.11,68.1,68.16,68.35,68.5,68.71,68.86,68.91,68.82,68.75,68.68,68.6,68.54,68.47,68.43,68.45,68.46,68.53,68.63,68.59,68.6,68.54,68.39,68.14,67.98,67.81,67.68,67.54,67.58,67.58,67.63,67.71,67.77,67.79,67.81,67.75,67.72,67.61,67.54,67.58,67.63,67.65,67.7,67.8,67.88,67.99,68.1,68.17,68.2,68.28,68.37,68.39,68.49,68.63,68.79,68.96,69.08,69.25,69.44,69.65,69.77,70.0,70.26,70.54,70.71,70.8,70.85,71.01,71.24,71.39,71.61,72.03,72.42,72.78,73.11,73.5,73.75,74.03,74.27,74.46,74.69,74.89,75.04,75.16,75.43,75.72,76.06,76.45,76.82,77.25,77.52,77.54,77.55,77.54,77.47,77.4,77.55,77.65,77.74,77.82,77.92,77.97,78.04,78.04,77.96,77.85,77.71,77.51,77.23,76.91,76.65,76.53,76.34,76.22,76.18,76.0,75.77,75.58,75.41,75.35,75.38,75.44,75.49,75.55,75.78,76.16,76.46,76.84,77.38,78.03,78.64,79.15,79.17,79.25,79.34,79.58,79.82,80.07,80.22,80.28,80.3,80.26,80.31,80.37,80.28,80.17,80.11,79.93,79.5,79.04,78.63,78.24,78.41,78.51,78.63,78.6,78.6,78.52,78.58,78.71,78.85,79.05,79.08,78.96,78.89,78.74,78.69,78.78,79.0,79.3,79.56,79.78,79.98,80.17,80.32,80.67,81.05,81.56,82.1,82.55,82.89,83.23,83.65,84.14,84.74,85.41,86.06,86.67,87.35,87.74,88.19,88.91,89.73,90.56,91.54,93.09,94.69,96.25,97.53,98.76,100.24,101.81,103.31,104.95,106.41,107.85,109.33,111.09,112.7,114.62,116.1,117.48,118.56,119.53,120.53,120.81,120.91,120.94,121.04,121.3,121.47,121.5,121.57,121.54,121.29,121.16,120.97,120.42,119.72,118.92,118.43,117.92,117.81,117.94,117.81,117.61,117.19,116.69,116.42,115.98];
+const CSCO_MA60 = [64.15,64.36,64.56,64.76,64.95,65.14,65.31,65.47,65.62,65.76,65.9,66.04,66.17,66.33,66.47,66.64,66.79,66.91,67.02,67.11,67.16,67.22,67.28,67.35,67.4,67.47,67.53,67.62,67.7,67.78,67.86,67.92,67.94,67.98,68.01,68.05,68.09,68.16,68.19,68.21,68.23,68.24,68.25,68.26,68.26,68.24,68.22,68.19,68.17,68.15,68.12,68.11,68.11,68.1,68.08,68.1,68.12,68.17,68.21,68.21,68.2,68.2,68.23,68.23,68.26,68.3,68.34,68.39,68.42,68.46,68.54,68.6,68.67,68.73,68.78,68.83,68.85,68.87,68.88,68.91,69.0,69.08,69.2,69.38,69.56,69.73,69.9,70.07,70.19,70.3,70.42,70.56,70.7,70.85,71.0,71.17,71.34,71.5,71.67,71.88,72.09,72.31,72.5,72.65,72.82,72.98,73.12,73.28,73.46,73.64,73.81,73.97,74.13,74.29,74.45,74.58,74.7,74.79,74.88,74.99,75.1,75.18,75.26,75.36,75.44,75.51,75.59,75.63,75.69,75.75,75.8,75.88,76.0,76.1,76.19,76.25,76.39,76.58,76.74,76.93,77.14,77.4,77.6,77.74,77.69,77.67,77.66,77.66,77.71,77.76,77.79,77.82,77.87,77.89,77.95,77.99,78.01,78.06,78.09,78.09,78.04,77.99,77.97,77.97,77.97,78.0,78.05,78.06,78.06,78.06,78.07,78.12,78.18,78.25,78.29,78.29,78.32,78.36,78.42,78.52,78.63,78.79,78.94,79.06,79.19,79.31,79.43,79.62,79.83,80.05,80.3,80.51,80.68,80.85,81.01,81.15,81.3,81.44,81.62,81.79,81.95,82.03,82.13,82.31,82.71,83.08,83.5,84.12,84.78,85.44,86.07,86.67,87.33,88.03,88.68,89.35,90.01,90.67,91.36,92.18,93.02,93.89,94.62,95.39,96.09,96.76,97.46,98.19,98.88,99.58,100.22,100.87,101.53,102.18,102.84,103.54,104.15,104.81,105.45,106.06,106.59,107.1,107.57,108.1,108.7,109.34,109.96,110.5,110.93,111.29,111.66,112.01];
+const CSCO_MA120 = [62.45,62.53,62.6,62.68,62.75,62.81,62.87,62.93,62.97,63.02,63.06,63.11,63.15,63.21,63.26,63.32,63.37,63.42,63.47,63.51,63.54,63.56,63.58,63.61,63.63,63.67,63.7,63.73,63.78,63.82,63.88,63.94,64.0,64.07,64.12,64.17,64.23,64.29,64.35,64.4,64.45,64.5,64.55,64.61,64.67,64.72,64.77,64.82,64.9,65.01,65.12,65.25,65.34,65.43,65.52,65.62,65.72,65.84,65.96,66.07,66.17,66.28,66.39,66.49,66.6,66.72,66.82,66.93,67.02,67.11,67.22,67.32,67.42,67.53,67.63,67.73,67.82,67.89,67.95,68.01,68.08,68.15,68.24,68.36,68.48,68.6,68.72,68.85,68.94,69.04,69.14,69.24,69.32,69.41,69.5,69.61,69.71,69.83,69.93,70.05,70.16,70.28,70.37,70.46,70.54,70.61,70.67,70.74,70.81,70.89,70.97,71.04,71.12,71.19,71.26,71.34,71.41,71.48,71.54,71.6,71.65,71.69,71.74,71.8,71.85,71.9,71.97,72.01,72.06,72.11,72.17,72.24,72.33,72.41,72.49,72.54,72.62,72.72,72.81,72.92,73.07,73.24,73.4,73.56,73.62,73.7,73.78,73.86,73.95,74.03,74.1,74.19,74.28,74.37,74.47,74.58,74.67,74.78,74.88,74.98,75.06,75.15,75.24,75.31,75.4,75.49,75.59,75.67,75.76,75.85,75.94,76.05,76.15,76.27,76.37,76.44,76.51,76.57,76.65,76.75,76.86,76.99,77.1,77.21,77.31,77.41,77.51,77.62,77.76,77.9,78.05,78.2,78.34,78.47,78.6,78.7,78.85,79.01,79.18,79.36,79.55,79.71,79.86,80.02,80.2,80.38,80.58,80.89,81.25,81.6,81.93,82.25,82.6,82.96,83.31,83.67,84.01,84.36,84.73,85.14,85.53,85.94,86.29,86.68,87.03,87.38,87.76,88.13,88.47,88.82,89.15,89.49,89.85,90.22,90.57,90.92,91.23,91.58,91.93,92.29,92.61,92.94,93.26,93.58,93.94,94.33,94.7,95.06,95.38,95.67,95.98,96.26];
+
+(function(){
+  const svgCandle = document.getElementById('cscoCandleSvg');
+  const svgVol = document.getElementById('cscoVolumeSvg');
+  const toggle = document.getElementById('cscoRangeToggle');
+  const maToggle = document.getElementById('cscoMaToggle');
+  if(!svgCandle || !svgVol || !toggle) return;
+  const RANGES = {'1M':21,'3M':63,'6M':126,'1Y':252};
+  const NS = 'http://www.w3.org/2000/svg';
+  const UP='#2ecc71', DOWN='#e74c3c';
+  const maColors = {ma5:'#ff6b9d', ma20:'#9b59b6', ma60:'#f0c040', ma120:'#22d3ee'};
+  const maState = {ma5:true, ma20:true, ma60:true, ma120:true, pricelabels:true};
+  let currentRange = '1Y';
+
+  function draw(rangeKey){
+    currentRange = rangeKey;
+    const n = RANGES[rangeKey];
+    const data = CSCO_DAILY.slice(-n);
+    const ma5 = CSCO_MA5.slice(-n), ma20 = CSCO_MA20.slice(-n), ma60 = CSCO_MA60.slice(-n), ma120 = CSCO_MA120.slice(-n);
+    while(svgCandle.firstChild) svgCandle.removeChild(svgCandle.firstChild);
+    while(svgVol.firstChild) svgVol.removeChild(svgVol.firstChild);
+
+    const W=720,H=240,pL=45,pR=12,pT=10,pB=20;
+    const cW=W-pL-pR,cH=H-pT-pB;
+    const highs=data.map(d=>d[2]), lows=data.map(d=>d[3]);
+    const maVals=[...ma5,...ma20,...ma60,...ma120].filter(v=>v!=null);
+    const mx=Math.max(...highs,...maVals), mn=Math.min(...lows,...maVals);
+    const pad=(mx-mn)*0.06 || mx*0.02;
+    const top=mx+pad, bot=mn-pad, rng=(top-bot)||1;
+    const py = v => pT + cH*(1-(v-bot)/rng);
+    const colW = cW/data.length;
+    const bodyW = Math.max(colW*0.62, 1);
+
+    for(let i=0;i<=3;i++){
+      const v = bot + rng*i/3;
+      const y = py(v);
+      const l=document.createElementNS(NS,'line');
+      l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+      l.setAttribute('stroke','rgba(255,255,255,.08)');l.setAttribute('stroke-width','1');
+      svgCandle.appendChild(l);
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x',pL-4);t.setAttribute('y',y+3);t.setAttribute('text-anchor','end');
+      t.setAttribute('font-size','9');t.setAttribute('fill','rgba(154,160,184,.8)');
+      t.textContent='$'+v.toFixed(0);
+      svgCandle.appendChild(t);
+    }
+
+    data.forEach((d,i)=>{
+      const [,o,h,l,c] = d;
+      const cx = pL + (i+0.5)*colW;
+      const up = c >= o;
+      const col = up ? UP : DOWN;
+      const wick=document.createElementNS(NS,'line');
+      wick.setAttribute('x1',cx);wick.setAttribute('x2',cx);
+      wick.setAttribute('y1',py(h));wick.setAttribute('y2',py(l));
+      wick.setAttribute('stroke',col);wick.setAttribute('stroke-width', Math.max(colW*0.12,0.6));
+      svgCandle.appendChild(wick);
+      const yTop = py(Math.max(o,c));
+      const yBot = py(Math.min(o,c));
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x', cx - bodyW/2);
+      rect.setAttribute('y', yTop);
+      rect.setAttribute('width', bodyW);
+      rect.setAttribute('height', Math.max(yBot-yTop, 1));
+      rect.setAttribute('fill', col);
+      svgCandle.appendChild(rect);
+    });
+
+    const drawMaLine = (vals, color) => {
+      let seg = [];
+      const flush = () => {
+        if (seg.length > 1) {
+          const pl = document.createElementNS(NS,'polyline');
+          pl.setAttribute('points', seg.join(' '));
+          pl.setAttribute('fill','none'); pl.setAttribute('stroke',color);
+          pl.setAttribute('stroke-width','1.7'); pl.setAttribute('opacity','0.95');
+          pl.setAttribute('stroke-linejoin','round'); pl.setAttribute('stroke-linecap','round');
+          svgCandle.appendChild(pl);
+        }
+        seg = [];
+      };
+      vals.forEach((v,i) => {
+        if (v == null) { flush(); return; }
+        seg.push(`${pL+(i+0.5)*colW},${py(v)}`);
+      });
+      flush();
+    };
+    if (maState.ma5) drawMaLine(ma5, maColors.ma5);
+    if (maState.ma20) drawMaLine(ma20, maColors.ma20);
+    if (maState.ma60) drawMaLine(ma60, maColors.ma60);
+    if (maState.ma120) drawMaLine(ma120, maColors.ma120);
+
+    if (maState.pricelabels) {
+    const closeIdx = data.length-1;
+    const closeVal = data[closeIdx][4];
+    const periodHigh = Math.max(...highs);
+    const periodLow = Math.min(...lows);
+    const highIdx = highs.indexOf(periodHigh);
+    const lowIdx = lows.indexOf(periodLow);
+    const markers = [
+      {idx: highIdx, v: periodHigh, color: UP, label:'최고', side:'above'},
+      {idx: lowIdx, v: periodLow, color: DOWN, label:'최저', side:'below'},
+      {idx: closeIdx, v: closeVal, color:'#60a5fa', label:'종가', side:'left'}
+    ];
+    markers.forEach(m=>{
+      const cx = pL + (m.idx+0.5)*colW;
+      const cy = py(m.v);
+      const dot=document.createElementNS(NS,'circle');
+      dot.setAttribute('cx',cx);dot.setAttribute('cy',cy);dot.setAttribute('r','3.5');
+      dot.setAttribute('fill',m.color);dot.setAttribute('stroke','#0f1117');dot.setAttribute('stroke-width','1.5');
+      svgCandle.appendChild(dot);
+
+      const labelText = `${m.label} $${m.v.toFixed(2)}`;
+      const labelW = labelText.length*5.2+6;
+      let tx, ty, anchor;
+      if (m.side === 'left') {
+        anchor = 'end'; tx = cx-7; ty = cy+3;
+      } else if (m.side === 'above') {
+        ty = cy-9;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      } else {
+        ty = cy+16;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      }
+      const bgX = anchor==='end' ? tx-labelW : anchor==='middle' ? tx-labelW/2 : tx;
+      const bg=document.createElementNS(NS,'rect');
+      bg.setAttribute('x', bgX);bg.setAttribute('y', ty-8);
+      bg.setAttribute('width', labelW);bg.setAttribute('height', 12);
+      bg.setAttribute('fill','rgba(15,17,23,0.85)');bg.setAttribute('rx','2');
+      svgCandle.appendChild(bg);
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x', tx);t.setAttribute('y', ty+2);
+      t.setAttribute('text-anchor',anchor);t.setAttribute('font-size','9');
+      t.setAttribute('font-weight','700');t.setAttribute('fill', m.color);
+      t.textContent = labelText;
+      svgCandle.appendChild(t);
+    });
+    }
+
+    const labelCount = Math.min(5, data.length);
+    for(let i=0;i<labelCount;i++){
+      const idx = Math.round(i*(data.length-1)/((labelCount-1)||1));
+      const cx = pL + (idx+0.5)*colW;
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x', Math.min(Math.max(cx,pL+10), W-20));
+      t.setAttribute('y', H-4);
+      t.setAttribute('text-anchor','middle');t.setAttribute('font-size','9');
+      t.setAttribute('fill','rgba(154,160,184,.8)');
+      t.textContent = data[idx][0].slice(2).replace(/-/g,'.');
+      svgCandle.appendChild(t);
+    }
+
+    const VW=720,VH=70,vpT=6,vpB=4;
+    const vcH=VH-vpT-vpB;
+    const maxV = Math.max(...data.map(d=>d[5]));
+    data.forEach((d,i)=>{
+      const [,o,,,c,v] = d;
+      const cx = pL + (i+0.5)*colW;
+      const up = c >= o;
+      const col = up ? 'rgba(46,204,113,0.55)' : 'rgba(231,76,60,0.55)';
+      const h = (v/maxV)*vcH;
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x', cx - bodyW/2);
+      rect.setAttribute('y', vpT + (vcH-h));
+      rect.setAttribute('width', bodyW);
+      rect.setAttribute('height', Math.max(h,1));
+      rect.setAttribute('fill', col);
+      svgVol.appendChild(rect);
+    });
+  }
+
+  toggle.querySelectorAll('.range-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      toggle.querySelectorAll('.range-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      draw(btn.dataset.range);
+    });
+  });
+
+  if (maToggle) {
+    maToggle.querySelectorAll('.ma-toggle-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const key = btn.dataset.ma;
+        maState[key] = !maState[key];
+        btn.classList.toggle('ma-off', !maState[key]);
+        draw(currentRange);
+      });
+    });
+  }
+
+  draw('1Y');
+})();
+
+function renderFundChart() {
+  const ctx = document.getElementById('cscoRevChart');
+  if (!ctx || charts['fund']) return;
+  charts['fund'] = new Chart(ctx,{
+    data:{
+      labels:['Q4 FY24','Q1 FY25','Q2 FY25','Q3 FY25','Q4 FY25','Q1 FY26','Q2 FY26','Q3 FY26'],
+      datasets:[
+        {type:'bar',label:'매출($B)',data:[13.6,13.8,14.0,14.1,14.7,14.9,15.3,15.84],backgroundColor:'#049fd9',borderRadius:4,barPercentage:0.7,categoryPercentage:0.7,yAxisID:'y'},
+        {type:'line',label:'GAAP EPS($)',data:[0.54,0.68,0.61,0.62,0.71,0.72,0.80,0.85],borderColor:'#5cc9f5',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#9aa0b8',font:{size:10}}}},
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}},
+        y2:{position:'right',min:0,max:1,grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v}}
+      }
+    }
+  });
+}
+
+function renderPeerChart() {
+  const ctx = document.getElementById('peerChart');
+  if (!ctx || charts['peer']) return;
+  charts['peer'] = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['CSCO','자체 10년평균'],
+      datasets:[{
+        label:'P/E',
+        data:[35.9,18.5],
+        backgroundColor:['#5cc9f5','rgba(154,160,184,0.4)'],
+        borderRadius:4,borderSkipped:false
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`P/E ${ctx.raw}x`}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{max:40,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
+      }
+    }
+  });
+}
+
+function renderCharts(sectionId) {
+  setTimeout(() => {
+    if (sectionId === 'fund') renderFundChart();
+    if (sectionId === 'valuation') renderPeerChart();
+  }, 50);
+}
+</script>
+</body>
+</html>
