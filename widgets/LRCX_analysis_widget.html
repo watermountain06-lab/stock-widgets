@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LRCX 종합 분석 위젯</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117; --bg2: #1a1d27; --bg3: #22263a; --border: #2e3347;
+    --text: #e8eaf0; --text2: #9aa0b8; --text3: #5c6282;
+    --accent: #3b82f6; --accent2: #60a5fa; --accent3: #4a0e1c;
+    --bull: #D85A30; --bear: #185FA5; --ma5: #ff6b9d; --ma20: #9b59b6; --ma60: #f0c040; --ma120: #22d3ee;
+    --green: #2ecc71; --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
+  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; max-width: 1100px; margin: 0 auto; }
+  .header { background: linear-gradient(135deg, #250810 0%, #0f1117 40%, #1a1d27 100%); border-bottom: 2px solid var(--accent3); padding: 28px 32px 24px; position: relative; overflow: hidden; max-width: 1100px; margin: 0 auto; }
+  .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(209,87,114,0.14) 0%, transparent 70%); pointer-events: none; }
+  .header-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .ticker-block { display: flex; align-items: center; gap: 16px; }
+  .ticker-badge { background: linear-gradient(135deg, var(--accent3), var(--accent)); color: #fff; font-size: 13px; font-weight: 800; padding: 5px 12px; border-radius: 6px; letter-spacing: 1px; }
+  .company-name { font-size: 22px; font-weight: 700; color: var(--text); }
+  .company-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .price-block { text-align: right; }
+  .price-main { font-size: 32px; font-weight: 800; color: var(--accent2); letter-spacing: -1px; }
+  .price-change { font-size: 13px; color: var(--green); font-weight: 600; }
+  .header-meta { display: flex; justify-content: space-between; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+  .meta-item { display: flex; flex-direction: column; }
+  .meta-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .meta-value { font-size: 13px; font-weight: 600; color: var(--text2); margin-top: 2px; }
+  .meta-value.highlight { color: var(--accent2); }
+  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
+  .nav-btn:hover { color: var(--text); background: var(--bg3); }
+  .nav-btn.active { background: var(--accent3); color: var(--accent2); }
+  .section { display: none; padding: 28px 32px; max-width: 1100px; margin: 0 auto; }
+  .section.active { display: block; }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--accent2); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; display: inline-block; }
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px; }
+  .card-title { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; font-weight: 600; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .chart-wrap { position: relative; }
+  .chart-wrap canvas { max-width: 100%; }
+  .price-chart-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+  .stat-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .stat-value { font-size: 20px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
+  .stat-sub { font-size: 11px; color: var(--text3); }
+  .stat-value.up { color: var(--green); }
+  .stat-value.down { color: var(--red); }
+  .stat-value.gold { color: var(--accent2); }
+  .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .ma-row:last-child { border-bottom: none; }
+  .ma-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+  .ma-name { display: flex; align-items: center; font-size: 13px; color: var(--text2); }
+  .ma-val { font-size: 13px; font-weight: 600; }
+  .ma-status { font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
+  .status-above { background: rgba(46,204,113,0.15); color: var(--green); }
+  .status-below { background: rgba(231,76,60,0.15); color: var(--red); }
+  .status-amber { background: rgba(240,192,64,0.18); color: var(--ma60); }
+  .zone-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .zone-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg3); border-radius: 6px; }
+  .zone-label { font-size: 12px; color: var(--text2); }
+  .zone-val { font-size: 13px; font-weight: 700; color: var(--accent2); }
+  .zone-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
+  .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
+  .tag-current { background: rgba(209,87,114,0.2); color: var(--accent2); }
+  .val-item { margin-bottom: 18px; }
+  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
+  .val-track { height: 8px; background: var(--bg3); border-radius: 4px; position: relative; overflow: hidden; }
+  .val-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; background: linear-gradient(90deg,#f0c040,#e74c3c); }
+  .val-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+  .val-low { font-size: 10px; color: var(--green); }
+  .val-mid { font-size: 10px; color: var(--accent2); text-align: center; }
+  .val-high { font-size: 10px; color: var(--red); }
+  .stage-badge { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
+  .stage-1 { background: rgba(46,204,113,0.2); color: #2ecc71; }
+  .stage-2 { background: rgba(39,174,96,0.2); color: #27ae60; }
+  .stage-3 { background: rgba(209,87,114,0.2); color: var(--accent2); }
+  .stage-4 { background: rgba(231,126,35,0.2); color: #e67e22; }
+  .stage-5 { background: rgba(231,76,60,0.2); color: var(--red); }
+  .stage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .stage-mini { text-align: center; padding: 10px 4px; border-radius: 8px; }
+  .stage-mini-num { font-size: 15px; font-weight: 700; }
+  .stage-mini-label { font-size: 9px; margin-top: 2px; }
+  .scenario-card { border-radius: 8px; padding: 14px; }
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--event-major); border: 2px solid var(--bg); }
+  .tl-dot.red { background: var(--red); }
+  .tl-dot.green { background: var(--green); }
+  .tl-dot.blue { background: var(--blue); }
+  .tl-dot.gold { background: var(--event-major); }
+  .tl-dot.neutral { background: var(--event-neutral); }
+  .tl-dot.today { background: #ffc107; }
+  .tl-date { font-size: 10px; color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+  .tl-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 3px 0; }
+  .tl-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .tl-source { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 11px; font-weight: 600; color: var(--accent2); text-decoration: none; }
+  .tl-source:hover { text-decoration: underline; }
+  .bull-bear { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .bb-box { background: var(--bg3); border-radius: var(--radius); padding: 16px; }
+  .bb-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .bb-bull { color: var(--bull); }
+  .bb-bear { color: var(--bear); }
+  .bb-item { display: flex; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .bb-icon { flex-shrink: 0; margin-top: 2px; }
+  .driver-item { display: flex; gap: 12px; padding: 12px; background: var(--bg3); border-radius: 8px; margin-bottom: 10px; }
+  .driver-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent3); color: var(--accent2); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .driver-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .driver-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
+  .per-share-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .ps-card { background: var(--bg3); border-radius: 8px; padding: 16px; text-align: center; }
+  .ps-icon { font-size: 22px; margin-bottom: 6px; }
+  .ps-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .ps-value { font-size: 22px; font-weight: 800; color: var(--accent2); }
+  .ps-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
+  .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+  .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
+  .disclaimer { max-width: 1100px; margin: 28px auto 16px; padding: 12px 16px; background: rgba(209,87,114,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
+  .info-box { background: rgba(209,87,114,0.1); border: 1px solid var(--accent3); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; color: var(--text2); }
+  .range-toggle { display: flex; gap: 4px; }
+  .range-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--text3); font-size: 11px; font-weight: 700; padding: 4px 11px; border-radius: 999px; cursor: pointer; transition: all .15s; }
+  .range-btn:hover { color: var(--text); border-color: var(--text2); }
+  .range-btn.active { background: var(--accent3); color: var(--accent2); border-color: var(--accent); }
+  .ma-toggle-btn { background: var(--bg3); border: 1px solid; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer; transition: all .15s; }
+  .ma-toggle-btn:hover { filter: brightness(1.2); }
+  .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
+  @media (max-width: 600px) {
+    .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
+    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; }
+    .per-share-grid { grid-template-columns: 1fr 1fr; } .stage-grid { grid-template-columns: 1fr 1fr; } .price-main { font-size: 24px; }
+  }
+  body { padding-top: 46px; }
+  .back-bar { position: fixed; top: 0; left: 0; right: 0; height: 46px; background: rgba(10,11,22,0.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.25); }
+  .back-bar a { color: var(--text2); font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+  .back-bar a:hover { color: var(--accent2); }
+  .back-bar .brand-icon { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 6px; background: var(--accent3); color: var(--accent2); font-size: 12px; }
+  .back-bar .back-bar-ticker { font-size: 11px; color: var(--text3); font-weight: 600; letter-spacing: 0.4px; }
+  .back-bar-nav { display: flex; align-items: center; gap: 10px; }
+  .peer-nav-link { color: var(--text2); font-size: 11px; font-weight: 700; text-decoration: none; padding: 4px 9px; border-radius: 6px; border: 1px solid var(--border); transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+  .peer-nav-link:hover { color: var(--accent2); border-color: var(--accent); }
+  .peer-nav-link.disabled { color: var(--text3); opacity: 0.4; pointer-events: none; border-color: var(--border); }
+</style>
+</head>
+<body>
+<div class="back-bar"><a href="../index.html"><span class="brand-icon">◧</span>US Stock Widgets · 전체 종목 목록</a><div class="back-bar-nav"><a class="peer-nav-link" href="AMAT_analysis_widget.html">◀ AMAT</a><span class="back-bar-ticker">LRCX · 시총 29위</span><span class="peer-nav-link disabled">다음 종목 ▶</span></div></div>
+<div class="today-banner">✅ <strong>2026년 7월 20일 종가 기준</strong> — $306.76 (-4.48%), 52주 최고 $438.50 대비 -30.0%. Yahoo Finance 2년 원천 데이터에서 완료된 최근 252거래일만 사용.</div>
+<div class="header"><div class="header-top"><div><div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;"><span class="ticker-badge">LRCX</span><span style="font-size:11px;color:var(--accent);font-weight:600;">NASDAQ · 반도체 장비 · 🇺🇸 미국</span></div><div class="company-name">Lam Research Corporation</div><div class="company-sub">식각·증착·세정 장비와 설치기반 서비스 선도기업 · CEO Tim Archer</div></div><div style="text-align:right;"><div class="price-main">$306.76</div><div class="price-change" style="color:var(--red);">-4.48% (2026.07.20)</div><div style="font-size:11px;color:var(--text3);margin-top:2px;">52주 최저 $90.94 · 최고 $438.50 · 기간 수익률 +204.7%</div></div></div><div class="header-meta"><div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">약 $384B</span></div><div class="meta-item"><span class="meta-label">FY2025 매출</span><span class="meta-value highlight">$18.44B</span></div><div class="meta-item"><span class="meta-label">FY2025 순이익</span><span class="meta-value highlight">$5.36B</span></div><div class="meta-item"><span class="meta-label">Q3 FY2026 매출</span><span class="meta-value highlight">$5.84B</span></div><div class="meta-item"><span class="meta-label">Q3 GAAP EPS</span><span class="meta-value highlight">$1.45</span></div><div class="meta-item"><span class="meta-label">Q3 총이익률</span><span class="meta-value highlight">49.8%</span></div></div></div>
+<div class="nav"><button class="nav-btn active" onclick="showSection('tech',event)">📈 기술적 분석</button><button class="nav-btn" onclick="showSection('fund',event)">📊 기본적 분석</button><button class="nav-btn" onclick="showSection('valuation',event)">⚖️ 밸류에이션</button><button class="nav-btn" onclick="showSection('us',event)">🇺🇸 US 특화</button><button class="nav-btn" onclick="showSection('news',event)">📰 시계열 뉴스</button><button class="nav-btn" onclick="showSection('invest',event)">🎯 투자 포인트</button></div>
+
+<div id="tech" class="section active"><div class="section-title">기술적 분석 — 일봉 캔들스틱 (최근 252거래일) · 기간 수익률 +204.7%</div><div class="price-chart-container"><div style="margin-bottom:10px;display:flex;justify-content:space-between;gap:8px;"><div class="range-toggle" id="lrcxRangeToggle"><button class="range-btn" data-range="1M">1개월</button><button class="range-btn" data-range="3M">3개월</button><button class="range-btn" data-range="6M">6개월</button><button class="range-btn active" data-range="1Y">1년</button></div><div id="lrcxMaToggle"><button class="ma-toggle-btn" data-ma="ma5">● MA5</button><button class="ma-toggle-btn" data-ma="ma20">● MA20</button><button class="ma-toggle-btn" data-ma="ma60">● MA60</button><button class="ma-toggle-btn" data-ma="ma120">● MA120</button></div></div><svg id="lrcxCandleSvg" viewBox="0 0 720 240" width="100%"></svg><svg id="lrcxVolumeSvg" viewBox="0 0 720 70" width="100%"></svg><div style="font-size:11px;color:var(--text3);margin-top:10px;">52주 최저 $90.94 → 최고 $438.50 → 현재 $306.76</div></div><div class="grid-2"><div class="card"><div class="card-title">핵심 가격대</div><div class="zone-list"><div class="zone-item"><span class="zone-label">52주 최고</span><span class="zone-val">$438.50</span></div><div class="zone-item"><span class="zone-label">현재가</span><span class="zone-val">$306.76</span></div><div class="zone-item"><span class="zone-label">52주 최저</span><span class="zone-val">$90.94</span></div></div></div><div class="card"><div class="card-title">이동평균선 현황</div><div class="ma-row"><span class="ma-name">MA5</span><span>$324.51</span><span class="ma-status status-below">하회</span></div><div class="ma-row"><span class="ma-name">MA20</span><span>$359.45</span><span class="ma-status status-below">하회</span></div><div class="ma-row"><span class="ma-name">MA60</span><span>$324.23</span><span class="ma-status status-below">하회</span></div><div class="ma-row"><span class="ma-name">MA120</span><span>$278.85</span><span class="ma-status status-above">상회</span></div></div></div><div class="card"><div class="card-title">구간별 패턴 분석</div><div class="grid-3"><div class="stat-box"><div class="stat-label">2025 하반기</div><div class="stat-value">바닥 형성</div><div class="stat-sub">$90대 저점 후 추세 전환</div></div><div class="stat-box"><div class="stat-label">2026 상반기</div><div class="stat-value up">AI 랠리</div><div class="stat-sub">HBM·첨단 NAND 투자 기대</div></div><div class="stat-box"><div class="stat-label">현재</div><div class="stat-value down">단기 조정</div><div class="stat-sub">MA120 위, 단기선 아래</div></div></div></div></div>
+<div id="fund" class="section"><div class="section-title">기본적 분석 — 최근 8분기 매출·GAAP 순이익·EPS</div><div class="card"><div class="card-title">분기 실적 (SEC 10-Q 및 10-K, $B) · Q4는 연간-9개월 누계로 역산</div><div class="chart-wrap" style="height:280px;"><canvas id="lrcxRevChart"></canvas></div></div><div class="grid-3"><div class="stat-box"><div class="stat-label">Q3 FY2026 매출</div><div class="stat-value up">$5.84B</div><div class="stat-sub">YoY +23.8%</div></div><div class="stat-box"><div class="stat-label">GAAP 영업이익</div><div class="stat-value up">$2.05B</div><div class="stat-sub">영업이익률 35.0%</div></div><div class="stat-box"><div class="stat-label">GAAP 순이익</div><div class="stat-value up">$1.83B</div><div class="stat-sub">EPS $1.45</div></div></div><div class="card"><div class="card-title">사업 구성</div><div class="grid-3"><div class="stat-box"><div class="stat-label">Systems</div><div class="stat-value">$3.73B</div><div class="stat-sub">식각·증착 등 신규 장비</div></div><div class="stat-box"><div class="stat-label">Customer Support</div><div class="stat-value up">$2.11B</div><div class="stat-sub">서비스·부품·업그레이드</div></div><div class="stat-box"><div class="stat-label">중국 매출 비중</div><div class="stat-value">34%</div><div class="stat-sub">규제 민감도 핵심</div></div></div></div><div class="card"><div class="card-title">핵심 성장 동력</div><div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">AI·HBM 공정 복잡도</div><div class="driver-desc">고종횡비 식각과 박막 증착 단계 증가가 Lam의 웨이퍼당 장비 기회를 확대.</div></div></div><div class="driver-item"><div class="driver-num">2</div><div><div class="driver-title">메모리 업사이클</div><div class="driver-desc">DRAM·NAND 투자 회복과 첨단 패키징이 시스템 수요를 지지.</div></div></div><div class="driver-item"><div class="driver-num">3</div><div><div class="driver-title">설치기반 서비스</div><div class="driver-desc">$2.11B 고객지원 매출이 장비 사이클 변동성을 완충.</div></div></div></div><div class="card"><div class="card-title">다음 실적 체크포인트 — 2026년 7월 29일</div><div class="grid-3"><div class="stat-box"><div class="stat-label">매출 가이던스</div><div class="stat-value">$6.60B ± $0.40B</div></div><div class="stat-box"><div class="stat-label">GAAP EPS</div><div class="stat-value">$1.65 ± $0.15</div></div><div class="stat-box"><div class="stat-label">영업이익률</div><div class="stat-value">36.5% ± 1%</div></div></div></div></div>
+<div id="valuation" class="section"><div class="section-title">밸류에이션 — 멀티플 5종 · 5단계 평가</div><div class="grid-2"><div class="card"><div class="card-title">멀티플 5종 · 5단계 평가</div>
+<div class="val-item"><div class="val-header"><span class="val-name">PER (TTM)</span><div><span class="val-number">58.4x</span> <span class="stage-badge stage-5">5단계</span></div></div><div class="val-track"><div class="val-fill" style="width:100%;"></div></div><div class="val-labels"><span class="val-low">저(18x)</span><span class="val-mid">적정(30x)</span><span class="val-high">고(45x)</span></div></div>
+<div class="val-item"><div class="val-header"><span class="val-name">Forward PER</span><div><span class="val-number">48.7x</span> <span class="stage-badge stage-5">5단계</span></div></div><div class="val-track"><div class="val-fill" style="width:100%;"></div></div><div class="val-labels"><span class="val-low">저(18x)</span><span class="val-mid">적정(30x)</span><span class="val-high">고(45x)</span></div></div>
+<div class="val-item"><div class="val-header"><span class="val-name">PBR</span><div><span class="val-number">36.3x</span> <span class="stage-badge stage-5">5단계</span></div></div><div class="val-track"><div class="val-fill" style="width:100%;"></div></div><div class="val-labels"><span class="val-low">저(5x)</span><span class="val-mid">적정(12x)</span><span class="val-high">고(22x)</span></div></div>
+<div class="val-item"><div class="val-header"><span class="val-name">PSR</span><div><span class="val-number">17.7x</span> <span class="stage-badge stage-5">5단계</span></div></div><div class="val-track"><div class="val-fill" style="width:100%;"></div></div><div class="val-labels"><span class="val-low">저(4x)</span><span class="val-mid">적정(8x)</span><span class="val-high">고(14x)</span></div></div>
+<div class="val-item"><div class="val-header"><span class="val-name">EV/EBITDA</span><div><span class="val-number">약 48x</span> <span class="stage-badge stage-5">5단계</span></div></div><div class="val-track"><div class="val-fill" style="width:100%;"></div></div><div class="val-labels"><span class="val-low">저(12x)</span><span class="val-mid">적정(24x)</span><span class="val-high">고(38x)</span></div></div><div style="font-size:11px;color:var(--text3);">* 7월 20일 완료 거래일과 최근 공시 기준 추정치.</div></div><div class="card"><div class="card-title">반도체 장비 피어 Forward PER</div><div class="chart-wrap" style="height:250px;"><canvas id="peerChart"></canvas></div></div></div><div class="card"><div class="card-title">밸류에이션 5단계</div><div class="stage-grid"><div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div></div><div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div></div><div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div></div><div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div></div><div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div><div style="font-size:8px;color:var(--red);">PER·Forward PER·PBR·PSR·EV/EBITDA</div></div></div><div style="margin-top:10px;font-size:11px;color:var(--text3);">* 1~4단계가 빈 것은 데이터 누락이 아니라 추적한 5개 지표 모두가 설정한 매우 고평가 구간에 해당하기 때문.</div></div><div class="card"><div class="card-title">Per-Share 데이터</div><div class="grid-3"><div class="stat-box"><div class="stat-label">TTM EPS</div><div class="stat-value">약 $5.25</div></div><div class="stat-box"><div class="stat-label">BPS</div><div class="stat-value">약 $8.46</div></div><div class="stat-box"><div class="stat-label">분기 배당</div><div class="stat-value">$0.26</div></div></div></div><div class="card"><div class="card-title">시나리오별 공정가치</div><div class="grid-3"><div class="stat-box"><div class="stat-label">Bear</div><div class="stat-value down">$170~220</div><div class="stat-sub">EPS $5.5 × 31~40x</div></div><div class="stat-box"><div class="stat-label">Base</div><div class="stat-value">$250~310</div><div class="stat-sub">EPS $6.2 × 40~50x</div></div><div class="stat-box"><div class="stat-label">Bull</div><div class="stat-value up">$335~400</div><div class="stat-sub">EPS $6.7 × 50~60x</div></div></div></div><div class="card"><div class="card-title">목표가 밴드</div><div style="font-size:12px;color:var(--text2);">Bear $170~220 · Base $250~310 · Bull $335~400. 현재가는 Base 상단 부근이며 실적 가이던스에 민감.</div></div></div>
+<div id="us" class="section"><div class="section-title">US 특화 — 미국 반도체 공급망과 정책 민감도</div><div class="grid-2"><div class="card"><div class="card-title">전략적 위치</div><div class="zone-list"><div class="zone-item"><span class="zone-label">본사</span><span class="zone-val">Fremont, CA</span></div><div class="zone-item"><span class="zone-label">핵심 기술</span><span class="zone-val">식각·증착·세정</span></div><div class="zone-item"><span class="zone-label">반복 매출</span><span class="zone-val">Customer Support 36%</span></div></div></div><div class="card"><div class="card-title">정책·지역 리스크</div><div class="bb-item"><span>▼</span><span>중국 매출 34%로 수출통제 변화에 직접 노출.</span></div><div class="bb-item"><span>▲</span><span>미국·한국·대만의 AI 팹 투자는 장기 수요를 지지.</span></div><div class="bb-item"><span>◆</span><span>메모리 설비투자 사이클이 실적 변동성을 좌우.</span></div></div></div><div class="card"><div class="card-title">S&P 500 대비 상대 성과</div><div style="font-size:12px;color:var(--text2);">최근 252거래일 LRCX +204.7%로 시장을 크게 상회했지만, 52주 고점 대비 -30.0% 조정으로 변동성도 확대.</div></div><div class="card"><div class="card-title">경쟁 구도</div><div class="grid-4"><div class="stat-box"><div class="stat-label">LRCX</div><div class="stat-value">식각·증착</div></div><div class="stat-box"><div class="stat-label">AMAT</div><div class="stat-value">종합 장비</div></div><div class="stat-box"><div class="stat-label">KLAC</div><div class="stat-value">검사·계측</div></div><div class="stat-box"><div class="stat-label">ASML</div><div class="stat-value">노광</div></div></div></div></div>
+<div id="news" class="section"><div class="section-title">시계열 뉴스 — 주요 이벤트</div><div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;color:var(--text2);"><span><i style="width:10px;height:10px;border-radius:50%;background:var(--event-major);display:inline-block;"></i> 초대형 이벤트</span><span><i style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;"></i> 긍정</span><span><i style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block;"></i> 부정</span><span><i style="width:10px;height:10px;border-radius:50%;background:var(--event-neutral);display:inline-block;"></i> 중립</span></div><div class="timeline"><div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2025년 8월</div><div class="tl-title">FY2025 매출 $18.44B</div><div class="tl-desc">메모리 투자 회복과 서비스 성장으로 연간 매출·순이익 증가.</div><a class="tl-source" href="https://investor.lamresearch.com/quarterly-results">공식 자료 →</a></div><div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2026년 1월</div><div class="tl-title">12월 분기 매출 $5.34B</div><div class="tl-desc">매출과 EPS가 전분기 대비 증가.</div><a class="tl-source" href="https://investor.lamresearch.com/quarterly-results">공식 자료 →</a></div><div class="tl-item"><div class="tl-dot"></div><div class="tl-date">2026년 4월 22일</div><div class="tl-title">기록적 3월 분기 실적</div><div class="tl-desc">매출 $5.84B, GAAP EPS $1.45, 영업이익률 35.0%.</div><a class="tl-source" href="https://investor.lamresearch.com/2026-04-22-Lam-Research-Corporation-Reports-Financial-Results-for-the-Quarter-Ended-March-29%2C-2026">공식 발표 →</a></div><div class="tl-item"><div class="tl-dot neutral"></div><div class="tl-date">2026년 5월 21일</div><div class="tl-title">분기 배당 $0.26</div><div class="tl-desc">주주환원 정책을 유지.</div><a class="tl-source" href="https://investor.lamresearch.com/">Lam IR →</a></div><div class="tl-item"><div class="tl-dot"></div><div class="tl-date">2026년 7월 29일 예정</div><div class="tl-title">6월 분기 실적 발표</div><div class="tl-desc">$6.60B 매출 가이던스 달성과 중국 매출 흐름이 핵심.</div><a class="tl-source" href="https://investor.lamresearch.com/">Lam IR →</a></div></div></div>
+<div id="invest" class="section"><div class="section-title">투자 포인트 — Bull / Bear</div><div class="bull-bear"><div class="bb-box"><div class="bb-title bb-bull">🐂 Bull 요인</div><div class="bb-item"><span>▲</span><span>AI·HBM이 식각·증착 단계와 장비 강도를 확대.</span></div><div class="bb-item"><span>▲</span><span>기록적 매출과 35% 영업이익률.</span></div><div class="bb-item"><span>▲</span><span>고객지원 매출의 반복성.</span></div></div><div class="bb-box"><div class="bb-title bb-bear">🐻 Bear 요인</div><div class="bb-item"><span>▼</span><span>5개 밸류에이션 지표 모두 매우 고평가 구간.</span></div><div class="bb-item"><span>▼</span><span>중국 매출 34%와 수출규제 위험.</span></div><div class="bb-item"><span>▼</span><span>메모리 CAPEX 사이클 둔화 위험.</span></div></div></div><div class="card"><div class="card-title">5개 분석 종합</div><div style="font-size:12px;color:var(--text2);">기술적 장기 상승·단기 조정, 기본적 기록적 성장, 밸류에이션 고평가, 미국 공급망 수혜와 중국 규제 위험, 7월 29일 실적 촉매를 종합.</div></div><div class="card"><div class="card-title">투자의견 요약</div><div class="zone-list"><div class="zone-item"><span class="zone-label">기술적</span><span class="zone-val">장기 추세 위·단기 조정</span></div><div class="zone-item"><span class="zone-label">펀더멘털</span><span class="zone-val">기록적 성장</span></div><div class="zone-item"><span class="zone-label">밸류에이션</span><span class="zone-val">높은 기대 선반영</span></div><div class="zone-item"><span class="zone-label">다음 촉매</span><span class="zone-val">7월 29일 실적</span></div></div></div></div>
+<div class="disclaimer">⚠️ SEC EDGAR, Lam Research IR, Yahoo Finance 및 공개 자료 기반 정보 제공용 분석입니다. 투자 권고가 아닙니다.</div>
+
+<script>
+function showSection(id, event) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  renderCharts(id);
+}
+const charts = {};
+
+const LRCX_DAILY = [["2025-07-18",101.24,101.73,100.36,100.66,8115500],["2025-07-21",100.88,102.59,100.73,101.74,7026700],["2025-07-22",101.0,101.12,97.04,97.69,14170100],["2025-07-23",98.26,98.38,96.4,97.1,12013900],["2025-07-24",97.57,98.62,97.03,97.78,9076600],["2025-07-25",96.7,97.33,96.32,96.96,8914400],["2025-07-28",98.98,99.53,97.92,98.62,8156100],["2025-07-29",99.39,100.22,98.03,98.94,7283700],["2025-07-30",99.52,100.65,97.95,99.09,12529400],["2025-07-31",91.02,95.63,90.94,94.84,27661800],["2025-08-01",92.71,96.66,92.47,96.37,16601000],["2025-08-04",97.43,98.81,96.64,98.41,11876700],["2025-08-05",98.78,99.35,95.62,96.68,12100100],["2025-08-06",96.3,96.47,94.27,95.94,10631900],["2025-08-07",98.6,100.19,97.97,99.15,9572300],["2025-08-08",99.15,102.23,98.99,101.75,8765100],["2025-08-11",103.9,104.15,101.71,102.0,8637000],["2025-08-12",102.65,105.64,101.39,105.28,11885800],["2025-08-13",106.5,107.49,105.45,106.74,12118600],["2025-08-14",106.2,108.02,105.59,107.38,11163800],["2025-08-15",104.68,105.89,99.26,99.51,23155700],["2025-08-18",99.0,99.8,98.4,98.88,15119300],["2025-08-19",98.83,100.63,98.2,100.33,11622900],["2025-08-20",100.99,101.02,97.32,99.15,14287700],["2025-08-21",98.76,99.85,97.14,98.41,10706500],["2025-08-22",99.05,102.55,98.59,100.08,9689700],["2025-08-25",99.98,101.75,99.9,101.28,5438500],["2025-08-26",101.3,103.99,101.1,103.63,11781100],["2025-08-27",103.17,103.78,102.37,103.67,7214700],["2025-08-28",104.0,104.9,102.96,104.09,7375200],["2025-08-29",101.91,102.69,98.81,100.15,12178800],["2025-09-02",95.77,97.27,94.11,97.03,14695200],["2025-09-03",97.03,97.86,96.44,97.74,11023300],["2025-09-04",97.66,101.11,97.16,100.42,8822400],["2025-09-05",101.7,103.01,100.68,102.95,8142000],["2025-09-08",105.01,106.37,104.48,105.07,7972700],["2025-09-09",104.91,105.82,104.46,105.57,7264300],["2025-09-10",106.7,107.78,104.61,107.36,12279400],["2025-09-11",108.35,115.9,108.29,115.58,20296100],["2025-09-12",115.92,117.5,115.88,116.96,11060500],["2025-09-15",117.8,119.33,117.03,119.21,9785700],["2025-09-16",119.98,120.97,118.67,120.47,9897200],["2025-09-17",120.82,123.28,119.51,121.9,10996100],["2025-09-18",126.55,128.7,125.04,126.32,13763900],["2025-09-19",126.36,127.8,125.0,126.92,24271900],["2025-09-22",129.8,132.63,129.16,132.2,13403700],["2025-09-23",129.75,133.57,129.36,131.93,12051100],["2025-09-24",130.0,130.23,127.02,128.32,12435900],["2025-09-25",126.44,129.06,125.02,128.13,9621700],["2025-09-26",127.94,128.76,126.37,128.33,8789000],["2025-09-29",133.08,133.36,131.03,131.09,11015500],["2025-09-30",131.35,134.21,130.81,133.9,10328800],["2025-10-01",132.41,143.09,131.94,142.79,15549100],["2025-10-02",146.97,147.35,143.71,146.99,16417100],["2025-10-03",145.82,147.91,144.6,145.81,8970300],["2025-10-06",149.9,153.7,149.12,149.15,11217100],["2025-10-07",149.23,149.36,139.5,140.35,16549800],["2025-10-08",137.91,142.88,137.61,142.54,13695700],["2025-10-09",141.75,142.86,140.58,141.0,8102500],["2025-10-10",140.6,141.8,131.02,131.37,18749000],["2025-10-13",138.09,138.9,136.58,137.81,10048100],["2025-10-14",134.1,140.92,134.04,138.31,10509700],["2025-10-15",144.0,145.22,141.1,144.78,9722700],["2025-10-16",147.58,147.58,140.37,142.37,11650300],["2025-10-17",142.26,142.65,139.82,141.51,6389800],["2025-10-20",143.49,146.48,143.43,144.05,8919400],["2025-10-21",143.98,145.44,142.47,145.04,8855600],["2025-10-22",144.9,145.75,136.86,141.25,16927800],["2025-10-23",138.0,148.46,137.37,147.54,13336600],["2025-10-24",149.91,153.21,148.0,151.68,10966400],["2025-10-27",156.14,158.25,155.74,156.9,13313100],["2025-10-28",155.52,156.13,154.28,155.62,7939700],["2025-10-29",158.25,163.09,158.09,160.67,12783300],["2025-10-30",162.37,165.22,160.3,161.01,10440600],["2025-10-31",162.55,164.06,156.6,157.46,9652100],["2025-11-03",159.99,162.24,159.0,161.24,7302400],["2025-11-04",155.63,161.09,155.16,155.78,11211100],["2025-11-05",157.57,166.92,157.0,165.05,11130200],["2025-11-06",163.39,165.21,160.19,162.19,9640100],["2025-11-07",159.83,159.95,153.2,159.35,11609300],["2025-11-10",164.56,167.15,163.7,166.37,10030600],["2025-11-11",164.17,164.62,157.71,159.18,9144600],["2025-11-12",161.31,162.16,158.48,161.42,8950000],["2025-11-13",158.89,160.31,151.73,153.32,13693700],["2025-11-14",147.51,152.95,145.37,148.26,15076100],["2025-11-17",147.31,153.81,145.94,147.46,10487800],["2025-11-18",145.25,147.44,142.5,143.24,12706700],["2025-11-19",146.77,150.4,145.51,148.8,9818300],["2025-11-20",153.46,154.37,138.3,139.59,13695500],["2025-11-21",139.8,144.41,135.5,142.65,14654600],["2025-11-24",145.6,152.56,144.43,150.38,23096000],["2025-11-25",149.55,152.8,145.5,151.93,9691500],["2025-11-26",152.97,156.97,152.5,155.14,8398100],["2025-11-28",156.2,156.2,153.83,156.0,4919200],["2025-12-01",154.85,156.79,153.25,154.79,7416700],["2025-12-02",155.85,159.45,155.66,158.19,10711900],["2025-12-03",156.89,160.1,153.15,159.75,9964300],["2025-12-04",157.05,158.52,154.92,157.09,8834700],["2025-12-05",159.01,161.05,157.88,158.7,7834100],["2025-12-08",161.98,164.62,160.85,162.74,10170500],["2025-12-09",160.75,166.36,160.75,165.81,8127000],["2025-12-10",165.09,169.69,162.54,168.26,9259600],["2025-12-11",165.66,169.15,160.32,168.71,10000000],["2025-12-12",166.84,167.8,159.09,160.52,11414800],["2025-12-15",163.4,166.87,162.16,164.3,10258800],["2025-12-16",164.5,166.19,160.79,163.26,8078600],["2025-12-17",163.86,164.52,153.6,154.98,12277800],["2025-12-18",163.19,168.29,162.0,164.7,14006400],["2025-12-19",166.08,173.58,166.08,172.27,38469400],["2025-12-22",175.68,175.96,171.49,175.26,11436100],["2025-12-23",175.26,177.29,174.78,175.16,6483000],["2025-12-24",175.26,177.56,175.2,177.33,2598900],["2025-12-26",178.43,179.8,177.8,178.07,5238900],["2025-12-29",176.5,179.23,174.75,175.87,6663300],["2025-12-30",176.54,177.36,173.59,173.78,5670800],["2025-12-31",174.49,174.91,170.76,171.18,4935800],["2026-01-02",177.85,185.78,177.5,185.06,11957400],["2026-01-05",190.12,198.36,190.12,194.76,16268200],["2026-01-06",197.79,210.45,197.15,206.96,18787600],["2026-01-07",202.58,205.38,199.8,203.08,15121000],["2026-01-08",202.87,203.22,195.04,200.96,13928600],["2026-01-09",204.66,219.59,202.72,218.36,16758600],["2026-01-12",216.12,222.58,215.18,220.4,10749100],["2026-01-13",219.42,220.57,213.39,214.38,12737000],["2026-01-14",211.13,211.31,206.61,208.79,18187200],["2026-01-15",228.15,229.57,217.21,217.47,15249800],["2026-01-16",221.9,225.69,219.0,222.96,14392700],["2026-01-20",218.21,226.15,217.61,222.41,11601700],["2026-01-21",223.05,232.9,220.66,228.39,12454800],["2026-01-22",235.56,236.1,219.76,220.7,11958600],["2026-01-23",217.87,223.36,213.87,217.94,10156800],["2026-01-26",218.98,225.35,215.93,222.87,10625600],["2026-01-27",230.63,239.5,228.76,238.46,12005900],["2026-01-28",241.27,243.99,237.14,239.58,15630600],["2026-01-29",245.61,251.38,236.82,248.17,16801600],["2026-01-30",244.26,251.87,232.0,233.46,18352900],["2026-02-02",233.33,242.95,232.0,237.5,13299300],["2026-02-03",244.89,246.62,226.88,230.1,13500400],["2026-02-04",229.87,231.11,205.11,209.78,19608000],["2026-02-05",208.13,215.85,204.57,213.31,10928900],["2026-02-06",220.67,232.45,218.76,231.01,13848800],["2026-02-09",229.01,231.32,223.39,229.28,9976700],["2026-02-10",229.28,229.31,220.25,226.61,7909500],["2026-02-11",235.55,240.34,230.04,235.12,9555800],["2026-02-12",236.33,238.91,229.64,231.29,10662100],["2026-02-13",236.18,242.78,233.39,235.53,9905400],["2026-02-17",231.45,238.15,228.88,235.58,7368500],["2026-02-18",236.38,245.27,234.1,240.09,10095400],["2026-02-19",234.07,237.92,231.42,237.39,6384200],["2026-02-20",237.55,245.76,236.97,244.92,8601200],["2026-02-23",245.35,249.4,237.37,242.27,9488000],["2026-02-24",243.45,247.76,238.98,244.25,9087100],["2026-02-25",249.89,256.68,248.39,249.48,9835400],["2026-02-26",246.03,248.5,230.7,239.07,10700300],["2026-02-27",233.46,240.1,232.68,233.89,12988900],["2026-03-02",229.28,233.83,227.23,231.0,10294000],["2026-03-03",223.77,224.12,215.79,217.27,12442300],["2026-03-04",221.71,225.12,219.0,222.99,8614400],["2026-03-05",218.41,222.41,208.13,214.68,10241000],["2026-03-06",205.45,211.24,198.45,199.33,13597800],["2026-03-09",195.0,211.5,194.08,211.15,13421000],["2026-03-10",211.0,220.82,210.88,215.23,10699700],["2026-03-11",214.45,221.62,214.0,218.87,7160500],["2026-03-12",213.67,215.17,208.0,209.49,9932900],["2026-03-13",212.34,218.0,211.23,212.2,8906500],["2026-03-16",217.95,221.46,215.95,219.4,9533100],["2026-03-17",220.53,226.71,218.55,226.47,10043700],["2026-03-18",226.74,232.32,222.98,224.71,12478800],["2026-03-19",218.17,235.14,215.0,233.99,10101900],["2026-03-20",234.32,236.84,222.05,228.36,26176400],["2026-03-23",230.39,239.52,227.07,233.31,9506200],["2026-03-24",230.16,241.37,230.16,238.84,7388000],["2026-03-25",236.15,237.1,227.36,233.45,8330600],["2026-03-26",225.74,226.89,211.38,211.62,13460500],["2026-03-27",209.67,217.0,209.0,211.41,8503300],["2026-03-30",214.56,216.29,198.6,199.93,11921000],["2026-03-31",206.0,213.84,203.01,213.66,11725000],["2026-04-01",215.45,225.5,215.0,222.01,10697600],["2026-04-02",208.84,222.01,208.8,218.44,6805400],["2026-04-06",220.13,221.56,216.53,220.65,4031200],["2026-04-07",218.24,224.49,216.5,224.35,6818400],["2026-04-08",242.75,249.19,241.49,246.49,11023000],["2026-04-09",248.33,259.0,247.35,258.76,9757800],["2026-04-10",263.19,268.23,259.33,263.66,9124700],["2026-04-13",263.12,267.54,260.85,267.32,8773600],["2026-04-14",271.86,273.5,264.9,272.41,8500600],["2026-04-15",267.0,267.99,255.48,265.16,11324200],["2026-04-16",263.48,266.25,259.18,260.96,7829400],["2026-04-17",267.97,268.76,262.42,267.6,8465400],["2026-04-20",267.1,267.65,262.54,263.16,5989900],["2026-04-21",263.81,265.6,256.71,258.37,7830300],["2026-04-22",261.71,266.14,257.4,265.55,9803300],["2026-04-23",265.05,272.82,253.28,258.56,12269100],["2026-04-24",267.5,275.84,266.88,267.78,12313200],["2026-04-27",267.76,268.83,256.31,259.47,8095400],["2026-04-28",251.98,253.7,243.04,251.23,11499500],["2026-04-29",253.17,253.96,241.6,248.75,9585300],["2026-04-30",252.39,258.58,248.66,257.86,10381100],["2026-05-01",255.14,260.44,250.12,256.72,8094500],["2026-05-04",256.69,263.08,254.95,258.57,6497400],["2026-05-05",266.64,280.0,266.64,275.8,11884000],["2026-05-06",287.0,297.87,285.85,297.17,14788600],["2026-05-07",297.03,298.0,283.14,286.52,9704500],["2026-05-08",295.72,297.42,287.52,294.05,8996700],["2026-05-11",292.51,300.0,292.51,296.05,9150000],["2026-05-12",287.22,290.35,277.77,289.24,9341800],["2026-05-13",295.27,298.98,287.18,295.44,8633100],["2026-05-14",296.33,302.0,293.01,299.15,6404900],["2026-05-15",289.44,289.44,276.48,284.72,9643200],["2026-05-18",292.74,294.56,273.08,277.96,8562200],["2026-05-19",267.95,278.73,263.71,273.38,8308600],["2026-05-20",279.58,293.63,277.52,292.09,8574200],["2026-05-21",292.67,303.18,291.8,302.24,9162400],["2026-05-22",305.73,309.98,303.18,305.35,7854700],["2026-05-26",314.77,323.98,309.65,322.68,9763600],["2026-05-27",331.67,333.33,314.28,318.93,8819300],["2026-05-28",317.45,322.64,308.74,318.0,8402800],["2026-05-29",322.0,324.25,316.81,318.18,10872200],["2026-06-01",309.27,320.83,307.04,317.12,8052800],["2026-06-02",324.42,335.55,320.86,334.41,8632400],["2026-06-03",335.05,346.19,332.13,343.71,8630900],["2026-06-04",329.75,342.37,324.71,336.41,8277000],["2026-06-05",320.37,323.42,302.74,303.28,13309000],["2026-06-08",318.55,330.68,315.0,324.45,11465100],["2026-06-09",335.5,349.09,306.01,327.16,14466800],["2026-06-10",323.29,348.16,318.95,321.8,14088500],["2026-06-11",336.64,364.81,336.2,362.52,14984000],["2026-06-12",359.39,373.82,354.89,366.81,9253300],["2026-06-15",385.99,393.07,382.39,388.92,13459800],["2026-06-16",385.14,393.0,368.77,369.34,12054900],["2026-06-17",382.0,397.63,373.24,374.18,10900800],["2026-06-18",397.22,401.0,386.9,389.04,22686600],["2026-06-22",398.39,409.75,392.08,409.54,14638600],["2026-06-23",369.71,377.1,365.26,371.33,16065200],["2026-06-24",366.87,376.98,361.41,374.8,12016700],["2026-06-25",407.99,407.99,372.3,401.82,16824000],["2026-06-26",385.5,389.88,374.31,379.09,19733700],["2026-06-29",383.01,414.98,379.1,410.91,14049600],["2026-06-30",416.29,438.5,414.01,433.33,16885100],["2026-07-01",404.97,415.49,381.0,391.26,18699300],["2026-07-02",391.06,392.5,342.48,351.41,18954700],["2026-07-06",365.34,366.08,348.27,350.2,13581700],["2026-07-07",322.41,330.75,313.1,326.13,15530600],["2026-07-08",325.47,337.5,322.72,333.15,8029400],["2026-07-09",365.13,369.95,350.06,353.17,12119700],["2026-07-10",341.36,354.73,338.13,350.33,6890900],["2026-07-13",335.0,337.98,326.9,329.92,9770500],["2026-07-14",354.66,354.66,338.88,346.1,10699100],["2026-07-15",357.25,357.25,319.79,335.43,10257300],["2026-07-16",324.99,336.68,315.16,320.96,10641300],["2026-07-17",303.83,322.07,298.65,313.3,12805700],["2026-07-20",321.15,324.45,305.26,306.76,8065600]];
+const LRCX_MA5 = [100.5,100.93,100.25,99.6,98.99,98.25,97.63,97.88,98.28,97.69,97.57,97.53,97.08,96.45,97.31,98.39,99.1,100.82,102.98,104.63,104.18,103.56,102.57,101.05,99.26,99.37,99.85,100.51,101.41,102.55,102.56,101.71,100.54,99.89,99.66,100.64,102.35,104.27,107.31,110.11,112.94,115.92,118.82,120.97,122.96,125.56,127.85,129.14,129.5,129.78,129.56,129.95,132.85,136.62,140.12,143.73,145.02,144.97,143.77,140.88,138.61,138.21,138.65,138.93,140.96,142.2,143.55,142.84,143.88,145.91,148.48,150.6,154.48,157.18,158.33,159.2,159.23,160.11,160.34,160.72,161.75,162.43,161.7,159.93,157.71,153.93,150.74,148.22,145.47,144.35,144.93,146.67,147.94,151.22,153.65,155.21,156.77,157.16,157.7,159.29,160.82,162.52,164.84,165.21,165.52,165.01,162.35,161.55,163.9,166.09,168.47,172.94,175.62,176.34,176.04,175.25,176.79,180.13,186.35,192.21,198.16,204.82,209.95,211.44,212.58,215.88,216.8,217.2,220.0,222.39,222.48,222.46,225.67,227.91,233.4,236.51,239.43,237.76,231.8,224.83,224.34,222.7,222.0,227.07,230.66,231.57,232.83,235.52,235.98,238.7,240.05,241.78,243.66,244.0,241.79,239.54,234.14,228.84,223.97,217.05,213.08,212.68,211.85,210.81,213.39,215.04,217.29,218.45,223.35,226.59,229.37,231.84,233.59,229.12,225.73,219.05,214.01,211.73,213.09,214.94,219.82,226.39,233.74,242.78,252.12,261.73,265.46,265.9,266.69,265.86,263.05,263.13,262.65,262.68,261.95,260.52,257.16,257.02,254.81,254.63,259.54,269.22,274.96,282.42,289.92,292.61,292.26,294.79,292.92,289.3,286.13,285.46,286.08,290.2,299.15,308.26,313.44,316.63,318.98,321.33,326.28,329.97,326.99,328.45,327.0,322.62,327.84,340.55,353.44,361.88,372.35,377.66,386.2,382.69,383.78,389.31,387.32,387.59,399.99,403.28,393.2,387.42,370.47,350.43,342.81,342.6,338.54,342.53,342.99,336.55,329.14,324.51];
+const LRCX_MA20 = [98.13,98.7,99.0,99.07,99.16,99.17,99.24,99.32,99.43,99.23,99.11,99.12,98.97,98.77,98.68,98.68,98.8,99.01,99.33,99.66,99.6,99.46,99.59,99.69,99.72,99.88,100.01,100.25,100.47,100.94,101.13,101.06,101.11,101.33,101.52,101.69,101.87,101.97,102.41,102.89,103.88,104.96,106.04,107.39,108.82,110.43,111.96,113.19,114.42,115.63,117.17,119.02,121.27,123.6,125.74,127.95,129.69,131.44,132.72,133.44,134.37,135.26,136.4,137.2,137.93,138.53,139.18,139.83,140.8,141.97,143.26,144.34,145.24,145.94,146.52,147.12,147.9,149.02,150.08,151.48,152.91,153.95,154.78,155.33,155.67,155.84,155.75,156.13,155.73,155.28,154.95,154.77,154.49,154.24,154.11,153.95,154.15,153.75,153.58,153.75,153.72,154.18,154.54,154.9,155.7,156.49,157.08,157.87,159.51,161.14,162.38,163.65,164.79,165.79,166.74,167.39,168.65,170.54,172.95,174.97,176.72,179.23,181.81,184.51,186.73,189.44,192.84,195.73,198.53,200.8,202.94,205.22,208.24,211.42,215.14,218.26,220.88,222.65,222.79,223.3,224.8,225.35,225.66,226.7,227.82,228.72,229.35,230.24,230.69,231.9,233.12,234.19,234.74,234.71,234.0,233.87,232.86,232.51,232.75,232.05,231.06,230.36,229.97,228.69,227.73,226.93,226.47,225.7,225.53,224.71,224.26,223.99,223.19,221.81,220.69,219.13,218.95,218.91,219.09,220.16,220.82,222.38,224.38,227.09,229.84,232.49,234.43,236.24,237.92,239.66,240.91,242.25,243.5,246.31,248.71,251.28,253.03,254.83,256.74,258.64,261.21,263.74,265.13,266.65,268.09,268.93,270.44,272.35,273.21,273.95,274.7,276.03,278.21,280.09,283.25,286.63,290.1,293.11,296.13,299.92,303.32,305.28,306.12,307.64,309.19,310.82,314.18,317.56,322.77,327.34,332.38,337.23,342.59,345.89,348.5,352.64,355.7,360.33,366.14,368.99,369.37,370.06,371.2,371.64,372.94,374.36,372.73,371.7,369.02,366.61,363.56,359.45];
+const LRCX_MA60 = [87.09,87.68,88.12,88.55,88.99,89.42,89.87,90.32,90.73,91.08,91.47,91.86,92.22,92.56,92.85,93.12,93.4,93.75,94.12,94.51,94.76,95.03,95.33,95.63,95.87,96.14,96.42,96.81,97.16,97.5,97.76,97.96,98.15,98.35,98.55,98.78,99.02,99.31,99.68,100.09,100.54,101.04,101.54,102.05,102.57,103.16,103.74,104.25,104.77,105.27,105.8,106.4,107.12,107.9,108.65,109.44,110.12,110.81,111.49,111.99,112.61,113.22,114.01,114.76,115.49,116.28,117.05,117.76,118.56,119.51,120.52,121.47,122.54,123.62,124.6,125.59,126.48,127.48,128.4,129.27,130.38,131.39,132.41,133.31,134.14,134.93,135.63,136.38,136.98,137.62,138.46,139.38,140.33,141.26,142.12,143.01,143.91,144.74,145.46,146.22,147.0,147.8,148.58,149.15,149.77,150.29,150.67,151.28,152.01,152.79,153.53,154.25,154.84,155.32,155.79,156.16,156.9,157.77,158.87,160.07,161.12,162.45,163.71,164.91,166.03,167.26,168.56,169.91,171.26,172.41,173.42,174.55,175.84,177.15,178.66,179.87,181.23,182.31,183.11,184.01,185.08,186.25,187.34,188.7,190.08,191.55,193.09,194.61,196.24,197.95,199.48,201.02,202.59,203.97,205.29,206.51,207.46,208.56,209.5,210.11,210.86,211.64,212.48,213.3,214.09,215.03,216.22,217.22,218.25,219.14,220.11,221.13,222.05,222.65,223.28,223.76,224.23,224.69,224.88,225.17,225.56,226.03,226.67,227.49,228.47,229.38,230.08,230.73,231.38,232.09,232.76,233.47,233.81,234.28,234.47,234.76,234.95,235.41,236.2,236.95,237.7,238.83,239.83,240.81,241.89,242.78,243.78,244.76,245.55,246.1,246.62,247.42,248.3,249.4,250.88,252.35,254.03,255.61,257.32,259.57,261.78,263.8,265.21,267.13,269.04,270.75,273.02,275.38,277.97,280.32,282.66,285.17,288.1,290.76,293.49,296.85,299.61,302.76,306.34,309.18,311.3,313.03,314.15,315.31,316.74,318.04,319.12,320.54,321.67,322.63,323.55,324.23];
+const LRCX_MA120 = [81.45,81.67,81.86,82.05,82.19,82.32,82.47,82.63,82.78,82.88,82.99,83.12,83.23,83.35,83.48,83.64,83.77,83.91,84.06,84.24,84.37,84.53,84.69,84.88,85.06,85.26,85.47,85.67,85.9,86.11,86.33,86.53,86.7,86.91,87.11,87.34,87.57,87.82,88.13,88.48,88.82,89.18,89.56,89.99,90.44,90.94,91.43,91.88,92.41,92.98,93.56,94.17,94.77,95.44,96.09,96.77,97.37,98.02,98.66,99.23,99.85,100.45,101.07,101.66,102.24,102.85,103.46,104.04,104.65,105.3,105.99,106.67,107.38,108.09,108.72,109.35,109.94,110.61,111.26,111.89,112.57,113.21,113.87,114.47,115.01,115.53,116.03,116.59,117.07,117.56,118.11,118.67,119.24,119.8,120.34,120.9,121.46,122.03,122.57,123.15,123.77,124.42,125.06,125.6,126.17,126.72,127.2,127.76,128.39,129.03,129.67,130.33,130.98,131.61,132.22,132.8,133.51,134.29,135.18,136.03,136.87,137.84,138.86,139.84,140.76,141.77,142.8,143.83,144.91,145.96,146.97,148.01,149.19,150.39,151.63,152.73,153.86,154.9,155.75,156.64,157.73,158.82,159.87,161.01,162.11,163.24,164.36,165.5,166.61,167.79,168.97,170.2,171.46,172.62,173.71,174.76,175.69,176.65,177.48,178.16,178.93,179.72,180.53,181.22,181.93,182.66,183.45,184.25,185.13,185.97,186.82,187.69,188.45,188.99,189.53,189.96,190.57,191.23,191.87,192.62,193.34,194.24,195.19,196.2,197.25,198.32,199.32,200.32,201.32,202.25,203.09,204.01,204.82,205.71,206.56,207.31,208.09,208.86,209.65,210.48,211.39,212.54,213.58,214.75,215.99,217.17,218.44,219.69,220.9,222.03,223.05,224.22,225.44,226.69,228.09,229.43,230.75,232.09,233.41,234.84,236.32,237.72,238.84,240.21,241.57,242.89,244.62,246.3,248.11,249.73,251.38,253.15,255.08,256.71,258.38,260.3,261.92,263.72,265.61,267.18,268.43,269.53,270.41,271.4,272.6,273.71,274.6,275.63,276.52,277.36,278.15,278.85];
+
+(function(){
+  const svgCandle = document.getElementById('lrcxCandleSvg');
+  const svgVol = document.getElementById('lrcxVolumeSvg');
+  const toggle = document.getElementById('lrcxRangeToggle');
+  const maToggle = document.getElementById('lrcxMaToggle');
+  if(!svgCandle || !svgVol || !toggle) return;
+  const RANGES = {'1M':21,'3M':63,'6M':126,'1Y':252};
+  const NS = 'http://www.w3.org/2000/svg';
+  const UP='#2ecc71', DOWN='#e74c3c';
+  const maColors = {ma5:'#ff6b9d', ma20:'#9b59b6', ma60:'#f0c040', ma120:'#22d3ee'};
+  const maState = {ma5:true, ma20:true, ma60:true, ma120:true, pricelabels:true};
+  let currentRange = '1Y';
+
+  function draw(rangeKey){
+    currentRange = rangeKey;
+    const n = RANGES[rangeKey];
+    const data = LRCX_DAILY.slice(-n);
+    const ma5 = LRCX_MA5.slice(-n), ma20 = LRCX_MA20.slice(-n), ma60 = LRCX_MA60.slice(-n), ma120 = LRCX_MA120.slice(-n);
+    while(svgCandle.firstChild) svgCandle.removeChild(svgCandle.firstChild);
+    while(svgVol.firstChild) svgVol.removeChild(svgVol.firstChild);
+
+    const W=720,H=240,pL=45,pR=12,pT=10,pB=20;
+    const cW=W-pL-pR,cH=H-pT-pB;
+    const highs=data.map(d=>d[2]), lows=data.map(d=>d[3]);
+    const maVals=[...ma5,...ma20,...ma60,...ma120].filter(v=>v!=null);
+    const mx=Math.max(...highs,...maVals), mn=Math.min(...lows,...maVals);
+    const pad=(mx-mn)*0.06 || mx*0.02;
+    const top=mx+pad, bot=mn-pad, rng=(top-bot)||1;
+    const py = v => pT + cH*(1-(v-bot)/rng);
+    const colW = cW/data.length;
+    const bodyW = Math.max(colW*0.62, 1);
+
+    for(let i=0;i<=3;i++){
+      const v = bot + rng*i/3;
+      const y = py(v);
+      const l=document.createElementNS(NS,'line');
+      l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+      l.setAttribute('stroke','rgba(255,255,255,.08)');l.setAttribute('stroke-width','1');
+      svgCandle.appendChild(l);
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x',pL-4);t.setAttribute('y',y+3);t.setAttribute('text-anchor','end');
+      t.setAttribute('font-size','9');t.setAttribute('fill','rgba(154,160,184,.8)');
+      t.textContent='$'+v.toFixed(0);
+      svgCandle.appendChild(t);
+    }
+
+    data.forEach((d,i)=>{
+      const [,o,h,l,c] = d;
+      const cx = pL + (i+0.5)*colW;
+      const up = c >= o;
+      const col = up ? UP : DOWN;
+      const wick=document.createElementNS(NS,'line');
+      wick.setAttribute('x1',cx);wick.setAttribute('x2',cx);
+      wick.setAttribute('y1',py(h));wick.setAttribute('y2',py(l));
+      wick.setAttribute('stroke',col);wick.setAttribute('stroke-width', Math.max(colW*0.12,0.6));
+      svgCandle.appendChild(wick);
+      const yTop = py(Math.max(o,c));
+      const yBot = py(Math.min(o,c));
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x', cx - bodyW/2);
+      rect.setAttribute('y', yTop);
+      rect.setAttribute('width', bodyW);
+      rect.setAttribute('height', Math.max(yBot-yTop, 1));
+      rect.setAttribute('fill', col);
+      svgCandle.appendChild(rect);
+    });
+
+    const drawMaLine = (vals, color) => {
+      let seg = [];
+      const flush = () => {
+        if (seg.length > 1) {
+          const pl = document.createElementNS(NS,'polyline');
+          pl.setAttribute('points', seg.join(' '));
+          pl.setAttribute('fill','none'); pl.setAttribute('stroke',color);
+          pl.setAttribute('stroke-width','1.7'); pl.setAttribute('opacity','0.95');
+          pl.setAttribute('stroke-linejoin','round'); pl.setAttribute('stroke-linecap','round');
+          svgCandle.appendChild(pl);
+        }
+        seg = [];
+      };
+      vals.forEach((v,i) => {
+        if (v == null) { flush(); return; }
+        seg.push(`${pL+(i+0.5)*colW},${py(v)}`);
+      });
+      flush();
+    };
+    if (maState.ma5) drawMaLine(ma5, maColors.ma5);
+    if (maState.ma20) drawMaLine(ma20, maColors.ma20);
+    if (maState.ma60) drawMaLine(ma60, maColors.ma60);
+    if (maState.ma120) drawMaLine(ma120, maColors.ma120);
+
+    if (maState.pricelabels) {
+    const closeIdx = data.length-1;
+    const closeVal = data[closeIdx][4];
+    const periodHigh = Math.max(...highs);
+    const periodLow = Math.min(...lows);
+    const highIdx = highs.indexOf(periodHigh);
+    const lowIdx = lows.indexOf(periodLow);
+    const markers = [
+      {idx: highIdx, v: periodHigh, color: UP, label:'최고', side:'above'},
+      {idx: lowIdx, v: periodLow, color: DOWN, label:'최저', side:'below'},
+      {idx: closeIdx, v: closeVal, color:'#60a5fa', label:'종가', side:'left'}
+    ];
+    markers.forEach(m=>{
+      const cx = pL + (m.idx+0.5)*colW;
+      const cy = py(m.v);
+      const dot=document.createElementNS(NS,'circle');
+      dot.setAttribute('cx',cx);dot.setAttribute('cy',cy);dot.setAttribute('r','3.5');
+      dot.setAttribute('fill',m.color);dot.setAttribute('stroke','#0f1117');dot.setAttribute('stroke-width','1.5');
+      svgCandle.appendChild(dot);
+
+      const labelText = `${m.label} $${m.v.toFixed(2)}`;
+      const labelW = labelText.length*5.2+6;
+      let tx, ty, anchor;
+      if (m.side === 'left') {
+        anchor = 'end'; tx = cx-7; ty = cy+3;
+      } else if (m.side === 'above') {
+        ty = cy-9;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      } else {
+        ty = cy+16;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      }
+      const bgX = anchor==='end' ? tx-labelW : anchor==='middle' ? tx-labelW/2 : tx;
+      const bg=document.createElementNS(NS,'rect');
+      bg.setAttribute('x', bgX);bg.setAttribute('y', ty-8);
+      bg.setAttribute('width', labelW);bg.setAttribute('height', 12);
+      bg.setAttribute('fill','rgba(15,17,23,0.85)');bg.setAttribute('rx','2');
+      svgCandle.appendChild(bg);
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x', tx);t.setAttribute('y', ty+2);
+      t.setAttribute('text-anchor',anchor);t.setAttribute('font-size','9');
+      t.setAttribute('font-weight','700');t.setAttribute('fill', m.color);
+      t.textContent = labelText;
+      svgCandle.appendChild(t);
+    });
+    }
+
+    const labelCount = Math.min(5, data.length);
+    for(let i=0;i<labelCount;i++){
+      const idx = Math.round(i*(data.length-1)/((labelCount-1)||1));
+      const cx = pL + (idx+0.5)*colW;
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x', Math.min(Math.max(cx,pL+10), W-20));
+      t.setAttribute('y', H-4);
+      t.setAttribute('text-anchor','middle');t.setAttribute('font-size','9');
+      t.setAttribute('fill','rgba(154,160,184,.8)');
+      t.textContent = data[idx][0].slice(2).replace(/-/g,'.');
+      svgCandle.appendChild(t);
+    }
+
+    const VW=720,VH=70,vpT=6,vpB=4;
+    const vcH=VH-vpT-vpB;
+    const maxV = Math.max(...data.map(d=>d[5]));
+    data.forEach((d,i)=>{
+      const [,o,,,c,v] = d;
+      const cx = pL + (i+0.5)*colW;
+      const up = c >= o;
+      const col = up ? 'rgba(46,204,113,0.55)' : 'rgba(231,76,60,0.55)';
+      const h = (v/maxV)*vcH;
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x', cx - bodyW/2);
+      rect.setAttribute('y', vpT + (vcH-h));
+      rect.setAttribute('width', bodyW);
+      rect.setAttribute('height', Math.max(h,1));
+      rect.setAttribute('fill', col);
+      svgVol.appendChild(rect);
+    });
+  }
+
+  toggle.querySelectorAll('.range-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      toggle.querySelectorAll('.range-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      draw(btn.dataset.range);
+    });
+  });
+
+  if (maToggle) {
+    maToggle.querySelectorAll('.ma-toggle-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const key = btn.dataset.ma;
+        maState[key] = !maState[key];
+        btn.classList.toggle('ma-off', !maState[key]);
+        draw(currentRange);
+      });
+    });
+  }
+
+  draw('1Y');
+})();
+
+function renderFundChart() {
+  const ctx=document.getElementById('lrcxRevChart'); if(!ctx||charts.fund)return;
+  charts.fund=new Chart(ctx,{data:{labels:["Q1 '25","Q2 '25","Q3 '25","Q4 '25","Q1 '26","Q2 '26","Q3 '26","Q4 '26"],datasets:[{type:'bar',label:'매출($B)',data:[4.168,4.376,4.720,5.171,5.324,5.345,5.841,6.600],backgroundColor:'#3b82f6',borderRadius:4,yAxisID:'y'},{type:'bar',label:'GAAP 순이익($B)',data:[1.116,1.191,1.331,1.720,1.569,1.594,1.825,null],backgroundColor:'rgba(240,192,64,.55)',borderRadius:4,yAxisID:'y'},{type:'line',label:'GAAP EPS($)',data:[0.86,0.92,1.03,1.35,1.24,1.26,1.45,1.65],borderColor:'#2ecc71',tension:.3,pointRadius:4,yAxisID:'y2'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#9aa0b8'}}},scales:{x:{ticks:{color:'#9aa0b8'}},y:{ticks:{color:'#9aa0b8'}},y2:{position:'right',grid:{display:false},ticks:{color:'#9aa0b8'}}}}});
+}
+
+function renderPeerChart() { const ctx=document.getElementById('peerChart'); if(!ctx||charts.peer)return; charts.peer=new Chart(ctx,{type:'bar',data:{labels:['AMAT','KLAC','LRCX','ASML'],datasets:[{label:'Forward P/E',data:[32.8,36,48.7,42],backgroundColor:['#777','#777','#3b82f6','#777']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#9aa0b8'}},y:{ticks:{color:'#9aa0b8'}}}}}); }
+function renderCharts(sectionId) {
+  setTimeout(() => {
+    if (sectionId === 'fund') renderFundChart();
+    if (sectionId === 'valuation') renderPeerChart();
+  }, 50);
+}
+</script>
+</body>
+</html>
