@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPCX 종합 분석 위젯</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117; --bg2: #1a1d27; --bg3: #22263a; --border: #2e3347;
+    --text: #e8eaf0; --text2: #9aa0b8; --text3: #5c6282;
+    --accent: #005288; --accent2: #4da6ff; --accent3: #0a2438;
+    --bull: #D85A30; --bear: #185FA5; --ma5: #ff6b9d; --ma20: #9b59b6; --ma60: #f0c040; --ma120: #22d3ee;
+    --green: #2ecc71; --red: #e74c3c; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
+  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; max-width: 1100px; margin: 0 auto; }
+  .header { background: linear-gradient(135deg, #051726 0%, #0f1117 40%, #1a1d27 100%); border-bottom: 2px solid var(--accent3); padding: 28px 32px 24px; position: relative; overflow: hidden; max-width: 1100px; margin: 0 auto; }
+  .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(77,166,255,0.14) 0%, transparent 70%); pointer-events: none; }
+  .header-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .ticker-block { display: flex; align-items: center; gap: 16px; }
+  .ticker-badge { background: linear-gradient(135deg, var(--accent3), var(--accent)); color: #fff; font-size: 13px; font-weight: 800; padding: 5px 12px; border-radius: 6px; letter-spacing: 1px; }
+  .company-name { font-size: 22px; font-weight: 700; color: var(--text); }
+  .company-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .price-block { text-align: right; }
+  .price-main { font-size: 32px; font-weight: 800; color: var(--accent2); letter-spacing: -1px; }
+  .price-change { font-size: 13px; color: var(--green); font-weight: 600; }
+  .header-meta { display: flex; justify-content: space-between; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+  .meta-item { display: flex; flex-direction: column; }
+  .meta-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .meta-value { font-size: 13px; font-weight: 600; color: var(--text2); margin-top: 2px; }
+  .meta-value.highlight { color: var(--accent2); }
+  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
+  .nav-btn:hover { color: var(--text); background: var(--bg3); }
+  .nav-btn.active { background: var(--accent3); color: var(--accent2); }
+  .section { display: none; padding: 28px 32px; max-width: 1100px; margin: 0 auto; }
+  .section.active { display: block; }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--accent2); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; display: inline-block; }
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px; }
+  .card-title { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; font-weight: 600; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .chart-wrap { position: relative; }
+  .chart-wrap canvas { max-width: 100%; }
+  .price-chart-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+  .stat-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; text-align: center; }
+  .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .stat-value { font-size: 20px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
+  .stat-sub { font-size: 11px; color: var(--text3); }
+  .stat-value.up { color: var(--green); }
+  .stat-value.down { color: var(--red); }
+  .stat-value.gold { color: var(--accent2); }
+  .zone-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .zone-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg3); border-radius: 6px; }
+  .zone-label { font-size: 12px; color: var(--text2); }
+  .zone-val { font-size: 13px; font-weight: 700; color: var(--accent2); }
+  .zone-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
+  .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
+  .tag-current { background: rgba(77,166,255,0.2); color: var(--accent2); }
+  .val-item { margin-bottom: 18px; }
+  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
+  .val-track { height: 8px; background: var(--bg3); border-radius: 4px; position: relative; overflow: hidden; }
+  .val-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+  .val-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+  .val-low { font-size: 10px; color: var(--green); }
+  .val-mid { font-size: 10px; color: var(--accent2); text-align: center; }
+  .val-high { font-size: 10px; color: var(--red); }
+  .stage-badge { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
+  .stage-3 { background: rgba(77,166,255,0.2); color: var(--accent2); }
+  .stage-5 { background: rgba(231,76,60,0.2); color: var(--red); }
+  .scenario-card { border-radius: 8px; padding: 14px; }
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent2); border: 2px solid var(--bg); }
+  .tl-dot.red { background: var(--red); }
+  .tl-dot.green { background: var(--green); }
+  .tl-dot.blue { background: var(--blue); }
+  .tl-dot.gold { background: var(--accent2); }
+  .tl-dot.today { background: #ffc107; }
+  .tl-date { font-size: 10px; color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+  .tl-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 3px 0; }
+  .tl-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .tl-source { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 11px; font-weight: 600; color: var(--accent2); text-decoration: none; }
+  .tl-source:hover { text-decoration: underline; }
+  .bull-bear { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .bb-box { background: var(--bg3); border-radius: var(--radius); padding: 16px; }
+  .bb-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .bb-bull { color: var(--bull); }
+  .bb-bear { color: var(--bear); }
+  .bb-item { display: flex; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .bb-icon { flex-shrink: 0; margin-top: 2px; }
+  .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+  .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
+  .disclaimer { max-width: 1100px; margin: 28px auto 16px; padding: 12px 16px; background: rgba(77,166,255,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
+  .info-box { background: rgba(77,166,255,0.1); border: 1px solid var(--accent3); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; color: var(--text2); }
+  .ma-toggle-btn { background: var(--bg3); border: 1px solid; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer; transition: all .15s; }
+  .ma-toggle-btn:hover { filter: brightness(1.2); }
+  .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
+  @media (max-width: 600px) {
+    .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
+    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; } .price-main { font-size: 24px; }
+  }
+  body { padding-top: 46px; }
+  .back-bar { position: fixed; top: 0; left: 0; right: 0; height: 46px; background: rgba(10,11,22,0.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.25); }
+  .back-bar a { color: var(--text2); font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+  .back-bar a:hover { color: var(--accent2); }
+  .back-bar .brand-icon { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 6px; background: var(--accent3); color: var(--accent2); font-size: 12px; }
+  .back-bar .back-bar-ticker { font-size: 11px; color: var(--text3); font-weight: 600; letter-spacing: 0.4px; }
+  .back-bar-nav { display: flex; align-items: center; gap: 10px; }
+  .peer-nav-link { color: var(--text2); font-size: 11px; font-weight: 700; text-decoration: none; padding: 4px 9px; border-radius: 6px; border: 1px solid var(--border); transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+  .peer-nav-link:hover { color: var(--accent2); border-color: var(--accent); }
+  .peer-nav-link.disabled { color: var(--text3); opacity: 0.4; pointer-events: none; border-color: var(--border); }
+</style>
+</head>
+<body>
+<div class="back-bar">
+  <a href="../index.html"><span class="brand-icon">◧</span>US Stock Widgets · 전체 종목 목록</a>
+  <div class="back-bar-nav">
+    <a class="peer-nav-link" href="INTC_analysis_widget.html">◀ INTC</a>
+    <span class="back-bar-ticker">SPCX · 시총 22위</span>
+    <a class="peer-nav-link" href="SKHY_analysis_widget.html">다음 SKHY ▶</a>
+  </div>
+</div>
+
+<div class="today-banner">⚠️ <strong>상장 25거래일(2026.06.12 IPO) — 정식 분기보고서 미발표</strong> · 본 위젯의 재무 데이터는 S-1 상장신고서에 공개된 2025년 연간·2026년 1분기 수치를 기반으로 함 · 최근 6거래일 연속 하락, 상장 후 최저가권</div>
+
+<div class="header">
+  <div class="header-top">
+    <div class="ticker-block">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+          <span class="ticker-badge">SPCX</span>
+          <span style="font-size:11px;color:var(--accent2);font-weight:600;">NASDAQ · 2026.06.12 IPO · 사상 최대급 흥행 후 급격한 조정</span>
+        </div>
+        <div class="company-name">Space Exploration Technologies Corp.</div>
+        <div class="company-sub">Space(재사용로켓 발사)·Connectivity(Starlink 위성 브로드밴드)·AI(xAI Grok·X) 3대 사업부 · 2026.02 xAI 합병으로 우주+AI 복합기업 전환 · S&P 시총 22위권(신규 편입)</div>
+      </div>
+    </div>
+    <div class="price-block">
+      <div class="price-main">$119.85</div>
+      <div class="price-change" style="color:var(--red);">▼ -3.34% (2026.07.20 기준)</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px;">상장 후 최저 $119.68 (2026.07.17) · 최고 $225.64 (2026.06.16)</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$1.58T</span></div>
+    <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Communication Services</span></div>
+    <div class="meta-item"><span class="meta-label">FY2025 매출</span><span class="meta-value">$18.67B</span></div>
+    <div class="meta-item"><span class="meta-label">FY2025 영업손익</span><span class="meta-value">-$2.59B (적자)</span></div>
+    <div class="meta-item"><span class="meta-label">상장 경과</span><span class="meta-value">25거래일</span></div>
+    <div class="meta-item"><span class="meta-label">배당</span><span class="meta-value">없음</span></div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
+  <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
+  <button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button>
+  <button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button>
+  <button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button>
+  <button class="nav-btn" onclick="showSection('invest')">🎯 투자 포인트</button>
+</div>
+
+<!-- ===================== SECTION 1: 기술적 분석 ===================== -->
+<div id="tech" class="section active">
+  <div class="section-title">기술적 분석 — 일봉 캔들스틱 (2026.06.12 IPO ~ 2026.07.20, 25거래일) · 상장 후 -46.9%</div>
+  <div class="price-chart-container">
+    <div style="margin-bottom:10px;display:flex;justify-content:flex-end;align-items:center;flex-wrap:wrap;gap:8px;">
+      <div id="spcxMaToggle" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="ma-toggle-btn" data-ma="ma5" style="color:var(--ma5);border-color:var(--ma5);">● MA5</button>
+        <button class="ma-toggle-btn" data-ma="pricelabels" style="color:var(--text2);border-color:var(--text2);margin-left:4px;">◆ 가격라벨</button>
+      </div>
+    </div>
+    <svg id="spcxCandleSvg" viewBox="0 0 720 240" width="100%" style="display:block;background:var(--bg3);border-radius:8px 8px 0 0;padding:4px;" role="img" aria-label="SPCX 일봉 캔들스틱 차트"></svg>
+    <svg id="spcxVolumeSvg" viewBox="0 0 720 70" width="100%" style="display:block;background:var(--bg3);border-radius:0 0 8px 8px;padding:0 4px 4px;" role="img" aria-label="SPCX 거래량 차트"></svg>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">상장 후 최고 $225.64(2026.06.16) → 최저 $119.68(2026.07.17) → 현재 $119.85 — 데이터 25거래일만 존재(MA20/60/120 계산 불가)</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">핵심 가격대</div>
+      <div class="zone-list">
+        <div class="zone-item"><span class="zone-label">상장 후 최고</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$225.64 (2026.06.16)</span><span class="zone-tag tag-resist">저항선</span></div></div>
+        <div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$119.85 (고점 대비 -46.9%)</span><span class="zone-tag tag-current">현재</span></div></div>
+        <div class="zone-item"><span class="zone-label">IPO 공모가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$150.00 (대비 -20.1%)</span><span class="zone-tag tag-support">기준선</span></div></div>
+        <div class="zone-item"><span class="zone-label">상장 후 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$119.68 (2026.07.17)</span><span class="zone-tag tag-support">강지지</span></div></div>
+        <div class="zone-item"><span class="zone-label">MA5 (유일하게 계산 가능)</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--red);">$129.26 — 현재가 하회</span></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">상장 후 가격 흐름 요약</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.8;">
+        6/12 IPO 첫날 +19%(공모가 $150→종가 $160.95) 이후 3거래일 만에 +50% 랠리로 6/16 고점 $225.64 형성. 이후 밸류에이션 부담과 xAI 통합發 대규모 손실 우려로 5주 연속 하락 추세가 이어지며, 최근 6거래일 연속 하락(7/10~7/20)으로 상장 후 최저가권($119.68~119.85)까지 밀린 상태.
+        <div style="margin-top:10px;padding:10px;background:var(--bg3);border-radius:6px;">⚠️ 데이터가 25거래일(약 5주)만 존재해 통상적인 MA20/60/120 기반 추세 판단은 불가능 — 단기 변동성이 극도로 큰 구간으로 해석에 유의.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">주차별 패턴 분석</div>
+    <div class="grid-4">
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">6/12~16 — IPO 랠리 $150→$226</div><div style="font-size:12px;color:var(--text2);">사상 최대급 IPO 흥행, 상장 첫날 +19%, 3거래일만에 +50% 폭등.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">6/17~30 — 급격한 조정 $226→$165</div><div style="font-size:12px;color:var(--text2);">밸류에이션 부담과 매도물량 출회로 조정 국면 진입, 변동성 극심.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">7/1~10 — 하락 지속 $165→$145</div><div style="font-size:12px;color:var(--text2);">xAI 부문 대규모 영업손실 부담이 부각되며 지속 하락.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">7/13~20 — 6거래일 연속 하락 $144→$120</div><div style="font-size:12px;color:var(--text2);">6연속 하락으로 상장 후 최저가권 경신, 밸류에이션 재평가 국면.</div></div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;">
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">상장 후 고점 대비 -46.9%, IPO 공모가 대비 -20.1%</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">6거래일 연속 하락 — 상장 후 최저가 경신 중</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(154,160,184,0.15);color:var(--text2);">FY2025 영업손실 -$2.59B — xAI 통합에 따른 AI 인프라 투자 부담</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">Starlink(Connectivity) 매출 $11.4B(+50% YoY) — 유일한 흑자 부문이 전체를 지탱</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(255,193,7,0.18);color:#ffc107;">상장 25거래일 — 정식 분기보고서 아직 미발표</span>
+  </div>
+</div>
+
+<!-- ===================== SECTION 2: 기본적 분석 ===================== -->
+<div id="fund" class="section">
+  <div class="section-title">기본적 분석 — S-1 상장신고서 공개 재무 (SEC 공시 기준)</div>
+  <div class="card">
+    <div class="card-title">2025년 사업부문별 매출 및 영업손익 (S-1 공개 기준)</div>
+    <div class="chart-wrap" style="height:260px;"><canvas id="spcxRevChart"></canvas></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--text3);">* 2026.02 xAI(X Holdings 포함) 합병이 동일지배하 거래로 처리되어, 2025년 재무제표는 xAI를 소급 연결한 수치. Starlink(Connectivity)만 흑자이며, Space·AI 부문은 영업손실 중.</div>
+  </div>
+  <div class="info-box">
+    <strong>SpaceX는 왜 영업적자인가?</strong>
+    <div style="margin-top:8px;">· <strong style="color:var(--text);">Connectivity(Starlink)</strong> — 소비자·기업·정부용 위성 브로드밴드. 2025년 $11.39B 매출(+50% YoY)로 유일하게 확실한 흑자 사업부.</div>
+    <div style="margin-top:6px;">· <strong style="color:var(--text);">AI(xAI)</strong> — Grok LLM·X 플랫폼·AI 인프라. 2025년 매출 $3.2B이나 대규모 데이터센터·GPU 투자로 손실 견인의 핵심.</div>
+    <div style="margin-top:6px;">· <strong style="color:var(--text);">Space</strong> — Falcon·Dragon·Starship 발사 사업. 2025년 매출 $4.09B, 영업손실 -$657M로 이 부문 자체도 적자.</div>
+    <div style="margin-top:8px;">즉 Starlink의 흑자가 AI·우주발사 부문의 적자를 상당폭 상쇄하고 있으나, 전체로는 여전히 영업손실 상태.</div>
+  </div>
+  <div class="grid-3">
+    <div class="stat-box"><div class="stat-label">FY2025 매출(연결)</div><div class="stat-value up">$18.67B</div><div class="stat-sub">xAI 소급연결 포함</div></div>
+    <div class="stat-box"><div class="stat-label">FY2025 영업손익</div><div class="stat-value down">-$2.59B</div><div class="stat-sub">AI 인프라 투자 부담</div></div>
+    <div class="stat-box"><div class="stat-label">Q1 FY26 매출</div><div class="stat-value up">$4.69B</div><div class="stat-sub">연환산 약 $18.8B</div></div>
+    <div class="stat-box"><div class="stat-label">Q1 FY26 영업손익</div><div class="stat-value down">-$1.94B</div><div class="stat-sub">적자폭 확대(AI 투자 가속)</div></div>
+    <div class="stat-box"><div class="stat-label">Starlink 매출(FY25)</div><div class="stat-value up">$11.39B</div><div class="stat-sub">▲50% YoY, 유일한 흑자부문</div></div>
+    <div class="stat-box"><div class="stat-label">xAI(AI) 매출(FY25)</div><div class="stat-value">$3.2B</div><div class="stat-sub">Grok·X 플랫폼·AI 인프라</div></div>
+    <div class="stat-box"><div class="stat-label">Space(발사) 매출(FY25)</div><div class="stat-value">$4.09B</div><div class="stat-sub">영업손실 -$657M</div></div>
+    <div class="stat-box"><div class="stat-label">배당</div><div class="stat-value down">없음</div><div class="stat-sub">성장 재투자 단계</div></div>
+    <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value gold">미정</div><div class="stat-sub">상장 후 첫 정식 분기보고서</div></div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">핵심 투자 논리 — Starlink의 흑자가 xAI의 대규모 투자를 얼마나 오래 지탱할 수 있는가</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.7;">2026.02 xAI 합병으로 SpaceX는 순수 로켓 기업에서 우주+통신+AI 복합기업으로 전환했다. Starlink는 $11.39B 매출·50% 성장으로 명확한 흑자 사업부이나, xAI의 데이터센터·GPU 투자가 전체 영업손실(-$2.59B)의 핵심 원인이며 Q1 FY26에는 손실폭이 오히려 확대(-$1.94B)됐다. <strong style="color:var(--text);">핵심 논쟁은 "Starlink의 견조한 흑자 창출력이 xAI의 AI 인프라 투자를 감당할 수 있는가" 그리고 "시장이 매긴 $1.58T 밸류에이션이 우주+AI 복합기업 서사에 걸맞은 수준인가"이다.</strong></div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 3: 밸류에이션 ===================== -->
+<div id="valuation" class="section">
+  <div class="section-title">밸류에이션 — 영업적자 상태로 전통적 PER 적용 불가, 극단적 프리미엄의 서사 중심 종목</div>
+  <div class="info-box">
+    <strong>핵심 전제:</strong> SPCX는 연결 기준 영업손실 상태라 PER 산출이 불가능하다. 연환산 매출 기준 P/S 약 84x는 전통적 밸류에이션 프레임을 크게 벗어난 수준으로, 우주·AI 복합기업 서사에 대한 극단적 프리미엄이 반영된 결과로 해석해야 한다.
+  </div>
+  <div class="card">
+    <div class="val-item">
+      <div class="val-header"><span class="val-name">PER (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">N/A</span><span class="stage-badge" style="background:rgba(231,76,60,0.2);color:var(--red);">영업손실 — 산출불가</span></div></div>
+      <div class="val-track"><div class="val-fill" style="width:100%;background:rgba(231,76,60,0.35);"></div></div>
+      <div style="font-size:11px;color:var(--text3);margin-top:4px;">Q1 FY26 영업손실 -$1.94B — xAI 부문 투자 지속으로 당분간 흑자전환 어려움</div>
+    </div>
+    <div class="val-item">
+      <div class="val-header"><span class="val-name">P/S (연환산, Q1 FY26 기준)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">약 84x</span><span class="stage-badge" style="background:rgba(231,76,60,0.2);color:var(--red);">참고용 — 극단적 프리미엄</span></div></div>
+      <div class="val-track"><div class="val-fill" style="width:100%;background:rgba(231,76,60,0.35);"></div></div>
+      <div style="font-size:11px;color:var(--text3);margin-top:4px;">시가총액 $1.58T÷연환산 매출 약 $18.8B(Q1×4) · 일반적인 기업가치 평가 프레임으로 해석하기 어려운 수준 — Tesla·Nvidia 등 AI 프리미엄 종목과 유사한 서사 구조로 접근 필요</div>
+    </div>
+    <div class="val-item">
+      <div class="val-header"><span class="val-name">시가총액 / Starlink 매출(FY25)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">약 139x</span><span class="stage-badge" style="background:rgba(154,160,184,0.2);color:var(--text2);">참고용</span></div></div>
+      <div class="val-track"><div class="val-fill" style="width:100%;background:rgba(154,160,184,0.35);"></div></div>
+      <div style="font-size:11px;color:var(--text3);margin-top:4px;">유일한 확실 흑자부문인 Starlink 매출만 놓고 봐도 극단적으로 높은 배수 — 밸류에이션의 대부분이 미래 AI·우주 사업 성장 기대에 의존</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">종합 밸류에이션 — 밸류에이션 지표 자체보다 사업부문별 손익 개선이 핵심 변수</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;">PER·P/S 등 전통적 지표는 모두 산출 불가하거나 극단적으로 높게 나타난다. <strong style="color:var(--text);">이는 SPCX가 저평가/고평가를 논할 수 있는 성숙 기업이 아니라, Starlink의 확실한 현금흐름과 xAI·Space의 미래 성장 잠재력을 함께 사는 서사 중심 종목이라는 점을 보여준다.</strong> 상장 후 첫 정식 분기보고서에서 xAI 손실 축소 추이가 확인되기 전까지는 밸류에이션 판단 자체가 조심스러운 구간.</div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 4: US 특화 ===================== -->
+<div id="us" class="section">
+  <div class="section-title">US 특화 — 상장 현황 · 사업구조</div>
+  <div class="rel-container">
+    <div class="rel-title">상장 이후 성과</div>
+    <div class="grid-3">
+      <div class="stat-box"><div class="stat-label">IPO 이후 수익률</div><div class="stat-value down">-20.1%</div></div>
+      <div class="stat-box"><div class="stat-label">고점 대비</div><div class="stat-value down">-46.9%</div></div>
+      <div class="stat-box"><div class="stat-label">거래일수</div><div class="stat-value">25일</div></div>
+    </div>
+    <div class="zone-list" style="margin-top:12px;">
+      <div class="zone-item"><span class="zone-label">시가총액 순위</span><span class="zone-val">세계 10위권 · S&P 관련 지수 시총 22위권(신규 편입)</span></div>
+      <div class="zone-item"><span class="zone-label">배당수익률</span><span class="zone-val" style="color:var(--red);">0% (배당 없음, 성장 재투자 단계)</span></div>
+      <div class="zone-item"><span class="zone-label">섹터</span><span class="zone-val">Communication Services · 우주·위성통신·AI 복합기업</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">3대 사업부 구조</div>
+    <div class="zone-list">
+      <div class="zone-item"><span class="zone-label">Connectivity (Starlink)</span><span class="zone-val" style="color:var(--green);">매출 $11.4B(+50%) — 유일한 확실 흑자 부문</span></div>
+      <div class="zone-item"><span class="zone-label">AI (xAI)</span><span class="zone-val">매출 $3.2B — Grok LLM·X 플랫폼, 대규모 투자 지속</span></div>
+      <div class="zone-item"><span class="zone-label">Space (발사체)</span><span class="zone-val" style="color:var(--red);">매출 $4.09B, 영업손실 -$657M</span></div>
+      <div class="zone-item"><span class="zone-label">경쟁구도</span><span class="zone-val">Blue Origin(신규자금조달 추진) 등과 우주발사 경쟁, OpenAI 등과 AI 경쟁</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 5: 시계열 뉴스 ===================== -->
+<div id="news" class="section">
+  <div class="section-title">시계열 주요 뉴스 (2026.02 ~ 2026.07)</div>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;color:var(--text2);">
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--accent2);display:inline-block;"></span>초대형 이벤트</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;"></span>긍정</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block;"></span>부정</span>
+  </div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot gold"></div>
+      <div class="tl-date">2026년 2월 2일 — xAI 합병 완료</div>
+      <div class="tl-title">SpaceX, X.AI Holdings Corp 인수 완료</div>
+      <div class="tl-desc">Elon Musk의 AI 스타트업 xAI(Grok LLM·X 플랫폼 포함)를 SpaceX에 합병, 결합기업 가치 약 $1.25T로 평가. 순수 우주기업에서 우주+AI 복합기업으로 전환하는 결정적 계기.</div>
+      <a class="tl-source" href="https://www.fool.com/investing/2026/07/16/elon-musk-spacex-merge-xai-orbital-data-center/" target="_blank" rel="noopener">관련 뉴스 보기 (Motley Fool) →</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2026년 5월 20일 — S-1 상장신고서 제출</div>
+      <div class="tl-title">첫 공개 재무제표, Starlink 흑자·xAI 손실 구조 드러나</div>
+      <div class="tl-desc">FY2025 연결매출 $18.67B·영업손실 -$2.59B을 처음 공개. Starlink가 유일한 확실 흑자 부문이며 xAI 인프라 투자가 전체 손실을 견인하는 구조가 시장에 알려짐.</div>
+      <a class="tl-source" href="https://www.cnbc.com/2026/05/20/spacex-ipo-live-updates.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot gold"></div>
+      <div class="tl-date">2026년 6월 12일 — 나스닥 IPO</div>
+      <div class="tl-title">공모가 $150, 상장 첫날 +19% 마감</div>
+      <div class="tl-desc">사상 최대급 IPO로 평가받으며 상장 첫날 $160.95에 마감(+19%), 시가총액이 곧바로 $2T를 넘어서기도 함.</div>
+      <a class="tl-source" href="https://www.cnbc.com/2026/06/12/spacex-ipo-spcx-live-updates.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2026년 6월 16일 — 상장 후 최고가 $225.64</div>
+      <div class="tl-title">상장 3거래일 만에 +50% 폭등</div>
+      <div class="tl-desc">IPO 흥행 열기가 이어지며 상장 후 최고가를 기록. 이후 밸류에이션 부담으로 장기 하락추세 전환.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-date">2026년 7월 중순 — 상장 후 최저가 근접, 6거래일 연속 하락</div>
+      <div class="tl-title">공모가 아래로 하락, "사상 최저가" 헤드라인 등장</div>
+      <div class="tl-desc">경쟁사 Blue Origin의 신규 자금조달 추진 소식 등과 맞물려 SPCX가 공모가 개장가 아래로 떨어지며 "상장 후 최저가" 관련 보도가 이어짐. 7/10~7/20 6거래일 연속 하락.</div>
+      <a class="tl-source" href="https://finance.yahoo.com/markets/stocks/article/spacex-hits-all-time-low-dips-below-ipo-opening-price-as-rival-blue-origin-seeks-new-funding-155049263.html" target="_blank" rel="noopener">관련 뉴스 보기 (Yahoo Finance) →</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot today"></div>
+      <div class="tl-date">2026년 7월 20일 — 현재, 상장 후 최저가권</div>
+      <div class="tl-title">$119.85, 고점 대비 -46.9% — 첫 정식 분기실적 대기</div>
+      <div class="tl-desc">상장 5주 만에 고점 대비 절반 가까이 하락한 상태. 아직 상장 후 첫 정식 분기보고서가 나오지 않아, xAI 손실 축소 여부와 Starlink 성장 지속 여부를 확인할 다음 실적 발표가 핵심 변수로 남아있음.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SECTION 6: 투자 포인트 ===================== -->
+<div id="invest" class="section">
+  <div class="section-title">2026년 핵심 투자 포인트</div>
+  <div class="bull-bear">
+    <div class="bb-box">
+      <div class="bb-title bb-bull">🐂 Bull 요인</div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Starlink 매출 $11.4B(+50%):</strong> 확실한 흑자 사업부, 글로벌 위성 브로드밴드 독점적 지위.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>우주+AI 복합기업 서사:</strong> Grok·X·데이터센터를 결합한 독보적 포지셔닝.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>상장 후 -46.9% 조정:</strong> 밸류에이션 재평가로 진입 부담 완화 가능성.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>재사용 로켓 기술력:</strong> Falcon·Starship 기반 발사 비용 경쟁력.</span></div>
+    </div>
+    <div class="bb-box">
+      <div class="bb-title bb-bear">🐻 Bear 요인</div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>영업손실 지속:</strong> Q1 FY26 -$1.94B로 적자폭 오히려 확대.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>P/S 약 84x:</strong> 전통적 밸류에이션 프레임을 벗어난 극단적 프리미엄.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>6거래일 연속 하락:</strong> 상장 후 최저가권, 단기 변동성 극심.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>데이터 제한적:</strong> 상장 25거래일, 정식 분기실적 미확인.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>Space 부문 자체 적자:</strong> 발사 사업도 영업손실 -$657M.</span></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">5개 분석 종합 — 한눈에 보기</div>
+    <div class="zone-list">
+      <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:var(--red);">6거래일 연속 하락, 상장 후 최저가권 — 데이터 25일뿐이라 추세 판단 제한적</span></div>
+      <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:#f0c040;">Starlink 흑자·xAI 적자 구조, 전체 영업손실 지속</span></div>
+      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:var(--red);">PER 산출불가, P/S 약 84x — 극단적 프리미엄</span></div>
+      <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val">세계 10위권 시총, 우주·통신·AI 복합기업 신규 편입</span></div>
+      <div class="zone-item"><span class="zone-label">📰 시계열 뉴스</span><span class="zone-val" style="color:var(--red);">IPO 흥행 후 급격한 조정 — 첫 정식 분기실적이 다음 분수령</span></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">투자의견 요약</div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
+      <div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:var(--text2)">미정 (상장 후 첫 정식 분기보고서 대기)</strong></div>
+      <div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">Starlink의 확실한 흑자 창출력과 xAI·Space의 성장 서사가 공존하지만, 상장 5주 만에 고점 대비 -46.9% 조정을 겪을 만큼 밸류에이션 변동성이 극심 — 애널리스트 목표가 컨센서스도 아직 형성되지 않은 초기 단계로, 첫 정식 분기실적에서 xAI 손실 축소 추이를 확인하기 전까지는 신중한 접근이 필요</strong></div>
+    </div>
+  </div>
+</div>
+
+<div class="disclaimer">
+  ⚠️ 본 위젯은 SEC EDGAR 공시(S-1), Yahoo Finance 주가 데이터 및 공개 뉴스를 기반으로 작성된 정보 제공 목적의 분석 자료입니다. 상장 25거래일 시점의 제한된 데이터를 기반으로 하며, 정식 분기보고서(10-Q/10-K) 미발표 상태입니다. 투자 권고 또는 매매 추천이 아니며, 모든 투자 결정은 본인의 판단과 책임 하에 이루어져야 합니다. 과거 실적이 미래 수익을 보장하지 않습니다.
+</div>
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  renderCharts(id);
+}
+const charts = {};
+
+const SPCX_DAILY = [["2026-06-12",150.0,176.52,149.34,160.95,519234800],["2026-06-15",171.74,193.0,168.35,192.5,256226600],["2026-06-16",200.51,225.64,199.98,211.39,195401600],["2026-06-17",209.84,213.8,187.01,191.82,201719500],["2026-06-18",188.39,190.0,172.11,185.0,272126800],["2026-06-22",176.04,176.75,154.0,154.6,169183800],["2026-06-23",151.06,165.5,147.11,156.11,155848100],["2026-06-24",154.2,159.86,150.72,154.54,76101500],["2026-06-25",156.63,160.65,150.0,153.0,62212400],["2026-06-26",150.62,158.4,148.51,153.23,126932900],["2026-06-29",157.36,166.17,151.74,164.19,81443100],["2026-06-30",163.38,172.4,161.64,170.86,82047500],["2026-07-01",171.57,171.74,155.0,157.54,109317600],["2026-07-02",159.73,162.16,155.88,162.0,61257100],["2026-07-06",165.95,167.9,155.04,160.42,188831300],["2026-07-07",158.92,159.3,148.86,149.47,83779700],["2026-07-08",152.55,152.93,145.2,148.3,60949400],["2026-07-09",150.45,153.5,147.59,152.16,46468600],["2026-07-10",150.13,150.57,145.07,145.3,46826000],["2026-07-13",144.7,144.92,136.78,139.14,71456500],["2026-07-14",140.95,143.33,135.52,136.08,46694800],["2026-07-15",137.51,139.34,132.15,135.27,58040900],["2026-07-16",135.01,137.76,130.74,131.11,58725600],["2026-07-17",127.43,130.33,122.12,123.99,83706200],["2026-07-20",125.29,125.7,119.68,119.85,56940000]];
+const SPCX_MA5 = [null,null,null,null,188.33,187.06,179.78,168.41,160.65,154.3,156.21,159.16,159.76,161.56,163.0,160.06,155.55,154.47,151.13,146.87,144.2,141.59,137.38,133.12,129.26];
+
+(function(){
+  const svgCandle = document.getElementById('spcxCandleSvg');
+  const svgVol = document.getElementById('spcxVolumeSvg');
+  const maToggle = document.getElementById('spcxMaToggle');
+  if(!svgCandle || !svgVol) return;
+  const NS = 'http://www.w3.org/2000/svg';
+  const UP='#2ecc71', DOWN='#e74c3c';
+  const maState = {ma5:true, pricelabels:true};
+
+  function draw(){
+    const data = SPCX_DAILY;
+    const ma5 = SPCX_MA5;
+    while(svgCandle.firstChild) svgCandle.removeChild(svgCandle.firstChild);
+    while(svgVol.firstChild) svgVol.removeChild(svgVol.firstChild);
+
+    const W=720,H=240,pL=45,pR=12,pT=10,pB=20;
+    const cW=W-pL-pR,cH=H-pT-pB;
+    const highs=data.map(d=>d[2]), lows=data.map(d=>d[3]);
+    const maVals=ma5.filter(v=>v!=null);
+    const mx=Math.max(...highs,...maVals), mn=Math.min(...lows,...maVals);
+    const pad=(mx-mn)*0.06 || mx*0.02;
+    const top=mx+pad, bot=mn-pad, rng=(top-bot)||1;
+    const py = v => pT + cH*(1-(v-bot)/rng);
+    const colW = cW/data.length;
+    const bodyW = Math.max(colW*0.62, 1);
+
+    for(let i=0;i<=3;i++){
+      const v = bot + rng*i/3;
+      const y = py(v);
+      const l=document.createElementNS(NS,'line');
+      l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+      l.setAttribute('stroke','rgba(255,255,255,.08)');l.setAttribute('stroke-width','1');
+      svgCandle.appendChild(l);
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x',pL-4);t.setAttribute('y',y+3);t.setAttribute('text-anchor','end');
+      t.setAttribute('font-size','9');t.setAttribute('fill','rgba(154,160,184,.8)');
+      t.textContent='$'+v.toFixed(0);
+      svgCandle.appendChild(t);
+    }
+
+    data.forEach((d,i)=>{
+      const [,o,h,l,c] = d;
+      const cx = pL + (i+0.5)*colW;
+      const up = c >= o;
+      const col = up ? UP : DOWN;
+      const wick=document.createElementNS(NS,'line');
+      wick.setAttribute('x1',cx);wick.setAttribute('x2',cx);
+      wick.setAttribute('y1',py(h));wick.setAttribute('y2',py(l));
+      wick.setAttribute('stroke',col);wick.setAttribute('stroke-width', Math.max(colW*0.12,0.6));
+      svgCandle.appendChild(wick);
+      const yTop = py(Math.max(o,c));
+      const yBot = py(Math.min(o,c));
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x', cx - bodyW/2);
+      rect.setAttribute('y', yTop);
+      rect.setAttribute('width', bodyW);
+      rect.setAttribute('height', Math.max(yBot-yTop, 1));
+      rect.setAttribute('fill', col);
+      svgCandle.appendChild(rect);
+    });
+
+    if (maState.ma5) {
+      let seg = [];
+      const flush = () => {
+        if (seg.length > 1) {
+          const pl = document.createElementNS(NS,'polyline');
+          pl.setAttribute('points', seg.join(' '));
+          pl.setAttribute('fill','none'); pl.setAttribute('stroke','#ff6b9d');
+          pl.setAttribute('stroke-width','1.7'); pl.setAttribute('opacity','0.95');
+          pl.setAttribute('stroke-linejoin','round'); pl.setAttribute('stroke-linecap','round');
+          svgCandle.appendChild(pl);
+        }
+        seg = [];
+      };
+      ma5.forEach((v,i) => {
+        if (v == null) { flush(); return; }
+        seg.push(`${pL+(i+0.5)*colW},${py(v)}`);
+      });
+      flush();
+    }
+
+    if (maState.pricelabels) {
+    const closeIdx = data.length-1;
+    const closeVal = data[closeIdx][4];
+    const periodHigh = Math.max(...highs);
+    const periodLow = Math.min(...lows);
+    const highIdx = highs.indexOf(periodHigh);
+    const lowIdx = lows.indexOf(periodLow);
+    const markers = [
+      {idx: highIdx, v: periodHigh, color: UP, label:'최고', side:'above'},
+      {idx: lowIdx, v: periodLow, color: DOWN, label:'최저', side:'below'},
+      {idx: closeIdx, v: closeVal, color:'#60a5fa', label:'종가', side:'left'}
+    ];
+    markers.forEach(m=>{
+      const cx = pL + (m.idx+0.5)*colW;
+      const cy = py(m.v);
+      const dot=document.createElementNS(NS,'circle');
+      dot.setAttribute('cx',cx);dot.setAttribute('cy',cy);dot.setAttribute('r','3.5');
+      dot.setAttribute('fill',m.color);dot.setAttribute('stroke','#0f1117');dot.setAttribute('stroke-width','1.5');
+      svgCandle.appendChild(dot);
+
+      const labelText = `${m.label} $${m.v.toFixed(2)}`;
+      const labelW = labelText.length*5.2+6;
+      let tx, ty, anchor;
+      if (m.side === 'left') {
+        anchor = 'end'; tx = cx-7; ty = cy+3;
+      } else if (m.side === 'above') {
+        ty = cy-9;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      } else {
+        ty = cy+16;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      }
+      const bgX = anchor==='end' ? tx-labelW : anchor==='middle' ? tx-labelW/2 : tx;
+      const bg=document.createElementNS(NS,'rect');
+      bg.setAttribute('x', bgX);bg.setAttribute('y', ty-8);
+      bg.setAttribute('width', labelW);bg.setAttribute('height', 12);
+      bg.setAttribute('fill','rgba(15,17,23,0.85)');bg.setAttribute('rx','2');
+      svgCandle.appendChild(bg);
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x', tx);t.setAttribute('y', ty+2);
+      t.setAttribute('text-anchor',anchor);t.setAttribute('font-size','9');
+      t.setAttribute('font-weight','700');t.setAttribute('fill', m.color);
+      t.textContent = labelText;
+      svgCandle.appendChild(t);
+    });
+    }
+
+    const labelCount = Math.min(5, data.length);
+    for(let i=0;i<labelCount;i++){
+      const idx = Math.round(i*(data.length-1)/((labelCount-1)||1));
+      const cx = pL + (idx+0.5)*colW;
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x', Math.min(Math.max(cx,pL+10), W-20));
+      t.setAttribute('y', H-4);
+      t.setAttribute('text-anchor','middle');t.setAttribute('font-size','9');
+      t.setAttribute('fill','rgba(154,160,184,.8)');
+      t.textContent = data[idx][0].slice(2).replace(/-/g,'.');
+      svgCandle.appendChild(t);
+    }
+
+    const VW=720,VH=70,vpT=6,vpB=4;
+    const vcH=VH-vpT-vpB;
+    const maxV = Math.max(...data.map(d=>d[5]));
+    data.forEach((d,i)=>{
+      const [,o,,,c,v] = d;
+      const cx = pL + (i+0.5)*colW;
+      const up = c >= o;
+      const col = up ? 'rgba(46,204,113,0.55)' : 'rgba(231,76,60,0.55)';
+      const h = (v/maxV)*vcH;
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x', cx - bodyW/2);
+      rect.setAttribute('y', vpT + (vcH-h));
+      rect.setAttribute('width', bodyW);
+      rect.setAttribute('height', Math.max(h,1));
+      rect.setAttribute('fill', col);
+      svgVol.appendChild(rect);
+    });
+  }
+
+  if (maToggle) {
+    maToggle.querySelectorAll('.ma-toggle-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const key = btn.dataset.ma;
+        maState[key] = !maState[key];
+        btn.classList.toggle('ma-off', !maState[key]);
+        draw();
+      });
+    });
+  }
+
+  draw();
+})();
+
+function renderFundChart() {
+  const ctx = document.getElementById('spcxRevChart');
+  if (!ctx || charts['fund']) return;
+  charts['fund'] = new Chart(ctx,{
+    type: 'bar',
+    data:{
+      labels:['Connectivity(Starlink)','AI(xAI)','Space(발사)'],
+      datasets:[
+        {label:'매출($B)',data:[11.39,3.2,4.09],backgroundColor:'#4da6ff',borderRadius:4,yAxisID:'y'},
+        {label:'영업손익($B)',data:[null,null,-0.657],backgroundColor:'#e74c3c',borderRadius:4,yAxisID:'y'}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#9aa0b8',font:{size:10}}}},
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}}
+      }
+    }
+  });
+}
+
+function renderCharts(sectionId) {
+  setTimeout(() => {
+    if (sectionId === 'fund') renderFundChart();
+  }, 50);
+}
+</script>
+</body>
+</html>
