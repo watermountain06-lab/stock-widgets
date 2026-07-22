@@ -136,6 +136,10 @@
   .stage-3 { background: rgba(224,90,32,0.15); color: var(--accent2); }
   .stage-4 { background: rgba(231,126,35,0.2); color: #e67e22; }
   .stage-5 { background: rgba(231,76,60,0.2); color: var(--red); }
+  .stage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .stage-mini { text-align: center; padding: 16px 8px; border-radius: 8px; }
+  .stage-mini-num { font-size: 22px; font-weight: 700; }
+  .stage-mini-label { font-size: 12px; margin-top: 4px; }
 
   /* DRIVER */
   .driver-item { display: flex; gap: 12px; padding: 12px; background: var(--bg3); border-radius: 8px; margin-bottom: 10px; }
@@ -436,6 +440,18 @@
       <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
       <div style="margin-top:10px;font-size:12px;color:var(--text2);">* AMD Forward PER ~38x는 NVDA(~30x) 대비 다소 높지만, 성장 모멘텀 가속도 감안 시 합리적 범위.</div>
     </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">밸류에이션 5단계</div>
+    <div class="stage-grid">
+      <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우낮음</div></div>
+      <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">낮음</div></div>
+      <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div></div>
+      <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">높음</div><div style="font-size:10px;color:#e67e22;background:rgba(231,126,35,0.18);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">Fwd PER·PBR·PSR</div></div>
+      <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우높음</div><div style="font-size:10px;color:var(--red);background:rgba(231,76,60,0.18);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">PER·EV/EBITDA</div></div>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">5개 지표 중 Forward PER·PBR·PSR 3개는 4단계 높음, TTM PER(176x)·EV/EBITDA(96.2x) 2개는 5단계 매우높음 — 1~3단계가 빈 것은 데이터 누락이 아니라 AMD의 어떤 지표도 저평가·적정 구간에 있지 않기 때문이다. TTM 기준이 극단적으로 높은 건 순이익이 아직 본격 반영되지 않은 성장 초입 구간이라, Forward 2026E 기준(PER ~38x)으로 봐야 실질 밸류에이션에 가깝다.</div>
   </div>
 
   <div class="card">
