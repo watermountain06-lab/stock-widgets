@@ -259,5 +259,14 @@
     "accentColor": "#3b82f6",
     "page": "widgets/LRCX_analysis_widget.html",
     "lastUpdated": "2026-07-21"
+  },
+  {
+    "rank": 30,
+    "ticker": "COST",
+    "name": "Costco Wholesale Corporation",
+    "sector": "Consumer Staples",
+    "accentColor": "#eab308",
+    "page": "widgets/COST_analysis_widget.html",
+    "lastUpdated": "2026-07-21"
   }
 ]
