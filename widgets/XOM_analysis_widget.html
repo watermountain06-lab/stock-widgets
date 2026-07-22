@@ -49,8 +49,8 @@
   .chart-wrap canvas { max-width: 100%; }
   .price-chart-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
   .stat-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
-  .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
-  .stat-value { font-size: 20px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
+  .stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .stat-value { font-size: 22px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
   .stat-sub { font-size: 11px; color: var(--text3); }
   .stat-value.up { color: var(--green); }
   .stat-value.down { color: var(--red); }
@@ -82,7 +82,7 @@
   .val-low { font-size: 10px; color: var(--green); }
   .val-mid { font-size: 10px; color: var(--accent2); text-align: center; }
   .val-high { font-size: 10px; color: var(--red); }
-  .stage-badge { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
+  .stage-badge { font-size: 13px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
   .stage-1 { background: rgba(46,204,113,0.2); color: #2ecc71; }
   .stage-2 { background: rgba(39,174,96,0.2); color: #27ae60; }
   .stage-3 { background: rgba(91,144,194,0.2); color: var(--accent2); }
@@ -100,7 +100,6 @@
   .tl-dot.red { background: var(--red); }
   .tl-dot.green { background: var(--green); }
   .tl-dot.blue { background: var(--blue); }
-  .tl-dot.gold { background: var(--event-major); }
   .tl-dot.neutral { background: var(--event-neutral); }
   .tl-dot.today { background: #ffc107; }
   .tl-date { font-size: 10px; color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
@@ -313,10 +312,10 @@
   <div class="card">
     <div class="card-title">Per-Share 지표 (TTM 기준 · 약 41.4억 주)</div>
     <div class="per-share-grid">
-      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS · TTM</div><div class="ps-value">$5.94</div><div class="ps-sub">'25.Q2~'26.Q1 합산 · PER 24.8x</div><div style="margin-top:5px;"><span class="stage-badge stage-4">높음(일회성 손실 왜곡)</span></div></div>
-      <div class="ps-card"><div class="ps-icon">📊</div><div class="ps-label">Forward EPS(컨센서스)</div><div class="ps-value">~$12.52</div><div class="ps-sub">Forward P/E 11.8x</div><div style="margin-top:5px;"><span class="stage-badge stage-2">저평가(Fwd P/E)</span></div></div>
-      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS · 주당순자산</div><div class="ps-value">$62.65</div><div class="ps-sub">'25 자기자본 $259.4B</div><div style="margin-top:5px;"><span class="stage-badge stage-3">적정(PBR 2.35x)</span></div></div>
-      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 · FY2025</div><div class="ps-value">$5.68</div><div class="ps-sub">FY25 FCF $23.61B</div><div style="margin-top:5px;"><span class="stage-badge stage-3">적정(FCF수익률)</span></div></div>
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS · TTM</div><div class="ps-value">$5.94</div><div class="ps-sub">'25.Q2~'26.Q1 합산 · PER 24.8x, 일회성 손실로 왜곡</div><div style="margin-top:5px;"><span class="stage-badge stage-4">4단계 높음</span></div></div>
+      <div class="ps-card"><div class="ps-icon">📊</div><div class="ps-label">Forward EPS(컨센서스)</div><div class="ps-value">~$12.52</div><div class="ps-sub">Forward P/E 11.8x</div><div style="margin-top:5px;"><span class="stage-badge stage-2">2단계 낮음</span></div></div>
+      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS · 주당순자산</div><div class="ps-value">$62.65</div><div class="ps-sub">'25 자기자본 $259.4B</div><div style="margin-top:5px;"><span class="stage-badge stage-3">3단계 적정</span></div></div>
+      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 · FY2025</div><div class="ps-value">$5.68</div><div class="ps-sub">FY25 FCF $23.61B</div><div style="margin-top:5px;"><span class="stage-badge stage-3">3단계 적정</span></div></div>
     </div>
     <div style="font-size:11px;color:var(--text3);margin-top:10px;">* Trailing GAAP PER 24.8x가 높아 보이는 것은 Q1 FY2026 $3.9B 파생상품 타이밍 손실로 분모(EPS)가 일시적으로 낮아진 착시 효과 — Forward P/E는 11.8x로 정상 궤도. PBR·EV/EBITDA는 에너지 섹터 내 견조한 수준.</div>
   </div>
@@ -333,7 +332,7 @@
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">$147.36÷$5.94 · 일회성 파생상품 손실로 분모(EPS)가 눌린 결과, 정상화 시 크게 낮아질 값</div>
       </div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">Forward P/E</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">11.8x</span><span class="stage-badge stage-2">2단계 저평가</span></div></div>
+        <div class="val-header"><span class="val-name">Forward P/E</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">11.8x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:35%;background:linear-gradient(90deg,#2ecc71,#27ae60);"></div></div>
         <div class="val-labels"><span class="val-low">저(8x)</span><span class="val-mid">적정(14x)</span><span class="val-high">고(22x)</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">애널리스트 컨센서스 EPS 기준 — Trailing PER 대비 훨씬 정상화된 밸류에이션</div>
@@ -463,7 +462,7 @@
       <div class="tl-desc">Q3 실적 발표와 함께 이사회가 4분기 배당을 $1.03로 4% 인상(11/14 기준일, 12/10 지급) 승인 — 43년 연속 연간 배당 증가 기록. 참고로 'Dividend King'(50년 연속) 등재까지는 앞으로 7~8년 더 필요.</div>
     </div>
     <div class="tl-item">
-      <div class="tl-dot gold"></div>
+      <div class="tl-dot neutral"></div>
       <div class="tl-date">2026년 3월 30일 — 52주 신고가 $176.41</div>
       <div class="tl-title">Permian·Guyana 생산 기록 경신 랠리</div>
       <div class="tl-desc">Permian Q4 2025 1.8M boe/d, Guyana 900K+ gross bpd 생산 기록(Yellowtail 4개월 조기 가동) 배경으로 52주 신고가 $176.41 경신 — 유가 자체는 오히려 약세였던 구간에도 생산 증가 모멘텀이 주가를 견인.</div>
@@ -483,7 +482,7 @@
       <div class="tl-desc">일회성 GAAP 손실에도 불구하고 자사주 매입 속도는 유지, 연간 $20.0B 프로그램 궤도 유지를 재확인. CEO Woods "호르무즈 해협 통한 세계 원유·LNG 공급의 약 20%가 걸린 전례 없는 공급 차질" 경고, 유가 추가 상승 가능성 시사.</div>
     </div>
     <div class="tl-item">
-      <div class="tl-dot gold"></div>
+      <div class="tl-dot neutral"></div>
       <div class="tl-date">2026년 7월 — 이란發 지정학 긴장 재점화, 유가 급등</div>
       <div class="tl-title">호르무즈 해협 공격 재개로 유가 4%+ 급등 · $147.36 반등</div>
       <div class="tl-desc">미국-이란 호르무즈 해협 공격 주고받기로 원유가 한 달래 최고치로 급등, Exxon 등 에너지주 동반 강세. 사우디 정제·석유화학, 카타르 LNG, UAE 생산 등 중동 사업 일부는 여전히 차질 중이나 고유가가 이를 상쇄. 주가는 $130대에서 $147.36까지 반등. 7월 초 텍사스 재본거지 이전(redomiciliation) 완료도 겹침.</div>

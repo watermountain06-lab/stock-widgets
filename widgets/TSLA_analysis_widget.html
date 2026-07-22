@@ -49,8 +49,8 @@
   .chart-wrap canvas { max-width: 100%; }
   .price-chart-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
   .stat-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
-  .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
-  .stat-value { font-size: 20px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
+  .stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .stat-value { font-size: 22px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
   .stat-sub { font-size: 11px; color: var(--text3); }
   .stat-value.up { color: var(--green); }
   .stat-value.down { color: var(--red); }
@@ -82,7 +82,7 @@
   .val-low { font-size: 10px; color: var(--green); }
   .val-mid { font-size: 10px; color: var(--accent2); text-align: center; }
   .val-high { font-size: 10px; color: var(--red); }
-  .stage-badge { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
+  .stage-badge { font-size: 13px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
   .stage-1 { background: rgba(46,204,113,0.2); color: #2ecc71; }
   .stage-2 { background: rgba(39,174,96,0.2); color: #27ae60; }
   .stage-3 { background: rgba(200,168,75,0.2); color: var(--accent2); }
@@ -100,7 +100,6 @@
   .tl-dot.red { background: var(--red); }
   .tl-dot.green { background: var(--green); }
   .tl-dot.blue { background: var(--blue); }
-  .tl-dot.gold { background: var(--event-major); }
   .tl-dot.neutral { background: var(--event-neutral); }
   .tl-dot.today { background: #ffc107; }
   .tl-date { font-size: 10px; color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
@@ -312,10 +311,10 @@
   <div class="card">
     <div class="card-title">Per-Share 지표 (Q1 2026 기준 · 3.23B 주)</div>
     <div class="per-share-grid">
-      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS · TTM</div><div class="ps-value">$1.08</div><div class="ps-sub">Q2~Q1 합산 · Trailing PER 364x</div><div style="margin-top:5px;"><span class="stage-badge stage-5">매우높음(PER 기준)</span></div></div>
-      <div class="ps-card"><div class="ps-icon">📊</div><div class="ps-label">Non-GAAP EPS · TTM</div><div class="ps-value">$1.55</div><div class="ps-sub">Forward EPS $2.11 (FY2026E)</div><div style="margin-top:5px;"><span class="stage-badge stage-4">높음(PER)</span></div></div>
-      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS · 주당순자산</div><div class="ps-value">$22.73</div><div class="ps-sub">Q1 2026 · 자기자본 $73.4B</div><div style="margin-top:5px;"><span class="stage-badge stage-5">높음(PBR 17x)</span></div></div>
-      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 · 2025</div><div class="ps-value">$1.93</div><div class="ps-sub">2026 마이너스 전환 예상</div><div style="margin-top:5px;"><span class="stage-badge stage-1">매우낮음</span></div></div>
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS · TTM</div><div class="ps-value">$1.08</div><div class="ps-sub">Q2~Q1 합산 · Trailing PER 364x</div><div style="margin-top:5px;"><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
+      <div class="ps-card"><div class="ps-icon">📊</div><div class="ps-label">Non-GAAP EPS · TTM</div><div class="ps-value">$1.55</div><div class="ps-sub">Forward EPS $2.11 (FY2026E)</div><div style="margin-top:5px;"><span class="stage-badge stage-4">4단계 높음</span></div></div>
+      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS · 주당순자산</div><div class="ps-value">$22.73</div><div class="ps-sub">Q1 2026 · 자기자본 $73.4B</div><div style="margin-top:5px;"><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
+      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 · 2025</div><div class="ps-value">$1.93</div><div class="ps-sub">2026 마이너스 전환 예상</div><div style="margin-top:5px;"><span class="stage-badge stage-1">1단계 매우낮음</span></div></div>
     </div>
     <div style="font-size:11px;color:var(--text3);margin-top:10px;">* GAAP PER 364x, Non-GAAP PER 254x, Forward PER 204x(FY2026E) — 어떤 기준을 써도 전통 밸류에이션 기준 극단적 고평가. 시장은 Robotaxi·Optimus 수익화 시나리오를 이미 상당 부분 반영.</div>
   </div>
@@ -457,7 +456,7 @@
       <a class="tl-source" href="https://fortune.com/2025/07/02/tesla-sales-musk-trump-doge-europe-rebound/" target="_blank" rel="noopener">관련 뉴스 보기 (Fortune) →</a>
     </div>
     <div class="tl-item">
-      <div class="tl-dot gold"></div>
+      <div class="tl-dot neutral"></div>
       <div class="tl-date">2025년 12월 22일 — 역대 최고가</div>
       <div class="tl-title">주가 $498.83 역대 최고 · Robotaxi Austin 확대 · "Tesla는 AI 회사" 내러티브</div>
       <div class="tl-desc">Austin에서 FSD 무감독 로보택시 서비스 확대 지속, Optimus 로봇 진척 기대감 지속. AI·자율주행 내러티브 힘입어 주가 $498.83 역대 최고 경신.</div>
@@ -477,7 +476,7 @@
       <a class="tl-source" href="https://www.bloomberg.com/news/articles/2026-06-23/tesla-s-european-recovery-gathers-pace-after-last-year-s-slide" target="_blank" rel="noopener">관련 뉴스 보기 (Bloomberg) →</a>
     </div>
     <div class="tl-item">
-      <div class="tl-dot gold"></div>
+      <div class="tl-dot neutral"></div>
       <div class="tl-date">2026년 7월 2일 — Q2 480K 인도 · 주가 -7%</div>
       <div class="tl-title">Q2 480,126대 인도 — 컨센서스 18% 상회 · 역대 최대 → 주가 -7% 역설</div>
       <div class="tl-desc">480,126대 인도(컨센서스 대비 +18%, YoY +25%). 에너지 저장 사업도 견조. 그러나 주가 -7.49%(1년래 최대 낙폭) — "이미 반영됨 + 204x Forward PER 부담 + BYD 등 경쟁 심화" 우려. Michael Burry가 $416.22에 신규 숏 공개("Tragic Tier" 지목).</div>

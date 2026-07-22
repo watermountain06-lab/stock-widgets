@@ -73,8 +73,8 @@
   .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
 
   .stat-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
-  .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
-  .stat-value { font-size: 20px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
+  .stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .stat-value { font-size: 22px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
   .stat-sub { font-size: 11px; color: var(--text3); }
   .stat-value.up { color: var(--green); }
   .stat-value.bl { color: var(--accent2); }
@@ -121,7 +121,7 @@
   .val-low { font-size: 10px; color: var(--green); }
   .val-mid { font-size: 10px; color: var(--accent2); text-align: center; }
   .val-high { font-size: 10px; color: var(--red); }
-  .stage-badge { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
+  .stage-badge { font-size: 13px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
   .stage-1 { background: rgba(46,204,113,0.2); color: #2ecc71; }
   .stage-2 { background: rgba(39,174,96,0.2); color: #27ae60; }
   .stage-3 { background: rgba(46,125,212,0.15); color: var(--accent2); }
@@ -152,7 +152,6 @@
   .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--event-major); border: 2px solid var(--bg); }
   .tl-dot.red { background: var(--red); }
   .tl-dot.green { background: var(--green); }
-  .tl-dot.gold { background: var(--event-major); }
   .tl-dot.neutral { background: var(--event-neutral); }
   .tl-date { font-size: 10px; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
   .tl-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 3px 0; }
@@ -430,13 +429,13 @@
       </div>
 
       <div class="val-item">
-        <div class="val-header"><span class="val-name">배당수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">1.94%</span><span class="stage-badge stage-2">2단계 적정</span></div></div>
+        <div class="val-header"><span class="val-name">배당수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">1.94%</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:40%;background:linear-gradient(90deg,#27ae60,#2e7dd4);"></div></div>
         <div class="val-labels"><span class="val-low">고 3%+</span><span class="val-mid">적정 2%</span><span class="val-high">저 1%</span></div>
       </div>
 
       <div class="val-item">
-        <div class="val-header"><span class="val-name">ROTCE (은행 효율)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">21%</span><span class="stage-badge stage-1">최우수</span></div></div>
+        <div class="val-header"><span class="val-name">ROTCE (은행 효율)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">21%</span><span class="stage-badge stage-1">1단계 매우낮음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:84%;background:linear-gradient(90deg,#2ecc71,#27ae60);"></div></div>
         <div class="val-labels"><span class="val-low">저 10%</span><span class="val-mid">적정 15%</span><span class="val-high">고 20%+</span></div>
       </div>
@@ -579,7 +578,7 @@
       <a class="tl-source" href="https://www.tradingkey.com/analysis/stocks/us-stocks/261781232-jpmorgan-q1-performance-shines-tradingkey" target="_blank" rel="noopener">관련 뉴스 보기 (TradingKey) →</a>
     </div>
     <div class="tl-item">
-      <div class="tl-dot gold"></div>
+      <div class="tl-dot neutral"></div>
       <div class="tl-date">2026년 5월</div>
       <div class="tl-title">방산 직접 투자 선언 + 크립토 규제 참여</div>
       <div class="tl-desc">Dimon, $1.5조 규모 10년 안보·방산·AI 이니셔티브 발표(직접 $10B 지분·VC 투자 포함). CLARITY Act(스테이블코인 규제 법안)에 강경 반대 입장 표명. AI 수석 은퇴 후 차세대 AI 전략 재편.</div>
@@ -593,7 +592,7 @@
       <a class="tl-source" href="https://finance.yahoo.com/markets/stocks/articles/jpms-50b-buyback-plan-dividend-121900176.html" target="_blank" rel="noopener">관련 뉴스 보기 (Yahoo Finance) →</a>
     </div>
     <div class="tl-item">
-      <div class="tl-dot gold"></div>
+      <div class="tl-dot neutral"></div>
       <div class="tl-date">2026년 6월 25일</div>
       <div class="tl-title">승계 구도 재편 — Doug Petno·Troy Rohrbaugh 공동사장 승진, Marianne Lake 퇴진</div>
       <div class="tl-desc">Doug Petno(CIB)·Troy Rohrbaugh(신규 CCB 수장)를 공동사장으로 승진. 유력 후계 후보였던 Marianne Lake는 즉시 퇴사. Dimon 후계 레이스가 두 사람으로 좁혀짐 — 두 사람에게 각 $30M 리텐션 보너스 지급.</div>

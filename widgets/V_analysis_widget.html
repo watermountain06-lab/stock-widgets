@@ -49,8 +49,8 @@
   .chart-wrap canvas { max-width: 100%; }
   .price-chart-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
   .stat-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
-  .stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
-  .stat-value { font-size: 20px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
+  .stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .stat-value { font-size: 22px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
   .stat-sub { font-size: 11px; color: var(--text3); }
   .stat-value.up { color: var(--green); }
   .stat-value.down { color: var(--red); }
@@ -82,7 +82,7 @@
   .val-low { font-size: 10px; color: var(--green); }
   .val-mid { font-size: 10px; color: var(--accent2); text-align: center; }
   .val-high { font-size: 10px; color: var(--red); }
-  .stage-badge { font-size: 11px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
+  .stage-badge { font-size: 13px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
   .stage-1 { background: rgba(46,204,113,0.2); color: #2ecc71; }
   .stage-2 { background: rgba(39,174,96,0.2); color: #27ae60; }
   .stage-3 { background: rgba(107,127,212,0.2); color: var(--accent2); }
@@ -100,7 +100,6 @@
   .tl-dot.red { background: var(--red); }
   .tl-dot.green { background: var(--green); }
   .tl-dot.blue { background: var(--blue); }
-  .tl-dot.gold { background: var(--event-major); }
   .tl-dot.neutral { background: var(--event-neutral); }
   .tl-dot.today { background: #ffc107; }
   .tl-date { font-size: 10px; color: var(--accent2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
@@ -313,10 +312,10 @@
   <div class="card">
     <div class="card-title">Per-Share 지표 (TTM 기준 · 약 18.8억 주)</div>
     <div class="per-share-grid">
-      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS · TTM</div><div class="ps-value">$11.47</div><div class="ps-sub">'25.Q3~'26.Q2 합산 · PER 31.2x</div><div style="margin-top:5px;"><span class="stage-badge stage-3">적정(PER 기준)</span></div></div>
-      <div class="ps-card"><div class="ps-icon">📊</div><div class="ps-label">Non-GAAP EPS · TTM</div><div class="ps-value">$12.44</div><div class="ps-sub">Non-GAAP PER 28.8x</div><div style="margin-top:5px;"><span class="stage-badge stage-3">적정(PER)</span></div></div>
-      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS · 주당순자산</div><div class="ps-value">$18.97</div><div class="ps-sub">'26.Q2 자기자본 $35.7B</div><div style="margin-top:5px;"><span class="stage-badge stage-4">높음(PBR 19.6x)</span></div></div>
-      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 · FY2025</div><div class="ps-value">$11.48</div><div class="ps-sub">FY25 FCF $21.58B · 매출 대비 54%</div><div style="margin-top:5px;"><span class="stage-badge stage-2">저평가(FCF수익률)</span></div></div>
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS · TTM</div><div class="ps-value">$11.47</div><div class="ps-sub">'25.Q3~'26.Q2 합산 · PER 31.2x</div><div style="margin-top:5px;"><span class="stage-badge stage-3">3단계 적정</span></div></div>
+      <div class="ps-card"><div class="ps-icon">📊</div><div class="ps-label">Non-GAAP EPS · TTM</div><div class="ps-value">$12.44</div><div class="ps-sub">Non-GAAP PER 28.8x</div><div style="margin-top:5px;"><span class="stage-badge stage-3">3단계 적정</span></div></div>
+      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS · 주당순자산</div><div class="ps-value">$18.97</div><div class="ps-sub">'26.Q2 자기자본 $35.7B</div><div style="margin-top:5px;"><span class="stage-badge stage-4">4단계 높음</span></div></div>
+      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 · FY2025</div><div class="ps-value">$11.48</div><div class="ps-sub">FY25 FCF $21.58B · 매출 대비 54%</div><div style="margin-top:5px;"><span class="stage-badge stage-2">2단계 낮음</span></div></div>
     </div>
     <div style="font-size:11px;color:var(--text3);margin-top:10px;">* BPS가 낮고 PBR이 높은 것은 저평가가 아니라 Visa 특유의 자산경량(asset-light) 구조와 대규모 자사주 매입으로 자기자본이 얇아진 결과 — ROE는 오히려 매우 높음(순이익/자기자본 비율 50%대). PER·EV/EBITDA는 5년 평균 대비 적정~약간 낮은 구간.</div>
   </div>
@@ -351,7 +350,7 @@
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV $686.1B÷EBITDA · 2025년 3월 24.2x에서 18.8x까지 압축됐다가 부분 회복한 수준</div>
       </div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">FCF수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">3.14%</span><span class="stage-badge stage-2">2단계 저평가</span></div></div>
+        <div class="val-header"><span class="val-name">FCF수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">3.14%</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:66%;background:linear-gradient(90deg,#e74c3c,#f0c040,#2ecc71);background-size:151.5% 100%;"></div></div>
         <div class="val-labels"><span class="val-low">저(1.5%)</span><span class="val-mid">적정(2.5%)</span><span class="val-high">고(4%)</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">TTM FCF $21.2B÷시총 $674.4B · 수익률이 높을수록 저평가 신호 — 자산경량 비즈니스의 높은 현금창출력이 프리미엄 멀티플을 상당폭 정당화</div>
@@ -486,7 +485,7 @@
       <a class="tl-source" href="https://www.pymnts.com/visa/2026/visa-launches-ai-and-stablecoin-tools-to-power-agentic-commerce/" target="_blank" rel="noopener">관련 뉴스 보기 (PYMNTS) →</a>
     </div>
     <div class="tl-item">
-      <div class="tl-dot gold"></div>
+      <div class="tl-dot neutral"></div>
       <div class="tl-date">2026년 7월 16일 — 52주 신고가 $365.14</div>
       <div class="tl-title">4월 저점 대비 +24.2% 반등 · 52주 신고가 경신 후 소폭 조정</div>
       <div class="tl-desc">Q1·Q2 FY26 연속 어닝서프라이즈와 AI·스테이블코인 내러티브를 바탕으로 52주 신고가 $365.14 달성(2025년 6월 기록한 사상 최고가 $370.38에는 미치지 못함). 다음날(7/17) -1.96% 조정, $357.98 마감.</div>
