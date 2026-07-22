@@ -277,5 +277,14 @@
     "accentColor": "#f0c040",
     "page": "widgets/CAT_analysis_widget.html",
     "lastUpdated": "2026-07-21"
+  },
+  {
+    "rank": 32,
+    "ticker": "UNH",
+    "name": "UnitedHealth Group Incorporated",
+    "sector": "Health Care",
+    "accentColor": "#2563eb",
+    "page": "widgets/UNH_analysis_widget.html",
+    "lastUpdated": "2026-07-22"
   }
 ]
