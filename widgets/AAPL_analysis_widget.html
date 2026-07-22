@@ -131,7 +131,7 @@
   .driver-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent3); color: var(--accent2); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .driver-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
   .driver-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
-  .per-share-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .per-share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
   .ps-card { background: var(--bg3); border-radius: 8px; padding: 16px; text-align: center; }
   .ps-icon { font-size: 22px; margin-bottom: 6px; }
   .ps-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
@@ -349,17 +349,19 @@
     <div class="card">
       <div class="card-title">빅테크 PER 비교 (AAPL이 가장 높음)</div>
       <div class="chart-wrap" style="height:220px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:12px;">
-        <div class="stage-grid">
-          <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우저평가</div></div>
-          <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div></div>
-          <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:8px;color:var(--accent2);background:rgba(162,170,173,0.15);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PSR</div></div>
-          <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:8px;color:#e67e22;background:rgba(231,126,35,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PER·PCR·EV/EBITDA</div></div>
-          <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우고평가</div><div style="font-size:8px;color:var(--red);background:rgba(231,76,60,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PBR</div></div>
-        </div>
-        <div style="margin-top:10px;font-size:11px;color:var(--text3);">AAPL 37.3x는 5개 빅테크 중 최고 — MSFT(35.2x)·NVDA(31.3x)·GOOGL(27.8x)·META(25.8x) 순으로 낮아진다. PEG 3.3도 5개 중 가장 부담스러운 수준으로, Services 복리 성장과 설치기반 해자가 프리미엄의 근거이나 밸류에이션 유지에는 지속적인 실적 서프라이즈가 필요하다.</div>
-      </div>
+      <div style="margin-top:10px;font-size:11px;color:var(--text3);">AAPL 37.3x는 5개 빅테크 중 최고 — MSFT(35.2x)·NVDA(31.3x)·GOOGL(27.8x)·META(25.8x) 순으로 낮아진다. PEG 3.3도 5개 중 가장 부담스러운 수준으로, Services 복리 성장과 설치기반 해자가 프리미엄의 근거이나 밸류에이션 유지에는 지속적인 실적 서프라이즈가 필요하다.</div>
     </div>
+  </div>
+  <div class="card">
+    <div class="card-title">밸류에이션 5단계</div>
+    <div class="stage-grid">
+      <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우저평가</div></div>
+      <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div></div>
+      <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:8px;color:var(--accent2);background:rgba(162,170,173,0.15);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PSR</div></div>
+      <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:8px;color:#e67e22;background:rgba(231,126,35,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PER·PCR·EV/EBITDA</div></div>
+      <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우고평가</div><div style="font-size:8px;color:var(--red);background:rgba(231,76,60,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PBR</div></div>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">5개 지표 중 PSR(10.8x)만 3단계 적정이고, PER·PCR·EV/EBITDA는 4단계 고평가, PBR(46.2x)은 5단계 매우고평가 — 1·2단계가 빈 것은 데이터 누락이 아니라 AAPL의 어떤 지표도 저평가 구간에 있지 않기 때문이다. PBR이 유독 높은 건 자사주 매입으로 BPS가 눌린 구조적 결과라 순수 고평가 신호로만 보기는 어렵다.</div>
   </div>
   <div class="card">
     <div class="card-title">Per-Share 지표 (Q2 FY26 기준 · 14.67B 주)</div>
