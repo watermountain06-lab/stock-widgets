@@ -89,9 +89,9 @@
   .stage-4 { background: rgba(231,126,35,0.2); color: #e67e22; }
   .stage-5 { background: rgba(231,76,60,0.2); color: var(--red); }
   .stage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-  .stage-mini { text-align: center; padding: 10px 4px; border-radius: 8px; }
-  .stage-mini-num { font-size: 15px; font-weight: 700; }
-  .stage-mini-label { font-size: 9px; margin-top: 2px; }
+  .stage-mini { text-align: center; padding: 16px 8px; border-radius: 8px; }
+  .stage-mini-num { font-size: 22px; font-weight: 700; }
+  .stage-mini-label { font-size: 12px; margin-top: 4px; }
   .scenario-card { border-radius: 8px; padding: 14px; }
   .timeline { position: relative; padding-left: 24px; }
   .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
@@ -118,7 +118,7 @@
   .driver-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent3); color: var(--accent2); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .driver-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
   .driver-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
-  .per-share-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .per-share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
   .ps-card { background: var(--bg3); border-radius: 8px; padding: 16px; text-align: center; }
   .ps-icon { font-size: 22px; margin-bottom: 6px; }
   .ps-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
@@ -367,9 +367,9 @@
     <div class="card-title">밸류에이션 5단계</div>
     <div class="stage-grid">
       <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div></div>
-      <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div><div style="font-size:8px;color:#2ecc71;background:rgba(46,204,113,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">Fwd P/E</div></div>
-      <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:8px;color:var(--accent2);background:rgba(91,144,194,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PBR·EV/EBITDA</div></div>
-      <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:8px;color:#e67e22;background:rgba(231,126,35,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">Trailing PER·배당수익률</div></div>
+      <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div><div style="font-size:10px;color:#2ecc71;background:rgba(46,204,113,0.18);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">Fwd P/E</div></div>
+      <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:10px;color:var(--accent2);background:rgba(91,144,194,0.18);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">PBR·EV/EBITDA</div></div>
+      <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:10px;color:#e67e22;background:rgba(231,126,35,0.18);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">Trailing PER·배당수익률</div></div>
       <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div></div>
     </div>
     <div style="margin-top:10px;font-size:11px;color:var(--text3);">* Forward P/E(2단계)는 정상화 기준으로 저평가를 시사하지만, Trailing PER·배당수익률(4단계)은 최근 주가 상승과 일회성 손실이 뒤섞인 결과 — 정상화된 지표(Forward P/E·PBR·EV/EBITDA)만 보면 2~3단계에 몰려 있어 밸류에이션 부담은 크지 않은 편.</div>

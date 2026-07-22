@@ -89,9 +89,9 @@
   .stage-4 { background: rgba(231,126,35,0.2); color: #e67e22; }
   .stage-5 { background: rgba(231,76,60,0.2); color: var(--red); }
   .stage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-  .stage-mini { text-align: center; padding: 10px 4px; border-radius: 8px; }
-  .stage-mini-num { font-size: 15px; font-weight: 700; }
-  .stage-mini-label { font-size: 9px; margin-top: 2px; }
+  .stage-mini { text-align: center; padding: 16px 8px; border-radius: 8px; }
+  .stage-mini-num { font-size: 22px; font-weight: 700; }
+  .stage-mini-label { font-size: 12px; margin-top: 4px; }
   .scenario-card { border-radius: 8px; padding: 14px; }
   .timeline { position: relative; padding-left: 24px; }
   .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
@@ -118,7 +118,7 @@
   .driver-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent3); color: var(--accent2); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .driver-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
   .driver-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
-  .per-share-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .per-share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
   .ps-card { background: var(--bg3); border-radius: 8px; padding: 16px; text-align: center; }
   .ps-icon { font-size: 22px; margin-bottom: 6px; }
   .ps-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
@@ -373,8 +373,8 @@
     <div class="stage-grid">
       <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div></div>
       <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div></div>
-      <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:8px;color:var(--accent2);background:rgba(209,87,114,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PER·Fwd P/E·EV/EBITDA</div></div>
-      <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:8px;color:#e67e22;background:rgba(231,126,35,0.18);border-radius:3px;padding:1px 4px;display:inline-block;margin-top:3px;">PBR·PSR</div></div>
+      <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:10px;color:var(--accent2);background:rgba(209,87,114,0.18);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">PER·Fwd P/E·EV/EBITDA</div></div>
+      <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:10px;color:#e67e22;background:rgba(231,126,35,0.18);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">PBR·PSR</div></div>
       <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div></div>
     </div>
     <div style="margin-top:10px;font-size:11px;color:var(--text3);">* 1·2·5단계가 비어 있는 것은 데이터 누락이 아니라, JNJ가 추적하는 5개 멀티플(PER·Fwd P/E·PBR·EV/EBITDA·PSR) 중 현재 "매우 저평가/저평가/매우 고평가"에 해당하는 지표가 하나도 없기 때문 — 소송 노이즈를 걷어내면 대형 제약 피어 중 적정~약간 고평가 구간에 고르게 몰려 있는 상태.</div>
