@@ -268,5 +268,14 @@
     "accentColor": "#eab308",
     "page": "widgets/COST_analysis_widget.html",
     "lastUpdated": "2026-07-21"
+  },
+  {
+    "rank": 31,
+    "ticker": "CAT",
+    "name": "Caterpillar Inc.",
+    "sector": "Industrials",
+    "accentColor": "#f0c040",
+    "page": "widgets/CAT_analysis_widget.html",
+    "lastUpdated": "2026-07-21"
   }
 ]
