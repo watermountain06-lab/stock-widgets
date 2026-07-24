@@ -322,5 +322,14 @@
     "accentColor": "#ef4444",
     "page": "widgets/KO_analysis_widget.html",
     "lastUpdated": "2026-07-24"
+  },
+  {
+    "rank": 37,
+    "ticker": "PG",
+    "name": "The Procter & Gamble Company",
+    "sector": "Consumer Staples",
+    "accentColor": "#2563eb",
+    "page": "widgets/PG_analysis_widget.html",
+    "lastUpdated": "2026-07-24"
   }
 ]
