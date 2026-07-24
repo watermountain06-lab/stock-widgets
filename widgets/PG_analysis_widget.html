@@ -416,10 +416,18 @@
 <div style="background:var(--bg3);padding:15px;border-radius:8px;"><div style="font-size:12px;font-weight:800;color:var(--green);margin-bottom:7px;">저평가 근거</div><div class="tl-desc">P/E 21.49x는 CHD 32.0x·CL 36.2x보다 낮고 배당수익률 2.88%는 적정 밴드에 들어왔다. 70년 연속 배당 증가와 22.06% ROIC가 품질 프리미엄을 뒷받침한다.</div></div>
 <div style="background:var(--bg3);padding:15px;border-radius:8px;"><div style="font-size:12px;font-weight:800;color:var(--accent);margin-bottom:7px;">주의 요소</div><div class="tl-desc">PEG 4.48x는 5단계이며 3년 EPS 성장 전망은 2.89%에 그친다. Q3 핵심 총마진 -100bp와 소비 둔화가 이어지면 적정권 배수도 낮아질 수 있다.</div></div>
 </div></div>
-<div class="card"><div class="card-title">시나리오별 공정가치 분석</div><div class="grid-3">
-<div class="scenario-card" style="background:var(--bg3);"><b>Bear</b><div class="ps-value">$125–138</div><div class="ps-sub">볼륨 둔화·마진 압박</div></div>
-<div class="scenario-card" style="background:var(--bg3);"><b>Base</b><div class="ps-value">$150–165</div><div class="ps-sub">저단일 성장·배당 복리</div></div>
-<div class="scenario-card" style="background:var(--bg3);"><b>Bull</b><div class="ps-value">$175–190</div><div class="ps-sub">볼륨·마진 동반 회복</div></div>
+<div class="card"><div class="card-title">시나리오별 공정가치 분석</div>
+<div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
+<div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — 볼륨 둔화·마진 압박 지속</div>
+<div style="font-size:12px;color:var(--text2);">유기매출 성장이 1% 안팎으로 둔화되고 관세·원재료 부담으로 총마진 회복이 지연되며 Forward PER이 18~20x로 낮아질 경우 → 공정가치 <strong style="color:var(--red);">$125~138/주</strong></div>
+</div>
+<div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
+<div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 저단일 성장·배당 복리 유지</div>
+<div style="font-size:12px;color:var(--text2);">유기매출 2~4%와 완만한 EPS 성장이 이어지고 Forward PER이 현재의 21~23x 품질 밴드를 유지할 경우 → 공정가치 <strong style="color:var(--text);">$150~165/주</strong> (Street 평균 목표가 $163.61과 부합)</div>
+</div>
+<div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
+<div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — 볼륨·마진 동반 회복</div>
+<div style="font-size:12px;color:var(--text2);">볼륨 중심 유기매출 성장이 4% 이상으로 가속되고 생산성 절감이 총마진 개선으로 연결돼 Forward PER 24~26x를 회복할 경우 → 공정가치 <strong style="color:var(--green);">$175~190/주</strong></div>
 </div></div>
 <div class="card"><div class="card-title">종합 밸류에이션 — 적정 4개·매우 고평가 1개</div><div class="tl-desc">배당수익률·Forward PER·P/S·EV/EBITDA는 3단계로 주가 조정 뒤 전통적인 품질 배수에 가까워졌다. 다만 PEG 4.48x는 5단계라 성장률 대비 가격 부담이 남아 있다. 즉 배당·현금흐름에는 합리적이지만 성장 투자로는 가격 규율이 필요한 분포다.</div></div>
 </div>
@@ -515,8 +523,159 @@ const PG_MA20 = [157.7,157.69,157.68,157.54,157.4,156.99,156.45,155.94,155.45,15
 const PG_MA60 = [160.91,160.86,160.8,160.71,160.65,160.52,160.38,160.24,160.1,159.96,159.88,159.76,159.67,159.62,159.5,159.37,159.18,158.99,158.83,158.72,158.62,158.47,158.32,158.11,157.88,157.7,157.52,157.37,157.29,157.19,157.13,157.09,157.03,156.97,156.92,156.89,156.88,156.86,156.84,156.83,156.78,156.73,156.64,156.51,156.4,156.25,156.1,155.98,155.87,155.79,155.7,155.59,155.48,155.46,155.43,155.38,155.28,155.15,155.05,154.87,154.73,154.6,154.5,154.4,154.33,154.32,154.35,154.37,154.38,154.35,154.3,154.25,154.16,154.02,153.87,153.72,153.6,153.45,153.34,153.16,152.97,152.79,152.57,152.42,152.27,152.12,152.04,151.88,151.72,151.55,151.37,151.16,150.94,150.73,150.53,150.27,149.95,149.66,149.36,149.03,148.79,148.61,148.48,148.4,148.28,148.16,147.99,147.82,147.67,147.53,147.4,147.27,147.15,146.97,146.8,146.62,146.42,146.32,146.2,146.14,146.05,145.96,145.84,145.72,145.64,145.53,145.49,145.46,145.43,145.43,145.39,145.38,145.44,145.54,145.7,145.88,146.08,146.3,146.45,146.63,146.84,147.06,147.3,147.51,147.67,147.84,148.01,148.31,148.59,148.84,149.1,149.43,149.73,149.94,150.16,150.34,150.59,150.85,151.12,151.33,151.46,151.55,151.66,151.73,151.75,151.75,151.78,151.79,151.77,151.76,151.72,151.7,151.72,151.77,151.83,151.88,151.96,151.96,152.01,152.06,152.08,152.03,152.03,152.01,151.94,151.96,151.86,151.73,151.62,151.58,151.59,151.57,151.53,151.41,151.28,151.12,150.86,150.63,150.47,150.25,150.02,149.73,149.46,149.17,148.93,148.65,148.34,147.95,147.57,147.23,146.91,146.51,146.24,146.01,145.76,145.53,145.32,145.07,144.82,144.7,144.61,144.58,144.53,144.48,144.53,144.62,144.76,144.87,144.99,145.05,145.19,145.35,145.41,145.48,145.56,145.62,145.69,145.86,145.94,146.04,146.09,146.15,146.19,146.27,146.32,146.34,146.46,146.59,146.69,146.73,146.75,146.72];
 const PG_MA120 = [164.62,164.54,164.48,164.38,164.29,164.15,164,163.86,163.72,163.56,163.42,163.27,163.19,163.11,163.01,162.91,162.78,162.64,162.5,162.39,162.29,162.16,162.02,161.88,161.73,161.58,161.41,161.25,161.12,161.04,160.96,160.89,160.8,160.73,160.64,160.57,160.49,160.42,160.38,160.33,160.23,160.13,159.99,159.84,159.7,159.53,159.43,159.38,159.34,159.26,159.17,159.04,158.89,158.75,158.62,158.46,158.32,158.15,158.02,157.91,157.82,157.73,157.65,157.55,157.49,157.42,157.37,157.31,157.24,157.16,157.09,157,156.91,156.82,156.68,156.54,156.39,156.22,156.08,155.94,155.79,155.63,155.45,155.27,155.08,154.91,154.78,154.62,154.5,154.37,154.25,154.12,153.99,153.85,153.73,153.58,153.41,153.26,153.1,152.93,152.78,152.67,152.56,152.46,152.34,152.2,152.05,151.9,151.77,151.66,151.55,151.43,151.31,151.21,151.11,151,150.85,150.74,150.63,150.5,150.39,150.28,150.17,150.06,149.98,149.93,149.92,149.92,149.91,149.89,149.84,149.81,149.8,149.78,149.79,149.8,149.84,149.88,149.89,149.9,149.9,149.92,149.93,149.96,149.97,149.98,150.03,150.09,150.15,150.2,150.24,150.3,150.33,150.34,150.34,150.31,150.27,150.26,150.24,150.18,150.12,150.08,150.07,150.06,150.02,149.95,149.89,149.81,149.72,149.64,149.56,149.48,149.43,149.37,149.31,149.25,149.19,149.14,149.1,149.1,149.06,149,148.93,148.86,148.79,148.74,148.68,148.6,148.53,148.5,148.49,148.47,148.48,148.48,148.49,148.5,148.47,148.46,148.46,148.44,148.43,148.39,148.38,148.34,148.3,148.25,148.18,148.13,148.08,148.04,148.01,147.97,147.98,147.98,147.96,147.94,147.96,147.96,147.97,148.02,148.04,148.07,148.1,148.1,148.14,148.19,148.27,148.33,148.38,148.4,148.45,148.52,148.56,148.63,148.69,148.75,148.83,148.91,148.97,149.05,149.08,149.09,149.11,149.14,149.13,149.15,149.16,149.16,149.16,149.15,149.17,149.15];
 const charts={};
-(function(){const D=PG_DAILY,M={ma5:PG_MA5,ma20:PG_MA20,ma60:PG_MA60,ma120:PG_MA120},C=document.getElementById('pgCandleSvg'),V=document.getElementById('pgVolumeSvg'),T=document.getElementById('pgRangeToggle'),B=document.getElementById('pgMaToggle'),R={'1M':21,'3M':63,'6M':126,'1Y':252},S={ma5:true,ma20:true,ma60:true,ma120:true,pricelabels:true},N='http://www.w3.org/2000/svg';function el(n,a){let x=document.createElementNS(N,n);Object.entries(a).forEach(([k,v])=>x.setAttribute(k,v));return x}function draw(r){let n=R[r],d=D.slice(-n),off=D.length-d.length;C.innerHTML='';V.innerHTML='';let W=720,H=240,L=45,RR=12,top=10,bot=20,cw=W-L-RR,ch=H-top-bot,vals=d.flatMap(x=>[x[2],x[3]]);['ma5','ma20','ma60','ma120'].forEach(k=>{if(S[k])vals.push(...M[k].slice(off).filter(x=>x!=null))});let mx=Math.max(...vals),mn=Math.min(...vals),pad=(mx-mn)*.06,py=v=>top+ch*(1-(v-(mn-pad))/(mx-mn+2*pad)),col=cw/d.length;d.forEach((x,i)=>{let xx=L+(i+.5)*col,[,o,h,l,cl]=x,co=cl>=o?'#2ecc71':'#e74c3c';C.appendChild(el('line',{x1:xx,x2:xx,y1:py(h),y2:py(l),stroke:co}));C.appendChild(el('rect',{x:xx-Math.max(1,col*.6)/2,y:Math.min(py(o),py(cl)),width:Math.max(1,col*.6),height:Math.max(1,Math.abs(py(o)-py(cl))),fill:co}))});let colors={ma5:'#ff6b9d',ma20:'#9b59b6',ma60:'#f0c040',ma120:'#22d3ee'};Object.keys(colors).forEach(k=>{if(!S[k])return;let pts=M[k].slice(off).map((v,i)=>v==null?null:`${L+(i+.5)*col},${py(v)}`).filter(Boolean).join(' ');C.appendChild(el('polyline',{points:pts,fill:'none',stroke:colors[k],'stroke-width':'1.7'}))});if(S.pricelabels){let marks=[['최고',Math.max(...d.map(x=>x[2])),'#2ecc71'],['최저',Math.min(...d.map(x=>x[3])),'#e74c3c'],['종가',d[d.length-1][4],'#60a5fa']];marks.forEach(([label,v,color],j)=>{let idx=j===0?d.findIndex(x=>x[2]===v):j===1?d.findIndex(x=>x[3]===v):d.length-1,xx=L+(idx+.5)*col,yy=py(v),t=el('text',{x:Math.min(xx,W-70),y:j===1?yy+15:yy-7,'font-size':'9',fill:color});t.textContent=label+' $'+v.toFixed(2);C.appendChild(t)})}let vm=Math.max(...d.map(x=>x[5]));d.forEach((x,i)=>V.appendChild(el('rect',{x:L+i*col,y:65-55*x[5]/vm,width:Math.max(1,col*.7),height:55*x[5]/vm,fill:x[4]>=x[1]?'#2ecc71':'#e74c3c',opacity:'.6'})))}T.addEventListener('click',e=>{if(!e.target.dataset.range)return;T.querySelectorAll('button').forEach(x=>x.classList.remove('active'));e.target.classList.add('active');draw(e.target.dataset.range)});B.addEventListener('click',e=>{let k=e.target.dataset.ma;if(!k)return;S[k]=!S[k];e.target.classList.toggle('ma-off');draw(T.querySelector('.active').dataset.range)});draw('1Y') })();
-function renderFundChart(){let ctx=document.getElementById('pgRevChart');if(!ctx||charts.fund)return;charts.fund=new Chart(ctx,{data:{labels:["Q4'24","Q1'25","Q2'25","Q3'25","Q4'25","Q1'26","Q2'26","Q3'26"],datasets:[{type:'bar',label:'매출 ($B)',data:[20.532,21.737,21.882,19.776,20.889,22.386,22.208,21.235],backgroundColor:'rgba(56,189,248,.45)',borderColor:'#38bdf8',borderWidth:1,borderRadius:4,yAxisID:'y'},{type:'bar',label:'순이익 ($B)',data:[3.137,3.959,4.63,3.769,3.615,4.75,4.319,3.932],backgroundColor:'rgba(46,204,113,.45)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4,yAxisID:'y'},{type:'line',label:'희석 EPS',data:[1.27,1.61,1.88,1.54,1.48,1.95,1.78,1.63],borderColor:'#f0c040',tension:.35,pointRadius:4,borderWidth:2.5,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:900,easing:'easeOutQuart'},animations:{y:{from:ctx=>ctx.chart.scales.y.getPixelForValue(0)}},plugins:{legend:{labels:{color:'#9aa0b8'}}},scales:{x:{ticks:{color:'#9aa0b8'}},y:{beginAtZero:true,ticks:{color:'#9aa0b8'}},y1:{position:'right',grid:{drawOnChartArea:false},ticks:{color:'#f0c040'}}}}})}
+// ─── SVG CANDLE + VOLUME CHART (NVDA 기준 · 기간/MA 토글) ───
+(function(){
+  const svgCandle=document.getElementById('pgCandleSvg');
+  const svgVol=document.getElementById('pgVolumeSvg');
+  const toggle=document.getElementById('pgRangeToggle');
+  const maToggle=document.getElementById('pgMaToggle');
+  if(!svgCandle||!svgVol||!toggle)return;
+  const RANGES={'1M':21,'3M':63,'6M':126,'1Y':252};
+  const NS='http://www.w3.org/2000/svg';
+  const UP='#2ecc71',DOWN='#e74c3c';
+  const maColors={ma5:'#ff6b9d',ma20:'#9b59b6',ma60:'#f0c040',ma120:'#22d3ee'};
+  const maState={ma5:true,ma20:true,ma60:true,ma120:true,pricelabels:true};
+  let currentRange='1Y';
+
+  function draw(rangeKey){
+    currentRange=rangeKey;
+    const n=RANGES[rangeKey];
+    const data=PG_DAILY.slice(-n);
+    const ma5=PG_MA5.slice(-n),ma20=PG_MA20.slice(-n),ma60=PG_MA60.slice(-n),ma120=PG_MA120.slice(-n);
+    while(svgCandle.firstChild)svgCandle.removeChild(svgCandle.firstChild);
+    while(svgVol.firstChild)svgVol.removeChild(svgVol.firstChild);
+
+    const W=720,H=240,pL=45,pR=12,pT=10,pB=20;
+    const cW=W-pL-pR,cH=H-pT-pB;
+    const highs=data.map(d=>d[2]),lows=data.map(d=>d[3]);
+    const maVals=[...ma5,...ma20,...ma60,...ma120].filter(v=>v!=null);
+    const mx=Math.max(...highs,...maVals),mn=Math.min(...lows,...maVals);
+    const pad=(mx-mn)*0.06||mx*0.02;
+    const top=mx+pad,bot=mn-pad,rng=(top-bot)||1;
+    const py=v=>pT+cH*(1-(v-bot)/rng);
+    const colW=cW/data.length;
+    const bodyW=Math.max(colW*0.62,1);
+
+    for(let i=0;i<=3;i++){
+      const v=bot+rng*i/3,y=py(v);
+      const line=document.createElementNS(NS,'line');
+      line.setAttribute('x1',pL);line.setAttribute('x2',W-pR);line.setAttribute('y1',y);line.setAttribute('y2',y);
+      line.setAttribute('stroke','rgba(255,255,255,.08)');line.setAttribute('stroke-width','1');
+      svgCandle.appendChild(line);
+      const text=document.createElementNS(NS,'text');
+      text.setAttribute('x',pL-4);text.setAttribute('y',y+3);text.setAttribute('text-anchor','end');
+      text.setAttribute('font-size','9');text.setAttribute('fill','rgba(154,160,184,.8)');
+      text.textContent='$'+v.toFixed(0);
+      svgCandle.appendChild(text);
+    }
+
+    data.forEach((d,i)=>{
+      const [,o,h,l,c]=d,cx=pL+(i+0.5)*colW,col=c>=o?UP:DOWN;
+      const wick=document.createElementNS(NS,'line');
+      wick.setAttribute('x1',cx);wick.setAttribute('x2',cx);wick.setAttribute('y1',py(h));wick.setAttribute('y2',py(l));
+      wick.setAttribute('stroke',col);wick.setAttribute('stroke-width',Math.max(colW*0.12,0.6));
+      svgCandle.appendChild(wick);
+      const yTop=py(Math.max(o,c)),yBot=py(Math.min(o,c));
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x',cx-bodyW/2);rect.setAttribute('y',yTop);rect.setAttribute('width',bodyW);
+      rect.setAttribute('height',Math.max(yBot-yTop,1));rect.setAttribute('fill',col);
+      svgCandle.appendChild(rect);
+    });
+
+    const drawMaLine=(vals,color)=>{
+      let seg=[];
+      const flush=()=>{
+        if(seg.length>1){
+          const pl=document.createElementNS(NS,'polyline');
+          pl.setAttribute('points',seg.join(' '));pl.setAttribute('fill','none');pl.setAttribute('stroke',color);
+          pl.setAttribute('stroke-width','1.7');pl.setAttribute('opacity','0.95');
+          pl.setAttribute('stroke-linejoin','round');pl.setAttribute('stroke-linecap','round');
+          svgCandle.appendChild(pl);
+        }
+        seg=[];
+      };
+      vals.forEach((v,i)=>{if(v==null){flush();return;}seg.push(`${pL+(i+0.5)*colW},${py(v)}`);});
+      flush();
+    };
+    if(maState.ma5)drawMaLine(ma5,maColors.ma5);
+    if(maState.ma20)drawMaLine(ma20,maColors.ma20);
+    if(maState.ma60)drawMaLine(ma60,maColors.ma60);
+    if(maState.ma120)drawMaLine(ma120,maColors.ma120);
+
+    if(maState.pricelabels){
+      const closeIdx=data.length-1,closeVal=data[closeIdx][4];
+      const periodHigh=Math.max(...highs),periodLow=Math.min(...lows);
+      const markers=[
+        {idx:highs.indexOf(periodHigh),v:periodHigh,color:UP,label:'최고',side:'above'},
+        {idx:lows.indexOf(periodLow),v:periodLow,color:DOWN,label:'최저',side:'below'},
+        {idx:closeIdx,v:closeVal,color:'#60a5fa',label:'종가',side:'left'}
+      ];
+      markers.forEach(m=>{
+        const cx=pL+(m.idx+0.5)*colW,cy=py(m.v);
+        const dot=document.createElementNS(NS,'circle');
+        dot.setAttribute('cx',cx);dot.setAttribute('cy',cy);dot.setAttribute('r','3.5');
+        dot.setAttribute('fill',m.color);dot.setAttribute('stroke','#0f1117');dot.setAttribute('stroke-width','1.5');
+        svgCandle.appendChild(dot);
+        const labelText=`${m.label} $${m.v.toFixed(2)}`,labelW=labelText.length*5.2+6;
+        let tx,ty,anchor;
+        if(m.side==='left'){anchor='end';tx=cx-7;ty=cy+3;}
+        else if(m.side==='above'){
+          ty=cy-9;
+          if(cx<pL+cW*0.15){anchor='start';tx=cx+7;}
+          else if(cx>W-pR-cW*0.15){anchor='end';tx=cx-7;}
+          else{anchor='middle';tx=cx;}
+        }else{
+          ty=cy+16;
+          if(cx<pL+cW*0.15){anchor='start';tx=cx+7;}
+          else if(cx>W-pR-cW*0.15){anchor='end';tx=cx-7;}
+          else{anchor='middle';tx=cx;}
+        }
+        const bgX=anchor==='end'?tx-labelW:anchor==='middle'?tx-labelW/2:tx;
+        const bg=document.createElementNS(NS,'rect');
+        bg.setAttribute('x',bgX);bg.setAttribute('y',ty-8);bg.setAttribute('width',labelW);bg.setAttribute('height',12);
+        bg.setAttribute('fill','rgba(15,17,23,0.85)');bg.setAttribute('rx','2');
+        svgCandle.appendChild(bg);
+        const text=document.createElementNS(NS,'text');
+        text.setAttribute('x',tx);text.setAttribute('y',ty+2);text.setAttribute('text-anchor',anchor);
+        text.setAttribute('font-size','9');text.setAttribute('font-weight','700');text.setAttribute('fill',m.color);
+        text.textContent=labelText;
+        svgCandle.appendChild(text);
+      });
+    }
+
+    const labelCount=Math.min(5,data.length);
+    for(let i=0;i<labelCount;i++){
+      const idx=Math.round(i*(data.length-1)/((labelCount-1)||1)),cx=pL+(idx+0.5)*colW;
+      const text=document.createElementNS(NS,'text');
+      text.setAttribute('x',Math.min(Math.max(cx,pL+10),W-20));text.setAttribute('y',H-4);
+      text.setAttribute('text-anchor','middle');text.setAttribute('font-size','9');
+      text.setAttribute('fill','rgba(154,160,184,.8)');
+      text.textContent=data[idx][0].slice(2).replace(/-/g,'.');
+      svgCandle.appendChild(text);
+    }
+
+    const VH=70,vpT=6,vpB=4,vcH=VH-vpT-vpB,maxV=Math.max(...data.map(d=>d[5]));
+    data.forEach((d,i)=>{
+      const [,o,,,c,v]=d,cx=pL+(i+0.5)*colW,col=c>=o?'rgba(46,204,113,0.55)':'rgba(231,76,60,0.55)';
+      const h=(v/maxV)*vcH;
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x',cx-bodyW/2);rect.setAttribute('y',vpT+(vcH-h));rect.setAttribute('width',bodyW);
+      rect.setAttribute('height',Math.max(h,1));rect.setAttribute('fill',col);
+      svgVol.appendChild(rect);
+    });
+  }
+
+  toggle.querySelectorAll('.range-btn').forEach(btn=>btn.addEventListener('click',()=>{
+    toggle.querySelectorAll('.range-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');draw(btn.dataset.range);
+  }));
+  if(maToggle)maToggle.querySelectorAll('.ma-toggle-btn').forEach(btn=>btn.addEventListener('click',()=>{
+    const key=btn.dataset.ma;maState[key]=!maState[key];
+    btn.classList.toggle('ma-off',!maState[key]);draw(currentRange);
+  }));
+  draw('1Y');
+})();
+function renderFundChart(){let ctx=document.getElementById('pgRevChart');if(!ctx||charts.fund)return;charts.fund=new Chart(ctx,{data:{labels:["Q4'24","Q1'25","Q2'25","Q3'25","Q4'25","Q1'26","Q2'26","Q3'26"],datasets:[{type:'bar',label:'매출 ($B)',data:[20.532,21.737,21.882,19.776,20.889,22.386,22.208,21.235],backgroundColor:'rgba(56,189,248,.45)',borderColor:'#38bdf8',borderWidth:1,borderRadius:4,yAxisID:'y'},{type:'bar',label:'순이익 ($B)',data:[3.137,3.959,4.63,3.769,3.615,4.75,4.319,3.932],backgroundColor:'rgba(46,204,113,.45)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4,yAxisID:'y'},{type:'line',label:'희석 EPS',data:[1.27,1.61,1.88,1.54,1.48,1.95,1.78,1.63],borderColor:'#f0c040',backgroundColor:'rgba(240,192,64,.1)',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#9aa0b8',font:{size:11}}}},scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},maxRotation:30}},y:{position:'left',beginAtZero:true,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}},y1:{position:'right',beginAtZero:true,grid:{display:false},ticks:{color:'#f0c040',font:{size:10},callback:v=>'$'+v}}}}})}
 function renderPeerChart(){let ctx=document.getElementById('pgPeerChart');if(!ctx||charts.peer)return;charts.peer=new Chart(ctx,{type:'bar',data:{labels:["PG","KMB","CHD","CL"],datasets:[{data:[21.49,17.0,32.0,36.2],backgroundColor:['#2563eb','rgba(154,160,184,.35)','rgba(154,160,184,.35)','rgba(154,160,184,.35)'],borderWidth:1,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#9aa0b8'}},y:{beginAtZero:true,ticks:{color:'#9aa0b8'}}}}})}
 function renderCharts(id){setTimeout(()=>{if(id==='fund')renderFundChart();if(id==='valuation')renderPeerChart()},40)}renderCharts('tech');
 </script>
