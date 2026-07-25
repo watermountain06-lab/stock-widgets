@@ -331,5 +331,14 @@
     "accentColor": "#2563eb",
     "page": "widgets/PG_analysis_widget.html",
     "lastUpdated": "2026-07-24"
+  },
+  {
+    "rank": 38,
+    "ticker": "MS",
+    "name": "Morgan Stanley",
+    "sector": "Financials",
+    "accentColor": "#3b82f6",
+    "page": "widgets/MS_analysis_widget.html",
+    "lastUpdated": "2026-07-25"
   }
 ]
