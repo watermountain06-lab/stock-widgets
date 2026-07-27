@@ -256,7 +256,7 @@
     "ticker": "CAT",
     "name": "Caterpillar Inc.",
     "sector": "Industrials",
-    "accentColor": "#f0c040",
+    "accentColor": "#64748b",
     "page": "widgets/CAT_analysis_widget.html",
     "lastUpdated": "2026-07-21"
   },
@@ -265,7 +265,7 @@
     "ticker": "UNH",
     "name": "UnitedHealth Group Incorporated",
     "sector": "Health Care",
-    "accentColor": "#2563eb",
+    "accentColor": "#ef4444",
     "page": "widgets/UNH_analysis_widget.html",
     "lastUpdated": "2026-07-22"
   },
@@ -283,7 +283,7 @@
     "ticker": "GE",
     "name": "GE Aerospace",
     "sector": "Industrials",
-    "accentColor": "#38bdf8",
+    "accentColor": "#64748b",
     "page": "widgets/GE_analysis_widget.html",
     "lastUpdated": "2026-07-24"
   },
@@ -292,7 +292,7 @@
     "ticker": "RHHBY",
     "name": "Roche Holding AG",
     "sector": "Health Care",
-    "accentColor": "#38bdf8",
+    "accentColor": "#ef4444",
     "page": "widgets/RHHBY_analysis_widget.html",
     "lastUpdated": "2026-07-24"
   },
@@ -301,7 +301,7 @@
     "ticker": "HSBC",
     "name": "HSBC Holdings plc",
     "sector": "Financials",
-    "accentColor": "#ef4444",
+    "accentColor": "#14b8a6",
     "page": "widgets/HSBC_analysis_widget.html",
     "lastUpdated": "2026-07-24"
   },
@@ -310,7 +310,7 @@
     "ticker": "KO",
     "name": "The Coca-Cola Company",
     "sector": "Consumer Staples",
-    "accentColor": "#ef4444",
+    "accentColor": "#eab308",
     "page": "widgets/KO_analysis_widget.html",
     "lastUpdated": "2026-07-24"
   },
@@ -319,7 +319,7 @@
     "ticker": "PG",
     "name": "The Procter & Gamble Company",
     "sector": "Consumer Staples",
-    "accentColor": "#2563eb",
+    "accentColor": "#eab308",
     "page": "widgets/PG_analysis_widget.html",
     "lastUpdated": "2026-07-24"
   },
@@ -328,7 +328,7 @@
     "ticker": "MS",
     "name": "Morgan Stanley",
     "sector": "Financials",
-    "accentColor": "#3b82f6",
+    "accentColor": "#14b8a6",
     "page": "widgets/MS_analysis_widget.html",
     "lastUpdated": "2026-07-25"
   },
@@ -346,7 +346,7 @@
     "ticker": "HD",
     "name": "The Home Depot, Inc.",
     "sector": "Consumer Discretionary",
-    "accentColor": "#c2410c",
+    "accentColor": "#f97316",
     "page": "widgets/HD_analysis_widget.html",
     "lastUpdated": "2026-07-24"
   },
@@ -355,7 +355,7 @@
     "ticker": "MRK",
     "name": "Merck & Co., Inc.",
     "sector": "Health Care",
-    "accentColor": "#047857",
+    "accentColor": "#ef4444",
     "page": "widgets/MRK_analysis_widget.html",
     "lastUpdated": "2026-07-24"
   }
