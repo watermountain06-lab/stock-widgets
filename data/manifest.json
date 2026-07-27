@@ -340,5 +340,23 @@
     "accentColor": "#3b82f6",
     "page": "widgets/ORCL_analysis_widget.html",
     "lastUpdated": "2026-07-15"
+  },
+  {
+    "rank": 39,
+    "ticker": "HD",
+    "name": "The Home Depot, Inc.",
+    "sector": "Consumer Discretionary",
+    "accentColor": "#c2410c",
+    "page": "widgets/HD_analysis_widget.html",
+    "lastUpdated": "2026-07-24"
+  },
+  {
+    "rank": 40,
+    "ticker": "MRK",
+    "name": "Merck & Co., Inc.",
+    "sector": "Health Care",
+    "accentColor": "#047857",
+    "page": "widgets/MRK_analysis_widget.html",
+    "lastUpdated": "2026-07-24"
   }
 ]

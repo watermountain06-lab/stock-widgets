@@ -1,0 +1,502 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>MRK 종합 분석 위젯</title><script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script><style>
+  :root {
+    --bg: #0f1117;
+    --bg2: #1a1d27;
+    --bg3: #22263a;
+    --border: #2e3347;
+    --text: #e8eaf0;
+    --text2: #9aa0b8;
+    --text3: #5c6282;
+    --accent: #047857;
+    --accent2: #38bdf8;
+    --accent3: #4a0e1c;
+    --bull: #D85A30;
+    --bear: #185FA5;
+    --ma5: #ff6b9d;
+    --ma20: #9b59b6;
+    --ma60: #f0c040;
+    --ma120: #22d3ee;
+    --green: #2ecc71;
+    --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f;
+    --blue: #3498db;
+    --radius: 10px;
+    --shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #101a05 0%, #0f1117 40%, #1a1d27 100%);
+    border-bottom: 2px solid var(--accent3);
+    padding: 28px 32px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 240px; height: 240px;
+    background: radial-gradient(circle, rgba(118,185,0,0.14) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .ticker-block { display: flex; align-items: center; gap: 16px; }
+  .ticker-badge {
+    background: linear-gradient(135deg, var(--accent3), var(--accent));
+    color: #0f1117;
+    font-size: 13px; font-weight: 800;
+    padding: 5px 12px; border-radius: 6px;
+    letter-spacing: 1px;
+  }
+  .company-name { font-size: 22px; font-weight: 700; color: var(--text); }
+  .company-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .price-block { text-align: right; }
+  .price-main { font-size: 32px; font-weight: 800; color: var(--accent2); letter-spacing: -1px; }
+  .price-change { font-size: 13px; color: var(--red); font-weight: 600; }
+  .header-meta { display: flex; justify-content: space-between; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+  .meta-item { display: flex; flex-direction: column; }
+  .meta-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .meta-value { font-size: 14px; font-weight: 600; color: var(--text2); margin-top: 2px; }
+  .meta-value.highlight { color: var(--accent2); }
+
+  /* NAV */
+  .nav {
+    display: flex; justify-content: space-between; gap: 4px;
+    padding: 12px 32px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    background: none; border: none;
+    color: var(--text3); font-size: 12px; font-weight: 600;
+    padding: 7px 14px; border-radius: 20px;
+    cursor: pointer; white-space: nowrap;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .nav-btn:hover { color: var(--text); background: var(--bg3); }
+  .nav-btn.active { background: var(--accent3); color: var(--accent2); }
+
+  /* SECTIONS */
+  .section { display: none; padding: 28px 32px; }
+  .section.active { display: block; }
+  .section-title {
+    font-size: 16px; font-weight: 700;
+    color: var(--accent2);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::before {
+    content: '';
+    width: 4px; height: 18px;
+    background: var(--accent);
+    border-radius: 2px;
+    display: inline-block;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    margin-bottom: 16px;
+  }
+  .card-title { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; font-weight: 600; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+  /* CHART CONTAINERS */
+  .chart-wrap { position: relative; }
+  .chart-wrap canvas { max-width: 100%; }
+
+  /* PRICE CHART (SVG) */
+  .price-chart-container {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  /* STAT BOX */
+  .stat-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .stat-value { font-size: 22px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
+  .stat-sub { font-size: 11px; color: var(--text3); }
+  .stat-value.up { color: var(--green); }
+  .stat-value.down { color: var(--red); }
+  .stat-value.gold { color: var(--accent2); }
+
+  /* MA TABLE */
+  .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .ma-row:last-child { border-bottom: none; }
+  .ma-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+  .ma-name { display: flex; align-items: center; font-size: 13px; color: var(--text2); }
+  .ma-val { font-size: 13px; font-weight: 600; }
+  .ma-status { font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
+  .status-above { background: rgba(46,204,113,0.15); color: var(--green); }
+  .status-below { background: rgba(231,76,60,0.15); color: var(--red); }
+  .status-amber { background: rgba(240,192,64,0.18); color: var(--ma60); }
+
+  /* ZONE TAGS */
+  .zone-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .zone-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg3); border-radius: 6px; }
+  .zone-label { font-size: 12px; color: var(--text2); }
+  .zone-val { font-size: 13px; font-weight: 700; color: var(--accent2); }
+  .zone-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
+  .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
+  .tag-current { background: rgba(118,185,0,0.2); color: var(--accent2); }
+
+  /* VALUATION METER */
+  .val-item { margin-bottom: 18px; }
+  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
+  .val-track { height: 8px; background: var(--bg3); border-radius: 4px; position: relative; overflow: hidden; }
+  .val-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+  .val-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+  .val-low { font-size: 10px; color: var(--green); }
+  .val-mid { font-size: 10px; color: var(--accent2); text-align: center; }
+  .val-high { font-size: 10px; color: var(--red); }
+  .stage-badge { font-size: 13px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
+  .stage-1 { background: rgba(46,204,113,0.2); color: #2ecc71; }
+  .stage-2 { background: rgba(39,174,96,0.2); color: #27ae60; }
+  .stage-3 { background: rgba(200,168,75,0.2); color: var(--accent2); }
+  .stage-4 { background: rgba(231,126,35,0.2); color: #e67e22; }
+  .stage-5 { background: rgba(231,76,60,0.2); color: var(--red); }
+  .stage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .stage-mini { text-align: center; padding: 16px 8px; border-radius: 8px; }
+  .stage-mini-num { font-size: 22px; font-weight: 700; }
+  .stage-mini-label { font-size: 12px; margin-top: 4px; }
+
+  /* NEWS TIMELINE */
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--event-major); border: 2px solid var(--bg); }
+  .tl-dot.red { background: var(--red); }
+  .tl-dot.green { background: var(--green); }
+  .tl-dot.blue { background: var(--blue); }
+  .tl-dot.neutral { background: var(--event-neutral); }
+  .tl-date { font-size: 10px; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+  .tl-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 3px 0; }
+  .tl-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .tl-source { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 11px; font-weight: 600; color: var(--accent2); text-decoration: none; }
+  .tl-source:hover { text-decoration: underline; }
+
+  /* BULL/BEAR */
+  .bull-bear { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .bb-box { background: var(--bg3); border-radius: var(--radius); padding: 16px; }
+  .bb-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .bb-bull { color: var(--bull); }
+  .bb-bear { color: var(--bear); }
+  .bb-item { display: flex; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .bb-icon { flex-shrink: 0; margin-top: 2px; }
+
+  /* GROWTH DRIVER */
+  .driver-item { display: flex; gap: 12px; padding: 12px; background: var(--bg3); border-radius: 8px; margin-bottom: 10px; }
+  .driver-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent3); color: var(--accent2); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .driver-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .driver-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
+
+  /* PER SHARE */
+  .per-share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .ps-card { background: var(--bg3); border-radius: 8px; padding: 16px; text-align: center; }
+  .ps-icon { font-size: 22px; margin-bottom: 6px; }
+  .ps-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .ps-value { font-size: 22px; font-weight: 800; color: var(--accent2); }
+  .ps-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
+
+  /* SP500 RELATIVE */
+  .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+  .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
+
+  /* DISCLAIMER */
+  .disclaimer {
+    margin: 28px 32px 16px;
+    padding: 12px 16px;
+    background: rgba(118,185,0,0.06);
+    border: 1px solid var(--accent3);
+    border-radius: 8px;
+    font-size: 11px;
+    color: var(--text3);
+    line-height: 1.6;
+  }
+  .scenario-card { border-radius: 8px; padding: 14px; }
+
+  @media (max-width: 600px) {
+    .header { padding: 20px 16px; }
+    .section { padding: 20px 16px; }
+    .nav { padding: 10px 16px; }
+    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+    .bull-bear { grid-template-columns: 1fr; }
+    .per-share-grid { grid-template-columns: 1fr 1fr; }
+    .stage-grid { grid-template-columns: 1fr 1fr; }
+    .price-main { font-size: 24px; }
+  }
+  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; margin: 12px 32px 0; }
+  .range-toggle { display: flex; gap: 4px; }
+  .range-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--text3); font-size: 11px; font-weight: 700; padding: 4px 11px; border-radius: 999px; cursor: pointer; transition: all .15s; }
+  .range-btn:hover { color: var(--text); border-color: var(--text2); }
+  .range-btn.active { background: var(--accent3); color: var(--accent2); border-color: var(--accent); }
+  .ma-toggle-btn { background: var(--bg3); border: 1px solid; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer; transition: all .15s; }
+  .ma-toggle-btn:hover { filter: brightness(1.2); }
+  .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
+  body { padding-top: 46px; }
+  .back-bar { position: fixed; top: 0; left: 0; right: 0; height: 46px; background: rgba(10,11,22,0.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.25); }
+  .back-bar a { color: var(--text2); font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+  .back-bar a:hover { color: var(--accent2); }
+  .back-bar .brand-icon { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 6px; background: var(--accent3); color: var(--accent2); font-size: 12px; }
+  .back-bar .back-bar-ticker { font-size: 11px; color: var(--text3); font-weight: 600; letter-spacing: 0.4px; }
+  .back-bar-nav { display: flex; align-items: center; gap: 10px; }
+  .peer-nav-link { color: var(--text2); font-size: 11px; font-weight: 700; text-decoration: none; padding: 4px 9px; border-radius: 6px; border: 1px solid var(--border); transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+  .peer-nav-link:hover { color: var(--accent2); border-color: var(--accent); }
+  .peer-nav-link.disabled { color: var(--text3); opacity: 0.4; pointer-events: none; border-color: var(--border); }
+</style></head><body><div class="back-bar"><a href="../index.html"><span class="brand-icon">◧</span>US Stock Widgets · 전체 종목 목록</a><div class="back-bar-nav"><a class="peer-nav-link" href="HD_analysis_widget.html">◀ HD</a><span class="back-bar-ticker">MRK · 시총 40위</span><span class="peer-nav-link disabled">다음 ▶</span></div></div>
+<div class="today-banner">📌 <strong>2026년 7월 30일 예정 다음 실적 체크</strong> · 데이터 기준일 2026.07.24 · 저장소 연속 순위 40위</div>
+<div class="header"><div class="header-top"><div class="ticker-block"><div><div style="display:flex;gap:10px;"><span class="ticker-badge">MRK</span><span style="font-size:11px;color:var(--accent2);">NYSE · Health Care</span></div><div class="company-name">Merck & Co., Inc.</div><div class="company-sub">Keytruda를 중심으로 백신·항암·동물의약품을 운영하는 글로벌 제약사</div></div></div><div class="price-block"><div class="price-main">$131.07</div><div class="price-change">2026.07.24 완료 거래일</div><div style="font-size:11px;color:var(--text3);">52주 $76.66–$131.74</div></div></div><div class="header-meta"><div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$323.7B</span></div><div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Health Care</span></div><div class="meta-item"><span class="meta-label">P/E</span><span class="meta-value">36.9x</span></div><div class="meta-item"><span class="meta-label">EPS TTM</span><span class="meta-value">$3.55</span></div><div class="meta-item"><span class="meta-label">연간 배당</span><span class="meta-value">$3.40</span></div></div></div>
+<div class="nav"><button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button><button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button><button class="nav-btn" onclick="showSection('valuation')">⚖️ 밸류에이션</button><button class="nav-btn" onclick="showSection('us')">🇺🇸 US 특화</button><button class="nav-btn" onclick="showSection('news')">📰 시계열 뉴스</button><button class="nav-btn" onclick="showSection('invest')">🎯 투자 포인트</button></div>
+<div id="tech" class="section active"><div class="section-title">기술적 분석 — 최신 252 거래일</div><div class="price-chart-container"><div style="display:flex;justify-content:space-between;margin-bottom:10px;"><div class="range-toggle" id="mrkRangeToggle"><button class="range-btn" data-range="1M">1개월</button><button class="range-btn" data-range="3M">3개월</button><button class="range-btn" data-range="6M">6개월</button><button class="range-btn active" data-range="1Y">1년</button></div><div id="mrkMaToggle" style="display:flex;gap:8px;"><button class="ma-toggle-btn" data-ma="ma5" style="color:var(--ma5);border-color:var(--ma5);">● MA5</button><button class="ma-toggle-btn" data-ma="ma20" style="color:var(--ma20);border-color:var(--ma20);">● MA20</button><button class="ma-toggle-btn" data-ma="ma60" style="color:var(--ma60);border-color:var(--ma60);">● MA60</button><button class="ma-toggle-btn" data-ma="ma120" style="color:var(--ma120);border-color:var(--ma120);">● MA120</button><button class="ma-toggle-btn" data-ma="pricelabels" style="color:var(--text2);border-color:var(--text2);">◆ 가격라벨</button></div></div><svg id="mrkCandleSvg" viewBox="0 0 720 240"></svg><svg id="mrkVolumeSvg" viewBox="0 0 720 70"></svg></div><div class="grid-2"><div class="card"><div class="card-title">핵심 가격대</div><div class="zone-list"><div class="zone-item"><span class="zone-label">52주 최고</span><span class="zone-val">$131.74 (2026-07-17)</span><span class="zone-tag tag-resist">저항선</span></div><div class="zone-item"><span class="zone-label">현재가</span><span class="zone-val">$131.07</span><span class="zone-tag tag-current">현재</span></div><div class="zone-item"><span class="zone-label">MA120 지지</span><span class="zone-val">$118.90</span><span class="zone-tag tag-support">지지선</span></div><div class="zone-item"><span class="zone-label">52주 최저</span><span class="zone-val">$76.66 (2025-07-29)</span><span class="zone-tag tag-support">강지지</span></div><div class="zone-item"><span class="zone-label">52주 수익률</span><span class="zone-val" style="color:var(--green)">+55.8%</span></div></div></div><div class="card"><div class="card-title">이동평균선 현황</div><div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기)</span><span class="ma-val">$127.94</span><span class="ma-status status-above">현재가 상회</span></div><div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기)</span><span class="ma-val">$126.75</span><span class="ma-status status-above">현재가 상회</span></div><div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기)</span><span class="ma-val">$119.57</span><span class="ma-status status-above">현재가 상회</span></div><div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기)</span><span class="ma-val">$118.90</span><span class="ma-status status-above">현재가 상회</span></div><div style="margin-top:10px;background:var(--bg3);padding:12px;border-radius:8px;font-size:12px;">현재 배열: 현재가>MA5>MA20>MA60>MA120 순 — 실제 표시값 기준 정배열</div></div></div><div class="card"><div class="card-title">구간별 패턴 분석</div><div class="grid-4"><div style="background:var(--bg3);padding:12px;border-radius:8px;border-top:3px solid var(--red);"><div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">2025.08~09 바닥 형성 · $80~91</div><div style="font-size:12px;color:var(--text2);">Keytruda 특허절벽 우려가 반영된 뒤 장기 저점권에서 매수세 유입.</div></div><div style="background:var(--bg3);padding:12px;border-radius:8px;border-top:3px solid var(--green);"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">2025.10~12 재평가 · $90→$108</div><div style="font-size:12px;color:var(--text2);">파이프라인·인수 전략이 부각되며 MA120을 회복한 상승 전환 구간.</div></div><div style="background:var(--bg3);padding:12px;border-radius:8px;border-top:3px solid var(--green);"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">2026.01~04 추세 가속 · $108→$130</div><div style="font-size:12px;color:var(--text2);">Keytruda 성장과 신제품 기대가 이어져 고점과 저점이 함께 상승.</div></div><div style="background:var(--bg3);padding:12px;border-radius:8px;border-top:3px solid var(--ma60);"><div style="font-size:11px;color:var(--ma60);font-weight:700;margin-bottom:6px;">2026.05~07 신고가권 · $117→$131</div><div style="font-size:12px;color:var(--text2);">Cidara 비용 충격을 흡수하고 Lipfendra 승인으로 52주 고점권 재진입.</div></div></div></div><div style="display:flex;gap:8px;flex-wrap:wrap;"><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,.15);color:var(--green);">Keytruda/Qlex Q1 $8.03B·+12%</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,.15);color:var(--green);">Q1 매출 $16.29B·+5%</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,.15);color:var(--green);">Lipfendra: 첫 경구 PCSK9 승인</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(241,196,15,.15);color:var(--event-neutral);">2026년 7월 30일 예정</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,.15);color:var(--red);">Keytruda 2028년 이후 독점권 약화</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,.15);color:var(--red);">대형 인수·후기 임상이 기대 수익을 못 낼 위험</span></div></div>
+<div id="fund" class="section"><div class="section-title">기본적 분석</div><div class="card"><div class="card-title">분기 매출·순이익·EPS</div><div class="chart-wrap" style="height:300px;"><canvas id="revProfitChart"></canvas></div></div><div class="card">최근 실적 · CEO Robert M. Davis “사업 전반의 모멘텀과 파이프라인 진전은 장기 성장에 대한 확신을 뒷받침한다” <a href="https://www.merck.com/news/merck-announces-first-quarter-2026-financial-results/" target="_blank" rel="noopener" style="color:var(--accent2);margin-left:6px;">발언 출처 →</a></div><div class="grid-3"><div class="stat-box"><div class="stat-label">최근 매출</div><div class="stat-value">$16.29B</div><div class="stat-sub">2026.07.24 기준</div></div><div class="stat-box"><div class="stat-label">최근 순이익</div><div class="stat-value">$-4.24B</div><div class="stat-sub">2026.07.24 기준</div></div><div class="stat-box"><div class="stat-label">최근 EPS</div><div class="stat-value">$-1.72</div><div class="stat-sub">2026.07.24 기준</div></div><div class="stat-box"><div class="stat-label">시가총액</div><div class="stat-value">$323.7B</div><div class="stat-sub">2026.07.24 기준</div></div><div class="stat-box"><div class="stat-label">P/E</div><div class="stat-value">36.9x</div><div class="stat-sub">2026.07.24 기준</div></div><div class="stat-box"><div class="stat-label">연간 배당</div><div class="stat-value">$3.40</div><div class="stat-sub">2026.07.24 기준</div></div><div class="stat-box"><div class="stat-label">52주 최고</div><div class="stat-value">$131.74</div><div class="stat-sub">2026.07.24 기준</div></div><div class="stat-box"><div class="stat-label">52주 최저</div><div class="stat-value">$76.66</div><div class="stat-sub">2026.07.24 기준</div></div><div class="stat-box"><div class="stat-label">현재가</div><div class="stat-value">$131.07</div><div class="stat-sub">2026.07.24 기준</div></div></div><div class="card"><div class="card-title">핵심 성장 동력 3가지</div><div class="grid-3"><div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">Keytruda 확장</div><div class="driver-desc">Qlex 피하주사·적응증 확대<br>Q1 매출 $8.03B, +12%</div></div></div><div class="driver-item"><div class="driver-num">2</div><div><div class="driver-title">신제품 포트폴리오</div><div class="driver-desc">Winrevair·Capvaxive·Lipfendra<br>2030년대 성장 브리지</div></div></div><div class="driver-item"><div class="driver-num">3</div><div><div class="driver-title">동물의약품</div><div class="driver-desc">가축·반려동물 제품 다각화<br>의약품 특허주기 완충</div></div></div></div></div><div class="card"><div class="card-title">핵심 투자 논리</div><div class="tl-desc">Keytruda/Qlex Q1 매출 $8.03B(+12%), Winrevair·Capvaxive와 동물의약품이 특허절벽 이전의 성장 브리지를 만든다. 반면 Cidara 인수 관련 $9.0B 비용으로 Q1 GAAP EPS가 -$1.72가 되면서 TTM PER은 36.9x로 왜곡됐다. 핵심 위험은 2028년 이후 Keytruda 독점권 약화, 임상 실패, 대형 인수의 수익화 지연이다.</div></div><div class="card"><div class="card-title">다음 실적 체크포인트</div><div class="tl-desc">① Keytruda/Qlex 성장률과 피하주사 전환 속도 ② Winrevair·Capvaxive 출시 곡선 ③ Cidara 관련 비용 제외 조정 EPS와 2026 가이던스 ④ Lipfendra 출시 준비·보험 등재 ⑤ 후기 파이프라인과 Keytruda 2028 특허절벽 대응</div></div></div>
+<div id="valuation" class="section"><div class="section-title">밸류에이션</div><div class="grid-2"><div class="card"><div class="card-title">멀티플 5단계 평가</div><div class="val-item"><div class="val-header"><span class="val-name">TTM GAAP PER</span><span class="val-number">36.9x</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div><div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 25x</span><span class="val-high">고 40x</span></div><div style="font-size:11px;color:var(--text3);">인수비용으로 왜곡</div></div><div class="val-item"><div class="val-header"><span class="val-name">Forward PER</span><span class="val-number">25.8x</span><span class="stage-badge stage-3">3단계 적정</span></div><div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#2ecc71,#f0c040);"></div></div><div class="val-labels"><span class="val-low">저 16x</span><span class="val-mid">적정 25x</span><span class="val-high">고 34x</span></div><div style="font-size:11px;color:var(--text3);">정상화 이익 기준</div></div><div class="val-item"><div class="val-header"><span class="val-name">P/S</span><span class="val-number">4.9x</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div><div class="val-labels"><span class="val-low">저 2.5x</span><span class="val-mid">적정 4x</span><span class="val-high">고 6x</span></div><div style="font-size:11px;color:var(--text3);">항암 프랜차이즈 프리미엄</div></div><div class="val-item"><div class="val-header"><span class="val-name">P/B</span><span class="val-number">7.1x</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div><div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 5x</span><span class="val-high">고 8x</span></div><div style="font-size:11px;color:var(--text3);">인수 후 자본 감소 반영</div></div><div class="val-item"><div class="val-header"><span class="val-name">배당수익률</span><span class="val-number">2.6%</span><span class="stage-badge stage-3">3단계 적정</span></div><div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#2ecc71,#f0c040);"></div></div><div class="val-labels"><span class="val-low">저 1.5%</span><span class="val-mid">적정 3%</span><span class="val-high">고 5%</span></div><div style="font-size:11px;color:var(--text3);">현금수익률 완충</div></div></div><div class="card"><div class="card-title">피어 비교 (P/E)</div><div class="chart-wrap" style="height:270px;"><canvas id="peerChart"></canvas></div><div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;">MRK 36.9x는 LLY 44.0x, JNJ 29.3x와 비교해 현재 프리미엄 수준을 보여준다.</div></div></div><div class="card"><div class="card-title">밸류에이션 5단계</div><div class="stage-grid"><div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div></div><div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div></div><div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:10px;padding:2px 6px;margin-top:5px;">Forward PER·배당수익률</div></div><div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:10px;padding:2px 6px;margin-top:5px;">TTM GAAP PER·P/S·P/B</div></div><div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div></div></div><div style="margin-top:10px;font-size:11px;color:var(--text3);">TTM GAAP PER 36.9x는 4단계; Forward PER 25.8x는 3단계; P/S 4.9x는 4단계; P/B 7.1x는 4단계; 배당수익률 2.6%는 3단계. 빈 단계는 누락 데이터가 아니라 현재 해당 밴드에 속한 지표가 없다는 뜻이다.</div></div><div class="card"><div class="card-title">Per-Share 지표</div><div class="per-share-grid"><div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">EPS</div><div class="ps-value">$3.55</div><div class="ps-sub">TTM GAAP · Cidara 비용 포함</div></div><div class="ps-card"><div class="ps-icon">📘</div><div class="ps-label">BPS</div><div class="ps-value">$18.57</div><div class="ps-sub">2026.03.31 자본/희석주식수</div></div><div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">FCF/Share</div><div class="ps-value">약 $5.8</div><div class="ps-sub">최근 12개월 FCF 추정</div></div><div class="ps-card"><div class="ps-icon">🎁</div><div class="ps-label">Dividend</div><div class="ps-value">$3.40</div><div class="ps-sub">분기 $0.85 연환산</div></div></div></div><div class="card"><div class="card-title">종합 밸류에이션</div><div class="grid-2">
+<div style="background:var(--bg3);padding:14px;border-radius:8px;border-top:3px solid var(--green);"><div style="color:var(--green);font-weight:800;margin-bottom:8px;">저평가 근거</div><div class="tl-desc">P/B 7.1x와 배당수익률 2.6%는 현금수익률 기준 적정권이다. 장기 프랜차이즈와 주주환원이 하방을 완충한다.</div></div>
+<div style="background:var(--bg3);padding:14px;border-radius:8px;border-top:3px solid var(--accent);"><div style="color:var(--accent2);font-weight:800;margin-bottom:8px;">주의 요소</div><div class="tl-desc">TTM GAAP PER 36.9x는 Cidara 인수비용 때문에 4단계이며 P/S 4.9x·P/B 7.1x도 4단계다. 배당수익률 2.6%와 정상화 Forward PER 약 25.8x는 3단계다. 일회성 비용을 제거해도 신제품 성공을 요구하는 가격이다.</div></div></div></div><div class="card"><div class="card-title">시나리오별 공정가치 분석</div><div class="grid-3"><div class="scenario-card" style="background:var(--bg3);"><b>Bear</b><div class="ps-value">$100–115</div><div class="ps-sub">특허절벽·임상 실패</div></div><div class="scenario-card" style="background:var(--bg3);"><b>Base</b><div class="ps-value">$125–145</div><div class="ps-sub">Keytruda와 신제품 성장</div></div><div class="scenario-card" style="background:var(--bg3);"><b>Bull</b><div class="ps-value">$160–185</div><div class="ps-sub">Lipfendra·Winrevair 대형화</div></div></div></div></div>
+<div id="us" class="section"><div class="section-title">US 특화 분석</div>
+<div class="rel-container"><div class="rel-title">S&P 500 대비 알파</div><div class="grid-3">
+<div class="stat-box"><div class="stat-label">MRK 52주</div><div class="stat-value">+55.8%</div></div>
+<div class="stat-box"><div class="stat-label">S&amp;P 500 52주</div><div class="stat-value">+13.7%</div></div>
+<div class="stat-box"><div class="stat-label">알파</div><div class="stat-value" style="color:var(--green)">+42.1%p</div></div></div>
+<div class="zone-list"><div class="zone-item"><span class="zone-label">S&amp;P 500 내 비중</span><span class="zone-val">약 0.43%</span></div><div class="zone-item"><span class="zone-label">5년 월간 베타</span><span class="zone-val">0.35</span></div></div></div>
+<div class="grid-2"><div class="card"><div class="card-title">기관·주주환원 체크</div><div class="zone-list"><div class="zone-item"><span class="zone-label">연간 배당</span><span class="zone-val">$3.40</span></div><div class="zone-item"><span class="zone-label">배당수익률</span><span class="zone-val">2.6%</span></div><div class="zone-item"><span class="zone-label">베타</span><span class="zone-val">0.35</span></div></div></div>
+<div class="card"><div class="card-title">Street 컨센서스</div><div class="zone-list"><div class="zone-item"><span class="zone-label">분석가</span><span class="zone-val">36명</span></div><div class="zone-item"><span class="zone-label">평균 목표가</span><span class="zone-val">$139.00</span></div><div class="zone-item"><span class="zone-label">상승여력</span><span class="zone-val">+6.1%</span></div></div></div></div></div><div id="news" class="section"><div class="section-title">시계열 뉴스</div><div class="card"><div class="timeline"><div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2026.07.16</div><div class="tl-title">FDA, 경구 PCSK9 Lipfendra 승인</div><div class="tl-desc">최초의 경구 PCSK9 억제제가 LDL을 55% 이상 낮춘 데이터로 승인됐다.</div><a class="tl-source" href="https://apnews.com/article/035bb7838b21fa15d5bba38e4c0639d4" target="_blank" rel="noopener">관련 뉴스 보기 (AP) →</a></div><div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2026.07.16</div><div class="tl-title">Lipfendra 출시 가격과 경쟁 구도</div><div class="tl-desc">연간 정가 약 $3,800으로 주사형 PCSK9 시장에 진입한다.</div><a class="tl-source" href="https://www.theguardian.com/us-news/2026/jul/16/merck-cholesterol-drug-fda-approval-lipfendra" target="_blank" rel="noopener">관련 뉴스 보기 (The Guardian) →</a></div><div class="tl-item"><div class="tl-dot red"></div><div class="tl-date">2026.04.30</div><div class="tl-title">Cidara 비용으로 Q1 순손실</div><div class="tl-desc">매출은 5% 늘었지만 $9.0B 인수 관련 비용으로 GAAP 손실을 기록했다.</div><a class="tl-source" href="https://www.investing.com/news/stock-market-news/merck-posts-quarterly-loss-due-to-cidara-charge-sales-rise-5-4648557" target="_blank" rel="noopener">관련 뉴스 보기 (Reuters·Investing) →</a></div><div class="tl-item"><div class="tl-dot neutral"></div><div class="tl-date">2025.11.14</div><div class="tl-title">Cidara를 약 $9.2B에 인수</div><div class="tl-desc">인플루엔자 예방 후보 CD388을 확보해 호흡기 파이프라인을 강화했다.</div><a class="tl-source" href="https://cincodias.elpais.com/companias/2025-11-14/merck-calienta-las-compras-farmaceuticas-acuerda-adquirir-cidara-por-7900-millones.html" target="_blank" rel="noopener">관련 뉴스 보기 (Cinco Días) →</a></div><div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2025.07.09</div><div class="tl-title">Verona Pharma 인수 발표</div><div class="tl-desc">Ohtuvayre를 확보하는 약 $10B 거래로 호흡기 사업을 확대했다.</div><a class="tl-source" href="https://www.merck.com/news/merck-to-acquire-verona-pharma-expanding-its-portfolio-to-include-ensifentrine-ohtuvayre/" target="_blank" rel="noopener">관련 뉴스 보기 (Merck) →</a></div></div><div style="font-size:11px;color:var(--text3);">🔵 주요 · 🟡 중립/예정 · 🟢 긍정 · 🔴 위험</div></div></div>
+<div id="invest" class="section"><div class="section-title">투자 포인트</div><div class="card"><div class="card-title">Bull / Bear</div><div class="bull-bear"><div class="bb-box"><div class="bb-title bb-bull">🐂 Bull Case</div><div class="bb-item"><strong>핵심 프랜차이즈:</strong> Qlex 피하주사·적응증 확대<br>Q1 매출 $8.03B, +12%</div><div class="bb-item"><strong>구조적 성장:</strong> Winrevair·Capvaxive·Lipfendra<br>2030년대 성장 브리지</div><div class="bb-item"><strong>규모 우위:</strong> 가축·반려동물 제품 다각화<br>의약품 특허주기 완충</div><div class="bb-item"><strong>실적 촉매:</strong> Keytruda/Qlex Q1 $8.03B·+12%</div><div class="bb-item"><strong>주주환원:</strong> $3.40 연간 배당</div></div><div class="bb-box"><div class="bb-title bb-bear">🐻 Bear Case</div><div class="bb-item"><strong>핵심 리스크:</strong> Keytruda 2028년 이후 독점권 약화</div><div class="bb-item"><strong>실행 리스크:</strong> 대형 인수·후기 임상이 기대 수익을 못 낼 위험</div><div class="bb-item"><strong>밸류에이션:</strong> 정상화 적정·GAAP 4단계</div><div class="bb-item"><strong>매크로:</strong> 금리·정책·환율 변화에 민감</div><div class="bb-item"><strong>이벤트:</strong> 다음 실적 전후 변동성 확대 가능</div></div></div></div><div class="card"><div class="card-title">목표가 밴드</div><div style="position:relative;padding-top:30px;"><div style="display:flex;height:14px;border-radius:7px;overflow:hidden;"><div style="width:17.65%;background:var(--green);"></div><div style="width:11.76%;background:#27ae60;"></div><div style="width:23.53%;background:var(--event-neutral);"></div><div style="width:17.65%;background:#e67e22;"></div><div style="width:29.41%;background:var(--red);"></div></div><div style="position:absolute;left:36.6%;top:10px;border-left:2px solid white;height:34px;"><span style="font-size:10px;">현재 $131</span></div><div style="position:absolute;left:45.9%;top:0;border-left:2px solid var(--accent2);height:44px;"><span style="font-size:10px;color:var(--accent2);">▲ Base 목표 $139 (+6.1%)</span></div></div><div style="display:flex;justify-content:space-between;margin-top:16px;"><span>Bear $100</span><span>Base $139</span><span>Bull $185</span></div><div style="margin-top:10px;font-size:12px;color:var(--text2);">기술적 현재가와 기본 시나리오의 간격을 실제 달러 폭에 비례해 표시했다. Base 목표는 외부 컨센서스가 아니라 본 위젯의 시나리오 기준값이다.</div><div style="margin-top:16px"><div style="font-size:12px;color:var(--text2);margin-bottom:6px;">애널리스트 36명 투자의견 분포 · 매수 64%</div><div class="val-track"><div class="val-fill" style="width:64%;background:linear-gradient(90deg,#2ecc71,#8bc34a);"></div></div></div></div><div class="card"><div class="card-title">5개 분석 종합</div><div class="zone-list"><div class="zone-item"><span>📈 기술</span><span class="zone-val" style="color:var(--ma60)">현재가>MA5>MA20>MA60>MA120</span></div><div class="zone-item"><span>📊 펀더멘털</span><span class="zone-val" style="color:var(--green)">Keytruda +12%, GAAP 인수손실</span></div><div class="zone-item"><span>⚖️ 밸류에이션</span><span class="zone-val" style="color:var(--red)">정상화 적정·GAAP 4단계</span></div><div class="zone-item"><span>🇺🇸 포지션</span><span class="zone-val" style="color:var(--ma60)">Health Care</span></div><div class="zone-item"><span>📰 촉매</span><span class="zone-val" style="color:var(--ma60)">2026년 7월 30일 예정</span></div></div></div><div class="card"><div class="card-title">투자의견 요약</div><div style="display:flex;gap:12px;flex-wrap:wrap;">
+<div class="stat-box" style="flex:1"><div class="stat-label">📅 다음 실적</div><div class="stat-value" style="font-size:14px">2026년 7월 30일 예정</div></div>
+<div class="stat-box" style="flex:1"><div class="stat-label">투자의견</div><div class="stat-value" style="font-size:14px">Buy · 매수 64%</div></div>
+<div class="stat-box" style="flex:1"><div class="stat-label">목표주가</div><div class="stat-value" style="font-size:14px">$139.00 · +6.1%</div></div>
+<div class="stat-box" style="flex:1"><div class="stat-label">결론</div><div class="stat-value" style="font-size:14px">신제품 모멘텀과 특허절벽을 함께 점검</div></div></div></div></div><div class="disclaimer">본 자료는 정보 제공 목적이며 투자 권유가 아닙니다. 가격·컨센서스·환율은 변동될 수 있습니다.</div><script>function showSection(id){document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".nav-btn").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");event.currentTarget.classList.add("active");}const MRK_DAILY = [["2025-07-24",84.2,84.51,83.52,84.11,8016700],["2025-07-25",84.16,85.22,83.84,84.71,10058800],["2025-07-28",84.47,84.97,83.87,84.06,12882000],["2025-07-29",79.85,82.89,76.66,82.63,27826400],["2025-07-30",82.91,83.58,81.52,81.75,13055200],["2025-07-31",80.8,81.49,77.85,78.12,19813300],["2025-08-01",78.02,79.87,77.53,79.29,11900300],["2025-08-04",79.06,79.99,78.43,79.86,13380700],["2025-08-05",79.9,81.13,79.57,80.79,9984300],["2025-08-06",80.29,81.32,79.27,79.44,13028700],["2025-08-07",79.65,80.82,78.65,80.37,10830100],["2025-08-08",80.11,81.17,80.11,80.69,6882900],["2025-08-11",80.96,81.64,79.63,80.03,8210700],["2025-08-12",80.47,80.94,79.67,80.3,7852700],["2025-08-13",80.75,82.84,80.2,82.71,11043800],["2025-08-14",82.01,83.4,81.6,82.76,10217600],["2025-08-15",83.72,84.74,83.36,84.21,10481400],["2025-08-18",84.26,85.15,84.08,84.22,8273600],["2025-08-19",84.38,85.8,84.38,84.93,14307700],["2025-08-20",85.31,86.25,84.55,84.66,8904700],["2025-08-21",84.88,87.32,84.6,86.08,13889000],["2025-08-22",87.5,87.84,86.76,87.37,11977400],["2025-08-25",87.21,87.39,84.95,85.31,9417700],["2025-08-26",85.56,85.59,84.67,84.99,14062700],["2025-08-27",85.07,85.48,83.88,84.07,10588100],["2025-08-28",84.25,84.25,82.65,83.21,14485300],["2025-08-29",83.42,84.24,83.28,84.12,10872900],["2025-09-02",84.5,85.5,84.34,85.48,11642700],["2025-09-03",85.37,85.81,84.07,84.18,12714400],["2025-09-04",84.2,84.41,83.0,84.05,12554800],["2025-09-05",83.79,85.27,83.25,84.71,13231100],["2025-09-08",84.16,84.32,82.82,84.09,13111200],["2025-09-09",84.18,84.8,84.13,84.61,9767500],["2025-09-10",84.27,84.57,83.54,84.03,13073300],["2025-09-11",84.34,85.55,84.0,85.15,9667200],["2025-09-12",84.62,85.18,82.8,82.81,9939500],["2025-09-15",82.11,82.75,80.92,81.02,10229800],["2025-09-16",81.01,81.48,80.54,81.09,10065900],["2025-09-17",80.98,82.25,80.8,81.14,12642100],["2025-09-18",81.22,81.69,80.82,81.53,10458900],["2025-09-19",81.81,82.4,81.0,81.51,25627800],["2025-09-22",81.76,81.94,80.26,80.4,11986400],["2025-09-23",80.09,81.11,79.67,79.96,13145300],["2025-09-24",79.9,80.11,79.33,79.67,11804200],["2025-09-25",79.78,79.88,77.58,77.6,14923800],["2025-09-26",78.76,78.96,77.69,78.56,12205400],["2025-09-29",78.6,78.8,78.03,78.58,12739000],["2025-09-30",78.42,84.0,78.4,83.93,21636600],["2025-10-01",85.19,90.75,85.19,90.13,33460900],["2025-10-02",89.95,91.0,88.22,89.51,14575400],["2025-10-03",89.63,90.7,88.1,89.19,12970600],["2025-10-06",88.83,90.31,88.55,88.8,11648300],["2025-10-07",88.67,88.94,87.14,87.61,9449100],["2025-10-08",87.93,87.93,86.2,86.4,9696200],["2025-10-09",86.96,87.8,86.64,87.5,10938200],["2025-10-10",87.94,88.24,85.92,85.99,11230700],["2025-10-13",85.66,86.46,85.24,85.7,6553900],["2025-10-14",85.38,85.68,84.15,84.7,9675000],["2025-10-15",84.19,84.69,83.61,84.11,9168700],["2025-10-16",84.41,85.5,83.6,83.92,11709100],["2025-10-17",83.28,84.89,83.16,84.79,10758900],["2025-10-20",85.25,87.0,85.03,86.32,8611800],["2025-10-21",86.96,87.67,86.23,87.62,9852400],["2025-10-22",87.68,88.79,87.01,87.61,10926300],["2025-10-23",87.56,88.11,86.91,87.18,7687500],["2025-10-24",87.33,88.06,87.11,87.49,7902100],["2025-10-27",87.51,88.3,87.03,88.0,7226600],["2025-10-28",88.11,88.11,86.93,87.03,8345900],["2025-10-29",86.95,87.84,86.07,86.58,10921900],["2025-10-30",84.62,87.3,83.3,86.28,16678800],["2025-10-31",85.42,86.46,84.56,85.98,12385000],["2025-11-03",85.77,86.1,82.34,82.49,13875800],["2025-11-04",82.7,84.96,82.01,83.86,12846100],["2025-11-05",84.03,85.38,82.91,84.39,9440200],["2025-11-06",84.48,86.17,84.35,85.78,10601400],["2025-11-07",85.95,86.59,85.24,86.28,9214300],["2025-11-10",86.69,87.37,85.8,86.75,8319600],["2025-11-11",87.35,91.07,87.26,90.95,15436000],["2025-11-12",91.41,92.91,91.16,91.45,13218900],["2025-11-13",91.31,94.26,90.9,92.93,16086100],["2025-11-14",92.2,95.08,91.49,92.92,19632000],["2025-11-17",93.23,94.75,92.68,92.86,14345800],["2025-11-18",94.11,97.66,92.11,96.43,28153500],["2025-11-19",96.0,97.14,94.09,95.05,14641300],["2025-11-20",94.97,96.0,93.9,94.97,12554200],["2025-11-21",95.48,100.27,95.36,97.76,23183300],["2025-11-24",99.12,102.36,99.12,100.4,28320900],["2025-11-25",100.73,105.84,100.71,105.66,22225500],["2025-11-26",104.6,105.75,104.2,104.63,12624000],["2025-11-28",104.84,105.41,104.12,104.83,6154500],["2025-12-01",104.72,105.68,101.71,101.83,14178300],["2025-12-02",101.53,101.8,100.31,101.03,11795000],["2025-12-03",101.9,103.09,101.52,102.27,12541600],["2025-12-04",102.1,102.6,100.54,100.89,12770700],["2025-12-05",101.4,102.09,99.19,99.72,16430400],["2025-12-08",99.38,99.67,97.81,98.93,12902600],["2025-12-09",99.32,99.85,96.06,96.89,16283900],["2025-12-10",98.05,98.17,96.47,97.62,18077700],["2025-12-11",98.44,99.14,97.58,99.01,11808200],["2025-12-12",98.96,100.66,98.32,100.3,11810800],["2025-12-15",99.99,100.94,98.0,100.26,16735900],["2025-12-16",100.3,100.34,96.79,98.27,16663600],["2025-12-17",98.18,100.14,98.06,99.18,13180600],["2025-12-18",99.27,101.37,98.86,100.69,14312800],["2025-12-19",100.6,102.2,100.11,101.09,44980200],["2025-12-22",100.63,104.95,100.4,104.72,17136200],["2025-12-23",104.56,105.39,104.33,105.04,13587500],["2025-12-24",105.37,106.95,105.28,106.45,5335000],["2025-12-26",106.45,107.05,106.03,106.78,6280700],["2025-12-29",106.85,107.59,106.43,106.62,8086900],["2025-12-30",106.73,106.88,105.64,106.06,6497900],["2025-12-31",105.94,106.1,104.99,105.26,7557300],["2026-01-02",105.53,106.62,104.43,106.45,9992400],["2026-01-05",107.01,108.44,105.8,107.44,15863300],["2026-01-06",107.68,110.17,107.68,108.87,14479000],["2026-01-07",109.51,111.46,107.95,108.6,16322300],["2026-01-08",110.61,112.9,109.25,110.99,20278800],["2026-01-09",110.87,112.48,110.22,110.53,11040800],["2026-01-12",110.97,111.46,108.78,109.19,10671900],["2026-01-13",109.05,109.31,107.22,108.26,9338600],["2026-01-14",108.97,111.23,107.95,111.01,11964600],["2026-01-15",110.62,111.58,108.45,110.97,11775800],["2026-01-16",110.72,110.73,108.43,108.83,14852100],["2026-01-20",108.11,109.64,106.93,109.45,15241100],["2026-01-21",109.19,111.97,108.73,111.11,12844400],["2026-01-22",110.78,111.32,108.59,109.18,9362600],["2026-01-23",109.09,109.09,107.21,108.18,10489500],["2026-01-26",107.8,108.42,107.06,107.4,9903200],["2026-01-27",107.5,108.35,106.84,107.92,7907100],["2026-01-28",106.85,107.93,106.03,106.9,7491700],["2026-01-29",107.33,109.93,107.1,108.34,13572800],["2026-01-30",108.59,110.54,107.95,110.27,19060600],["2026-02-02",110.12,113.89,109.95,113.37,18000100],["2026-02-03",111.67,118.46,111.44,115.84,25793600],["2026-02-04",116.9,120.39,116.5,118.33,21954600],["2026-02-05",118.31,122.43,118.31,119.75,24010600],["2026-02-06",120.76,122.66,120.44,121.93,13083300],["2026-02-09",121.41,121.88,116.98,117.65,16158700],["2026-02-10",117.69,118.18,116.1,117.15,11849500],["2026-02-11",117.04,119.36,116.31,119.31,10885300],["2026-02-12",119.01,121.61,118.12,119.24,13453300],["2026-02-13",121.5,123.33,121.03,121.41,10102300],["2026-02-17",122.36,123.08,120.8,121.57,9899800],["2026-02-18",121.25,121.81,120.39,121.66,7803400],["2026-02-19",121.4,122.6,120.5,121.86,8933300],["2026-02-20",122.64,122.7,120.6,122.26,9442500],["2026-02-23",122.31,124.19,121.5,123.82,9661100],["2026-02-24",123.41,124.84,122.63,123.93,8460300],["2026-02-25",124.01,125.14,122.26,122.46,11082500],["2026-02-26",122.4,122.5,119.0,119.3,10327300],["2026-02-27",119.68,124.0,119.68,123.82,17636400],["2026-03-02",123.51,123.7,121.04,121.41,11564500],["2026-03-03",119.67,120.97,118.61,119.83,9334100],["2026-03-04",119.43,120.87,117.86,120.28,6700900],["2026-03-05",119.11,119.53,114.45,116.07,14516000],["2026-03-06",115.16,116.36,113.82,115.79,12809300],["2026-03-09",114.98,117.26,114.11,117.11,8321600],["2026-03-10",117.24,119.0,116.67,117.09,9739300],["2026-03-11",116.76,116.95,115.29,116.21,6760700],["2026-03-12",115.47,116.6,114.3,115.91,8349200],["2026-03-13",116.92,117.89,115.53,115.61,7111000],["2026-03-16",115.34,116.06,114.22,115.43,8785300],["2026-03-17",115.78,116.8,114.38,115.87,7952200],["2026-03-18",115.06,115.56,113.35,114.5,6736300],["2026-03-19",114.66,115.76,113.75,114.2,8383800],["2026-03-20",114.25,115.18,112.72,114.18,36355400],["2026-03-23",116.17,116.47,114.77,115.68,9096400],["2026-03-24",114.7,116.54,114.02,116.37,7411900],["2026-03-25",117.3,120.12,116.8,119.37,10220300],["2026-03-26",118.96,120.06,118.65,118.93,6497200],["2026-03-27",119.29,121.07,118.6,119.63,8345800],["2026-03-30",120.57,121.64,117.22,118.1,11084000],["2026-03-31",119.03,121.27,118.77,120.29,10713300],["2026-04-01",120.88,122.19,120.27,120.84,6351700],["2026-04-02",120.37,121.65,119.22,120.87,6387900],["2026-04-06",120.41,121.48,120.04,120.85,4890200],["2026-04-07",119.56,119.56,116.5,119.28,11376400],["2026-04-08",119.6,123.63,117.94,123.18,9256900],["2026-04-09",122.9,124.0,121.35,122.68,8666300],["2026-04-10",122.96,123.01,120.95,121.42,9707000],["2026-04-13",121.03,121.3,119.06,120.15,6357300],["2026-04-14",119.03,120.36,118.15,119.96,12449400],["2026-04-15",119.8,120.25,116.64,117.9,7689400],["2026-04-16",117.13,117.85,114.71,115.46,11399900],["2026-04-17",115.56,119.2,115.56,119.07,16194900],["2026-04-20",119.15,119.36,116.75,117.1,7392000],["2026-04-21",116.49,116.53,111.91,112.56,12769500],["2026-04-22",112.61,113.51,111.54,112.89,8037500],["2026-04-23",113.37,115.02,113.1,114.62,6826300],["2026-04-24",113.74,114.03,111.5,111.9,7060000],["2026-04-27",111.22,112.75,110.14,110.23,9133600],["2026-04-28",111.52,111.91,109.71,110.03,7157600],["2026-04-29",108.55,111.23,107.9,110.95,9769900],["2026-04-30",109.34,112.24,108.63,109.18,17131200],["2026-05-01",112.33,114.54,111.88,112.16,11953700],["2026-05-04",111.41,114.62,110.75,113.11,7659100],["2026-05-05",113.67,114.07,112.83,113.15,7910400],["2026-05-06",113.15,114.49,112.74,113.56,7256100],["2026-05-07",113.51,113.75,111.1,112.3,7329000],["2026-05-08",112.38,113.01,111.18,111.38,5725100],["2026-05-11",112.15,113.68,111.01,111.28,7750600],["2026-05-12",111.5,113.69,111.39,112.37,9117400],["2026-05-13",112.25,114.07,112.04,113.45,8110500],["2026-05-14",113.63,113.9,112.57,113.41,5284200],["2026-05-15",113.9,113.93,110.94,111.38,10028900],["2026-05-18",111.43,112.89,110.97,112.56,8047200],["2026-05-19",112.56,115.1,112.13,114.24,7555400],["2026-05-20",114.63,114.95,112.9,113.0,9130600],["2026-05-21",112.79,115.98,112.09,115.88,7402700],["2026-05-22",120.55,122.66,120.08,122.41,14749200],["2026-05-26",122.9,123.13,119.41,119.72,10008700],["2026-05-27",119.82,122.4,119.78,120.24,7162300],["2026-05-28",120.26,121.5,119.36,119.89,9258900],["2026-05-29",119.65,120.67,118.19,118.72,16596000],["2026-06-01",117.55,117.96,114.36,115.17,9406700],["2026-06-02",114.5,116.78,114.5,115.65,8311500],["2026-06-03",115.45,117.33,114.7,114.7,8225100],["2026-06-04",117.16,120.55,117.09,120.26,15933900],["2026-06-05",120.94,123.46,120.36,120.79,15967200],["2026-06-08",120.85,122.6,118.69,119.52,12312200],["2026-06-09",120.03,120.5,118.0,119.6,9669100],["2026-06-10",119.78,120.04,117.26,119.09,10302100],["2026-06-11",120.04,122.71,119.95,120.76,13180300],["2026-06-12",121.5,121.9,118.83,119.05,10926900],["2026-06-15",118.71,118.95,114.87,114.9,15395700],["2026-06-16",115.88,115.9,113.57,115.17,10665400],["2026-06-17",114.86,115.99,114.02,115.44,10459900],["2026-06-18",114.64,114.94,111.57,113.87,29521600],["2026-06-22",113.97,115.63,113.0,115.48,10521200],["2026-06-23",116.53,119.8,116.53,119.6,10469300],["2026-06-24",120.9,121.81,119.51,120.6,10478100],["2026-06-25",121.63,125.96,121.0,125.45,14043800],["2026-06-26",125.83,128.78,125.83,128.66,18891500],["2026-06-29",127.65,129.97,126.74,129.38,9584600],["2026-06-30",129.22,130.29,126.68,128.5,11837200],["2026-07-01",128.01,128.42,124.71,125.37,10761500],["2026-07-02",126.18,129.61,125.99,129.56,7832200],["2026-07-06",129.31,130.0,125.62,126.78,9499300],["2026-07-07",128.77,129.69,127.89,128.86,10174300],["2026-07-08",128.34,128.99,125.14,125.99,7910200],["2026-07-09",125.48,128.07,124.45,125.07,6975500],["2026-07-10",125.12,125.56,122.9,123.54,8388400],["2026-07-13",123.58,124.74,122.44,124.03,5225800],["2026-07-14",123.3,123.66,120.16,120.78,9932900],["2026-07-15",124.25,124.9,122.75,123.61,9053800],["2026-07-16",124.33,128.93,124.0,127.63,13038800],["2026-07-17",128.45,131.74,127.03,127.5,13472700],["2026-07-20",127.29,127.89,124.22,124.4,7729000],["2026-07-21",124.8,126.77,124.1,126.26,7344800],["2026-07-22",127.32,128.83,126.62,127.47,7792400],["2026-07-23",127.82,131.04,127.82,130.48,8531300],["2026-07-24",131.44,131.71,130.24,131.07,6153700]];
+const MRK_MA5 = [81.79,82.74,83.69,83.9,83.45,82.25,81.17,80.33,79.96,79.5,79.95,80.23,80.26,80.17,80.82,81.3,82.0,82.84,83.77,84.16,84.82,85.45,85.67,85.68,85.56,84.99,84.34,84.37,84.21,84.21,84.51,84.5,84.33,84.3,84.52,84.14,83.52,82.82,82.24,81.52,81.26,81.13,80.91,80.61,79.83,79.24,78.87,79.67,81.76,84.14,86.27,88.31,89.05,88.3,87.9,87.26,86.64,86.06,85.6,84.88,84.64,84.77,85.35,86.05,86.7,87.24,87.58,87.46,87.26,87.08,86.77,85.67,85.04,84.6,84.5,84.56,85.41,86.83,88.24,89.67,91.0,92.22,93.32,94.04,94.45,95.41,96.92,98.77,100.68,102.66,103.47,103.6,102.92,102.17,101.15,100.57,99.74,98.81,98.43,98.55,98.82,99.09,99.4,99.74,99.9,100.79,102.14,103.6,104.82,105.92,106.19,106.23,106.23,106.37,106.82,107.32,108.47,109.29,109.64,109.51,110.0,109.99,109.65,109.7,110.27,109.91,109.35,109.06,108.76,107.92,107.75,108.17,109.36,110.94,113.23,115.51,117.84,118.7,118.96,119.16,119.06,118.95,119.74,120.64,121.15,121.75,122.23,122.71,122.87,122.35,122.67,122.18,121.36,120.93,120.28,118.68,117.82,117.27,116.45,116.42,116.39,116.05,115.81,115.46,115.12,114.84,114.89,114.99,115.96,116.91,118.0,118.48,119.26,119.56,119.95,120.19,120.43,121.0,121.37,121.48,121.34,121.48,120.42,118.98,118.51,117.9,116.42,115.42,115.25,113.81,112.44,111.93,111.55,110.46,110.51,111.09,111.71,112.23,112.86,112.7,112.33,112.18,112.16,112.38,112.38,112.63,113.01,112.92,113.41,115.62,117.05,118.25,119.63,120.2,118.75,117.93,116.83,116.9,117.31,118.18,118.97,119.85,119.95,119.6,118.68,117.79,117.06,115.69,114.97,115.91,117.0,119.0,121.96,124.74,126.52,127.47,128.29,127.92,127.81,127.31,127.25,126.05,125.5,123.88,123.41,123.92,124.71,124.78,125.88,126.65,127.22,127.94];
+const MRK_MA20 = [81.68,81.98,82.23,82.4,82.4,82.18,82.1,82.05,82.02,81.81,81.62,81.49,81.31,81.25,81.26,81.32,81.54,81.78,81.95,81.98,82.08,82.21,82.28,82.39,82.51,82.76,83.01,83.29,83.46,83.69,83.9,84.07,84.3,84.49,84.61,84.61,84.45,84.3,84.11,83.95,83.72,83.38,83.11,82.84,82.52,82.29,82.01,81.93,82.23,82.5,82.73,82.96,83.11,83.23,83.35,83.51,83.74,83.92,84.07,84.19,84.35,84.65,85.03,85.43,85.91,86.35,86.83,86.98,86.8,86.64,86.48,86.16,85.98,85.88,85.79,85.81,85.86,86.17,86.54,86.99,87.39,87.72,88.16,88.53,88.92,89.44,90.06,90.99,91.89,92.82,93.61,94.54,95.46,96.28,96.98,97.61,98.12,98.45,98.83,99.2,99.57,99.84,99.97,100.26,100.56,100.91,101.14,101.18,101.29,101.38,101.59,101.8,102.01,102.34,102.8,103.28,103.98,104.63,105.14,105.54,106.08,106.71,107.19,107.63,108.13,108.35,108.51,108.56,108.62,108.63,108.74,108.99,109.34,109.76,110.23,110.79,111.34,111.69,112.09,112.64,113.06,113.58,114.22,114.83,115.36,116.02,116.8,117.63,118.35,118.97,119.75,120.3,120.63,120.85,120.74,120.54,120.3,120.27,120.22,120.05,119.87,119.57,119.29,118.93,118.55,118.14,117.73,117.36,117.2,117.18,116.97,116.81,116.83,116.86,117.1,117.35,117.46,117.77,118.09,118.36,118.59,118.82,118.92,118.97,119.21,119.36,119.2,119.03,118.79,118.44,117.97,117.56,117.1,116.51,116.08,115.69,115.38,114.9,114.38,113.88,113.44,113.06,112.84,112.73,112.35,112.12,112.21,112.21,112.28,112.8,113.28,113.79,114.23,114.71,114.86,114.99,115.07,115.4,115.83,116.23,116.65,116.98,117.35,117.63,117.81,117.94,118.0,118.04,118.02,117.88,117.92,118.19,118.62,119.16,119.82,120.31,121.05,121.38,121.78,122.11,122.38,122.6,122.77,122.85,123.29,123.91,124.51,125.04,125.58,125.97,126.47,126.75];
+const MRK_MA60 = [79.85,79.85,79.83,79.82,79.8,79.72,79.72,79.74,79.79,79.85,79.85,79.91,80.02,80.12,80.23,80.32,80.42,80.54,80.66,80.78,80.92,81.11,81.26,81.39,81.52,81.62,81.72,81.85,81.94,82.02,82.07,82.14,82.18,82.22,82.29,82.37,82.4,82.43,82.45,82.47,82.5,82.52,82.54,82.55,82.47,82.41,82.37,82.42,82.57,82.67,82.75,82.84,82.91,82.99,83.07,83.15,83.24,83.33,83.38,83.37,83.39,83.41,83.47,83.55,83.65,83.8,83.95,84.07,84.16,84.28,84.37,84.4,84.46,84.53,84.58,84.64,84.68,84.8,84.91,85.04,85.16,85.25,85.43,85.6,85.78,86.03,86.3,86.63,86.97,87.32,87.61,87.89,88.18,88.46,88.71,88.97,89.24,89.51,89.81,90.13,90.44,90.74,91.06,91.41,91.8,92.23,92.67,93.05,93.33,93.61,93.89,94.17,94.48,94.83,95.19,95.57,95.99,96.42,96.84,97.24,97.68,98.09,98.44,98.81,99.21,99.57,99.9,100.24,100.6,100.94,101.32,101.78,102.27,102.79,103.34,103.89,104.48,104.93,105.35,105.79,106.23,106.71,107.13,107.57,108.02,108.43,108.82,109.12,109.42,109.66,110.03,110.37,110.66,110.98,111.26,111.54,111.87,112.2,112.48,112.74,113.0,113.29,113.56,113.79,114.01,114.17,114.35,114.51,114.72,114.93,115.15,115.37,115.6,115.82,116.02,116.23,116.36,116.58,116.8,117.02,117.17,117.32,117.47,117.57,117.71,117.84,117.91,118.0,118.11,118.2,118.23,118.23,118.18,118.07,117.97,117.86,117.71,117.65,117.56,117.43,117.3,117.15,117.01,116.88,116.7,116.54,116.38,116.2,116.09,116.14,116.07,116.05,116.05,116.03,116.01,116.01,115.97,116.02,116.1,116.16,116.23,116.29,116.37,116.44,116.46,116.47,116.47,116.43,116.36,116.37,116.39,116.51,116.65,116.79,116.92,117.0,117.17,117.23,117.33,117.41,117.49,117.55,117.65,117.74,117.81,117.99,118.24,118.43,118.63,118.88,119.22,119.57];
+const MRK_MA120 = [83.77,83.65,83.52,83.46,83.39,83.31,83.24,83.19,83.14,83.09,83.05,83.03,83.01,82.96,82.92,82.86,82.81,82.75,82.71,82.66,82.61,82.56,82.5,82.43,82.35,82.25,82.16,82.08,82.01,81.92,81.84,81.75,81.66,81.58,81.5,81.41,81.32,81.26,81.2,81.15,81.09,81.01,80.95,80.89,80.82,80.8,80.77,80.82,80.88,80.98,81.07,81.15,81.22,81.31,81.39,81.45,81.51,81.56,81.6,81.61,81.62,81.63,81.65,81.69,81.72,81.76,81.84,81.9,81.98,82.06,82.11,82.16,82.24,82.32,82.4,82.48,82.55,82.67,82.78,82.91,83.04,83.18,83.34,83.5,83.65,83.82,84.01,84.24,84.46,84.67,84.84,85.01,85.18,85.34,85.5,85.67,85.82,85.97,86.13,86.3,86.47,86.63,86.8,86.98,87.14,87.32,87.52,87.74,87.95,88.14,88.32,88.51,88.7,88.91,89.13,89.36,89.62,89.88,90.11,90.31,90.53,90.75,90.96,91.18,91.43,91.68,91.93,92.15,92.38,92.61,92.84,93.09,93.37,93.66,93.96,94.27,94.58,94.86,95.13,95.42,95.69,95.98,96.28,96.59,96.9,97.23,97.56,97.88,98.2,98.49,98.82,99.13,99.42,99.72,99.98,100.26,100.56,100.86,101.15,101.44,101.72,102.01,102.31,102.6,102.91,103.2,103.51,103.78,104.03,104.27,104.52,104.77,105.04,105.33,105.61,105.9,106.18,106.5,106.82,107.13,107.43,107.71,107.96,108.19,108.46,108.7,108.91,109.12,109.36,109.57,109.77,110.0,110.23,110.43,110.65,110.88,111.1,111.29,111.46,111.61,111.77,111.93,112.07,112.22,112.36,112.48,112.6,112.66,112.75,112.9,113.05,113.21,113.36,113.51,113.63,113.77,113.92,114.11,114.29,114.45,114.61,114.79,114.97,115.12,115.23,115.32,115.41,115.47,115.54,115.65,115.77,115.94,116.13,116.31,116.47,116.61,116.77,116.9,117.07,117.21,117.33,117.44,117.56,117.66,117.76,117.91,118.08,118.22,118.37,118.54,118.73,118.9];
+
+// ─── SVG CANDLE + VOLUME CHART (실데이터 · 기간/MA 토글) ───
+(function(){
+  const svgCandle = document.getElementById('mrkCandleSvg');
+  const svgVol = document.getElementById('mrkVolumeSvg');
+  const toggle = document.getElementById('mrkRangeToggle');
+  const maToggle = document.getElementById('mrkMaToggle');
+  if(!svgCandle || !svgVol || !toggle) return;
+  const RANGES = {'1M':21,'3M':63,'6M':126,'1Y':252};
+  const NS = 'http://www.w3.org/2000/svg';
+  const UP='#2ecc71', DOWN='#e74c3c';
+  const maColors = {ma5:'#ff6b9d', ma20:'#9b59b6', ma60:'#f0c040', ma120:'#22d3ee'};
+  const maState = {ma5:true, ma20:true, ma60:true, ma120:true, pricelabels:true};
+  let currentRange = '1Y';
+
+  function draw(rangeKey){
+    currentRange = rangeKey;
+    const n = RANGES[rangeKey];
+    const data = MRK_DAILY.slice(-n);
+    const ma5 = MRK_MA5.slice(-n), ma20 = MRK_MA20.slice(-n), ma60 = MRK_MA60.slice(-n), ma120 = MRK_MA120.slice(-n);
+    while(svgCandle.firstChild) svgCandle.removeChild(svgCandle.firstChild);
+    while(svgVol.firstChild) svgVol.removeChild(svgVol.firstChild);
+
+    const W=720,H=240,pL=45,pR=12,pT=10,pB=20;
+    const cW=W-pL-pR,cH=H-pT-pB;
+    const highs=data.map(d=>d[2]), lows=data.map(d=>d[3]);
+    const maVals=[...ma5,...ma20,...ma60,...ma120].filter(v=>v!=null);
+    const mx=Math.max(...highs,...maVals), mn=Math.min(...lows,...maVals);
+    const pad=(mx-mn)*0.06 || mx*0.02;
+    const top=mx+pad, bot=mn-pad, rng=(top-bot)||1;
+    const py = v => pT + cH*(1-(v-bot)/rng);
+    const colW = cW/data.length;
+    const bodyW = Math.max(colW*0.62, 1);
+
+    for(let i=0;i<=3;i++){
+      const v = bot + rng*i/3;
+      const y = py(v);
+      const l=document.createElementNS(NS,'line');
+      l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+      l.setAttribute('stroke','rgba(255,255,255,.08)');l.setAttribute('stroke-width','1');
+      svgCandle.appendChild(l);
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x',pL-4);t.setAttribute('y',y+3);t.setAttribute('text-anchor','end');
+      t.setAttribute('font-size','9');t.setAttribute('fill','rgba(154,160,184,.8)');
+      t.textContent='$'+v.toFixed(0);
+      svgCandle.appendChild(t);
+    }
+
+    data.forEach((d,i)=>{
+      const [,o,h,l,c] = d;
+      const cx = pL + (i+0.5)*colW;
+      const up = c >= o;
+      const col = up ? UP : DOWN;
+      const wick=document.createElementNS(NS,'line');
+      wick.setAttribute('x1',cx);wick.setAttribute('x2',cx);
+      wick.setAttribute('y1',py(h));wick.setAttribute('y2',py(l));
+      wick.setAttribute('stroke',col);wick.setAttribute('stroke-width', Math.max(colW*0.12,0.6));
+      svgCandle.appendChild(wick);
+      const yTop = py(Math.max(o,c));
+      const yBot = py(Math.min(o,c));
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x', cx - bodyW/2);
+      rect.setAttribute('y', yTop);
+      rect.setAttribute('width', bodyW);
+      rect.setAttribute('height', Math.max(yBot-yTop, 1));
+      rect.setAttribute('fill', col);
+      svgCandle.appendChild(rect);
+    });
+
+    const drawMaLine = (vals, color) => {
+      let seg = [];
+      const flush = () => {
+        if (seg.length > 1) {
+          const pl = document.createElementNS(NS,'polyline');
+          pl.setAttribute('points', seg.join(' '));
+          pl.setAttribute('fill','none'); pl.setAttribute('stroke',color);
+          pl.setAttribute('stroke-width','1.7'); pl.setAttribute('opacity','0.95');
+          pl.setAttribute('stroke-linejoin','round'); pl.setAttribute('stroke-linecap','round');
+          svgCandle.appendChild(pl);
+        }
+        seg = [];
+      };
+      vals.forEach((v,i) => {
+        if (v == null) { flush(); return; }
+        seg.push(`${pL+(i+0.5)*colW},${py(v)}`);
+      });
+      flush();
+    };
+    if (maState.ma5) drawMaLine(ma5, maColors.ma5);
+    if (maState.ma20) drawMaLine(ma20, maColors.ma20);
+    if (maState.ma60) drawMaLine(ma60, maColors.ma60);
+    if (maState.ma120) drawMaLine(ma120, maColors.ma120);
+
+    if (maState.pricelabels) {
+    const closeIdx = data.length-1;
+    const closeVal = data[closeIdx][4];
+    const periodHigh = Math.max(...highs);
+    const periodLow = Math.min(...lows);
+    const highIdx = highs.indexOf(periodHigh);
+    const lowIdx = lows.indexOf(periodLow);
+    const markers = [
+      {idx: highIdx, v: periodHigh, color: UP, label:'최고', side:'above'},
+      {idx: lowIdx, v: periodLow, color: DOWN, label:'최저', side:'below'},
+      {idx: closeIdx, v: closeVal, color:'#60a5fa', label:'종가', side:'left'}
+    ];
+    markers.forEach(m=>{
+      const cx = pL + (m.idx+0.5)*colW;
+      const cy = py(m.v);
+      const dot=document.createElementNS(NS,'circle');
+      dot.setAttribute('cx',cx);dot.setAttribute('cy',cy);dot.setAttribute('r','3.5');
+      dot.setAttribute('fill',m.color);dot.setAttribute('stroke','#0f1117');dot.setAttribute('stroke-width','1.5');
+      svgCandle.appendChild(dot);
+
+      const labelText = `${m.label} $${m.v.toFixed(2)}`;
+      const labelW = labelText.length*5.2+6;
+      let tx, ty, anchor;
+      if (m.side === 'left') {
+        anchor = 'end'; tx = cx-7; ty = cy+3;
+      } else if (m.side === 'above') {
+        ty = cy-9;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      } else {
+        ty = cy+16;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      }
+      const bgX = anchor==='end' ? tx-labelW : anchor==='middle' ? tx-labelW/2 : tx;
+      const bg=document.createElementNS(NS,'rect');
+      bg.setAttribute('x', bgX);bg.setAttribute('y', ty-8);
+      bg.setAttribute('width', labelW);bg.setAttribute('height', 12);
+      bg.setAttribute('fill','rgba(15,17,23,0.85)');bg.setAttribute('rx','2');
+      svgCandle.appendChild(bg);
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x', tx);t.setAttribute('y', ty+2);
+      t.setAttribute('text-anchor',anchor);t.setAttribute('font-size','9');
+      t.setAttribute('font-weight','700');t.setAttribute('fill', m.color);
+      t.textContent = labelText;
+      svgCandle.appendChild(t);
+    });
+    }
+
+    const labelCount = Math.min(5, data.length);
+    for(let i=0;i<labelCount;i++){
+      const idx = Math.round(i*(data.length-1)/((labelCount-1)||1));
+      const cx = pL + (idx+0.5)*colW;
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x', Math.min(Math.max(cx,pL+10), W-20));
+      t.setAttribute('y', H-4);
+      t.setAttribute('text-anchor','middle');t.setAttribute('font-size','9');
+      t.setAttribute('fill','rgba(154,160,184,.8)');
+      t.textContent = data[idx][0].slice(2).replace(/-/g,'.');
+      svgCandle.appendChild(t);
+    }
+
+    const VW=720,VH=70,vpT=6,vpB=4;
+    const vcH=VH-vpT-vpB;
+    const maxV = Math.max(...data.map(d=>d[5]));
+    data.forEach((d,i)=>{
+      const [,o,,,c,v] = d;
+      const cx = pL + (i+0.5)*colW;
+      const up = c >= o;
+      const col = up ? 'rgba(46,204,113,0.55)' : 'rgba(231,76,60,0.55)';
+      const h = (v/maxV)*vcH;
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x', cx - bodyW/2);
+      rect.setAttribute('y', vpT + (vcH-h));
+      rect.setAttribute('width', bodyW);
+      rect.setAttribute('height', Math.max(h,1));
+      rect.setAttribute('fill', col);
+      svgVol.appendChild(rect);
+    });
+  }
+
+  toggle.querySelectorAll('.range-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      toggle.querySelectorAll('.range-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      draw(btn.dataset.range);
+    });
+  });
+
+  if (maToggle) {
+    maToggle.querySelectorAll('.ma-toggle-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const key = btn.dataset.ma;
+        maState[key] = !maState[key];
+        btn.classList.toggle('ma-off', !maState[key]);
+        draw(currentRange);
+      });
+    });
+  }
+
+  draw('1Y');
+})();
+
+new Chart(document.getElementById('revProfitChart'),{type:'bar',data:{labels:["Q2'24", "Q3'24", "Q4'24", "Q1'25", "Q2'25", "Q3'25", "Q4'25", "Q1'26"],datasets:[{label:'매출 ($B)',data:[16.112, 16.657, 15.624, 15.529, 15.806, 17.276, 16.4, 16.286],backgroundColor:'rgba(56,189,248,.45)',yAxisID:'y'},{label:'순이익 ($B)',data:[5.455, 3.157, 3.73, 5.079, 4.427, 5.785, 2.624, -4.24],backgroundColor:'rgba(46,204,113,.45)',yAxisID:'y'},{label:'EPS',data:[2.14, 1.24, 1.49, 2.01, 1.76, 2.32, 1.19, -1.72],type:'line',borderColor:'#f1c40f',yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true},y1:{position:'right',grid:{drawOnChartArea:false}}}}});
+new Chart(document.getElementById('peerChart'),{type:'bar',data:{labels:["MRK", "LLY", "JNJ", "PFE"],datasets:[{data:[36.9, 44.0, 29.3, 16.2],backgroundColor:['#38bdf8','#5c6282','#5c6282','#5c6282']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
+</script></body></html>
