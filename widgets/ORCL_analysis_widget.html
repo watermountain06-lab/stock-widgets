@@ -257,7 +257,7 @@
   <button class="nav-btn active" onclick="showSection('tech',event)">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund',event)">📊 기본적 분석</button>
   <button class="nav-btn" onclick="showSection('valuation',event)">⚖️ 밸류에이션</button>
-  <button class="nav-btn" onclick="showSection('us',event)">☁️ 클라우드 특화</button>
+  <button class="nav-btn" onclick="showSection('us',event)">🇺🇸 US 특화</button>
   <button class="nav-btn" onclick="showSection('news',event)">📰 시계열 뉴스</button>
   <button class="nav-btn" onclick="showSection('invest',event)">🎯 투자 포인트</button>
 </div>
@@ -500,7 +500,7 @@
 
 <!-- ===================== S5: 클라우드 특화 ===================== -->
 <div class="section" id="us">
-  <div class="section-title">클라우드 특화 — S&P500 상대 성과 & OCI·RPO 분석</div>
+  <div class="section-title">US 특화 — 미국 AI 클라우드 수주 · 투자회수 구조</div>
 
   <div class="rel-container">
     <div class="rel-title">S&P 500 대비 상대 성과 (52주)</div>
@@ -513,35 +513,35 @@
   </div>
 
   <div class="card">
-    <div class="card-title">OCI(IaaS) 성장 궤적 + Capex 투자 현황 ($B)</div>
+    <div class="card-title">OCI 성장·RPO의 질 — 수주를 매출로 전환하는 속도</div>
     <div class="chart-wrap" style="height:220px;"><canvas id="ociChart"></canvas></div>
     <div style="margin-top:10px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">
-      OCI Q4 FY26 $5.8B(+93%). Capex 분기 $16.5B로 급증 — AI 데이터센터 건설 투자. "현재 투자가 2027~2028 OCI 수익으로 전환" — 경영진 가이던스.
+      OCI Q4 FY26 $5.8B(+93%), RPO $638B(+363%)로 미국 AI 인프라 수요가 수주를 견인했다. 대형 AI 계약 중 고객 선불·고객 제공 GPU가 $75B여서 총 Capex만 볼 때보다 Oracle의 실제 자금 부담은 낮지만, 매출 인식 속도와 전력·데이터센터 가동이 핵심이다.
     </div>
   </div>
 
   <div class="card">
-    <div class="card-title">Stargate AI 파트너십 현황</div>
+    <div class="card-title">미국 AI 인프라 실행력 — 자본부담과 고객집중 점검</div>
     <div class="grid-2">
       <div>
-        <div style="font-size:12px;color:var(--text3);font-weight:600;margin-bottom:10px;">🤝 핵심 파트너십</div>
+        <div style="font-size:12px;color:var(--text3);font-weight:600;margin-bottom:10px;">📑 계약·수익 구조</div>
         <div class="zone-list">
-          <div class="zone-item"><span class="zone-label">OpenAI (Stargate)</span><div style="display:flex;align-items:center;gap:6px;"><span class="zone-val">4.5GW 용량</span><span class="zone-tag tag-s">핵심</span></div></div>
-          <div class="zone-item"><span class="zone-label">Microsoft Azure</span><div style="display:flex;align-items:center;gap:6px;"><span class="zone-val">멀티클라우드</span><span class="zone-tag tag-s">연동</span></div></div>
-          <div class="zone-item"><span class="zone-label">Meta (AI 훈련)</span><div style="display:flex;align-items:center;gap:6px;"><span class="zone-val">Llama 배포</span><span class="zone-tag tag-s">채택</span></div></div>
-          <div class="zone-item"><span class="zone-label">NVIDIA (GPU 공급)</span><div style="display:flex;align-items:center;gap:6px;"><span class="zone-val">H100/H200</span><span class="zone-tag tag-s">협력</span></div></div>
+          <div class="zone-item"><span class="zone-label">RPO</span><div style="display:flex;align-items:center;gap:6px;"><span class="zone-val">$638B · +363%</span><span class="zone-tag tag-s">가시성</span></div></div>
+          <div class="zone-item"><span class="zone-label">Q4 순증</span><div style="display:flex;align-items:center;gap:6px;"><span class="zone-val">+$85B QoQ</span><span class="zone-tag tag-s">수주</span></div></div>
+          <div class="zone-item"><span class="zone-label">고객 선투자 GPU</span><div style="display:flex;align-items:center;gap:6px;"><span class="zone-val">$75B</span><span class="zone-tag tag-s">완충</span></div></div>
+          <div class="zone-item"><span class="zone-label">FY26 FCF</span><div style="display:flex;align-items:center;gap:6px;"><span class="zone-val">-$23.7B</span><span class="zone-tag tag-r">부담</span></div></div>
         </div>
       </div>
       <div>
-        <div style="font-size:12px;color:var(--text3);font-weight:600;margin-bottom:10px;">🏗️ 인프라 현황</div>
+        <div style="font-size:12px;color:var(--text3);font-weight:600;margin-bottom:10px;">🏗️ 투자회수 체크</div>
         <div style="display:flex;flex-direction:column;gap:8px;">
           <div style="background:var(--bg3);padding:10px;border-radius:6px;">
-            <div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px;">데이터센터 건설 (FY26)</div>
-            <div style="font-size:11px;color:var(--text2);">Capex $52B 투입. 텍사스·NM·위스콘신·미시간 AI 팩토리 완공 진행 중. Sovereign Cloud 29개 운영.</div>
+            <div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px;">Capex와 현금흐름</div>
+            <div style="font-size:11px;color:var(--text2);">FY26 Capex $55.7B, 영업현금흐름 $32.0B. 선불·고객 제공 장비를 제외한 순현금 투입과 신규 용량 가동률을 함께 봐야 한다.</div>
           </div>
           <div style="background:var(--bg3);padding:10px;border-radius:6px;">
-            <div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px;">2030 전망</div>
-            <div style="font-size:11px;color:var(--text2);">OCI 단독 $100B+ 매출 목표. 클라우드 전체 매출 $80B+. Ellison "OCI는 AWS를 능가할 것".</div>
+            <div style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:3px;">핵심 리스크</div>
+            <div style="font-size:11px;color:var(--text2);">대형 AI 고객 집중, 전력·GPU 공급, 공사 지연, 장기계약의 매출 인식 속도가 기대에 못 미치면 높은 부채와 음의 FCF가 재평가를 제한한다.</div>
           </div>
         </div>
       </div>
