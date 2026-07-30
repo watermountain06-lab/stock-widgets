@@ -1,0 +1,491 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>NVS 종합 분석 위젯</title><script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script><style>
+  :root {
+    --bg: #0f1117;
+    --bg2: #1a1d27;
+    --bg3: #22263a;
+    --border: #2e3347;
+    --text: #e8eaf0;
+    --text2: #9aa0b8;
+    --text3: #5c6282;
+    --accent: #ef4444;
+    --accent2: #38bdf8;
+    --accent3: #4a0e1c;
+    --bull: #D85A30;
+    --bear: #185FA5;
+    --ma5: #ff6b9d;
+    --ma20: #9b59b6;
+    --ma60: #f0c040;
+    --ma120: #22d3ee;
+    --green: #2ecc71;
+    --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f;
+    --blue: #3498db;
+    --radius: 10px;
+    --shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #101a05 0%, #0f1117 40%, #1a1d27 100%);
+    border-bottom: 2px solid var(--accent3);
+    padding: 28px 32px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 240px; height: 240px;
+    background: radial-gradient(circle, rgba(118,185,0,0.14) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .ticker-block { display: flex; align-items: center; gap: 16px; }
+  .ticker-badge {
+    background: linear-gradient(135deg, var(--accent3), var(--accent));
+    color: #0f1117;
+    font-size: 13px; font-weight: 800;
+    padding: 5px 12px; border-radius: 6px;
+    letter-spacing: 1px;
+  }
+  .company-name { font-size: 22px; font-weight: 700; color: var(--text); }
+  .company-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .price-block { text-align: right; }
+  .price-main { font-size: 32px; font-weight: 800; color: var(--accent2); letter-spacing: -1px; }
+  .price-change { font-size: 13px; color: var(--red); font-weight: 600; }
+  .header-meta { display: flex; justify-content: space-between; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+  .meta-item { display: flex; flex-direction: column; }
+  .meta-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .meta-value { font-size: 14px; font-weight: 600; color: var(--text2); margin-top: 2px; }
+  .meta-value.highlight { color: var(--accent2); }
+
+  /* NAV */
+  .nav {
+    display: flex; justify-content: space-between; gap: 4px;
+    padding: 12px 32px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    background: none; border: none;
+    color: var(--text3); font-size: 12px; font-weight: 600;
+    padding: 7px 14px; border-radius: 20px;
+    cursor: pointer; white-space: nowrap;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .nav-btn:hover { color: var(--text); background: var(--bg3); }
+  .nav-btn.active { background: var(--accent3); color: var(--accent2); }
+
+  /* SECTIONS */
+  .section { display: none; padding: 28px 32px; }
+  .section.active { display: block; }
+  .section-title {
+    font-size: 16px; font-weight: 700;
+    color: var(--accent2);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::before {
+    content: '';
+    width: 4px; height: 18px;
+    background: var(--accent);
+    border-radius: 2px;
+    display: inline-block;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    margin-bottom: 16px;
+  }
+  .card-title { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; font-weight: 600; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+  /* CHART CONTAINERS */
+  .chart-wrap { position: relative; }
+  .chart-wrap canvas { max-width: 100%; }
+
+  /* PRICE CHART (SVG) */
+  .price-chart-container {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  /* STAT BOX */
+  .stat-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+  .stat-value { font-size: 22px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
+  .stat-sub { font-size: 11px; color: var(--text3); }
+  .stat-value.up { color: var(--green); }
+  .stat-value.down { color: var(--red); }
+  .stat-value.gold { color: var(--accent2); }
+
+  /* MA TABLE */
+  .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .ma-row:last-child { border-bottom: none; }
+  .ma-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+  .ma-name { display: flex; align-items: center; font-size: 13px; color: var(--text2); }
+  .ma-val { font-size: 13px; font-weight: 600; }
+  .ma-status { font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
+  .status-above { background: rgba(46,204,113,0.15); color: var(--green); }
+  .status-below { background: rgba(231,76,60,0.15); color: var(--red); }
+  .status-amber { background: rgba(240,192,64,0.18); color: var(--ma60); }
+
+  /* ZONE TAGS */
+  .zone-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .zone-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg3); border-radius: 6px; }
+  .zone-label { font-size: 12px; color: var(--text2); }
+  .zone-val { font-size: 13px; font-weight: 700; color: var(--accent2); }
+  .zone-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
+  .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
+  .tag-current { background: rgba(118,185,0,0.2); color: var(--accent2); }
+
+  /* VALUATION METER */
+  .val-item { margin-bottom: 18px; }
+  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
+  .val-track { height: 8px; background: var(--bg3); border-radius: 4px; position: relative; overflow: hidden; }
+  .val-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+  .val-labels { display: flex; justify-content: space-between; margin-top: 4px; }
+  .val-low { font-size: 10px; color: var(--green); }
+  .val-mid { font-size: 10px; color: var(--accent2); text-align: center; }
+  .val-high { font-size: 10px; color: var(--red); }
+  .stage-badge { font-size: 13px; padding: 2px 10px; border-radius: 12px; font-weight: 700; }
+  .stage-1 { background: rgba(46,204,113,0.2); color: #2ecc71; }
+  .stage-2 { background: rgba(39,174,96,0.2); color: #27ae60; }
+  .stage-3 { background: rgba(200,168,75,0.2); color: var(--accent2); }
+  .stage-4 { background: rgba(231,126,35,0.2); color: #e67e22; }
+  .stage-5 { background: rgba(231,76,60,0.2); color: var(--red); }
+  .stage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .stage-mini { text-align: center; padding: 16px 8px; border-radius: 8px; }
+  .stage-mini-num { font-size: 22px; font-weight: 700; }
+  .stage-mini-label { font-size: 12px; margin-top: 4px; }
+
+  /* NEWS TIMELINE */
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--event-major); border: 2px solid var(--bg); }
+  .tl-dot.red { background: var(--red); }
+  .tl-dot.green { background: var(--green); }
+  .tl-dot.blue { background: var(--blue); }
+  .tl-dot.neutral { background: var(--event-neutral); }
+  .tl-date { font-size: 10px; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+  .tl-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 3px 0; }
+  .tl-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .tl-source { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 11px; font-weight: 600; color: var(--accent2); text-decoration: none; }
+  .tl-source:hover { text-decoration: underline; }
+
+  /* BULL/BEAR */
+  .bull-bear { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .bb-box { background: var(--bg3); border-radius: var(--radius); padding: 16px; }
+  .bb-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .bb-bull { color: var(--bull); }
+  .bb-bear { color: var(--bear); }
+  .bb-item { display: flex; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .bb-icon { flex-shrink: 0; margin-top: 2px; }
+
+  /* GROWTH DRIVER */
+  .driver-item { display: flex; gap: 12px; padding: 12px; background: var(--bg3); border-radius: 8px; margin-bottom: 10px; }
+  .driver-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent3); color: var(--accent2); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .driver-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .driver-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
+
+  /* PER SHARE */
+  .per-share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .ps-card { background: var(--bg3); border-radius: 8px; padding: 16px; text-align: center; }
+  .ps-icon { font-size: 22px; margin-bottom: 6px; }
+  .ps-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .ps-value { font-size: 22px; font-weight: 800; color: var(--accent2); }
+  .ps-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
+
+  /* SP500 RELATIVE */
+  .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+  .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
+
+  /* DISCLAIMER */
+  .disclaimer {
+    margin: 28px 32px 16px;
+    padding: 12px 16px;
+    background: rgba(118,185,0,0.06);
+    border: 1px solid var(--accent3);
+    border-radius: 8px;
+    font-size: 11px;
+    color: var(--text3);
+    line-height: 1.6;
+  }
+  .scenario-card { border-radius: 8px; padding: 14px; }
+
+  @media (max-width: 600px) {
+    .header { padding: 20px 16px; }
+    .section { padding: 20px 16px; }
+    .nav { padding: 10px 16px; }
+    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+    .bull-bear { grid-template-columns: 1fr; }
+    .per-share-grid { grid-template-columns: 1fr 1fr; }
+    .stage-grid { grid-template-columns: 1fr 1fr; }
+    .price-main { font-size: 24px; }
+  }
+  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; margin: 12px 32px 0; }
+  .range-toggle { display: flex; gap: 4px; }
+  .range-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--text3); font-size: 11px; font-weight: 700; padding: 4px 11px; border-radius: 999px; cursor: pointer; transition: all .15s; }
+  .range-btn:hover { color: var(--text); border-color: var(--text2); }
+  .range-btn.active { background: var(--accent3); color: var(--accent2); border-color: var(--accent); }
+  .ma-toggle-btn { background: var(--bg3); border: 1px solid; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer; transition: all .15s; }
+  .ma-toggle-btn:hover { filter: brightness(1.2); }
+  .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
+  body { padding-top: 46px; }
+  .back-bar { position: fixed; top: 0; left: 0; right: 0; height: 46px; background: rgba(10,11,22,0.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.25); }
+  .back-bar a { color: var(--text2); font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+  .back-bar a:hover { color: var(--accent2); }
+  .back-bar .brand-icon { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 6px; background: var(--accent3); color: var(--accent2); font-size: 12px; }
+  .back-bar .back-bar-ticker { font-size: 11px; color: var(--text3); font-weight: 600; letter-spacing: 0.4px; }
+  .back-bar-nav { display: flex; align-items: center; gap: 10px; }
+  .peer-nav-link { color: var(--text2); font-size: 11px; font-weight: 700; text-decoration: none; padding: 4px 9px; border-radius: 6px; border: 1px solid var(--border); transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+  .peer-nav-link:hover { color: var(--accent2); border-color: var(--accent); }
+  .peer-nav-link.disabled { color: var(--text3); opacity: 0.4; pointer-events: none; border-color: var(--border); }
+</style></head><body><div class="back-bar"><a href="../index.html"><span class="brand-icon">◧</span>US Stock Widgets · 전체 종목 목록</a><div class="back-bar-nav"><a class="peer-nav-link" href="NFLX_analysis_widget.html">◀ NFLX</a><span class="back-bar-ticker">NVS · 시총 43위</span><a class="peer-nav-link" href="PLTR_analysis_widget.html">PLTR ▶</a></div></div>
+<div class="today-banner">📌 <strong>2026년 10월 Q3 실적 예정</strong> · 데이터 기준일 2026.07.29 · 저장소 연속 순위 43위</div>
+<div class="header"><div class="header-top"><div class="ticker-block"><div><div style="display:flex;gap:10px;"><span class="ticker-badge">NVS</span><span style="font-size:11px;color:var(--accent2);">NYSE ADR · Health Care</span></div><div class="company-name">Novartis AG</div><div class="company-sub">Kisqali·Kesimpta·Pluvicto 등 혁신의약품에 집중하는 스위스 제약사</div></div></div><div class="price-block"><div class="price-main">$158.83</div><div class="price-change" style="color:var(--red);">▼ -0.64% (2026.07.29 기준)</div><div style="font-size:11px;color:var(--text3);">52주 $112.34–$170.46</div></div></div><div class="header-meta"><div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$314B</span></div><div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Health Care</span></div><div class="meta-item"><span class="meta-label">P/E</span><span class="meta-value">17.7x</span></div><div class="meta-item"><span class="meta-label">EPS TTM</span><span class="meta-value">$8.97</span></div><div class="meta-item"><span class="meta-label">연간 배당</span><span class="meta-value">$4.15</span></div></div></div>
+<div class="nav"><button class="nav-btn active" onclick="showSection('tech',event)">📈 기술적 분석</button><button class="nav-btn" onclick="showSection('fund',event)">📊 기본적 분석</button><button class="nav-btn" onclick="showSection('valuation',event)">⚖️ 밸류에이션</button><button class="nav-btn" onclick="showSection('us',event)">🇺🇸 US 특화</button><button class="nav-btn" onclick="showSection('news',event)">📰 시계열 뉴스</button><button class="nav-btn" onclick="showSection('invest',event)">🎯 투자 포인트</button></div>
+<div id="tech" class="section active"><div class="section-title">기술적 분석 — 최신 252 거래일</div><div class="price-chart-container"><div style="display:flex;justify-content:space-between;margin-bottom:10px;"><div class="range-toggle" id="nvsRangeToggle"><button class="range-btn" data-range="1M">1개월</button><button class="range-btn" data-range="3M">3개월</button><button class="range-btn" data-range="6M">6개월</button><button class="range-btn active" data-range="1Y">1년</button></div><div id="nvsMaToggle" style="display:flex;gap:8px;"><button class="ma-toggle-btn" data-ma="ma5" style="color:var(--ma5);border-color:var(--ma5);">● MA5</button><button class="ma-toggle-btn" data-ma="ma20" style="color:var(--ma20);border-color:var(--ma20);">● MA20</button><button class="ma-toggle-btn" data-ma="ma60" style="color:var(--ma60);border-color:var(--ma60);">● MA60</button><button class="ma-toggle-btn" data-ma="ma120" style="color:var(--ma120);border-color:var(--ma120);">● MA120</button><button class="ma-toggle-btn" data-ma="pricelabels" style="color:var(--text2);border-color:var(--text2);">◆ 가격라벨</button></div></div><svg id="nvsCandleSvg" viewBox="0 0 720 240"></svg><svg id="nvsVolumeSvg" viewBox="0 0 720 70"></svg></div><div class="grid-2"><div class="card"><div class="card-title">핵심 가격대</div><div class="zone-list"><div class="zone-item"><span class="zone-label">52주 최고</span><span class="zone-val">$170.46 (2026-02-27)</span><span class="zone-tag tag-resist">저항선</span></div><div class="zone-item"><span class="zone-label">현재가</span><span class="zone-val">$158.83</span><span class="zone-tag tag-current">현재</span></div><div class="zone-item"><span class="zone-label">MA120</span><span class="zone-val">$153.31</span><span class="zone-tag tag-support">지지선</span></div><div class="zone-item"><span class="zone-label">52주 최저</span><span class="zone-val">$112.34 (2025-08-01)</span><span class="zone-tag tag-support">강지지</span></div><div class="zone-item"><span class="zone-label">52주 수익률</span><span class="zone-val" style="color:var(--green);">+35.5%</span></div></div></div><div class="card"><div class="card-title">이동평균선 현황</div><div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5</span><span class="ma-val">$157.19</span><span class="ma-status status-above">현재가 상회</span></div><div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20</span><span class="ma-val">$154.69</span><span class="ma-status status-above">현재가 상회</span></div><div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60</span><span class="ma-val">$151.40</span><span class="ma-status status-above">현재가 상회</span></div><div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120</span><span class="ma-val">$153.31</span><span class="ma-status status-above">현재가 상회</span></div></div></div><div class="card"><div class="card-title">구간별 패턴 분석</div><div class="grid-4"><div style="background:var(--bg3);padding:12px;border-radius:8px;border-top:3px solid var(--green);"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">2025.07~10 · $117→$130</div><div style="font-size:12px;color:var(--text2);">종가 기준 +11.2% 변동. 실적 기대와 시장 위험선호가 가격대에 반영된 구간.</div></div><div style="background:var(--bg3);padding:12px;border-radius:8px;border-top:3px solid var(--green);"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">2025.10~2026.01 · $129→$152</div><div style="font-size:12px;color:var(--text2);">종가 기준 +17.9% 변동. 실적 기대와 시장 위험선호가 가격대에 반영된 구간.</div></div><div style="background:var(--bg3);padding:12px;border-radius:8px;border-top:3px solid var(--ma60);"><div style="font-size:11px;color:var(--ma60);font-weight:700;margin-bottom:6px;">2026.01~04 · $148→$146</div><div style="font-size:12px;color:var(--text2);">종가 기준 -1.6% 변동. 실적 기대와 시장 위험선호가 가격대에 반영된 구간.</div></div><div style="background:var(--bg3);padding:12px;border-radius:8px;border-top:3px solid var(--green);"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">2026.05~07 · $143→$159</div><div style="font-size:12px;color:var(--text2);">종가 기준 +11.1% 변동. 실적 기대와 시장 위험선호가 가격대에 반영된 구간.</div></div></div></div><div style="display:flex;gap:8px;flex-wrap:wrap;"><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,.15);color:var(--green);">Q2 매출 $14.41B</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,.15);color:var(--green);">Core 마진 41.2%</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,.15);color:var(--green);">Q2 FCF $5.56B</span></div></div>
+<div id="fund" class="section"><div class="section-title">기본적 분석 — 분기 재무제표</div><div class="card"><div class="card-title">8개 분기 매출·순이익·EPS</div><div class="chart-wrap" style="height:310px;"><canvas id="nvsRevChart"></canvas></div></div><div class="grid-4"><div class="stat-box"><div class="stat-label">최신 매출</div><div class="stat-value gold">$14.41B</div><div class="stat-sub">공식 최신 분기</div></div><div class="stat-box"><div class="stat-label">매출 성장</div><div class="stat-value up">+3%</div><div class="stat-sub">전년 동기 대비</div></div><div class="stat-box"><div class="stat-label">수익성</div><div class="stat-value">41.2% core</div><div class="stat-sub">공식 발표 기준</div></div><div class="stat-box"><div class="stat-label">현금흐름</div><div class="stat-value">$5.56B Q2</div><div class="stat-sub">최신 공시 기준</div></div></div><div class="card"><div class="card-title">핵심 성장 동력 3가지</div><div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">Q2 매출 $14.41B</div><div class="driver-desc">환율 포함 3% 성장하며 성장 브랜드가 특허 만료 영향을 상쇄했다.</div></div></div><div class="driver-item"><div class="driver-num">2</div><div><div class="driver-title">Core 마진 41.2%</div><div class="driver-desc">Core 영업이익 $5.94B로 높은 수익성을 유지했다.</div></div></div><div class="driver-item"><div class="driver-num">3</div><div><div class="driver-title">Q2 FCF $5.56B</div><div class="driver-desc">강한 현금창출이 연구개발·배당·자사주를 뒷받침한다.</div></div></div></div><div class="card"><div class="card-title">다음 실적 체크포인트</div><div class="zone-list"><div class="zone-item"><span class="zone-label">1. Kisqali·Kesimpta·Pluvicto 성장률</span></div><div class="zone-item"><span class="zone-label">2. Entresto 제네릭 침식 규모</span></div><div class="zone-item"><span class="zone-label">3. 2026 매출·core 영업이익 가이던스 유지 여부</span></div></div></div></div>
+<div id="valuation" class="section"><div class="section-title">밸류에이션</div><div class="grid-2"><div class="card"><div class="card-title">멀티플 5단계 평가</div><div class="val-item"><div class="val-header"><span class="val-name">Forward PER</span><span class="val-number">17.0x</span><span class="stage-badge stage-3">3단계 적정</span></div><div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div><div class="val-labels"><span class="val-low">저 12x</span><span class="val-mid">적정 17x</span><span class="val-high">고 23x</span></div></div><div class="val-item"><div class="val-header"><span class="val-name">EV/EBITDA</span><span class="val-number">14.3x</span><span class="stage-badge stage-3">3단계 적정</span></div><div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div><div class="val-labels"><span class="val-low">저 9x</span><span class="val-mid">적정 14x</span><span class="val-high">고 19x</span></div></div><div class="val-item"><div class="val-header"><span class="val-name">P/S</span><span class="val-number">5.4x</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 4x</span><span class="val-high">고 6x</span></div></div><div class="val-item"><div class="val-header"><span class="val-name">FCF 수익률</span><span class="val-number">5.6%</span><span class="stage-badge stage-2">2단계 낮음</span></div><div class="val-track"><div class="val-fill" style="width:38%;background:linear-gradient(90deg,#27ae60,#f0c040);"></div></div><div class="val-labels"><span class="val-low">저 3%</span><span class="val-mid">적정 5%</span><span class="val-high">고 7%</span></div></div><div class="val-item"><div class="val-header"><span class="val-name">배당수익률</span><span class="val-number">2.6%</span><span class="stage-badge stage-3">3단계 적정</span></div><div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div><div class="val-labels"><span class="val-low">저 2%</span><span class="val-mid">적정 3%</span><span class="val-high">고 4%</span></div></div></div><div class="card"><div class="card-title">피어 비교 (P/E)</div><div class="chart-wrap" style="height:270px;"><canvas id="nvsPeerChart"></canvas></div><div style="font-size:12px;color:var(--text2);margin-top:12px;">현재 주가 $158.83 기준으로 성장률·현금흐름과 멀티플을 함께 비교했다.</div></div></div><div class="card"><div class="card-title">밸류에이션 5단계</div><div class="stage-grid"><div class="stage-mini stage-1"><div class="stage-mini-num">0</div><div class="stage-mini-label">1단계</div></div><div class="stage-mini stage-2"><div class="stage-mini-num">1</div><div class="stage-mini-label">2단계</div></div><div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">3단계</div></div><div class="stage-mini stage-4"><div class="stage-mini-num">1</div><div class="stage-mini-label">4단계</div></div><div class="stage-mini stage-5"><div class="stage-mini-num">0</div><div class="stage-mini-label">5단계</div></div></div></div><div class="card"><div class="card-title">Per-Share</div><div class="per-share-grid"><div class="ps-card"><div class="ps-label">현재가</div><div class="ps-value">$158.83</div><div class="ps-sub">2026.07.29 종가</div></div><div class="ps-card"><div class="ps-label">EPS TTM</div><div class="ps-value">$8.97</div><div class="ps-sub">최근 4개 분기</div></div><div class="ps-card"><div class="ps-label">배당</div><div class="ps-value">$4.15</div><div class="ps-sub">연환산 기준</div></div><div class="ps-card"><div class="ps-label">목표가</div><div class="ps-value">$168</div><div class="ps-sub">Street 평균</div></div></div></div><div class="grid-2"><div class="card"><div class="card-title" style="color:var(--green);">저평가 근거</div><div style="font-size:12px;color:var(--text2);">환율 포함 3% 성장하며 성장 브랜드가 특허 만료 영향을 상쇄했다. 현금창출과 성장 지속 시 기본 시나리오 $165가 정당화된다.</div></div><div class="card"><div class="card-title" style="color:var(--accent);">주의 요소</div><div style="font-size:12px;color:var(--text2);">특허: Entresto 제네릭 침식 현재 주가는 실적 실행에 민감하다.</div></div></div><div class="card"><div class="card-title">시나리오별 공정가치 분석</div><div class="scenario-card" style="background:var(--bg3);margin-bottom:10px;border-left:4px solid var(--red);"><strong>Bear $135</strong><div style="font-size:12px;color:var(--text2);">성장 둔화와 멀티플 정상화</div></div><div class="scenario-card" style="background:var(--bg3);margin-bottom:10px;border-left:4px solid var(--ma60);"><strong>Base $165</strong><div style="font-size:12px;color:var(--text2);">현재 성장과 마진 유지</div></div><div class="scenario-card" style="background:var(--bg3);margin-bottom:10px;border-left:4px solid var(--green);"><strong>Bull $190</strong><div style="font-size:12px;color:var(--text2);">성장 가속과 실행 프리미엄</div></div></div></div>
+<div id="us" class="section"><div class="section-title">US 특화 분석</div><div class="rel-container"><div class="rel-title">S&P 500 대비</div><div class="grid-3"><div class="stat-box"><div class="stat-label">NVS 52주</div><div class="stat-value up">+35.5%</div></div><div class="stat-box"><div class="stat-label">S&P 500 52주</div><div class="stat-value">16.8%</div></div><div class="stat-box"><div class="stat-label">알파</div><div class="stat-value up">+18.7%p</div></div></div><div class="zone-list"><div class="zone-item"><span class="zone-label">S&P 500 내 비중</span><span class="zone-val">약 0.28%</span></div><div class="zone-item"><span class="zone-label">베타</span><span class="zone-val">0.55</span></div></div></div><div class="grid-2"><div class="card"><div class="card-title">핵심 투자 논리</div><div style="font-size:13px;color:var(--text2);line-height:1.8;">Kisqali·Kesimpta·Pluvicto의 볼륨 성장과 40%대 core 마진이 방어적 복리를 만든다. 다만 Entresto 제네릭 침식과 파이프라인 임상 결과가 재평가 속도를 좌우한다.</div></div><div class="card"><div class="card-title">Street 컨센서스</div><div class="zone-list"><div class="zone-item"><span class="zone-label">분석가·매수 비율</span><span class="zone-val">8명 · 매수 50%</span></div><div class="zone-item"><span class="zone-label">평균 목표가</span><span class="zone-val">$168</span></div><div class="zone-item"><span class="zone-label">상승여력</span><span class="zone-val">+5.8%</span></div></div></div></div></div>
+<div id="news" class="section"><div class="section-title">시계열 뉴스</div><div class="card"><div class="timeline"><div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2026.07.21</div><div class="tl-title">Q2 매출 $14.41B</div><div class="tl-desc">성장 브랜드가 매출을 3% 끌어올렸다.</div><a class="tl-source" href="https://www.novartis.com/news/media-releases/novartis-delivered-sales-growth-q2-and-further-advanced-pipeline-full-year-guidance-reaffirmed" target="_blank" rel="noopener">공식 자료 보기 →</a></div><div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2026.07.21</div><div class="tl-title">연간 가이던스 재확인</div><div class="tl-desc">제네릭 역풍 속에서도 기존 전망을 유지했다.</div><a class="tl-source" href="https://www.novartis.com/news/media-releases/novartis-delivered-sales-growth-q2-and-further-advanced-pipeline-full-year-guidance-reaffirmed" target="_blank" rel="noopener">공식 자료 보기 →</a></div><div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2026.07.21</div><div class="tl-title">Q2 FCF $5.56B</div><div class="tl-desc">높은 현금전환율을 이어갔다.</div><a class="tl-source" href="https://www.novartis.com/news/media-releases/novartis-delivered-sales-growth-q2-and-further-advanced-pipeline-full-year-guidance-reaffirmed" target="_blank" rel="noopener">공식 자료 보기 →</a></div><div class="tl-item"><div class="tl-dot neutral"></div><div class="tl-date">2026.04.28</div><div class="tl-title">Q1 매출 $13.11B</div><div class="tl-desc">환율 제외 매출은 5% 감소했다.</div><a class="tl-source" href="https://www.novartis.com/news/media-releases/novartis-delivered-sales-growth-q2-and-further-advanced-pipeline-full-year-guidance-reaffirmed" target="_blank" rel="noopener">공식 자료 보기 →</a></div><div class="tl-item"><div class="tl-dot neutral"></div><div class="tl-date">2026.02.04</div><div class="tl-title">2025 core 마진 40%</div><div class="tl-desc">2026 저성장 가이던스의 기준점을 제시했다.</div><a class="tl-source" href="https://www.novartis.com/news/media-releases/novartis-delivered-sales-growth-q2-and-further-advanced-pipeline-full-year-guidance-reaffirmed" target="_blank" rel="noopener">공식 자료 보기 →</a></div></div></div><div class="card"><div class="card-title">CEO 인용</div><div style="font-size:14px;color:var(--text2);">“2분기 매출 성장을 달성하고 파이프라인을 진전시켰으며 연간 가이던스를 재확인했다.” — Vas Narasimhan, CEO</div><a class="tl-source" href="https://www.novartis.com/news/media-releases/novartis-delivered-sales-growth-q2-and-further-advanced-pipeline-full-year-guidance-reaffirmed" target="_blank" rel="noopener">공식 출처 →</a></div></div>
+<div id="invest" class="section"><div class="section-title">핵심 투자 포인트</div><div class="grid-2"><div class="card"><div class="card-title">핵심 논리</div><div style="font-size:13px;color:var(--text2);">Kisqali·Kesimpta·Pluvicto의 볼륨 성장과 40%대 core 마진이 방어적 복리를 만든다. 다만 Entresto 제네릭 침식과 파이프라인 임상 결과가 재평가 속도를 좌우한다.</div></div><div class="card"><div class="card-title">실적 체크</div><div style="font-size:12px;color:var(--text2);"><div>① Kisqali·Kesimpta·Pluvicto 성장률</div><div>② Entresto 제네릭 침식 규모</div><div>③ 2026 매출·core 영업이익 가이던스 유지 여부</div></div></div><div class="card"><div class="card-title">밸류에이션 결론</div><div style="font-size:13px;color:var(--ma60);">성장 가시성과 가격 규율을 함께 확인</div></div><div class="card"><div class="card-title">리스크 관리</div><div style="font-size:12px;color:var(--text2);">특허: Entresto 제네릭 침식</div></div></div><div class="card"><div class="bull-bear"><div class="bb-box"><div class="bb-title bb-bull">🐂 Bull Case</div><div class="bb-item"><span class="bb-icon">•</span><span><strong>브랜드:</strong> Kisqali·Kesimpta·Pluvicto 성장</span></div><div class="bb-item"><span class="bb-icon">•</span><span><strong>마진:</strong> Q2 core 영업이익률 41.2%</span></div><div class="bb-item"><span class="bb-icon">•</span><span><strong>현금:</strong> Q2 FCF $5.56B</span></div><div class="bb-item"><span class="bb-icon">•</span><span><strong>파이프라인:</strong> 방사성리간드·면역 분야 확장</span></div><div class="bb-item"><span class="bb-icon">•</span><span><strong>방어력:</strong> 글로벌 의약품 수요의 낮은 경기민감도</span></div></div><div class="bb-box"><div class="bb-title bb-bear">🐻 Bear Case</div><div class="bb-item"><span class="bb-icon">•</span><span><strong>특허:</strong> Entresto 제네릭 침식</span></div><div class="bb-item"><span class="bb-icon">•</span><span><strong>임상:</strong> 후기 파이프라인 실패 가능성</span></div><div class="bb-item"><span class="bb-icon">•</span><span><strong>가격:</strong> 미국·유럽 약가 규제</span></div><div class="bb-item"><span class="bb-icon">•</span><span><strong>환율:</strong> ADR 가격과 스위스프랑 변동</span></div><div class="bb-item"><span class="bb-icon">•</span><span><strong>집중도:</strong> 핵심 성장 브랜드 의존</span></div></div></div></div><div class="card"><div class="card-title">목표가 밴드</div><div class="zone-list"><div class="zone-item"><span class="zone-label">Bear / Base / Bull</span><span class="zone-val">$135 / $165 / $190</span></div><div class="zone-item"><span class="zone-label">애널리스트 투자의견 분포</span><span class="zone-val">8명 · 매수 50%</span></div></div><div style="height:8px;background:var(--bg3);border-radius:8px;margin-top:12px;"><div style="height:100%;width:70%;background:linear-gradient(90deg,#2ecc71,#f0c040);border-radius:8px;"></div></div></div><div class="card"><div class="card-title">5개 분석 종합</div><div class="zone-list"><div class="zone-item"><span class="zone-label">기술적</span><span class="zone-val" style="color:var(--green);">상승 추세</span></div><div class="zone-item"><span class="zone-label">펀더멘털</span><span class="zone-val" style="color:var(--green);">성장 지속</span></div><div class="zone-item"><span class="zone-label">밸류에이션</span><span class="zone-val" style="color:var(--ma60);">프리미엄 점검</span></div><div class="zone-item"><span class="zone-label">상대성과</span><span class="zone-val" style="color:var(--green);">+18.7%p</span></div><div class="zone-item"><span class="zone-label">리스크</span><span class="zone-val" style="color:var(--red);">실행 확인 필요</span></div></div></div><div class="card"><div class="card-title">투자의견 요약</div><div style="display:flex;gap:22px;flex-wrap:wrap;font-size:12px;color:var(--text2);"><span>📅 <strong>다음 실적</strong> 2026년 10월 Q3 실적 예정</span><span><strong>투자의견</strong> 8명 · 매수 50%</span><span><strong>목표주가</strong> $168 (+5.8%)</span><span><strong>결론</strong> 성장 확인·가격 규율 필요</span></div></div></div>
+<div class="disclaimer">본 자료는 정보 제공 목적이며 투자 권유가 아닙니다. 가격은 2026년 7월 29일 완료 세션 기준이며 컨센서스는 변동될 수 있습니다.</div><script>function showSection(id,e){document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".nav-btn").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");if(e)e.currentTarget.classList.add("active");renderCharts(id);}
+const NVS_DAILY = [["2025-07-29",116.69,117.78,116.47,117.22,1449100],["2025-07-30",117.18,117.61,116.3,116.63,1415100],["2025-07-31",115.7,116.12,113.45,113.74,1803300],["2025-08-01",112.4,115.54,112.34,115.3,1927800],["2025-08-04",116.19,117.87,115.92,117.83,2389700],["2025-08-05",118.05,118.38,117.54,117.73,1447300],["2025-08-06",115.0,115.44,113.48,113.5,2016700],["2025-08-07",114.52,116.0,114.38,115.92,1326600],["2025-08-08",115.95,116.97,115.75,116.84,1585000],["2025-08-11",118.07,118.86,117.54,118.55,2612500],["2025-08-12",118.42,119.43,118.34,119.31,1168800],["2025-08-13",119.97,121.55,119.97,121.2,1088300],["2025-08-14",120.88,122.5,120.78,122.09,1212700],["2025-08-15",122.66,124.31,122.56,124.21,1179400],["2025-08-18",123.79,124.48,123.79,124.01,1148100],["2025-08-19",124.77,125.62,124.68,124.95,1028200],["2025-08-20",126.54,127.68,126.46,127.25,1279200],["2025-08-21",126.7,127.47,126.58,126.82,807400],["2025-08-22",127.46,128.03,126.86,126.98,1339300],["2025-08-25",126.86,126.95,124.99,125.04,706700],["2025-08-26",126.31,126.84,125.75,126.64,1337800],["2025-08-27",126.53,127.07,126.26,126.89,697700],["2025-08-28",126.36,126.88,125.82,126.47,677900],["2025-08-29",126.25,126.94,126.05,126.55,761200],["2025-09-02",126.07,126.79,125.66,126.64,899300],["2025-09-03",126.96,128.44,126.96,128.23,1289200],["2025-09-04",129.07,129.21,128.41,128.42,1486600],["2025-09-05",129.82,130.46,129.15,129.73,1339500],["2025-09-08",128.55,129.07,127.83,128.71,1034300],["2025-09-09",128.32,128.58,127.9,128.05,1009000],["2025-09-10",127.29,127.29,126.09,126.55,1002000],["2025-09-11",127.52,128.05,127.35,127.7,920700],["2025-09-12",123.86,125.14,123.47,124.12,1861300],["2025-09-15",123.21,123.53,122.32,123.31,1141700],["2025-09-16",122.97,123.36,122.68,122.78,954800],["2025-09-17",122.29,122.99,122.26,122.47,1291900],["2025-09-18",122.0,122.76,121.68,122.29,1409500],["2025-09-19",123.34,123.51,122.54,122.93,1284700],["2025-09-22",123.5,124.01,123.19,123.36,992400],["2025-09-23",122.99,123.4,122.54,122.82,755000],["2025-09-24",122.53,123.31,122.37,123.0,691900],["2025-09-25",123.97,124.14,122.21,122.23,1400400],["2025-09-26",123.0,123.86,122.78,123.65,915200],["2025-09-29",123.35,124.6,123.2,124.1,1217300],["2025-09-30",123.89,128.51,123.83,128.24,2188800],["2025-10-01",129.0,131.96,128.94,131.72,3358600],["2025-10-02",131.02,131.52,129.97,130.97,1713000],["2025-10-03",132.24,133.37,131.95,132.39,1415300],["2025-10-06",132.26,133.55,132.06,132.25,1376800],["2025-10-07",132.12,132.55,131.32,131.55,942400],["2025-10-08",132.71,133.16,132.26,132.31,3142000],["2025-10-09",132.6,132.92,130.99,131.06,1657800],["2025-10-10",131.82,131.87,129.93,130.03,2289600],["2025-10-13",129.62,130.01,128.83,129.12,1994600],["2025-10-14",129.57,130.49,129.32,130.26,1559400],["2025-10-15",128.24,130.41,128.18,129.97,1454200],["2025-10-16",129.88,131.19,129.65,130.77,1169100],["2025-10-17",130.57,132.44,130.41,131.43,1326300],["2025-10-20",131.41,132.21,130.6,131.79,1382500],["2025-10-21",131.33,131.77,130.88,131.34,734800],["2025-10-22",131.06,132.33,131.06,131.43,1029000],["2025-10-23",130.82,131.68,130.62,131.64,1670200],["2025-10-24",131.53,131.54,130.28,130.36,1220000],["2025-10-27",128.0,130.17,127.08,129.14,2578900],["2025-10-28",125.52,125.75,123.06,123.43,4630700],["2025-10-29",123.29,123.93,121.57,121.8,2582400],["2025-10-30",122.65,123.33,121.98,122.61,2358500],["2025-10-31",123.41,124.15,122.57,123.79,1655500],["2025-11-03",123.08,124.05,122.86,123.86,1657100],["2025-11-04",123.51,125.46,123.51,125.01,1510000],["2025-11-05",124.53,125.92,124.47,125.5,1260100],["2025-11-06",126.27,127.11,126.07,126.57,1119500],["2025-11-07",126.47,126.96,126.0,126.35,1417700],["2025-11-10",126.69,127.28,126.29,127.2,1224600],["2025-11-11",128.81,130.69,128.72,130.5,1594200],["2025-11-12",130.92,132.3,130.8,132.29,1290500],["2025-11-13",131.88,134.0,131.81,131.91,1603700],["2025-11-14",132.46,132.76,130.3,131.26,1822800],["2025-11-17",132.39,133.19,131.46,131.55,1744000],["2025-11-18",127.83,128.7,126.94,128.01,2003100],["2025-11-19",128.21,128.4,126.31,127.31,1716200],["2025-11-20",125.63,125.63,123.24,124.36,2417200],["2025-11-21",125.88,127.89,125.88,127.31,2200000],["2025-11-24",127.44,128.14,126.5,126.54,1712300],["2025-11-25",128.75,130.47,128.75,130.26,2017800],["2025-11-26",130.16,131.19,129.85,130.44,1312000],["2025-11-28",130.21,130.51,129.43,130.4,1514200],["2025-12-01",131.02,131.15,128.91,128.97,1603200],["2025-12-02",131.55,132.67,130.73,132.28,1943400],["2025-12-03",133.62,134.24,133.43,133.72,1259800],["2025-12-04",133.63,133.95,132.18,132.43,1266400],["2025-12-05",133.82,134.04,132.09,132.16,1997200],["2025-12-08",132.83,132.85,129.98,130.17,2245500],["2025-12-09",132.55,133.16,130.81,131.01,2127900],["2025-12-10",131.05,131.63,130.46,131.19,2068200],["2025-12-11",132.46,133.84,132.2,132.36,2062400],["2025-12-12",132.37,133.01,131.77,132.57,1226100],["2025-12-15",133.9,135.27,133.67,135.19,1635600],["2025-12-16",136.66,136.66,134.4,135.03,1721400],["2025-12-17",135.34,137.4,134.96,135.03,2458300],["2025-12-18",135.19,135.69,134.88,135.27,1544500],["2025-12-19",134.94,137.16,134.82,136.06,1392600],["2025-12-22",136.48,137.27,136.0,136.87,1388700],["2025-12-23",139.6,140.18,138.78,139.13,1945400],["2025-12-24",139.06,139.48,138.53,138.88,647000],["2025-12-26",138.88,139.22,138.39,139.18,587100],["2025-12-29",138.86,139.45,138.84,139.2,777400],["2025-12-30",138.76,139.12,138.41,138.72,710400],["2025-12-31",138.71,138.91,137.8,137.87,756300],["2026-01-02",138.28,138.56,137.02,138.54,1039800],["2026-01-05",137.14,137.96,135.55,137.91,1232700],["2026-01-06",139.09,142.58,139.09,142.27,3285900],["2026-01-07",141.67,143.49,141.16,141.98,2003300],["2026-01-08",142.55,143.48,140.86,141.46,1560300],["2026-01-09",141.99,142.9,141.46,141.54,1117500],["2026-01-12",142.98,143.0,140.31,141.82,1502000],["2026-01-13",142.37,142.59,140.8,141.61,2107100],["2026-01-14",144.56,146.35,144.29,146.16,1844800],["2026-01-15",145.07,145.07,142.26,143.15,1036300],["2026-01-16",143.78,144.76,142.89,144.34,1651600],["2026-01-20",144.0,144.85,142.82,143.58,1827900],["2026-01-21",143.82,145.22,143.43,145.11,2027400],["2026-01-22",144.73,146.22,144.45,145.0,1139700],["2026-01-23",145.61,148.1,145.26,147.14,1823900],["2026-01-26",148.29,150.13,147.99,149.12,1719600],["2026-01-27",150.64,152.48,150.49,152.22,3393300],["2026-01-28",148.71,149.39,146.84,147.87,1990000],["2026-01-29",148.62,149.53,148.34,148.91,1588800],["2026-01-30",149.49,149.98,148.13,148.68,1147100],["2026-02-02",149.63,151.31,149.54,151.04,1843200],["2026-02-03",149.68,151.53,149.38,149.86,3522100],["2026-02-04",153.82,154.71,151.42,152.91,4379900],["2026-02-05",152.0,154.95,151.68,153.95,4100200],["2026-02-06",154.03,156.62,153.9,156.42,3011900],["2026-02-09",156.98,157.57,155.94,157.05,2436000],["2026-02-10",158.5,159.37,157.46,158.2,4086300],["2026-02-11",159.25,160.18,158.04,160.06,2720400],["2026-02-12",159.6,162.32,159.47,161.18,2337600],["2026-02-13",162.16,163.42,161.79,163.1,1877000],["2026-02-17",166.78,167.29,165.57,166.17,2508800],["2026-02-18",167.57,167.86,164.71,165.38,2379600],["2026-02-19",163.87,164.02,162.53,163.92,1836300],["2026-02-20",162.67,163.63,161.75,162.67,2059800],["2026-02-23",163.66,165.64,163.66,164.7,1970500],["2026-02-24",166.1,167.84,166.1,167.11,3315100],["2026-02-25",167.19,168.02,166.75,166.85,3771800],["2026-02-26",166.73,166.9,164.27,165.51,4185800],["2026-02-27",169.11,170.46,168.56,168.62,3195600],["2026-03-02",167.16,167.61,165.79,166.87,2811500],["2026-03-03",162.43,164.89,160.42,164.18,3225500],["2026-03-04",164.44,165.69,162.19,165.15,2135200],["2026-03-05",161.05,161.39,158.95,161.01,4320200],["2026-03-06",156.71,160.54,156.18,160.12,3765300],["2026-03-09",159.52,163.08,159.22,162.79,1751800],["2026-03-10",161.35,163.07,160.43,161.59,3705700],["2026-03-11",155.99,156.58,154.96,155.8,5153800],["2026-03-12",154.55,155.04,153.7,154.25,1962700],["2026-03-13",154.69,155.96,153.18,153.44,1976900],["2026-03-16",154.54,155.38,153.86,154.87,2512200],["2026-03-17",155.64,155.79,154.38,154.85,2220500],["2026-03-18",152.38,152.76,149.47,149.81,1605000],["2026-03-19",147.81,149.32,147.15,148.19,2370800],["2026-03-20",148.77,148.9,145.3,146.03,2019800],["2026-03-23",147.21,148.95,146.9,148.09,1648400],["2026-03-24",146.56,148.98,146.22,148.61,1198200],["2026-03-25",150.47,151.78,150.15,150.75,1214800],["2026-03-26",149.67,151.11,149.31,149.7,1157600],["2026-03-27",150.01,150.6,147.86,148.18,1983800],["2026-03-30",150.25,150.75,149.56,150.36,2078300],["2026-03-31",151.58,152.86,150.52,152.75,2003000],["2026-04-01",154.62,156.08,154.12,155.08,1626800],["2026-04-02",153.37,154.81,153.16,154.03,2631000],["2026-04-06",153.59,154.36,152.84,152.84,1185300],["2026-04-07",151.44,151.49,149.49,151.22,2024100],["2026-04-08",153.77,154.45,152.71,154.42,2118100],["2026-04-09",152.76,156.12,152.48,155.06,906100],["2026-04-10",156.46,156.46,153.7,154.05,996900],["2026-04-13",153.72,154.5,152.9,154.47,841500],["2026-04-14",154.04,155.05,153.33,153.38,1257000],["2026-04-15",153.98,154.1,150.86,152.08,1097300],["2026-04-16",150.38,150.86,149.38,149.73,1066000],["2026-04-17",151.55,152.54,150.75,151.97,1070200],["2026-04-20",151.4,152.04,150.77,150.99,1228900],["2026-04-21",149.61,149.63,147.77,147.97,2117600],["2026-04-22",148.58,148.58,147.12,147.32,1026300],["2026-04-23",147.88,148.36,146.58,147.48,1687400],["2026-04-24",146.03,146.07,144.05,145.47,1299700],["2026-04-27",144.67,145.71,144.12,144.19,1604300],["2026-04-28",144.26,145.65,142.65,145.5,2650600],["2026-04-29",143.05,144.04,142.25,142.94,1612400],["2026-04-30",146.51,148.58,146.22,147.85,1402500],["2026-05-01",148.14,148.14,146.35,146.57,1094400],["2026-05-04",145.55,145.82,144.45,144.62,1720700],["2026-05-05",146.62,146.65,144.79,145.5,1328600],["2026-05-06",147.8,148.76,147.52,148.36,1115500],["2026-05-07",147.97,148.06,144.99,145.39,1004900],["2026-05-08",146.45,146.67,145.48,146.03,1067400],["2026-05-11",146.59,147.28,144.75,145.23,2098900],["2026-05-12",146.29,148.56,145.88,148.16,921800],["2026-05-13",148.23,150.33,148.16,149.75,1271500],["2026-05-14",150.13,150.56,148.6,149.77,1521800],["2026-05-15",150.12,150.33,147.81,148.08,829300],["2026-05-18",149.01,150.58,148.95,149.15,1083100],["2026-05-19",149.61,151.41,149.32,150.44,999000],["2026-05-20",150.95,151.76,150.23,150.45,1362900],["2026-05-21",150.09,152.52,149.54,151.76,965700],["2026-05-22",151.56,152.55,151.24,152.01,1410600],["2026-05-26",152.3,152.49,150.32,150.8,1047400],["2026-05-27",151.05,152.37,150.62,151.12,988700],["2026-05-28",150.13,151.74,149.96,151.4,1643100],["2026-05-29",151.84,152.03,150.12,150.17,1635400],["2026-06-01",146.92,147.5,144.72,145.68,2054500],["2026-06-02",144.01,144.46,142.64,143.48,1472800],["2026-06-03",142.47,144.26,142.26,143.66,1538200],["2026-06-04",146.46,148.48,146.46,148.4,2489000],["2026-06-05",147.65,149.16,147.44,149.16,3570600],["2026-06-08",147.54,148.53,146.39,146.42,2592000],["2026-06-09",147.19,149.71,147.05,149.12,2418800],["2026-06-10",149.03,149.72,147.91,148.12,1436800],["2026-06-11",152.0,154.71,151.62,153.92,2128600],["2026-06-12",153.93,154.22,152.85,153.07,1177800],["2026-06-15",153.07,153.32,151.27,151.56,1683400],["2026-06-16",150.46,151.38,148.64,150.93,1589300],["2026-06-17",151.42,152.57,150.2,150.88,1664900],["2026-06-18",149.9,150.08,146.92,147.08,1869600],["2026-06-22",146.94,149.23,146.6,148.93,1400000],["2026-06-23",151.94,153.47,151.36,153.38,1403600],["2026-06-24",154.2,154.96,152.31,153.12,7223500],["2026-06-25",153.48,155.85,153.41,155.12,4445100],["2026-06-26",153.33,156.38,153.33,155.41,3831200],["2026-06-29",156.14,157.73,155.79,157.59,2315000],["2026-06-30",157.63,157.89,155.92,156.72,1755200],["2026-07-01",154.67,155.02,153.22,154.14,1917800],["2026-07-02",157.5,160.57,157.0,159.9,1588000],["2026-07-06",157.32,157.57,154.21,155.49,1918200],["2026-07-07",157.15,157.93,156.43,157.03,1445000],["2026-07-08",155.26,156.4,155.1,155.17,1420100],["2026-07-09",154.9,155.47,153.79,154.62,2270400],["2026-07-10",154.8,155.0,153.63,154.05,1165500],["2026-07-13",152.68,154.17,151.94,153.37,1177400],["2026-07-14",152.08,152.44,150.33,150.36,1239900],["2026-07-15",150.02,151.66,149.65,150.8,1757800],["2026-07-16",150.48,153.18,150.21,152.73,2368200],["2026-07-17",153.97,155.3,153.14,153.76,2592800],["2026-07-20",153.17,153.54,149.33,149.56,1841200],["2026-07-21",155.39,159.3,153.66,153.87,2654000],["2026-07-22",156.07,156.41,152.67,153.08,1458900],["2026-07-23",151.71,156.94,151.44,156.14,2105400],["2026-07-24",156.11,156.38,154.44,155.01,1826600],["2026-07-27",156.59,158.08,155.79,156.11,1620200],["2026-07-28",158.07,160.34,158.03,159.85,1689900],["2026-07-29",159.15,159.37,157.32,158.83,1627000]];
+const NVS_MA5 = [117.31,117.04,116.29,115.81,116.14,116.25,115.62,116.06,116.36,116.51,116.82,118.36,119.6,121.07,122.16,123.29,124.5,125.45,126.0,126.21,126.55,126.47,126.4,126.32,126.64,126.96,127.26,127.91,128.35,128.63,128.29,128.15,127.03,125.95,124.89,124.08,122.99,122.76,122.77,122.77,122.88,122.87,123.01,123.16,124.24,125.99,127.74,129.48,131.11,131.78,131.89,131.91,131.44,130.81,130.56,130.09,130.03,130.31,130.84,131.06,131.35,131.53,131.31,130.78,129.2,127.27,125.47,124.15,123.1,123.41,124.15,124.95,125.46,126.13,127.22,128.58,129.65,130.63,131.5,131.0,130.01,128.5,127.71,126.71,127.16,127.78,128.99,129.32,130.47,131.16,131.56,131.91,132.15,131.9,131.39,131.38,131.46,132.46,133.27,134.04,134.62,135.32,135.65,136.47,137.24,138.02,138.65,139.02,138.77,138.7,138.45,139.06,139.71,140.43,141.03,141.81,141.68,142.52,142.86,143.42,143.77,144.47,144.24,145.03,145.99,147.72,148.27,149.05,149.36,149.74,149.27,150.28,151.29,152.84,154.04,155.71,157.14,158.58,159.92,161.74,163.18,163.95,164.25,164.57,164.76,165.05,165.37,166.56,166.99,166.41,166.07,165.17,163.47,162.65,162.13,160.26,158.91,157.57,155.99,154.64,153.44,152.23,150.75,149.39,148.15,148.33,148.64,149.07,149.52,150.35,151.21,152.08,153.01,153.18,153.52,153.51,153.52,153.84,154.28,153.81,152.74,152.33,151.63,150.55,149.6,149.15,147.85,146.49,145.99,145.12,145.19,145.41,145.5,145.5,146.58,146.09,145.98,146.1,146.63,146.91,147.79,148.2,148.98,149.44,149.58,149.98,150.76,151.09,151.23,151.42,151.1,149.83,148.37,146.88,146.28,146.08,146.22,147.35,148.24,149.35,150.13,151.16,151.52,152.07,150.7,149.88,150.24,150.68,151.53,153.19,154.92,155.59,155.8,156.75,156.77,156.66,156.35,156.44,155.27,154.85,153.51,152.64,152.26,152.2,151.44,152.14,152.6,153.28,153.53,154.84,156.04,157.19];
+const NVS_MA20 = [119.28,118.96,118.46,118.13,117.91,117.71,117.24,116.85,116.64,116.52,116.5,116.64,117.02,117.52,118.01,118.42,118.88,119.35,119.81,120.26,120.73,121.24,121.88,122.44,122.88,123.4,124.15,124.84,125.43,125.91,126.27,126.6,126.7,126.65,126.59,126.47,126.22,126.03,125.84,125.73,125.55,125.32,125.18,125.05,125.13,125.31,125.44,125.57,125.75,125.92,126.21,126.38,126.67,126.96,127.34,127.71,128.14,128.56,128.98,129.41,129.83,130.3,130.64,130.89,130.65,130.15,129.73,129.3,128.88,128.56,128.22,127.99,127.81,127.71,127.72,127.84,127.9,127.89,127.88,127.71,127.5,127.14,126.99,126.86,127.2,127.63,128.02,128.28,128.7,129.14,129.48,129.76,129.95,130.14,130.18,130.18,130.22,130.41,130.59,130.94,131.33,131.92,132.4,133.03,133.46,133.9,134.33,134.82,135.1,135.34,135.62,136.12,136.71,137.24,137.75,138.23,138.68,139.23,139.63,140.1,140.51,140.97,141.37,141.77,142.28,142.94,143.37,143.88,144.42,145.05,145.64,146.18,146.77,147.52,148.3,149.12,150.04,150.79,151.79,152.88,153.97,154.91,155.79,156.67,157.57,158.3,159.18,160.17,161.08,161.74,162.5,162.91,163.21,163.53,163.76,163.64,163.35,162.96,162.55,161.98,161.21,160.42,159.59,158.76,157.83,157.03,156.24,155.21,154.39,153.82,153.31,152.96,152.6,152.02,151.66,151.63,151.62,151.67,151.59,151.45,151.45,151.64,151.89,151.88,151.82,151.65,151.44,151.24,151.0,150.51,150.15,149.78,149.36,149.08,148.78,148.29,147.89,147.43,147.17,147.05,147.05,146.86,146.77,146.89,147.05,147.26,147.59,147.92,148.2,148.62,148.74,148.69,148.64,148.54,148.55,148.73,148.75,148.95,148.95,149.16,149.32,149.49,149.58,149.61,149.44,149.3,149.36,149.48,149.68,149.88,150.25,150.8,151.34,152.15,152.5,152.9,153.33,153.61,153.91,153.88,153.74,153.7,153.79,153.94,154.06,154.31,154.29,154.45,154.44,154.47,154.59,154.69];
+const NVS_MA60 = [116.16,116.2,116.21,116.29,116.39,116.52,116.6,116.71,116.88,117.11,117.29,117.48,117.67,117.87,118.06,118.26,118.51,118.73,118.98,119.19,119.37,119.54,119.72,119.88,120.03,120.2,120.37,120.56,120.73,120.85,120.97,121.13,121.26,121.38,121.5,121.58,121.64,121.72,121.77,121.82,121.85,121.84,121.84,121.87,121.97,122.14,122.28,122.42,122.61,122.78,122.99,123.2,123.46,123.71,123.98,124.2,124.41,124.65,124.88,125.13,125.37,125.62,125.9,126.13,126.22,126.29,126.44,126.57,126.69,126.8,126.9,126.99,127.06,127.11,127.22,127.34,127.42,127.49,127.57,127.62,127.63,127.59,127.6,127.6,127.66,127.7,127.73,127.72,127.78,127.87,127.97,128.04,128.15,128.27,128.41,128.58,128.75,128.95,129.15,129.35,129.56,129.79,130.01,130.26,130.44,130.56,130.7,130.8,130.9,131.01,131.11,131.29,131.49,131.7,131.89,132.08,132.26,132.51,132.7,132.91,133.12,133.34,133.59,133.89,134.31,134.82,135.24,135.66,136.07,136.51,136.91,137.35,137.81,138.3,138.74,139.17,139.64,140.14,140.67,141.3,141.94,142.6,143.19,143.82,144.44,145.04,145.63,146.29,146.87,147.37,147.92,148.4,148.9,149.43,149.94,150.33,150.69,150.99,151.32,151.65,151.9,152.1,152.25,152.4,152.56,152.75,152.93,153.09,153.3,153.53,153.82,154.01,154.2,154.36,154.57,154.79,155.0,155.14,155.31,155.44,155.54,155.66,155.76,155.77,155.74,155.66,155.62,155.54,155.49,155.35,155.32,155.21,155.06,154.88,154.73,154.52,154.29,154.02,153.77,153.5,153.24,152.97,152.75,152.51,152.23,151.98,151.76,151.46,151.2,150.98,150.73,150.48,150.2,149.88,149.66,149.55,149.42,149.35,149.24,149.22,149.27,149.33,149.41,149.46,149.43,149.4,149.46,149.55,149.63,149.67,149.71,149.76,149.78,149.92,149.94,149.97,149.99,150.0,150.01,150.03,150.04,150.02,150.05,150.14,150.18,150.29,150.42,150.61,150.77,150.99,151.19,151.4];
+const NVS_MA120 = [112.92,112.98,113.04,113.11,113.2,113.29,113.34,113.41,113.51,113.61,113.71,113.82,113.93,114.06,114.18,114.32,114.47,114.62,114.75,114.87,114.99,115.11,115.2,115.29,115.42,115.58,115.74,115.91,116.05,116.18,116.31,116.43,116.53,116.63,116.73,116.84,116.93,117.01,117.11,117.22,117.32,117.41,117.56,117.73,117.95,118.18,118.41,118.62,118.81,118.99,119.18,119.35,119.51,119.66,119.83,119.98,120.14,120.3,120.45,120.6,120.76,120.91,121.05,121.21,121.31,121.4,121.52,121.64,121.78,121.95,122.09,122.23,122.37,122.49,122.64,122.8,122.96,123.11,123.28,123.4,123.5,123.56,123.66,123.74,123.84,123.95,124.05,124.14,124.26,124.36,124.47,124.59,124.7,124.83,124.96,125.08,125.2,125.34,125.46,125.59,125.7,125.81,125.92,126.07,126.21,126.35,126.49,126.61,126.75,126.9,127.05,127.25,127.48,127.7,127.93,128.14,128.34,128.58,128.79,129.02,129.24,129.48,129.74,130.01,130.27,130.55,130.84,131.12,131.38,131.65,131.91,132.17,132.44,132.71,132.98,133.26,133.53,133.82,134.12,134.46,134.78,135.09,135.39,135.71,136.05,136.37,136.68,137.0,137.32,137.62,137.94,138.22,138.52,138.85,139.17,139.45,139.72,139.97,140.24,140.5,140.73,140.94,141.13,141.33,141.5,141.66,141.81,141.94,142.1,142.27,142.46,142.65,142.84,143.03,143.23,143.44,143.63,143.82,144.0,144.18,144.33,144.5,144.67,144.83,145.03,145.24,145.43,145.6,145.78,145.93,146.12,146.28,146.44,146.59,146.74,146.85,146.96,147.08,147.22,147.4,147.59,147.79,147.97,148.17,148.33,148.51,148.69,148.87,149.03,149.18,149.33,149.44,149.55,149.66,149.8,149.94,150.05,150.17,150.28,150.44,150.59,150.71,150.83,150.93,151.0,151.08,151.2,151.32,151.46,151.6,151.77,151.89,151.99,152.14,152.26,152.38,152.5,152.57,152.66,152.73,152.79,152.84,152.9,152.96,152.96,152.97,153.02,153.08,153.13,153.17,153.26,153.31];
+// ─── SVG CANDLE + VOLUME CHART (실데이터 · 기간/MA 토글) ───
+(function(){
+  const svgCandle = document.getElementById('nvsCandleSvg');
+  const svgVol = document.getElementById('nvsVolumeSvg');
+  const toggle = document.getElementById('nvsRangeToggle');
+  const maToggle = document.getElementById('nvsMaToggle');
+  if(!svgCandle || !svgVol || !toggle) return;
+  const RANGES = {'1M':21,'3M':63,'6M':126,'1Y':252};
+  const NS = 'http://www.w3.org/2000/svg';
+  const UP='#2ecc71', DOWN='#e74c3c';
+  const maColors = {ma5:'#ff6b9d', ma20:'#9b59b6', ma60:'#f0c040', ma120:'#22d3ee'};
+  const maState = {ma5:true, ma20:true, ma60:true, ma120:true, pricelabels:true};
+  let currentRange = '1Y';
+
+  function draw(rangeKey){
+    currentRange = rangeKey;
+    const n = RANGES[rangeKey];
+    const data = NVS_DAILY.slice(-n);
+    const ma5 = NVS_MA5.slice(-n), ma20 = NVS_MA20.slice(-n), ma60 = NVS_MA60.slice(-n), ma120 = NVS_MA120.slice(-n);
+    while(svgCandle.firstChild) svgCandle.removeChild(svgCandle.firstChild);
+    while(svgVol.firstChild) svgVol.removeChild(svgVol.firstChild);
+
+    const W=720,H=240,pL=45,pR=12,pT=10,pB=20;
+    const cW=W-pL-pR,cH=H-pT-pB;
+    const highs=data.map(d=>d[2]), lows=data.map(d=>d[3]);
+    const maVals=[...ma5,...ma20,...ma60,...ma120].filter(v=>v!=null);
+    const mx=Math.max(...highs,...maVals), mn=Math.min(...lows,...maVals);
+    const pad=(mx-mn)*0.06 || mx*0.02;
+    const top=mx+pad, bot=mn-pad, rng=(top-bot)||1;
+    const py = v => pT + cH*(1-(v-bot)/rng);
+    const colW = cW/data.length;
+    const bodyW = Math.max(colW*0.62, 1);
+
+    for(let i=0;i<=3;i++){
+      const v = bot + rng*i/3;
+      const y = py(v);
+      const l=document.createElementNS(NS,'line');
+      l.setAttribute('x1',pL);l.setAttribute('x2',W-pR);l.setAttribute('y1',y);l.setAttribute('y2',y);
+      l.setAttribute('stroke','rgba(255,255,255,.08)');l.setAttribute('stroke-width','1');
+      svgCandle.appendChild(l);
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x',pL-4);t.setAttribute('y',y+3);t.setAttribute('text-anchor','end');
+      t.setAttribute('font-size','9');t.setAttribute('fill','rgba(154,160,184,.8)');
+      t.textContent='$'+v.toFixed(0);
+      svgCandle.appendChild(t);
+    }
+
+    data.forEach((d,i)=>{
+      const [,o,h,l,c] = d;
+      const cx = pL + (i+0.5)*colW;
+      const up = c >= o;
+      const col = up ? UP : DOWN;
+      const wick=document.createElementNS(NS,'line');
+      wick.setAttribute('x1',cx);wick.setAttribute('x2',cx);
+      wick.setAttribute('y1',py(h));wick.setAttribute('y2',py(l));
+      wick.setAttribute('stroke',col);wick.setAttribute('stroke-width', Math.max(colW*0.12,0.6));
+      svgCandle.appendChild(wick);
+      const yTop = py(Math.max(o,c));
+      const yBot = py(Math.min(o,c));
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x', cx - bodyW/2);
+      rect.setAttribute('y', yTop);
+      rect.setAttribute('width', bodyW);
+      rect.setAttribute('height', Math.max(yBot-yTop, 1));
+      rect.setAttribute('fill', col);
+      svgCandle.appendChild(rect);
+    });
+
+    const drawMaLine = (vals, color) => {
+      let seg = [];
+      const flush = () => {
+        if (seg.length > 1) {
+          const pl = document.createElementNS(NS,'polyline');
+          pl.setAttribute('points', seg.join(' '));
+          pl.setAttribute('fill','none'); pl.setAttribute('stroke',color);
+          pl.setAttribute('stroke-width','1.7'); pl.setAttribute('opacity','0.95');
+          pl.setAttribute('stroke-linejoin','round'); pl.setAttribute('stroke-linecap','round');
+          svgCandle.appendChild(pl);
+        }
+        seg = [];
+      };
+      vals.forEach((v,i) => {
+        if (v == null) { flush(); return; }
+        seg.push(`${pL+(i+0.5)*colW},${py(v)}`);
+      });
+      flush();
+    };
+    if (maState.ma5) drawMaLine(ma5, maColors.ma5);
+    if (maState.ma20) drawMaLine(ma20, maColors.ma20);
+    if (maState.ma60) drawMaLine(ma60, maColors.ma60);
+    if (maState.ma120) drawMaLine(ma120, maColors.ma120);
+
+    if (maState.pricelabels) {
+    const closeIdx = data.length-1;
+    const closeVal = data[closeIdx][4];
+    const periodHigh = Math.max(...highs);
+    const periodLow = Math.min(...lows);
+    const highIdx = highs.indexOf(periodHigh);
+    const lowIdx = lows.indexOf(periodLow);
+    const markers = [
+      {idx: highIdx, v: periodHigh, color: UP, label:'최고', side:'above'},
+      {idx: lowIdx, v: periodLow, color: DOWN, label:'최저', side:'below'},
+      {idx: closeIdx, v: closeVal, color:'#60a5fa', label:'종가', side:'left'}
+    ];
+    markers.forEach(m=>{
+      const cx = pL + (m.idx+0.5)*colW;
+      const cy = py(m.v);
+      const dot=document.createElementNS(NS,'circle');
+      dot.setAttribute('cx',cx);dot.setAttribute('cy',cy);dot.setAttribute('r','3.5');
+      dot.setAttribute('fill',m.color);dot.setAttribute('stroke','#0f1117');dot.setAttribute('stroke-width','1.5');
+      svgCandle.appendChild(dot);
+
+      const labelText = `${m.label} $${m.v.toFixed(2)}`;
+      const labelW = labelText.length*5.2+6;
+      let tx, ty, anchor;
+      if (m.side === 'left') {
+        anchor = 'end'; tx = cx-7; ty = cy+3;
+      } else if (m.side === 'above') {
+        ty = cy-9;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      } else {
+        ty = cy+16;
+        if (cx < pL+cW*0.15) { anchor='start'; tx=cx+7; }
+        else if (cx > W-pR-cW*0.15) { anchor='end'; tx=cx-7; }
+        else { anchor='middle'; tx=cx; }
+      }
+      const bgX = anchor==='end' ? tx-labelW : anchor==='middle' ? tx-labelW/2 : tx;
+      const bg=document.createElementNS(NS,'rect');
+      bg.setAttribute('x', bgX);bg.setAttribute('y', ty-8);
+      bg.setAttribute('width', labelW);bg.setAttribute('height', 12);
+      bg.setAttribute('fill','rgba(15,17,23,0.85)');bg.setAttribute('rx','2');
+      svgCandle.appendChild(bg);
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x', tx);t.setAttribute('y', ty+2);
+      t.setAttribute('text-anchor',anchor);t.setAttribute('font-size','9');
+      t.setAttribute('font-weight','700');t.setAttribute('fill', m.color);
+      t.textContent = labelText;
+      svgCandle.appendChild(t);
+    });
+    }
+
+    const labelCount = Math.min(5, data.length);
+    for(let i=0;i<labelCount;i++){
+      const idx = Math.round(i*(data.length-1)/((labelCount-1)||1));
+      const cx = pL + (idx+0.5)*colW;
+      const t=document.createElementNS(NS,'text');
+      t.setAttribute('x', Math.min(Math.max(cx,pL+10), W-20));
+      t.setAttribute('y', H-4);
+      t.setAttribute('text-anchor','middle');t.setAttribute('font-size','9');
+      t.setAttribute('fill','rgba(154,160,184,.8)');
+      t.textContent = data[idx][0].slice(2).replace(/-/g,'.');
+      svgCandle.appendChild(t);
+    }
+
+    const VW=720,VH=70,vpT=6,vpB=4;
+    const vcH=VH-vpT-vpB;
+    const maxV = Math.max(...data.map(d=>d[5]));
+    data.forEach((d,i)=>{
+      const [,o,,,c,v] = d;
+      const cx = pL + (i+0.5)*colW;
+      const up = c >= o;
+      const col = up ? 'rgba(46,204,113,0.55)' : 'rgba(231,76,60,0.55)';
+      const h = (v/maxV)*vcH;
+      const rect=document.createElementNS(NS,'rect');
+      rect.setAttribute('x', cx - bodyW/2);
+      rect.setAttribute('y', vpT + (vcH-h));
+      rect.setAttribute('width', bodyW);
+      rect.setAttribute('height', Math.max(h,1));
+      rect.setAttribute('fill', col);
+      svgVol.appendChild(rect);
+    });
+  }
+
+  toggle.querySelectorAll('.range-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      toggle.querySelectorAll('.range-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      draw(btn.dataset.range);
+    });
+  });
+
+  if (maToggle) {
+    maToggle.querySelectorAll('.ma-toggle-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const key = btn.dataset.ma;
+        maState[key] = !maState[key];
+        btn.classList.toggle('ma-off', !maState[key]);
+        draw(currentRange);
+      });
+    });
+  }
+
+  draw('1Y');
+})();
+const charts={};
+function renderFundChart(){let ctx=document.getElementById('nvsRevChart');if(!ctx||charts.fund)return;charts.fund=new Chart(ctx,{data:{labels:["Q3'24", "Q4'24", "Q1'25", "Q2'25", "Q3'25", "Q4'25", "Q1'26", "Q2'26"],datasets:[{type:'bar',label:'매출 ($B)',data:[12.51, 12.82, 12.58, 13.23, 14.05, 13.95, 13.17, 14.41],backgroundColor:'rgba(56,189,248,.45)',borderColor:'#38bdf8',borderWidth:1,borderRadius:4,yAxisID:'y'},{type:'bar',label:'순이익 ($B)',data:[3.25, 3.19, 2.82, 3.61, 4.02, 3.71, 3.09, 3.26],backgroundColor:'rgba(46,204,113,.45)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4,yAxisID:'y'},{type:'line',label:'EPS',data:[1.63, 1.6, 1.42, 1.83, 2.07, 1.92, 1.62, 1.71],borderColor:'#f0c040',tension:.35,pointRadius:4,borderWidth:2.5,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:900,easing:'easeOutQuart'},scales:{x:{ticks:{color:'#9aa0b8'}},y:{beginAtZero:true,ticks:{color:'#9aa0b8'}},y1:{position:'right',beginAtZero:true,ticks:{color:'#f0c040'}}},plugins:{legend:{labels:{color:'#9aa0b8'}}}}})}
+function renderPeerChart(){let ctx=document.getElementById('nvsPeerChart');if(!ctx||charts.peer)return;charts.peer=new Chart(ctx,{type:'bar',data:{labels:['NVS','섹터 중앙값','S&P 500'],datasets:[{data:[17.7,24,22],backgroundColor:['#38bdf8','rgba(154,160,184,.35)','rgba(154,160,184,.35)'],borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:900,easing:'easeOutQuart'},scales:{y:{beginAtZero:true,ticks:{color:'#9aa0b8'}},x:{ticks:{color:'#9aa0b8'}}},plugins:{legend:{display:false}}}})}
+function renderCharts(id){setTimeout(()=>{if(id==='fund')renderFundChart();if(id==='valuation')renderPeerChart()},40)}renderCharts('tech');</script></body></html>
