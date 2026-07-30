@@ -14,7 +14,7 @@
     --text: #dde0f8;
     --text2: #8888c8;
     --text3: #404080;
-    --accent: #c04040;
+    --accent: #3b82f6;
     --accent2: #f07070;
     --accent3: #5a1010;
     --bull: #D85A30;
@@ -72,12 +72,14 @@
   .card-title { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; font-weight: 600; }
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 
   .stat-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
   .stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
   .stat-value { font-size: 22px; font-weight: 700; color: var(--text); margin: 4px 0 2px; }
   .stat-sub { font-size: 11px; color: var(--text3); }
   .stat-value.up { color: var(--green); }
+  .stat-value.down { color: var(--red); }
   .stat-value.re { color: var(--accent2); }
   .stat-value.te { color: var(--teal); }
 
@@ -100,6 +102,7 @@
   .ma-row:last-child { border-bottom: none; }
   .ma-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
   .ma-name { display: flex; align-items: center; font-size: 13px; color: var(--text2); }
+  .ma-val { font-size: 13px; font-weight: 600; }
   .ma-status { font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
   .above { background: rgba(46,204,113,0.15); color: var(--green); }
   .below { background: rgba(231,76,60,0.15); color: var(--red); }
@@ -201,6 +204,7 @@
   .peer-nav-link.disabled { color: var(--text3); opacity: 0.4; pointer-events: none; border-color: var(--border); }
   .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; max-width: 1100px; margin: 0 auto; }
   .range-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--text3); font-size: 11px; font-weight: 700; padding: 4px 11px; border-radius: 999px; cursor: pointer; transition: all .15s; }
+  .range-toggle { display: flex; gap: 4px; }
   .range-btn:hover { color: var(--text); border-color: var(--text2); }
   .range-btn.active { background: var(--accent3); color: var(--accent2); border-color: var(--accent); }
   .ma-toggle-btn { background: var(--bg3); border: 1px solid; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer; transition: all .15s; }
@@ -259,7 +263,7 @@
 </div>
 
 <!-- ===================== S1: 기술적 분석 ===================== -->
-<div id="tech" class="section active">
+<div class="section active" id="tech">
   <div class="section-title">기술적 분석 — 일봉 캔들스틱 (2025.07 ~ 2026.07) · 52주 수익률 -52.9%</div>
 
   <div class="price-chart-container">
@@ -287,44 +291,48 @@
     <div class="card">
       <div class="card-title">핵심 가격대</div>
       <div class="zone-list">
-        <div class="zone-item"><span class="zone-label">52주 최고 (2025.09.10)</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$345.72</span><span class="zone-tag tag-r">강저항</span></div></div>
-        <div class="zone-item"><span class="zone-label">MA120 저항</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$163.13</span><span class="zone-tag tag-r">저항권</span></div></div>
-        <div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$117.74</span><span class="zone-tag tag-c">현재</span></div></div>
-        <div class="zone-item"><span class="zone-label">MA5 저항(근접)</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$118.53</span><span class="zone-tag tag-r">저항선</span></div></div>
-        <div class="zone-item"><span class="zone-label">52주 최저 (2026.07.17, 당일)</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$114.50</span><span class="zone-tag tag-s">강지지</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 최고 (2025.09.10)</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--red);">$345.72</span><span class="zone-tag tag-r">강저항</span></div></div>
+        <div class="zone-item"><span class="zone-label">MA120 저항</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--red);">$163.13</span><span class="zone-tag tag-r">저항권</span></div></div>
+        <div class="zone-item"><span class="zone-label">MA5 저항(근접)</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--red);">$118.53</span><span class="zone-tag tag-r">저항선</span></div></div>
+        <div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--accent2);">$117.74</span><span class="zone-tag tag-c">현재</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 최저 (2026.07.17)</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--green);">$114.50</span><span class="zone-tag tag-s">강지지</span></div></div>
       </div>
     </div>
     <div class="card">
       <div class="card-title">이동평균선 현황</div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기)</span><span style="color:var(--ma5);font-size:13px;font-weight:600;">$118.53</span><span class="ma-status below">근접 하회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기)</span><span style="color:var(--ma20);font-size:13px;font-weight:600;">$130.15</span><span class="ma-status below">하회 중</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기)</span><span style="color:var(--ma60);font-size:13px;font-weight:600;">$171.10</span><span class="ma-status below">대폭 하회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기)</span><span style="color:var(--ma120);font-size:13px;font-weight:600;">$163.13</span><span class="ma-status below">대폭 하회</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$118.53</span><span class="ma-status below">현재가 하회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$130.15</span><span class="ma-status below">현재가 하회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$171.10</span><span class="ma-status below">현재가 하회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$163.13</span><span class="ma-status below">현재가 하회</span></div></div>
       <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">MA60&gt;MA120&gt;MA20&gt;MA5&gt;현재가 순 — 전 이평선 하회 · 기술적 약세. 현재가 $117.74, 52주 고점 $345.72 대비 -65.9%.</div>
     </div>
   </div>
 
   <div class="card">
     <div class="card-title">구간별 패턴 분석</div>
-    <div class="grid-3">
-      <div style="background:var(--bg3);padding:12px;border-radius:8px;">
-        <div style="font-size:11px;color:var(--accent);font-weight:700;margin-bottom:6px;">2025.07~09 급등 (Stargate 효과)</div>
+    <div class="grid-4">
+      <div style="background:rgba(46,204,113,.08);border:1px solid rgba(46,204,113,.35);padding:12px;border-radius:8px;">
+        <div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">2025.07~09 · Stargate 급등</div>
         <div style="font-size:12px;color:var(--text2);">$140→$325 폭등. OpenAI·Stargate AI 파트너십 + $100B+ RPO 발표. Q4 FY25 OCI +62% 발표. 거래량 폭발. 역대최고가 경신.</div>
       </div>
-      <div style="background:var(--bg3);padding:12px;border-radius:8px;">
-        <div style="font-size:11px;color:var(--accent);font-weight:700;margin-bottom:6px;">2025.10~2026.04 장기 조정</div>
+      <div style="background:rgba(231,76,60,.08);border:1px solid rgba(231,76,60,.35);padding:12px;border-radius:8px;">
+        <div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">2025.10~2026.04 · 장기 조정</div>
         <div style="font-size:12px;color:var(--text2);">$325→$140. Q2 FY26 매출 가이던스 소폭 미스 + Capex 급증 우려. Stargate 협상 지연 보도. 증권 집단소송. 장장 7개월 45% 급락.</div>
       </div>
-      <div style="background:var(--bg3);padding:12px;border-radius:8px;">
-        <div style="font-size:11px;color:var(--accent);font-weight:700;margin-bottom:6px;">2026.05~06 V자 반등</div>
+      <div style="background:rgba(46,204,113,.08);border:1px solid rgba(46,204,113,.35);padding:12px;border-radius:8px;">
+        <div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">2026.05~06 · 실적 반등</div>
         <div style="font-size:12px;color:var(--text2);">Q4 FY26 매출 $19.2B(+21%) 역대최고. OCI +93%, RPO $638B(+$85B). 주가 $140→$295 급반등. Q4 어닝 서프라이즈가 반전 트리거.</div>
+      </div>
+      <div style="background:rgba(231,76,60,.08);border:1px solid rgba(231,76,60,.35);padding:12px;border-radius:8px;">
+        <div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">2026.06~07 · 신뢰도 재조정</div>
+        <div style="font-size:12px;color:var(--text2);">$295→$117.74 급락. RPO 실현 가능성과 AI 데이터센터 Capex·부채 부담이 재부각되며 52주 신저가를 시험했다.</div>
       </div>
     </div>
   </div>
 </div>
 
 <!-- ===================== S2: 기본적 분석 ===================== -->
-<div id="fund" class="section">
+<div class="section" id="fund">
   <div class="section-title">기본적 분석 — 분기 실적 (FY: 6월 마감)</div>
 
   <div class="fy-note">
@@ -389,7 +397,7 @@
 
 <!-- ===================== S3: Per-Share ===================== -->
 <!-- ===================== S4: 밸류에이션 ===================== -->
-<div id="valuation" class="section">
+<div class="section" id="valuation">
   <div class="section-title">밸류에이션 — 5단계 멀티플 평가</div>
 
   <div class="fy-note">⚠️ FCF 음수(AI 데이터센터 Capex 투자 사이클) — PCR(FCF 기준) 적용 불가. 운영현금흐름 기준 PCR 대체. PBR은 공격적 자사주 매입으로 마이너스 가능 — 특수 처리.</div>
@@ -446,7 +454,7 @@
     <div class="stage-grid">
       <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div></div>
       <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div></div>
-      <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:10px;color:var(--gold);background:rgba(245,166,35,0.15);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">PBR (Q4 FY26)·PSR (시총/연매출)</div></div>
+      <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:10px;color:#f0c040;background:rgba(245,166,35,0.15);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">PBR (Q4 FY26)·PSR (시총/연매출)</div></div>
       <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:10px;color:var(--red);background:rgba(231,76,60,0.15);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">Non-GAAP PER (FY26)·EV/EBITDA (FY26 TTM)</div></div>
       <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div><div style="font-size:10px;color:var(--red);background:rgba(231,76,60,0.15);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">PER (FY2026 GAAP)</div></div>
     </div>
@@ -462,11 +470,10 @@
       <div class="ps-card"><div class="ps-label">OCF/주 (FY2026)</div><div class="ps-value">$11.26</div><div class="ps-sub">연간 OCF $32.5B ÷ 2.89B주</div></div>
       <div class="ps-card"><div class="ps-label">배당금 (분기)</div><div class="ps-value">$0.50</div><div class="ps-sub">연 $2.00 / 배당수익률 ~0.7%</div></div>
     </div>
-    <div class="chart-wrap" style="height:220px;"><canvas id="perShareChart"></canvas></div>
   </div>
 
   <div class="card">
-    <div class="card-title">수익성 지표 요약</div>
+    <div class="card-title">종합 밸류에이션 — RPO 성장 프리미엄과 Capex 부담 병존</div>
     <div class="grid-3">
       <div class="stat-box"><div class="stat-label">총이익률 (Q4 FY26)</div><div class="stat-value re">65.2%</div><div class="stat-sub">Capex 증가로 소폭 하락</div></div>
       <div class="stat-box"><div class="stat-label">영업이익률 (Q4 FY26)</div><div class="stat-value re">32.0%</div><div class="stat-sub">Non-GAAP ~43%</div></div>
@@ -492,24 +499,17 @@
 </div>
 
 <!-- ===================== S5: 클라우드 특화 ===================== -->
-<div id="us" class="section">
+<div class="section" id="us">
   <div class="section-title">클라우드 특화 — S&P500 상대 성과 & OCI·RPO 분석</div>
 
-  <!-- RPO HIGHLIGHT -->
-  <div class="rpo-box">
-    <div class="rpo-label">📋 Remaining Performance Obligations (RPO) — 수주잔고</div>
-    <div class="rpo-value">$638B</div>
-    <div class="rpo-sub">FY2026 연매출($67.4B)의 9.5배 | Q4 단기간에 $85B 추가 | YoY +438%</div>
-  </div>
-
   <div class="rel-container">
-    <div class="rel-title">S&P500 대비 상대 성과 (2025.07 ~ 2026.06, 기준=100)</div>
-    <div class="chart-wrap" style="height:200px;"><canvas id="relChart"></canvas></div>
+    <div class="rel-title">S&P 500 대비 상대 성과 (52주)</div>
     <div class="grid-3" style="margin-top:12px;">
-      <div class="stat-box"><div class="stat-label">ORCL 1년 수익률</div><div class="stat-value up">+103%</div><div class="stat-sub">$140→$284</div></div>
+      <div class="stat-box"><div class="stat-label">ORCL 52주</div><div class="stat-value down">-52.9%</div><div class="stat-sub">현재가 $117.74 기준</div></div>
       <div class="stat-box"><div class="stat-label">S&P500 동기간</div><div class="stat-value up">+15.2%</div><div class="stat-sub">추정치</div></div>
-      <div class="stat-box"><div class="stat-label">상대 초과 수익</div><div class="stat-value up">+87.8%p</div><div class="stat-sub">강한 아웃퍼폼</div></div>
+      <div class="stat-box"><div class="stat-label">알파</div><div class="stat-value down">-68.1%p</div><div class="stat-sub">큰 폭 언더퍼폼</div></div>
     </div>
+    <div class="zone-list"><div class="zone-item"><span class="zone-label">S&P 500 비중</span><span class="zone-val">약 1.17% · 구성종목</span></div><div class="zone-item"><span class="zone-label">5년 베타</span><span class="zone-val">1.71</span></div></div>
   </div>
 
   <div class="card">
@@ -550,7 +550,7 @@
 </div>
 
 <!-- ===================== S6: 시계열 뉴스 ===================== -->
-<div id="news" class="section">
+<div class="section" id="news">
   <div class="section-title">시계열 뉴스 — 2025.07 ~ 2026.06 주요 이벤트</div>
   <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;color:var(--text2);">
     <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--event-major);display:inline-block;"></span>초대형 이벤트</span>
@@ -612,7 +612,7 @@
 </div>
 
 <!-- ===================== S7: 투자 포인트 ===================== -->
-<div id="invest" class="section">
+<div class="section" id="invest">
   <div class="section-title">투자 포인트 — Bull / Bear & 컨센서스</div>
 
   <div class="bull-bear">
@@ -638,11 +638,11 @@
     <div class="card-title">목표가 밴드 — 시나리오별 공정가치 vs 현재가 · 애널리스트 목표가</div>
     <div style="position:relative;height:70px;margin:28px 6px 6px;">
       <div style="position:absolute;top:28px;left:0;right:0;height:10px;border-radius:5px;overflow:hidden;display:flex;">
-        <div style="width:18.3%;height:100%;background:rgba(46,204,113,0.45);"></div>
+        <div style="width:18.3%;height:100%;background:rgba(231,76,60,0.45);"></div>
         <div style="width:25.0%;height:100%;background:var(--bg3);"></div>
         <div style="width:23.3%;height:100%;background:rgba(240,192,64,0.5);"></div>
         <div style="width:16.7%;height:100%;background:var(--bg3);"></div>
-        <div style="width:16.7%;height:100%;background:rgba(231,76,60,0.45);"></div>
+        <div style="width:16.7%;height:100%;background:rgba(46,204,113,0.45);"></div>
       </div>
       <div style="position:absolute;top:10px;left:8.8%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
       <div style="position:absolute;top:-6px;left:8.8%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $117.74</div>
@@ -650,9 +650,9 @@
       <div style="position:absolute;top:48px;left:50.62%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $251.85 (+113.9%)</div>
     </div>
     <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-top:4px;">
-      <span style="color:var(--green);">약세 $100~155 (현재 위치)</span>
+      <span style="color:var(--red);">약세 $100~155 (현재 위치)</span>
       <span>기본 $230~300 (RPO 정상 인식)</span>
-      <span style="color:var(--red);">강세 $350~400 (RPO 수익 전환 가속)</span>
+      <span style="color:var(--green);">강세 $350~400 (RPO 수익 전환 가속)</span>
     </div>
     <div style="margin-top:10px;font-size:11px;color:var(--text3);">현재가는 애널리스트 최저 목표가($155)보다도 낮은 극단적 저평가 구간 — 컨센서스 목표가까지 +99.2% 괴리. 애널리스트 목표가가 아직 폭락을 완전히 반영하지 못했을 가능성과, 시장이 RPO 실현 가능성에 심각한 의구심을 갖고 있다는 신호가 공존.</div>
 
@@ -683,41 +683,8 @@
   </div>
 
   <div class="card" style="margin-top:16px;">
-    <div class="card-title">월가 컨센서스 요약</div>
-    <div class="consensus-bar">
-      <div class="cb-buy" style="width:60%">매수 60%</div>
-      <div class="cb-hold" style="width:32%">중립 32%</div>
-      <div class="cb-sell" style="width:8%">매도 8%</div>
-    </div>
-    <div class="consensus-info">
-      <span>평균 목표주가: <strong style="color:var(--accent2)">$230</strong></span>
-      <span>현재대비: <strong style="color:var(--red)">-19%</strong></span>
-      <span>커버리지: 약 35개 기관</span>
-    </div>
-    <div style="margin-top:14px;padding:12px;background:var(--bg3);border-radius:8px;font-size:12px;color:var(--text2);line-height:1.6;">
-      <strong style="color:var(--accent2)">핵심 시각:</strong> "RPO $638B의 실현을 믿는가가 ORCL 투자의 핵심." Q4 FY26 어닝이 OCI 수익화 속도 우려를 일부 해소. 다만 최근 급반등($140→$284)으로 단기 목표주가 상회 상태. 2027 Capex 감소→FCF 전환이 다음 리레이팅 트리거. 고위험 고수익 AI 인프라 순수 플레이.
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">시나리오 분석</div>
-    <div class="grid-3">
-      <div style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);padding:14px;border-radius:8px;">
-        <div style="font-size:12px;color:var(--green);font-weight:700;margin-bottom:6px;">강세 시나리오</div>
-        <div style="font-size:22px;font-weight:800;color:var(--green);">$350~$450</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">RPO 수익 전환 가속 + OCI +100% 성장 유지 + Capex 감소→FCF 전환</div>
-      </div>
-      <div style="background:rgba(192,64,64,0.08);border:1px solid var(--accent3);padding:14px;border-radius:8px;">
-        <div style="font-size:12px;color:var(--accent2);font-weight:700;margin-bottom:6px;">기본 시나리오</div>
-        <div style="font-size:22px;font-weight:800;color:var(--accent2);">$230~$300</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">OCI 60~80% 성장 + 가이던스 달성 + 부채 관리 + 목표주가 수렴</div>
-      </div>
-      <div style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);padding:14px;border-radius:8px;">
-        <div style="font-size:12px;color:var(--red);font-weight:700;margin-bottom:6px;">약세 시나리오</div>
-        <div style="font-size:22px;font-weight:800;color:var(--red);">$140~$180</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">Stargate 지연 + RPO 인식 지연 + 부채 부담 + 고금리 장기화</div>
-      </div>
-    </div>
+    <div class="card-title">투자의견 요약</div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;"><div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107">2026년 9월 중순 예상</strong></div><div><span style="color:var(--text2);">투자의견:</span> <strong style="color:var(--accent2)">Buy · 매수 37/43명(86.0%)</strong></div><div><span style="color:var(--text2);">목표주가:</span> <strong style="color:var(--text)">$251.85 · +113.9%</strong></div><div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">RPO 잠재력과 Capex·부채 위험이 공존</strong></div></div>
   </div>
 </div>
 
