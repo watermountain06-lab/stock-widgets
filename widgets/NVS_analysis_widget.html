@@ -112,6 +112,8 @@
   .bb-bear { color: var(--bear); }
   .bb-item { display: flex; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--text2); line-height: 1.5; }
   .bb-icon { flex-shrink: 0; margin-top: 2px; }
+  .bb-box:first-child .bb-icon { font-size:0; color:var(--green); } .bb-box:first-child .bb-icon::before { content:'▲'; font-size:12px; }
+  .bb-box:last-child .bb-icon { font-size:0; color:var(--red); } .bb-box:last-child .bb-icon::before { content:'▼'; font-size:12px; }
   .driver-item { display: flex; gap: 12px; padding: 12px; background: var(--bg3); border-radius: 8px; margin-bottom: 10px; }
   .driver-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent3); color: var(--accent2); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .driver-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
@@ -217,20 +219,20 @@
 </div>
 <svg aria-label="NVS 일봉 캔들스틱 차트" id="nvsCandleSvg" role="img" style="display:block;background:var(--bg3);border-radius:8px 8px 0 0;padding:4px;" viewbox="0 0 720 240" width="100%"></svg>
 <svg aria-label="NVS 거래량 차트" id="nvsVolumeSvg" role="img" style="display:block;background:var(--bg3);border-radius:0 0 8px 8px;padding:0 4px 4px;" viewbox="0 0 720 70" width="100%"></svg>
-<div style="font-size:11px;color:var(--text3);margin-top:10px;">52주 최저 $349.200 (2026.06.25) → 52주 최고 $555.45 (2025.07.31) → 현재 $158.83</div>
+<div style="font-size:11px;color:var(--text3);margin-top:10px;">52주 최저 $112.34 (2025.08.01) → 52주 최고 $170.46 (2026.02.27) → 현재 $158.83</div>
 </div>
 <div class="grid-2">
 <div class="card">
 <div class="card-title">핵심 가격대</div>
-<div class="zone-list"><div class="zone-item"><span class="zone-label">52주 최고</span><span class="zone-val">$170.46 (2026-02-27)</span><span class="zone-tag tag-resist">저항선</span></div><div class="zone-item"><span class="zone-label">현재가</span><span class="zone-val">$158.83</span><span class="zone-tag tag-current">현재</span></div><div class="zone-item"><span class="zone-label">MA120</span><span class="zone-val">$153.31</span><span class="zone-tag tag-support">지지선</span></div><div class="zone-item"><span class="zone-label">52주 최저</span><span class="zone-val">$112.34 (2025-08-01)</span><span class="zone-tag tag-support">강지지</span></div><div class="zone-item"><span class="zone-label">52주 수익률</span><span class="zone-val" style="color:var(--green);">+35.5%</span></div></div>
+<div class="zone-list"><div class="zone-item"><span class="zone-label">52주 최고</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$170.46 (2026.02.27)</span><span class="zone-tag tag-resist">저항선</span></div></div><div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$158.83</span><span class="zone-tag tag-current">현재</span></div></div><div class="zone-item"><span class="zone-label">MA120</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$153.31</span><span class="zone-tag tag-support">지지선</span></div></div><div class="zone-item"><span class="zone-label">52주 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$112.34 (2025.08.01)</span><span class="zone-tag tag-support">강지지</span></div></div><div class="zone-item"><span class="zone-label">52주 수익률</span><span class="zone-val" style="color:var(--green);">+35.5%</span></div></div>
 </div>
 <div class="card">
 <div class="card-title">이동평균선 현황</div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5</span><span class="ma-val">$157.19</span><span class="ma-status status-above">현재가 상회</span></div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20</span><span class="ma-val">$154.69</span><span class="ma-status status-above">현재가 상회</span></div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60</span><span class="ma-val">$151.40</span><span class="ma-status status-above">현재가 상회</span></div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120</span><span class="ma-val">$153.31</span><span class="ma-status status-above">현재가 상회</span></div>
-<div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">MA60&gt;MA120&gt;현재가&gt;MA20&gt;MA5 순 — 지지와 저항이 교차하는 혼조 구간. 현재가 $158.83, 52주 고점 $555.45 대비 -29.7%.</div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 <span class="ma-val">$157.19</span></span><span class="ma-status status-above">현재가 상회</span></div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 <span class="ma-val">$154.69</span></span><span class="ma-status status-above">현재가 상회</span></div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 <span class="ma-val">$151.40</span></span><span class="ma-status status-above">현재가 상회</span></div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 <span class="ma-val">$153.31</span></span><span class="ma-status status-above">현재가 상회</span></div>
+<div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">현재가&gt;MA5&gt;MA20&gt;MA120&gt;MA60 순 — 모든 이동평균선을 웃도는 상승 구간. 현재가는 52주 고점 $170.46 대비 -6.8%다.</div>
 </div>
 </div>
 <div class="card">
@@ -270,7 +272,7 @@
 </div>
 <div class="card">
 <div class="card-title">다음 실적 체크포인트 — Q3 2026 · 2026년 10월 예상</div>
-<div style="font-size:12px;color:var(--text2);line-height:1.8;"> 1. Kisqali·Kesimpta·Pluvicto 성장률 2. Entresto 제네릭 침식 규모 3. 2026 매출·core 영업이익 가이던스 유지 여부</div>
+<div style="font-size:12px;color:var(--text2);line-height:1.8;">① Kisqali·Kesimpta·Pluvicto 성장률 → ② Entresto 제네릭 침식 규모 → ③ Core 영업마진 40%대 유지 여부 → ④ 2026 매출·Core 영업이익 가이던스 유지 여부.</div>
 </div>
 </div>
 <div class="section" id="valuation">
@@ -292,16 +294,16 @@
 </div>
 <div class="card">
 <div class="card-title">밸류에이션 5단계</div>
-<div class="stage-grid"><div class="stage-mini stage-1"><div class="stage-mini-num">0</div><div class="stage-mini-label">1단계</div></div><div class="stage-mini stage-2"><div class="stage-mini-num">1</div><div class="stage-mini-label">2단계</div></div><div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">3단계</div></div><div class="stage-mini stage-4"><div class="stage-mini-num">1</div><div class="stage-mini-label">4단계</div></div><div class="stage-mini stage-5"><div class="stage-mini-num">0</div><div class="stage-mini-label">5단계</div></div></div>
+<div class="stage-grid"><div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div></div><div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div><div style="font-size:10px;color:var(--green);margin-top:5px;">FCF 수익률</div></div><div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:10px;color:var(--gold);margin-top:5px;">PER·EV/EBITDA·배당</div></div><div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:10px;color:var(--red);margin-top:5px;">P/S</div></div><div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div></div></div>
 <div style="margin-top:10px;font-size:11px;color:var(--text3);">다섯 개 지표의 단계 분포는 기존 NVS 카드의 회사별 평가를 그대로 이식했다.</div>
 </div>
 <div class="card">
-<div class="card-title">Per-Share 지표 (FY26·2026.06 말 기준 · 7.43B 주)</div>
+<div class="card-title">Per-Share 지표 (TTM·현재 밸류에이션 기준)</div>
 <div class="per-share-grid">
-<div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">현재가</div><div class="ps-value">$158.83</div><div class="ps-sub">2026.07.29 종가</div></div>
-<div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">EPS TTM</div><div class="ps-value">$8.97</div><div class="ps-sub">최근 4개 분기</div></div>
-<div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">배당</div><div class="ps-value">$4.15</div><div class="ps-sub">연환산 기준</div></div>
-<div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">목표가</div><div class="ps-value">$168</div><div class="ps-sub">Street 평균</div></div>
+<div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석)</div><div class="ps-value">$8.97</div><div class="ps-sub">TTM</div></div>
+<div class="ps-card"><div class="ps-icon">🧾</div><div class="ps-label">매출/주</div><div class="ps-value">약 $29.41</div><div class="ps-sub">P/S 5.4x 기준</div></div>
+<div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주</div><div class="ps-value">약 $8.89</div><div class="ps-sub">FCF 수익률 5.6% 기준</div></div>
+<div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS</div><div class="ps-value">$4.15</div><div class="ps-sub">연환산</div></div>
 </div>
 <div style="font-size:11px;color:var(--text3);margin-top:10px;">* Per-Share 값과 기준 시점은 기존 NVS 카드의 최신 공시·시장 데이터 기준이다.</div>
 </div>
@@ -311,9 +313,9 @@
 </div>
 <div class="card">
 <div class="card-title">시나리오별 공정가치 분석</div>
-<div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;"><strong>Bear $135</strong><div style="font-size:12px;color:var(--text2);">성장 둔화와 멀티플 정상화</div></div>
-<div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;"><strong>Base $165</strong><div style="font-size:12px;color:var(--text2);">현재 성장과 마진 유지</div></div>
-<div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);"><strong>Bull $190</strong><div style="font-size:12px;color:var(--text2);">성장 가속과 실행 프리미엄</div></div>
+<div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;"><div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — Entresto 침식 가속</div><div style="font-size:12px;color:var(--text2);">제네릭 침식과 파이프라인 지연 시 → 공정가치 <strong style="color:var(--red);">$135~145/주</strong></div></div>
+<div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;"><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 핵심 신약 성장 유지</div><div style="font-size:12px;color:var(--text2);">Kisqali·Kesimpta·Pluvicto가 침식을 상쇄할 경우 → 공정가치 <strong>$155~175/주</strong></div></div>
+<div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);"><div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — 파이프라인 상향</div><div style="font-size:12px;color:var(--text2);">신약 성장과 마진이 예상을 웃돌 경우 → 공정가치 <strong style="color:var(--green);">$185~195/주</strong></div></div>
 </div>
 </div>
 <div class="section" id="us">
@@ -331,7 +333,7 @@
 </div>
 </div>
 <div class="card">
-<div class="card-title">AI 수익화 진척 현황</div>
+<div class="card-title">핵심 의약품·수익성 지표</div>
 <div class="zone-list">
 <div class="zone-item"><span class="zone-label">Q2 매출</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$14.41B (+3%)</span><span class="zone-tag tag-support">첫 돌파</span></div></div>
 <div class="zone-item"><span class="zone-label">Core 영업마진</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">41.2%</span><span class="zone-tag tag-support">Q4 FY26</span></div></div>
@@ -342,7 +344,7 @@
 </div>
 </div>
 <div class="card">
-<div class="card-title">Q2 매출 · Core 영업마진 추세</div>
+<div class="card-title">분기 매출 추세 — 핵심 신약 성장과 특허 절벽</div>
 <div class="chart-wrap" style="height:200px;"><canvas id="capexFcfChart"></canvas></div>
 <div style="margin-top:12px;font-size:12px;color:var(--text2);line-height:1.7;"><strong style="color:var(--text);">섹터·지수 수급: </strong>Health Care 동종 기업 및 S&P 500 대비 상대성과와 기관 수급을 함께 확인한다.</div>
 </div>
@@ -389,45 +391,40 @@
 <div style="width:20%;height:100%;background:rgba(231,76,60,0.45);"></div>
 <div style="width:6.7%;height:100%;background:var(--bg3);"></div>
 </div>
-<div style="position:absolute;top:10px;left:13.9%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
-<div style="position:absolute;top:-6px;left:13.9%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $158.83</div>
-<div style="position:absolute;top:22px;left:72.9%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
-<div style="position:absolute;top:48px;left:72.9%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $168</div>
+<div style="position:absolute;top:10px;left:45.1%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
+<div style="position:absolute;top:-6px;left:45.1%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $158.83</div>
+<div style="position:absolute;top:22px;left:57.3%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
+<div style="position:absolute;top:48px;left:57.3%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $168</div>
 </div>
 <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-top:4px;">
-<span style="color:var(--green);">Bear $360~400 (저평가)</span>
-<span>Base $450~520 (멀티플 정상화)</span>
-<span style="color:var(--red);">Bull $560~620 (고평가)</span>
+<span style="color:var(--red);">Bear $135~145</span><span>Base $155~175</span><span style="color:var(--green);">Bull $185~195</span>
 </div>
 <div style="margin-top:10px;font-size:11px;color:var(--text3);">기존 NVS 카드의 Bear/Base/Bull 공정가치와 현재가를 NVS 목표가 게이지 형식으로 표시했다.</div>
 <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
 <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">애널리스트 투자의견 — 8명 중 매수 50%</div>
 <div style="height:8px;border-radius:4px;overflow:hidden;display:flex;">
-<div style="width:94.6%;height:100%;background:var(--green);"></div>
-<div style="width:5.4%;height:100%;background:#f0c040;"></div>
+<div style="width:50%;height:100%;background:var(--green);"></div><div style="width:50%;height:100%;background:#f0c040;"></div>
 </div>
 <div style="display:flex;justify-content:space-between;font-size:10.5px;margin-top:6px;">
-<span style="color:var(--green);">매수 53명 (Strong Buy 41·Buy 12)</span>
-<span style="color:#f0c040;">유지 3명 (Hold)</span>
-<span style="color:var(--red);">매도 0명</span>
+<span style="color:var(--green);">매수 비중 50%</span><span style="color:#f0c040;">중립·기타 50%</span><span style="color:var(--accent2);">평균 목표가 $168</span>
 </div>
 </div>
 </div>
 <div class="card" style="margin-top:16px;">
 <div class="card-title">5개 분석 종합 — 한눈에 보기</div>
 <div class="zone-list">
-<div class="zone-item"><span class="zone-label">기술적</span><span class="zone-val" style="color:var(--green);">상승 추세</span></div>
-<div class="zone-item"><span class="zone-label">펀더멘털</span><span class="zone-val" style="color:var(--green);">성장 지속</span></div>
-<div class="zone-item"><span class="zone-label">밸류에이션</span><span class="zone-val" style="color:var(--ma60);">프리미엄 점검</span></div>
-<div class="zone-item"><span class="zone-label">상대성과</span><span class="zone-val" style="color:var(--green);">+18.7%p</span></div>
-<div class="zone-item"><span class="zone-label">리스크</span><span class="zone-val" style="color:var(--red);">실행 확인 필요</span></div>
+<div class="zone-item"><span class="zone-label">📈 기술적</span><span class="zone-val" style="color:var(--green);">모든 이동평균선 상회</span></div>
+<div class="zone-item"><span class="zone-label">📊 펀더멘털</span><span class="zone-val" style="color:var(--green);">Core 영업마진 41.2%</span></div>
+<div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:var(--gold);">대체로 적정·P/S만 4단계</span></div>
+<div class="zone-item"><span class="zone-label">🇺🇸 상대성과</span><span class="zone-val" style="color:var(--green);">+18.7%p</span></div>
+<div class="zone-item"><span class="zone-label">📰 핵심 변수</span><span class="zone-val" style="color:var(--red);">Entresto 제네릭 침식</span></div>
 </div>
 </div>
 <div class="card" style="margin-top:16px;">
 <div class="card-title">투자의견 요약</div>
 <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
 <div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107">Q3 2026 · 2026년 10월 예상</strong></div>
-<div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">8명 중 매수 50% · 평균 목표가 $168 — 실적 성장과 현금흐름을 함께 확인</strong></div>
+<div><span style="color:var(--text2);">투자의견:</span> <strong style="color:var(--gold)">매수 비중 50%</strong></div><div><span style="color:var(--text2);">목표주가:</span> <strong style="color:#ffc107">$168 · +5.8%</strong></div><div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">핵심 신약 성장과 Entresto 침식의 균형 확인</strong></div>
 </div>
 </div>
 </div>
@@ -647,22 +644,19 @@ const NVS_MA120 = [112.92,112.98,113.04,113.11,113.2,113.29,113.34,113.41,113.51
 })();
 
 function renderFundChart(){let ctx=document.getElementById('nvsRevChart');if(!ctx||charts.fund)return;charts.fund=new Chart(ctx,{data:{labels:["Q3'24", "Q4'24", "Q1'25", "Q2'25", "Q3'25", "Q4'25", "Q1'26", "Q2'26"],datasets:[{type:'bar',label:'매출 ($B)',data:[12.51, 12.82, 12.58, 13.23, 14.05, 13.95, 13.17, 14.41],backgroundColor:'rgba(56,189,248,.45)',borderColor:'#38bdf8',borderWidth:1,borderRadius:4,yAxisID:'y'},{type:'bar',label:'순이익 ($B)',data:[3.25, 3.19, 2.82, 3.61, 4.02, 3.71, 3.09, 3.26],backgroundColor:'rgba(46,204,113,.45)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4,yAxisID:'y'},{type:'line',label:'EPS',data:[1.63, 1.6, 1.42, 1.83, 2.07, 1.92, 1.62, 1.71],borderColor:'#f0c040',tension:.35,pointRadius:4,borderWidth:2.5,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:900,easing:'easeOutQuart'},scales:{x:{ticks:{color:'#9aa0b8'}},y:{beginAtZero:true,ticks:{color:'#9aa0b8'}},y1:{position:'right',beginAtZero:true,ticks:{color:'#f0c040'}}},plugins:{legend:{labels:{color:'#9aa0b8'}}}}})}
-function renderPeerChart(){let ctx=document.getElementById('nvsPeerChart');if(!ctx||charts.peer)return;charts.peer=new Chart(ctx,{type:'bar',data:{labels:['NVS','섹터 중앙값','S&P 500'],datasets:[{data:[17.7,24,22],backgroundColor:['#38bdf8','rgba(154,160,184,.35)','rgba(154,160,184,.35)'],borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:900,easing:'easeOutQuart'},scales:{y:{beginAtZero:true,ticks:{color:'#9aa0b8'}},x:{ticks:{color:'#9aa0b8'}}},plugins:{legend:{display:false}}}})}
+function renderPeerChart(){let ctx=document.getElementById('peerChart');if(!ctx||charts.peer)return;charts.peer=new Chart(ctx,{type:'bar',data:{labels:['NVS','섹터 중앙값','S&P 500'],datasets:[{data:[17.0,24,22],backgroundColor:['#38bdf8','rgba(154,160,184,.35)','rgba(154,160,184,.35)'],borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:900,easing:'easeOutQuart'},scales:{y:{beginAtZero:true,ticks:{color:'#9aa0b8'}},x:{ticks:{color:'#9aa0b8'}}},plugins:{legend:{display:false}}}})}
 function renderCapexFcfChart() {
   const ctx = document.getElementById('capexFcfChart');
   if (!ctx || charts['capexfcf']) return;
   charts['capexfcf'] = new Chart(ctx,{
     type:'bar',
     data:{
-      labels:['Q1 FY25','Q2 FY25','Q3 FY25','Q4 FY25','Q1 FY26','Q2 FY26','Q3 FY26','Q4 FY26'],
-      datasets:[
-        {label:'Capex($B)',data:[14.9,15.8,16.7,17.1,19.4,29.9,30.9,35.8],backgroundColor:'rgba(231,76,60,0.5)',borderColor:'#e74c3c',borderWidth:1,borderRadius:4},
-        {label:'FCF($B)',data:[19.3,6.5,20.3,25.6,25.7,5.9,15.8,19.6],backgroundColor:'rgba(46,204,113,0.5)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4}
-      ]
+      labels:["Q3'24","Q4'24","Q1'25","Q2'25","Q3'25","Q4'25","Q1'26","Q2'26"],
+      datasets:[{label:'매출($B)',data:[12.51,12.82,12.58,13.23,14.05,13.95,13.17,14.41],backgroundColor:'rgba(56,189,248,.5)',borderColor:'#38bdf8',borderWidth:1,borderRadius:4}]
     },
     options:{
       responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{labels:{color:'#9aa0b8',font:{size:10}}}},
+      animation:{duration:900,easing:'easeOutQuart'},plugins:{legend:{display:false}},
       scales:{
         x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10},maxRotation:30}},
         y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}}
