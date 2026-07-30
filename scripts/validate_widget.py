@@ -7,7 +7,9 @@ p=argparse.ArgumentParser(); p.add_argument('widget'); p.add_argument('--ticker'
 path=Path(a.widget); s=path.read_text(); errors=[]
 
 def section(tab):
-    m=re.search(rf'<div class="section(?: active)?" id="{tab}">(.*?)(?=<div class="section(?: active)?" id="|<div class="disclaimer")',s,re.S)
+    opener=rf'<div(?=[^>]*\bclass="section(?: active)?")(?=[^>]*\bid="{tab}")[^>]*>'
+    next_section=r'<div(?=[^>]*\bclass="section(?: active)?")(?=[^>]*\bid=")[^>]*>'
+    m=re.search(rf'{opener}(.*?)(?={next_section}|<div class="disclaimer")',s,re.S)
     return m.group(1) if m else ''
 
 def card_titles(tab):
