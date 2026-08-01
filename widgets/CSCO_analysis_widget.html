@@ -124,14 +124,13 @@
   .ma-toggle-btn { background: var(--bg3); border: 1px solid; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer; transition: all .15s; }
   .ma-toggle-btn:hover { filter: brightness(1.2); }
   .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
-  @media
   .per-share-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
   .ps-card { background:var(--bg3); border-radius:8px; padding:16px; text-align:center; }
   .ps-icon { font-size:22px; margin-bottom:6px; }
-  .ps-label { font-size:11px; color:var(--text3); }
-  .ps-value { font-size:18px; font-weight:700; color:var(--text); margin-top:4px; }
-  .ps-sub { font-size:10px; color:var(--text3); margin-top:3px; }
- (max-width: 600px) {
+  .ps-label { font-size:10px; color:var(--text3); text-transform:uppercase; letter-spacing:.8px; margin-bottom:6px; }
+  .ps-value { font-size:22px; font-weight:800; color:var(--accent2); }
+  .ps-sub { font-size:11px; color:var(--text3); margin-top:3px; }
+  @media (max-width: 600px) {
     .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
     .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; } .price-main { font-size: 24px; }
   }
@@ -367,13 +366,14 @@
   </div>
 
   <div class="card">
-    <div class="card-title">Per-Share 데이터 (참고 · TTM 기준 · 약 39.7억 주)</div>
+    <div class="card-title">Per-Share 지표 (TTM·최근 공시 기준 · 약 39.7억 주)</div>
 <div class="per-share-grid">
-      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">GAAP EPS</div><div class="ps-value">$3.08</div><div class="ps-sub">TTM</div></div>
-      <div class="ps-card"><div class="ps-icon">📘</div><div class="ps-label">BPS</div><div class="ps-value">$12.31</div><div class="ps-sub">최근 공시 기준</div></div>
-      <div class="ps-card"><div class="ps-icon">📊</div><div class="ps-label">매출/주</div><div class="ps-value">$15.49</div><div class="ps-sub">TTM</div></div>
-      <div class="ps-card"><div class="ps-icon">🎁</div><div class="ps-label">분기배당</div><div class="ps-value">$0.42</div><div class="ps-sub"></div></div>
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석)</div><div class="ps-value">$3.08</div><div class="ps-sub">TTM GAAP</div></div>
+      <div class="ps-card"><div class="ps-icon">📘</div><div class="ps-label">BPS</div><div class="ps-value">$12.31</div><div class="ps-sub">최근 분기 장부가</div></div>
+      <div class="ps-card"><div class="ps-icon">🧾</div><div class="ps-label">매출/주</div><div class="ps-value">$15.49</div><div class="ps-sub">최근 4개 분기</div></div>
+      <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS (연간배당)</div><div class="ps-value">$1.68</div><div class="ps-sub">분기 $0.42 연환산</div></div>
     </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">* EPS·매출/주는 최근 4개 분기, BPS는 최근 분기 공시를 약 39.7억 주 기준으로 환산했다. DPS는 현재 분기배당을 연환산한 값이다.</div>
   </div>
 
   <div class="card">
