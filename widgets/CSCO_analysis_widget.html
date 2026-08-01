@@ -124,7 +124,14 @@
   .ma-toggle-btn { background: var(--bg3); border: 1px solid; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer; transition: all .15s; }
   .ma-toggle-btn:hover { filter: brightness(1.2); }
   .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
-  @media (max-width: 600px) {
+  @media
+  .per-share-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  .ps-card { background:var(--bg3); border-radius:8px; padding:16px; text-align:center; }
+  .ps-icon { font-size:22px; margin-bottom:6px; }
+  .ps-label { font-size:11px; color:var(--text3); }
+  .ps-value { font-size:18px; font-weight:700; color:var(--text); margin-top:4px; }
+  .ps-sub { font-size:10px; color:var(--text3); margin-top:3px; }
+ (max-width: 600px) {
     .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
     .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; } .price-main { font-size: 24px; }
   }
@@ -217,19 +224,19 @@
     <div class="card">
       <div class="card-title">핵심 가격대</div>
       <div class="zone-list">
-        <div class="zone-item"><span class="zone-label">52주 최고</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$130.37 (2026.06.04)</span><span class="zone-tag tag-resist">저항선</span></div></div>
-        <div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$112.48 (고점 대비 -13.7%)</span><span class="zone-tag tag-current">현재</span></div></div>
-        <div class="zone-item"><span class="zone-label">MA120 지지</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$98.22</span><span class="zone-tag tag-support">지지선</span></div></div>
-        <div class="zone-item"><span class="zone-label">52주 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$65.75 (2025.08.18)</span><span class="zone-tag tag-support">강지지</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 최고</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--red);">$130.37 (2026.06.04)</span><span class="zone-tag tag-resist">저항선</span></div></div>
+        <div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--accent2);">$112.48 (고점 대비 -13.7%)</span><span class="zone-tag tag-current">현재</span></div></div>
+        <div class="zone-item"><span class="zone-label">MA120 지지</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--green);">$98.22</span><span class="zone-tag tag-support">지지선</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--green);">$65.75 (2025.08.18)</span><span class="zone-tag tag-support">강지지</span></div></div>
         <div class="zone-item"><span class="zone-label">52주 수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--green);">+65.5%</span></div></div>
       </div>
     </div>
     <div class="card">
       <div class="card-title">이동평균선 현황</div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기) $113.91</span><span class="ma-status status-below">단기 저항</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기) $114.16</span><span class="ma-status status-below">중단기 저항</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기) $114.82</span><span class="ma-status status-below">중기 저항</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기) $98.22</span><span class="ma-status status-above">장기 지지</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$113.91</span><span class="ma-status status-below">현재가 하회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$114.16</span><span class="ma-status status-below">현재가 하회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$114.82</span><span class="ma-status status-below">현재가 하회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$98.22</span><span class="ma-status status-above">현재가 상회</span></div></div>
       <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">MA60&gt;MA20&gt;MA5&gt;현재가&gt;MA120 순 — 지지와 저항이 교차하는 혼조 구간. 현재가 $112.48, 52주 고점 $130.37 대비 -13.7%.</div>
     </div>
   </div>
@@ -237,10 +244,10 @@
   <div class="card">
     <div class="card-title">구간별 패턴 분석</div>
     <div class="grid-4">
-      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.07~08 — 저점 형성 $68→$66</div><div style="font-size:12px;color:var(--text2);">52주 저점($65.75, 8/18) 형성. 네트워킹 업황 둔화 우려 속 밸류에이션 바닥권 형성.</div></div>
-      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2025.09~2026.04 — 완만한 우상향 $66→$89</div><div style="font-size:12px;color:var(--text2);">캠퍼스 네트워킹 주문 회복과 AI 인프라 수주 증가 기대감이 누적되며 꾸준한 상승세.</div></div>
-      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.05 — Q3 실적 서프라이즈 후 급등 $90→$121</div><div style="font-size:12px;color:var(--text2);">5/13 Q3 실적 발표 후 AI 주문 목표 상향(가이던스 $5B→$9B) 소식에 +15% 단일일 급등, 5/14 추가로 +13% 급등.</div></div>
-      <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--accent2);font-weight:700;margin-bottom:6px;">2026.06~07 — 사상 최고가 후 조정 $121→$130→$111</div><div style="font-size:12px;color:var(--text2);">6/4 사상 최고가 $130.37 경신 후 차익실현 매물로 조정, 8/19 Q4 실적 발표를 앞두고 $111 부근에서 등락.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;border-top:3px solid var(--green);"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">2025.07~08 — 저점 형성 $68→$66</div><div style="font-size:12px;color:var(--text2);">52주 저점($65.75, 8/18) 형성. 네트워킹 업황 둔화 우려 속 밸류에이션 바닥권 형성.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;border-top:3px solid var(--green);"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">2025.09~2026.04 — 완만한 우상향 $66→$89</div><div style="font-size:12px;color:var(--text2);">캠퍼스 네트워킹 주문 회복과 AI 인프라 수주 증가 기대감이 누적되며 꾸준한 상승세.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;border-top:3px solid var(--green);"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">2026.05 — Q3 실적 서프라이즈 후 급등 $90→$121</div><div style="font-size:12px;color:var(--text2);">5/13 Q3 실적 발표 후 AI 주문 목표 상향(가이던스 $5B→$9B) 소식에 +15% 단일일 급등, 5/14 추가로 +13% 급등.</div></div>
+      <div style="background:var(--bg3);padding:12px;border-radius:8px;border-top:3px solid var(--red);"><div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">2026.06~07 — 사상 최고가 후 조정 $121→$130→$111</div><div style="font-size:12px;color:var(--text2);">6/4 사상 최고가 $130.37 경신 후 차익실현 매물로 조정, 8/19 Q4 실적 발표를 앞두고 $111 부근에서 등락.</div></div>
     </div>
   </div>
 
@@ -291,7 +298,6 @@
   <div class="card">
     <div class="card-title">다음 실적 체크포인트</div>
     <div style="font-size:12px;color:var(--text2);line-height:1.8;">
-      <strong style="color:var(--text);">8/19 Q4 실적 4대 체크포인트:</strong><br>
       ① AI 인프라 수주 $9B 목표 달성 여부<br>
       ② 캠퍼스 네트워킹 +25% 고성장 지속 여부<br>
       ③ Splunk 매출 믹스 역풍 완화 신호<br>
@@ -362,64 +368,38 @@
 
   <div class="card">
     <div class="card-title">Per-Share 데이터 (참고 · TTM 기준 · 약 39.7억 주)</div>
-    <div class="grid-4">
-      <div class="stat-box"><div class="stat-label">GAAP EPS</div><div class="stat-value">$3.08</div></div>
-      <div class="stat-box"><div class="stat-label">BPS</div><div class="stat-value">$12.31</div></div>
-      <div class="stat-box"><div class="stat-label">매출/주</div><div class="stat-value">$15.49</div></div>
-      <div class="stat-box"><div class="stat-label">분기배당</div><div class="stat-value">$0.42</div></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">시나리오별 공정가치 분석</div>
-    <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
-      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — AI 인프라 수요 둔화·Splunk 역풍 장기화</div>
-      <div style="font-size:12px;color:var(--text2);">AI 데이터센터 투자 사이클 둔화, Splunk 매출 믹스 역풍이 FY2027까지 지속 시 → 공정가치 <strong style="color:var(--red);">$75~90/주</strong></div>
-    </div>
-    <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
-      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 가이던스 달성·AI 성장 지속</div>
-      <div style="font-size:12px;color:var(--text2);">FY2026 가이던스(매출 $60.2~61B·EPS $4.08~4.14) 달성, 캠퍼스 네트워킹 고성장 유지 시 → 공정가치 <strong style="color:var(--text);">$115~130/주</strong> (애널리스트 평균 목표가 $127.18과 부합)</div>
-    </div>
-    <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
-      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — AI 인프라 수요 가속·Splunk 조기 정상화</div>
-      <div style="font-size:12px;color:var(--green);">neocloud·소버린 고객 수주 추가 확대, Splunk 클라우드 전환 조기 완료로 매출 믹스 개선 시 → 공정가치 <strong style="color:var(--green);">$140~160/주</strong></div>
+<div class="per-share-grid">
+      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">GAAP EPS</div><div class="ps-value">$3.08</div><div class="ps-sub">TTM</div></div>
+      <div class="ps-card"><div class="ps-icon">📘</div><div class="ps-label">BPS</div><div class="ps-value">$12.31</div><div class="ps-sub">최근 공시 기준</div></div>
+      <div class="ps-card"><div class="ps-icon">📊</div><div class="ps-label">매출/주</div><div class="ps-value">$15.49</div><div class="ps-sub">TTM</div></div>
+      <div class="ps-card"><div class="ps-icon">🎁</div><div class="ps-label">분기배당</div><div class="ps-value">$0.42</div><div class="ps-sub"></div></div>
     </div>
   </div>
 
   <div class="card">
     <div class="card-title">종합 밸류에이션 — 밸류에이션보다 AI 네트워킹 수요의 지속가능성이 핵심 변수</div>
     <div style="font-size:12px;color:var(--text2);line-height:1.6;">PER·PBR 모두 5단계(매우 고평가)로 자체 역사적 평균을 크게 상회한다. <strong style="color:var(--text);">이는 전통 네트워킹 기업에서 AI 인프라 수혜주로의 밸류에이션 리레이팅이 진행 중임을 보여주지만, 동시에 향후 실적이 뒷받침되지 못하면 밸류에이션 되돌림 리스크도 크다는 의미다.</strong> 공정가치 $75(Bear)~$160(Bull) — 실질 변수는 밸류에이션 그 자체가 아니라 AI 데이터센터 네트워킹 수요가 하이퍼스케일러를 넘어 얼마나 폭넓게 지속되는지 여부.</div>
+  </div><div class="card">
+    <div class="card-title">시나리오별 공정가치 분석</div>
+    <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — AI 인프라 수요 둔화·Splunk 역풍 장기화</div>
+      <div style="font-size:12px;color:var(--text2);">AI 데이터센터 투자 사이클 둔화, Splunk 매출 믹스 역풍이 FY2027까지 지속 시 → 공정가치 <strong style="color:var(--red);">$75~90/주 (-33.3%~-20.0%)</strong></div>
+    </div>
+    <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 가이던스 달성·AI 성장 지속</div>
+      <div style="font-size:12px;color:var(--text2);">FY2026 가이던스(매출 $60.2~61B·EPS $4.08~4.14) 달성, 캠퍼스 네트워킹 고성장 유지 시 → 공정가치 <strong style="color:var(--text);">$115~130/주 (+2.2%~+15.6%)</strong> (애널리스트 평균 목표가 $127.18과 부합)</div>
+    </div>
+    <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — AI 인프라 수요 가속·Splunk 조기 정상화</div>
+      <div style="font-size:12px;color:var(--green);">neocloud·소버린 고객 수주 추가 확대, Splunk 클라우드 전환 조기 완료로 매출 믹스 개선 시 → 공정가치 <strong style="color:var(--green);">$140~160/주 (+24.5%~+42.2%)</strong></div>
+    </div>
   </div>
+
+
 </div>
 
 <!-- ===================== SECTION 4: US 특화 ===================== -->
-<div id="us" class="section">
-  <div class="section-title">US 특화 — S&P 500 성과 · 경쟁 구도</div>
-  <div class="rel-container">
-    <div class="rel-title">S&P 500 상대 수익률</div>
-    <div class="grid-3">
-      <div class="stat-box"><div class="stat-label">CSCO 52주</div><div class="stat-value up">+65.5%</div></div>
-      <div class="stat-box"><div class="stat-label">S&P 500 52주</div><div class="stat-value">+19.6%</div></div>
-      <div class="stat-box"><div class="stat-label">알파 (초과수익)</div><div class="stat-value up">+45.9%p</div><div class="stat-sub">압도적 아웃퍼폼</div></div>
-    </div>
-    <div class="zone-list" style="margin-top:12px;">
-      <div class="zone-item"><span class="zone-label">시가총액 순위</span><span class="zone-val">S&P500 내 약 26위권</span></div>
-      <div class="zone-item"><span class="zone-label">배당수익률</span><span class="zone-val">1.5% (분기 $0.42)</span></div>
-      <div class="zone-item"><span class="zone-label">섹터</span><span class="zone-val">Information Technology · 네트워킹 인프라(AI 데이터센터 수혜)</span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">네트워킹·AI 인프라 경쟁 구도</div>
-    <div class="zone-list">
-      <div class="zone-item"><span class="zone-label">Arista Networks (데이터센터 네트워킹 경쟁)</span><span class="zone-val">고성장 프리미엄 밸류에이션 — 하이퍼스케일러 중심 고객 구조</span></div>
-      <div class="zone-item"><span class="zone-label">Juniper Networks (전통 네트워킹 경쟁)</span><span class="zone-val">HPE 인수 완료 — 규모의 경쟁 심화</span></div>
-      <div class="zone-item"><span class="zone-label">Nvidia·Broadcom (AI 인프라 공급망)</span><span class="zone-val">GPU·커스텀 실리콘 — Cisco와는 보완 관계이자 일부 경쟁</span></div>
-      <div class="zone-item"><span class="zone-label">Splunk 통합</span><span class="zone-val" style="color:var(--red);">클라우드 전환 매출 믹스 역풍 — FY2027 상반기 정상화 전망</span></div>
-      <div class="zone-item"><span class="zone-label">일자리 구조조정</span><span class="zone-val">약 4,000명 감원 발표(2026.05) — 효율화·AI 투자 재배분</span></div>
-    </div>
-  </div>
-</div>
+<div id="us" class="section"><div class="section-title">US 특화 — 미국 AI 네트워킹·보안 수요</div><div class="rel-container"><div class="rel-title">S&P 500 대비 상대 수익률 (52주)</div><div class="grid-3"><div class="stat-box"><div class="stat-label">CSCO</div><div class="stat-value up">+65.5%</div></div><div class="stat-box"><div class="stat-label">S&amp;P 500</div><div class="stat-value">+19.6%</div></div><div class="stat-box"><div class="stat-label">알파</div><div class="stat-value up">+45.9%p</div></div></div><div class="zone-list" style="margin-top:12px;"><div class="zone-item"><span class="zone-label">S&amp;P 500</span><span class="zone-val">구성 종목</span></div><div class="zone-item"><span class="zone-label">미국 상장</span><span class="zone-val">NASDAQ · Information Technology</span></div></div></div><div class="card"><div class="card-title">미국 AI·캠퍼스 네트워킹 수요 — Q3 FY2026</div><div class="zone-list"><div class="zone-item"><span class="zone-label">글로벌 AI 인프라 수주 목표 · FY2026</span><span class="zone-val" style="color:var(--green);">$9B · 기존 $5B에서 상향</span></div><div class="zone-item"><span class="zone-label">미국 중심 캠퍼스 주문 · Q3 FY2026</span><span class="zone-val" style="color:var(--green);">+25% YoY</span></div><div class="zone-item"><span class="zone-label">글로벌 Q4 매출 가이던스 · FY2026</span><span class="zone-val">$16.7~16.9B</span></div><div class="zone-item"><span class="zone-label">미국 수요 확인 · Q4 FY2026</span><span class="zone-val">하이퍼스케일러 AI 패브릭·기업 교체주기</span></div></div></div><div class="card"><div class="card-title">미국 보안·소프트웨어 실행력 — FY2026</div><div class="zone-list"><div class="zone-item"><span class="zone-label">글로벌 Splunk 통합 · FY2026</span><span class="zone-val">구독 전환과 매출 믹스 정상화</span></div><div class="zone-item"><span class="zone-label">미국 경쟁 구도 · FY2026</span><span class="zone-val">Arista·HPE/Juniper·Nvidia와 경쟁·보완</span></div><div class="zone-item"><span class="zone-label">미국 비용 재배분 · 2026.05</span><span class="zone-val" style="color:var(--red);">약 4,000명 구조조정 · AI 투자 전환</span></div><div class="zone-item"><span class="zone-label">미국 실행 체크 · FY2027 H1</span><span class="zone-val">Splunk 역풍 완화와 보안 ARR 성장</span></div></div></div></div>
 
 <!-- ===================== SECTION 5: 시계열 뉴스 ===================== -->
 <div id="news" class="section">
