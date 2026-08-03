@@ -93,6 +93,12 @@
   .stage-mini-num { font-size: 22px; font-weight: 700; }
   .stage-mini-label { font-size: 12px; margin-top: 4px; }
   .scenario-card { border-radius: 8px; padding: 14px; }
+  .per-share-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  .ps-card { background:var(--bg3); border-radius:8px; padding:16px; text-align:center; }
+  .ps-icon { font-size:22px; margin-bottom:6px; }
+  .ps-label { font-size:10px; color:var(--text3); text-transform:uppercase; letter-spacing:.8px; margin-bottom:6px; }
+  .ps-value { font-size:22px; font-weight:800; color:var(--accent2); }
+  .ps-sub { font-size:11px; color:var(--text3); margin-top:3px; }
   .timeline { position: relative; padding-left: 24px; }
   .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--border); }
   .tl-item { position: relative; margin-bottom: 20px; }
@@ -229,10 +235,10 @@
     <div class="card">
       <div class="card-title">핵심 가격대</div>
       <div class="zone-list">
-        <div class="zone-item"><span class="zone-label">52주 최고</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$267.47 (2026.07.29)</span><span class="zone-tag tag-resist">저항선</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 최고</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--red);">$267.47 (2026.07.29)</span><span class="zone-tag tag-resist">저항선</span></div></div>
         <div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$250.94 (고점 대비 -6.2%)</span><span class="zone-tag tag-current">현재</span></div></div>
-        <div class="zone-item"><span class="zone-label">MA20 지지</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$254.03</span><span class="zone-tag tag-support">지지선</span></div></div>
-        <div class="zone-item"><span class="zone-label">52주 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$187.62 (2025.07.31)</span><span class="zone-tag tag-support">강지지</span></div></div>
+        <div class="zone-item"><span class="zone-label">MA20 저항</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--red);">$254.03</span><span class="zone-tag tag-resist">저항선</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--green);">$187.62 (2025.07.31)</span><span class="zone-tag tag-support">강지지</span></div></div>
         <div class="zone-item"><span class="zone-label">52주 수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--green);">+32.8%</span></div></div>
       </div>
     </div>
@@ -302,9 +308,9 @@
   </div>
 
   <div class="card">
-    <div class="card-title">다음 실적 체크포인트</div>
+    <div class="card-title">다음 실적 체크포인트 — Q3 FY2026 · 2026년 10월 예상</div>
     <div style="font-size:12px;color:var(--text2);line-height:1.8;">
-      <strong style="color:var(--text);">7/31 Q2 실적 4대 체크포인트:</strong><br>
+      <div style="margin-bottom:6px;"><strong style="color:var(--text);">Q3 FY2026 4대 체크포인트</strong></div>
       ① Skyrizi·Rinvoq 고성장 지속 여부 → Immunology 모멘텀 검증<br>
       ② 자체 가이던스(컨센서스 하회) 실제 결과 부합 여부<br>
       ③ Apogee 인수 마무리 진행상황(2026 Q3 종료 예정)<br>
@@ -374,42 +380,44 @@
   </div>
 
   <div class="card">
-    <div class="card-title">Per-Share 데이터 (참고 · TTM 기준 · 약 17.8억 주)</div>
-    <div class="grid-4">
-      <div class="stat-box"><div class="stat-label">GAAP EPS</div><div class="stat-value">$2.03</div></div>
-      <div class="stat-box"><div class="stat-label">Adjusted EPS</div><div class="stat-value up">$10.19</div></div>
-      <div class="stat-box"><div class="stat-label">BPS</div><div class="stat-value down">N/A (음수)</div></div>
-      <div class="stat-box"><div class="stat-label">매출/주</div><div class="stat-value">$35.25</div></div>
+    <div class="card-title">Per-Share 지표 (TTM·최근 공시 기준 · 약 17.8억 주)</div>
+    <div class="per-share-grid">
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석)</div><div class="ps-value">$2.03</div><div class="ps-sub">TTM GAAP</div></div>
+      <div class="ps-card"><div class="ps-icon">💎</div><div class="ps-label">Adjusted EPS</div><div class="ps-value">$10.19</div><div class="ps-sub">TTM 비GAAP</div></div>
+      <div class="ps-card"><div class="ps-icon">📘</div><div class="ps-label">BPS</div><div class="ps-value" style="color:var(--red);">N/A</div><div class="ps-sub">음(-)의 장부가치</div></div>
+      <div class="ps-card"><div class="ps-icon">🧾</div><div class="ps-label">매출/주</div><div class="ps-value">$35.25</div><div class="ps-sub">최근 4개 분기</div></div>
     </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">시나리오별 공정가치 분석</div>
-    <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
-      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — Humira 감소세 재가속·M&A 통합 비용 부담</div>
-      <div style="font-size:12px;color:var(--text2);">Humira 매출 감소폭 재확대, Apogee·Cerevel 등 M&A 통합비용 부담 확대, 가이던스 지속 미달 시 → 공정가치 <strong style="color:var(--red);">$190~210/주</strong></div>
-    </div>
-    <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
-      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 가이던스 달성·Skyrizi·Rinvoq 성장 지속</div>
-      <div style="font-size:12px;color:var(--text2);">FY2026 Adj EPS $14.08~14.28 가이던스 달성, Skyrizi·Rinvoq 고성장 지속 시 → 공정가치 <strong style="color:var(--text);">$245~270/주</strong> (애널리스트 평균 목표가 $256.67와 부합)</div>
-    </div>
-    <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
-      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — Apogee 파이프라인 조기 성과·밸류에이션 리레이팅</div>
-      <div style="font-size:12px;color:var(--text2);">Apogee 파이프라인(zumilokibart 등) 조기 임상 성과, Skyrizi·Rinvoq 시장 예상 상회, Forward P/E 리레이팅 시 → 공정가치 <strong style="color:var(--green);">$290~320/주</strong></div>
-    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">* EPS·매출/주는 최근 4개 분기를 약 17.8억 주 기준으로 환산했다. M&A 회계와 무형자산 상각 영향을 구분하기 위해 GAAP·Adjusted EPS를 함께 표시하고, 음(-)의 장부가치에는 PBR을 적용하지 않았다.</div>
   </div>
 
   <div class="card">
     <div class="card-title">종합 밸류에이션 — Humira 이후 성장 스토리의 지속 여부가 핵심 변수</div>
     <div style="font-size:12px;color:var(--text2);line-height:1.6;">GAAP PER·PBR만 보면 각각 극단적 고평가·산출불가로 보이지만, 이는 Allergan 인수발 회계상 왜곡일 뿐이다. <strong style="color:var(--text);">Adjusted PER 24.9x·Forward P/E 17.9x는 대형 제약 피어 밴드 내(3단계 적정)~할인(2단계 저평가) 수준으로, 시장은 Humira 이후 성장 스토리를 이미 합리적으로 반영하고 있다.</strong> 공정가치 $190(Bear)~$320(Bull) — 실질 리스크는 밸류에이션이 아니라 Skyrizi·Rinvoq의 성장 지속과 M&A 파이프라인의 실제 가치 창출 여부.</div>
   </div>
+
+
+  <div class="card">
+    <div class="card-title">시나리오별 공정가치 분석</div>
+    <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — Humira 감소세 재가속·M&A 통합 비용 부담</div>
+      <div style="font-size:12px;color:var(--text2);">Humira 매출 감소폭 재확대, Apogee·Cerevel 등 M&A 통합비용 부담 확대, 가이던스 지속 미달 시 → 공정가치 <strong style="color:var(--red);">$190~210/주</strong> (현재가 대비 -24.3% ~ -16.3%)</div>
+    </div>
+    <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 가이던스 달성·Skyrizi·Rinvoq 성장 지속</div>
+      <div style="font-size:12px;color:var(--text2);">FY2026 Adj EPS $14.08~14.28 가이던스 달성, Skyrizi·Rinvoq 고성장 지속 시 → 공정가치 <strong style="color:var(--text);">$245~270/주</strong> (현재가 대비 -2.4% ~ +7.6% · 애널리스트 평균 목표가 $256.67와 부합)</div>
+    </div>
+    <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — Apogee 파이프라인 조기 성과·밸류에이션 리레이팅</div>
+      <div style="font-size:12px;color:var(--text2);">Apogee 파이프라인(zumilokibart 등) 조기 임상 성과, Skyrizi·Rinvoq 시장 예상 상회, Forward P/E 리레이팅 시 → 공정가치 <strong style="color:var(--green);">$290~320/주</strong> (현재가 대비 +15.6% ~ +27.5%)</div>
+    </div>
+  </div>
 </div>
 
 <!-- ===================== SECTION 4: US 특화 ===================== -->
 <div id="us" class="section">
-  <div class="section-title">US 특화 — S&P 500 성과 · 경쟁 구도</div>
+  <div class="section-title">US 특화 — S&P 500 대비 상대 성과 · 미국 의약품·규제 렌즈</div>
   <div class="rel-container">
-    <div class="rel-title">S&P 500 상대 수익률</div>
+    <div class="rel-title">S&P 500 대비 상대 수익률 (52주)</div>
     <div class="grid-3">
       <div class="stat-box"><div class="stat-label">ABBV 52주</div><div class="stat-value up">+37.7%</div></div>
       <div class="stat-box"><div class="stat-label">S&P 500 52주</div><div class="stat-value">+19.6%</div></div>
@@ -423,13 +431,23 @@
   </div>
 
   <div class="card">
-    <div class="card-title">대형 제약 경쟁 구도</div>
+    <div class="card-title">미국 면역질환 전환과 글로벌 제품 지표 — Q1 FY2026</div>
     <div class="zone-list">
-      <div class="zone-item"><span class="zone-label">Eli Lilly (GLP-1 고성장)</span><span class="zone-val">P/E 40.5x — 훨씬 높은 밸류에이션, 시총 더 큼</span></div>
-      <div class="zone-item"><span class="zone-label">Johnson & Johnson (다각화 경쟁)</span><span class="zone-val">Adjusted P/E 23.3x — 거의 동일한 밸류에이션</span></div>
-      <div class="zone-item"><span class="zone-label">Pfizer (실적 부진)</span><span class="zone-val" style="color:var(--red);">P/E 7.9x — 극도로 저평가, 성장 정체 우려</span></div>
-      <div class="zone-item"><span class="zone-label">Humira 바이오시밀러 경쟁사</span><span class="zone-val" style="color:var(--red);">Amgen 등 다수 — 특허절벽 지속 압박</span></div>
-      <div class="zone-item"><span class="zone-label">Apogee·Cerevel 인수</span><span class="zone-val" style="color:var(--green);">면역·신경과학 파이프라인 확장 — 차세대 성장동력 구축</span></div>
+      <div class="zone-item"><span class="zone-label">미국 별도 제품 매출</span><span class="zone-val">최신 카드 자료상 미공시 · 글로벌 수치와 구분</span></div>
+      <div class="zone-item"><span class="zone-label">글로벌 Skyrizi</span><span class="zone-val">$4.5B · +29.2% YoY (Q1 FY26)</span></div>
+      <div class="zone-item"><span class="zone-label">글로벌 Immunology</span><span class="zone-val">$7.3B (Q1 FY26)</span></div>
+      <div class="zone-item"><span class="zone-label">미국 Humira</span><span class="zone-val" style="color:var(--red);">바이오시밀러 경쟁 지속 · Q1 FY26</span></div>
+      <div class="zone-item"><span class="zone-label">미국 성장축</span><span class="zone-val">Skyrizi·Rinvoq 적응증 확대</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">미국 FDA·특허·파이프라인 민감도 — FY2026</div>
+    <div class="zone-list">
+      <div class="zone-item"><span class="zone-label">미국 Humira 특허절벽</span><span class="zone-val">2023 바이오시밀러 진입 · 기저효과 완화</span></div>
+      <div class="zone-item"><span class="zone-label">미국 Skyrizi·Rinvoq</span><span class="zone-val">FDA 적응증 확대가 성장 지속의 핵심</span></div>
+      <div class="zone-item"><span class="zone-label">Apogee 거래</span><span class="zone-val">2026 Q3 종료 예정 · 면역 파이프라인 강화</span></div>
+      <div class="zone-item"><span class="zone-label">글로벌 FY26 매출 가이던스</span><span class="zone-val">약 $67.3B · Q1 FY26 상향</span></div>
+      <div class="zone-item"><span class="zone-label">공시 한계</span><span class="zone-val">글로벌 제품 매출을 미국 수치로 재분류하지 않음</span></div>
     </div>
   </div>
 </div>
