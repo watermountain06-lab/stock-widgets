@@ -90,7 +90,7 @@
   .zone-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
   .tag-s { background: rgba(46,204,113,0.15); color: var(--green); }
   .tag-r { background: rgba(231,76,60,0.15); color: var(--red); }
-  .tag-c { background: rgba(224,90,32,0.2); color: var(--accent2); }
+  .tag-c { background:rgba(56,189,248,.20); color:#38bdf8; }
 
   .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
   .ma-row:last-child { border-bottom: none; }
@@ -212,6 +212,12 @@
   .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
   .header-meta { justify-content: space-between; }
   .nav { justify-content: space-between; }
+  .ma-val { font-size:13px; font-weight:600; margin-left:auto; }
+  .status-above { background:rgba(46,204,113,.15); color:var(--green); }
+  .status-below { background:rgba(231,76,60,.15); color:var(--red); }
+  .range-toggle { display:flex; gap:6px; }
+  .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  @media(max-width:720px){ .grid-4 { grid-template-columns:1fr 1fr; } }
 </style>
 </head>
 <body>
@@ -311,18 +317,22 @@
 
   <div class="card">
     <div class="card-title">구간별 패턴 분석</div>
-    <div class="grid-3">
-      <div style="background:var(--bg3);padding:12px;border-radius:8px;">
-        <div style="font-size:11px;color:var(--accent);font-weight:700;margin-bottom:6px;">2025.07~09 저점 형성</div>
+    <div class="grid-4">
+      <div style="background:rgba(231,76,60,.10);border:1px solid var(--red);padding:12px;border-radius:8px;">
+        <div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">2025.07~09 · 약세</div>
         <div style="font-size:12px;color:var(--text2);">$142~$180 박스권. AI GPU 경쟁력 의구심 + MI300 수요 우려. 거래량 낮고 방향성 부재. 시장 저평가 구간.</div>
       </div>
-      <div style="background:var(--bg3);padding:12px;border-radius:8px;">
-        <div style="font-size:11px;color:var(--accent);font-weight:700;margin-bottom:6px;">2025.10~2026.02 폭등</div>
+      <div style="background:rgba(46,204,113,.10);border:1px solid var(--green);padding:12px;border-radius:8px;">
+        <div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">2025.10~2026.02 · 강세</div>
         <div style="font-size:12px;color:var(--text2);">MI350 출하·OpenAI 파트너십·Oracle 계약 발표. $180→$265→1차 급등. Q4 FY25 어닝 서프 + CES MI400 공개로 $265→$380 연속 상승.</div>
       </div>
-      <div style="background:var(--bg3);padding:12px;border-radius:8px;">
-        <div style="font-size:11px;color:var(--accent);font-weight:700;margin-bottom:6px;">2026.03~06 수직 상승</div>
+      <div style="background:rgba(46,204,113,.10);border:1px solid var(--green);padding:12px;border-radius:8px;">
+        <div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">2026.03~06 · 강세</div>
         <div style="font-size:12px;color:var(--text2);">Q1 2026 어닝(+38% 매출, FCF $2.6B)·데이터센터 60%+ 비중 확인. $380→$552 신고가. MI400 양산 기대감·Helios 랙 수주 뉴스 지속.</div>
+      </div>
+      <div style="background:rgba(240,192,64,.10);border:1px solid var(--ma60);padding:12px;border-radius:8px;">
+        <div style="font-size:11px;color:var(--ma60);font-weight:700;margin-bottom:6px;">2026.07 · 조정</div>
+        <div style="font-size:12px;color:var(--text2);">현재가 $476.15는 52주 고점 대비 -18.6%. MA20·MA60 아래, MA5·MA120 위의 혼조 구간.</div>
       </div>
     </div>
   </div>
@@ -344,6 +354,9 @@
     <div class="stat-box"><div class="stat-label">FY2025 연매출</div><div class="stat-value up">$34.6B</div><div class="stat-sub">YoY +34% / 역대최고</div></div>
     <div class="stat-box"><div class="stat-label">FCF (Q1 2026)</div><div class="stat-value up">$2.57B</div><div class="stat-sub">FCF 마진 25.0% 폭발</div></div>
     <div class="stat-box"><div class="stat-label">2026 데이터센터 전망</div><div class="stat-value up">$28.7B</div><div class="stat-sub">YoY +73% 전망 (S&P Global)</div></div>
+    <div class="stat-box"><div class="stat-label">총이익률 (Q1 2026)</div><div class="stat-value or">52.8%</div><div class="stat-sub">고마진 데이터센터 믹스</div></div>
+    <div class="stat-box"><div class="stat-label">FCF 마진 (Q1 2026)</div><div class="stat-value up">25.0%</div><div class="stat-sub">현금창출력 개선</div></div>
+    <div class="stat-box"><div class="stat-label">순현금 (Q1 2026)</div><div class="stat-value up">+$8.5B</div><div class="stat-sub">무차입 순현금 구조</div></div>
   </div>
 
   <div class="card" style="margin-top:16px;">
@@ -384,7 +397,7 @@
   </div>
   <div class="card">
     <div class="card-title">다음 실적 체크포인트 — 2026년 8월 초 (Q2 2026 예상)</div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.8;">① MI350/355X 매출이 가속되며 데이터센터 부문 성장을 견인하는지 → ② EPYC 서버 CPU 매출이 2026E $12.8B(+40%) 경로를 따라가는지 → ③ OpenAI 6기가와트 공급 계약의 초기 매출 인식이 시작되는지 → ④ MI400 2026년 출시 일정과 초년도 $7.2B 매출 가이던스가 유지되는지 확인.</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.8;">① MI350/355X 매출이 가속되며 데이터센터 부문 성장을 견인하는지<br>② EPYC 서버 CPU 매출이 2026E $12.8B(+40%) 경로를 따라가는지<br>③ OpenAI 6기가와트 공급 계약의 초기 매출 인식이 시작되는지<br>④ MI400 2026년 출시 일정과 초년도 $7.2B 매출 가이던스가 유지되는지 확인</div>
   </div>
 </div>
 
@@ -464,7 +477,7 @@
   </div>
 
   <div class="card">
-    <div class="card-title">수익성 & 자본 구조 요약</div>
+    <div class="card-title">종합 밸류에이션 — 수익성 & 자본 구조 요약</div>
     <div class="grid-3">
       <div class="stat-box"><div class="stat-label">총이익률 (Q1 2026)</div><div class="stat-value or">52.8%</div><div class="stat-sub">반도체 팹리스 고마진</div></div>
       <div class="stat-box"><div class="stat-label">FCF Margin (Q1 2026)</div><div class="stat-value or">25.0%</div><div class="stat-sub">역대급 현금창출력</div></div>
@@ -490,8 +503,8 @@
 </div>
 
 <!-- ===================== S5: US 특화 ===================== -->
-<div id="us" class="section">
-  <div class="section-title">US 특화 — S&P500 상대 성과 & AI GPU 로드맵</div>
+<div id="us" class="section" data-us-visual="chart">
+  <div class="section-title">US 특화 — S&P 500 대비 상대 성과 & AI GPU 로드맵</div>
 
   <div class="rel-container">
     <div class="rel-title">S&P500 대비 상대 성과 (2025.07 ~ 2026.06, 기준=100)</div>
@@ -703,7 +716,7 @@
   </div>
 
   <div class="card" style="margin-top:16px;">
-    <div class="card-title">월가 컨센서스 요약</div>
+    <div class="card-title">투자의견 요약</div>
     <div class="consensus-bar">
       <div class="cb-buy" style="width:76%">매수 76%</div>
       <div class="cb-hold" style="width:20%">중립 20%</div>
@@ -720,7 +733,6 @@
   </div>
 
   <div class="card">
-    <div class="card-title">시나리오 분석</div>
     <div class="grid-3">
       <div style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);padding:14px;border-radius:8px;">
         <div style="font-size:12px;color:var(--green);font-weight:700;margin-bottom:6px;">강세 시나리오</div>

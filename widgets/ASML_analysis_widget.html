@@ -93,7 +93,7 @@
   .zone-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
   .tag-s { background: rgba(46,204,113,0.15); color: var(--green); }
   .tag-r { background: rgba(231,76,60,0.15); color: var(--red); }
-  .tag-c { background: rgba(0,180,216,0.2); color: var(--accent2); }
+  .tag-c { background:rgba(56,189,248,.20); color:#38bdf8; }
 
   .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
   .ma-row:last-child { border-bottom: none; }
@@ -200,6 +200,12 @@
   .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
   .header-meta { justify-content: space-between; }
   .nav { justify-content: space-between; }
+  .ma-val { font-size:13px; font-weight:600; margin-left:auto; }
+  .status-above { background:rgba(46,204,113,.15); color:var(--green); }
+  .status-below { background:rgba(231,76,60,.15); color:var(--red); }
+  .range-toggle { display:flex; gap:6px; }
+  .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  @media(max-width:720px){ .grid-4 { grid-template-columns:1fr 1fr; } }
 </style>
 </head>
 <body>
@@ -298,18 +304,22 @@
 
   <div class="card">
     <div class="card-title">구간별 패턴 분석</div>
-    <div class="grid-3">
-      <div style="background:var(--bg3);padding:12px;border-radius:8px;">
-        <div style="font-size:11px;color:var(--accent);font-weight:700;margin-bottom:6px;">2025.07~09 저점</div>
+    <div class="grid-4">
+      <div style="background:rgba(231,76,60,.10);border:1px solid var(--red);padding:12px;border-radius:8px;">
+        <div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">2025.07~09 · 약세</div>
         <div style="font-size:12px;color:var(--text2);">$700~$800 바닥권. 중국 수출규제 충격 + 수주 부진 우려. 2024년 고점 $1,100 대비 급락 후 안정화 시작.</div>
       </div>
-      <div style="background:var(--bg3);padding:12px;border-radius:8px;">
-        <div style="font-size:11px;color:var(--accent);font-weight:700;margin-bottom:6px;">2025.10~2026.01 회복</div>
+      <div style="background:rgba(46,204,113,.10);border:1px solid var(--green);padding:12px;border-radius:8px;">
+        <div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">2025.10~2026.01 · 강세</div>
         <div style="font-size:12px;color:var(--text2);">Q3·Q4 2025 수주 반등 확인. Q4 북클리올링 €13.2B 역대최고. AI 인프라 EUV 수요 가시화. $800→$1,450 빠른 회복.</div>
       </div>
-      <div style="background:var(--bg3);padding:12px;border-radius:8px;">
-        <div style="font-size:11px;color:var(--accent);font-weight:700;margin-bottom:6px;">2026.02~06 급등 신고가</div>
-        <div style="font-size:12px;color:var(--text2);">Q1 2026 EPS 서프라이즈 + 가이던스 상향. $1,450→$2,000 신고가. MATCH Act 우려로 고점 이탈 후 $1,769 조정 중.</div>
+      <div style="background:rgba(46,204,113,.10);border:1px solid var(--green);padding:12px;border-radius:8px;">
+        <div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">2026.02~06 · 강세</div>
+        <div style="font-size:12px;color:var(--text2);">Q1 2026 EPS 서프라이즈 + 가이던스 상향. $1,450→$2,000 신고가. MATCH Act 우려로 고점 이탈 후 $1,629 조정 중.</div>
+      </div>
+      <div style="background:rgba(240,192,64,.10);border:1px solid var(--ma60);padding:12px;border-radius:8px;">
+        <div style="font-size:11px;color:var(--ma60);font-weight:700;margin-bottom:6px;">2026.07 · 조정</div>
+        <div style="font-size:12px;color:var(--text2);">현재가 $1,629는 신고가 이탈 후 조정 구간. MA20·MA60 아래, MA5·MA120 위의 혼조 상태.</div>
       </div>
     </div>
   </div>
@@ -335,6 +345,9 @@
     <div class="stat-box"><div class="stat-label">수주잔고 (2025년말)</div><div class="stat-value up">€38.8B</div><div class="stat-sub">다년간 매출 시현 보장</div></div>
     <div class="stat-box"><div class="stat-label">Q4 2025 신규수주</div><div class="stat-value up">€13.2B</div><div class="stat-sub">역대 최고 / EUV €7.4B</div></div>
     <div class="stat-box"><div class="stat-label">2026 가이던스</div><div class="stat-value up">€36~40B</div><div class="stat-sub">YoY +3~15% / 상향 여지</div></div>
+    <div class="stat-box"><div class="stat-label">순이익률 (Q1 2026)</div><div class="stat-value cy">30.3%</div><div class="stat-sub">고마진 독점 사업 구조</div></div>
+    <div class="stat-box"><div class="stat-label">EUV 수주 (Q4 2025)</div><div class="stat-value up">€7.4B</div><div class="stat-sub">신규수주의 56%</div></div>
+    <div class="stat-box"><div class="stat-label">High-NA 출하 계획</div><div class="stat-value up">10대</div><div class="stat-sub">2026년 예정</div></div>
   </div>
 
   <div class="card" style="margin-top:16px;">
@@ -380,7 +393,7 @@
   </div>
   <div class="card">
     <div class="card-title">다음 실적 체크포인트 — 2026년 7월 중순~하순 (Q2 2026)</div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.8;">① Q1의 어닝 서프라이즈(매출 €8.8B·GM 53%)가 Q2에도 이어지는지 → ② 수주잔고 €38.8B가 신규 수주로 계속 채워지는지 → ③ 중국 매출 비중이 계획대로 20%대까지 축소되는지 → ④ High-NA EUV 2026년 10대 출하 일정이 유지되는지 확인.</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.8;">① Q1의 어닝 서프라이즈(매출 €8.8B·GM 53%)가 Q2에도 이어지는지<br>② 수주잔고 €38.8B가 신규 수주로 계속 채워지는지<br>③ 중국 매출 비중이 계획대로 20%대까지 축소되는지<br>④ High-NA EUV 2026년 10대 출하 일정이 유지되는지 확인</div>
   </div>
 </div>
 
@@ -462,7 +475,7 @@
   </div>
 
   <div class="card">
-    <div class="card-title">수익성 지표</div>
+    <div class="card-title">종합 밸류에이션 — 수익성 지표</div>
     <div class="grid-3">
       <div class="stat-box"><div class="stat-label">총이익률 (Q1 2026)</div><div class="stat-value cy">53.0%</div><div class="stat-sub">반도체장비 최고 수준</div></div>
       <div class="stat-box"><div class="stat-label">영업이익률 (Q1 2026)</div><div class="stat-value cy">36.0%</div><div class="stat-sub">고정비 레버리지 효과</div></div>
@@ -488,8 +501,8 @@
 </div>
 
 <!-- ===================== S5: 글로벌 특화 ===================== -->
-<div id="us" class="section">
-  <div class="section-title">글로벌 특화 — S&P500 상대 성과 & EUV 독점 생태계</div>
+<div id="us" class="section" data-us-visual="chart">
+  <div class="section-title">US 특화 — S&P 500 대비 ADR 상대 성과 & EUV 독점 생태계</div>
 
   <div class="rel-container">
     <div class="rel-title">S&P500 대비 상대 성과 (2025.07 ~ 2026.06, 기준=100)</div>
@@ -670,7 +683,7 @@
   </div>
 
   <div class="card" style="margin-top:16px;">
-    <div class="card-title">월가 컨센서스 요약</div>
+    <div class="card-title">투자의견 요약</div>
     <div class="consensus-bar">
       <div class="cb-buy" style="width:68%">매수 68%</div>
       <div class="cb-hold" style="width:26%">중립 26%</div>
@@ -687,7 +700,6 @@
   </div>
 
   <div class="card">
-    <div class="card-title">시나리오 분석</div>
     <div class="grid-3">
       <div style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);padding:14px;border-radius:8px;">
         <div style="font-size:12px;color:var(--green);font-weight:700;margin-bottom:6px;">강세 시나리오</div>

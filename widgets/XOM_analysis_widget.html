@@ -151,6 +151,7 @@
   .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
   .header-meta { justify-content: space-between; }
   .nav { justify-content: space-between; }
+  .range-toggle { display:flex; gap:6px; }
 </style>
 </head>
 <body>
@@ -297,7 +298,7 @@
   </div>
   <div class="card">
     <div class="card-title">다음 실적 체크포인트 — 2026년 7월 31일 FY2026 Q2</div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.8;">① 컨센서스 EPS $1.93을 충족하는지, 사전공시된 Upstream 증익 $3.5~3.9B가 실현되는지 → ② 파생상품 마크투마켓 손실이 Q1처럼 GAAP EPS를 왜곡하는지, 정상화되는지 → ③ Permian·Guyana 저원가 자산의 생산량이 계속 기록을 경신하는지 → ④ Product Solutions(정제·화학) 마진이 개선되는지 확인.</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.8;">① 컨센서스 EPS $1.93과 Upstream 증익 $3.5~3.9B가 실현되는지<br>② 파생상품 마크투마켓 손실이 정상화되는지<br>③ Permian·Guyana 저원가 자산의 생산량이 기록을 경신하는지<br>④ Product Solutions(정제·화학) 마진이 개선되는지 확인</div>
   </div>
 </div>
 
@@ -374,6 +375,11 @@
   </div>
 
   <div class="card">
+    <div class="card-title">종합 밸류에이션 — Trailing PER 착시를 걷어내면 저평가~적정 구간</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;">Trailing PER만 보면 4단계(높음)로 보이지만, 이는 Q1 2026 일회성 파생상품 손실에 따른 착시. <strong style="color:var(--text);">Forward P/E 11.8x·EV/EBITDA 9.6x는 오히려 2~3단계(저평가~적정)로, 실질 리스크는 밸류에이션 수준이 아니라 유가 변동성 그 자체다.</strong> 공정가치 $115(Bear)~$210(Bull) — 저원가 자산 포트폴리오와 강력한 주주환원이 하방을 지지하는 구조.</div>
+  </div>
+
+  <div class="card">
     <div class="card-title">시나리오별 공정가치 분석</div>
     <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
       <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — 지정학 리스크 완화·유가 재하락</div>
@@ -388,16 +394,11 @@
       <div style="font-size:12px;color:var(--text2);">중동 공급 차질 장기화로 고유가 국면 지속, 저원가 자산 마진 극대화, Forward P/E 14x대 재평가 → 공정가치 <strong style="color:var(--green);">$185~210/주</strong></div>
     </div>
   </div>
-
-  <div class="card">
-    <div class="card-title">종합 밸류에이션 — Trailing PER 착시를 걷어내면 저평가~적정 구간</div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.6;">Trailing PER만 보면 4단계(높음)로 보이지만, 이는 Q1 2026 일회성 파생상품 손실에 따른 착시. <strong style="color:var(--text);">Forward P/E 11.8x·EV/EBITDA 9.6x는 오히려 2~3단계(저평가~적정)로, 실질 리스크는 밸류에이션 수준이 아니라 유가 변동성 그 자체다.</strong> 공정가치 $115(Bear)~$210(Bull) — 저원가 자산 포트폴리오와 강력한 주주환원이 하방을 지지하는 구조.</div>
-  </div>
 </div>
 
 <!-- ===================== SECTION 5: US 특화 ===================== -->
-<div id="us" class="section">
-  <div class="section-title">US 특화 — S&P 500 성과 · 경쟁 구도 · 다가오는 실적 체크포인트</div>
+<div id="us" class="section" data-us-visual="chart">
+  <div class="section-title">US 특화 — S&P 500 대비 성과 · 경쟁 구도 · 다가오는 실적 체크포인트</div>
   <div class="rel-container">
     <div class="rel-title">S&P 500 상대 수익률</div>
     <div class="grid-3">
