@@ -415,7 +415,7 @@
 </div>
 
 <!-- ===================== SECTION 4: US 특화 ===================== -->
-<div id="us" class="section">
+<div id="us" class="section" data-us-visual="chart">
   <div class="section-title">US 특화 — S&P 500 대비 상대 성과 · 미국 생산·정책 렌즈</div>
   <div class="rel-container">
     <div class="rel-title">S&P 500 대비 상대 수익률 (52주)</div>
@@ -442,14 +442,9 @@
     </div>
   </div>
   <div class="card">
-    <div class="card-title">미국 생산능력·18A 상업화 — Q1 FY2026</div>
-    <div class="zone-list">
-      <div class="zone-item"><span class="zone-label">미국 Arizona 18A</span><span class="zone-val">생산 웨이퍼 단계 · Q1 FY26</span></div>
-      <div class="zone-item"><span class="zone-label">글로벌 Intel Foundry</span><span class="zone-val">$4.2B 매출 · 최근 카드 공시 Q3 FY25</span></div>
-      <div class="zone-item"><span class="zone-label">글로벌 DCAI</span><span class="zone-val">+22% YoY · Q1 FY26</span></div>
-      <div class="zone-item"><span class="zone-label">미국 외부 고객</span><span class="zone-val">18A 확정 수주와 수율이 재평가 조건</span></div>
-      <div class="zone-item"><span class="zone-label">지리 구분</span><span class="zone-val">Foundry·DCAI 수치는 글로벌 맥락으로 표시</span></div>
-    </div>
+    <div class="card-title">미국 전략적 자본 투입 비교 — 2025년 발표 기준</div>
+    <div class="chart-wrap" style="height:220px;"><canvas id="intcUsCapitalChart"></canvas></div>
+    <div style="font-size:11px;color:var(--text2);line-height:1.65;margin-top:10px;">단위: $B · 발표된 투자·지원 전환액 기준. 미국 정부(CHIPS) $8.9B가 가장 크고 Nvidia $5.0B, SoftBank $2.0B가 뒤를 잇는다. 이는 영업매출이 아니라 미국 생산기반을 뒷받침하는 전략 자본이며, 18A 수율과 외부 고객 확보가 상업화의 핵심이다.</div>
   </div>
 </div>
 
@@ -883,10 +878,31 @@ function renderPeerChart() {
   });
 }
 
+function renderIntcUsCapitalChart() {
+  const ctx = document.getElementById('intcUsCapitalChart');
+  if (!ctx || charts['uscapital']) return;
+  charts['uscapital'] = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['미국 정부(CHIPS)','Nvidia','SoftBank'],
+      datasets:[{data:[8.9,5.0,2.0],backgroundColor:['#4a9eff','#76b900','#f59e0b'],borderRadius:5,borderSkipped:false}]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`$${ctx.raw.toFixed(1)}B`}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{beginAtZero:true,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}}
+      }
+    }
+  });
+}
+
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
     if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'us') renderIntcUsCapitalChart();
   }, 50);
 }
 </script>

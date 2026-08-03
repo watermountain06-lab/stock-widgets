@@ -414,7 +414,7 @@
 </div>
 
 <!-- ===================== SECTION 4: US 특화 ===================== -->
-<div id="us" class="section">
+<div id="us" class="section" data-us-visual="chart">
   <div class="section-title">US 특화 — S&P 500 대비 상대 성과 · 미국 사업·규제 렌즈</div>
   <div class="rel-container">
     <div class="rel-title">S&P 500 대비 상대 수익률 (52주)</div>
@@ -442,14 +442,9 @@
   </div>
 
   <div class="card">
-    <div class="card-title">미국 규제·소송·특허 민감도 — FY2026</div>
-    <div class="zone-list">
-      <div class="zone-item"><span class="zone-label">미국 탈크 소송 충당금</span><span class="zone-val">$7.0B(2023) → $5.1B(2024)</span></div>
-      <div class="zone-item"><span class="zone-label">STELARA 특허절벽</span><span class="zone-val" style="color:var(--red);">글로벌 성장률 -760bp 압력 · Q2 FY26</span></div>
-      <div class="zone-item"><span class="zone-label">미국 규제 촉매</span><span class="zone-val">Oncology·면역 적응증 확대와 FDA 일정</span></div>
-      <div class="zone-item"><span class="zone-label">미국 M&amp;A 통합</span><span class="zone-val">Shockwave·Abiomed 심혈관 플랫폼</span></div>
-      <div class="zone-item"><span class="zone-label">공시 한계</span><span class="zone-val">글로벌 지표는 미국 수치로 재분류하지 않음</span></div>
-    </div>
+    <div class="card-title">글로벌 사업 포트폴리오 믹스 — Q2 FY2026 매출</div>
+    <div class="chart-wrap" style="height:220px;"><canvas id="jnjUsMixChart"></canvas></div>
+    <div style="font-size:11px;color:var(--text2);line-height:1.65;margin-top:10px;">단위: $B · 회사 공시 글로벌 매출 기준. Innovative Medicine 64.7%, MedTech 35.3%로 의약품이 성장을 주도한다. 이는 미국 매출 믹스가 아니며, 미국 투자 판단에서는 FDA 적응증 확대·STELARA 특허절벽·MedTech 심혈관 회복을 별도로 점검해야 한다.</div>
   </div>
 
 </div>
@@ -851,10 +846,30 @@ function renderPeerChart() {
   });
 }
 
+function renderJnjUsMixChart() {
+  const ctx = document.getElementById('jnjUsMixChart');
+  if (!ctx || charts['usmix']) return;
+  charts['usmix'] = new Chart(ctx,{
+    type:'doughnut',
+    data:{
+      labels:['글로벌 Innovative Medicine','글로벌 MedTech'],
+      datasets:[{data:[16.38,8.93],backgroundColor:['#d15772','#38bdf8'],borderWidth:0}]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,cutout:'62%',
+      plugins:{
+        legend:{position:'bottom',labels:{color:'#9aa0b8',font:{size:10}}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.label}: $${ctx.raw.toFixed(2)}B`}}
+      }
+    }
+  });
+}
+
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
     if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'us') renderJnjUsMixChart();
   }, 50);
 }
 </script>

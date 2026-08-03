@@ -40,6 +40,18 @@ elif not (val_titles[0].startswith(val_contract[0]) and
     errors.append('valuation card order differs from PM')
 us_titles=card_titles('us')
 if len(us_titles) != 2: errors.append('US tab must contain exactly two dense cards after rel-container')
+us_open=re.search(r'<div(?=[^>]*\bid="us")[^>]*>',s)
+us_visual_mode=(re.search(r'data-us-visual="([^"]+)"',us_open.group(0)) if us_open else None)
+if us_visual_mode:
+    mode=us_visual_mode.group(1)
+    us_body=section('us')
+    if mode not in ('chart','not-applicable'):
+        errors.append('data-us-visual must be chart or not-applicable')
+    elif mode == 'chart':
+        if not (re.search(r'<canvas\b',us_body) or re.search(r'<svg\b',us_body) or 'class="us-visual' in us_body):
+            errors.append('US chart mode requires canvas, svg, or structured .us-visual')
+    elif 'US_VISUAL_EXCEPTION:' not in us_body:
+        errors.append('US not-applicable mode requires a specific US_VISUAL_EXCEPTION comment')
 invest_titles=card_titles('invest')
 if len(invest_titles) != 3 or not (invest_titles[0].startswith('목표가 밴드') and invest_titles[1].startswith('5개 분석 종합') and invest_titles[2].startswith('투자의견 요약')):
     errors.append('invest card order differs from PM')
