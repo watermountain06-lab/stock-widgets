@@ -394,7 +394,7 @@
 </div>
 
 <!-- ===================== SECTION 4: US 특화 ===================== -->
-<div id="us" class="section"><div class="section-title">US 특화 — 미국 AI 네트워킹·보안 수요</div><div class="rel-container"><div class="rel-title">S&P 500 대비 상대 수익률 (52주)</div><div class="grid-3"><div class="stat-box"><div class="stat-label">CSCO</div><div class="stat-value up">+65.5%</div></div><div class="stat-box"><div class="stat-label">S&amp;P 500</div><div class="stat-value">+19.6%</div></div><div class="stat-box"><div class="stat-label">알파</div><div class="stat-value up">+45.9%p</div></div></div><div class="zone-list" style="margin-top:12px;"><div class="zone-item"><span class="zone-label">S&amp;P 500</span><span class="zone-val">구성 종목</span></div><div class="zone-item"><span class="zone-label">미국 상장</span><span class="zone-val">NASDAQ · Information Technology</span></div></div></div><div class="card"><div class="card-title">미국 AI·캠퍼스 네트워킹 수요 — Q3 FY2026</div><div class="zone-list"><div class="zone-item"><span class="zone-label">글로벌 AI 인프라 수주 목표 · FY2026</span><span class="zone-val" style="color:var(--green);">$9B · 기존 $5B에서 상향</span></div><div class="zone-item"><span class="zone-label">미국 중심 캠퍼스 주문 · Q3 FY2026</span><span class="zone-val" style="color:var(--green);">+25% YoY</span></div><div class="zone-item"><span class="zone-label">글로벌 Q4 매출 가이던스 · FY2026</span><span class="zone-val">$16.7~16.9B</span></div><div class="zone-item"><span class="zone-label">미국 수요 확인 · Q4 FY2026</span><span class="zone-val">하이퍼스케일러 AI 패브릭·기업 교체주기</span></div></div></div><div class="card"><div class="card-title">미국 보안·소프트웨어 실행력 — FY2026</div><div class="zone-list"><div class="zone-item"><span class="zone-label">글로벌 Splunk 통합 · FY2026</span><span class="zone-val">구독 전환과 매출 믹스 정상화</span></div><div class="zone-item"><span class="zone-label">미국 경쟁 구도 · FY2026</span><span class="zone-val">Arista·HPE/Juniper·Nvidia와 경쟁·보완</span></div><div class="zone-item"><span class="zone-label">미국 비용 재배분 · 2026.05</span><span class="zone-val" style="color:var(--red);">약 4,000명 구조조정 · AI 투자 전환</span></div><div class="zone-item"><span class="zone-label">미국 실행 체크 · FY2027 H1</span><span class="zone-val">Splunk 역풍 완화와 보안 ARR 성장</span></div></div></div></div>
+<div id="us" class="section" data-us-visual="chart"><div class="section-title">US 특화 — 미국 AI 네트워킹·보안 수요</div><div class="rel-container"><div class="rel-title">S&P 500 대비 상대 수익률 (52주)</div><div class="grid-3"><div class="stat-box"><div class="stat-label">CSCO</div><div class="stat-value up">+65.5%</div></div><div class="stat-box"><div class="stat-label">S&amp;P 500</div><div class="stat-value">+19.6%</div></div><div class="stat-box"><div class="stat-label">알파</div><div class="stat-value up">+45.9%p</div></div></div><div class="zone-list" style="margin-top:12px;"><div class="zone-item"><span class="zone-label">S&amp;P 500</span><span class="zone-val">구성 종목</span></div><div class="zone-item"><span class="zone-label">미국 상장</span><span class="zone-val">NASDAQ · Information Technology</span></div></div></div><div class="card"><div class="card-title">미국 AI·캠퍼스 네트워킹 수요 — Q3 FY2026</div><div class="zone-list"><div class="zone-item"><span class="zone-label">글로벌 AI 인프라 수주 목표 · FY2026</span><span class="zone-val" style="color:var(--green);">$9B · 기존 $5B에서 상향</span></div><div class="zone-item"><span class="zone-label">미국 중심 캠퍼스 주문 · Q3 FY2026</span><span class="zone-val" style="color:var(--green);">+25% YoY</span></div><div class="zone-item"><span class="zone-label">글로벌 Q4 매출 가이던스 · FY2026</span><span class="zone-val">$16.7~16.9B</span></div><div class="zone-item"><span class="zone-label">미국 수요 확인 · Q4 FY2026</span><span class="zone-val">하이퍼스케일러 AI 패브릭·기업 교체주기</span></div></div></div><div class="card"><div class="card-title">글로벌 AI 인프라 수주 목표 비교 — FY2026</div><div class="chart-wrap" style="height:220px;"><canvas id="cscoUsOrdersChart"></canvas></div><div style="font-size:11px;color:var(--text2);line-height:1.65;margin-top:10px;">단위: $B · 회사의 글로벌 FY2026 수주 목표 기준. 기존 $5B에서 $9B로 80% 상향됐으며, 미국 중심 캠퍼스 주문 +25%와 하이퍼스케일러 AI 패브릭 수요가 실행력을 뒷받침한다. 이 차트는 미국 단독 수주가 아니라 글로벌 목표 비교다.</div></div></div>
 
 <!-- ===================== SECTION 5: 시계열 뉴스 ===================== -->
 <div id="news" class="section">
@@ -784,10 +784,21 @@ function renderPeerChart() {
   });
 }
 
+function renderCscoUsOrdersChart() {
+  const ctx = document.getElementById('cscoUsOrdersChart');
+  if (!ctx || charts['usorders']) return;
+  charts['usorders'] = new Chart(ctx,{
+    type:'bar',
+    data:{labels:['기존 목표','상향 목표'],datasets:[{data:[5,9],backgroundColor:['rgba(154,160,184,0.45)','#5cc9f5'],borderRadius:5,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`$${ctx.raw}B`}}},scales:{x:{grid:{display:false},ticks:{color:'#9aa0b8'}},y:{beginAtZero:true,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',callback:v=>'$'+v+'B'}}}}
+  });
+}
+
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
     if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'us') renderCscoUsOrdersChart();
   }, 50);
 }
 </script>

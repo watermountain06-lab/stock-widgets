@@ -439,7 +439,7 @@
 </div></div>
 </div>
 
-<div id="us" class="section">
+<div id="us" class="section" data-us-visual="chart">
 <div class="section-title">US 특화 — 북미 카테고리 수요 · 가격·프로모션</div>
 <div class="rel-container"><div class="rel-title">S&P 500 대비 상대 수익률 (52주)</div><div class="grid-3">
 <div class="stat-box"><div class="stat-label">PG 52주</div><div class="stat-value down">-6.7%</div></div>
@@ -449,7 +449,6 @@
 <div class="zone-item"><span class="zone-label">S&amp;P 500 내 비중</span><span class="zone-val">약 0.51% · 지수 내 33위</span></div>
 <div class="zone-item"><span class="zone-label">5년 베타</span><span class="zone-val">0.38</span></div>
 </div></div>
-<div class="grid-2">
 <div class="card"><div class="card-title">북미 소비 수요 — 카테고리별 판매량과 가격</div><div class="zone-list">
 <div class="zone-item"><span class="zone-label">Personal Care · Q4 FY26</span><span class="zone-val">중단일 성장 · 북미 가격 기여</span></div>
 <div class="zone-item"><span class="zone-label">Personal Health Care · Q4</span><span class="zone-val">중단일 성장 · 북미 가격·볼륨</span></div>
@@ -457,14 +456,9 @@
 <div class="zone-item"><span class="zone-label">Home Care · Q4</span><span class="zone-val" style="color:var(--red)">저단일 감소 · 북미 볼륨 약세</span></div>
 <div class="zone-item"><span class="zone-label">북미 단독 P&amp;L 공시</span><span class="zone-val">미제공 · 카테고리 코멘트 기준</span></div>
 </div><div class="tl-desc" style="margin-top:10px;">P&amp;G는 북미 매출·이익을 별도 수치로 공시하지 않는다. 따라서 Q4 FY26의 북미 귀속 코멘트를 기준으로 건강·퍼스널케어의 가격·판매량 개선이 Oral Care·Home Care 약세를 상쇄하는지 추적한다.</div></div>
-<div class="card"><div class="card-title">미국 채널 경제성 — 판촉·가격·관세 대응</div><div class="zone-list">
-<div class="zone-item"><span class="zone-label">Fabric Care · Q4 FY26</span><span class="zone-val" style="color:var(--event-neutral)">북미 판촉 투자로 성장 일부 상쇄</span></div>
-<div class="zone-item"><span class="zone-label">Home Care 가격 · Q4</span><span class="zone-val">북미 인상 · 볼륨 감소 일부 상쇄</span></div>
-<div class="zone-item"><span class="zone-label">Personal Care 가격 · Q4</span><span class="zone-val">주로 북미에서 인상</span></div>
-<div class="zone-item"><span class="zone-label">순 관세 효과 · Q4</span><span class="zone-val">회수 포함 총마진 +40bp</span></div>
-<div class="zone-item"><span class="zone-label">상품 원가 효과 · Q4</span><span class="zone-val" style="color:var(--red)">총마진 -40bp</span></div>
-</div><div class="tl-desc" style="margin-top:10px;">미국 대형 유통채널에서 판촉을 늘리면서도 가격 인상과 생산성으로 단위 경제성을 지키는지가 핵심이다. Q4에는 관세 회수가 완충 역할을 했지만 북미 볼륨과 상품 원가가 동시에 악화되면 마진 방어력이 낮아진다.</div></div>
-</div>
+<div class="card"><div class="card-title">글로벌 총마진 요인 비교 — Q4 FY2026</div>
+<div class="chart-wrap" style="height:220px;"><canvas id="pgUsMarginChart"></canvas></div>
+<div style="font-size:11px;color:var(--text2);line-height:1.65;margin-top:10px;">단위: bp · 회사 공시 글로벌 Q4 FY2026 기준. 회수를 포함한 순 관세 효과 +40bp가 상품 원가 -40bp를 상쇄했다. 이는 북미 단독 마진이 아니며, 미국에서는 판촉 확대와 Home·Personal Care 가격 인상이 볼륨 약세를 보완하는지가 핵심이다.</div></div>
 </div>
 
 <div id="news" class="section">
@@ -686,7 +680,8 @@ const charts={};
 })();
 function renderFundChart(){let ctx=document.getElementById('pgRevChart');if(!ctx||charts.fund)return;charts.fund=new Chart(ctx,{data:{labels:["Q1'25","Q2'25","Q3'25","Q4'25","Q1'26","Q2'26","Q3'26","Q4'26"],datasets:[{type:'bar',label:'매출 ($B)',data:[21.737,21.882,19.776,20.889,22.386,22.208,21.235,21.203],backgroundColor:'rgba(56,189,248,.45)',borderColor:'#38bdf8',borderWidth:1,borderRadius:4,yAxisID:'y'},{type:'bar',label:'순이익 ($B)',data:[3.959,4.63,3.769,3.615,4.75,4.319,3.932,3.081],backgroundColor:'rgba(46,204,113,.45)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4,yAxisID:'y'},{type:'line',label:'희석 EPS',data:[1.61,1.88,1.54,1.48,1.95,1.78,1.63,1.26],borderColor:'#f0c040',backgroundColor:'rgba(240,192,64,.1)',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#9aa0b8',font:{size:11}}}},scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},maxRotation:30}},y:{position:'left',beginAtZero:true,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}},y1:{position:'right',beginAtZero:true,grid:{display:false},ticks:{color:'#f0c040',font:{size:10},callback:v=>'$'+v}}}}})}
 function renderPeerChart(){let ctx=document.getElementById('pgPeerChart');if(!ctx||charts.peer)return;charts.peer=new Chart(ctx,{type:'bar',data:{labels:["PG","KMB","CHD","CL"],datasets:[{data:[21.49,17.0,32.0,36.2],backgroundColor:['#2563eb','rgba(154,160,184,.35)','rgba(154,160,184,.35)','rgba(154,160,184,.35)'],borderWidth:1,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#9aa0b8'}},y:{beginAtZero:true,ticks:{color:'#9aa0b8'}}}}})}
-function renderCharts(id){setTimeout(()=>{if(id==='fund')renderFundChart();if(id==='valuation')renderPeerChart()},40)}renderCharts('tech');
+function renderPgUsMarginChart(){let ctx=document.getElementById('pgUsMarginChart');if(!ctx||charts.usmargin)return;charts.usmargin=new Chart(ctx,{type:'bar',data:{labels:['순 관세 효과','상품 원가 효과'],datasets:[{data:[40,-40],backgroundColor:['#2ecc71','#e74c3c'],borderRadius:5,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.raw>0?'+':'')+c.raw+'bp'}}},scales:{x:{grid:{display:false},ticks:{color:'#9aa0b8'}},y:{min:-50,max:50,grid:{color:'rgba(255,255,255,.08)'},ticks:{color:'#9aa0b8',callback:v=>(v>0?'+':'')+v+'bp'}}}}})}
+function renderCharts(id){setTimeout(()=>{if(id==='fund')renderFundChart();if(id==='valuation')renderPeerChart();if(id==='us')renderPgUsMarginChart()},40)}renderCharts('tech');
 </script>
 </body>
 </html>

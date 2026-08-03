@@ -392,7 +392,7 @@
 </div>
 
 <!-- ===================== SECTION 4: US 특화 ===================== -->
-<div id="us" class="section"><div class="section-title">US 특화 — 미국 소비자금융·자본시장</div><div class="rel-container"><div class="rel-title">S&P 500 대비 상대 수익률 (52주)</div><div class="grid-3"><div class="stat-box"><div class="stat-label">BAC</div><div class="stat-value up">+27.4%</div></div><div class="stat-box"><div class="stat-label">S&amp;P 500</div><div class="stat-value">+19.6%</div></div><div class="stat-box"><div class="stat-label">알파</div><div class="stat-value up">+7.8%p</div></div></div><div class="zone-list" style="margin-top:12px;"><div class="zone-item"><span class="zone-label">S&amp;P 500</span><span class="zone-val">구성 종목</span></div><div class="zone-item"><span class="zone-label">미국 상장</span><span class="zone-val">NYSE · Financials</span></div></div></div><div class="card"><div class="card-title">미국 소비자금융·금리 민감도 — Q2 2026</div><div class="zone-list"><div class="zone-item"><span class="zone-label">미국 포함 전사 NII 성장 · FY2026</span><span class="zone-val" style="color:var(--green);">가이던스 6~8% 상단</span></div><div class="zone-item"><span class="zone-label">미국 소비자 프랜차이즈 · Q2 2026</span><span class="zone-val">예금·카드·대출의 저비용 자금 기반</span></div><div class="zone-item"><span class="zone-label">미국 신용 모니터 · H2 2026</span><span class="zone-val">카드 연체·상업용 부동산 충당금</span></div><div class="zone-item"><span class="zone-label">미국 금리 모니터 · H2 2026</span><span class="zone-val">예금 베타와 장단기 금리곡선</span></div></div></div><div class="card"><div class="card-title">미국 자본시장·규제 자본 — Q2 2026</div><div class="zone-list"><div class="zone-item"><span class="zone-label">글로벌 트레이딩 매출 · Q2 2026</span><span class="zone-val" style="color:var(--green);">$7.1B · +33% YoY</span></div><div class="zone-item"><span class="zone-label">글로벌 IB 수수료 · Q2 2026</span><span class="zone-val">$2.1B · +50% YoY</span></div><div class="zone-item"><span class="zone-label">미국 규제자본 CET1 · Q2 2026</span><span class="zone-val">11.2%</span></div><div class="zone-item"><span class="zone-label">미국 효율성 목표 · FY2026</span><span class="zone-val">영업 레버리지 300~400bp</span></div></div></div></div>
+<div id="us" class="section" data-us-visual="chart"><div class="section-title">US 특화 — 미국 소비자금융·자본시장</div><div class="rel-container"><div class="rel-title">S&P 500 대비 상대 수익률 (52주)</div><div class="grid-3"><div class="stat-box"><div class="stat-label">BAC</div><div class="stat-value up">+27.4%</div></div><div class="stat-box"><div class="stat-label">S&amp;P 500</div><div class="stat-value">+19.6%</div></div><div class="stat-box"><div class="stat-label">알파</div><div class="stat-value up">+7.8%p</div></div></div><div class="zone-list" style="margin-top:12px;"><div class="zone-item"><span class="zone-label">S&amp;P 500</span><span class="zone-val">구성 종목</span></div><div class="zone-item"><span class="zone-label">미국 상장</span><span class="zone-val">NYSE · Financials</span></div></div></div><div class="card"><div class="card-title">미국 소비자금융·금리 민감도 — Q2 2026</div><div class="zone-list"><div class="zone-item"><span class="zone-label">미국 포함 전사 NII 성장 · FY2026</span><span class="zone-val" style="color:var(--green);">가이던스 6~8% 상단</span></div><div class="zone-item"><span class="zone-label">미국 소비자 프랜차이즈 · Q2 2026</span><span class="zone-val">예금·카드·대출의 저비용 자금 기반</span></div><div class="zone-item"><span class="zone-label">미국 신용 모니터 · H2 2026</span><span class="zone-val">카드 연체·상업용 부동산 충당금</span></div><div class="zone-item"><span class="zone-label">미국 금리 모니터 · H2 2026</span><span class="zone-val">예금 베타와 장단기 금리곡선</span></div></div></div><div class="card"><div class="card-title">글로벌 자본시장 매출 비교 — Q2 2026</div><div class="chart-wrap" style="height:220px;"><canvas id="bacUsMarketsChart"></canvas></div><div style="font-size:11px;color:var(--text2);line-height:1.65;margin-top:10px;">단위: $B · 회사 공시 글로벌 Q2 2026 기준. 트레이딩 $7.1B(+33% YoY)가 IB 수수료 $2.1B(+50% YoY)보다 규모가 크다. 이는 미국 단독 매출이 아니며, 미국 투자 판단에서는 CET1 11.2%와 NII 성장 가이던스 상단 달성 여부를 함께 봐야 한다.</div></div></div>
 
 <!-- ===================== SECTION 5: 시계열 뉴스 ===================== -->
 <div id="news" class="section">
@@ -780,10 +780,21 @@ function renderPeerChart() {
   });
 }
 
+function renderBacUsMarketsChart() {
+  const ctx = document.getElementById('bacUsMarketsChart');
+  if (!ctx || charts['usmarkets']) return;
+  charts['usmarkets'] = new Chart(ctx,{
+    type:'bar',
+    data:{labels:['글로벌 트레이딩','글로벌 IB 수수료'],datasets:[{data:[7.1,2.1],backgroundColor:['#ff5a72','#f0c040'],borderRadius:5,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`$${ctx.raw.toFixed(1)}B`}}},scales:{x:{grid:{display:false},ticks:{color:'#9aa0b8'}},y:{beginAtZero:true,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',callback:v=>'$'+v+'B'}}}}
+  });
+}
+
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
     if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'us') renderBacUsMarketsChart();
   }, 50);
 }
 </script>
