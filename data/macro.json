@@ -1,28 +1,28 @@
 {
-  "generatedAt": "2026-08-03T14:59:20Z",
+  "generatedAt": "2026-08-04T13:02:33Z",
   "sp500": {
-    "value": 7489.72,
-    "changePct": 0.7,
-    "asOf": "2026-07-31"
+    "value": 7600.5,
+    "changePct": 1.48,
+    "asOf": "2026-08-03"
   },
   "spy": {
-    "value": 747.03,
-    "changePct": 0.72,
-    "asOf": "2026-07-31"
+    "value": 757.67,
+    "changePct": 1.42,
+    "asOf": "2026-08-03"
   },
   "vix": {
-    "value": 15.99,
-    "changePct": -6.44,
-    "asOf": "2026-07-31"
+    "value": 15.86,
+    "changePct": -0.81,
+    "asOf": "2026-08-03"
   },
   "usdkrw": {
-    "value": 1428.79,
-    "changePct": 0.58,
-    "asOf": "2026-08-03"
+    "value": 1427.83,
+    "changePct": -0.55,
+    "asOf": "2026-08-04"
   },
   "fedFunds": {
     "value": 3.63,
-    "asOf": "2026-07-22"
+    "asOf": "2026-08-03"
   },
   "nextFomcMeeting": {
     "start": "2026-09-15",
