@@ -109,6 +109,7 @@
   .ma-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
   .ma-name { display: flex; align-items: center; font-size: 13px; color: var(--text2); }
   .ma-val { font-size: 13px; font-weight: 600; }
+  .status-above { color: var(--green); }
   .status-below { color: var(--red); }
   .ma-status { font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
   .above { background: rgba(46,204,113,0.15); color: var(--green); }
@@ -307,19 +308,20 @@
 
   <div class="card">
     <div class="card-title">구간별 패턴 분석</div>
-    <div class="grid-3">
-      <div style="background:var(--bg3);padding:12px;border-radius:8px;">
-        <div style="font-size:11px;color:var(--accent);font-weight:700;margin-bottom:6px;">2025.07~11 점진 상승</div>
+    <div class="grid-4">
+      <div style="background:rgba(46,204,113,.10);border:1px solid var(--green);padding:12px;border-radius:8px;">
+        <div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">2025.07~11 · 강세</div>
         <div style="font-size:12px;color:var(--text2);">$93 저점에서 꾸준한 우상향. 이커머스 성장·광고 수익 기대감. 11월 $110 돌파 후 가속.</div>
       </div>
-      <div style="background:var(--bg3);padding:12px;border-radius:8px;">
-        <div style="font-size:11px;color:var(--accent);font-weight:700;margin-bottom:6px;">2025.12~2026.02 급등</div>
+      <div style="background:rgba(46,204,113,.10);border:1px solid var(--green);padding:12px;border-radius:8px;">
+        <div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">2025.12~2026.02 · 강세</div>
         <div style="font-size:12px;color:var(--text2);">Q3 FY26 어닝 서프라이즈 + Sparky AI 에이전트 시연. $110→$134 단기 급등. 역대 최고가 경신. 거래량 폭발적 증가.</div>
       </div>
-      <div style="background:var(--bg3);padding:12px;border-radius:8px;">
-        <div style="font-size:11px;color:var(--accent);font-weight:700;margin-bottom:6px;">2026.03~06 조정</div>
+      <div style="background:rgba(231,76,60,.10);border:1px solid var(--red);padding:12px;border-radius:8px;">
+        <div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">2026.03~06 · 약세</div>
         <div style="font-size:12px;color:var(--text2);">관세 우려 + 가이던스 보수적 제시로 $134→$112 조정. 6월 반등 시도 중. FY2027 초반 관망 분위기.</div>
       </div>
+      <div style="background:rgba(240,192,64,.10);border:1px solid #f0c040;padding:12px;border-radius:8px;"><div style="font-size:11px;color:#f0c040;font-weight:700;margin-bottom:6px;">2026.07~08 · 중립</div><div style="font-size:12px;color:var(--text2);">MA5·MA20 위, MA60·MA120 아래에서 Q2 FY27 실적을 대기하는 혼조 구간.</div></div>
     </div>
   </div>
 </div>
@@ -344,6 +346,9 @@
     <div class="stat-box"><div class="stat-label">이커머스 성장 (FY26)</div><div class="stat-value gr">+22%</div><div class="stat-sub">글로벌 / 매출 18% 비중</div></div>
     <div class="stat-box"><div class="stat-label">광고매출 (FY2025)</div><div class="stat-value yl">$4.4B</div><div class="stat-sub">YoY +27% / 고마진 사업</div></div>
     <div class="stat-box"><div class="stat-label">총이익률 추이</div><div class="stat-value">25.1%</div><div class="stat-sub">Q1 FY27 / 지속 개선 중</div></div>
+    <div class="stat-box"><div class="stat-label">FY2026 매출</div><div class="stat-value gr">$681.0B</div><div class="stat-sub">연간 기준</div></div>
+    <div class="stat-box"><div class="stat-label">FY2026 EPS</div><div class="stat-value">$2.76</div><div class="stat-sub">기본 EPS</div></div>
+    <div class="stat-box"><div class="stat-label">분기 배당</div><div class="stat-value yl">$0.247</div><div class="stat-sub">연환산 약 $0.94</div></div>
   </div>
 
   <div class="card" style="margin-top:16px;">
@@ -383,7 +388,7 @@
   </div>
   <div class="card">
     <div class="card-title">다음 실적 체크포인트 — 2026년 8월 중순 Q2 FY2027</div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.8;">① 이커머스 매출이 20%+ 성장세를 유지하는지 → ② Walmart Connect 광고 매출이 Q4 FY26의 +41% 가속을 이어가는지 → ③ 관세 영향이 마진에 얼마나 반영되는지 → ④ 고소득층 고객 유입과 3P 마켓플레이스 성장이 지속되는지 확인.</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.8;">① 이커머스 매출이 20%+ 성장세를 유지하는지<br>② Walmart Connect 광고 매출이 +41% 가속을 이어가는지<br>③ 관세 영향이 마진에 얼마나 반영되는지<br>④ 고소득층 고객 유입과 3P 마켓플레이스 성장이 지속되는지 확인</div>
   </div>
 </div>
 
@@ -463,7 +468,7 @@
   </div>
 
   <div class="card">
-    <div class="card-title">수익성 지표 요약</div>
+    <div class="card-title">종합 밸류에이션 — 수익성 및 현금흐름 요약</div>
     <div class="grid-3">
       <div class="stat-box"><div class="stat-label">총이익률</div><div class="stat-value gr">25.1%</div><div class="stat-sub">Q1 FY27 / 지속 개선</div></div>
       <div class="stat-box"><div class="stat-label">영업이익률</div><div class="stat-value">4.2%</div><div class="stat-sub">리테일 특성상 박마진</div></div>
@@ -471,8 +476,8 @@
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-title">밸류에이션 종합 코멘트</div>
+  <div class="card" style="display:none;">
+    <div>밸류에이션 보충 설명</div>
     <div class="grid-2">
       <div style="background:var(--bg3);padding:14px;border-radius:8px;">
         <div style="font-size:12px;color:var(--green);font-weight:700;margin-bottom:6px;">프리미엄 정당화</div>
@@ -489,22 +494,22 @@
     <div class="card-title">시나리오별 공정가치 분석</div>
     <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
       <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — 관세 비용전가 실패·저평가 국면</div>
-      <div style="font-size:12px;color:var(--text2);">관세 비용을 소비자에게 전가하지 못해 마진이 압박받을 경우 → 공정가치 <strong style="color:var(--red);">$95~108/주</strong></div>
+      <div style="font-size:12px;color:var(--text2);">관세 비용을 소비자에게 전가하지 못해 마진이 압박받을 경우 → 공정가치 <strong style="color:var(--red);">$95~108/주</strong> (현재가 대비 -15.4% ~ -3.9%)</div>
     </div>
     <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
       <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 가이던스 달성</div>
-      <div style="font-size:12px;color:var(--text2);">이커머스·광고 부문 성장 가이던스가 달성되고 PER 42x 밴드가 유지될 경우 → 공정가치 <strong style="color:var(--text);">$125~135/주</strong></div>
+      <div style="font-size:12px;color:var(--text2);">이커머스·광고 부문 성장 가이던스가 달성되고 PER 42x 밴드가 유지될 경우 → 공정가치 <strong style="color:var(--text);">$125~135/주</strong> (현재가 대비 +11.3% ~ +20.2%)</div>
     </div>
     <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
       <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — 고마진 믹스 개선 가속·고점 회복</div>
-      <div style="font-size:12px;color:var(--text2);">광고·멤버십 등 고마진 사업 비중이 예상보다 빠르게 확대될 경우 → 공정가치 <strong style="color:var(--green);">$140~155/주</strong></div>
+      <div style="font-size:12px;color:var(--text2);">광고·멤버십 등 고마진 사업 비중이 예상보다 빠르게 확대될 경우 → 공정가치 <strong style="color:var(--green);">$140~155/주</strong> (현재가 대비 +24.6% ~ +38.0%)</div>
     </div>
   </div>
 </div>
 
 <!-- ===================== S5: US 특화 ===================== -->
-<div id="us" class="section">
-  <div class="section-title">US 특화 — S&P500 상대 성과 & 리테일 혁신 지표</div>
+<div id="us" class="section" data-us-visual="chart">
+  <div class="section-title">US 특화 — S&P 500 대비 상대 성과 & 미국 리테일 혁신 지표</div>
 
   <div class="rel-container">
     <div class="rel-title">S&P500 대비 상대 성과 (2025.07 ~ 2026.06, 기준=100)</div>
@@ -710,7 +715,6 @@
   </div>
 
   <div class="card">
-    <div class="card-title">시나리오 분석</div>
     <div class="grid-3">
       <div style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);padding:14px;border-radius:8px;">
         <div style="font-size:12px;color:var(--green);font-weight:700;margin-bottom:6px;">강세 시나리오</div>

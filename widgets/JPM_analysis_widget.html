@@ -210,6 +210,8 @@
   .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
   .header-meta { justify-content: space-between; }
   .nav { justify-content: space-between; }
+  .per-share-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+  .ps-icon{font-size:20px;margin-bottom:5px}
 </style>
 </head>
 <body>
@@ -281,8 +283,8 @@
         <button class="ma-toggle-btn" data-ma="pricelabels" style="color:var(--text2);border-color:var(--text2);margin-left:4px;">◆ 가격라벨</button>
       </div>
     </div>
-    <svg id="jpmCandleSvg" viewBox="0 0 720 240" width="100%" style="display:block;background:var(--bg3);border-radius:8px 8px 0 0;padding:4px;" role="img" aria-label="JPM 일봉 캔들스틱 차트"></svg>
-    <svg id="jpmVolumeSvg" viewBox="0 0 720 70" width="100%" style="display:block;background:var(--bg3);border-radius:0 0 8px 8px;padding:0 4px 4px;" role="img" aria-label="JPM 거래량 차트"></svg>
+    <svg id="jpmPriceCandleSvg" viewBox="0 0 720 240" width="100%" style="display:block;background:var(--bg3);border-radius:8px 8px 0 0;padding:4px;" role="img" aria-label="JPM 일봉 캔들스틱 차트"></svg>
+    <svg id="jpmPriceVolumeSvg" viewBox="0 0 720 70" width="100%" style="display:block;background:var(--bg3);border-radius:0 0 8px 8px;padding:0 4px 4px;" role="img" aria-label="JPM 거래량 차트"></svg>
     <div style="font-size:11px;color:var(--text3);margin-top:10px;">52주 최저 $279.10 (2026.03) → 52주 최고 $363.00 (2026.08) → 현재 $359.24</div>
   </div>
 
@@ -309,19 +311,20 @@
 
   <div class="card">
     <div class="card-title">구간별 패턴 분석</div>
-    <div class="grid-3">
-      <div style="background:var(--bg3);padding:12px;border-radius:8px;">
-        <div style="font-size:11px;color:var(--accent);font-weight:700;margin-bottom:6px;">2025.07~12 완만한 상승</div>
+    <div class="grid-4">
+      <div style="background:rgba(46,204,113,.10);border:1px solid var(--green);padding:12px;border-radius:8px;">
+        <div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">2025.07~12 · 강세</div>
         <div style="font-size:12px;color:var(--text2);">$284~$330 점진 우상향. 금리 고원 환경에서 NII 방어. Q2·Q3 견조한 실적 + IB 수수료 회복으로 박스권 돌파.</div>
       </div>
-      <div style="background:var(--bg3);padding:12px;border-radius:8px;">
-        <div style="font-size:11px;color:var(--accent);font-weight:700;margin-bottom:6px;">2026.01~03 고점 후 조정</div>
+      <div style="background:rgba(231,76,60,.10);border:1px solid var(--red);padding:12px;border-radius:8px;">
+        <div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">2026.01~03 · 약세</div>
         <div style="font-size:12px;color:var(--text2);">1월 $330 신고가 후 관세·불확실성·신용우려로 $284까지 조정. 금리인하 기대감 후퇴. 시장 전반 변동성 확대 구간.</div>
       </div>
-      <div style="background:var(--bg3);padding:12px;border-radius:8px;">
-        <div style="font-size:11px;color:var(--accent);font-weight:700;margin-bottom:6px;">2026.04~06 재상승 신고가</div>
+      <div style="background:rgba(46,204,113,.10);border:1px solid var(--green);padding:12px;border-radius:8px;">
+        <div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">2026.04~06 · 강세</div>
         <div style="font-size:12px;color:var(--text2);">Q1 2026 어닝 서프라이즈(EPS $5.94 vs 예상 $5.43). 트레이딩 $11.6B 역대 최고. $284→$334 신고가 갱신. 자사주 매입 가속.</div>
       </div>
+      <div style="background:rgba(240,192,64,.10);border:1px solid #f0c040;padding:12px;border-radius:8px;"><div style="font-size:11px;color:#f0c040;font-weight:700;margin-bottom:6px;">2026.07~08 · 중립</div><div style="font-size:12px;color:var(--text2);">신고가 부근에서 실적과 금리 경로를 확인하는 숨 고르기 구간.</div></div>
     </div>
   </div>
 </div>
@@ -340,13 +343,16 @@
   </div>
 
   <!-- 은행 핵심 지표 -->
-  <div class="km-grid">
-    <div class="km-box"><div class="km-label">ROTCE (Q1 2026)</div><div class="km-value">21%</div><div class="km-sub">자기자본이익률 · 역대급</div></div>
-    <div class="km-box"><div class="km-label">CET1 비율 (Q1 2026)</div><div class="km-value">14.3%</div><div class="km-sub">규제기준 11.9% 크게 상회</div></div>
-    <div class="km-box"><div class="km-label">순이자마진 (NIM)</div><div class="km-value">~2.7%</div><div class="km-sub">고금리 환경 수혜 구간</div></div>
-    <div class="km-box"><div class="km-label">대손충당금 (Q1 2026)</div><div class="km-value">$2.5B</div><div class="km-sub">전분기 $4.7B 대비 감소</div></div>
-    <div class="km-box"><div class="km-label">효율성 비율 (Q1 2026)</div><div class="km-value">53.9%</div><div class="km-sub">낮을수록 비용효율 우수</div></div>
-    <div class="km-box"><div class="km-label">총자산 (Q1 2026)</div><div class="km-value">$4.9T</div><div class="km-sub">미국 최대 · YoY +19%</div></div>
+  <div class="grid-3">
+    <div class="stat-box"><div class="stat-label">ROTCE (Q1 2026)</div><div class="stat-value">21%</div><div class="stat-sub">자기자본이익률</div></div>
+    <div class="stat-box"><div class="stat-label">CET1 비율 (Q1 2026)</div><div class="stat-value">14.3%</div><div class="stat-sub">규제기준 11.9% 상회</div></div>
+    <div class="stat-box"><div class="stat-label">순이자마진 (Q1 2026)</div><div class="stat-value">~2.7%</div><div class="stat-sub">고금리 환경 수혜</div></div>
+    <div class="stat-box"><div class="stat-label">대손충당금 (Q1 2026)</div><div class="stat-value">$2.5B</div><div class="stat-sub">전분기 $4.7B</div></div>
+    <div class="stat-box"><div class="stat-label">효율성 비율 (Q1 2026)</div><div class="stat-value">53.9%</div><div class="stat-sub">낮을수록 효율적</div></div>
+    <div class="stat-box"><div class="stat-label">총자산 (Q1 2026)</div><div class="stat-value">$4.9T</div><div class="stat-sub">미국 최대 · YoY +19%</div></div>
+    <div class="stat-box"><div class="stat-label">NII (Q1 2026)</div><div class="stat-value">$25.4B</div><div class="stat-sub">YoY +9%</div></div>
+    <div class="stat-box"><div class="stat-label">총수익 (Q1 2026)</div><div class="stat-value">$49.8B</div><div class="stat-sub">CIB 45% 기여</div></div>
+    <div class="stat-box"><div class="stat-label">분기 배당</div><div class="stat-value">$1.50</div><div class="stat-sub">YoY +20%</div></div>
   </div>
 
   <div class="card" style="margin-top:4px;">
@@ -387,7 +393,7 @@
   </div>
   <div class="card">
     <div class="card-title">다음 실적 체크포인트 — 2026년 7월 중순 (Q2 2026)</div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.8;">① 트레이딩·IB 수수료가 Q1의 역대최고 수준을 유지하는지 → ② NII가 FY2026 가이던스 $103B 상향 경로를 따라가는지 → ③ 대출 성장(+15% YoY)이 지속되는지, 신용 손실 지표에 변화가 있는지 → ④ 자사주 매입·배당 정책이 유지되는지 확인.</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.8;">① 트레이딩·IB 수수료가 Q1의 역대최고 수준을 유지하는지<br>② NII가 FY2026 가이던스 $103B 경로를 따라가는지<br>③ 대출 성장과 신용 손실 지표에 변화가 있는지<br>④ 자사주 매입·배당 정책이 유지되는지 확인</div>
   </div>
 </div>
 
@@ -459,17 +465,17 @@
   <div class="card">
     <div class="card-title">Per-Share 지표</div>
     <div class="bank-note">⚠️ 은행주 FCF/주는 트레이딩자산 변동으로 분기별 극단적 등락 — 은행 분석 기준으로는 미사용. EPS·BPS·배당·ROTCE로 평가.</div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;">
-      <div class="ps-card"><div class="ps-label">EPS (TTM 기본)</div><div class="ps-value">$20.98</div><div class="ps-sub">Q2\'25~Q1\'26 합산 / YoY +5.6%</div></div>
-      <div class="ps-card"><div class="ps-label">BPS (Q1 2026)</div><div class="ps-value">$133.83</div><div class="ps-sub">순자산 $364B ÷ 2.72B주</div></div>
-      <div class="ps-card"><div class="ps-label">배당금 (분기 최신)</div><div class="ps-value">$1.50</div><div class="ps-sub">연 $6.00 / 배당수익률 ~1.9%</div></div>
-      <div class="ps-card"><div class="ps-label">TBV/주 (Q1 2026)</div><div class="ps-value">$110.19</div><div class="ps-sub">유형자산 기준 / YoY +18%</div></div>
+    <div class="per-share-grid">
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (TTM 기본)</div><div class="ps-value">$20.98</div><div class="ps-sub">Q2\'25~Q1\'26 합산 / YoY +5.6%</div></div>
+      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (Q1 2026)</div><div class="ps-value">$133.83</div><div class="ps-sub">순자산 $364B ÷ 2.72B주</div></div>
+      <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">배당금 (분기 최신)</div><div class="ps-value">$1.50</div><div class="ps-sub">연 $6.00 / 배당수익률 ~1.9%</div></div>
+      <div class="ps-card"><div class="ps-icon">🏦</div><div class="ps-label">TBV/주 (Q1 2026)</div><div class="ps-value">$110.19</div><div class="ps-sub">유형자산 기준 / YoY +18%</div></div>
     </div>
     <div class="chart-wrap" style="height:220px;"><canvas id="perShareChart"></canvas></div>
   </div>
 
   <div class="card">
-    <div class="card-title">주주환원 현황 요약</div>
+    <div class="card-title">종합 밸류에이션 — 주주환원 및 자본 효율 요약</div>
     <div class="grid-3">
       <div class="stat-box"><div class="stat-label">자사주 매입 (2025H2~)</div><div class="stat-value gd">$24.9B</div><div class="stat-sub">8,200만주 소각</div></div>
       <div class="stat-box"><div class="stat-label">분기 배당 (2026.07~)</div><div class="stat-value gd">$1.50</div><div class="stat-sub">YoY +20% 인상</div></div>
@@ -481,22 +487,22 @@
     <div class="card-title">시나리오별 공정가치 분석</div>
     <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
       <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — 신용 사이클 악화·대손충당금 급증</div>
-      <div style="font-size:12px;color:var(--text2);">경기 둔화로 신용 사이클이 악화되고 대손충당금이 급증할 경우 → 공정가치 <strong style="color:var(--red);">$240~275/주</strong></div>
+      <div style="font-size:12px;color:var(--text2);">경기 둔화로 신용 사이클이 악화되고 대손충당금이 급증할 경우 → 공정가치 <strong style="color:var(--red);">$240~275/주</strong> (현재가 대비 -33.2% ~ -23.5%)</div>
     </div>
     <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
       <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 순이자이익(NII) 안정</div>
-      <div style="font-size:12px;color:var(--text2);">P/TBV 2.81x·ROTCE 21% 밴드가 유지되며 NII가 안정적으로 유지될 경우 → 공정가치 <strong style="color:var(--text);">$330~360/주</strong></div>
+      <div style="font-size:12px;color:var(--text2);">P/TBV 2.81x·ROTCE 21% 밴드가 유지되며 NII가 안정적으로 유지될 경우 → 공정가치 <strong style="color:var(--text);">$330~360/주</strong> (현재가 대비 -8.1% ~ +0.2%)</div>
     </div>
     <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
       <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — 연착륙 성공·M&A 붐 도래</div>
-      <div style="font-size:12px;color:var(--text2);">경기 연착륙이 성공하고 IB 부문 M&A 딜플로우가 붐을 이룰 경우 → 공정가치 <strong style="color:var(--green);">$390~420/주</strong></div>
+      <div style="font-size:12px;color:var(--text2);">경기 연착륙이 성공하고 IB 부문 M&A 딜플로우가 붐을 이룰 경우 → 공정가치 <strong style="color:var(--green);">$390~420/주</strong> (현재가 대비 +8.6% ~ +16.9%)</div>
     </div>
   </div>
 </div>
 
 <!-- ===================== S5: US 특화 ===================== -->
-<div id="us" class="section">
-  <div class="section-title">US 특화 — S&P500 상대 성과 & 은행 고유 지표</div>
+<div id="us" class="section" data-us-visual="chart">
+  <div class="section-title">US 특화 — S&P 500 대비 상대 성과 & 미국 은행 고유 지표</div>
 
   <div class="rel-container">
     <div class="rel-title">S&P500 대비 상대 성과 (2025.07 ~ 2026.06, 기준=100)</div>
@@ -698,7 +704,7 @@
   </div>
 
   <div class="card" style="margin-top:16px;">
-    <div class="card-title">월가 컨센서스 요약</div>
+    <div class="card-title">투자의견 요약</div>
     <div class="consensus-bar">
       <div class="cb-buy" style="width:62%">매수 62%</div>
       <div class="cb-hold" style="width:33%">중립 33%</div>
@@ -715,7 +721,6 @@
   </div>
 
   <div class="card">
-    <div class="card-title">시나리오 분석</div>
     <div class="grid-3">
       <div style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);padding:14px;border-radius:8px;">
         <div style="font-size:12px;color:var(--green);font-weight:700;margin-bottom:6px;">강세 시나리오</div>
@@ -764,8 +769,8 @@ const JPM_MA60 = [278.31,278.95,279.4,279.83,280.23,280.65,281.03,281.52,281.93,
 const JPM_MA120 = [261.74,261.87,261.96,262.06,262.14,262.26,262.45,262.7,262.95,263.23,263.5,263.77,264.0,264.29,264.67,265.06,265.5,265.99,266.56,267.15,267.75,268.4,268.92,269.41,269.94,270.45,271.0,271.55,272.05,272.54,273.04,273.59,274.18,274.74,275.32,275.88,276.59,277.47,278.31,279.14,279.77,280.44,281.06,281.68,282.3,282.92,283.53,284.13,284.74,285.25,285.75,286.21,286.67,287.15,287.58,287.98,288.33,288.73,289.18,289.65,290.08,290.55,290.98,291.37,291.73,292.1,292.48,292.89,293.32,293.77,294.27,294.68,295.0,295.3,295.59,295.92,296.2,296.47,296.75,297.09,297.44,297.83,298.16,298.49,298.86,299.29,299.66,300.04,300.26,300.55,300.88,301.19,301.49,301.71,301.94,302.14,302.36,302.62,302.87,303.18,303.55,303.89,304.19,304.48,304.79,305.18,305.59,305.9,306.22,306.54,306.81,306.93,307.03,307.12,307.23,307.28,307.3,307.36,307.43,307.49,307.56,307.64,307.8,307.95,308.1,308.28,308.51,308.64,308.91,309.16,309.39,309.55,309.64,309.69,309.79,309.88,309.95,310.03,310.0,309.98,310.01,310.03,310.08,310.12,310.14,310.13,310.03,309.89,309.73,309.56,309.36,309.1,308.84,308.62,308.41,308.19,307.98,307.73,307.52,307.33,307.2,307.07,306.84,306.63,306.52,306.45,306.35,306.31,306.22,306.27,306.31,306.4,306.54,306.61,306.68,306.82,306.95,307.09,307.16,307.22,307.27,307.26,307.27,307.29,307.29,307.3,307.29,307.24,307.17,307.17,307.05,306.99,306.96,307.0,307.0,306.98,306.97,306.99,306.97,306.97,306.93,306.87,306.85,306.78,306.65,306.51,306.36,306.24,306.24,306.25,306.21,306.15,306.09,306.03,306.02,306.08,306.1,306.17,306.23,306.2,306.23,306.32,306.4,306.51,306.54,306.5,306.44,306.5,306.53,306.61,306.73,306.89,307.12,307.35,307.53,307.87,308.24,308.57,308.93,309.25,309.62,310.02,310.38,310.77,311.17,311.53,311.76,312.1,312.34,312.6,312.92,313.33];
 
 (function(){
-  const svgCandle = document.getElementById('jpmCandleSvg');
-  const svgVol = document.getElementById('jpmVolumeSvg');
+  const svgCandle = document.getElementById('jpmPriceCandleSvg');
+  const svgVol = document.getElementById('jpmPriceVolumeSvg');
   const toggle = document.getElementById('jpmRangeToggle');
   const maToggle = document.getElementById('jpmMaToggle');
   if(!svgCandle || !svgVol || !toggle) return;

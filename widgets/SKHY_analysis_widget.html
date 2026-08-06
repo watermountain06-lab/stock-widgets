@@ -118,6 +118,12 @@
   .peer-nav-link { color: var(--text2); font-size: 11px; font-weight: 700; text-decoration: none; padding: 4px 9px; border-radius: 6px; border: 1px solid var(--border); transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; }
   .peer-nav-link:hover { color: var(--accent2); border-color: var(--accent); }
   .peer-nav-link.disabled { color: var(--text3); opacity: 0.4; pointer-events: none; border-color: var(--border); }
+  .ma-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+  .ma-name{display:flex;align-items:center;gap:7px}.ma-dot{width:8px;height:8px;border-radius:50%}.ma-status{font-size:10px;padding:3px 8px;border-radius:10px}.status-above{background:rgba(46,204,113,.15);color:var(--green)}.status-below{background:rgba(231,76,60,.15);color:var(--red)}
+  .per-share-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.ps-card{background:var(--bg3);padding:14px;border-radius:8px}.ps-icon{font-size:20px}.ps-label{font-size:11px;color:var(--text3)}.ps-value{font-size:18px;font-weight:700}.ps-sub{font-size:10px;color:var(--text3)}
+  .stage-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.stage-mini{text-align:center;padding:10px;background:var(--bg3);border-radius:8px}.stage-mini-num{font-weight:800}.stage-mini-label{font-size:10px;color:var(--text3)}
+  .scenario-card{padding:14px;border-radius:8px}.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .driver-item{padding:8px 0;font-size:12px;color:var(--text2)}.ma-val{font-size:13px;font-weight:700}.us-visual{min-height:1px}
 </style>
 </head>
 <body>
@@ -191,16 +197,19 @@
         <div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$151.03 (고점 대비 -49.4%)</span><span class="zone-tag tag-current">현재</span></div></div>
         <div class="zone-item"><span class="zone-label">첫 거래일 종가(7/10)</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$168.01 (대비 +373.3%)</span><span class="zone-tag tag-support">기준선</span></div></div>
         <div class="zone-item"><span class="zone-label">ADR 거래 후 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$24.500 (2026.07.17)</span><span class="zone-tag tag-support">강지지</span></div></div>
+        <div class="zone-item"><span class="zone-label">52주 수익률</span><span class="zone-val" style="color:var(--green);">+460.4%</span></div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title">ADR 초기 가격 흐름 요약</div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.8;">
-        7/10 임시코드(SKHYV)로 첫 거래 개시($168.01 종가) 후 7/13 정식 티커(SKHY)로 전환되며 $152.35로 급락, 7/14 하루 만에 +27% 폭등하며 $193.92 마감, 7/16 다시 -13.7% 급락하는 등 극심한 변동성을 보이는 중.
-        <div style="margin-top:10px;padding:10px;background:var(--bg3);border-radius:6px;">⚠️ 실제 원주(KRX:000660) 대비 ADR 프리미엄이 최대 약 50%까지 벌어졌다는 보도가 있어, 이런 변동성은 회사 펀더멘털보다 ADR-원주 간 가격 괴리 조정 과정으로 해석하는 것이 합리적. 최소 수개월의 거래 이력이 쌓이기 전까지는 기술적 분석의 신뢰도가 낮음.</div>
-      </div>
+      <div class="card-title">이동평균선 현황</div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:#38bdf8"></span>MA5</span><div><span class="ma-val">$148.17</span> <span class="ma-status status-above">현재가 상회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:#f59e0b"></span>MA20</span><div><span class="ma-val">$158.45</span> <span class="ma-status status-below">현재가 하회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:#a78bfa"></span>MA60</span><div><span class="ma-val">$203.88</span> <span class="ma-status status-below">현재가 하회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:#22c55e"></span>MA120</span><div><span class="ma-val">$154.94</span> <span class="ma-status status-below">현재가 하회</span></div></div>
+      <div style="margin-top:10px;font-size:12px;color:var(--text2);">MA60&gt;MA20&gt;MA120&gt;현재가&gt;MA5 — 단기 반등과 중장기 저항이 교차하는 약세 구간.</div>
     </div>
   </div>
+  <div class="card"><div class="card-title">구간별 패턴 분석</div><div class="grid-4"><div style="background:rgba(46,204,113,.1);border:1px solid var(--green);padding:12px;border-radius:8px;color:var(--green)">1개월 · 반등</div><div style="background:rgba(231,76,60,.1);border:1px solid var(--red);padding:12px;border-radius:8px;color:var(--red)">3개월 · 조정</div><div style="background:rgba(240,192,64,.1);border:1px solid #f0c040;padding:12px;border-radius:8px;color:#f0c040">6개월 · 고변동</div><div style="background:rgba(46,204,113,.1);border:1px solid var(--green);padding:12px;border-radius:8px;color:var(--green)">1년 · 강세</div></div></div>
 
   <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;">
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">ADR 거래 7일 만에 고점 대비 -22.4% — 극심한 변동성</span>
@@ -231,46 +240,45 @@
       <div class="stat-box"><div class="stat-label">영업이익률</div><div class="stat-value up">72%</div><div class="stat-sub">반도체 업종 내에서도 이례적으로 높은 수준</div></div>
       <div class="stat-box"><div class="stat-label">순이익률</div><div class="stat-value up">77%</div><div class="stat-sub">HBM 고부가가치 제품 믹스 효과</div></div>
       <div class="stat-box"><div class="stat-label">HBM 시장점유율</div><div class="stat-value up">57%</div><div class="stat-sub">세계 1위, AI 가속기向 HBM 공급 주도</div></div>
+      <div class="stat-box"><div class="stat-label">FY2025 매출</div><div class="stat-value up">66.2조원</div><div class="stat-sub">연간 기준</div></div>
+      <div class="stat-box"><div class="stat-label">FY2025 순이익</div><div class="stat-value up">19.8조원</div><div class="stat-sub">원주 공시 기준</div></div>
+      <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value">2026 Q2</div><div class="stat-sub">회사 발표 일정 확인</div></div>
     </div>
     <div style="margin-top:12px;font-size:12px;color:var(--text3);">AI 데이터센터發 HBM(고대역폭메모리)·고용량 서버 D램·eSSD 수요 급증이 매출·이익 급증을 견인. 2026년 생산능력이 이미 완판된 상태라는 보도도 있음.</div>
   </div>
 
+  <div class="card"><div class="card-title">핵심 성장 동력 3가지</div><div class="driver-item">① HBM4 기술 리더십과 AI 가속기 공급 확대</div><div class="driver-item">② 고용량 서버 DRAM·eSSD 믹스 개선</div><div class="driver-item">③ 미국 ADR 접근성과 글로벌 투자자 기반 확대</div></div>
   <div class="card">
     <div class="card-title">핵심 투자 논리 — AI 메모리 슈퍼사이클이 얼마나 지속되는가</div>
     <div style="font-size:12px;color:var(--text2);line-height:1.7;">SK hynix는 HBM 시장에서 57% 점유율로 세계 1위를 차지하며 AI 가속기 수요 급증의 최대 수혜주로 부상했다. Q1 FY26 영업이익률 72%는 메모리 반도체 기업으로선 이례적으로 높은 수준이며, 이는 HBM이라는 고부가가치 제품 믹스 전환의 결과다. <strong style="color:var(--text);">핵심 논쟁은 "AI 데이터센터發 HBM 수요가 구조적으로 지속되는 슈퍼사이클인가" 아니면 "과거 메모리 반도체 업종처럼 결국 사이클 정점을 지나 하강할 것인가"이다.</strong></div>
+  </div>
+  <div class="card">
+    <div class="card-title">다음 실적 체크포인트 — 2026년 Q2 실적</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.8;">① HBM 매출과 시장점유율이 유지되는지<br>② 영업이익률 72%의 지속 가능성이 확인되는지<br>③ 2026년 생산능력 완판 물량이 매출로 전환되는지<br>④ HBM4 양산 일정과 고객 인증이 계획대로 진행되는지</div>
   </div>
 </div>
 
 <!-- ===================== SECTION 3: 밸류에이션 ===================== -->
 <div id="valuation" class="section">
-  <div class="section-title">밸류에이션 — 메모리 슈퍼사이클 정점 실적 대비 오히려 낮은 P/E</div>
-  <div class="info-box">
-    <strong>핵심 전제:</strong> SKHY의 P/E(TTM) 17.5x는 사상 최대 분기 실적(영업이익률 72%)을 감안하면 오히려 낮은 수준이다 — 시장이 현재의 HBM 슈퍼사이클 이익을 "일시적 정점"으로 보고 있다는 신호로 해석할 수 있다.
+  <div class="section-title">밸류에이션 — 메모리 슈퍼사이클 지속 가능성 평가</div>
+  <div class="card"><div class="card-title">멀티플 5단계 평가</div>
+    <div class="val-item"><div class="val-header"><span class="val-name">PER (TTM)</span><span class="val-number">17.4x</span></div><div class="val-labels"><span class="val-low">저 10x</span><span class="val-mid">적정 18x</span><span class="val-high">고 28x</span></div></div>
+    <div class="val-item"><div class="val-header"><span class="val-name">Forward PER</span><span class="val-number">~12x</span></div><div class="val-labels"><span class="val-low">저 8x</span><span class="val-mid">적정 16x</span><span class="val-high">고 25x</span></div></div>
+    <div class="val-item"><div class="val-header"><span class="val-name">PBR</span><span class="val-number">~3.0x</span></div><div class="val-labels"><span class="val-low">저 1x</span><span class="val-mid">적정 2x</span><span class="val-high">고 4x</span></div></div>
+    <div class="val-item"><div class="val-header"><span class="val-name">PSR</span><span class="val-number">~2.2x</span></div><div class="val-labels"><span class="val-low">저 1x</span><span class="val-mid">적정 2x</span><span class="val-high">고 4x</span></div></div>
+    <div class="val-item"><div class="val-header"><span class="val-name">배당수익률</span><span class="val-number">~0.5%</span></div><div class="val-labels"><span class="val-low">저 0%</span><span class="val-mid">적정 1%</span><span class="val-high">고 2%</span></div></div>
   </div>
-  <div class="card">
-    <div class="val-item">
-      <div class="val-header"><span class="val-name">PER (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">17.4x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
-      <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);background-size:172% 100%;"></div></div>
-      <div class="val-labels"><span class="val-low">저(10x)</span><span class="val-mid">적정(18x)</span><span class="val-high">고(28x)</span></div>
-      <div style="font-size:11px;color:var(--text3);margin-top:4px;">Micron(21x) 대비 낮은 배수 — 사상 최대 분기 실적(영업이익률 72%) 대비 오히려 낮은 배수로, 메모리 슈퍼사이클의 지속가능성에 대한 시장의 신중한 시각을 반영</div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">메모리 반도체 피어 P/E 비교</div>
-    <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
-    <div style="margin-top:12px;font-size:12px;color:var(--text2);">SK hynix의 P/E 17.5x는 메모리 슈퍼사이클을 함께 누리는 Micron(21x)보다 낮은 수준 — HBM 시장 1위 지위에도 불구하고 상대적으로 보수적으로 평가받고 있다.</div>
-  </div>
-  <div class="card">
-    <div class="card-title">종합 밸류에이션 — 핵심 변수는 HBM 슈퍼사이클의 지속가능성</div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.6;">P/E 17.5x 자체는 낮아 보이지만, 이는 현재의 영업이익률 72%가 메모리 업종 역사상 이례적으로 높은 수준이라는 점을 감안한 시장의 보수적 평가다. <strong style="color:var(--text);">밸류에이션 판단의 핵심은 멀티플 자체가 아니라 AI發 HBM 수요가 구조적 성장인지, 사이클의 일시적 정점인지 여부다.</strong> ADR 자체의 극심한 초기 변동성은 이 펀더멘털 논쟁과는 별개로 ADR-원주 간 가격 괴리 조정 과정에 가깝다.</div>
-  </div>
+  <div class="card"><div class="card-title">메모리 반도체 피어 비교 (P/E)</div><div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div><div style="font-size:12px;color:var(--text2);">SK hynix 17.5x는 Micron 21x보다 낮다.</div></div>
+  <div class="card"><div class="card-title">밸류에이션 5단계</div><div class="stage-grid"><div class="stage-mini"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div></div><div class="stage-mini"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div></div><div class="stage-mini"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div></div><div class="stage-mini"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div></div><div class="stage-mini"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div></div></div></div>
+  <div class="card"><div class="card-title">Per-Share 지표 (ADR 1주 = 원주 0.1주)</div><div class="per-share-grid"><div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS</div><div class="ps-value">$8.68</div><div class="ps-sub">TTM ADR 환산</div></div><div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS</div><div class="ps-value">$50.34</div><div class="ps-sub">원주 자본 ADR 환산</div></div><div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">매출/주</div><div class="ps-value">$68.65</div><div class="ps-sub">TTM ADR 환산</div></div><div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">배당/주</div><div class="ps-value">~$0.75</div><div class="ps-sub">연환산 참고</div></div></div></div>
+  <div class="card"><div class="card-title">종합 밸류에이션 — HBM 사이클 지속성이 핵심</div><div style="font-size:12px;color:var(--text2);">P/E는 Micron 대비 낮지만, 현재 이익률이 사이클 정점일 가능성을 함께 반영해야 한다. ADR 가격 괴리와 HBM4 양산 가시성이 재평가의 핵심이다.</div></div>
+  <div class="card"><div class="card-title">시나리오별 공정가치 분석</div><div class="scenario-card" style="background:rgba(231,76,60,.08);border:1px solid var(--red);margin-bottom:8px;">Bear — 사이클 둔화: <strong>$100~125</strong> (현재가 대비 -33.8% ~ -17.2%)</div><div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">Base — HBM 성장 유지: <strong>$145~175</strong> (현재가 대비 -4.0% ~ +15.9%)</div><div class="scenario-card" style="background:rgba(46,204,113,.08);border:1px solid var(--green);">Bull — HBM4 리더십 확대: <strong>$190~225</strong> (현재가 대비 +25.8% ~ +49.0%)</div></div>
 </div>
-
-<!-- ===================== SECTION 4: US 특화 ===================== -->
-<div id="us" class="section">
-  <div class="section-title">US 특화 — ADR 상장 구조 · 경쟁 구도</div>
-  <div class="rel-container">
-    <div class="rel-title">ADR 상장 개요</div>
+<div id="us" class="section" data-us-visual="chart">
+  <div class="section-title">US 특화 — S&P 500 대비 ADR 성과 · 미국 상장 구조 · HBM 공급망</div>
+  <div class="rel-container us-visual">
+    <div class="us-visual" style="font-size:11px;color:var(--text3);margin-bottom:8px;">미국 ADR 구조 · 2026년 7월 · 공모 규모 및 환산비율</div>
+    <div class="rel-title">S&P 500 대비 ADR 상장 개요 (미국 · 2026년 7월)</div>
     <div class="grid-3">
       <div class="stat-box"><div class="stat-label">공모 규모</div><div class="stat-value">$26.5B</div><div class="stat-sub">외국기업 美 사상 최대 지분 매각</div></div>
       <div class="stat-box"><div class="stat-label">ADR 비율</div><div class="stat-value">1:0.1</div><div class="stat-sub">ADR 1주 = 원주 0.1주</div></div>
@@ -291,6 +299,11 @@
       <div class="zone-item"><span class="zone-label">글로벌 낸드 시장점유율</span><span class="zone-val">2위 (21%, 2024년 기준)</span></div>
       <div class="zone-item"><span class="zone-label">HBM 시장점유율</span><span class="zone-val" style="color:var(--green);">1위 (57%) — AI 가속기 공급망 핵심</span></div>
     </div>
+  </div>
+  <div class="card">
+    <div class="card-title">미국 AI 공급망·ADR 구조</div>
+    <div class="zone-list"><div class="zone-item"><span class="zone-label">미국 ADR · 2026.07</span><span class="zone-val">$26.5B 공모</span></div><div class="zone-item"><span class="zone-label">미국 투자자 환산비율</span><span class="zone-val">ADR 1주 = 원주 0.1주</span></div><div class="zone-item"><span class="zone-label">미국 AI 고객 공급망</span><span class="zone-val">HBM 57% · 글로벌 기준</span></div><div class="zone-item"><span class="zone-label">공시 한계</span><span class="zone-val">미국 매출 별도 미공개</span></div></div>
+    <div style="font-size:11px;color:var(--text3);margin-top:8px;">HBM 수치는 글로벌 시장 기준이며 미국 지역 매출로 해석하지 않는다. 미국 특화의 핵심은 ADR 접근성과 미국 AI 가속기 공급망 노출이다.</div>
   </div>
 </div>
 
@@ -350,6 +363,7 @@
       <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Q1 FY26 영업이익률 72%:</strong> 메모리 업종 역사상 이례적 수익성.</span></div>
       <div class="bb-item"><span class="bb-icon">▲</span><span><strong>P/E 17.5x, Micron(21x) 대비 낮음:</strong> 실적 대비 상대적으로 낮은 밸류에이션.</span></div>
       <div class="bb-item"><span class="bb-icon">▲</span><span><strong>2026년 생산능력 완판:</strong> 공급 부족 국면에서 가격 결정력 보유.</span></div>
+      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>미국 ADR 접근성:</strong> 글로벌 투자자 기반 확대.</span></div>
     </div>
     <div class="bb-box">
       <div class="bb-title bb-bear">🐻 Bear 요인</div>
@@ -357,8 +371,10 @@
       <div class="bb-item"><span class="bb-icon">▼</span><span><strong>메모리 반도체 사이클 리스크:</strong> 현재의 슈퍼사이클이 정점일 가능성.</span></div>
       <div class="bb-item"><span class="bb-icon">▼</span><span><strong>ADR-원주 프리미엄 불확실성:</strong> 가격 괴리 조정이 언제 완료될지 불명확.</span></div>
       <div class="bb-item"><span class="bb-icon">▼</span><span><strong>데이터 극도로 제한적:</strong> ADR 7거래일, 미국 기준 정식 분기보고서 없음.</span></div>
+      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>미국 매출 별도 미공개:</strong> 지역 실적 가시성 제한.</span></div>
     </div>
   </div>
+  <div class="card" style="margin-top:16px;"><div class="card-title">목표가 밴드 — 시나리오별 공정가치 vs 현재가 · 애널리스트 목표가</div><div class="zone-list"><div class="zone-item"><span class="zone-label">Bear</span><span class="zone-val">$100~125</span></div><div class="zone-item"><span class="zone-label">Base</span><span class="zone-val">$145~175</span></div><div class="zone-item"><span class="zone-label">Bull</span><span class="zone-val">$190~225</span></div></div></div>
   <div class="card" style="margin-top:16px;">
     <div class="card-title">5개 분석 종합 — 한눈에 보기</div>
     <div class="zone-list">
