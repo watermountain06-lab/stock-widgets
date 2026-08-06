@@ -77,6 +77,8 @@
   .stage-1 { background: rgba(46,204,113,0.2); color: #2ecc71; }
   .stage-2 { background: rgba(39,174,96,0.2); color: #27ae60; }
   .stage-3 { background: rgba(255,122,92,0.2); color: var(--accent2); }
+  .stage-4 { background: rgba(230,126,34,0.2); color: #e67e22; }
+  .stage-5 { background: rgba(231,76,60,0.2); color: var(--red); }
   .bull-bear { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .bb-box { background: var(--bg3); border-radius: var(--radius); padding: 16px; }
   .bb-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
@@ -104,6 +106,9 @@
   .ma-toggle-btn { background: var(--bg3); border: 1px solid; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer; transition: all .15s; }
   .ma-toggle-btn:hover { filter: brightness(1.2); }
   .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
+  .range-toggle { display:flex; gap:4px; background:var(--bg3); border-radius:8px; padding:3px; }
+  .range-btn { border:0; background:transparent; color:var(--text3); padding:5px 10px; border-radius:6px; font-size:11px; cursor:pointer; }
+  .range-btn.active { background:var(--accent); color:#fff; font-weight:700; }
   @media (max-width: 600px) {
     .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
     .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; } .price-main { font-size: 24px; }
@@ -120,7 +125,8 @@
   .peer-nav-link.disabled { color: var(--text3); opacity: 0.4; pointer-events: none; border-color: var(--border); }
   .ma-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
   .ma-name{display:flex;align-items:center;gap:7px}.ma-dot{width:8px;height:8px;border-radius:50%}.ma-status{font-size:10px;padding:3px 8px;border-radius:10px}.status-above{background:rgba(46,204,113,.15);color:var(--green)}.status-below{background:rgba(231,76,60,.15);color:var(--red)}
-  .per-share-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.ps-card{background:var(--bg3);padding:14px;border-radius:8px}.ps-icon{font-size:20px}.ps-label{font-size:11px;color:var(--text3)}.ps-value{font-size:18px;font-weight:700}.ps-sub{font-size:10px;color:var(--text3)}
+  .per-share-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:12px; }
+  .ps-card { background:var(--bg3);padding:14px;border-radius:8px; }.ps-icon{font-size:20px}.ps-label{font-size:11px;color:var(--text3)}.ps-value{font-size:18px;font-weight:700}.ps-sub{font-size:10px;color:var(--text3)}
   .stage-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.stage-mini{text-align:center;padding:10px;background:var(--bg3);border-radius:8px}.stage-mini-num{font-weight:800}.stage-mini-label{font-size:10px;color:var(--text3)}
   .scenario-card{padding:14px;border-radius:8px}.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
   .driver-item{padding:8px 0;font-size:12px;color:var(--text2)}.ma-val{font-size:13px;font-weight:700}.us-visual{min-height:1px}
@@ -160,7 +166,7 @@
     <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$200B+</span></div>
     <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Information Technology</span></div>
     <div class="meta-item"><span class="meta-label">Q1 FY26 매출(원주)</span><span class="meta-value">52.6조원 (+198%)</span></div>
-    <div class="meta-item"><span class="meta-label">P/E (TTM)</span><span class="meta-value">17.5x</span></div>
+    <div class="meta-item"><span class="meta-label">P/E (TTM)</span><span class="meta-value">17.4x</span></div>
     <div class="meta-item"><span class="meta-label">영업이익률</span><span class="meta-value">72%</span></div>
     <div class="meta-item"><span class="meta-label">ADR 거래 경과</span><span class="meta-value">18거래일</span></div>
   </div>
@@ -179,8 +185,13 @@
 <div id="tech" class="section active">
   <div class="section-title">기술적 분석 — 일봉 캔들스틱 (2025.08 ~ 2026.08) · 1년 수익률 +473.2%</div>
   <div class="price-chart-container">
-    <div style="margin-bottom:10px;display:flex;justify-content:flex-end;align-items:center;flex-wrap:wrap;gap:8px;">
+    <div style="margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+      <div class="range-toggle" id="skhyRangeToggle"><button class="range-btn" data-range="1M">1개월</button><button class="range-btn" data-range="3M">3개월</button><button class="range-btn" data-range="6M">6개월</button><button class="range-btn active" data-range="1Y">1년</button></div>
       <div id="skhyMaToggle" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="ma-toggle-btn" data-ma="ma5" style="color:#38bdf8;border-color:#38bdf8;">● MA5</button>
+        <button class="ma-toggle-btn" data-ma="ma20" style="color:#f59e0b;border-color:#f59e0b;">● MA20</button>
+        <button class="ma-toggle-btn" data-ma="ma60" style="color:#a78bfa;border-color:#a78bfa;">● MA60</button>
+        <button class="ma-toggle-btn" data-ma="ma120" style="color:#22c55e;border-color:#22c55e;">● MA120</button>
         <button class="ma-toggle-btn" data-ma="pricelabels" style="color:var(--text2);border-color:var(--text2);">◆ 가격라벨</button>
       </div>
     </div>
@@ -262,16 +273,16 @@
 <div id="valuation" class="section">
   <div class="section-title">밸류에이션 — 메모리 슈퍼사이클 지속 가능성 평가</div>
   <div class="card"><div class="card-title">멀티플 5단계 평가</div>
-    <div class="val-item"><div class="val-header"><span class="val-name">PER (TTM)</span><span class="val-number">17.4x</span></div><div class="val-labels"><span class="val-low">저 10x</span><span class="val-mid">적정 18x</span><span class="val-high">고 28x</span></div></div>
-    <div class="val-item"><div class="val-header"><span class="val-name">Forward PER</span><span class="val-number">~12x</span></div><div class="val-labels"><span class="val-low">저 8x</span><span class="val-mid">적정 16x</span><span class="val-high">고 25x</span></div></div>
-    <div class="val-item"><div class="val-header"><span class="val-name">PBR</span><span class="val-number">~3.0x</span></div><div class="val-labels"><span class="val-low">저 1x</span><span class="val-mid">적정 2x</span><span class="val-high">고 4x</span></div></div>
-    <div class="val-item"><div class="val-header"><span class="val-name">PSR</span><span class="val-number">~2.2x</span></div><div class="val-labels"><span class="val-low">저 1x</span><span class="val-mid">적정 2x</span><span class="val-high">고 4x</span></div></div>
-    <div class="val-item"><div class="val-header"><span class="val-name">배당수익률</span><span class="val-number">~0.5%</span></div><div class="val-labels"><span class="val-low">저 0%</span><span class="val-mid">적정 1%</span><span class="val-high">고 2%</span></div></div>
+    <div class="val-item"><div class="val-header"><span class="val-name">PER (TTM)</span><div><span class="val-number">17.4x</span> <span class="stage-badge stage-3">3단계 적정</span></div></div><div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div><div class="val-labels"><span class="val-low">저 10x</span><span class="val-mid">적정 18x</span><span class="val-high">고 28x</span></div></div>
+    <div class="val-item"><div class="val-header"><span class="val-name">Forward PER (CY2027E)</span><div><span class="val-number">6.2x</span> <span class="stage-badge stage-1">1단계 매우낮음</span></div></div><div class="val-track"><div class="val-fill" style="width:20%;background:linear-gradient(90deg,#2ecc71,#27ae60);"></div></div><div class="val-labels"><span class="val-low">저 8x</span><span class="val-mid">적정 16x</span><span class="val-high">고 25x</span></div></div>
+    <div class="val-item"><div class="val-header"><span class="val-name">PBR</span><div><span class="val-number">3.0x</span> <span class="stage-badge stage-4">4단계 높음</span></div></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 1x</span><span class="val-mid">적정 2x</span><span class="val-high">고 4x</span></div></div>
+    <div class="val-item"><div class="val-header"><span class="val-name">PSR (TTM)</span><div><span class="val-number">2.2x</span> <span class="stage-badge stage-3">3단계 적정</span></div></div><div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div><div class="val-labels"><span class="val-low">저 1x</span><span class="val-mid">적정 2x</span><span class="val-high">고 4x</span></div></div>
+    <div class="val-item"><div class="val-header"><span class="val-name">배당수익률</span><div><span class="val-number">0.5%</span> <span class="stage-badge stage-2">2단계 낮음</span></div></div><div class="val-track"><div class="val-fill" style="width:40%;background:linear-gradient(90deg,#27ae60,#f0c040);"></div></div><div class="val-labels"><span class="val-low">저 0%</span><span class="val-mid">적정 1%</span><span class="val-high">고 2%</span></div></div>
   </div>
-  <div class="card"><div class="card-title">메모리 반도체 피어 비교 (P/E)</div><div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div><div style="font-size:12px;color:var(--text2);">SK hynix 17.5x는 Micron 21x보다 낮다.</div></div>
-  <div class="card"><div class="card-title">밸류에이션 5단계</div><div class="stage-grid"><div class="stage-mini"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div></div><div class="stage-mini"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div></div><div class="stage-mini"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div></div><div class="stage-mini"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div></div><div class="stage-mini"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div></div></div></div>
+  <div class="card"><div class="card-title">메모리 반도체 피어 비교 — CY2027E Forward PER</div><div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div><div style="font-size:11px;color:var(--text3);margin-top:8px;">2026년 6월 1일 비교 스냅샷 · 단위: 배 · 약 2027년 이익 기준.</div><div style="font-size:12px;color:var(--text2);margin-top:8px;">SK hynix 6.2x는 Micron 9.6x와 Samsung Electronics 6.5x 대비 낮다. 메모리 호황 이후 이익 둔화 우려가 세 회사 모두의 한 자릿수 배수에 반영됐다.</div></div>
+  <div class="card"><div class="card-title">밸류에이션 5단계</div><div class="stage-grid"><div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div><div style="font-size:10px;color:var(--green);">Forward PER</div></div><div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div><div style="font-size:10px;color:var(--green);">배당수익률</div></div><div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:10px;color:var(--gold);">PER·PSR</div></div><div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:10px;color:var(--red);">PBR</div></div><div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div></div></div></div>
   <div class="card"><div class="card-title">Per-Share 지표 (ADR 1주 = 원주 0.1주)</div><div class="per-share-grid"><div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS</div><div class="ps-value">$8.68</div><div class="ps-sub">TTM ADR 환산</div></div><div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS</div><div class="ps-value">$50.34</div><div class="ps-sub">원주 자본 ADR 환산</div></div><div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">매출/주</div><div class="ps-value">$68.65</div><div class="ps-sub">TTM ADR 환산</div></div><div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">배당/주</div><div class="ps-value">~$0.75</div><div class="ps-sub">연환산 참고</div></div></div></div>
-  <div class="card"><div class="card-title">종합 밸류에이션 — HBM 사이클 지속성이 핵심</div><div style="font-size:12px;color:var(--text2);">P/E는 Micron 대비 낮지만, 현재 이익률이 사이클 정점일 가능성을 함께 반영해야 한다. ADR 가격 괴리와 HBM4 양산 가시성이 재평가의 핵심이다.</div></div>
+  <div class="card"><div class="card-title">종합 밸류에이션 — HBM 사이클 지속성이 핵심</div><div style="font-size:12px;color:var(--text2);line-height:1.6;">TTM PER 17.4x는 현재 실적을 반영하지만, 2027E Forward PER 6.2x는 Micron 9.6x·Samsung Electronics 6.5x와 함께 메모리 업황 정점 이후의 이익 둔화를 크게 할인한다. PBR 3.0x의 프리미엄을 유지하려면 HBM4 양산과 고수익성 지속이 필요하며, ADR 가격 괴리 안정화도 재평가의 핵심이다.</div></div>
   <div class="card"><div class="card-title">시나리오별 공정가치 분석</div><div class="scenario-card" style="background:rgba(231,76,60,.08);border:1px solid var(--red);margin-bottom:8px;">Bear — 사이클 둔화: <strong>$100~125</strong> (현재가 대비 -33.8% ~ -17.2%)</div><div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">Base — HBM 성장 유지: <strong>$145~175</strong> (현재가 대비 -4.0% ~ +15.9%)</div><div class="scenario-card" style="background:rgba(46,204,113,.08);border:1px solid var(--green);">Bull — HBM4 리더십 확대: <strong>$190~225</strong> (현재가 대비 +25.8% ~ +49.0%)</div></div>
 </div>
 <div id="us" class="section" data-us-visual="chart">
@@ -418,13 +429,18 @@ const SKHY_MA5 = [null,null,null,26.58,26.47,26.55,26.39,26.31,26.33,26.23,26.0,
   const svgCandle = document.getElementById('skhyCandleSvg');
   const svgVol = document.getElementById('skhyVolumeSvg');
   const maToggle = document.getElementById('skhyMaToggle');
+  const rangeToggle = document.getElementById('skhyRangeToggle');
   if(!svgCandle || !svgVol) return;
   const NS = 'http://www.w3.org/2000/svg';
   const UP='#2ecc71', DOWN='#e74c3c';
-  const maState = {pricelabels:true};
+  const maState = {ma5:true,ma20:true,ma60:true,ma120:true,pricelabels:true};
+  let currentRange='1Y';
 
-  function draw(){
-    const data = SKHY_DAILY;
+  function draw(range=currentRange){
+    currentRange=range;
+    const counts={"1M":22,"3M":66,"6M":126,"1Y":252};
+    const start=Math.max(0,SKHY_DAILY.length-(counts[range]||252));
+    const data = SKHY_DAILY.slice(start);
     while(svgCandle.firstChild) svgCandle.removeChild(svgCandle.firstChild);
     while(svgVol.firstChild) svgVol.removeChild(svgVol.firstChild);
 
@@ -471,6 +487,17 @@ const SKHY_MA5 = [null,null,null,26.58,26.47,26.55,26.39,26.31,26.33,26.23,26.0,
       rect.setAttribute('height', Math.max(yBot-yTop, 1));
       rect.setAttribute('fill', col);
       svgCandle.appendChild(rect);
+    });
+
+    const maDefs=[['ma5',SKHY_MA5,'#38bdf8'],['ma20',SKHY_MA20,'#f59e0b'],['ma60',SKHY_MA60,'#a78bfa'],['ma120',SKHY_MA120,'#22c55e']];
+    maDefs.forEach(([key,series,color])=>{
+      if(!maState[key]) return;
+      const pts=[];
+      series.slice(start).forEach((v,i)=>{ if(v!=null) pts.push(`${pL+(i+0.5)*colW},${py(v)}`); });
+      if(pts.length<2) return;
+      const line=document.createElementNS(NS,'polyline');
+      line.setAttribute('points',pts.join(' '));line.setAttribute('fill','none');line.setAttribute('stroke',color);line.setAttribute('stroke-width','1.5');
+      svgCandle.appendChild(line);
     });
 
     if (maState.pricelabels) {
@@ -554,18 +581,19 @@ const SKHY_MA5 = [null,null,null,26.58,26.47,26.55,26.39,26.31,26.33,26.23,26.0,
     });
   }
 
+  if (rangeToggle) rangeToggle.querySelectorAll('.range-btn').forEach(btn=>btn.addEventListener('click',()=>{rangeToggle.querySelectorAll('.range-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');draw(btn.dataset.range);}));
   if (maToggle) {
     maToggle.querySelectorAll('.ma-toggle-btn').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const key = btn.dataset.ma;
         maState[key] = !maState[key];
         btn.classList.toggle('ma-off', !maState[key]);
-        draw();
+        draw(currentRange);
       });
     });
   }
 
-  draw();
+  draw('1Y');
 })();
 
 function renderPeerChart() {
@@ -574,20 +602,20 @@ function renderPeerChart() {
   charts['peer'] = new Chart(ctx,{
     type:'bar',
     data:{
-      labels:['SKHY','MU'],
+      labels:['SK hynix','Micron','Samsung Electronics'],
       datasets:[{
-        label:'P/E (TTM)',
-        data:[17.5,21],
-        backgroundColor:['#ff7a5c','rgba(154,160,184,0.4)'],
+        label:'CY2027E Forward PER (x)',
+        data:[6.2,9.6,6.5],
+        backgroundColor:['#ff7a5c','rgba(0,94,184,0.72)','rgba(240,192,64,0.72)'],
         borderRadius:4,borderSkipped:false
       }]
     },
     options:{
       responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`P/E ${ctx.raw}x`}}},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`2027E PER ${ctx.raw}x`}}},
       scales:{
         x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
-        y:{max:25,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
+        y:{beginAtZero:true,max:12,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
       }
     }
   });

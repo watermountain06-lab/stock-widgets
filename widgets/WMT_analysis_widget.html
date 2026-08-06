@@ -178,6 +178,7 @@
   .driver-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
 
   .ps-card { background: var(--bg3); border-radius: 8px; padding: 16px; text-align: center; }
+  .per-share-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px; }
   .ps-icon { font-size: 22px; margin-bottom: 6px; }
   .ps-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
   .ps-value { font-size: 22px; font-weight: 800; color: var(--accent2); }
@@ -423,14 +424,14 @@
       </div>
 
       <div style="margin-top:10px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">
-        ※ 리테일 특성상 PSR은 1x대가 정상. PER 42x는 광고·이커머스 고마진 성장 프리미엄 반영. Amazon대비 할인 매력.
+        ※ 리테일 특성상 PSR은 1x대가 정상. 8월 5일 종가 기준 PER 40.7x는 광고·이커머스 고마진 성장 프리미엄을 반영.
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">리테일 피어 비교 (PER 기준)</div>
+      <div class="card-title">리테일 피어 비교 — TTM PER (2026.08.05 스냅샷)</div>
       <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:10px;font-size:12px;color:var(--text2);">* WMT의 PER 42x는 전통 리테일 대비 높지만, 광고+이커머스 고성장 감안 시 AMZN보다 낮은 수준</div>
+      <div style="margin-top:10px;font-size:12px;color:var(--text2);">* WMT 40.7x는 전통 리테일 대비 높지만 광고·이커머스 성장 프리미엄을 반영하며, 같은 스냅샷의 AMZN·COST보다는 낮다.</div>
     </div>
   </div>
 
@@ -449,7 +450,7 @@
   <div class="card">
     <div class="card-title">Per-Share 지표</div>
     <div class="fy-note">⚠️ WMT는 2024년 2월 주식분할(3:1) 완료. 과거 수치는 소급 수정된 기준. FY회계연도 기준 집계.</div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;">
+    <div class="per-share-grid">
       <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (FY2026 기본)</div><div class="ps-value">$2.76</div><div class="ps-sub">Q2~Q1 FY26 합산 / YoY +0.7%</div></div>
       <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (Q1 FY27)</div><div class="ps-value">$11.79</div><div class="ps-sub">순자산 $94.3B ÷ 7.97B주</div></div>
       <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (FY2026)</div><div class="ps-value">$1.85</div><div class="ps-sub">FCF $14.9B ÷ ~8.0B주</div></div>
@@ -459,12 +460,8 @@
   </div>
 
   <div class="card">
-    <div class="card-title">종합 밸류에이션 — 수익성 및 현금흐름 요약</div>
-    <div class="grid-3">
-      <div class="stat-box"><div class="stat-label">총이익률</div><div class="stat-value gr">25.1%</div><div class="stat-sub">Q1 FY27 / 지속 개선</div></div>
-      <div class="stat-box"><div class="stat-label">영업이익률</div><div class="stat-value">4.2%</div><div class="stat-sub">리테일 특성상 박마진</div></div>
-      <div class="stat-box"><div class="stat-label">EBITDA Margin</div><div class="stat-value">6.4%</div><div class="stat-sub">D&A 포함 실질 현금흐름</div></div>
-    </div>
+    <div class="card-title">종합 밸류에이션 — 고마진 사업 성장과 높은 이익 배수의 균형</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;">8월 5일 종가 기준 PER 40.7x·Forward PER 약 36x는 4단계 고평가지만, PSR 1.2x는 방대한 매출 기반을 반영해 1단계다. PBR 9.5x와 EV/EBITDA 22.9x는 카드 기준 3단계이며, Q1 FY27 총이익률 25.1%·영업이익률 4.2%·EBITDA 마진 6.4%가 광고·멤버십·이커머스 믹스 개선의 지속 여부를 판단하는 핵심이다.</div>
   </div>
 
   <div class="card" style="display:none;">
@@ -1005,7 +1002,7 @@ function renderPeer() {
       labels:['WMT','AMZN','COST','TGT','KR'],
       datasets:[{
         label:'PER (x)',
-        data:[42.3, 55.0, 52.0, 16.2, 14.5],
+        data:[40.7, 55.0, 52.0, 16.2, 14.5],
         backgroundColor:['#5dba3b','rgba(93,186,59,0.4)','rgba(93,186,59,0.4)','rgba(93,186,59,0.4)','rgba(93,186,59,0.4)'],
         borderColor:['#8fe06a','#5dba3b','#5dba3b','#5dba3b','#5dba3b'], borderWidth:1
       }]

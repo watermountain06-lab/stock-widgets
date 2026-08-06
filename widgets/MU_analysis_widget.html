@@ -328,9 +328,11 @@
       </div>
     </div>
     <div class="card">
-      <div class="card-title">메모리 반도체 피어 비교 (Forward PER)</div>
-      <div class="zone-list"><div class="zone-item"><span class="zone-label">Micron</span><span class="zone-val">10.2x · FY2027E</span></div><div class="zone-item"><span class="zone-label">SK hynix</span><span class="zone-val">17.5x · TTM 참고</span></div><div class="zone-item"><span class="zone-label">Samsung Electronics</span><span class="zone-val">메모리·파운드리 복합</span></div></div>
-      <div style="font-size:11px;color:var(--text3);margin-top:8px;">기간과 이익 기준이 다른 비교값은 참고용이며, MU 10.2x는 HBM 사이클 지속을 전제로 한 FY2027 추정치 기준이다.</div>
+      <div class="card-title">메모리 반도체 피어 비교 — CY2027E Forward PER</div>
+      <div class="chart-wrap" style="height:270px;"><canvas id="muPeerChart"></canvas></div>
+      <div style="font-size:11px;color:var(--text3);margin-top:10px;">2026년 6월 1일 비교 스냅샷 · 단위: 배 · Micron FY2027(8월 결산), 한국 2사는 CY2027(12월 결산)으로 모두 약 2027년 이익 기준.</div>
+      <div style="margin-top:10px;background:var(--bg3);padding:12px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.6;">Micron 9.6x는 SK hynix 6.2x·Samsung Electronics 6.5x보다 높지만 세 회사 모두 한 자릿수 Forward PER다. 이는 AI 메모리 호황에도 시장이 이익 정점 이후의 사이클 둔화를 할인하고 있음을 보여준다.</div>
+      <!-- Source: FairCurve Equity Pulse, 2026-06-01; anchor years aligned to approximately calendar 2027. -->
     </div>
   </div>
   <div class="card">
@@ -765,9 +767,40 @@ function renderCycleChart() {
     }
   });
 }
+function renderPeerChart() {
+  const ctx = document.getElementById('muPeerChart');
+  if (!ctx || charts['valuation']) return;
+  charts['valuation'] = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['Micron','SK hynix','Samsung Electronics'],
+      datasets:[{
+        label:'CY2027E Forward PER (x)',
+        data:[9.6,6.2,6.5],
+        backgroundColor:['rgba(0,94,184,0.78)','rgba(46,204,113,0.72)','rgba(240,192,64,0.72)'],
+        borderColor:['#005EB8','#2ecc71','#f0c040'],
+        borderWidth:1.5,
+        borderRadius:6,
+        maxBarThickness:72
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:c=>c.raw.toFixed(1)+'x'}}
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{beginAtZero:true,suggestedMax:12,grid:{color:'rgba(255,255,255,0.06)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'},title:{display:true,text:'2027E Forward PER (배)',color:'#9aa0b8',font:{size:10}}}
+      }
+    }
+  });
+}
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
+    if (sectionId === 'valuation') renderPeerChart();
     if (sectionId === 'us') renderCycleChart();
   }, 50);
 }
