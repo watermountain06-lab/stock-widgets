@@ -51,6 +51,13 @@ A stage-grid's per-metric badges (`stage-badge stage-N`) can be internally corre
 
 Determining the (고평가|적정가|저평가) verdict itself is not always a clean read - PM/CAT had all 5 metrics clustered on one side, making the call trivial, but TSM's badges were `[2,1,3,1,3]` (mixed low/fair, nothing high) and required actually counting rather than eyeballing the card's existing subtitle.
 
+## More structural checks, found on a second TSM pass
+
+- **MA-row layout**: `.ma-row` is `display:flex;justify-content:space-between` over what should be exactly 2 children (`.ma-name` and a wrapper). If a widget instead has 3 direct children (`.ma-name`, `.ma-val`, `.ma-status`), `space-between` spreads all three apart and the price ends up nowhere near the status badge - it needs to visually sit immediately left of "현재가 상회/하회". Fix: wrap `.ma-val` + `.ma-status` together in `<div style="display:flex;align-items:center;gap:10px;">`, matching PM. Check this on every widget - it's a one-time markup mistake at authoring time, not something that degrades from data refreshes, so it can be present from the start and never get caught by content-focused review.
+- **구간별 패턴 분석 sentiment color**: verify each of the 4 period cards' background/border/title color comes from `var(--green)` / `var(--event-neutral)` / `var(--red)` only. A visually-similar but semantically wrong substitute (e.g. `var(--ma60)`, a gold MA-line color) is easy to miss since it renders a plausible-looking yellow/gold card - but it's the wrong variable and not part of the documented 3-color sentiment system.
+- **Count requirements from `canonical_widget_spec.md`**: the `#fund` quarterly chart needs 8 quarters (rolling window) and the primary KPI grid needs exactly 9 `.stat-box` cards - these aren't currently enforced by `validate_widget.py`, so a widget can silently ship with 5 quarters or 7 KPI boxes. Count them explicitly when touching `#fund`.
+- **Rebuilding a shortened quarterly series can surface a deeper data bug, not just missing history**: extending TSM's chart from 5 to 8 quarters required fetching 3 older quarters, and cross-checking those against the *existing* 5 revealed the whole 순이익 (net income) series was internally inconsistent with revenue/margin (each value implied a NT$→USD rate wildly different from the rest, off by close to one full quarter's growth) - likely a stale or miscomputed series from whenever it was first built. Recomputing all 8 net-income points from NT$ figures at one consistent FX rate (not just appending 3 new ones next to 5 old ones) was the actual fix.
+
 ## 목표가 밴드 (target price band) gauge
 
 **Check which markup convention the widget already uses before computing anything** - count the flex divs in the color bar:
