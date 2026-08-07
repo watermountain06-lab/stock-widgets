@@ -24,15 +24,15 @@
     --ma60: #f0c040;
     --ma120: #22d3ee;
     --green: #2ecc71;
-    --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f;
+    --red: #e74c3c; --gold: #f0c040; --event-major: #38bdf8; --event-neutral: #f1c40f;
     --blue: #3498db;
     --radius: 10px;
     --shadow: 0 4px 20px rgba(0,0,0,0.4);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
-  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; margin: 10px 16px 0; }
-  .header { background: linear-gradient(135deg, #17181a 0%, #0f1117 40%, #1a1d27 100%); border-bottom: 2px solid var(--accent3); padding: 28px 32px 24px; position: relative; overflow: hidden; }
+  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; margin: 10px auto 0; max-width: 1100px;}
+  .header { background: linear-gradient(135deg, #17181a 0%, #0f1117 40%, #1a1d27 100%); border-bottom: 2px solid var(--accent3); padding: 28px 32px 24px; position: relative; overflow: hidden; max-width: 1100px; margin: 0 auto;}
   .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(162,170,173,0.14) 0%, transparent 70%); pointer-events: none; }
   .header-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
   .ticker-block { display: flex; align-items: center; gap: 16px; }
@@ -47,12 +47,12 @@
   .meta-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
   .meta-value { font-size: 14px; font-weight: 600; color: var(--text2); margin-top: 2px; }
   .meta-value.highlight { color: var(--accent2); }
-  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto;}
   .nav::-webkit-scrollbar { display: none; }
   .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
   .nav-btn:hover { color: var(--text); background: var(--bg3); }
   .nav-btn.active { background: var(--accent3); color: var(--accent2); }
-  .section { display: none; padding: 28px 32px; }
+  .section { display: none; padding: 28px 32px; max-width: 1100px; margin: 0 auto;}
   .section.active { display: block; }
   .section-title { font-size: 16px; font-weight: 700; color: var(--accent2); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
   .section-title::before { content: ''; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; display: inline-block; }
@@ -139,7 +139,7 @@
   .ps-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
   .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
   .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
-  .disclaimer { margin: 28px 32px 16px; padding: 12px 16px; background: rgba(162,170,173,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
+  .disclaimer { margin: 28px auto 16px; padding: 12px 16px; background: rgba(162,170,173,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; max-width: 1100px;}
   .range-toggle { display: flex; gap: 4px; }
   .range-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--text3); font-size: 11px; font-weight: 700; padding: 4px 11px; border-radius: 999px; cursor: pointer; transition: all .15s; }
   .range-btn:hover { color: var(--text); border-color: var(--text2); }
@@ -249,10 +249,10 @@
     </div>
     <div class="card">
       <div class="card-title">이동평균선 현황</div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기)</span><span class="ma-val">$309.02</span><span class="ma-status status-above">현재가 상회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기)</span><span class="ma-val">$323.53</span><span class="ma-status status-below">현재가 하회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기)</span><span class="ma-val">$308.33</span><span class="ma-status status-above">현재가 상회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기)</span><span class="ma-val">$286.06</span><span class="ma-status status-above">현재가 상회</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기)</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$309.02</span><span class="ma-status status-above">현재가 상회</span></div></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기)</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$323.53</span><span class="ma-status status-below">현재가 하회</span></div></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기)</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$308.33</span><span class="ma-status status-above">현재가 상회</span></div></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기)</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$286.06</span><span class="ma-status status-above">현재가 상회</span></div></div></div>
       <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">MA20&gt;현재가&gt;MA5&gt;MA60&gt;MA120 순 — 4개 이평선 중 3개 상회 · 기술적 강세. 현재가 $312.41, 52주 고점 $344.57 대비 -9.3%.</div>
     </div>
   </div>
@@ -408,7 +408,7 @@
     </div>
     <div class="zone-list" style="margin-top:12px;">
       <div class="zone-item"><span class="zone-label">S&P500 내 비중</span><span class="zone-val">~5.8% (시총 2위)</span></div>
-      <div class="zone-item"><span class="zone-label">베타</span><span class="zone-val">1.09 — 시장과 유사</span></div>
+      <div class="zone-item"><span class="zone-label">베타 (시장 대비 주가 변동성, 1보다 높으면 더 흔들림)</span><span class="zone-val">1.09 — 시장과 유사</span></div>
     </div>
   </div>
   <div class="card">
@@ -440,12 +440,7 @@
     <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--event-neutral);display:inline-block;"></span>중립</span>
   </div>
   <div class="timeline">
-    <div class="tl-item"><div class="tl-dot red"></div><div class="tl-date">2025년 8월 1일 — 52주 최저 $201.500</div><div class="tl-title">관세·매크로 우려로 52주 저점 형성 · 중국 공급망 부담</div><div class="tl-desc">누적 관세와 중국 의존 우려가 겹치며 8/1 $201.500까지 조정, 최근 1년 저점 형성. 이후 팀쿡의 인도·베트남 생산 전환 가속과 iPhone 17 기대감으로 반등 시작.</div><a class="tl-source" href="https://fortune.com/2025/08/01/apple-earnings-tariff-ai-stock/" target="_blank" rel="noopener">관련 뉴스 보기 (Fortune) →</a></div>
-    <div class="tl-item"><div class="tl-dot neutral"></div><div class="tl-date">2026년 1월 — Q1 FY26 실적</div><div class="tl-title">Q1 FY26 매출 $143.8B · iPhone 역대최대 $85.3B · EPS $2.84(+19%)</div><div class="tl-desc">사상 최강 분기 성적. iPhone $85.3B(▲1.1%), Services $26.3B(▲14%) 역대최대. 영업CF $53.9B. EPS $2.84로 컨센서스 $2.67 크게 상회. Apple Intelligence 탑재 iPhone 16 업그레이드 수요 확인.</div><a class="tl-source" href="https://www.cnbc.com/2026/01/29/apple-aapl-earnings-report-q1-2026.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a></div>
-    <div class="tl-item"><div class="tl-dot red"></div><div class="tl-date">2026년 4월 20일 — CEO 교체</div><div class="tl-title">Tim Cook CEO 사임 발표 — John Ternus(SVP 하드웨어) 9월 승계 · 주가 -2.5%</div><div class="tl-desc">팀쿡 9월 1일부로 CEO 사임 및 Executive Chairman 전환 발표. 25년 경력 하드웨어 엔지니어링 SVP John Ternus 승계. 시장은 초기 -2.5% 하락 반응했으나 빠르게 회복.</div><a class="tl-source" href="https://www.cnbc.com/2026/04/20/apple-names-john-ternus-ceo-replacing-tim-cook-who-becomes-chairman.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a></div>
-    <div class="tl-item"><div class="tl-dot neutral"></div><div class="tl-date">2026년 4월 30일 — Q2 FY26 실적</div><div class="tl-title">Q2 FY26 매출 $111.2B(▲17%) · iPhone $58B 3월분기 최대 · $100B 바이백 승인</div><div class="tl-desc">매출 $111.2B(컨센서스 $109.7B 상회), EPS $2.01(컨센서스 $1.95 상회), GM 49.3%. Services $31.0B 역대최대. 추가 $100B 자사주 승인 + 배당 4% 인상. 누적 관세 $3.3B 부담에도 서프라이즈.</div><a class="tl-source" href="https://www.cnbc.com/2026/04/30/apple-aapl-q2-2026-earnings-report.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a></div>
-    <div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2026년 6~7월 — WWDC + 사상 최고</div><div class="tl-title">WWDC 2026 Apple Intelligence 2.0 발표 + 7/17 주가 $344.57 역대 최고 경신</div><div class="tl-desc">WWDC 2026에서 Apple Intelligence 2.0, 강화된 Siri, Vision Pro 업데이트 발표. iOS 20 프리뷰·M5칩 기대. 6월 말 $273 눌림 이후 7월 강한 랠리로 7/17 사상 최고 $344.57, 종가 $333.74.</div><a class="tl-source" href="https://www.fool.com/investing/2026/07/15/why-apple-stock-climbed-to-new-all-time-high-today/" target="_blank" rel="noopener">관련 뉴스 보기 (Motley Fool) →</a></div>
-  </div>
+    <div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2026년 6~7월 — WWDC + 사상 최고</div><div class="tl-title">WWDC 2026 Apple Intelligence 2.0 발표 + 7/17 주가 $344.57 역대 최고 경신</div><div class="tl-desc">WWDC 2026에서 Apple Intelligence 2.0, 강화된 Siri, Vision Pro 업데이트 발표. iOS 20 프리뷰·M5칩 기대. 6월 말 $273 눌림 이후 7월 강한 랠리로 7/17 사상 최고 $344.57, 종가 $333.74.</div><a class="tl-source" href="https://www.fool.com/investing/2026/07/15/why-apple-stock-climbed-to-new-all-time-high-today/" target="_blank" rel="noopener">관련 뉴스 보기 (Motley Fool) →</a></div><div class="tl-item"><div class="tl-dot neutral"></div><div class="tl-date">2026년 4월 30일 — Q2 FY26 실적</div><div class="tl-title">Q2 FY26 매출 $111.2B(▲17%) · iPhone $58B 3월분기 최대 · $100B 바이백 승인</div><div class="tl-desc">매출 $111.2B(컨센서스 $109.7B 상회), EPS $2.01(컨센서스 $1.95 상회), GM 49.3%. Services $31.0B 역대최대. 추가 $100B 자사주 승인 + 배당 4% 인상. 누적 관세 $3.3B 부담에도 서프라이즈.</div><a class="tl-source" href="https://www.cnbc.com/2026/04/30/apple-aapl-q2-2026-earnings-report.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a></div><div class="tl-item"><div class="tl-dot red"></div><div class="tl-date">2026년 4월 20일 — CEO 교체</div><div class="tl-title">Tim Cook CEO 사임 발표 — John Ternus(SVP 하드웨어) 9월 승계 · 주가 -2.5%</div><div class="tl-desc">팀쿡 9월 1일부로 CEO 사임 및 Executive Chairman 전환 발표. 25년 경력 하드웨어 엔지니어링 SVP John Ternus 승계. 시장은 초기 -2.5% 하락 반응했으나 빠르게 회복.</div><a class="tl-source" href="https://www.cnbc.com/2026/04/20/apple-names-john-ternus-ceo-replacing-tim-cook-who-becomes-chairman.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a></div><div class="tl-item"><div class="tl-dot neutral"></div><div class="tl-date">2026년 1월 — Q1 FY26 실적</div><div class="tl-title">Q1 FY26 매출 $143.8B · iPhone 역대최대 $85.3B · EPS $2.84(+19%)</div><div class="tl-desc">사상 최강 분기 성적. iPhone $85.3B(▲1.1%), Services $26.3B(▲14%) 역대최대. 영업CF $53.9B. EPS $2.84로 컨센서스 $2.67 크게 상회. Apple Intelligence 탑재 iPhone 16 업그레이드 수요 확인.</div><a class="tl-source" href="https://www.cnbc.com/2026/01/29/apple-aapl-earnings-report-q1-2026.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a></div><div class="tl-item"><div class="tl-dot red"></div><div class="tl-date">2025년 8월 1일 — 52주 최저 $201.500</div><div class="tl-title">관세·매크로 우려로 52주 저점 형성 · 중국 공급망 부담</div><div class="tl-desc">누적 관세와 중국 의존 우려가 겹치며 8/1 $201.500까지 조정, 최근 1년 저점 형성. 이후 팀쿡의 인도·베트남 생산 전환 가속과 iPhone 17 기대감으로 반등 시작.</div><a class="tl-source" href="https://fortune.com/2025/08/01/apple-earnings-tariff-ai-stock/" target="_blank" rel="noopener">관련 뉴스 보기 (Fortune) →</a></div></div>
 </div>
 
 <div id="invest" class="section">
@@ -453,19 +448,19 @@
   <div class="bull-bear">
     <div class="bb-box">
       <div class="bb-title bb-bull">🐂 Bull 요인</div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>설치 기반 20억대:</strong> 진입 불가 해자, 독점적 생태계.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Services $31B+, GM 75%:</strong> 복리성장, 마진 믹스 개선.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>$100B 바이백 + 배당 인상:</strong> 역대급 주주환원.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>인도 생산 확대:</strong> 관세 리스크 완화, 공급망 다변화.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Apple Intelligence:</strong> iPhone 슈퍼사이클 촉매.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>설치 기반 20억대:</strong> 진입 불가 해자, 독점적 생태계.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Services $31B+, GM 75%:</strong> 복리성장, 마진 믹스 개선.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>$100B 바이백 + 배당 인상:</strong> 역대급 주주환원.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>인도 생산 확대:</strong> 관세 리스크 완화, 공급망 다변화.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Apple Intelligence:</strong> iPhone 슈퍼사이클 촉매.</span></div>
     </div>
     <div class="bb-box">
       <div class="bb-title bb-bear">🐻 Bear 요인</div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>PER 40.4x·PEG 3.3:</strong> 빅테크 최고 밸류, 사상 최고가 부근 고밸류 부담.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>CEO 리스크:</strong> Tim Cook 교체(9월), 리더십 불확실성.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>관세 부담 지속:</strong> 누적 $3.3B, 중국 의존.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>화웨이 경쟁:</strong> 중국 스마트폰 시장 점유율 압박.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>규제 리스크:</strong> App Store EU·DOJ 규제 압박.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>PER 40.4x·PEG 3.3:</strong> 빅테크 최고 밸류, 사상 최고가 부근 고밸류 부담.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>CEO 리스크:</strong> Tim Cook 교체(9월), 리더십 불확실성.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>관세 부담 지속:</strong> 누적 $3.3B, 중국 의존.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>화웨이 경쟁:</strong> 중국 스마트폰 시장 점유율 압박.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>규제 리스크:</strong> App Store EU·DOJ 규제 압박.</span></div>
     </div>
   </div>
   <div class="card" style="margin-top:16px;">

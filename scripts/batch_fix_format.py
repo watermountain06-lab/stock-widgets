@@ -113,24 +113,27 @@ def apply_ma_row_layout(s):
 def split_top_level(text, class_name):
     """Split `text` into chunks starting at each <div class="{class_name}">,
     using div-depth counting so nested divs inside each chunk don't confuse
-    the split. Returns (prefix_before_first_match, [chunk, chunk, ...])."""
+    the split. Returns (prefix_before_first_match, [chunk, chunk, ...]).
+    Whitespace between chunks (indentation/newlines in the source) is
+    dropped rather than preserved - harmless for block-level divs."""
     marker = f'<div class="{class_name}">'
     first = text.find(marker)
     if first == -1:
         return text, []
-    prefix, rest = text[:first], text[first:]
+    prefix = text[:first]
     chunks = []
-    i = 0
-    while i < len(rest):
-        if not rest.startswith(marker, i):
+    pos = first
+    while True:
+        idx = text.find(marker, pos)
+        if idx == -1:
             break
         depth = 1
-        j = i + len("<div")
-        while depth > 0 and j < len(rest):
-            nxt_open = rest.find("<div", j)
-            nxt_close = rest.find("</div>", j)
+        j = idx + len("<div")
+        while depth > 0 and j < len(text):
+            nxt_open = text.find("<div", j)
+            nxt_close = text.find("</div>", j)
             if nxt_close == -1:
-                j = len(rest)
+                j = len(text)
                 break
             if nxt_open != -1 and nxt_open < nxt_close:
                 depth += 1
@@ -138,8 +141,8 @@ def split_top_level(text, class_name):
             else:
                 depth -= 1
                 j = nxt_close + 6
-        chunks.append(rest[i:j])
-        i = j
+        chunks.append(text[idx:j])
+        pos = j
     return prefix, chunks
 
 

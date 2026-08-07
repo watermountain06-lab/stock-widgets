@@ -24,7 +24,7 @@
     --ma60: #f0c040;
     --ma120: #22d3ee;
     --green: #2ecc71;
-    --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f;
+    --red: #e74c3c; --gold: #f0c040; --event-major: #38bdf8; --event-neutral: #f1c40f;
     --blue: #3498db;
     --radius: 10px;
     --shadow: 0 4px 20px rgba(0,0,0,0.4);
@@ -42,8 +42,7 @@
     border-bottom: 2px solid var(--accent3);
     padding: 28px 32px 24px;
     position: relative;
-    overflow: hidden;
-  }
+    overflow: hidden; max-width: 1100px; margin: 0 auto;}
   .header::before {
     content: '';
     position: absolute;
@@ -77,8 +76,7 @@
     background: var(--bg2);
     border-bottom: 1px solid var(--border);
     overflow-x: auto;
-    scrollbar-width: none;
-  }
+    scrollbar-width: none; max-width: 1100px; margin: 0 auto;}
   .nav::-webkit-scrollbar { display: none; }
   .nav-btn {
     background: none; border: none;
@@ -90,7 +88,7 @@
   }
   .nav-btn:hover { color: var(--text); background: var(--bg3); }
   .nav-btn.active { background: var(--accent3); color: var(--accent2); }
-  .section { display: none; padding: 28px 32px; }
+  .section { display: none; padding: 28px 32px; max-width: 1100px; margin: 0 auto;}
   .section.active { display: block; }
   .section-title {
     font-size: 16px; font-weight: 700;
@@ -208,15 +206,14 @@
   .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
   .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
   .disclaimer {
-    margin: 28px 32px 16px;
+    margin: 28px auto 16px;
     padding: 12px 16px;
     background: rgba(66,133,244,0.06);
     border: 1px solid var(--accent3);
     border-radius: 8px;
     font-size: 11px;
     color: var(--text3);
-    line-height: 1.6;
-  }
+    line-height: 1.6; max-width: 1100px;}
   .scenario-card { border-radius: 8px; padding: 14px; }
   @media (max-width: 600px) {
     .header { padding: 20px 16px; }
@@ -229,7 +226,7 @@
     .price-main { font-size: 24px; }
   }
   .status-amber { background: rgba(240,192,64,0.18); color: var(--ma60); }
-  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; }
+  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; max-width: 1100px; margin: 0 auto;}
   .range-toggle { display: flex; gap: 4px; }
   .range-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--text3); font-size: 11px; font-weight: 700; padding: 4px 11px; border-radius: 999px; cursor: pointer; transition: all .15s; }
   .range-btn:hover { color: var(--text); border-color: var(--text2); }
@@ -351,10 +348,10 @@
     </div>
     <div class="card">
       <div class="card-title">이동평균선 현황</div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기)</span><span class="ma-val">$365.49</span><span class="ma-status status-below">현재가 하회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기)</span><span class="ma-val">$348.91</span><span class="ma-status status-above">현재가 상회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기)</span><span class="ma-val">$363.01</span><span class="ma-status status-below">현재가 하회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기)</span><span class="ma-val">$342.73</span><span class="ma-status status-above">현재가 상회</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기)</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$365.49</span><span class="ma-status status-below">현재가 하회</span></div></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기)</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$348.91</span><span class="ma-status status-above">현재가 상회</span></div></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기)</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$363.01</span><span class="ma-status status-below">현재가 하회</span></div></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기)</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$342.73</span><span class="ma-status status-above">현재가 상회</span></div></div></div>
       <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">MA5&gt;MA60&gt;현재가&gt;MA20&gt;MA120 순 — 4개 이평선 중 2개 상회 · 혼조. 현재가 $357.75, 52주 고점 $408.61 대비 -12.4%.</div>
     </div>
   </div>
@@ -515,7 +512,7 @@
     </div>
     <div class="zone-list" style="margin-top:12px;">
       <div class="zone-item"><span class="zone-label">S&P500 내 비중</span><span class="zone-val">~4.5% (시총 3위)</span></div>
-      <div class="zone-item"><span class="zone-label">베타</span><span class="zone-val">1.24</span></div>
+      <div class="zone-item"><span class="zone-label">베타 (시장 대비 주가 변동성, 1보다 높으면 더 흔들림)</span><span class="zone-val">1.24</span></div>
     </div>
   </div>
   <div class="card">
@@ -550,47 +547,41 @@
   <div class="timeline">
     <div class="tl-item">
       <div class="tl-dot neutral"></div>
-      <div class="tl-date">2025년 5월 20일 — Google I/O</div>
-      <div class="tl-title">Google I/O 2025 — Gemini 2.5, AI Overviews 15억, Project Astra 발표</div>
-      <div class="tl-desc">Gemini 2.5 Pro 출시로 벤치마크 1위 달성. AI Overviews가 검색 잠식 우려를 불식하고 오히려 이용량 증가 확인. Project Astra·Veo3 등 AI 혁신 발표로 주가 급반등.</div>
-      <a class="tl-source" href="https://techcrunch.com/2025/05/20/project-astra-comes-to-google-search-gemini-and-developers/" target="_blank" rel="noopener">관련 뉴스 보기 (TechCrunch) →</a>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot red"></div>
-      <div class="tl-date">2025년 7월 — 저점 $180</div>
-      <div class="tl-title">DOJ 반독점 판결 공포 + 매크로 우려 — $180 52주 저점</div>
-      <div class="tl-desc">검색 독점 관련 DOJ 반독점 판결(8/8 예정) 및 구제책 논의로 최악의 시나리오(Chrome 강제매각) 공포. 관세 불확실성과 맞물려 $180.48 저점 형성(7/17). 9월 판결에서 Chrome 매각 불요 확정되며 반등 시작.</div>
-      <a class="tl-source" href="https://finance.yahoo.com/news/alphabet-google-googl-likely-avoid-225809362.html" target="_blank" rel="noopener">관련 뉴스 보기 (Yahoo Finance) →</a>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot neutral"></div>
-      <div class="tl-date">2026년 2월 — Q4 FY25 실적</div>
-      <div class="tl-title">연매출 $400B 첫 돌파 · Cloud +48% · Gemini 3 출시 · Waymo 50만 라이드</div>
-      <div class="tl-desc">Q4 FY25 매출 $113.8B(▲18%), 연간 매출 $403B로 사상 첫 $400B 돌파. Cloud $17.7B(+48%), 백로그 $240B. Gemini 3 대규모 모델 출시. Waymo 주 50만+ 라이드 달성. 주가 $270→$400 급등.</div>
-      <a class="tl-source" href="https://www.cnbc.com/2026/02/04/alphabet-googl-q4-2025-earnings.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot neutral"></div>
-      <div class="tl-date">2026년 4월 — Q1 2026 실적</div>
-      <div class="tl-title">Q1 매출 $109.9B(▲22%) · Cloud +63% 가속 · 백로그 $460B QoQ 2배</div>
-      <div class="tl-desc">매출 $109.9B(▲21.8%), OPM 36.1%(▲2%p), 11연속 두 자릿수 성장. Cloud $20.0B(+63%)으로 성장 가속. 백로그 $460B로 QoQ 거의 2배. 유료 구독자 3.5억명 달성.</div>
-      <a class="tl-source" href="https://www.cnbc.com/2026/04/29/alphabet-googl-q1-2026-earnings.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
-    </div>
-    <div class="tl-item">
+      <div class="tl-date">2026년 7월 22일 — Q2 FY2026 실적</div>
+      <div class="tl-title">매출 +24%·Cloud +82% 서프라이즈, Capex 상향과 첫 분기 FCF 적자가 주가 압박</div>
+      <div class="tl-desc">매출 $119.8B, Google Cloud $24.8B(+82%), Cloud 백로그 $514B로 성장세가 더 강해졌다. 반면 Q2 Capex $44.9B와 FCF -$5.9B를 기록했고, 연간 Capex 전망을 $195~205B로 높이면서 AI 투자 회수 기간에 대한 우려가 확대됐다.</div>
+      <a class="tl-source" href="https://www.reuters.com/business/google-quarterly-cloud-revenue-growth-beats-expectations-2026-07-22/" target="_blank" rel="noopener">관련 뉴스 보기 (Reuters) →</a>
+    </div><div class="tl-item">
       <div class="tl-dot red"></div>
       <div class="tl-date">2026년 6월 1일 — $80B 유상증자</div>
       <div class="tl-title">$80B 초대형 유상증자 발표 — Berkshire $10B 참여 · AI 인프라 집중 투자</div>
       <div class="tl-desc">AI 인프라 투자 자금 조달을 위해 $80B 규모 유상증자 발표(전환우선주 $15B + 보통주 $15B + 사모 $50B). 버크셔 해서웨이 $10B 참여로 신뢰도 확보. 단기 희석 우려로 $400→$368 조정.</div>
       <a class="tl-source" href="https://www.cnbc.com/2026/06/01/alphabet-to-raise-80-billion-from-stock-sales-to-fund-ai-buildout.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
-    </div>
-    <div class="tl-item">
+    </div><div class="tl-item">
       <div class="tl-dot neutral"></div>
-      <div class="tl-date">2026년 7월 22일 — Q2 FY2026 실적</div>
-      <div class="tl-title">매출 +24%·Cloud +82% 서프라이즈, Capex 상향과 첫 분기 FCF 적자가 주가 압박</div>
-      <div class="tl-desc">매출 $119.8B, Google Cloud $24.8B(+82%), Cloud 백로그 $514B로 성장세가 더 강해졌다. 반면 Q2 Capex $44.9B와 FCF -$5.9B를 기록했고, 연간 Capex 전망을 $195~205B로 높이면서 AI 투자 회수 기간에 대한 우려가 확대됐다.</div>
-      <a class="tl-source" href="https://www.reuters.com/business/google-quarterly-cloud-revenue-growth-beats-expectations-2026-07-22/" target="_blank" rel="noopener">관련 뉴스 보기 (Reuters) →</a>
-    </div>
-  </div>
+      <div class="tl-date">2026년 4월 — Q1 2026 실적</div>
+      <div class="tl-title">Q1 매출 $109.9B(▲22%) · Cloud +63% 가속 · 백로그 $460B QoQ 2배</div>
+      <div class="tl-desc">매출 $109.9B(▲21.8%), OPM 36.1%(▲2%p), 11연속 두 자릿수 성장. Cloud $20.0B(+63%)으로 성장 가속. 백로그 $460B로 QoQ 거의 2배. 유료 구독자 3.5억명 달성.</div>
+      <a class="tl-source" href="https://www.cnbc.com/2026/04/29/alphabet-googl-q1-2026-earnings.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
+    </div><div class="tl-item">
+      <div class="tl-dot neutral"></div>
+      <div class="tl-date">2026년 2월 — Q4 FY25 실적</div>
+      <div class="tl-title">연매출 $400B 첫 돌파 · Cloud +48% · Gemini 3 출시 · Waymo 50만 라이드</div>
+      <div class="tl-desc">Q4 FY25 매출 $113.8B(▲18%), 연간 매출 $403B로 사상 첫 $400B 돌파. Cloud $17.7B(+48%), 백로그 $240B. Gemini 3 대규모 모델 출시. Waymo 주 50만+ 라이드 달성. 주가 $270→$400 급등.</div>
+      <a class="tl-source" href="https://www.cnbc.com/2026/02/04/alphabet-googl-q4-2025-earnings.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
+    </div><div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-date">2025년 7월 — 저점 $180</div>
+      <div class="tl-title">DOJ 반독점 판결 공포 + 매크로 우려 — $180 52주 저점</div>
+      <div class="tl-desc">검색 독점 관련 DOJ 반독점 판결(8/8 예정) 및 구제책 논의로 최악의 시나리오(Chrome 강제매각) 공포. 관세 불확실성과 맞물려 $180.48 저점 형성(7/17). 9월 판결에서 Chrome 매각 불요 확정되며 반등 시작.</div>
+      <a class="tl-source" href="https://finance.yahoo.com/news/alphabet-google-googl-likely-avoid-225809362.html" target="_blank" rel="noopener">관련 뉴스 보기 (Yahoo Finance) →</a>
+    </div><div class="tl-item">
+      <div class="tl-dot neutral"></div>
+      <div class="tl-date">2025년 5월 20일 — Google I/O</div>
+      <div class="tl-title">Google I/O 2025 — Gemini 2.5, AI Overviews 15억, Project Astra 발표</div>
+      <div class="tl-desc">Gemini 2.5 Pro 출시로 벤치마크 1위 달성. AI Overviews가 검색 잠식 우려를 불식하고 오히려 이용량 증가 확인. Project Astra·Veo3 등 AI 혁신 발표로 주가 급반등.</div>
+      <a class="tl-source" href="https://techcrunch.com/2025/05/20/project-astra-comes-to-google-search-gemini-and-developers/" target="_blank" rel="noopener">관련 뉴스 보기 (TechCrunch) →</a>
+    </div></div>
 </div>
 
 <!-- SECTION 7 -->
@@ -599,19 +590,19 @@
   <div class="bull-bear">
     <div class="bb-box">
       <div class="bb-title bb-bull">🐂 Bull 요인</div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>PER 26.2x:</strong> 조정으로 더 싸진 빅테크 최저 가성비.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Cloud 백로그 $460B:</strong> 2년 매출 가시성.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Search AI Overviews:</strong> 잠식 우려 불식, 해자 강화.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>OPM 36% · ROE 39%:</strong> 수익성 최고, 마진 확장.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Waymo 자율주행:</strong> 대형 옵션가치.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>PER 26.2x:</strong> 조정으로 더 싸진 빅테크 최저 가성비.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Cloud 백로그 $460B:</strong> 2년 매출 가시성.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Search AI Overviews:</strong> 잠식 우려 불식, 해자 강화.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>OPM 36% · ROE 39%:</strong> 수익성 최고, 마진 확장.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Waymo 자율주행:</strong> 대형 옵션가치.</span></div>
     </div>
     <div class="bb-box">
       <div class="bb-title bb-bear">🐻 Bear 요인</div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>$80B 유상증자:</strong> 주식 희석, 단기 부담.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>DOJ 반독점 구제책:</strong> 규제 리스크 진행 중.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>Capex $180~190B:</strong> FCF 압박.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>AI 경쟁 심화:</strong> OpenAI·MS Copilot 검색 잠식 경쟁.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>매크로 의존:</strong> YouTube 광고 경기 민감도.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>$80B 유상증자:</strong> 주식 희석, 단기 부담.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>DOJ 반독점 구제책:</strong> 규제 리스크 진행 중.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>Capex $180~190B:</strong> FCF 압박.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>AI 경쟁 심화:</strong> OpenAI·MS Copilot 검색 잠식 경쟁.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>매크로 의존:</strong> YouTube 광고 경기 민감도.</span></div>
     </div>
   </div>
   <div class="card" style="margin-top:16px;">

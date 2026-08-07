@@ -11,11 +11,11 @@
     --text: #e8eaf0; --text2: #9aa0b8; --text3: #5c6282;
     --accent: #FF9900; --accent2: #ffb84d; --accent3: #a86400;
     --bull: #D85A30; --bear: #185FA5; --ma5: #ff6b9d; --ma20: #9b59b6; --ma60: #f0c040; --ma120: #22d3ee;
-    --green: #2ecc71; --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+    --green: #2ecc71; --red: #e74c3c; --gold: #f0c040; --event-major: #38bdf8; --event-neutral: #f1c40f; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
-  .header { background: linear-gradient(135deg, #241a05 0%, #0f1117 40%, #1a1d27 100%); border-bottom: 2px solid var(--accent3); padding: 28px 32px 24px; position: relative; overflow: hidden; }
+  .header { background: linear-gradient(135deg, #241a05 0%, #0f1117 40%, #1a1d27 100%); border-bottom: 2px solid var(--accent3); padding: 28px 32px 24px; position: relative; overflow: hidden; max-width: 1100px; margin: 0 auto;}
   .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(255,153,0,0.14) 0%, transparent 70%); pointer-events: none; }
   .header-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
   .ticker-block { display: flex; align-items: center; gap: 16px; }
@@ -30,12 +30,12 @@
   .meta-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
   .meta-value { font-size: 14px; font-weight: 600; color: var(--text2); margin-top: 2px; }
   .meta-value.highlight { color: var(--accent2); }
-  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto;}
   .nav::-webkit-scrollbar { display: none; }
   .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
   .nav-btn:hover { color: var(--text); background: var(--bg3); }
   .nav-btn.active { background: var(--accent3); color: var(--accent2); }
-  .section { display: none; padding: 28px 32px; }
+  .section { display: none; padding: 28px 32px; max-width: 1100px; margin: 0 auto;}
   .section.active { display: block; }
   .section-title { font-size: 16px; font-weight: 700; color: var(--accent2); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
   .section-title::before { content: ''; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; display: inline-block; }
@@ -122,7 +122,7 @@
   .ps-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
   .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
   .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
-  .disclaimer { margin: 28px 32px 16px; padding: 12px 16px; background: rgba(255,153,0,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
+  .disclaimer { margin: 28px auto 16px; padding: 12px 16px; background: rgba(255,153,0,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; max-width: 1100px;}
   .box-key { background: rgba(255,153,0,0.1); border: 1px solid var(--accent3); border-radius: var(--radius); padding: 12px 16px; margin: 0 32px 16px; }
   .scenario-card { border-radius: 8px; padding: 14px; }
   @media (max-width: 600px) {
@@ -239,10 +239,10 @@
     </div>
     <div class="card">
       <div class="card-title">이동평균선 현황</div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기)</span><span class="ma-val">$275.59</span><span class="ma-status status-below">현재가 하회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기)</span><span class="ma-val">$250.14</span><span class="ma-status status-above">현재가 상회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기)</span><span class="ma-val">$250.49</span><span class="ma-status status-above">현재가 상회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기)</span><span class="ma-val">$239.27</span><span class="ma-status status-above">현재가 상회</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기)</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$275.59</span><span class="ma-status status-below">현재가 하회</span></div></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기)</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$250.14</span><span class="ma-status status-above">현재가 상회</span></div></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기)</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$250.49</span><span class="ma-status status-above">현재가 상회</span></div></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기)</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$239.27</span><span class="ma-status status-above">현재가 상회</span></div></div></div>
       <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">MA5&gt;현재가&gt;MA60&gt;MA20&gt;MA120 순 — 4개 이평선 중 3개 상회 · 기술적 강세. 현재가 $272.26, 52주 고점 $287.20 대비 -5.2%.</div>
     </div>
   </div>
@@ -387,7 +387,7 @@
     </div>
     <div class="zone-list" style="margin-top:12px;">
       <div class="zone-item"><span class="zone-label">S&P500 내 비중</span><span class="zone-val">~2.7% (시총 5위)</span></div>
-      <div class="zone-item"><span class="zone-label">베타</span><span class="zone-val">1.44 — 고변동성</span></div>
+      <div class="zone-item"><span class="zone-label">베타 (시장 대비 주가 변동성, 1보다 높으면 더 흔들림)</span><span class="zone-val">1.44 — 고변동성</span></div>
     </div>
   </div>
   <div class="card">
@@ -419,12 +419,7 @@
     <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--event-neutral);display:inline-block;"></span>중립</span>
   </div>
   <div class="timeline">
-    <div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2025년 9월 — Anthropic $183B 밸류</div><div class="tl-title">Anthropic 신규 펀딩 — 밸류 $183B · Amazon 지분 15~19% 가치 $27~35B</div><div class="tl-desc">Anthropic이 신규 자금 조달로 밸류에이션 $183B 달성. Amazon의 추정 지분 가치 $27~35B 수준. JetBlue 기내 Wi-Fi에 Project Kuiper 활용 발표. AWS가 Anthropic의 최대 클라우드 파트너임을 재확인.</div><a class="tl-source" href="https://www.fool.com/investing/2025/09/08/anthropics-183-billion-valuation-could-add-fuel-to/" target="_blank" rel="noopener">관련 뉴스 보기 (Motley Fool) →</a></div>
-    <div class="tl-item"><div class="tl-dot red"></div><div class="tl-date">2026년 2월 — Q4 2025 실적 후 급락</div><div class="tl-title">Q4 가이던스 실망 + Capex $200B 계획 발표 — 하루 급락 · $198 52주 최저</div><div class="tl-desc">Q4 2025 매출 $187.8B(▲14%). AWS +18%(둔화 우려). Q1 2026 가이던스 $151~156.5B — 컨센서스 하회. 2026 Capex $200B 계획 발표로 FCF 압박 우려. $233→$198 급락. 역대 최대 하이퍼스케일러 Capex 규모에 시장 충격.</div><a class="tl-source" href="https://www.cnbc.com/2026/02/05/amazon-amzn-q4-earnings-report-2025.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a></div>
-    <div class="tl-item"><div class="tl-dot red"></div><div class="tl-date">2026년 4월 7일 — 관세 재격화</div><div class="tl-title">트럼프 상호관세 재확대 — $209 2차 저점 · 리테일 마진 충격 우려</div><div class="tl-desc">트럼프 행정부 대중 관세 재확대로 $209 2차 저점. 아마존의 중국 제조 상품 의존도 높은 리테일 부문 마진 압박 우려. 이후 관세 협상 타결 기대감으로 급반등 시작.</div><a class="tl-source" href="https://www.fool.com/investing/2026/04/18/tariffs-volatility-amazon-still-a-long-term-buy/" target="_blank" rel="noopener">관련 뉴스 보기 (Motley Fool) →</a></div>
-    <div class="tl-item"><div class="tl-dot neutral"></div><div class="tl-date">2026년 4월 29일 — Q1 2026 실적</div><div class="tl-title">Q1 매출 $181.5B(▲17%) · AWS +28% 재가속 · Anthropic $16.8B 평가이익</div><div class="tl-desc">매출 $181.5B(컨센서스 상회), AWS $37.6B(+28%, 전분기 23% 대비 가속). 영업이익 $23.9B. Anthropic 지분 $16.8B 평가이익 포함으로 순이익 $30.3B. Q2 가이던스 $194~199B · OI $20~24B. 발표 후 $200→$273 폭등.</div><a class="tl-source" href="https://www.cnbc.com/2026/04/29/amazon-amzn-q1-earnings-report-2026.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a></div>
-    <div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2026년 5월 — Anthropic 5GW Trainium 협약</div><div class="tl-title">Anthropic, Amazon Trainium 5GW 공급 계약 · Project Rainier $11B 데이터센터</div><div class="tl-desc">Anthropic이 Amazon Trainium 칩 최대 5GW 공급 계약 체결. $11B 규모 Project Rainier 데이터센터(인디애나) 완공 — Anthropic 전용 AI 인프라. 주가 $273 신고점 달성 후 현재 $238 조정 중.</div><a class="tl-source" href="https://www.anthropic.com/news/anthropic-amazon-compute" target="_blank" rel="noopener">관련 뉴스 보기 (Anthropic) →</a></div>
-  </div>
+    <div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2026년 5월 — Anthropic 5GW Trainium 협약</div><div class="tl-title">Anthropic, Amazon Trainium 5GW 공급 계약 · Project Rainier $11B 데이터센터</div><div class="tl-desc">Anthropic이 Amazon Trainium 칩 최대 5GW 공급 계약 체결. $11B 규모 Project Rainier 데이터센터(인디애나) 완공 — Anthropic 전용 AI 인프라. 주가 $273 신고점 달성 후 현재 $238 조정 중.</div><a class="tl-source" href="https://www.anthropic.com/news/anthropic-amazon-compute" target="_blank" rel="noopener">관련 뉴스 보기 (Anthropic) →</a></div><div class="tl-item"><div class="tl-dot neutral"></div><div class="tl-date">2026년 4월 29일 — Q1 2026 실적</div><div class="tl-title">Q1 매출 $181.5B(▲17%) · AWS +28% 재가속 · Anthropic $16.8B 평가이익</div><div class="tl-desc">매출 $181.5B(컨센서스 상회), AWS $37.6B(+28%, 전분기 23% 대비 가속). 영업이익 $23.9B. Anthropic 지분 $16.8B 평가이익 포함으로 순이익 $30.3B. Q2 가이던스 $194~199B · OI $20~24B. 발표 후 $200→$273 폭등.</div><a class="tl-source" href="https://www.cnbc.com/2026/04/29/amazon-amzn-q1-earnings-report-2026.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a></div><div class="tl-item"><div class="tl-dot red"></div><div class="tl-date">2026년 4월 7일 — 관세 재격화</div><div class="tl-title">트럼프 상호관세 재확대 — $209 2차 저점 · 리테일 마진 충격 우려</div><div class="tl-desc">트럼프 행정부 대중 관세 재확대로 $209 2차 저점. 아마존의 중국 제조 상품 의존도 높은 리테일 부문 마진 압박 우려. 이후 관세 협상 타결 기대감으로 급반등 시작.</div><a class="tl-source" href="https://www.fool.com/investing/2026/04/18/tariffs-volatility-amazon-still-a-long-term-buy/" target="_blank" rel="noopener">관련 뉴스 보기 (Motley Fool) →</a></div><div class="tl-item"><div class="tl-dot red"></div><div class="tl-date">2026년 2월 — Q4 2025 실적 후 급락</div><div class="tl-title">Q4 가이던스 실망 + Capex $200B 계획 발표 — 하루 급락 · $198 52주 최저</div><div class="tl-desc">Q4 2025 매출 $187.8B(▲14%). AWS +18%(둔화 우려). Q1 2026 가이던스 $151~156.5B — 컨센서스 하회. 2026 Capex $200B 계획 발표로 FCF 압박 우려. $233→$198 급락. 역대 최대 하이퍼스케일러 Capex 규모에 시장 충격.</div><a class="tl-source" href="https://www.cnbc.com/2026/02/05/amazon-amzn-q4-earnings-report-2025.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a></div><div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2025년 9월 — Anthropic $183B 밸류</div><div class="tl-title">Anthropic 신규 펀딩 — 밸류 $183B · Amazon 지분 15~19% 가치 $27~35B</div><div class="tl-desc">Anthropic이 신규 자금 조달로 밸류에이션 $183B 달성. Amazon의 추정 지분 가치 $27~35B 수준. JetBlue 기내 Wi-Fi에 Project Kuiper 활용 발표. AWS가 Anthropic의 최대 클라우드 파트너임을 재확인.</div><a class="tl-source" href="https://www.fool.com/investing/2025/09/08/anthropics-183-billion-valuation-could-add-fuel-to/" target="_blank" rel="noopener">관련 뉴스 보기 (Motley Fool) →</a></div></div>
 </div>
 
 <div id="invest" class="section">
@@ -432,19 +427,19 @@
   <div class="bull-bear">
     <div class="bb-box">
       <div class="bb-title bb-bull">🐂 Bull 요인</div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>EV/EBITDA 16x:</strong> 5년 평균 21x 대비 역대 저평가.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>AWS +28% 재가속:</strong> 백로그 $244B, 클라우드 2위.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>광고 OPM 60%+:</strong> 빠른 성장, 고마진 확대.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Anthropic·OpenAI:</strong> 최대 클라우드 파트너, AI 생태계 허브.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Capex 정점 후:</strong> FCF $50~80B 복귀 기대.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>EV/EBITDA 16x:</strong> 5년 평균 21x 대비 역대 저평가.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>AWS +28% 재가속:</strong> 백로그 $244B, 클라우드 2위.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>광고 OPM 60%+:</strong> 빠른 성장, 고마진 확대.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Anthropic·OpenAI:</strong> 최대 클라우드 파트너, AI 생태계 허브.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Capex 정점 후:</strong> FCF $50~80B 복귀 기대.</span></div>
     </div>
     <div class="bb-box">
       <div class="bb-title bb-bear">🐻 Bear 요인</div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>현금 부족:</strong> FCF TTM $1.2B — Capex에 압도.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>이커머스 리스크:</strong> 관세 리테일 마진 압박 지속.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>이익 품질 논란:</strong> Anthropic 이익 제거 시 실질 PER 35x.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>시장점유율:</strong> AWS Azure·GCP 경쟁 심화.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>주주가치 희석:</strong> 주식 수 증가 (희석 계속).</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>현금 부족:</strong> FCF TTM $1.2B — Capex에 압도.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>이커머스 리스크:</strong> 관세 리테일 마진 압박 지속.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>이익 품질 논란:</strong> Anthropic 이익 제거 시 실질 PER 35x.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>시장점유율:</strong> AWS Azure·GCP 경쟁 심화.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>주주가치 희석:</strong> 주식 수 증가 (희석 계속).</span></div>
     </div>
   </div>
 
