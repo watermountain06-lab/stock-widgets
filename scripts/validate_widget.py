@@ -58,6 +58,16 @@ if len(invest_titles) != 3 or not (invest_titles[0].startswith('목표가 밴드
 if section('invest').count('class="bb-box"') != 2: errors.append('invest must contain PM Bull/Bear pair')
 if section('invest').count('class="bb-item"') != 10: errors.append('Bull/Bear must contain exactly 5 items each')
 
+# 목표가 밴드's current-price marker must track the same price as the rest of the
+# widget - this drifted stale (hand-typed, never recomputed) in PM/NVDA/GOOGL/AAPL/JNJ.
+val_price_m=re.search(r'현재가 \$([\d,.]+)',section('valuation'))
+band_price_m=re.search(r'현재 \$([\d,.]+)',section('invest'))
+if val_price_m and band_price_m:
+    vp=float(val_price_m.group(1).replace(',',''))
+    bp=float(band_price_m.group(1).replace(',',''))
+    if vp and abs(vp-bp)/vp > 0.005:
+        errors.append(f'목표가 밴드 current price ${bp} does not match valuation-tab current price ${vp} - run scripts/target_band_gauge.py')
+
 scenario=re.search(r'<div class="card-title">시나리오별 공정가치 분석</div>(.*?)(?=</div>\s*</div>\s*<div class="section"|</div>\s*</div>\s*<div class="disclaimer"|$)',section('valuation'),re.S)
 if not scenario or scenario.group(1).count('class="scenario-card"') != 3:
     errors.append('valuation must contain exactly 3 vertical scenario cards')
