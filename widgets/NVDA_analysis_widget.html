@@ -24,7 +24,7 @@
     --ma60: #f0c040;
     --ma120: #22d3ee;
     --green: #2ecc71;
-    --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f;
+    --red: #e74c3c; --gold: #f0c040; --event-major: #38bdf8; --event-neutral: #f1c40f;
     --blue: #3498db;
     --radius: 10px;
     --shadow: 0 4px 20px rgba(0,0,0,0.4);
@@ -45,7 +45,10 @@
     padding: 28px 32px 24px;
     position: relative;
     overflow: hidden;
+    max-width: 1100px;
+    margin: 0 auto;
   }
+  .box-key { background: rgba(118,185,0,0.1); border: 1px solid var(--accent3); border-radius: 10px; padding: 12px 16px; max-width: 1100px; margin: 0 auto 16px; }
   .header::before {
     content: '';
     position: absolute;
@@ -82,6 +85,8 @@
     border-bottom: 1px solid var(--border);
     overflow-x: auto;
     scrollbar-width: none;
+    max-width: 1100px;
+    margin: 0 auto;
   }
   .nav::-webkit-scrollbar { display: none; }
   .nav-btn {
@@ -96,7 +101,7 @@
   .nav-btn.active { background: var(--accent3); color: var(--accent2); }
 
   /* SECTIONS */
-  .section { display: none; padding: 28px 32px; }
+  .section { display: none; padding: 28px 32px; max-width: 1100px; margin: 0 auto; }
   .section.active { display: block; }
   .section-title {
     font-size: 16px; font-weight: 700;
@@ -241,7 +246,8 @@
 
   /* DISCLAIMER */
   .disclaimer {
-    margin: 28px 32px 16px;
+    max-width: 1100px;
+    margin: 28px auto 16px;
     padding: 12px 16px;
     background: rgba(118,185,0,0.06);
     border: 1px solid var(--accent3);
@@ -262,7 +268,7 @@
     .stage-grid { grid-template-columns: 1fr 1fr; }
     .price-main { font-size: 24px; }
   }
-  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; margin: 12px 32px 0; }
+  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; max-width: 1100px; margin: 12px auto 0; }
   .range-toggle { display: flex; gap: 4px; }
   .range-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--text3); font-size: 11px; font-weight: 700; padding: 4px 11px; border-radius: 999px; cursor: pointer; transition: all .15s; }
   .range-btn:hover { color: var(--text); border-color: var(--text2); }
@@ -322,6 +328,7 @@
     <div class="meta-item"><span class="meta-label">배당수익률</span><span class="meta-value">0.02% (미미)</span></div>
   </div>
 </div>
+<div class="box-key"><div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:var(--green);">(저평가)</span> — Q1 FY27 매출 $81.6B (+85.2%) · PEG 0.49</div><div style="font-size:12px;color:var(--text2);line-height:1.6;">영업이익률 65.6%는 소프트웨어 수준의 하드웨어 마진. 하이퍼스케일러 4사(AAPL·AMZN·META·MSFT) 합산 2026 capex $700B — 대부분 NVDA GPU로 집행. Forward PER 22x는 AI 성장주 기준 합리적. PEG 0.49로 성장 대비 극단적 저평가. FCF $48.6B/분기로 자사주 매입·현금 축적 가속.</div></div>
 
 <!-- NAV -->
 <div class="nav">
@@ -372,10 +379,10 @@
 
     <div class="card">
       <div class="card-title">이동평균선 현황</div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기)</span><span class="ma-val">$211.51</span><span class="ma-status status-above">현재가 상회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기)</span><span class="ma-val">$206.17</span><span class="ma-status status-above">현재가 상회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기)</span><span class="ma-val">$208.60</span><span class="ma-status status-above">현재가 상회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기)</span><span class="ma-val">$198.89</span><span class="ma-status status-above">현재가 상회</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기)</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$211.51</span><span class="ma-status status-above">현재가 상회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기)</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$206.17</span><span class="ma-status status-above">현재가 상회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기)</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$208.60</span><span class="ma-status status-above">현재가 상회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기)</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$198.89</span><span class="ma-status status-above">현재가 상회</span></div></div>
       <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">현재가&gt;MA5&gt;MA60&gt;MA20&gt;MA120 순 — 4개 이평선 중 4개 상회 · 기술적 강세. 현재가 $218.99, 52주 고점 $236.54 대비 -7.4%.</div>
     </div>
   </div>
@@ -437,6 +444,21 @@
       <div class="stat-value gold">$80.6B</div>
       <div class="stat-sub">Q1 FY27 기준</div>
     </div>
+    <div class="stat-box">
+      <div class="stat-label">순이익 (Q1 FY27)</div>
+      <div class="stat-value up">$58.3B</div>
+      <div class="stat-sub">순이익률 71.5% 반영</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">EPS (Q1 FY27, 희석)</div>
+      <div class="stat-value up">$2.41</div>
+      <div class="stat-sub">TTM EPS $6.56</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-label">다음 실적</div>
+      <div class="stat-value gold">8월 하순 예상</div>
+      <div class="stat-sub">Q2 FY27</div>
+    </div>
   </div>
 
   <div class="card" style="margin-top:16px;">
@@ -465,14 +487,14 @@
   </div>
 
   <div class="card">
-    <div class="card-title">핵심 투자 논리</div>
+    <div class="card-title">핵심 투자 논리 <span style="color:var(--green);">(저평가)</span></div>
     <div style="font-size:12px;color:var(--text2);line-height:1.7;">
       영업이익률 65.6%는 소프트웨어 수준의 하드웨어 마진. 하이퍼스케일러 4사(AAPL·AMZN·META·MSFT) 합산 2026 capex $700B — 대부분 NVDA GPU로 집행. Forward PER 22x는 AI 성장주 기준 합리적. PEG 0.49로 성장 대비 극단적 저평가. FCF $48.6B/분기로 자사주 매입·현금 축적 가속.
     </div>
   </div>
   <div class="card">
     <div class="card-title">다음 실적 체크포인트 — 8월 하순 Q2 FY27</div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.8;">① Data Center 매출이 Q1 추정 $74B+ 수준에서 계속 신고점을 경신하는지 → ② 중국 수출규제 재강화가 실제 매출 가이던스에 반영되는 규모 → ③ Blackwell 후속 Vera Rubin 로드맵의 2026년 하반기 출하 일정이 유지되는지 → ④ 하이퍼스케일러 4사 합산 $700B capex 가이던스가 실제 GPU 발주로 이어지는지 확인.</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.8;">① Data Center 매출이 Q1 추정 $74B+ 수준에서 계속 신고점을 경신하는지<br>② 중국 수출규제 재강화가 실제 매출 가이던스에 반영되는 규모<br>③ Blackwell 후속 Vera Rubin 로드맵의 2026년 하반기 출하 일정이 유지되는지<br>④ 하이퍼스케일러 4사 합산 $700B capex 가이던스가 실제 GPU 발주로 이어지는지 확인.</div>
   </div>
 </div>
 
@@ -556,7 +578,7 @@
       <div class="chart-wrap" style="height:270px;">
         <canvas id="peerChart"></canvas>
       </div>
-      <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;">NVDA 31.5x는 AVGO(30.2x)와 비슷한 수준이며, TSM(20.1x)보다는 높지만 AMD(47.0x)·반도체 평균(52.0x)보다는 훨씬 낮다. PEG 0.49로 성장률을 감안하면 5개 중 가장 저평가된 축에 속한다.</div>
+      <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;">NVDA 33.3x는 AVGO(30.2x)와 비슷한 수준이며, TSM(20.1x)보다는 높지만 AMD(47.0x)·반도체 평균(52.0x)보다는 훨씬 낮다. PEG 0.49로 성장률을 감안하면 5개 중 가장 저평가된 축에 속한다.</div>
     </div>
   </div>
 
@@ -569,7 +591,7 @@
       <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:10px;color:var(--red);background:rgba(231,76,60,0.15);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">PCR (FCF)</div></div>
       <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div></div>
     </div>
-    <div style="margin-top:10px;font-size:11px;color:var(--text3);">PER·EV/EBITDA는 2단계 낮음인 반면 PBR(25.6x)·PSR(20.7x)·PCR(53.4x)은 4단계 고평가로 갈린다 — 이익·현금흐름 기준 배수는 싸지만 자산·매출 기준 배수는 비싸다는 뜻이다. PEG 0.49가 보여주듯 성장률까지 감안하면 여전히 전체적으로 저평가 쪽에 가깝다.</div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">PER·EV/EBITDA는 2단계 낮음, PBR(27.1x)·PSR(21.9x)은 3단계 적정으로 대체로 저평가~적정 구간이다. PCR(56.6x)만 4단계 고평가인데, FCF 마진 59%를 반영하면 합리적인 수준이다. PEG 0.49가 보여주듯 성장률까지 감안하면 전체적으로 저평가 쪽에 가깝다.</div>
   </div>
 
   <div class="card">
@@ -603,18 +625,18 @@
   </div>
 
   <div class="card">
-    <div class="card-title">밸류에이션 종합 코멘트 — 2~4단계 혼재 · PEG 0.49</div>
+    <div class="card-title">종합 밸류에이션 <span style="color:var(--green);">(저평가)</span> — 2~4단계 혼재 · PEG 0.49</div>
     <div class="grid-2">
       <div style="background:var(--bg3);padding:14px;border-radius:8px;">
         <div style="font-size:12px;color:var(--green);font-weight:700;margin-bottom:6px;">저평가 근거</div>
         <div style="font-size:12px;color:var(--text2);line-height:1.6;">
-          PER 31.5x → 2단계(AI 반도체 평균 52x 대비). EV/EBITDA 27.8x → 2단계(10년 중간값 42.7x 대비). PEG 0.49 = EPS 성장률(85%+) 감안 시 극단적 저평가.
+          PER 33.3x → 2단계(AI 반도체 평균 52x 대비). EV/EBITDA 29.4x → 2단계(10년 중간값 42.7x 대비). PEG 0.49 = EPS 성장률(85%+) 감안 시 극단적 저평가.
         </div>
       </div>
       <div style="background:var(--bg3);padding:14px;border-radius:8px;">
         <div style="font-size:12px;color:var(--accent2);font-weight:700;margin-bottom:6px;">주의 요소</div>
         <div style="font-size:12px;color:var(--text2);line-height:1.6;">
-          PBR 25.6x → 4단계(자사주 매입으로 BPS 낮음). PSR 20.7x → 4단계. PCR 53.4x → 4단계. 전통 멀티플로는 고평가처럼 보이나, 성장·마진 품질 조정 시 저평가.
+          PBR 27.1x → 3단계(자사주 매입으로 BPS 낮음). PSR 21.9x → 3단계. PCR 56.6x → 4단계. 자산·매출 기준 멀티플은 다소 부담스러워 보이나, 성장·마진 품질 조정 시 저평가.
         </div>
       </div>
     </div>
@@ -628,7 +650,7 @@
     </div>
     <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
       <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 컨센서스 목표가 수준 유지</div>
-      <div style="font-size:12px;color:var(--text2);">PER 31.5x·PEG 0.49 밴드가 유지되며 현 성장세가 지속될 경우 → 공정가치 <strong style="color:var(--text);">$265~320/주</strong> (애널리스트 평균 목표가 $301과 부합)</div>
+      <div style="font-size:12px;color:var(--text2);">PER 33.3x·PEG 0.49 밴드가 유지되며 현 성장세가 지속될 경우 → 공정가치 <strong style="color:var(--text);">$265~320/주</strong> (애널리스트 평균 목표가 $301과 부합)</div>
     </div>
     <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
       <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — AI 인프라 슈퍼사이클 가속</div>
@@ -638,7 +660,7 @@
 </div>
 
 <!-- ===================== SECTION 5: US 특화 ===================== -->
-<div id="us" class="section">
+<div id="us" class="section" data-us-visual="chart">
   <div class="section-title">US 특화 — S&P 500 상대 성과 · 섹터 포지셔닝 · 기관 수급</div>
 
   <div class="rel-container">
@@ -653,7 +675,7 @@
         <div class="stat-value up">+15.2%</div>
       </div>
       <div class="stat-box">
-        <div class="stat-label">알파 (초과수익)</div>
+        <div class="stat-label">알파 (S&amp;P 500 대비 초과수익률)</div>
         <div class="stat-value gold">+2.0%p</div>
         <div class="stat-sub">소폭 아웃퍼폼</div>
       </div>
@@ -664,7 +686,7 @@
         <span class="zone-val">~6.2% (최상위)</span>
       </div>
       <div class="zone-item">
-        <span class="zone-label">베타</span>
+        <span class="zone-label">베타 (시장 대비 주가 변동성, 1보다 높으면 더 흔들림)</span>
         <span class="zone-val">2.20 — 고변동성</span>
       </div>
     </div>
@@ -731,16 +753,17 @@
   <div class="timeline">
     <div class="tl-item">
       <div class="tl-dot red"></div>
-      <div class="tl-date">2025년 9월 5일 — 52주 최저</div>
-      <div class="tl-title">$164.07 52주 최저 · 중국향 수출규제 불확실성 지속</div>
-      <div class="tl-desc">H20 중국向 라이선스 요건(2025년 4월 부과, Q1 FY26에 $4.5B 재고손실 충당) 여파와 추가 규제 불확실성이 지속되며 주가 $164.07로 52주 최저 형성. 이후 반등 시작의 최적 진입점이었음.</div>
+      <div class="tl-date">2026년 6월 1일 — 수출규제 재강화</div>
+      <div class="tl-title">미 정부 중국계 기업 해외 법인도 수출허가 적용 — Blackwell 루프홀 차단</div>
+      <div class="tl-desc">6월 1일, 美 상무부(BIS)가 중국 본사·모기업 소재 기업의 해외 자회사(말레이시아·싱가포르·UAE 등)에도 수출허가 요건 적용 명확화 — 우회 수입 루프홀 차단. Warren 상원의원이 젠슨 황에 6/11 청문회 출석 요청.</div>
+      <a class="tl-source" href="https://www.cnbc.com/2026/06/04/nvidia-ceo-jensen-huang-warren-senate-hearing-china-ai-chips.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
     </div>
     <div class="tl-item">
       <div class="tl-dot neutral"></div>
-      <div class="tl-date">2025년 11월 19일 — Q3 FY26 실적</div>
-      <div class="tl-title">매출 $57.0B 역대최대 · Blackwell "품절(sold out)" — 역대급 서프라이즈</div>
-      <div class="tl-desc">매출 $57.0B(▲62% YoY, 전분기比 +22%). Data Center $51.2B(▲66% YoY). 젠슨 황 CEO "Blackwell 판매는 차트를 벗어났고, 클라우드 GPU는 품절(sold out)" 발언. 주당 Blackwell 랙 1,000개 이상 출하 중이라고 공개.</div>
-      <a class="tl-source" href="https://mysweetretirement.com/nvidia-q3-fy2026-earnings" target="_blank" rel="noopener">관련 뉴스 보기 →</a>
+      <div class="tl-date">2026년 5월 20일 — Q1 FY27 실적</div>
+      <div class="tl-title">매출 $81.6B · 연속 신고점 · 배당 25배 인상 + $80B 자사주 승인</div>
+      <div class="tl-desc">매출 $81.6B(▲85% YoY, 컨센서스 $78.8B 상회). Data Center $75.2B(+92%). EPS $1.87(컨센서스 $1.76 상회). 분기배당 $0.01→$0.25로 25배 인상 + $80B 추가 자사주 매입 승인. 주가 $220대 신고점권 진입.</div>
+      <a class="tl-source" href="https://www.tikr.com/blog/nvidia-q1-2027-earnings-81-6b-revenue-and-three-straight-quarters-of-acceleration" target="_blank" rel="noopener">관련 뉴스 보기 (TIKR) →</a>
     </div>
     <div class="tl-item">
       <div class="tl-dot neutral"></div>
@@ -751,17 +774,16 @@
     </div>
     <div class="tl-item">
       <div class="tl-dot neutral"></div>
-      <div class="tl-date">2026년 5월 20일 — Q1 FY27 실적</div>
-      <div class="tl-title">매출 $81.6B · 연속 신고점 · 배당 25배 인상 + $80B 자사주 승인</div>
-      <div class="tl-desc">매출 $81.6B(▲85% YoY, 컨센서스 $78.8B 상회). Data Center $75.2B(+92%). EPS $1.87(컨센서스 $1.76 상회). 분기배당 $0.01→$0.25로 25배 인상 + $80B 추가 자사주 매입 승인. 주가 $220대 신고점권 진입.</div>
-      <a class="tl-source" href="https://www.tikr.com/blog/nvidia-q1-2027-earnings-81-6b-revenue-and-three-straight-quarters-of-acceleration" target="_blank" rel="noopener">관련 뉴스 보기 (TIKR) →</a>
+      <div class="tl-date">2025년 11월 19일 — Q3 FY26 실적</div>
+      <div class="tl-title">매출 $57.0B 역대최대 · Blackwell "품절(sold out)" — 역대급 서프라이즈</div>
+      <div class="tl-desc">매출 $57.0B(▲62% YoY, 전분기比 +22%). Data Center $51.2B(▲66% YoY). 젠슨 황 CEO "Blackwell 판매는 차트를 벗어났고, 클라우드 GPU는 품절(sold out)" 발언. 주당 Blackwell 랙 1,000개 이상 출하 중이라고 공개.</div>
+      <a class="tl-source" href="https://mysweetretirement.com/nvidia-q3-fy2026-earnings" target="_blank" rel="noopener">관련 뉴스 보기 →</a>
     </div>
     <div class="tl-item">
       <div class="tl-dot red"></div>
-      <div class="tl-date">2026년 6월 1일 — 수출규제 재강화</div>
-      <div class="tl-title">미 정부 중국계 기업 해외 법인도 수출허가 적용 — Blackwell 루프홀 차단</div>
-      <div class="tl-desc">6월 1일, 美 상무부(BIS)가 중국 본사·모기업 소재 기업의 해외 자회사(말레이시아·싱가포르·UAE 등)에도 수출허가 요건 적용 명확화 — 우회 수입 루프홀 차단. Warren 상원의원이 젠슨 황에 6/11 청문회 출석 요청.</div>
-      <a class="tl-source" href="https://www.cnbc.com/2026/06/04/nvidia-ceo-jensen-huang-warren-senate-hearing-china-ai-chips.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
+      <div class="tl-date">2025년 9월 5일 — 52주 최저</div>
+      <div class="tl-title">$164.07 52주 최저 · 중국향 수출규제 불확실성 지속</div>
+      <div class="tl-desc">H20 중국向 라이선스 요건(2025년 4월 부과, Q1 FY26에 $4.5B 재고손실 충당) 여파와 추가 규제 불확실성이 지속되며 주가 $164.07로 52주 최저 형성. 이후 반등 시작의 최적 진입점이었음.</div>
     </div>
   </div>
 </div>
@@ -773,19 +795,19 @@
   <div class="bull-bear">
     <div class="bb-box">
       <div class="bb-title bb-bull">🐂 Bull 요인</div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>PEG 0.49:</strong> 성장 대비 극단 저평가. 성장주 기준으로는 싸다.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>하이퍼스케일러 $700B capex:</strong> 수요 가시성 최고 수준.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>CUDA 생태계:</strong> 교체 불가 기술 독점 해자.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>OPM 65%:</strong> 소프트웨어 수준 마진, 마진 확장 지속.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Vera Rubin 로드맵:</strong> 차세대 사이클 준비 완료.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>PEG 0.49:</strong> 성장 대비 극단 저평가. 성장주 기준으로는 싸다.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>하이퍼스케일러 $700B capex:</strong> 수요 가시성 최고 수준.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>CUDA 생태계:</strong> 교체 불가 기술 독점 해자.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>OPM 65%:</strong> 소프트웨어 수준 마진, 마진 확장 지속.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Vera Rubin 로드맵:</strong> 차세대 사이클 준비 완료.</span></div>
     </div>
     <div class="bb-box">
       <div class="bb-title bb-bear">🐻 Bear 요인</div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>지정학 리스크:</strong> 중국 수출규제 재강화 (6월 현재).</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>고객 이탈 위험:</strong> 구글·아마존·MS 자체 AI칩 개발.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>고변동성:</strong> 베타 2.2 — 시장 하락 시 2배 낙폭.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>집중 위험:</strong> 하이퍼스케일러 고객 집중도 높음.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>멀티플 압축 가능:</strong> PSR 20x·PBR 25x — 절대 고평가.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>지정학 리스크:</strong> 중국 수출규제 재강화 (6월 현재).</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>고객 이탈 위험:</strong> 구글·아마존·MS 자체 AI칩 개발.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>고변동성:</strong> 베타 2.2 — 시장 하락 시 2배 낙폭.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>집중 위험:</strong> 하이퍼스케일러 고객 집중도 높음.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>멀티플 압축 가능:</strong> PCR(FCF) 56.6x는 4단계 부담, PBR·PSR도 완충 여력이 크지 않다.</span></div>
     </div>
   </div>
 
@@ -793,23 +815,23 @@
     <div class="card-title">목표가 밴드 — 시나리오별 공정가치 vs 현재가 · 애널리스트 목표가</div>
     <div style="position:relative;height:70px;margin:28px 6px 6px;">
       <div style="position:absolute;top:28px;left:0;right:0;height:10px;border-radius:5px;overflow:hidden;display:flex;">
-        <div style="width:25%;height:100%;background:rgba(46,204,113,0.45);"></div>
-        <div style="width:15.4%;height:100%;background:var(--bg3);"></div>
-        <div style="width:21.1%;height:100%;background:rgba(240,192,64,0.5);"></div>
-        <div style="width:15.4%;height:100%;background:var(--bg3);"></div>
-        <div style="width:23.1%;height:100%;background:rgba(231,76,60,0.45);"></div>
+        <div style="width:18.8%;height:100%;background:rgba(46,204,113,0.45);"></div>
+        <div style="width:16.7%;height:100%;background:var(--bg3);"></div>
+        <div style="width:22.9%;height:100%;background:rgba(240,192,64,0.5);"></div>
+        <div style="width:16.7%;height:100%;background:var(--bg3);"></div>
+        <div style="width:25.0%;height:100%;background:rgba(231,76,60,0.45);"></div>
       </div>
-      <div style="position:absolute;top:10px;left:17.6%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
-      <div style="position:absolute;top:-6px;left:17.6%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $190.01</div>
-      <div style="position:absolute;top:22px;left:54.5%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
-      <div style="position:absolute;top:48px;left:54.5%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $301.62 (+58.4%)</div>
+      <div style="position:absolute;top:10px;left:16.2%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
+      <div style="position:absolute;top:-6px;left:16.2%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $218.99</div>
+      <div style="position:absolute;top:22px;left:50.7%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
+      <div style="position:absolute;top:48px;left:50.7%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $301.62 (+37.7%)</div>
     </div>
     <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-top:4px;">
       <span style="color:var(--green);">Bear $180~225 (저평가·안전마진)</span>
       <span>Base $265~320 (컨센서스 $301)</span>
       <span style="color:var(--red);">Bull $360~420 (강세 시나리오)</span>
     </div>
-    <div style="margin-top:10px;font-size:11px;color:var(--text3);">밸류에이션 탭(Forward PER 22x·PEG 0.49·EV/EBITDA 27.8x)과 기본적 분석(OPM 65.6%·FCF $48.6B)을 반영한 밴드 — 현재가 $190.01은 애널리스트 컨센서스 밴드($265~320) 하단에도 크게 못 미쳐, 61명 평균 목표가 $301.62까지 +45.8% 여력. Street 목표가 범위는 최저 $180 ~ 최고 $500(중앙값 $294), GF Value $334.95.</div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">밸류에이션 탭(Forward PER 22x·PEG 0.49·EV/EBITDA 29.4x)과 기본적 분석(OPM 65.6%·FCF $48.6B)을 반영한 밴드 — 현재가 $218.99는 애널리스트 컨센서스 밴드($265~320) 하단에도 못 미쳐, 61명 평균 목표가 $301.62까지 +37.7% 여력. Street 목표가 범위는 최저 $180 ~ 최고 $500(중앙값 $294), GF Value $334.95.</div>
 
     <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
       <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">애널리스트 61명 투자의견 분포</div>
@@ -829,9 +851,9 @@
   <div class="card" style="margin-top:16px;">
     <div class="card-title">5개 분석 종합 — 한눈에 보기</div>
     <div class="zone-list">
-      <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:var(--red)">MA60&gt;MA20&gt;MA5&gt;MA120&gt;현재가 · 전 이평선 하회 · 기술적 약세</span></div>
+      <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:var(--green)">현재가&gt;MA5&gt;MA60&gt;MA20&gt;MA120 · 전 이평선 상회 · 기술적 강세</span></div>
       <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">Q1 FY27 매출 $81.6B(+85.2%)·OPM 65.6%·FCF $48.6B — 역대급 마진</span></div>
-      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:var(--green);">PER 31.5x·EV/EBITDA 27.8x 2단계 저평가, PEG 0.49 — PBR·PSR 부담은 마진이 정당화</span></div>
+      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:var(--green);">PER 33.3x·EV/EBITDA 29.4x 2단계 저평가, PEG 0.49 — PBR·PSR 부담은 마진이 정당화</span></div>
       <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:var(--green);">하이퍼스케일러 capex $700B 수혜·자사주 $19.3B 분기 최대, S&P500 대비 아웃퍼폼</span></div>
       <div class="zone-item"><span class="zone-label">📰 시계열 뉴스</span><span class="zone-val" style="color:var(--red);">중국 수출규제 재강화(6월) — 지정학 리스크가 단기 변동성의 핵심 변수</span></div>
     </div>
@@ -839,11 +861,11 @@
 
   <div class="card" style="margin-top:16px;">
     <div class="card-title">투자의견 요약</div>
-    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:13px;">
-      <div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107">8월 하순 Q2 FY27 (예상)</strong></div>
-      <div><span style="color:var(--text2);">투자의견:</span> <strong style="color:var(--accent2)">Strong Buy (61명 중 매수 58)</strong></div>
-      <div><span style="color:var(--text2);">목표주가:</span> <strong style="color:var(--text)">평균 $301.62 (+45.8%)</strong></div>
-      <div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">PEG 0.49 성장 대비 저평가 — 중국 수출규제 지정학 리스크가 유일한 핵심 변수</strong></div>
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;">
+      <div>📅 다음 실적: <strong style="color:#ffc107;">8월 하순 Q2 FY27 (예상)</strong></div>
+      <div>투자의견: <strong style="color:var(--accent2);">Strong Buy (61명 중 매수 58)</strong></div>
+      <div>목표주가: <strong style="color:#ffc107;">$301.62 · +37.7%</strong></div>
+      <div>결론: <strong style="color:var(--text);">PEG 0.49 성장 대비 저평가 — 중국 수출규제 지정학 리스크가 유일한 핵심 변수</strong></div>
     </div>
   </div>
 </div>
@@ -1105,7 +1127,7 @@ function renderPeerChart() {
       labels:['NVDA','AVGO','TSM','AMD','반도체평균'],
       datasets:[{
         label:'PER(TTM)',
-        data:[31.5,30.2,20.1,47.0,52.0],
+        data:[33.3,30.2,20.1,47.0,52.0],
         backgroundColor:['#76b900','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','rgba(154,160,184,0.2)'],
         borderColor:['#9fdb2f','#5c6282','#5c6282','#5c6282','#5c6282'],
         borderWidth:1,borderRadius:5
@@ -1135,7 +1157,7 @@ function renderCapexChart() {
         data:[65,80,105,75,700],
         backgroundColor:['rgba(118,185,0,0.25)','rgba(118,185,0,0.25)','rgba(118,185,0,0.25)','rgba(118,185,0,0.25)','#76b900'],
         borderColor:['#9fdb2f','#9fdb2f','#9fdb2f','#9fdb2f','#c8f050'],
-        borderWidth:1,borderRadius:4
+        borderWidth:1,borderRadius:4,maxBarThickness:52,categoryPercentage:0.6,barPercentage:0.8
       }]
     },
     options:{

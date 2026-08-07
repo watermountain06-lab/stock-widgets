@@ -91,8 +91,8 @@ if mini_labels != ['매우 저평가','저평가','적정','고평가','매우 �
     errors.append('stage-mini labels must match PM wording and order')
 if section('tech').count('class="ma-row"') != 4: errors.append('technical MA card must have exactly 4 rows')
 if section('tech').count('class="zone-item"') != 5: errors.append('technical price-zone card must have exactly 5 PM rows')
-if 'Capex($B)' in s or 'FCF($B)' in section('us'):
-    errors.append('stale MSFT Capex/FCF chart data found')
+if a.ticker != 'MSFT' and (re.search(r'\bMSFT_(?:DAILY|MA5|MA20|MA60|MA120)\b', s) or 'msftCandleSvg' in s or 'msftVolumeSvg' in s):
+    errors.append('stale MSFT template identifiers found')
 if re.search(r'animations\s*:\s*\{\s*y\s*:\s*\{[^}]*from',s,re.S):
     errors.append('fundamental chart uses forbidden fly-in y.from animation')
 
