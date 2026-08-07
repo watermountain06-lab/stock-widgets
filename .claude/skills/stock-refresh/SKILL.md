@@ -119,6 +119,10 @@ Every `#us` chart card needs adjacent interpretation text (not a bare canvas) - 
 
 The old "stale MSFT Capex/FCF chart data found" check matched on the generic substring `'Capex($B)'`, which meant it flagged NVDA's and AMZN's own legitimate hyperscaler-capex charts (real, ticker-specific content) as if they were copy-pasted MSFT template leakage. Fixed by switching to the same pattern the working "stale PM template identifiers" check already used - search for MSFT's actual unique identifiers (`MSFT_DAILY`, `msftCandleSvg`, `msftVolumeSvg`) instead of a topic keyword. When a validator FAIL doesn't match what you see in the file, check whether the *check itself* is well-targeted before assuming the widget is wrong - and if you fix the check, verify it against a widget that should still legitimately fail (there wasn't one available for this specific check, so this was verified by confirming NVDA/AMZN/META/MSFT all pass cleanly instead).
 
+## 핵심 가격대 zone-val colors - checked in `#valuation` but not in `#tech`
+
+`canonical_widget_spec.md` says resistance/current/support prices should be red/`var(--accent2)`/green, but that check was only being applied to the valuation-tab `.zone-val`s. TSM and NVDA's `#tech`-tab "핵심 가격대" (or "구간별 가격 분석") card - the 52주 최고/현재가/MAxxx 지지/52주 최저 rows - had zero color on any `.zone-val`, only the `.zone-tag` badge next to it carried the semantic color. CAT already had this right (built correctly from the start), so this isn't universal drift - check it explicitly on every widget rather than assuming it's covered by the valuation-tab check. Fix: `style="color:var(--red|--accent2|--green);"` on the `.zone-val` span itself, matching whichever `.zone-tag` (저항/현재/지지) sits next to it in the same row.
+
 ## Validation gate
 
 Run in this order, fix every failure before moving on:
