@@ -40,6 +40,17 @@ A single "current price" or "latest quarter" gets echoed in far more places than
 
 `scripts/validate_widget.py` now catches one instance of this automatically (valuation-tab current price vs 목표가 밴드 marker, when the valuation section-title embeds "현재가 $X") - but that check is not a substitute for the manual grep above, since it only compares two of the many locations.
 
+Two more leak points found by testing this skill on TSM, easy to miss because they're outside the fixed 6-element width list and outside the two obvious valuation cards:
+
+- **Any other banner/note-style element the widget has beyond `.today-banner`/`.header`/`.box-key`/`.nav`/`.section`/`.disclaimer`** - e.g. TSM has its own `.note-box` (ADR share-conversion note) that PM doesn't have, and it was missed on the first width-fix pass. Grep the `<style>` block for every rule with `margin:` using a raw pixel value instead of `auto` before considering the width fix done.
+- **Section-title date ranges** (e.g. "시계열 뉴스 (2025.07 ~ 2026.06)") - update the end date whenever a new news event pushes the real latest date forward.
+
+## Stage-badge vs. narrative-text mismatches - check every occurrence, not just one
+
+A stage-grid's per-metric badges (`stage-badge stage-N`) can be internally correct while one or more *separate* prose sentences elsewhere still describe an older distribution - and a widget can have **more than one such sentence to check**. TSM had this in two different places at once: the `#valuation` "종합 밸류에이션" card's paragraph *and* the "밸류에이션 5단계" stage-grid card's own footnote sentence both restated the 5-metric distribution independently, and only one of the two was caught on the first pass (the other - which claimed PCR was "4단계" when both its own badge and the stage-grid's own tag placement said stage-1 - was only caught by the browser walkthrough, not by grep). Whenever you touch valuation data, find every sentence that names a metric + a stage number or 저평가/고평가 word, not just the first one you spot, and verify each against the actual `stage-badge` values.
+
+Determining the (고평가|적정가|저평가) verdict itself is not always a clean read - PM/CAT had all 5 metrics clustered on one side, making the call trivial, but TSM's badges were `[2,1,3,1,3]` (mixed low/fair, nothing high) and required actually counting rather than eyeballing the card's existing subtitle.
+
 ## 목표가 밴드 (target price band) gauge
 
 **Check which markup convention the widget already uses before computing anything** - count the flex divs in the color bar:
@@ -54,7 +65,9 @@ python3 scripts/target_band_gauge.py --bear LO HI --base LO HI --bull LO HI \
     --current PRICE --target TARGET [--no-pad]
 ```
 
-Apply the printed segment widths, both marker `left:%` values, and the current-vs-target upside % together. Keep the Bear/Base/Bull dollar ranges unchanged unless there's a documented fundamental reason to move them (a market-price move alone is not one - but a real earnings beat with raised guidance, like CAT's Q2, can be, and even then be conservative: check whether analyst high/low already bracket the existing range before touching it). Recompute the analyst-distribution bar widths (`buy/(total)*100` etc.) from the verified count, never eyeball them.
+**Not every widget's 목표가 밴드 is a Bear/Base/Bull scenario band at all.** TSM's version is a single analyst Low/Average/High range instead (card text literally states "목표가 밴드 $354~$700 · 평균 $520.37"), which doesn't fit `target_band_gauge.py`'s three-range interface. When you hit this shape, compute by hand: `marker_pct = (price - domain_min) / (domain_max - domain_min) * 100` using the domain the card's own text states (here `[354, 700]`) - verify it reproduces the *unchanged* value (target/average marker here) before trusting the recomputed current-price marker.
+
+For the standard three-range case, apply the printed segment widths, both marker `left:%` values, and the current-vs-target upside % together. Keep the Bear/Base/Bull dollar ranges unchanged unless there's a documented fundamental reason to move them (a market-price move alone is not one - but a real earnings beat with raised guidance, like CAT's Q2, can be, and even then be conservative: check whether analyst high/low already bracket the existing range before touching it). Recompute the analyst-distribution bar widths (`buy/(total)*100` etc.) from the verified count, never eyeball them.
 
 ## Format conventions this session established beyond `canonical_widget_spec.md`
 
