@@ -103,11 +103,30 @@ def apply_ma_row_layout(s):
             + "</div>"
         )
 
-    return re.sub(
+    # variant A: ma-val already a sibling of ma-name, directly before ma-status
+    s = re.sub(
         r'(<span class="ma-val">[^<]*</span>)(<span class="ma-status[^"]*">[^<]*</span>)',
         wrap,
         s,
     )
+
+    # variant B: ma-val nested inside ma-name (e.g. NFLX) - pull it out first,
+    # then the row matches variant A's shape and gets wrapped the same way.
+    def unnest(m):
+        return f'<span class="ma-name">{m.group(1)}</span><span class="ma-val">{m.group(2)}</span>'
+
+    s = re.sub(
+        r'<span class="ma-name">(.*?)<span class="ma-val">([^<]*)</span></span>',
+        unnest,
+        s,
+        flags=re.S,
+    )
+    s = re.sub(
+        r'(<span class="ma-val">[^<]*</span>)(<span class="ma-status[^"]*">[^<]*</span>)',
+        wrap,
+        s,
+    )
+    return s
 
 
 def split_top_level(text, class_name):

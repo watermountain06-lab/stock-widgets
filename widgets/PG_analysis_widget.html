@@ -25,7 +25,7 @@
     --ma60: #f0c040;
     --ma120: #22d3ee;
     --green: #2ecc71;
-    --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f;
+    --red: #e74c3c; --gold: #f0c040; --event-major: #38bdf8; --event-neutral: #f1c40f;
     --blue: #3498db;
     --radius: 10px;
     --shadow: 0 4px 20px rgba(0,0,0,0.4);
@@ -45,8 +45,7 @@
     border-bottom: 2px solid var(--accent3);
     padding: 28px 32px 24px;
     position: relative;
-    overflow: hidden;
-  }
+    overflow: hidden; max-width: 1100px; margin: 0 auto;}
   .header::before {
     content: '';
     position: absolute;
@@ -82,8 +81,7 @@
     background: var(--bg2);
     border-bottom: 1px solid var(--border);
     overflow-x: auto;
-    scrollbar-width: none;
-  }
+    scrollbar-width: none; max-width: 1100px; margin: 0 auto;}
   .nav::-webkit-scrollbar { display: none; }
   .nav-btn {
     background: none; border: none;
@@ -97,7 +95,7 @@
   .nav-btn.active { background: var(--accent3); color: var(--accent2); }
 
   /* SECTIONS */
-  .section { display: none; padding: 28px 32px; }
+  .section { display: none; padding: 28px 32px; max-width: 1100px; margin: 0 auto;}
   .section.active { display: block; }
   .section-title {
     font-size: 16px; font-weight: 700;
@@ -242,15 +240,14 @@
 
   /* DISCLAIMER */
   .disclaimer {
-    margin: 28px 32px 16px;
+    margin: 28px auto 16px;
     padding: 12px 16px;
     background: rgba(118,185,0,0.06);
     border: 1px solid var(--accent3);
     border-radius: 8px;
     font-size: 11px;
     color: var(--text3);
-    line-height: 1.6;
-  }
+    line-height: 1.6; max-width: 1100px;}
   .scenario-card { border-radius: 8px; padding: 14px; }
 
   @media (max-width: 600px) {
@@ -263,7 +260,7 @@
     .stage-grid { grid-template-columns: 1fr 1fr; }
     .price-main { font-size: 24px; }
   }
-  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; margin: 12px 32px 0; }
+  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; margin: 12px auto 0; max-width: 1100px;}
   .range-toggle { display: flex; gap: 4px; }
   .range-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--text3); font-size: 11px; font-weight: 700; padding: 4px 11px; border-radius: 999px; cursor: pointer; transition: all .15s; }
   .range-btn:hover { color: var(--text); border-color: var(--text2); }
@@ -352,10 +349,10 @@
 <div class="zone-item"><span class="zone-label">52주 수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--red);">-3.9%</span><span class="zone-tag tag-resist">약세</span></div></div>
 </div></div>
 <div class="card"><div class="card-title">이동평균선 현황</div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기)</span><span class="ma-val">$146.25</span><span class="ma-status status-above">현재가 상회</span></div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기)</span><span class="ma-val">$147.53</span><span class="ma-status status-below">현재가 하회</span></div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기)</span><span class="ma-val">$146.79</span><span class="ma-status status-above">현재가 상회</span></div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기)</span><span class="ma-val">$148.26</span><span class="ma-status status-below">현재가 하회</span></div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기)</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$146.25</span><span class="ma-status status-above">현재가 상회</span></div></div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기)</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$147.53</span><span class="ma-status status-below">현재가 하회</span></div></div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기)</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$146.79</span><span class="ma-status status-above">현재가 상회</span></div></div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기)</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$148.26</span><span class="ma-status status-below">현재가 하회</span></div></div>
 <div style="margin-top:10px;background:var(--bg3);padding:12px;border-radius:8px;font-size:12px;">MA120&gt;MA20&gt;MA5&gt;MA60&gt;현재가 순 — 전 이평선 하회 · 기술적 약세. 현재가 $146.97, 52주 고점 $167.25 대비 -12.6%.</div>
 </div></div>
 <div class="card"><div class="card-title">구간별 패턴 분석</div><div class="grid-4">
@@ -476,18 +473,18 @@
 <div class="section-title">2026년 핵심 투자 포인트</div>
 <div class="bull-bear">
 <div class="bb-box"><div class="bb-title bb-bull">🐂 Bull 요인</div>
-<div class="bb-item"><span class="bb-icon">▲</span><span><strong>브랜드 가격력:</strong> Tide·Pampers·Gillette 등 일상 필수 브랜드가 혁신 기반 가격 인상을 지지한다.</span></div>
-<div class="bb-item"><span class="bb-icon">▲</span><span><strong>성장 회복:</strong> Q3 유기매출 +3%는 볼륨 +2%와 가격 +1%의 균형으로 달성됐다.</span></div>
-<div class="bb-item"><span class="bb-icon">▲</span><span><strong>배당 복리:</strong> 70년 연속 배당 증가와 연환산 $4.23이 장기 보유 가치를 높인다.</span></div>
-<div class="bb-item"><span class="bb-icon">▲</span><span><strong>자본효율:</strong> ROIC 22.06%와 FY2026 약 $5B 자사주가 주당가치 성장을 뒷받침한다.</span></div>
-<div class="bb-item"><span class="bb-icon">▲</span><span><strong>방어성:</strong> 베타 0.38과 생활필수품 수요가 경기 변동성을 낮춘다.</span></div>
+<div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>브랜드 가격력:</strong> Tide·Pampers·Gillette 등 일상 필수 브랜드가 혁신 기반 가격 인상을 지지한다.</span></div>
+<div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>성장 회복:</strong> Q3 유기매출 +3%는 볼륨 +2%와 가격 +1%의 균형으로 달성됐다.</span></div>
+<div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>배당 복리:</strong> 70년 연속 배당 증가와 연환산 $4.23이 장기 보유 가치를 높인다.</span></div>
+<div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>자본효율:</strong> ROIC 22.06%와 FY2026 약 $5B 자사주가 주당가치 성장을 뒷받침한다.</span></div>
+<div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>방어성:</strong> 베타 0.38과 생활필수품 수요가 경기 변동성을 낮춘다.</span></div>
 </div>
 <div class="bb-box"><div class="bb-title bb-bear">🐻 Bear 요인</div>
-<div class="bb-item"><span class="bb-icon">▼</span><span><strong>낮은 성장:</strong> 3년 EPS 성장 전망 2.89%에 비해 PEG 4.48x는 매우 높다.</span></div>
-<div class="bb-item"><span class="bb-icon">▼</span><span><strong>마진 압박:</strong> Q3 핵심 총마진은 믹스·재투자·관세 부담으로 100bp 하락했다.</span></div>
-<div class="bb-item"><span class="bb-icon">▼</span><span><strong>소비자 가치추구:</strong> 저가·PB 전환과 프로모션 의존이 볼륨·가격력을 동시에 약화시킬 수 있다.</span></div>
-<div class="bb-item"><span class="bb-icon">▼</span><span><strong>원가·관세:</strong> 원자재와 무역 비용 변동이 생산성 절감분을 상쇄할 위험이 있다.</span></div>
-<div class="bb-item"><span class="bb-icon">▼</span><span><strong>상대수익률:</strong> 52주 알파 -24.6%p는 방어주가 성장주 장세에서 소외될 수 있음을 보여준다.</span></div>
+<div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>낮은 성장:</strong> 3년 EPS 성장 전망 2.89%에 비해 PEG 4.48x는 매우 높다.</span></div>
+<div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>마진 압박:</strong> Q3 핵심 총마진은 믹스·재투자·관세 부담으로 100bp 하락했다.</span></div>
+<div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>소비자 가치추구:</strong> 저가·PB 전환과 프로모션 의존이 볼륨·가격력을 동시에 약화시킬 수 있다.</span></div>
+<div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>원가·관세:</strong> 원자재와 무역 비용 변동이 생산성 절감분을 상쇄할 위험이 있다.</span></div>
+<div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>상대수익률:</strong> 52주 알파 -24.6%p는 방어주가 성장주 장세에서 소외될 수 있음을 보여준다.</span></div>
 </div>
 </div>
 <div class="card" style="margin-top:16px;"><div class="card-title">목표가 밴드 — 시나리오별 공정가치 vs 현재가 · 애널리스트 목표가</div>

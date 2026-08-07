@@ -11,7 +11,7 @@
     --text: #e8eaf0; --text2: #9aa0b8; --text3: #5c6282;
     --accent: #ee3524; --accent2: #ff7a5c; --accent3: #4a0f0a;
     --bull: #D85A30; --bear: #185FA5; --ma5: #ff6b9d; --ma20: #9b59b6; --ma60: #f0c040; --ma120: #22d3ee;
-    --green: #2ecc71; --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+    --green: #2ecc71; --red: #e74c3c; --gold: #f0c040; --event-major: #38bdf8; --event-neutral: #f1c40f; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
@@ -213,10 +213,10 @@
     </div>
     <div class="card">
       <div class="card-title">이동평균선 현황</div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:#38bdf8"></span>MA5</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$148.17</span><span class="ma-status status-above">현재가 상회</span></div></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:#f59e0b"></span>MA20</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$158.45</span><span class="ma-status status-below">현재가 하회</span></div></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:#a78bfa"></span>MA60</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$203.88</span><span class="ma-status status-below">현재가 하회</span></div></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:#22c55e"></span>MA120</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$154.94</span><span class="ma-status status-below">현재가 하회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:#38bdf8"></span>MA5</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$148.17</span><span class="ma-status status-above">현재가 상회</span></div></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:#f59e0b"></span>MA20</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$158.45</span><span class="ma-status status-below">현재가 하회</span></div></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:#a78bfa"></span>MA60</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$203.88</span><span class="ma-status status-below">현재가 하회</span></div></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:#22c55e"></span>MA120</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$154.94</span><span class="ma-status status-below">현재가 하회</span></div></div></div>
       <div style="margin-top:10px;font-size:12px;color:var(--text2);">MA60&gt;MA20&gt;MA120&gt;현재가&gt;MA5 — 단기 반등과 중장기 저항이 교차하는 약세 구간.</div>
     </div>
   </div>
@@ -329,39 +329,34 @@
   </div>
   <div class="timeline">
     <div class="tl-item">
-      <div class="tl-dot green"></div>
-      <div class="tl-date">2026년 4월 23일 — Q1 FY2026 실적 발표</div>
-      <div class="tl-title">사상 최대 분기 실적 — 매출 52.6조원(+198%)</div>
-      <div class="tl-desc">AI發 HBM·고용량 서버 D램·eSSD 수요 급증으로 사상 첫 분기 매출 50조원을 돌파. 영업이익 37.6조원(+405%), 영업이익률 72%로 메모리 반도체 업종 역사상 이례적인 수익성을 기록.</div>
-      <a class="tl-source" href="https://www.cnbc.com/2026/04/23/sk-hynix-earnings-ai-memory-shortage-hbm-demand.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
-    </div>
-    <div class="tl-item">
+      <div class="tl-dot today"></div>
+      <div class="tl-date">2026년 7월 20일 — 당시 ADR 거래 7일차</div>
+      <div class="tl-title">$140.100, 고점 대비 -22.4% — 초기 변동성 지속</div>
+      <div class="tl-desc">ADR 거래 시작 후 불과 일주일 만에 고점 대비 22% 넘게 조정을 겪을 만큼 변동성이 크며, 아직 안정적인 가격 형성 단계에 이르지 못한 상태. 원주 펀더멘털(HBM 슈퍼사이클)과 별개로 ADR 자체의 가격 발견 과정을 좀 더 지켜볼 필요.</div>
+    </div><div class="tl-item">
       <div class="tl-dot neutral"></div>
       <div class="tl-date">2026년 7월 초 — Nasdaq ADR 상장($26.5B 공모)</div>
       <div class="tl-title">외국기업 美 사상 최대 규모 지분 매각으로 ADR 상장</div>
       <div class="tl-desc">SK hynix가 총 $26.5B 규모의 ADR을 나스닥에 상장, 외국기업의 美 주식 매각으로는 역대 최대 규모로 평가됨. 오버서브스크립션(초과청약)이 7배를 넘어서는 등 투자자 수요가 매우 높았음.</div>
       <a class="tl-source" href="https://finance.yahoo.com/markets/stocks/articles/sk-hynix-nasdaq-debut-adr-160017381.html" target="_blank" rel="noopener">관련 뉴스 보기 (Yahoo Finance) →</a>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot"></div>
-      <div class="tl-date">2026년 7월 10일 — 임시코드(SKHYV) 첫 거래</div>
-      <div class="tl-title">$170 개장, 첫날 $168.01 마감</div>
-      <div class="tl-desc">정식 티커 전환 전 임시코드로 첫 거래 개시. 이후 7/13부터 정식 티커 SKHY로 일반 거래 시작.</div>
-    </div>
-    <div class="tl-item">
+    </div><div class="tl-item">
       <div class="tl-dot red"></div>
       <div class="tl-date">2026년 7월 13일 — 정식거래 개시, ADR 프리미엄 급등 보도</div>
       <div class="tl-title">SKHY ADR이 원주 대비 최대 약 50% 프리미엄까지 확대</div>
       <div class="tl-desc">정식 티커 전환 직후 ADR 가격이 원주(KRX 환산가) 대비 큰 폭의 프리미엄을 형성했다는 보도가 나오며, 이후 며칠간 극심한 변동성(+27%, -14% 등 일간 등락)이 이어짐 — 이는 신규 상장 ADR에서 흔히 나타나는 가격 발견·차익거래 조정 과정으로 해석됨.</div>
       <a class="tl-source" href="https://finance.yahoo.com/markets/stocks/articles/sk-hynix-adr-premium-balloons-172621118.html" target="_blank" rel="noopener">관련 뉴스 보기 (Yahoo Finance) →</a>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot today"></div>
-      <div class="tl-date">2026년 7월 20일 — 당시 ADR 거래 7일차</div>
-      <div class="tl-title">$140.100, 고점 대비 -22.4% — 초기 변동성 지속</div>
-      <div class="tl-desc">ADR 거래 시작 후 불과 일주일 만에 고점 대비 22% 넘게 조정을 겪을 만큼 변동성이 크며, 아직 안정적인 가격 형성 단계에 이르지 못한 상태. 원주 펀더멘털(HBM 슈퍼사이클)과 별개로 ADR 자체의 가격 발견 과정을 좀 더 지켜볼 필요.</div>
-    </div>
-  </div>
+    </div><div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2026년 7월 10일 — 임시코드(SKHYV) 첫 거래</div>
+      <div class="tl-title">$170 개장, 첫날 $168.01 마감</div>
+      <div class="tl-desc">정식 티커 전환 전 임시코드로 첫 거래 개시. 이후 7/13부터 정식 티커 SKHY로 일반 거래 시작.</div>
+    </div><div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">2026년 4월 23일 — Q1 FY2026 실적 발표</div>
+      <div class="tl-title">사상 최대 분기 실적 — 매출 52.6조원(+198%)</div>
+      <div class="tl-desc">AI發 HBM·고용량 서버 D램·eSSD 수요 급증으로 사상 첫 분기 매출 50조원을 돌파. 영업이익 37.6조원(+405%), 영업이익률 72%로 메모리 반도체 업종 역사상 이례적인 수익성을 기록.</div>
+      <a class="tl-source" href="https://www.cnbc.com/2026/04/23/sk-hynix-earnings-ai-memory-shortage-hbm-demand.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
+    </div></div>
 </div>
 
 <!-- ===================== SECTION 6: 투자 포인트 ===================== -->
@@ -370,19 +365,19 @@
   <div class="bull-bear">
     <div class="bb-box">
       <div class="bb-title bb-bull">🐂 Bull 요인</div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>HBM 시장점유율 57% 세계 1위:</strong> AI 가속기 공급망의 핵심 병목 자산.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Q1 FY26 영업이익률 72%:</strong> 메모리 업종 역사상 이례적 수익성.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>P/E 17.5x, Micron(21x) 대비 낮음:</strong> 실적 대비 상대적으로 낮은 밸류에이션.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>2026년 생산능력 완판:</strong> 공급 부족 국면에서 가격 결정력 보유.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>미국 ADR 접근성:</strong> 글로벌 투자자 기반 확대.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>HBM 시장점유율 57% 세계 1위:</strong> AI 가속기 공급망의 핵심 병목 자산.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Q1 FY26 영업이익률 72%:</strong> 메모리 업종 역사상 이례적 수익성.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>P/E 17.5x, Micron(21x) 대비 낮음:</strong> 실적 대비 상대적으로 낮은 밸류에이션.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>2026년 생산능력 완판:</strong> 공급 부족 국면에서 가격 결정력 보유.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>미국 ADR 접근성:</strong> 글로벌 투자자 기반 확대.</span></div>
     </div>
     <div class="bb-box">
       <div class="bb-title bb-bear">🐻 Bear 요인</div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>ADR 거래 7일차 -22.4% 조정:</strong> 극심한 초기 변동성, 가격 발견 미완료.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>메모리 반도체 사이클 리스크:</strong> 현재의 슈퍼사이클이 정점일 가능성.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>ADR-원주 프리미엄 불확실성:</strong> 가격 괴리 조정이 언제 완료될지 불명확.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>데이터 제한:</strong> 정식 ADR 18거래일, 미국 기준 정식 분기보고서 없음.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>미국 매출 별도 미공개:</strong> 지역 실적 가시성 제한.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>ADR 거래 7일차 -22.4% 조정:</strong> 극심한 초기 변동성, 가격 발견 미완료.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>메모리 반도체 사이클 리스크:</strong> 현재의 슈퍼사이클이 정점일 가능성.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>ADR-원주 프리미엄 불확실성:</strong> 가격 괴리 조정이 언제 완료될지 불명확.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>데이터 제한:</strong> 정식 ADR 18거래일, 미국 기준 정식 분기보고서 없음.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>미국 매출 별도 미공개:</strong> 지역 실적 가시성 제한.</span></div>
     </div>
   </div>
   <div class="card" style="margin-top:16px;"><div class="card-title">목표가 밴드 — 시나리오별 공정가치 vs 현재가 · 애널리스트 목표가</div><div class="zone-list"><div class="zone-item"><span class="zone-label">Bear</span><span class="zone-val">$100~125</span></div><div class="zone-item"><span class="zone-label">Base</span><span class="zone-val">$145~175</span></div><div class="zone-item"><span class="zone-label">Bull</span><span class="zone-val">$190~225</span></div></div></div>

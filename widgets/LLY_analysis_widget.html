@@ -24,7 +24,7 @@
     --ma60: #f0c040;
     --ma120: #22d3ee;
     --green: #2ecc71;
-    --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f;
+    --red: #e74c3c; --gold: #f0c040; --event-major: #38bdf8; --event-neutral: #f1c40f;
     --teal: #1abc9c;
     --radius: 10px;
   }
@@ -36,8 +36,7 @@
     background: linear-gradient(135deg, #050d1a 0%, #0d1219 45%, #141c27 100%);
     border-bottom: 2px solid var(--accent3);
     padding: 28px 32px 24px;
-    position: relative; overflow: hidden;
-  }
+    position: relative; overflow: hidden; max-width: 1100px; margin: 0 auto;}
   .header::before {
     content: ''; position: absolute; top: -80px; right: -80px;
     width: 300px; height: 300px;
@@ -57,14 +56,14 @@
   .meta-value.highlight { color: var(--accent2); }
 
   /* NAV */
-  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto;}
   .nav::-webkit-scrollbar { display: none; }
   .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
   .nav-btn:hover { color: var(--text); background: var(--bg3); }
   .nav-btn.active { background: var(--accent3); color: var(--accent2); }
 
   /* SECTIONS */
-  .section { display: none; padding: 28px 32px; }
+  .section { display: none; padding: 28px 32px; max-width: 1100px; margin: 0 auto;}
   .section.active { display: block; }
   .section-title { font-size: 16px; font-weight: 700; color: var(--accent2); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
   .section-title::before { content: ''; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; display: inline-block; }
@@ -185,9 +184,9 @@
   .ps-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
 
   /* DISCLAIMER */
-  .disclaimer { margin: 28px 32px 16px; padding: 12px 16px; background: rgba(74,158,255,0.05); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
+  .disclaimer { margin: 28px auto 16px; padding: 12px 16px; background: rgba(74,158,255,0.05); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; max-width: 1100px;}
 
-  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; }
+  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; max-width: 1100px; margin: 0 auto;}
   .range-toggle { display: flex; gap: 4px; }
   .range-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--text3); font-size: 11px; font-weight: 700; padding: 4px 11px; border-radius: 999px; cursor: pointer; transition: all .15s; }
   .range-btn:hover { color: var(--text); border-color: var(--text2); }
@@ -305,10 +304,10 @@
     </div>
     <div class="card">
       <div class="card-title">이동평균선 현황</div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기)</span><span class="ma-val">$1,150.17</span><span class="ma-status status-below">현재가 하회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기)</span><span class="ma-val">$1,174.85</span><span class="ma-status status-below">현재가 하회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기)</span><span class="ma-val">$1,125.76</span><span class="ma-status status-below">현재가 하회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기)</span><span class="ma-val">$1,041.84</span><span class="ma-status status-above">현재가 상회</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기)</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$1,150.17</span><span class="ma-status status-below">현재가 하회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기)</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$1,174.85</span><span class="ma-status status-below">현재가 하회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기)</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$1,125.76</span><span class="ma-status status-below">현재가 하회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기)</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$1,041.84</span><span class="ma-status status-above">현재가 상회</span></div></div>
       <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">MA20&gt;MA5&gt;MA60&gt;현재가&gt;MA120 순 — 4개 이평선 중 1개 상회 · 기술적 약세. 현재가 $1,115.68, 52주 고점 $1,249.45 대비 -10.7%.</div>
     </div>
   </div>
@@ -549,62 +548,54 @@
   </div>
   <div class="timeline">
     <div class="tl-item">
-      <div class="tl-dot red"></div>
-      <div class="tl-date">2025년 7~8월</div>
-      <div class="tl-title">주가 $654 급락 — CVS 처방 제외 + 가이던스 하향</div>
-      <div class="tl-desc">CVS Caremark가 7월 1일 일부 처방플랜(Standard·Advanced Control·Value)에서 Zepbound 제외(Wegovy 우선 채택), 약 20만 명 영향. FY2025 조정 EPS 가이던스 $22.50~24.00→$20.78~22.28로 하향. 가이던스 하향으로 단기 급락(-11%+). 52주 최저 기록.</div>
-      <a class="tl-source" href="https://seekingalpha.com/article/4780589-cvs-excludes-zepbound-why-eli-lilly-11-percent-plus-drop-looks-overdone" target="_blank" rel="noopener">관련 뉴스 보기 (Seeking Alpha) →</a>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot green"></div>
-      <div class="tl-date">2025년 8월 7일</div>
-      <div class="tl-title">오르포글리프론 Phase3 1차 결과 — 경구 GLP-1 혁명</div>
-      <div class="tl-desc">ATTAIN-1 비만 Phase3 결과: 36mg 용량 기준 평균 -27.3lbs(-12.4%) 체중감량(위약 대비). 주사 없는 경구 GLP-1으로 시장 패러다임 전환 가능성. 2025년 내 비만 적응증 글로벌 허가 신청 계획 발표.</div>
-      <a class="tl-source" href="https://www.patientcareonline.com/view/lilly-s-oral-glp-1-orforglipron-meets-endpoints-in-phase-3-obesity-and-diabetes-trial" target="_blank" rel="noopener">관련 뉴스 보기 (Patient Care Online) →</a>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot green"></div>
-      <div class="tl-date">2025년 10월 30일</div>
-      <div class="tl-title">Q3 실적 어닝 서프라이즈 — tirzepatide $10.1B/분기 달성</div>
-      <div class="tl-desc">매출 $17.6B(+54%). Mounjaro $6.52B(+109%) + Zepbound 미국 $3.57B(+184%). 애널리스트 전망 $1.6B 상회. FY2025 가이던스 $63.0~63.5B로 상향. 주가 $654→$1,100+ 단기 V자 반등.</div>
-      <a class="tl-source" href="https://www.cnbc.com/2025/10/30/eli-lilly-lly-earnings-q3-2025.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot green"></div>
-      <div class="tl-date">2026년 2월 4일</div>
-      <div class="tl-title">Q4 2025 결과 + 2026 가이던스 $80~83B 발표</div>
-      <div class="tl-desc">Q4 매출 $19.3B(+43%). FY2025 전체 매출 $65.2B(+45%). EPS $7.39(GAAP, +51%) / $7.54(Non-GAAP, +42%). 2026 가이던스 매출 $80~83B·EPS $33.50~35.00 제시 — 컨센서스($77.6B) 상회.</div>
-      <a class="tl-source" href="https://www.cnbc.com/2026/02/04/eli-lilly-lly-earnings-q4-2025.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot"></div>
-      <div class="tl-date">2026년 4월 1일</div>
-      <div class="tl-title">오르포글리프론 FDA 승인 확정 (Foundayo 브랜드)</div>
-      <div class="tl-desc">경구 GLP-1 오르포글리프론이 'Foundayo'로 FDA 승인 — 식이·수분 제한 없이 하루 중 아무 때나 복용 가능한 유일한 경구 GLP-1. 40개국 이상에 허가 신청 완료, 순차 출시 예정. 승인 시 주사제 불가능 환자 수억 명 흡수 예상.</div>
-      <a class="tl-source" href="https://www.biospace.com/fda/eli-lillys-oral-obesity-pill-approved-kicking-off-renewed-novo-rivalry" target="_blank" rel="noopener">관련 뉴스 보기 (BioSpace) →</a>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot red"></div>
-      <div class="tl-date">2026년 2~4월</div>
-      <div class="tl-title">약가규제(IRA) + 관세 우려 — 주가 $880까지 조정</div>
-      <div class="tl-desc">2026 가이던스에 IRA發 약가 하락(-10%대 중반) 이미 반영. 제약 관세 정책 리스크 지속(Lilly·Novo는 3년 관세 유예+FDA 우선심사권 교환 조건으로 약가 대폭 할인 합의). $1,100→$880대 조정, YTD -15% 수준.</div>
-      <a class="tl-source" href="https://247wallst.com/investing/2026/03/28/pph-etf-drug-pricing-policy-and-eli-lilly-concentration-are-the-two-risks-to-watch-in-2026/" target="_blank" rel="noopener">관련 뉴스 보기 (24/7 Wall St) →</a>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot green"></div>
-      <div class="tl-date">2026년 4~5월</div>
-      <div class="tl-title">Q1 2026 결과 — 매출 $19.8B 역대 최고 + 가이던스 재상향</div>
-      <div class="tl-desc">매출 $19.8B(+56%), EPS $8.26(GAAP,+170%)/$8.55(Non-GAAP,+156%). Mounjaro 전세계 $8.66B(+125%). 2026 가이던스 매출 $82.0~85.0B·EPS $35.50~37.00로 재상향. 주가 신고가 행진 재개.</div>
-      <a class="tl-source" href="https://www.cnbc.com/2026/04/30/eli-lilly-lly-earnings-q1-2026.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
-    </div>
-    <div class="tl-item">
       <div class="tl-dot green"></div>
       <div class="tl-date">2026년 6월</div>
       <div class="tl-title">ADA 학회 — Retatrutide·Foundayo 데이터 발표 + 주가 $1,182 신고</div>
       <div class="tl-desc">ADA(미국당뇨협회) 86차 학술회의(6/8)에서 retatrutide Phase3 데이터 발표 — TRIUMPH-1 최대 80주차 -70.3lbs(-28.3%) 체중감량. Foundayo 전환 연구 데이터도 공개. 발표 당일 주가 +4%, 52주 최고 $1,182.73 경신.</div>
       <a class="tl-source" href="https://finance.yahoo.com/sectors/healthcare/articles/eli-lilly-shares-climb-obesity-104356468.html" target="_blank" rel="noopener">관련 뉴스 보기 (Yahoo Finance) →</a>
-    </div>
-  </div>
+    </div><div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">2026년 4~5월</div>
+      <div class="tl-title">Q1 2026 결과 — 매출 $19.8B 역대 최고 + 가이던스 재상향</div>
+      <div class="tl-desc">매출 $19.8B(+56%), EPS $8.26(GAAP,+170%)/$8.55(Non-GAAP,+156%). Mounjaro 전세계 $8.66B(+125%). 2026 가이던스 매출 $82.0~85.0B·EPS $35.50~37.00로 재상향. 주가 신고가 행진 재개.</div>
+      <a class="tl-source" href="https://www.cnbc.com/2026/04/30/eli-lilly-lly-earnings-q1-2026.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
+    </div><div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2026년 4월 1일</div>
+      <div class="tl-title">오르포글리프론 FDA 승인 확정 (Foundayo 브랜드)</div>
+      <div class="tl-desc">경구 GLP-1 오르포글리프론이 'Foundayo'로 FDA 승인 — 식이·수분 제한 없이 하루 중 아무 때나 복용 가능한 유일한 경구 GLP-1. 40개국 이상에 허가 신청 완료, 순차 출시 예정. 승인 시 주사제 불가능 환자 수억 명 흡수 예상.</div>
+      <a class="tl-source" href="https://www.biospace.com/fda/eli-lillys-oral-obesity-pill-approved-kicking-off-renewed-novo-rivalry" target="_blank" rel="noopener">관련 뉴스 보기 (BioSpace) →</a>
+    </div><div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-date">2026년 2~4월</div>
+      <div class="tl-title">약가규제(IRA) + 관세 우려 — 주가 $880까지 조정</div>
+      <div class="tl-desc">2026 가이던스에 IRA發 약가 하락(-10%대 중반) 이미 반영. 제약 관세 정책 리스크 지속(Lilly·Novo는 3년 관세 유예+FDA 우선심사권 교환 조건으로 약가 대폭 할인 합의). $1,100→$880대 조정, YTD -15% 수준.</div>
+      <a class="tl-source" href="https://247wallst.com/investing/2026/03/28/pph-etf-drug-pricing-policy-and-eli-lilly-concentration-are-the-two-risks-to-watch-in-2026/" target="_blank" rel="noopener">관련 뉴스 보기 (24/7 Wall St) →</a>
+    </div><div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">2026년 2월 4일</div>
+      <div class="tl-title">Q4 2025 결과 + 2026 가이던스 $80~83B 발표</div>
+      <div class="tl-desc">Q4 매출 $19.3B(+43%). FY2025 전체 매출 $65.2B(+45%). EPS $7.39(GAAP, +51%) / $7.54(Non-GAAP, +42%). 2026 가이던스 매출 $80~83B·EPS $33.50~35.00 제시 — 컨센서스($77.6B) 상회.</div>
+      <a class="tl-source" href="https://www.cnbc.com/2026/02/04/eli-lilly-lly-earnings-q4-2025.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
+    </div><div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">2025년 10월 30일</div>
+      <div class="tl-title">Q3 실적 어닝 서프라이즈 — tirzepatide $10.1B/분기 달성</div>
+      <div class="tl-desc">매출 $17.6B(+54%). Mounjaro $6.52B(+109%) + Zepbound 미국 $3.57B(+184%). 애널리스트 전망 $1.6B 상회. FY2025 가이던스 $63.0~63.5B로 상향. 주가 $654→$1,100+ 단기 V자 반등.</div>
+      <a class="tl-source" href="https://www.cnbc.com/2025/10/30/eli-lilly-lly-earnings-q3-2025.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
+    </div><div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">2025년 8월 7일</div>
+      <div class="tl-title">오르포글리프론 Phase3 1차 결과 — 경구 GLP-1 혁명</div>
+      <div class="tl-desc">ATTAIN-1 비만 Phase3 결과: 36mg 용량 기준 평균 -27.3lbs(-12.4%) 체중감량(위약 대비). 주사 없는 경구 GLP-1으로 시장 패러다임 전환 가능성. 2025년 내 비만 적응증 글로벌 허가 신청 계획 발표.</div>
+      <a class="tl-source" href="https://www.patientcareonline.com/view/lilly-s-oral-glp-1-orforglipron-meets-endpoints-in-phase-3-obesity-and-diabetes-trial" target="_blank" rel="noopener">관련 뉴스 보기 (Patient Care Online) →</a>
+    </div><div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-date">2025년 7~8월</div>
+      <div class="tl-title">주가 $654 급락 — CVS 처방 제외 + 가이던스 하향</div>
+      <div class="tl-desc">CVS Caremark가 7월 1일 일부 처방플랜(Standard·Advanced Control·Value)에서 Zepbound 제외(Wegovy 우선 채택), 약 20만 명 영향. FY2025 조정 EPS 가이던스 $22.50~24.00→$20.78~22.28로 하향. 가이던스 하향으로 단기 급락(-11%+). 52주 최저 기록.</div>
+      <a class="tl-source" href="https://seekingalpha.com/article/4780589-cvs-excludes-zepbound-why-eli-lilly-11-percent-plus-drop-looks-overdone" target="_blank" rel="noopener">관련 뉴스 보기 (Seeking Alpha) →</a>
+    </div></div>
 </div>
 
 <!-- ===================== S7: 투자 포인트 ===================== -->

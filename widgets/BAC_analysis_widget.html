@@ -11,7 +11,7 @@
     --text: #e8eaf0; --text2: #9aa0b8; --text3: #5c6282;
     --accent: #e31837; --accent2: #ff5a72; --accent3: #3d0810;
     --bull: #D85A30; --bear: #185FA5; --ma5: #ff6b9d; --ma20: #9b59b6; --ma60: #f0c040; --ma120: #22d3ee;
-    --green: #2ecc71; --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+    --green: #2ecc71; --red: #e74c3c; --gold: #f0c040; --event-major: #38bdf8; --event-neutral: #f1c40f; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
@@ -232,10 +232,10 @@
     </div>
     <div class="card">
       <div class="card-title">이동평균선 현황</div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$61.83</span><span class="ma-status status-below">현재가 하회</span></div></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$60.55</span><span class="ma-status status-above">현재가 상회</span></div></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$55.90</span><span class="ma-status status-above">현재가 상회</span></div></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$53.47</span><span class="ma-status status-above">현재가 상회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$61.83</span><span class="ma-status status-below">현재가 하회</span></div></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$60.55</span><span class="ma-status status-above">현재가 상회</span></div></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$55.90</span><span class="ma-status status-above">현재가 상회</span></div></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$53.47</span><span class="ma-status status-above">현재가 상회</span></div></div></div>
       <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">현재가&gt;MA5&gt;MA20&gt;MA60&gt;MA120 순 — 4개 이평선 중 4개 상회 · 기술적 강세. 현재가 $63.00, 52주 고점 $63.97 대비 -1.5%.</div>
     </div>
   </div>
@@ -392,7 +392,7 @@
 </div>
 
 <!-- ===================== SECTION 4: US 특화 ===================== -->
-<div id="us" class="section" data-us-visual="chart"><div class="section-title">US 특화 — 미국 소비자금융·자본시장</div><div class="rel-container"><div class="rel-title">S&P 500 대비 상대 수익률 (52주)</div><div class="grid-3"><div class="stat-box"><div class="stat-label">BAC</div><div class="stat-value up">+27.4%</div></div><div class="stat-box"><div class="stat-label">S&amp;P 500</div><div class="stat-value">+19.6%</div></div><div class="stat-box"><div class="stat-label">알파</div><div class="stat-value up">+7.8%p</div></div></div><div class="zone-list" style="margin-top:12px;"><div class="zone-item"><span class="zone-label">S&amp;P 500</span><span class="zone-val">구성 종목</span></div><div class="zone-item"><span class="zone-label">미국 상장</span><span class="zone-val">NYSE · Financials</span></div></div></div><div class="card"><div class="card-title">미국 소비자금융·금리 민감도 — Q2 2026</div><div class="zone-list"><div class="zone-item"><span class="zone-label">미국 포함 전사 NII 성장 · FY2026</span><span class="zone-val" style="color:var(--green);">가이던스 6~8% 상단</span></div><div class="zone-item"><span class="zone-label">미국 소비자 프랜차이즈 · Q2 2026</span><span class="zone-val">예금·카드·대출의 저비용 자금 기반</span></div><div class="zone-item"><span class="zone-label">미국 신용 모니터 · H2 2026</span><span class="zone-val">카드 연체·상업용 부동산 충당금</span></div><div class="zone-item"><span class="zone-label">미국 금리 모니터 · H2 2026</span><span class="zone-val">예금 베타와 장단기 금리곡선</span></div></div></div><div class="card"><div class="card-title">글로벌 자본시장 매출 비교 — Q2 2026</div><div class="chart-wrap" style="height:220px;"><canvas id="bacUsMarketsChart"></canvas></div><div style="font-size:11px;color:var(--text2);line-height:1.65;margin-top:10px;">단위: $B · 회사 공시 글로벌 Q2 2026 기준. 트레이딩 $7.1B(+33% YoY)가 IB 수수료 $2.1B(+50% YoY)보다 규모가 크다. 이는 미국 단독 매출이 아니며, 미국 투자 판단에서는 CET1 11.2%와 NII 성장 가이던스 상단 달성 여부를 함께 봐야 한다.</div></div></div>
+<div id="us" class="section" data-us-visual="chart"><div class="section-title">US 특화 — 미국 소비자금융·자본시장</div><div class="rel-container"><div class="rel-title">S&P 500 대비 상대 수익률 (52주)</div><div class="grid-3"><div class="stat-box"><div class="stat-label">BAC</div><div class="stat-value up">+27.4%</div></div><div class="stat-box"><div class="stat-label">S&amp;P 500</div><div class="stat-value">+19.6%</div></div><div class="stat-box"><div class="stat-label">알파 (S&amp;P 500 대비 초과수익률)</div><div class="stat-value up">+7.8%p</div></div></div><div class="zone-list" style="margin-top:12px;"><div class="zone-item"><span class="zone-label">S&amp;P 500</span><span class="zone-val">구성 종목</span></div><div class="zone-item"><span class="zone-label">미국 상장</span><span class="zone-val">NYSE · Financials</span></div></div></div><div class="card"><div class="card-title">미국 소비자금융·금리 민감도 — Q2 2026</div><div class="zone-list"><div class="zone-item"><span class="zone-label">미국 포함 전사 NII 성장 · FY2026</span><span class="zone-val" style="color:var(--green);">가이던스 6~8% 상단</span></div><div class="zone-item"><span class="zone-label">미국 소비자 프랜차이즈 · Q2 2026</span><span class="zone-val">예금·카드·대출의 저비용 자금 기반</span></div><div class="zone-item"><span class="zone-label">미국 신용 모니터 · H2 2026</span><span class="zone-val">카드 연체·상업용 부동산 충당금</span></div><div class="zone-item"><span class="zone-label">미국 금리 모니터 · H2 2026</span><span class="zone-val">예금 베타와 장단기 금리곡선</span></div></div></div><div class="card"><div class="card-title">글로벌 자본시장 매출 비교 — Q2 2026</div><div class="chart-wrap" style="height:220px;"><canvas id="bacUsMarketsChart"></canvas></div><div style="font-size:11px;color:var(--text2);line-height:1.65;margin-top:10px;">단위: $B · 회사 공시 글로벌 Q2 2026 기준. 트레이딩 $7.1B(+33% YoY)가 IB 수수료 $2.1B(+50% YoY)보다 규모가 크다. 이는 미국 단독 매출이 아니며, 미국 투자 판단에서는 CET1 11.2%와 NII 성장 가이던스 상단 달성 여부를 함께 봐야 한다.</div></div></div>
 
 <!-- ===================== SECTION 5: 시계열 뉴스 ===================== -->
 <div id="news" class="section">
@@ -405,38 +405,33 @@
   </div>
   <div class="timeline">
     <div class="tl-item">
+      <div class="tl-dot today"></div>
+      <div class="tl-date">2026년 7월 20일 — 현재</div>
+      <div class="tl-title">고점 대비 -2.7% 소폭 조정, $61.07에서 거래 중</div>
+      <div class="tl-desc">거의 완전한 이평선 정배열을 유지한 채 신고가 이후 소폭 숨고르기 중. 다음 실적(10월 Q3)까지는 트레이딩·IB 부문의 매크로 환경 변화가 주가의 핵심 변수가 될 전망.</div>
+    </div><div class="tl-item">
       <div class="tl-dot"></div>
-      <div class="tl-date">2025년 8월 5일 — 52주 저점 $44.75</div>
-      <div class="tl-title">시장 전반 조정 속 바닥 형성</div>
-      <div class="tl-desc">거시 불확실성 속 은행주 전반의 조정 국면에서 저점을 형성. 이후 견조한 트레이딩·IB 실적이 이어지며 반등 국면 진입.</div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot green"></div>
-      <div class="tl-date">2026년 4월 15일 — Q1 FY2026 실적 발표</div>
-      <div class="tl-title">EPS $1.11로 20년래 최고, 소비자은행 "건전"</div>
-      <div class="tl-desc">매출 $30.3B(+7%), 순이익 $8.6B(+25%)로 EPS가 거의 20년 만의 최고 수준을 기록. CEO Brian Moynihan은 소비자 부문이 "건전한" 상태라고 평가.</div>
-      <a class="tl-source" href="https://www.cnbc.com/2026/04/15/bank-of-america-bac-earnings-q1-2026.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
-    </div>
-    <div class="tl-item">
+      <div class="tl-date">2026년 7월 17일 — 52주 신고가 $62.99</div>
+      <div class="tl-title">Q2 실적 서프라이즈 여진 — 연중 최고가 경신</div>
+      <div class="tl-desc">Q2 실적 발표 이후 매수세가 이어지며 연중 최고가를 기록. 이후 소폭 조정을 겪으며 $60선에서 등락.</div>
+    </div><div class="tl-item">
       <div class="tl-dot neutral"></div>
       <div class="tl-date">2026년 7월 14일 — Q2 FY2026 실적 발표</div>
       <div class="tl-title">매출 $31.6B(+15%)·EPS $1.21(+34%) — 트레이딩 사상 최대</div>
       <div class="tl-desc">주식 트레이딩 매출 +70% YoY($3.6B), 투자은행 수수료 +50% YoY($2.1B)로 전체 트레이딩 매출이 17분기 연속 성장. 순이자마진 가이던스도 상단으로 상향하며 실적 발표 당일 주가 급등.</div>
       <a class="tl-source" href="https://qz.com/bank-of-america-earnings-record-equities-trading-investment-banking-071426" target="_blank" rel="noopener">관련 뉴스 보기 (Quartz) →</a>
-    </div>
-    <div class="tl-item">
+    </div><div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">2026년 4월 15일 — Q1 FY2026 실적 발표</div>
+      <div class="tl-title">EPS $1.11로 20년래 최고, 소비자은행 "건전"</div>
+      <div class="tl-desc">매출 $30.3B(+7%), 순이익 $8.6B(+25%)로 EPS가 거의 20년 만의 최고 수준을 기록. CEO Brian Moynihan은 소비자 부문이 "건전한" 상태라고 평가.</div>
+      <a class="tl-source" href="https://www.cnbc.com/2026/04/15/bank-of-america-bac-earnings-q1-2026.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
+    </div><div class="tl-item">
       <div class="tl-dot"></div>
-      <div class="tl-date">2026년 7월 17일 — 52주 신고가 $62.99</div>
-      <div class="tl-title">Q2 실적 서프라이즈 여진 — 연중 최고가 경신</div>
-      <div class="tl-desc">Q2 실적 발표 이후 매수세가 이어지며 연중 최고가를 기록. 이후 소폭 조정을 겪으며 $60선에서 등락.</div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot today"></div>
-      <div class="tl-date">2026년 7월 20일 — 현재</div>
-      <div class="tl-title">고점 대비 -2.7% 소폭 조정, $61.07에서 거래 중</div>
-      <div class="tl-desc">거의 완전한 이평선 정배열을 유지한 채 신고가 이후 소폭 숨고르기 중. 다음 실적(10월 Q3)까지는 트레이딩·IB 부문의 매크로 환경 변화가 주가의 핵심 변수가 될 전망.</div>
-    </div>
-  </div>
+      <div class="tl-date">2025년 8월 5일 — 52주 저점 $44.75</div>
+      <div class="tl-title">시장 전반 조정 속 바닥 형성</div>
+      <div class="tl-desc">거시 불확실성 속 은행주 전반의 조정 국면에서 저점을 형성. 이후 견조한 트레이딩·IB 실적이 이어지며 반등 국면 진입.</div>
+    </div></div>
 </div>
 
 <!-- ===================== SECTION 6: 투자 포인트 ===================== -->
@@ -445,19 +440,19 @@
   <div class="bull-bear">
     <div class="bb-box">
       <div class="bb-title bb-bull">🐂 Bull 요인</div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>17분기 연속 트레이딩 매출 성장:</strong> 구조적 경쟁력 입증.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Q2 EPS $1.21 — 20년래 최고:</strong> 광범위한 사업부 고른 성장.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>PER 13.9x·PBR 1.51x:</strong> 대형은행 중 합리적 밸류에이션.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>52주 수익률 +27.4%:</strong> S&P500 대비 +8.1%p 아웃퍼폼.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>CET1 11.2%:</strong> 자사주매입·배당 확대 여력 충분.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>17분기 연속 트레이딩 매출 성장:</strong> 구조적 경쟁력 입증.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Q2 EPS $1.21 — 20년래 최고:</strong> 광범위한 사업부 고른 성장.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>PER 13.9x·PBR 1.51x:</strong> 대형은행 중 합리적 밸류에이션.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>52주 수익률 +27.4%:</strong> S&P500 대비 +8.1%p 아웃퍼폼.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>CET1 11.2%:</strong> 자사주매입·배당 확대 여력 충분.</span></div>
     </div>
     <div class="bb-box">
       <div class="bb-title bb-bear">🐻 Bear 요인</div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>트레이딩·IB 의존도 확대:</strong> 시장 변동성 급감 시 이익 정상화 리스크.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>52주 신고가 직후 조정:</strong> 단기 과열 우려.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>금리 환경 변화 민감도:</strong> 순이자마진이 금리 경로에 좌우.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>거시 불확실성:</strong> 소비자·기업 신용 사이클 반전 리스크.</span></div>
-    <div class="bb-item"><span class="bb-icon">▼</span><span><strong>신용비용:</strong> 카드 연체와 상업용 부동산 충당금이 정상화 속도를 늦출 수 있다.</span></div></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>트레이딩·IB 의존도 확대:</strong> 시장 변동성 급감 시 이익 정상화 리스크.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>52주 신고가 직후 조정:</strong> 단기 과열 우려.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>금리 환경 변화 민감도:</strong> 순이자마진이 금리 경로에 좌우.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>거시 불확실성:</strong> 소비자·기업 신용 사이클 반전 리스크.</span></div>
+    <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>신용비용:</strong> 카드 연체와 상업용 부동산 충당금이 정상화 속도를 늦출 수 있다.</span></div></div>
   </div>
   <div class="card" style="margin-top:16px;">
     <div class="card-title">목표가 밴드 — 시나리오별 공정가치 vs 현재가 · 애널리스트 목표가</div>

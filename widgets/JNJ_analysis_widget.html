@@ -11,7 +11,7 @@
     --text: #e8eaf0; --text2: #9aa0b8; --text3: #5c6282;
     --accent: #a01d3a; --accent2: #d15772; --accent3: #4a0e1c;
     --bull: #D85A30; --bear: #185FA5; --ma5: #ff6b9d; --ma20: #9b59b6; --ma60: #f0c040; --ma120: #22d3ee;
-    --green: #2ecc71; --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+    --green: #2ecc71; --red: #e74c3c; --gold: #f0c040; --event-major: #38bdf8; --event-neutral: #f1c40f; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
@@ -244,10 +244,10 @@
     </div>
     <div class="card">
       <div class="card-title">이동평균선 현황</div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기)</span><span class="ma-val">$256.05</span><span class="ma-status status-above">현재가 상회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기)</span><span class="ma-val">$256.53</span><span class="ma-status status-above">현재가 상회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기)</span><span class="ma-val">$244.25</span><span class="ma-status status-above">현재가 상회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기)</span><span class="ma-val">$240.83</span><span class="ma-status status-above">현재가 상회</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기)</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$256.05</span><span class="ma-status status-above">현재가 상회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기)</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$256.53</span><span class="ma-status status-above">현재가 상회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기)</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$244.25</span><span class="ma-status status-above">현재가 상회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기)</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$240.83</span><span class="ma-status status-above">현재가 상회</span></div></div>
       <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">현재가&gt;MA20&gt;MA5&gt;MA60&gt;MA120 순 — 4개 이평선 중 4개 상회 · 기술적 강세. 현재가 $256.98, 52주 고점 $274.90 대비 -6.5%.</div>
     </div>
   </div>
@@ -460,46 +460,40 @@
   </div>
   <div class="timeline">
     <div class="tl-item">
-      <div class="tl-dot"></div>
-      <div class="tl-date">2025년 7월 21일 — 52주 저점 $164.23</div>
-      <div class="tl-title">저점 형성 후 반등 시작</div>
-      <div class="tl-desc">탈크 소송 우려가 정점에 달했던 시기의 저점을 형성. 이후 완만한 반등 국면 진입.</div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot green"></div>
-      <div class="tl-date">2025년 10월 — Q3 FY2025 실적</div>
-      <div class="tl-title">GAAP EPS $2.12(+91% YoY, 전년 소송충당금 기저효과) · Adj EPS $2.80</div>
-      <div class="tl-desc">전년 동기 대규모 소송충당금 기저효과로 GAAP EPS가 급증. 2025년 매출 가이던스 상향.</div>
-      <a class="tl-source" href="https://www.cnbc.com/2025/10/14/jj-to-spin-off-orthopedics-business-raises-full-year-forecast.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot neutral"></div>
-      <div class="tl-date">2026년 1월 21일 — Q4·FY2025 실적</div>
-      <div class="tl-title">FY2025 GAAP EPS $11.03(+90.5%) · FY2026 가이던스 최초 제시</div>
-      <div class="tl-desc">FY2025 매출 $94.2B(+6.0%), GAAP EPS가 전년 대비 90.5% 급증(소송충당금 감소 효과). FY2026 매출 $100.5B·Adj EPS $11.53 가이던스 최초 제시.</div>
-      <a class="tl-source" href="https://www.biospace.com/press-releases/johnson-johnson-reports-q4-and-full-year-2025-results" target="_blank" rel="noopener">관련 뉴스 보기 (BioSpace) →</a>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot green"></div>
-      <div class="tl-date">2026년 4월 — Q1 FY2026 실적 · 배당 인상</div>
-      <div class="tl-title">분기배당 $1.34로 3.1% 인상 — 64년 연속 증배</div>
-      <div class="tl-desc">이사회가 분기 배당을 3.1% 인상하며 64년 연속 배당 증가 기록 수립. Q1 매출 $24.06B(+9.9%), FY2026 가이던스 추가 상향.</div>
-      <a class="tl-source" href="https://finance.yahoo.com/markets/stocks/articles/johnson-johnson-raises-dividend-64th-165545251.html" target="_blank" rel="noopener">관련 뉴스 보기 (Yahoo Finance) →</a>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot neutral"></div>
-      <div class="tl-date">2026년 7월 7일 — 52주 신고가 $274.90</div>
-      <div class="tl-title">신약 파이프라인 모멘텀 지속으로 사상 최고가 경신</div>
-      <div class="tl-desc">DARZALEX·CARVYKTI 등 Oncology 성장과 실적 기대감으로 52주 신고가 달성.</div>
-    </div>
-    <div class="tl-item">
       <div class="tl-dot red"></div>
       <div class="tl-date">2026년 7월 15일 — Q2 FY2026 실적, 주가 조정</div>
       <div class="tl-title">매출 $25.31B 가이던스 상향에도 MedTech 부진 우려로 -2.7%</div>
       <div class="tl-desc">매출·Adjusted EPS 모두 컨센서스 상회, FY2026 가이던스 재차 상향에도 MedTech 심혈관(특히 heart recovery) 부문 부진 우려로 주가는 오히려 -2.7% 하락. 이후 2거래일간 $265.53까지 재반등.</div>
       <a class="tl-source" href="https://www.tradingkey.com/analysis/stocks/us-stocks/262031909-jnj-q2-earnings-beat-estimates-yet-pre-market-shares-dip-tradingkey" target="_blank" rel="noopener">관련 뉴스 보기 (TradingKey) →</a>
-    </div>
-  </div>
+    </div><div class="tl-item">
+      <div class="tl-dot neutral"></div>
+      <div class="tl-date">2026년 7월 7일 — 52주 신고가 $274.90</div>
+      <div class="tl-title">신약 파이프라인 모멘텀 지속으로 사상 최고가 경신</div>
+      <div class="tl-desc">DARZALEX·CARVYKTI 등 Oncology 성장과 실적 기대감으로 52주 신고가 달성.</div>
+    </div><div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">2026년 4월 — Q1 FY2026 실적 · 배당 인상</div>
+      <div class="tl-title">분기배당 $1.34로 3.1% 인상 — 64년 연속 증배</div>
+      <div class="tl-desc">이사회가 분기 배당을 3.1% 인상하며 64년 연속 배당 증가 기록 수립. Q1 매출 $24.06B(+9.9%), FY2026 가이던스 추가 상향.</div>
+      <a class="tl-source" href="https://finance.yahoo.com/markets/stocks/articles/johnson-johnson-raises-dividend-64th-165545251.html" target="_blank" rel="noopener">관련 뉴스 보기 (Yahoo Finance) →</a>
+    </div><div class="tl-item">
+      <div class="tl-dot neutral"></div>
+      <div class="tl-date">2026년 1월 21일 — Q4·FY2025 실적</div>
+      <div class="tl-title">FY2025 GAAP EPS $11.03(+90.5%) · FY2026 가이던스 최초 제시</div>
+      <div class="tl-desc">FY2025 매출 $94.2B(+6.0%), GAAP EPS가 전년 대비 90.5% 급증(소송충당금 감소 효과). FY2026 매출 $100.5B·Adj EPS $11.53 가이던스 최초 제시.</div>
+      <a class="tl-source" href="https://www.biospace.com/press-releases/johnson-johnson-reports-q4-and-full-year-2025-results" target="_blank" rel="noopener">관련 뉴스 보기 (BioSpace) →</a>
+    </div><div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">2025년 10월 — Q3 FY2025 실적</div>
+      <div class="tl-title">GAAP EPS $2.12(+91% YoY, 전년 소송충당금 기저효과) · Adj EPS $2.80</div>
+      <div class="tl-desc">전년 동기 대규모 소송충당금 기저효과로 GAAP EPS가 급증. 2025년 매출 가이던스 상향.</div>
+      <a class="tl-source" href="https://www.cnbc.com/2025/10/14/jj-to-spin-off-orthopedics-business-raises-full-year-forecast.html" target="_blank" rel="noopener">관련 뉴스 보기 (CNBC) →</a>
+    </div><div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2025년 7월 21일 — 52주 저점 $164.23</div>
+      <div class="tl-title">저점 형성 후 반등 시작</div>
+      <div class="tl-desc">탈크 소송 우려가 정점에 달했던 시기의 저점을 형성. 이후 완만한 반등 국면 진입.</div>
+    </div></div>
 </div>
 
 <!-- ===================== SECTION 6: 투자 포인트 ===================== -->
@@ -508,19 +502,19 @@
   <div class="bull-bear">
     <div class="bb-box">
       <div class="bb-title bb-bull">🐂 Bull 요인</div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>64년 연속 배당 증가:</strong> S&P500 내에서도 최장 기록급 Dividend King.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>DARZALEX·CARVYKTI·TREMFYA 고성장·가이던스 상향:</strong> 신약 파이프라인 모멘텀.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>52주 수익률 +58.0% — S&P500 대비 +34.9%p:</strong> 압도적 아웃퍼폼.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>탈크 소송 충당금 감소 추세:</strong> GAAP 변동성 완화 국면 진입.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>Adj P/E 23.3x·EV/EBITDA 15.9x:</strong> 대형 제약 피어 대비 합리적 밸류에이션.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>64년 연속 배당 증가:</strong> S&P500 내에서도 최장 기록급 Dividend King.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>DARZALEX·CARVYKTI·TREMFYA 고성장·가이던스 상향:</strong> 신약 파이프라인 모멘텀.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>52주 수익률 +58.0% — S&P500 대비 +34.9%p:</strong> 압도적 아웃퍼폼.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>탈크 소송 충당금 감소 추세:</strong> GAAP 변동성 완화 국면 진입.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Adj P/E 23.3x·EV/EBITDA 15.9x:</strong> 대형 제약 피어 대비 합리적 밸류에이션.</span></div>
     </div>
     <div class="bb-box">
       <div class="bb-title bb-bear">🐻 Bear 요인</div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>MedTech 심혈관(Cardiovascular) 부문 부진:</strong> 실적일 주가 조정 요인.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>STELARA 특허절벽 지속:</strong> 매출 성장률 -760bp 하방 압력.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>PBR 7.48x:</strong> M&A 중심 성장으로 절대 밸류에이션 부담.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>탈크 소송 리스크 완전 해소 안 됨:</strong> 추가 충당금 가능성 상존.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>52주 신고가 대비 -6.1%:</strong> 최근 실적 발표 후 조정 국면.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>MedTech 심혈관(Cardiovascular) 부문 부진:</strong> 실적일 주가 조정 요인.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>STELARA 특허절벽 지속:</strong> 매출 성장률 -760bp 하방 압력.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>PBR 7.48x:</strong> M&A 중심 성장으로 절대 밸류에이션 부담.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>탈크 소송 리스크 완전 해소 안 됨:</strong> 추가 충당금 가능성 상존.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>52주 신고가 대비 -6.1%:</strong> 최근 실적 발표 후 조정 국면.</span></div>
     </div>
   </div>
   <div class="card" style="margin-top:16px;">

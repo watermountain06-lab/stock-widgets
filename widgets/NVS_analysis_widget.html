@@ -12,12 +12,12 @@
     --text: #e8eaf0; --text2: #9aa0b8; --text3: #5c6282;
     --accent: #ef4444; --accent2: #38bdf8; --accent3: #7f1d1d;
     --bull: #D85A30; --bear: #185FA5; --ma5: #ff6b9d; --ma20: #9b59b6; --ma60: #f0c040; --ma120: #22d3ee;
-    --green: #2ecc71; --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+    --green: #2ecc71; --red: #e74c3c; --gold: #f0c040; --event-major: #38bdf8; --event-neutral: #f1c40f; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
-  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; }
-  .header { background: linear-gradient(135deg, #061627 0%, #0f1117 40%, #1a1d27 100%); border-bottom: 2px solid var(--accent3); padding: 28px 32px 24px; position: relative; overflow: hidden; }
+  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; max-width: 1100px; margin: 0 auto;}
+  .header { background: linear-gradient(135deg, #061627 0%, #0f1117 40%, #1a1d27 100%); border-bottom: 2px solid var(--accent3); padding: 28px 32px 24px; position: relative; overflow: hidden; max-width: 1100px; margin: 0 auto;}
   .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(56,189,248,0.14) 0%, transparent 70%); pointer-events: none; }
   .header-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
   .ticker-block { display: flex; align-items: center; gap: 16px; }
@@ -32,12 +32,12 @@
   .meta-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
   .meta-value { font-size: 14px; font-weight: 600; color: var(--text2); margin-top: 2px; }
   .meta-value.highlight { color: var(--accent2); }
-  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto;}
   .nav::-webkit-scrollbar { display: none; }
   .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
   .nav-btn:hover { color: var(--text); background: var(--bg3); }
   .nav-btn.active { background: var(--accent3); color: var(--accent2); }
-  .section { display: none; padding: 28px 32px; }
+  .section { display: none; padding: 28px 32px; max-width: 1100px; margin: 0 auto;}
   .section.active { display: block; }
   .section-title { font-size: 16px; font-weight: 700; color: var(--accent2); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
   .section-title::before { content: ''; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; display: inline-block; }
@@ -126,7 +126,7 @@
   .ps-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
   .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
   .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
-  .disclaimer { margin: 28px 32px 16px; padding: 12px 16px; background: rgba(56,189,248,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
+  .disclaimer { margin: 28px auto 16px; padding: 12px 16px; background: rgba(56,189,248,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; max-width: 1100px;}
   .box-key { background: rgba(56,189,248,0.1); border: 1px solid var(--accent3); border-radius: var(--radius); padding: 12px 16px; margin: 0 32px 16px; }
   .status-amber { background: rgba(240,192,64,0.18); color: var(--ma60); }
   .range-toggle { display: flex; gap: 4px; }
@@ -228,10 +228,10 @@
 </div>
 <div class="card">
 <div class="card-title">이동평균선 현황</div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 <span class="ma-val">$157.19</span></span><span class="ma-status status-above">현재가 상회</span></div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 <span class="ma-val">$154.69</span></span><span class="ma-status status-above">현재가 상회</span></div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 <span class="ma-val">$151.40</span></span><span class="ma-status status-above">현재가 상회</span></div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 <span class="ma-val">$153.31</span></span><span class="ma-status status-above">현재가 상회</span></div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$157.19</span><span class="ma-status status-above">현재가 상회</span></div></div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$154.69</span><span class="ma-status status-above">현재가 상회</span></div></div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$151.40</span><span class="ma-status status-above">현재가 상회</span></div></div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$153.31</span><span class="ma-status status-above">현재가 상회</span></div></div>
 <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">MA20&gt;MA5&gt;현재가&gt;MA120&gt;MA60 순 — 4개 이평선 중 2개 상회 · 혼조. 현재가 $154.21, 52주 고점 $170.46 대비 -9.5%.</div>
 </div>
 </div>
@@ -320,11 +320,11 @@
 <div class="grid-3">
 <div class="stat-box"><div class="stat-label">NVS 52주</div><div class="stat-value up">+35.5%</div></div>
 <div class="stat-box"><div class="stat-label">S&P 500 52주</div><div class="stat-value">16.8%</div></div>
-<div class="stat-box"><div class="stat-label">알파</div><div class="stat-value up">+18.7%p</div></div>
+<div class="stat-box"><div class="stat-label">알파 (S&amp;P 500 대비 초과수익률)</div><div class="stat-value up">+18.7%p</div></div>
 </div>
 <div class="zone-list" style="margin-top:12px;">
 <div class="zone-item"><span class="zone-label">S&P 500 편입</span><span class="zone-val">비구성 · 스위스 ADR</span></div>
-<div class="zone-item"><span class="zone-label">베타</span><span class="zone-val">0.55</span></div>
+<div class="zone-item"><span class="zone-label">베타 (시장 대비 주가 변동성, 1보다 낮으면 덜 흔들림)</span><span class="zone-val">0.55</span></div>
 </div>
 </div>
 <div class="card">

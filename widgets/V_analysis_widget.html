@@ -15,8 +15,8 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
-  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; }
-  .header { background: linear-gradient(135deg, #0a0b2e 0%, #0f1117 40%, #1a1d27 100%); border-bottom: 2px solid var(--accent3); padding: 28px 32px 24px; position: relative; overflow: hidden; }
+  .today-banner { background: rgba(255,193,7,0.12); border: 1px solid #ffc107; border-radius: 8px; padding: 8px 32px; font-size: 12px; color: #ffc107; max-width: 1100px; margin: 0 auto;}
+  .header { background: linear-gradient(135deg, #0a0b2e 0%, #0f1117 40%, #1a1d27 100%); border-bottom: 2px solid var(--accent3); padding: 28px 32px 24px; position: relative; overflow: hidden; max-width: 1100px; margin: 0 auto;}
   .header::before { content: ''; position: absolute; top: -60px; right: -60px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(107,127,212,0.14) 0%, transparent 70%); pointer-events: none; }
   .header-top { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
   .ticker-block { display: flex; align-items: center; gap: 16px; }
@@ -31,12 +31,12 @@
   .meta-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
   .meta-value { font-size: 14px; font-weight: 600; color: var(--text2); margin-top: 2px; }
   .meta-value.highlight { color: var(--accent2); }
-  .nav { display: flex; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .nav { display: flex; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto;}
   .nav::-webkit-scrollbar { display: none; }
   .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
   .nav-btn:hover { color: var(--text); background: var(--bg3); }
   .nav-btn.active { background: var(--accent3); color: var(--accent2); }
-  .section { display: none; padding: 28px 32px; }
+  .section { display: none; padding: 28px 32px; max-width: 1100px; margin: 0 auto;}
   .section.active { display: block; }
   .section-title { font-size: 16px; font-weight: 700; color: var(--accent2); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
   .section-title::before { content: ''; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; display: inline-block; }
@@ -126,7 +126,7 @@
   .ps-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
   .rel-container { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
   .rel-title { font-size: 12px; color: var(--text3); margin-bottom: 12px; font-weight: 600; }
-  .disclaimer { margin: 28px 32px 16px; padding: 12px 16px; background: rgba(107,127,212,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; }
+  .disclaimer { margin: 28px auto 16px; padding: 12px 16px; background: rgba(107,127,212,0.06); border: 1px solid var(--accent3); border-radius: 8px; font-size: 11px; color: var(--text3); line-height: 1.6; max-width: 1100px;}
   .info-box { background: rgba(107,127,212,0.1); border: 1px solid var(--accent3); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; color: var(--text2); }
   @media (max-width: 600px) {
     .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
@@ -240,10 +240,10 @@
     </div>
     <div class="card">
       <div class="card-title">이동평균선 현황</div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기)</span><span class="ma-val">$368.08</span><span class="ma-status status-above">현재가 상회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기)</span><span class="ma-val">$361.16</span><span class="ma-status status-above">현재가 상회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기)</span><span class="ma-val">$340.90</span><span class="ma-status status-above">현재가 상회</span></div>
-      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기)</span><span class="ma-val">$326.59</span><span class="ma-status status-above">현재가 상회</span></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 (단기)</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$368.08</span><span class="ma-status status-above">현재가 상회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 (중단기)</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$361.16</span><span class="ma-status status-above">현재가 상회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 (중기)</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$340.90</span><span class="ma-status status-above">현재가 상회</span></div></div>
+      <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 (장기)</span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$326.59</span><span class="ma-status status-above">현재가 상회</span></div></div>
       <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">현재가&gt;MA5&gt;MA20&gt;MA60&gt;MA120 순 — 4개 이평선 중 4개 상회 · 기술적 강세. 현재가 $370.47, 52주 고점 $373.97 대비 -0.9%.</div>
     </div>
   </div>
@@ -449,48 +449,42 @@
   </div>
   <div class="timeline">
     <div class="tl-item">
-      <div class="tl-dot"></div>
-      <div class="tl-date">2025년 7월 — Q3 FY2025 실적</div>
-      <div class="tl-title">매출 $10.2B(+14%) · GAAP EPS $2.69(+12%) · $340~350 박스권</div>
-      <div class="tl-desc">CEO Ryan McInerney "14% 매출 성장, 건강한 소비 지속" 코멘트. 자사주매입+배당 $6.0B(7/29 발표). 견조한 실적에도 특별한 주가 모멘텀 없이 횡보.</div>
-      <a class="tl-source" href="https://www.fool.com/earnings/call-transcripts/2025/08/04/visa-v-q3-2025-earnings-call-transcript/" target="_blank" rel="noopener">관련 뉴스 보기 (Motley Fool) →</a>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot red"></div>
-      <div class="tl-date">2025년 11월 — $318 저점, 규제 리스크 부각</div>
-      <div class="tl-title">Credit Card Competition Act 재발의 조짐 · 결제주 전반 밸류에이션 재평가 시작</div>
-      <div class="tl-desc">인터체인지 수수료 규제 관련 정치적 수사가 재점화되며 Visa·Mastercard 등 결제 네트워크 전반의 밸류에이션 압박 시작(정식 재발의는 2026년 1월 13일). NTM EV/EBITDA 24.2x대에서 하락 전환.</div>
-      <a class="tl-source" href="https://www.durbin.senate.gov/newsroom/press-releases/durbin-marshall-reintroduce-the-credit-card-competition-act" target="_blank" rel="noopener">관련 뉴스 보기 (Sen. Durbin) →</a>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot red"></div>
-      <div class="tl-date">2026년 1~4월 — 52주 신저점 $293.89</div>
-      <div class="tl-title">CCCA 정식 재발의(1/13) · 소비심리 급락 · 밸류에이션 압축 → YTD -14%</div>
-      <div class="tl-desc">Credit Card Competition Act 상하원 동시 재발의. 미시간대 소비자심리지수 56.6→53.3(2월→3월)로 침체 수준 근접(중립선 80 크게 하회). 실적은 견조했음에도 거시 불안·규제 우려로 NTM EV/EBITDA 18.8x까지 압축, $293.89 52주 저점 기록(3월 하순).</div>
-      <a class="tl-source" href="https://www.tikr.com/blog/visa-stock-has-fallen-16-from-its-52-week-high-is-it-finally-a-buy-in-2026" target="_blank" rel="noopener">관련 뉴스 보기 (TIKR) →</a>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot green"></div>
-      <div class="tl-date">2026년 4월 — Q2 FY2026 어닝서프라이즈</div>
-      <div class="tl-title">GAAP EPS $3.14(+36%) · $20B 신규 자사주 매입 승인 · 배당 14% 인상</div>
-      <div class="tl-desc">매출 $11.2B(+17%)로 2022년 이후 최고 성장률. GAAP EPS $3.14(+36%), Non-GAAP EPS $3.31(+20%). 이사회가 $20.0B 규모 다년간 자사주 매입 프로그램 신규 승인(분기 중 $7.9B 역대 최대 매입 실행), 분기 배당 $0.670 확정 — 저점 이후 반등의 기점.</div>
-      <a class="tl-source" href="https://www.stocktitan.net/sec-filings/V/8-k-visa-inc-reports-material-event-e5b890a6c4d8.html" target="_blank" rel="noopener">관련 뉴스 보기 →</a>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot"></div>
-      <div class="tl-date">2026년 6월 — Visa Payments Forum, AI·스테이블코인 확대</div>
-      <div class="tl-title">OpenAI 전략적 제휴 · Agent Score·Agentic Directory 공개 · 스테이블코인 연 $7B 규모</div>
-      <div class="tl-desc">Visa Payments Forum(6/10)에서 에이전틱 커머스를 위한 AI 도구(Agent Score, Agentic Directory) 공개, OpenAI와 전략적 제휴 — ChatGPT 내 Visa 결제망 임베딩으로 AI 에이전트의 자율 구매 지원. VisaNet 위 스테이블코인 정산 규모 연 $7B 페이스로 확대, 은행의 토큰화 예금(프로그래머블 머니) 인프라 구축 계획도 공개.</div>
-      <a class="tl-source" href="https://www.pymnts.com/visa/2026/visa-launches-ai-and-stablecoin-tools-to-power-agentic-commerce/" target="_blank" rel="noopener">관련 뉴스 보기 (PYMNTS) →</a>
-    </div>
-    <div class="tl-item">
       <div class="tl-dot neutral"></div>
       <div class="tl-date">2026년 7월 16일 — 52주 신고가 $373.97</div>
       <div class="tl-title">4월 저점 대비 +24.2% 반등 · 52주 신고가 경신 후 소폭 조정</div>
       <div class="tl-desc">Q1·Q2 FY26 연속 어닝서프라이즈와 AI·스테이블코인 내러티브를 바탕으로 52주 신고가 $373.97 달성(2025년 6월 기록한 사상 최고가 $370.38에는 미치지 못함). 다음날(7/17) -1.96% 조정, $357.98 마감.</div>
       <a class="tl-source" href="https://finance.yahoo.com/quote/V/" target="_blank" rel="noopener">관련 뉴스 보기 (Yahoo Finance) →</a>
-    </div>
-  </div>
+    </div><div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2026년 6월 — Visa Payments Forum, AI·스테이블코인 확대</div>
+      <div class="tl-title">OpenAI 전략적 제휴 · Agent Score·Agentic Directory 공개 · 스테이블코인 연 $7B 규모</div>
+      <div class="tl-desc">Visa Payments Forum(6/10)에서 에이전틱 커머스를 위한 AI 도구(Agent Score, Agentic Directory) 공개, OpenAI와 전략적 제휴 — ChatGPT 내 Visa 결제망 임베딩으로 AI 에이전트의 자율 구매 지원. VisaNet 위 스테이블코인 정산 규모 연 $7B 페이스로 확대, 은행의 토큰화 예금(프로그래머블 머니) 인프라 구축 계획도 공개.</div>
+      <a class="tl-source" href="https://www.pymnts.com/visa/2026/visa-launches-ai-and-stablecoin-tools-to-power-agentic-commerce/" target="_blank" rel="noopener">관련 뉴스 보기 (PYMNTS) →</a>
+    </div><div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">2026년 4월 — Q2 FY2026 어닝서프라이즈</div>
+      <div class="tl-title">GAAP EPS $3.14(+36%) · $20B 신규 자사주 매입 승인 · 배당 14% 인상</div>
+      <div class="tl-desc">매출 $11.2B(+17%)로 2022년 이후 최고 성장률. GAAP EPS $3.14(+36%), Non-GAAP EPS $3.31(+20%). 이사회가 $20.0B 규모 다년간 자사주 매입 프로그램 신규 승인(분기 중 $7.9B 역대 최대 매입 실행), 분기 배당 $0.670 확정 — 저점 이후 반등의 기점.</div>
+      <a class="tl-source" href="https://www.stocktitan.net/sec-filings/V/8-k-visa-inc-reports-material-event-e5b890a6c4d8.html" target="_blank" rel="noopener">관련 뉴스 보기 →</a>
+    </div><div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-date">2026년 1~4월 — 52주 신저점 $293.89</div>
+      <div class="tl-title">CCCA 정식 재발의(1/13) · 소비심리 급락 · 밸류에이션 압축 → YTD -14%</div>
+      <div class="tl-desc">Credit Card Competition Act 상하원 동시 재발의. 미시간대 소비자심리지수 56.6→53.3(2월→3월)로 침체 수준 근접(중립선 80 크게 하회). 실적은 견조했음에도 거시 불안·규제 우려로 NTM EV/EBITDA 18.8x까지 압축, $293.89 52주 저점 기록(3월 하순).</div>
+      <a class="tl-source" href="https://www.tikr.com/blog/visa-stock-has-fallen-16-from-its-52-week-high-is-it-finally-a-buy-in-2026" target="_blank" rel="noopener">관련 뉴스 보기 (TIKR) →</a>
+    </div><div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-date">2025년 11월 — $318 저점, 규제 리스크 부각</div>
+      <div class="tl-title">Credit Card Competition Act 재발의 조짐 · 결제주 전반 밸류에이션 재평가 시작</div>
+      <div class="tl-desc">인터체인지 수수료 규제 관련 정치적 수사가 재점화되며 Visa·Mastercard 등 결제 네트워크 전반의 밸류에이션 압박 시작(정식 재발의는 2026년 1월 13일). NTM EV/EBITDA 24.2x대에서 하락 전환.</div>
+      <a class="tl-source" href="https://www.durbin.senate.gov/newsroom/press-releases/durbin-marshall-reintroduce-the-credit-card-competition-act" target="_blank" rel="noopener">관련 뉴스 보기 (Sen. Durbin) →</a>
+    </div><div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2025년 7월 — Q3 FY2025 실적</div>
+      <div class="tl-title">매출 $10.2B(+14%) · GAAP EPS $2.69(+12%) · $340~350 박스권</div>
+      <div class="tl-desc">CEO Ryan McInerney "14% 매출 성장, 건강한 소비 지속" 코멘트. 자사주매입+배당 $6.0B(7/29 발표). 견조한 실적에도 특별한 주가 모멘텀 없이 횡보.</div>
+      <a class="tl-source" href="https://www.fool.com/earnings/call-transcripts/2025/08/04/visa-v-q3-2025-earnings-call-transcript/" target="_blank" rel="noopener">관련 뉴스 보기 (Motley Fool) →</a>
+    </div></div>
 </div>
 
 <!-- ===================== SECTION 7: 투자 포인트 ===================== -->
@@ -499,19 +493,19 @@
   <div class="bull-bear">
     <div class="bb-box">
       <div class="bb-title bb-bull">🐂 Bull 요인</div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>영업이익률 60% 초고마진 · 4개 분기 연속 EPS 서프라이즈:</strong> 검증된 사업 품질.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>$20B 신규 자사주 매입 + 배당 14% 인상:</strong> 강력한 주주환원.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>OpenAI 제휴·에이전틱 커머스 선점:</strong> AI 결제 인프라 주도권.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>스테이블코인 정산 연 $7B 규모로 확대:</strong> 위협을 기회로 전환.</span></div>
-      <div class="bb-item"><span class="bb-icon">▲</span><span><strong>PER 31.2x — 5년 평균 대비 낮은 편:</strong> 재평가 여력.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>영업이익률 60% 초고마진 · 4개 분기 연속 EPS 서프라이즈:</strong> 검증된 사업 품질.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>$20B 신규 자사주 매입 + 배당 14% 인상:</strong> 강력한 주주환원.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>OpenAI 제휴·에이전틱 커머스 선점:</strong> AI 결제 인프라 주도권.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>스테이블코인 정산 연 $7B 규모로 확대:</strong> 위협을 기회로 전환.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>PER 31.2x — 5년 평균 대비 낮은 편:</strong> 재평가 여력.</span></div>
     </div>
     <div class="bb-box">
       <div class="bb-title bb-bear">🐻 Bear 요인</div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>Credit Card Competition Act 재발의:</strong> 최대 규제 리스크, 통과 시 마진 훼손.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>52주 수익률 +2.3% — S&P500 대비 -19.8%p:</strong> 뚜렷한 언더퍼폼.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>소비심리 위축(미시간 지수 침체권 근접):</strong> 결제 볼륨 둔화 우려.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>PBR 19.6x·PSR 15.7x — 절대 수준은 높음:</strong> 저마진 전환 시 부담.</span></div>
-      <div class="bb-item"><span class="bb-icon">▼</span><span><strong>스테이블코인發 장기 disintermediation 리스크:</strong> 아직 완전히 해소 안 됨.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>Credit Card Competition Act 재발의:</strong> 최대 규제 리스크, 통과 시 마진 훼손.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>52주 수익률 +2.3% — S&P500 대비 -19.8%p:</strong> 뚜렷한 언더퍼폼.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>소비심리 위축(미시간 지수 침체권 근접):</strong> 결제 볼륨 둔화 우려.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>PBR 19.6x·PSR 15.7x — 절대 수준은 높음:</strong> 저마진 전환 시 부담.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>스테이블코인發 장기 disintermediation 리스크:</strong> 아직 완전히 해소 안 됨.</span></div>
     </div>
   </div>
 
