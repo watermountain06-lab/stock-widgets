@@ -52,6 +52,18 @@ if us_visual_mode:
             errors.append('US chart mode requires canvas, svg, or structured .us-visual')
     elif 'US_VISUAL_EXCEPTION:' not in us_body:
         errors.append('US not-applicable mode requires a specific US_VISUAL_EXCEPTION comment')
+elif us_open:
+    errors.append('us section missing data-us-visual="chart|not-applicable" attribute (declaration was optional before - TSM shipped without one)')
+
+# Every chart-bearing card inside #us needs its own interpretation text, not a bare canvas/svg.
+# Cards don't nest, so split on the literal card-opener and cut each chunk at the next
+# top-level boundary rather than trying to div-match with regex.
+if us_open:
+    for chunk in re.split(r'<div class="card">', section('us'))[1:]:
+        card_body = re.split(r'<div class="danger-box"', chunk)[0]
+        body_minus_title = re.sub(r'<div class="card-title">.*?</div>', '', card_body, count=1, flags=re.S)
+        if (re.search(r'<canvas\b', card_body) or re.search(r'<svg\b', card_body)) and len(re.sub(r'<[^>]+>', '', body_minus_title).strip()) < 20:
+            errors.append('a #us chart card has no adjacent interpretation text')
 invest_titles=card_titles('invest')
 if len(invest_titles) != 3 or not (invest_titles[0].startswith('목표가 밴드') and invest_titles[1].startswith('5개 분석 종합') and invest_titles[2].startswith('투자의견 요약')):
     errors.append('invest card order differs from PM')

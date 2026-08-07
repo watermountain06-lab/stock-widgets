@@ -375,8 +375,8 @@
   </div>
 </div>
 
-<div id="us" class="section">
-  <div class="section-title">US 특화 + TSM 고유 — S&P 500 성과 · 지정학 리스크 · 글로벌 팹 전략</div>
+<div id="us" class="section" data-us-visual="chart">
+  <div class="section-title">US 특화 + TSM 고유 — S&P 500 성과 · 지정학 리스크 · 애리조나 투자 확대</div>
   <div class="rel-container">
     <div class="rel-title">S&P 500 대비 상대 수익률 (52주)</div>
     <div class="grid-3">
@@ -390,19 +390,19 @@
     </div>
   </div>
   <div class="card">
-    <div class="card-title">글로벌 팹 분산 전략</div>
+    <div class="card-title">미국(애리조나) 투자 현황 — TSM 고유 리스크 헤지</div>
     <div class="zone-list">
-      <div class="zone-item"><span class="zone-label">Arizona $165B (12팹)</span><span class="zone-val">2nm~4nm · CoWoS · 2027~2030</span></div>
-      <div class="zone-item"><span class="zone-label">일본 구마모토</span><span class="zone-val">12nm·6nm · Sony·Toyota 협력</span></div>
-      <div class="zone-item"><span class="zone-label">독일 드레스덴</span><span class="zone-val">28nm 특수공정 · 차량용</span></div>
-      <div class="zone-item"><span class="zone-label">대만 (본진)</span><span class="zone-val">2nm·1.6nm 차세대 공정</span></div>
-      <div class="zone-item"><span class="zone-label">CHIPS법 보조금</span><span class="zone-val">$6.6B 직접 보조 확정</span></div>
-      <div class="zone-item"><span class="zone-label">북미 매출 비중</span><span class="zone-val">75% — NVIDIA·AMD·Apple 3사</span></div>
+      <div class="zone-item"><span class="zone-label">애리조나 누적 투자 (2026.07 확대)</span><span class="zone-val" style="color:var(--green);">$265B — 팹 10개+패키징 2개+R&D센터</span></div>
+      <div class="zone-item"><span class="zone-label">CHIPS법 보조금</span><span class="zone-val">$6.6B 직접 보조 확정 (+최대 $5B 대출)</span></div>
+      <div class="zone-item"><span class="zone-label">애리조나 공정 로드맵</span><span class="zone-val">4nm 가동 중 → 2nm(2028) · CoWoS 패키징</span></div>
+      <div class="zone-item"><span class="zone-label">북미 고객사 매출 비중</span><span class="zone-val">75% — NVIDIA·AMD·Apple 3사</span></div>
+      <div class="zone-item"><span class="zone-label">해외 분산 비교</span><span class="zone-val">일본 구마모토(12/6nm)·독일 드레스덴(28nm)은 특수공정, 최선단 공정은 대만·애리조나가 담당</span></div>
     </div>
   </div>
   <div class="card">
-    <div class="card-title">기술 노드별 매출 비중 (Q1 2026)</div>
-    <div class="chart-wrap" style="height:200px;"><canvas id="nodeChart"></canvas></div>
+    <div class="card-title">애리조나 누적 투자액 확대 추이 (2020~2026)</div>
+    <div class="chart-wrap" style="height:200px;"><canvas id="arizonaInvestChart"></canvas></div>
+    <div style="font-size:11px;color:var(--text2);line-height:1.65;margin-top:10px;">2020년 $12B 단일 팹으로 시작해 2022년 $40B(2팹) → 2024년 $65B(3팹) → 2025년 $165B → 2026년 7월 $265B(팹 10개+패키징 2개+R&D센터)까지 6년간 22배로 확대됐다. AI 수요발 실적 호조가 매 확장 발표의 배경이었다.</div>
   </div>
   <div class="danger-box">
     <div style="font-size:13px;font-weight:600;color:var(--red);margin-bottom:4px;">⚠ TSM 고유 리스크 — 대만 지정학 · 단일 지역 집중</div>
@@ -769,24 +769,28 @@ function renderPeerChart() {
     }
   });
 }
-function renderNodeChart() {
-  const ctx = document.getElementById('nodeChart');
-  if (!ctx || charts['node']) return;
-  charts['node'] = new Chart(ctx,{
-    type:'doughnut',
+function renderArizonaInvestChart() {
+  const ctx = document.getElementById('arizonaInvestChart');
+  if (!ctx || charts['arizonaInvest']) return;
+  charts['arizonaInvest'] = new Chart(ctx,{
+    type:'bar',
     data:{
-      labels:['5nm (36%)','3nm (25%)','7nm (13%)','기타 7nm이하 (6%)','16/20nm (7%)','28nm (7%)','40nm+ (6%)'],
+      labels:['2020','2022.12','2024.4','2025.3','2026.7'],
       datasets:[{
-        data:[36,25,13,6,7,7,6],
-        backgroundColor:['#5b8fd6','#185FA5','#4A90D9','#7AB3E8','#3a5a8a','#22334f','#161d2b'],
-        borderWidth:0
+        data:[12,40,65,165,265],
+        backgroundColor:['#22334f','#2a4166','#3a5a8a','#185FA5','#5b8fd6'],
+        borderRadius:5,borderSkipped:false
       }]
     },
     options:{
       responsive:true,maintainAspectRatio:false,
       plugins:{
-        legend:{display:true,position:'right',labels:{font:{size:10},color:'#9aa0b8',boxWidth:12}},
-        tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw}%`}}
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>`$${ctx.raw}B`}}
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{beginAtZero:true,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}}
       }
     }
   });
@@ -795,7 +799,7 @@ function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
     if (sectionId === 'valuation') renderPeerChart();
-    if (sectionId === 'us') renderNodeChart();
+    if (sectionId === 'us') renderArizonaInvestChart();
   }, 50);
 }
 </script>
