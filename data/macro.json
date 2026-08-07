@@ -1,36 +1,36 @@
 {
-  "generatedAt": "2026-08-06T13:03:00Z",
+  "generatedAt": "2026-08-07T13:04:00Z",
   "sp500": {
-    "value": 7723.55,
-    "changePct": -0.17,
-    "asOf": "2026-08-05"
+    "value": 7709.96,
+    "changePct": -0.18,
+    "asOf": "2026-08-06"
   },
   "spy": {
-    "value": 769.79,
-    "changePct": -0.2,
-    "asOf": "2026-08-05"
+    "value": 768.56,
+    "changePct": -0.16,
+    "asOf": "2026-08-06"
   },
   "vix": {
-    "value": 15.81,
-    "changePct": -4.18,
-    "asOf": "2026-08-05"
+    "value": 15.15,
+    "changePct": -4.17,
+    "asOf": "2026-08-06"
   },
   "usdkrw": {
-    "value": 1423.48,
-    "changePct": -0.35,
-    "asOf": "2026-08-06"
+    "value": 1408.4,
+    "changePct": -0.9,
+    "asOf": "2026-08-07"
   },
   "fedFunds": {
     "value": 3.63,
-    "asOf": "2026-08-05"
+    "asOf": "2026-08-06"
   },
   "nextFomcMeeting": {
     "start": "2026-09-15",
     "end": "2026-09-16"
   },
   "unemploymentRate": {
-    "value": 4.2,
-    "asOf": "2026-06-01"
+    "value": 4.1,
+    "asOf": "2026-07-01"
   },
   "cpiYoy": {
     "value": 3.5,
