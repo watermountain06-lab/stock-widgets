@@ -289,6 +289,17 @@ The old "stale MSFT Capex/FCF chart data found" check matched on the generic sub
 
 `canonical_widget_spec.md` says resistance/current/support prices should be red/`var(--accent2)`/green, but that check was only being applied to the valuation-tab `.zone-val`s. TSM and NVDA's `#tech`-tab "핵심 가격대" (or "구간별 가격 분석") card - the 52주 최고/현재가/MAxxx 지지/52주 최저 rows - had zero color on any `.zone-val`, only the `.zone-tag` badge next to it carried the semantic color. CAT already had this right (built correctly from the start), so this isn't universal drift - check it explicitly on every widget rather than assuming it's covered by the valuation-tab check. Fix: `style="color:var(--red|--accent2|--green);"` on the `.zone-val` span itself, matching whichever `.zone-tag` (저항/현재/지지) sits next to it in the same row.
 
+## Stale valuation-multiple propagation - fleet-wide, found 2026-08-08
+
+NVDA's #valuation tab had a bug class worth checking on every widget: the "멀티플 5단계 평가" val-item badges get recalculated when a widget is refreshed, but prose mentions of the same multiple elsewhere in the tab (종합 밸류에이션, 피어 비교 card+chart, 시나리오별 공정가치, 목표가 밴드, and #invest's 5개 분석 종합) don't always get resynced - they're free text, not derived from the val-item at render time. `scripts/audit_valuation_consistency.py` checks this mechanically: extracts every val-item (name, number) pair, then scans the rest of the widget for the same metric keyword (PER/PBR/PSR/PCR/EV-EBITDA/P-S/Forward PER) followed by a number, and flags any prose mention that doesn't match. It also checks EV/EBITDA footnote self-consistency (`EV $X ÷ EBITDA $Y` should equal the displayed multiple) and 시가총액 vs 현재가×주식수.
+
+Ran it fleet-wide once NVDA was fixed: **24 of the other 44 widgets have at least one instance of this**, 55 total findings. Two distinct patterns emerged, worth telling apart before fixing:
+
+- **Uniform-gap tickers** (AAPL, AMAT, BRK.B, GOOGL, GE, KO, MSFT - every multiple on the same widget off by roughly the same %, e.g. AAPL ~6-7% across all 5, GOOGL ~9-10%, MSFT ~22%) - the uniformity across unrelated multiples is the signature of one root cause: the prose block was written against an older stock price and never resynced when the price/val-items were last updated. Likely fixable by resyncing the price reference in that one prose block rather than recomputing each multiple from scratch.
+- **Large, non-uniform gaps** (AMZN 108%, TSLA 97% with 3 wildly different prose numbers, MU 73%, AVGO 64% with 4 inconsistent prose numbers, ORCL 35% with 2 different prose numbers, RHHBY 31%) - not a single stale-price signature, more likely a genuine data error (possibly GAAP/non-GAAP mixups, like the AVGO 영업이익 mixup found earlier in this project, or multi-quarter-stale figures) that needs the same SEC-EDGAR-verification treatment NVDA got, not just a resync.
+
+Script has a real limitation: it does per-widget name-collision handling (e.g. ABBV's "PER (GAAP TTM)" and "PER (Adjusted TTM)" both strip to "PER" - matches each prose value against its *nearest* canon value, not a single one) but can't verify which number is actually *correct* against live data - it only catches internal inconsistency, same as `validate_widget.py`. A clean run doesn't mean the numbers are right, only that they agree with each other.
+
 ## Validation gate
 
 Run in this order, fix every failure before moving on:
