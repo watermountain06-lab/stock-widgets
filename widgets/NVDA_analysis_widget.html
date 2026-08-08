@@ -174,6 +174,39 @@
   .zone-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
   .zone-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg3); border-radius: 6px; }
   .zone-label { font-size: 12px; color: var(--text2); }
+  .section-label { font-size: 12px; color: var(--text2); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:11px; color:var(--text2); margin-top:2px; }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 22px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; }
+  .diag-label { font-size:12px; color:var(--text2); min-width:96px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:10.5px; color:var(--text3); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .act-card { background: var(--bg3); border-radius: 8px; padding: 12px 14px; display:flex; align-items:center; gap:12px; }
+  .act-icon { font-size: 19px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:rgba(159,219,47,0.1); border-radius:8px; flex-shrink:0; }
+  .act-label { font-size: 10.5px; color: var(--text3); margin-bottom:2px; }
+  .act-value { font-size: 15px; font-weight: 700; color: var(--text); }
+  .act-sub { font-size: 10px; color: var(--text3); margin-top:1px; }
+  .ccc-card { background: var(--bg3); border-radius: 8px; padding: 16px 18px 12px; }
+  .ccc-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 6px; }
+  .ccc-head-label { font-size:11.5px; color:var(--text2); font-weight:700; }
+  .ccc-head-value { font-size:18px; font-weight:800; color:var(--gold); }
+  .ccc-explain { font-size: 10.5px; color: var(--text3); line-height: 1.5; margin-bottom: 22px; }
+  .tl-bar-wrap { position: relative; margin: 40px 4px 8px; }
+  .tl-bar { height: 18px; border-radius: 5px; overflow: hidden; display: flex; }
+  .tl-seg-inv { background: linear-gradient(90deg,#3498db,#2980b9); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
+  .tl-seg-ar { background: linear-gradient(90deg,#9fdb2f,#76b900); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#0f1117; }
+  .tl-marker { position: absolute; top: -18px; width: 2px; background: var(--gold); }
+  .tl-marker-label { position: absolute; top: -32px; transform: translateX(-50%); font-size: 9.5px; font-weight: 700; color: var(--gold); white-space: nowrap; }
+  .tl-ccc-span { position: absolute; height: 3px; background: rgba(240,192,64,0.6); border-radius: 2px; top: 24px; }
   .zone-val { font-size: 13px; font-weight: 700; color: var(--accent2); }
   .zone-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
   .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
@@ -584,24 +617,79 @@
 
   <div class="card">
     <div class="card-title">재무 건전성 — 안정성·활동성 (Q1 FY27 · 2026.04.26 기준)</div>
-    <div style="font-size:12px;color:var(--text2);font-weight:600;margin-bottom:8px;">안정성 — 단기 지급능력·차입 의존도</div>
-    <div class="grid-3">
-      <div class="stat-box"><div class="stat-label">유동비율</div><div class="stat-value up">344.1%</div><div class="stat-sub">150%↑ 안정 기준 대비 매우 여유</div></div>
-      <div class="stat-box"><div class="stat-label">당좌비율</div><div class="stat-value up">285.3%</div><div class="stat-sub">100%↑ 양호 기준 크게 상회</div></div>
-      <div class="stat-box"><div class="stat-label">부채비율</div><div class="stat-value up">32.7%</div><div class="stat-sub">부채 $64.0B ÷ 자기자본 $195.5B</div></div>
-      <div class="stat-box"><div class="stat-label">차입금의존도</div><div class="stat-value up">3.3%</div><div class="stat-sub">30%↓ 양호 기준 대비 사실상 무차입</div></div>
-      <div class="stat-box"><div class="stat-label">이자보상배율</div><div class="stat-value up">503x</div><div class="stat-sub">FY26 영업이익 $130.4B ÷ 이자비용 $0.26B</div></div>
-      <div class="stat-box"><div class="stat-label">총자산증가율</div><div class="stat-value up">85.3%</div><div class="stat-sub">FY26 $206.8B (전기 $111.6B)</div></div>
+
+    <div class="section-label"><span class="dot"></span>안정성 — 단기 지급능력·차입 의존도</div>
+    <div class="diag-summary">
+      <div class="icon">🩺</div>
+      <div>
+        <div class="title">종합 진단: 매우 안정적</div>
+        <div class="sub">5개 항목 모두 기준치 통과 — 단기 부실 위험 없음</div>
+      </div>
     </div>
-    <div style="font-size:12px;color:var(--text2);font-weight:600;margin:16px 0 8px;">활동성 — 회수·재고소진·지급 속도</div>
-    <div class="zone-list">
-      <div class="zone-item"><span class="zone-label">매출채권 회전율·회전기간</span><span class="zone-val">7.02회 · 52.0일</span></div>
-      <div class="zone-item"><span class="zone-label">재고자산 회전율·회전기간</span><span class="zone-val">3.97회 · 92.0일</span></div>
-      <div class="zone-item"><span class="zone-label">매입채무 회전율·지급기간</span><span class="zone-val">9.15회 · 39.9일</span></div>
-      <div class="zone-item"><span class="zone-label">영업순환주기</span><span class="zone-val">143.9일 (매출채권+재고자산 회전기간)</span></div>
-      <div class="zone-item"><span class="zone-label">현금창출주기 (CCC)</span><span class="zone-val" style="color:var(--gold);">104.1일 (영업순환주기 − 매입채무 지급기간)</span></div>
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">344.1%</span><span class="diag-note">기준 150%↑</span></div>
+        <div class="diag-badge safe">✅ 안정</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">당좌비율</span><span class="diag-value">285.3%</span><span class="diag-note">기준 100%↑</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">차입금의존도</span><span class="diag-value">3.3%</span><span class="diag-note">기준 30%↓</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">이자보상배율</span><span class="diag-value">503x</span><span class="diag-note">기준 1x↑</span></div>
+        <div class="diag-badge safe">✅ 매우안전</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">부채비율</span><span class="diag-value">32.7%</span><span class="diag-note">부채 $64.0B÷자기자본 $195.5B</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">총자산증가율</span><span class="diag-value">85.3%</span><span class="diag-note">FY26 $206.8B(전기 $111.6B)</span></div>
+        <div class="diag-badge info">ℹ️ 참고</div>
+      </div>
     </div>
-    <div style="margin-top:10px;font-size:11px;color:var(--text3);">유동비율·당좌비율·차입금의존도·이자보상배율 모두 기준치를 큰 폭으로 상회 — 재무구조 자체의 부실 위험은 사실상 없다. 다만 CCC 104일은 반도체 제조·재고 특성상 매출채권과 재고 회수에 3개월 이상 현금이 묶인다는 뜻으로, 수요 급변 시 재고자산 감액 리스크를 함께 봐야 한다.</div>
+
+    <div class="section-label"><span class="dot" style="background:var(--blue);"></span>활동성 — 회수·재고소진·지급 속도</div>
+    <div class="activity-grid">
+      <div class="act-card">
+        <div class="act-icon">💳</div>
+        <div><div class="act-label">매출채권 회전율·회전기간</div><div class="act-value">7.02회</div><div class="act-sub">52.0일 만에 현금화</div></div>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">📦</div>
+        <div><div class="act-label">재고자산 회전율·회전기간</div><div class="act-value">3.97회</div><div class="act-sub">92.0일 재고 보유</div></div>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">🧾</div>
+        <div><div class="act-label">매입채무 회전율·지급기간</div><div class="act-value">9.15회</div><div class="act-sub">39.9일 만에 지급</div></div>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">🔄</div>
+        <div><div class="act-label">영업순환주기</div><div class="act-value">143.9일</div><div class="act-sub">재고보유+매출채권 회전기간</div></div>
+      </div>
+    </div>
+    <div class="ccc-card">
+      <div class="ccc-head">
+        <div class="ccc-head-label">⏱️ 현금창출주기 (CCC)</div>
+        <div class="ccc-head-value">104.1일</div>
+      </div>
+      <div class="ccc-explain">재고를 사서 판매 대금을 회수하기까지 143.9일이 걸리는데, 그중 39.9일은 매입채무(외상)로 버티고 나머지 <strong style="color:var(--gold);">104.1일은 회사가 직접 현금으로 메워야</strong> 하는 기간이다.</div>
+      <div class="tl-bar-wrap">
+        <div class="tl-marker" style="left:27.7%; height:18px;"></div>
+        <div class="tl-marker-label" style="left:27.7%;">매입채무 지급 39.9일</div>
+        <div class="tl-bar">
+          <div class="tl-seg-inv" style="width:63.9%;">재고보유 92.0일</div>
+          <div class="tl-seg-ar" style="width:36.1%;">매출채권회수 52.0일</div>
+        </div>
+        <div class="tl-ccc-span" style="left:27.7%; width:72.3%;"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;font-size:11px;color:var(--text3);">유동비율·당좌비율·차입금의존도·이자보상배율 모두 기준치를 큰 폭으로 상회 — 재무구조 자체의 부실 위험은 사실상 없다. 다만 CCC 104일은 반도체 제조·재고 특성상 매출채권과 재고 회수에 3개월 이상 현금이 묶인다는 뜻으로, 수요 급변 시 재고자산 감액 리스크를 함께 봐야 한다.</div>
   </div>
 
   <div class="card">
