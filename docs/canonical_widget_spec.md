@@ -15,7 +15,7 @@ styles, class names) — this doc describes *what* goes where, not full markup.
 - `back-bar`: brand link back to `index.html` (left) + bidirectional rank-neighbor nav (`◀ PREV` / `NEXT ▶`, right). Every publish of a new ticker must patch both rank-neighbor widgets' nav, not just the new file.
 - `today-banner`: one-line latest-earnings/news flag, only shown when there's something dated and current.
 - `header`: ticker badge + exchange/sector, company name + one-line description, price block (current price, day change %, 52-week range), 6-item `header-meta` grid (시가총액, 섹터, 최근분기 매출, 핵심 지표, EPS, 배당수익률 — the middle two vary by business model).
-- `box-key`: one restated "핵심 투자 논리" line, mirrors the `#fund` tab's card of the same name.
+- `box-key`: one restated "핵심 투자 논리" line, mirrors the `#fund` tab's card of the same name. Title carries a colored verdict tag from the 5-tier scale `(초저평가|저평가|적정|고평가|초고평가)` — see `stock-refresh/SKILL.md`'s "Format conventions" section for the color mapping (2026-08-08: expanded from the original 3-tier 고평가/적정/저평가 set to match the 5-stage `stage-badge` system already used in `#valuation`).
 
 **Every price shown anywhere in the file must trace back to the same number** (see "목표가 밴드 가격 동기화" below) — this was the PM bug fixed 2026-08-07.
 

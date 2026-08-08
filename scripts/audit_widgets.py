@@ -154,8 +154,8 @@ def check_valuation_verdict_tag(s):
     if idx == -1:
         return ["핵심 투자 논리 not found"]
     chunk = s[idx : idx + 60]
-    if not re.search(r"\((고평가|저평가|적정가?)\)", chunk):
-        return ["핵심 투자 논리 missing (고평가/저평가/적정) tag"]
+    if not re.search(r"\((초고평가|초저평가|고평가|저평가|적정가?)\)", chunk):
+        return ["핵심 투자 논리 missing (초저평가/저평가/적정/고평가/초고평가) tag"]
     return []
 
 

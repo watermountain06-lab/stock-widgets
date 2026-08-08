@@ -85,7 +85,14 @@ For the standard three-range case, apply the printed segment widths, both marker
 
 ## Format conventions this session established beyond `canonical_widget_spec.md`
 
-- **`(고평가|적정가|저평가)` tag**: wherever "핵심 투자 논리" appears (both the header box-key, if present, and the `#fund` card title), append a colored span - `var(--red)` for 고평가, `var(--gold)` for 적정가, `var(--green)` for 저평가 - matching the current 밸류에이션 5단계 stage distribution. If `var(--gold)` isn't defined in the widget's `:root` yet, add `--gold: #f0c040;` (it's usually already referenced elsewhere - stage-mini tag chips, US-tab zone-vals - without being defined, a silent bug worth fixing on sight).
+- **`(초저평가|저평가|적정|고평가|초고평가)` tag** (2026-08-08: expanded from the original 3-tier 고평가/적정/저평가 set at user request, to match the 5-stage granularity already used by `#valuation`'s `stage-badge`s): wherever "핵심 투자 논리" appears (both the header box-key, if present, and the `#fund` card title), append a colored span using the *same* 5-color hex values PM's own `.stage-1`–`.stage-5` CSS classes already define (not each ticker's brand-specific `--accent2`, which varies per file and would make the tag's color meaning inconsistent across widgets):
+  - 초저평가 → `#2ecc71` (stage-1)
+  - 저평가 → `#27ae60` (stage-2)
+  - 적정 → `var(--gold)` (stage-3; add `--gold: #f0c040;` to the widget's `:root` if missing - it's usually already referenced elsewhere, e.g. stage-mini tag chips, US-tab zone-vals, without being defined, a silent bug worth fixing on sight)
+  - 고평가 → `#e67e22` (stage-4)
+  - 초고평가 → `var(--red)` (stage-5)
+
+  Pick the tag from the same majority-vote read on the `#valuation` stage-badge distribution used for the 3-tier version (see the paragraph above on TSM's `[2,1,3,1,3]` case) - a widget with metrics clustered at stage-1/2 reads 초저평가/저평가, not just 저평가, when the distribution actually skews to the extreme end, not just the mild one. `check_valuation_verdict_tag` in `audit_widgets.py` accepts all five values.
 - **Bull/Bear triangle color**: `▲` gets `var(--bull)`, `▼` gets `var(--bear)` (Korean market convention - red=up/gain, blue=down, the opposite of the US convention used elsewhere in the same file for the target-band Bear/Bull colors; this is intentional, don't "fix" it to match). Apply inline `style="color:var(--bull);"` / `var(--bear);"` directly on each triangle span - don't rely on a shared CSS class, since older widgets have some `bb-item`s with the `bb-icon` class and some without, so a class-based rule silently misses half of them.
 - **투자의견 요약**: stacked layout (`display:flex;flex-direction:column;gap:10px`, not a wrapped flex row), exactly four lines in order - 📅 다음 실적 / 투자의견 / 목표주가 / 결론. No separate valuation-verdict line here - that belongs on the 핵심 투자 논리 title tag instead (redundant with the 5개 분석 종합 card's ⚖️ row otherwise).
 - **시계열 뉴스**: newest event first (top of the DOM = most recent date). Check this on every widget touched - at least one existing widget (CAT) had it backwards before this session.
