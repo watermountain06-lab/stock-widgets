@@ -892,11 +892,11 @@ function renderFundChart() {
   if (!ctx || charts['fund']) return;
   charts['fund'] = new Chart(ctx,{
     data:{
-      labels:['Q1\'25','Q2\'25','Q3\'25','Q4\'25','Q1\'26'],
+      labels:['Q3\'24','Q4\'24','Q1\'25','Q2\'25','Q3\'25','Q4\'25','Q1\'26','Q2\'26'],
       datasets:[
-        {type:'bar',label:'매출($B)',data:[90.2,96.4,102.3,113.8,109.9],backgroundColor:'rgba(66,133,244,0.55)',borderColor:'#4285F4',borderWidth:1,borderRadius:4,yAxisID:'y'},
-        {type:'bar',label:'영업이익($B)',data:[30.6,31.3,31.2,35.9,39.7],backgroundColor:'rgba(52,152,219,0.5)',borderColor:'#3498db',borderWidth:1,borderRadius:4,yAxisID:'y'},
-        {type:'line',label:'OPM(%)',data:[33.9,32.4,30.5,31.6,36.1],borderColor:'#f0c040',backgroundColor:'rgba(240,192,64,.1)',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+        {type:'bar',label:'매출($B)',data:[88.3,96.5,90.2,96.4,102.3,113.8,109.9,119.8],backgroundColor:'rgba(66,133,244,0.55)',borderColor:'#4285F4',borderWidth:1,borderRadius:4,yAxisID:'y'},
+        {type:'bar',label:'영업이익($B)',data:[28.5,31.0,30.6,31.3,31.2,35.9,39.7,40.8],backgroundColor:'rgba(52,152,219,0.5)',borderColor:'#3498db',borderWidth:1,borderRadius:4,yAxisID:'y'},
+        {type:'line',label:'OPM(%)',data:[32.3,32.1,33.9,32.4,30.5,31.6,36.1,34.0],borderColor:'#f0c040',backgroundColor:'rgba(240,192,64,.1)',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
       ]
     },
     options:{

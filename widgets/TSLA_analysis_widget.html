@@ -786,11 +786,11 @@ function renderFundChart() {
   if (!ctx || charts['fund']) return;
   charts['fund'] = new Chart(ctx,{
     data:{
-      labels:['Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26','Q2(E)'],
+      labels:['Q3 \'24','Q4 \'24','Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26','Q2 \'26'],
       datasets:[
-        {type:'bar',label:'매출($B)',data:[19.3,22.5,28.1,24.9,22.4,24.7],backgroundColor:'#E31937',borderRadius:4,yAxisID:'y'},
-        {type:'line',label:'GM%',data:[16.3,17.2,18.0,20.1,21.1,20.5],borderColor:'#2ecc71',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'},
-        {type:'line',label:'OPM%',data:[2.1,4.1,5.8,5.7,4.2,5.0],borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:3,borderWidth:2,fill:false,yAxisID:'y2',borderDash:[4,4]}
+        {type:'bar',label:'매출($B)',data:[25.2,25.7,19.3,22.5,28.1,24.9,22.4,28.2],backgroundColor:'#E31937',borderRadius:4,yAxisID:'y'},
+        {type:'line',label:'GM%',data:[19.8,16.3,16.3,17.2,18.0,20.1,21.1,16.8],borderColor:'#2ecc71',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'},
+        {type:'line',label:'OPM%',data:[10.8,6.2,2.1,4.1,5.8,5.7,4.2,1.4],borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:3,borderWidth:2,fill:false,yAxisID:'y2',borderDash:[4,4]}
       ]
     },
     options:{

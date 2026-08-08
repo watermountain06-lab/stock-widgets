@@ -805,11 +805,11 @@ function renderFundChart() {
   if (!ctx || charts['fund']) return;
   charts['fund'] = new Chart(ctx,{
     data:{
-      labels:['Q3 \'25','Q4 \'25','Q1 \'26','Q2 \'26','Q3(E)'],
+      labels:['Q3 \'24','Q4 \'24','Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26','Q2 \'26'],
       datasets:[
-        {type:'bar',label:'매출($B)',data:[10.2,10.7,10.9,11.2,11.35],backgroundColor:'#1A1F71',borderRadius:4,yAxisID:'y'},
-        {type:'line',label:'GAAP EPS($)',data:[2.69,2.62,3.03,3.14,3.22],borderColor:'#2ecc71',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'},
-        {type:'line',label:'Non-GAAP EPS($)',data:[2.98,2.98,3.17,3.31,null],borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:3,borderWidth:2,fill:false,yAxisID:'y2',borderDash:[4,4]}
+        {type:'bar',label:'매출($B)',data:[8.9,9.6,9.5,9.6,10.2,10.7,10.9,11.2],backgroundColor:'#1A1F71',borderRadius:4,yAxisID:'y'},
+        {type:'line',label:'GAAP EPS($)',data:[2.40,2.65,2.58,2.32,2.69,2.62,3.03,3.14],borderColor:'#2ecc71',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'},
+        {type:'line',label:'Non-GAAP EPS($)',data:[2.42,2.71,2.75,2.76,2.98,2.98,3.17,3.31],borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:3,borderWidth:2,fill:false,yAxisID:'y2',borderDash:[4,4]}
       ]
     },
     options:{
