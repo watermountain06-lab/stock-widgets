@@ -55,7 +55,8 @@
   .meta-value { font-size: 14px; font-weight: 600; color: var(--text2); margin-top: 2px; }
   .meta-value.hl { color: var(--accent2); }
 
-  .nav { display: flex; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto;}
+    .box-key { background: rgba(56,189,248,0.1); border: 1px solid var(--accent3); border-radius: var(--radius); padding: 12px 16px; max-width: 1100px; margin: 0 auto 16px; }
+.nav { display: flex; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto;}
   .nav::-webkit-scrollbar { display: none; }
   .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
   .nav-btn:hover { color: var(--text); background: var(--bg3); }
@@ -246,6 +247,10 @@
 </div>
 
 <!-- NAV -->
+<div class="box-key">
+<div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:var(--red);">(고평가)</span> — EUV 리소그래피 100% 독점 · 수주잔고 €38.8B</div>
+<div style="font-size:12px;color:var(--text2);line-height:1.6;">EUV 리소그래피 100% 독점 공급자 지위는 어떤 AI 칩도 ASML 장비 없이는 생산할 수 없다는 구조적 해자를 만든다. 수주잔고 €38.8B로 1년 이상 매출 가시성을 확보했고, 중국 매출 비중이 DUV에서 EUV로 전환되며 오히려 마진이 개선되는 구조다. High-NA EUV가 2026년 상업화되면 차세대 기술 우위도 공고해진다. 핵심 논쟁은 중국向 수출규제 리스크가 이 구조적 성장 스토리를 얼마나 훼손할 수 있는지다.</div>
+</div>
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech',event)">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund',event)">📊 기본적 분석</button>
@@ -387,7 +392,7 @@
     </div>
   </div>
   <div class="card">
-    <div class="card-title">핵심 투자 논리</div>
+    <div class="card-title">핵심 투자 논리 <span style="color:var(--red);">(고평가)</span></div>
     <div style="font-size:12px;color:var(--text2);line-height:1.7;">EUV 리소그래피 100% 독점 공급자 지위는 어떤 AI 칩도 ASML 장비 없이는 생산할 수 없다는 구조적 해자를 만든다. 수주잔고 €38.8B로 1년 이상 매출 가시성을 확보했고, 중국 매출 비중이 DUV에서 EUV로 전환되며 오히려 마진이 개선되는 구조다. High-NA EUV가 2026년 상업화되면 차세대 기술 우위도 공고해진다. 핵심 논쟁은 중국向 수출규제 리스크가 이 구조적 성장 스토리를 얼마나 훼손할 수 있는지다.</div>
   </div>
   <div class="card">

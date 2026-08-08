@@ -31,7 +31,8 @@
   .meta-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
   .meta-value { font-size: 14px; font-weight: 600; color: var(--text2); margin-top: 2px; }
   .meta-value.highlight { color: var(--accent2); }
-  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto; }
+    .box-key { background: rgba(56,189,248,0.1); border: 1px solid var(--accent3); border-radius: var(--radius); padding: 12px 16px; max-width: 1100px; margin: 0 auto 16px; }
+.nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto; }
   .nav::-webkit-scrollbar { display: none; }
   .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
   .nav-btn:hover { color: var(--text); background: var(--bg3); }
@@ -198,6 +199,10 @@
   </div>
 </div>
 
+<div class="box-key">
+<div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:#f0c040;">(적정)</span> — GAAP PER 124.8x는 회계 왜곡, Adjusted PER 24.9x가 실질 밸류에이션</div>
+<div style="font-size:12px;color:var(--text2);line-height:1.6;">GAAP EPS(TTM) $2.03은 Allergan 인수발 무형자산 상각과 반복적 인수 IPR&D 충당금이 만든 회계상 수치로, PER을 계산하면 124.8x라는 왜곡된 값이 나온다. 반면 Adjusted EPS(TTM) $10.19 기준 PER은 24.9x로 대형 제약 피어 밴드 내에 있다. <strong style="color:var(--text);">핵심 논쟁은 "Humira 특허절벽 이후에도 Skyrizi·Rinvoq가 성장을 지속할 수 있는가" 그리고 "Apogee 등 반복적 M&A가 실제 파이프라인 가치를 창출하는가, 단순히 상각비만 늘리는가"이다.</strong></div>
+</div>
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
@@ -303,7 +308,7 @@
   </div>
 
   <div class="card">
-    <div class="card-title">핵심 투자 논리 — GAAP 적자성 지표가 실제 사업 부실을 의미하는가</div>
+    <div class="card-title">핵심 투자 논리 — GAAP 적자성 지표가 실제 사업 부실을 의미하는가 <span style="color:#f0c040;">(적정)</span></div>
     <div style="font-size:12px;color:var(--text2);line-height:1.7;">GAAP EPS(TTM) $2.03은 Allergan 인수발 무형자산 상각과 반복적 인수 IPR&D 충당금이 만든 회계상 수치로, PER을 계산하면 124.8x라는 왜곡된 값이 나온다. 반면 Adjusted EPS(TTM) $10.19 기준 PER은 24.9x로 대형 제약 피어 밴드 내에 있다. <strong style="color:var(--text);">핵심 논쟁은 "Humira 특허절벽 이후에도 Skyrizi·Rinvoq가 성장을 지속할 수 있는가" 그리고 "Apogee 등 반복적 M&A가 실제 파이프라인 가치를 창출하는가, 단순히 상각비만 늘리는가"이다.</strong></div>
   </div>
 

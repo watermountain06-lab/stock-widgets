@@ -31,7 +31,8 @@
   .meta-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
   .meta-value { font-size: 14px; font-weight: 600; color: var(--text2); margin-top: 2px; }
   .meta-value.highlight { color: var(--accent2); }
-  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto; }
+    .box-key { background: rgba(56,189,248,0.1); border: 1px solid var(--accent3); border-radius: var(--radius); padding: 12px 16px; max-width: 1100px; margin: 0 auto 16px; }
+.nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto; }
   .nav::-webkit-scrollbar { display: none; }
   .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
   .nav-btn:hover { color: var(--text); background: var(--bg3); }
@@ -186,6 +187,10 @@
   </div>
 </div>
 
+<div class="box-key">
+<div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:var(--red);">(고평가)</span> — AI 인프라 수주목표 $5B→$9B 상향, 6분기 연속 가속</div>
+<div style="font-size:12px;color:var(--text2);line-height:1.6;">Cisco는 전통적으로 저성장·안정형 네트워크 인프라 기업으로 평가받아 왔으나, FY2026 들어 AI 데이터센터 네트워킹 수요가 실적을 견인하며 6분기 연속 매출·EPS 성장이 가속되고 있다. AI 인프라 수주 목표가 한 분기 만에 $5B에서 $9B로 상향된 점은 이례적이다. <strong style="color:var(--text);">핵심 논쟁은 "하이퍼스케일러를 넘어 neocloud·엔터프라이즈까지 확산되는 AI 네트워킹 수요가 구조적으로 지속되는가" 그리고 "Splunk 매출 믹스 역풍이 CFO 전망대로 FY2027 상반기에 정상화될 것인가"이다.</strong></div>
+</div>
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
@@ -285,7 +290,7 @@
   </div>
 
   <div class="card">
-    <div class="card-title">핵심 투자 논리 — AI 네트워킹 수요가 구조적 성장인가, 일시적 특수 수요인가</div>
+    <div class="card-title">핵심 투자 논리 — AI 네트워킹 수요가 구조적 성장인가, 일시적 특수 수요인가 <span style="color:var(--red);">(고평가)</span></div>
     <div style="font-size:12px;color:var(--text2);line-height:1.7;">Cisco는 전통적으로 저성장·안정형 네트워크 인프라 기업으로 평가받아 왔으나, FY2026 들어 AI 데이터센터 네트워킹 수요가 실적을 견인하며 6분기 연속 매출·EPS 성장이 가속되고 있다. AI 인프라 수주 목표가 한 분기 만에 $5B에서 $9B로 상향된 점은 이례적이다. <strong style="color:var(--text);">핵심 논쟁은 "하이퍼스케일러를 넘어 neocloud·엔터프라이즈까지 확산되는 AI 네트워킹 수요가 구조적으로 지속되는가" 그리고 "Splunk 매출 믹스 역풍이 CFO 전망대로 FY2027 상반기에 정상화될 것인가"이다.</strong></div>
   </div>
 

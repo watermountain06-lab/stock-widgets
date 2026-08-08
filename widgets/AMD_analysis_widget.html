@@ -55,7 +55,8 @@
   .meta-value { font-size: 14px; font-weight: 600; color: var(--text2); margin-top: 2px; }
   .meta-value.hl { color: var(--accent2); }
 
-  .nav { display: flex; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto;}
+    .box-key { background: rgba(56,189,248,0.1); border: 1px solid var(--accent3); border-radius: var(--radius); padding: 12px 16px; max-width: 1100px; margin: 0 auto 16px; }
+.nav { display: flex; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto;}
   .nav::-webkit-scrollbar { display: none; }
   .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
   .nav-btn:hover { color: var(--text); background: var(--bg3); }
@@ -259,6 +260,10 @@
 </div>
 
 <!-- NAV -->
+<div class="box-key">
+<div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:var(--red);">(고평가)</span> — OpenAI 6GW 공급계약·지분 10% 취득 — MI400 매출 전망이 관건</div>
+<div style="font-size:12px;color:var(--text2);line-height:1.6;">MI300→MI350→MI400 연간 로드맵으로 NVDA 독점 구도에 실질적 균열을 내고 있다. Meta·Microsoft·OpenAI가 전략적으로 채택했고, OpenAI는 AMD 지분 최대 10% 취득과 6기가와트 GPU 공급 계약까지 맺으며 "엔비디아 대안"에서 "엔비디아 경쟁자"로 격상됐다. EPYC 서버 CPU도 인텔 점유율을 지속 잠식 중이다. 핵심 논쟁은 MI400의 초년도 $7.2B 매출 전망이 실제로 달성되며 NVDA와의 격차를 좁힐 수 있는지다.</div>
+</div>
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech',event)">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund',event)">📊 기본적 분석</button>
@@ -391,7 +396,7 @@
     </div>
   </div>
   <div class="card">
-    <div class="card-title">핵심 투자 논리</div>
+    <div class="card-title">핵심 투자 논리 <span style="color:var(--red);">(고평가)</span></div>
     <div style="font-size:12px;color:var(--text2);line-height:1.7;">MI300→MI350→MI400 연간 로드맵으로 NVDA 독점 구도에 실질적 균열을 내고 있다. Meta·Microsoft·OpenAI가 전략적으로 채택했고, OpenAI는 AMD 지분 최대 10% 취득과 6기가와트 GPU 공급 계약까지 맺으며 "엔비디아 대안"에서 "엔비디아 경쟁자"로 격상됐다. EPYC 서버 CPU도 인텔 점유율을 지속 잠식 중이다. 핵심 논쟁은 MI400의 초년도 $7.2B 매출 전망이 실제로 달성되며 NVDA와의 격차를 좁힐 수 있는지다.</div>
   </div>
   <div class="card">

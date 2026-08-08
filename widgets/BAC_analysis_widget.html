@@ -31,7 +31,8 @@
   .meta-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
   .meta-value { font-size: 14px; font-weight: 600; color: var(--text2); margin-top: 2px; }
   .meta-value.highlight { color: var(--accent2); }
-  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto; }
+    .box-key { background: rgba(56,189,248,0.1); border: 1px solid var(--accent3); border-radius: var(--radius); padding: 12px 16px; max-width: 1100px; margin: 0 auto 16px; }
+.nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto; }
   .nav::-webkit-scrollbar { display: none; }
   .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
   .nav-btn:hover { color: var(--text); background: var(--bg3); }
@@ -186,6 +187,10 @@
   </div>
 </div>
 
+<div class="box-key">
+<div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:#f0c040;">(적정)</span> — 트레이딩 +70%·IB 수수료 +50%, 17분기 연속 성장의 지속가능성</div>
+<div style="font-size:12px;color:var(--text2);line-height:1.6;">BAC의 Q2 FY26 실적은 순이자수익(전통 예대마진)뿐 아니라 트레이딩·투자은행 부문에서 광범위한 성장을 보였다. 주식 트레이딩 매출 +70%, 투자은행 수수료 +50%는 시장 활동성이 극도로 활발했던 결과로, 17분기 연속 성장이라는 기록은 구조적 추세일 가능성을 시사하지만 동시에 시장 변동성·거래량에 크게 의존하는 이익구조라는 리스크도 내포한다. <strong style="color:var(--text);">핵심 논쟁은 "트레이딩·IB 호황이 구조적으로 지속되는가" 아니면 "역대급 시장 활동성이 만든 일시적 정점인가"이다.</strong></div>
+</div>
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
@@ -285,7 +290,7 @@
   </div>
 
   <div class="card">
-    <div class="card-title">핵심 투자 논리 — 트레이딩·IB 슈퍼사이클이 지속되는가, 순환적 정점인가</div>
+    <div class="card-title">핵심 투자 논리 — 트레이딩·IB 슈퍼사이클이 지속되는가, 순환적 정점인가 <span style="color:#f0c040;">(적정)</span></div>
     <div style="font-size:12px;color:var(--text2);line-height:1.7;">BAC의 Q2 FY26 실적은 순이자수익(전통 예대마진)뿐 아니라 트레이딩·투자은행 부문에서 광범위한 성장을 보였다. 주식 트레이딩 매출 +70%, 투자은행 수수료 +50%는 시장 활동성이 극도로 활발했던 결과로, 17분기 연속 성장이라는 기록은 구조적 추세일 가능성을 시사하지만 동시에 시장 변동성·거래량에 크게 의존하는 이익구조라는 리스크도 내포한다. <strong style="color:var(--text);">핵심 논쟁은 "트레이딩·IB 호황이 구조적으로 지속되는가" 아니면 "역대급 시장 활동성이 만든 일시적 정점인가"이다.</strong></div>
   </div>
 

@@ -31,7 +31,8 @@
   .meta-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
   .meta-value { font-size: 14px; font-weight: 600; color: var(--text2); margin-top: 2px; }
   .meta-value.highlight { color: var(--accent2); }
-  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto;}
+    .box-key { background: rgba(56,189,248,0.1); border: 1px solid var(--accent3); border-radius: var(--radius); padding: 12px 16px; max-width: 1100px; margin: 0 auto 16px; }
+.nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto;}
   .nav::-webkit-scrollbar { display: none; }
   .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
   .nav-btn:hover { color: var(--text); background: var(--bg3); }
@@ -191,6 +192,10 @@
   </div>
 </div>
 
+<div class="box-key">
+<div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:var(--green);">(저평가)</span> — HBM 완판·2027 대부분 예약 vs Forward PER 10x</div>
+<div style="font-size:12px;color:var(--text2);line-height:1.6;">과거 MU는 DRAM 사이클 주식 → 폭락 반복. 지금은 다름: HBM이 3사 과점(SK하이닉스·삼성·마이크론) + 전량 장기계약 구조로 변했음. 2026 HBM 완판, 2027 대부분 예약됨. Q3 가이던스 $33.5B(GM 81%)가 실현되면 Forward PER 10x = 이전 사이클 과거 최저 PER 수준. FY2026 한 해에 역대 모든 연도 FCF 합산보다 많은 현금 창출 예상.</div>
+</div>
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
@@ -280,7 +285,7 @@
     <div class="driver-item"><div class="driver-num">3</div><div><div class="driver-title">NAND + 미국 CHIPS법</div><div class="driver-desc">NAND ASP 고70%대 상승. 버지니아 Manassas 1α생산. CHIPS법 $20B 투자 지원. $200B 미국 팹 확장.</div></div></div>
   </div>
   <div class="card">
-    <div class="card-title">핵심 투자 논리</div>
+    <div class="card-title">핵심 투자 논리 <span style="color:var(--green);">(저평가)</span></div>
     <div style="font-size:12px;color:var(--text2);line-height:1.7;">과거 MU는 DRAM 사이클 주식 → 폭락 반복. 지금은 다름: HBM이 3사 과점(SK하이닉스·삼성·마이크론) + 전량 장기계약 구조로 변했음. 2026 HBM 완판, 2027 대부분 예약됨. Q3 가이던스 $33.5B(GM 81%)가 실현되면 Forward PER 10x = 이전 사이클 과거 최저 PER 수준. FY2026 한 해에 역대 모든 연도 FCF 합산보다 많은 현금 창출 예상.</div>
   </div>
   <div class="card">

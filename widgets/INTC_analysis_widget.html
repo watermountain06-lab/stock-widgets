@@ -31,7 +31,8 @@
   .meta-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
   .meta-value { font-size: 14px; font-weight: 600; color: var(--text2); margin-top: 2px; }
   .meta-value.highlight { color: var(--accent2); }
-  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto; }
+    .box-key { background: rgba(56,189,248,0.1); border: 1px solid var(--accent3); border-radius: var(--radius); padding: 12px 16px; max-width: 1100px; margin: 0 auto 16px; }
+.nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto; }
   .nav::-webkit-scrollbar { display: none; }
   .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
   .nav-btn:hover { color: var(--text); background: var(--bg3); }
@@ -198,6 +199,10 @@
   </div>
 </div>
 
+<div class="box-key">
+<div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:var(--red);">(고평가)</span> — Non-GAAP EPS 흑자 전환 추세 vs GAAP은 여전히 적자</div>
+<div style="font-size:12px;color:var(--text2);line-height:1.6;">Q3 FY24 GAAP EPS -$3.88(주로 $15.9B 자산손상)과 Q1 FY26 GAAP EPS -$0.73(Mobileye 손상 등 $4.1B) 모두 대규모 일회성 비용이 반영된 결과다. 반면 Non-GAAP EPS는 Q3 FY24 -$0.46에서 Q1 FY26 $0.29로 뚜렷하게 개선되는 추세를 보이고 있다. <strong style="color:var(--text);">핵심 논쟁은 "반도체 파운드리 사업이 구조적으로 회복 중인가" 아니면 "정부·전략적 투자자 자금이 만든 일시적 밸류에이션 프리미엄인가"이다.</strong></div>
+</div>
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
@@ -304,7 +309,7 @@
   </div>
 
   <div class="card">
-    <div class="card-title">핵심 투자 논리 — GAAP 적자가 구조적 부실인가, 일회성 회계효과인가</div>
+    <div class="card-title">핵심 투자 논리 — GAAP 적자가 구조적 부실인가, 일회성 회계효과인가 <span style="color:var(--red);">(고평가)</span></div>
     <div style="font-size:12px;color:var(--text2);line-height:1.7;">Q3 FY24 GAAP EPS -$3.88(주로 $15.9B 자산손상)과 Q1 FY26 GAAP EPS -$0.73(Mobileye 손상 등 $4.1B) 모두 대규모 일회성 비용이 반영된 결과다. 반면 Non-GAAP EPS는 Q3 FY24 -$0.46에서 Q1 FY26 $0.29로 뚜렷하게 개선되는 추세를 보이고 있다. <strong style="color:var(--text);">핵심 논쟁은 "반도체 파운드리 사업이 구조적으로 회복 중인가" 아니면 "정부·전략적 투자자 자금이 만든 일시적 밸류에이션 프리미엄인가"이다.</strong></div>
   </div>
 

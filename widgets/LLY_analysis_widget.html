@@ -56,7 +56,8 @@
   .meta-value.highlight { color: var(--accent2); }
 
   /* NAV */
-  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto;}
+    .box-key { background: rgba(56,189,248,0.1); border: 1px solid var(--accent3); border-radius: var(--radius); padding: 12px 16px; max-width: 1100px; margin: 0 auto 16px; }
+.nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto;}
   .nav::-webkit-scrollbar { display: none; }
   .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
   .nav-btn:hover { color: var(--text); background: var(--bg3); }
@@ -257,6 +258,10 @@
 </div>
 
 <!-- NAV -->
+<div class="box-key">
+<div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:#f0c040;">(적정)</span> — GLP-1 듀얼 플랫폼 $36.5B · 오르포글리프론 하반기 출시</div>
+<div style="font-size:12px;color:var(--text2);line-height:1.6;">Mounjaro·Zepbound 듀얼 플랫폼이 2025년 합산 $36.5B로 세계 1위 의약품 지위를 굳혔고, 경구형 GLP-1 오르포글리프론이 2026년 하반기 출시되면 주사를 꺼리던 환자층까지 흡수해 시장을 크게 확대할 잠재력이 있다. Kisunla·Retatrutide 등 알츠하이머·차세대 비만 파이프라인까지 다각화되며 단일 제품 리스크를 낮추고 있다. 핵심 논쟁은 이 고성장을 현재 밸류에이션이 어디까지 선반영했는지다.</div>
+</div>
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech',event)">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund',event)">📊 기본적 분석</button>
@@ -383,7 +388,7 @@
     </div>
   </div>
   <div class="card">
-    <div class="card-title">핵심 투자 논리</div>
+    <div class="card-title">핵심 투자 논리 <span style="color:#f0c040;">(적정)</span></div>
     <div style="font-size:12px;color:var(--text2);line-height:1.7;">Mounjaro·Zepbound 듀얼 플랫폼이 2025년 합산 $36.5B로 세계 1위 의약품 지위를 굳혔고, 경구형 GLP-1 오르포글리프론이 2026년 하반기 출시되면 주사를 꺼리던 환자층까지 흡수해 시장을 크게 확대할 잠재력이 있다. Kisunla·Retatrutide 등 알츠하이머·차세대 비만 파이프라인까지 다각화되며 단일 제품 리스크를 낮추고 있다. 핵심 논쟁은 이 고성장을 현재 밸류에이션이 어디까지 선반영했는지다.</div>
   </div>
   <div class="card">

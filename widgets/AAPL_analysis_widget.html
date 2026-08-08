@@ -47,7 +47,8 @@
   .meta-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
   .meta-value { font-size: 14px; font-weight: 600; color: var(--text2); margin-top: 2px; }
   .meta-value.highlight { color: var(--accent2); }
-  .nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto;}
+    .box-key { background: rgba(56,189,248,0.1); border: 1px solid var(--accent3); border-radius: var(--radius); padding: 12px 16px; max-width: 1100px; margin: 0 auto 16px; }
+.nav { display: flex; justify-content: space-between; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto;}
   .nav::-webkit-scrollbar { display: none; }
   .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
   .nav-btn:hover { color: var(--text); background: var(--bg3); }
@@ -205,6 +206,10 @@
   </div>
 </div>
 
+<div class="box-key">
+<div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:var(--red);">(고평가)</span> — TTM FCF $113B · ROE 141%</div>
+<div style="font-size:12px;color:var(--text2);line-height:1.6;">활성 기기 20억대 이상의 설치 기반 위에 Services 고마진 구조가 매년 복리 성장. TTM FCF $113B으로 분기당 $25~$28B 자사주 매입 가능. ROE 141%는 자본효율성 세계 최고. iPhone 슈퍼사이클 + Services 복리 성장 + AI 업그레이드 수요 = 3중 촉매. 관세 부담은 인도 생산 확대로 점진적 상쇄.</div>
+</div>
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
@@ -293,7 +298,7 @@
     <div class="driver-item"><div class="driver-num">3</div><div><div class="driver-title">Apple Intelligence (AI)</div><div class="driver-desc">온디바이스 AI 독자 강점. WWDC 2026 6월 발표. Siri 대폭 업그레이드. 새 CEO Ternus 하드웨어 강점.</div></div></div>
   </div>
   <div class="card">
-    <div class="card-title">핵심 투자 논리</div>
+    <div class="card-title">핵심 투자 논리 <span style="color:var(--red);">(고평가)</span></div>
     <div style="font-size:12px;color:var(--text2);line-height:1.7;">활성 기기 20억대 이상의 설치 기반 위에 Services 고마진 구조가 매년 복리 성장. TTM FCF $113B으로 분기당 $25~$28B 자사주 매입 가능. ROE 141%는 자본효율성 세계 최고. iPhone 슈퍼사이클 + Services 복리 성장 + AI 업그레이드 수요 = 3중 촉매. 관세 부담은 인도 생산 확대로 점진적 상쇄.</div>
   </div>
   <div class="card">

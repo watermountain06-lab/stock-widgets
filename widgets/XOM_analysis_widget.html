@@ -31,7 +31,8 @@
   .meta-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
   .meta-value { font-size: 14px; font-weight: 600; color: var(--text2); margin-top: 2px; }
   .meta-value.highlight { color: var(--accent2); }
-  .nav { display: flex; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto;}
+    .box-key { background: rgba(56,189,248,0.1); border: 1px solid var(--accent3); border-radius: var(--radius); padding: 12px 16px; max-width: 1100px; margin: 0 auto 16px; }
+.nav { display: flex; gap: 4px; padding: 12px 32px; background: var(--bg2); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; max-width: 1100px; margin: 0 auto;}
   .nav::-webkit-scrollbar { display: none; }
   .nav-btn { background: none; border: none; color: var(--text3); font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 20px; cursor: pointer; white-space: nowrap; transition: all 0.2s; letter-spacing: 0.3px; }
   .nav-btn:hover { color: var(--text); background: var(--bg3); }
@@ -194,6 +195,10 @@
   </div>
 </div>
 
+<div class="box-key">
+<div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:var(--red);">(고평가)</span> — GAAP EPS -43%는 파생상품 타이밍효과, Non-GAAP은 컨센서스 상회</div>
+<div style="font-size:12px;color:var(--text2);line-height:1.6;">Q1 FY2026 GAAP EPS는 $1.00으로 전년 동기($1.76) 대비 43% 급락했지만, 이 중 상당 부분은 원유 파생상품에 대한 $3.9B 규모의 마크투마켓 타이밍 효과(실제 현금흐름과 무관한 회계상 손실)에서 비롯됐다. 같은 분기 조정(Non-GAAP) EPS $1.16은 오히려 컨센서스를 상회했다. <strong style="color:var(--text);">Permian·Guyana의 저원가 자산 생산 기록 경신은 유가 사이클과 무관하게 구조적 수익성이 개선되고 있음을 시사 — "유가에 베팅하는 기업"인지 "저원가 포트폴리오로 사이클을 방어하는 기업"인지가 핵심 논쟁점.</strong></div>
+</div>
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
   <button class="nav-btn" onclick="showSection('fund')">📊 기본적 분석</button>
@@ -293,7 +298,7 @@
   </div>
 
   <div class="card">
-    <div class="card-title">핵심 투자 논리 — GAAP 실적 급락은 사업 악화인가, 회계상 타이밍 효과인가</div>
+    <div class="card-title">핵심 투자 논리 — GAAP 실적 급락은 사업 악화인가, 회계상 타이밍 효과인가 <span style="color:var(--red);">(고평가)</span></div>
     <div style="font-size:12px;color:var(--text2);line-height:1.7;">Q1 FY2026 GAAP EPS는 $1.00으로 전년 동기($1.76) 대비 43% 급락했지만, 이 중 상당 부분은 원유 파생상품에 대한 $3.9B 규모의 마크투마켓 타이밍 효과(실제 현금흐름과 무관한 회계상 손실)에서 비롯됐다. 같은 분기 조정(Non-GAAP) EPS $1.16은 오히려 컨센서스를 상회했다. <strong style="color:var(--text);">Permian·Guyana의 저원가 자산 생산 기록 경신은 유가 사이클과 무관하게 구조적 수익성이 개선되고 있음을 시사 — "유가에 베팅하는 기업"인지 "저원가 포트폴리오로 사이클을 방어하는 기업"인지가 핵심 논쟁점.</strong></div>
   </div>
   <div class="card">
