@@ -1,23 +1,23 @@
 {
-  "generatedAt": "2026-08-07T13:04:00Z",
+  "generatedAt": "2026-08-08T13:09:00Z",
   "sp500": {
-    "value": 7709.96,
-    "changePct": -0.18,
-    "asOf": "2026-08-06"
+    "value": 7757.64,
+    "changePct": 0.62,
+    "asOf": "2026-08-07"
   },
   "spy": {
-    "value": 768.56,
-    "changePct": -0.16,
-    "asOf": "2026-08-06"
+    "value": 773.26,
+    "changePct": 0.61,
+    "asOf": "2026-08-07"
   },
   "vix": {
-    "value": 15.15,
-    "changePct": -4.17,
-    "asOf": "2026-08-06"
+    "value": 14.9,
+    "changePct": -1.65,
+    "asOf": "2026-08-07"
   },
   "usdkrw": {
-    "value": 1408.4,
-    "changePct": -0.9,
+    "value": 1407.45,
+    "changePct": -1.04,
     "asOf": "2026-08-07"
   },
   "fedFunds": {
