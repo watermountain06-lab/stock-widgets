@@ -122,9 +122,13 @@ def check_news_min_events(s):
 
 
 def check_kpi_count(s):
+    # NVDA standard (2026-08-08): 9 legacy boxes trimmed to 6 non-redundant
+    # ones (매출/영업이익/순이익/TTM매출 dropped as duplicates of the #fund
+    # chart or the top ticker-summary row). Widgets not yet migrated still
+    # carry the legacy 9-box PM grid - both counts are accepted.
     fund = section(s, "fund")
     n = fund.count('class="stat-box"')
-    return [f"#fund has {n} KPI stat-boxes (need 9)"] if n != 9 else []
+    return [f"#fund has {n} KPI stat-boxes (need 6 NVDA-standard or 9 legacy PM)"] if n not in (6, 9) else []
 
 
 def check_quarter_count(s):

@@ -52,6 +52,9 @@ CONCEPTS = {
     "cash": ["CashAndCashEquivalentsAtCarryingValue",
              "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents"],
     "dividendPerShare": ["CommonStockDividendsPerShareDeclared", "CommonStockDividendsPerShareCashPaid"],
+    "operatingCashFlow": ["NetCashProvidedByUsedInOperatingActivities",
+                           "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations"],
+    "capex": ["PaymentsToAcquirePropertyPlantAndEquipment", "PaymentsToAcquireProductiveAssets"],
 }
 
 # Balance-sheet concepts are point-in-time ("instant": only an "end" date,

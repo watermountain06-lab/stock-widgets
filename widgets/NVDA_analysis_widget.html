@@ -448,49 +448,34 @@
 
   <div class="grid-3">
     <div class="stat-box">
-      <div class="stat-label">매출 (Q1 FY27)</div>
-      <div class="stat-value up">$81.6B</div>
-      <div class="stat-sub">▲85.2% YoY · 분기 신고점</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">영업이익 (Q1 FY27)</div>
-      <div class="stat-value up">$53.5B</div>
-      <div class="stat-sub">▲147.5% YoY · OPM 65.6%</div>
-    </div>
-    <div class="stat-box">
       <div class="stat-label">순이익률 (Q1 FY27)</div>
       <div class="stat-value up">71.5%</div>
-      <div class="stat-sub">역대급 마진</div>
+      <div class="stat-sub">최종 손익 마진 · 역대급</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">FCF (Q1 FY27)</div>
       <div class="stat-value gold">$48.6B</div>
-      <div class="stat-sub">FCF 마진 59.5%</div>
+      <div class="stat-sub">현금창출력 · FCF 마진 59.5%</div>
     </div>
     <div class="stat-box">
-      <div class="stat-label">TTM 매출</div>
-      <div class="stat-value">$253.5B</div>
-      <div class="stat-sub">4분기 합산</div>
+      <div class="stat-label">Capex (Q1 FY27)</div>
+      <div class="stat-value">$1.8B</div>
+      <div class="stat-sub">미래 재투자 · 매출의 2.2%(팹리스)</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">현금 및 단기투자</div>
       <div class="stat-value gold">$80.6B</div>
-      <div class="stat-sub">Q1 FY27 기준</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">순이익 (Q1 FY27)</div>
-      <div class="stat-value up">$58.3B</div>
-      <div class="stat-sub">순이익률 71.5% 반영</div>
+      <div class="stat-sub">재무 여력 · Q1 FY27 기준</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">EPS (Q1 FY27, 희석)</div>
       <div class="stat-value up">$2.41</div>
-      <div class="stat-sub">TTM EPS $6.56</div>
+      <div class="stat-sub">주당 가치 · TTM EPS $6.56</div>
     </div>
     <div class="stat-box">
       <div class="stat-label">다음 실적</div>
       <div class="stat-value gold">8월 하순 예상</div>
-      <div class="stat-sub">Q2 FY27</div>
+      <div class="stat-sub">일정 · Q2 FY27</div>
     </div>
   </div>
 
@@ -1194,24 +1179,38 @@ const NVDA_MA120 = [134.42,134.79,135.14,135.51,135.85,136.25,136.67,137.13,137.
 function renderFundChart() {
   const ctx = document.getElementById('nvdaRevChart');
   if (!ctx || charts['fund']) return;
+  const revenue=[30.0,35.1,39.3,44.1,46.7,57.0,68.1,81.6];
+  const netIncome=[16.6,19.3,22.1,18.8,26.4,31.9,43.0,58.3];
+  const opm=[62.1,62.3,61.1,49.1,60.8,63.2,65.0,65.6];
+  const y2min=40, y2max=75;
   charts['fund'] = new Chart(ctx,{
     data:{
       labels:['Q2 FY25','Q3 FY25','Q4 FY25','Q1 FY26','Q2 FY26','Q3 FY26','Q4 FY26','Q1 FY27'],
       datasets:[
-        {type:'bar',label:'매출($B)',data:[30.0,35.1,39.3,44.1,46.7,57.0,68.1,81.6],backgroundColor:'rgba(118,185,0,0.55)',borderColor:'#76b900',borderWidth:1,borderRadius:4,yAxisID:'y'},
-        {type:'bar',label:'순이익($B)',data:[16.6,19.3,22.1,18.8,26.4,31.9,43.0,58.3],backgroundColor:'rgba(52,152,219,0.5)',borderColor:'#3498db',borderWidth:1,borderRadius:4,yAxisID:'y'},
-        {type:'line',label:'OPM(%)',data:[62.1,62.3,61.1,49.1,60.8,63.2,65.0,65.6],borderColor:'#f0c040',backgroundColor:'rgba(240,192,64,.1)',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+        {type:'bar',label:'매출($B)',data:revenue.map(()=>0),backgroundColor:'rgba(118,185,0,0.55)',borderColor:'#76b900',borderWidth:1,borderRadius:4,yAxisID:'y'},
+        {type:'bar',label:'순이익($B)',data:netIncome.map(()=>0),backgroundColor:'rgba(52,152,219,0.5)',borderColor:'#3498db',borderWidth:1,borderRadius:4,yAxisID:'y'},
+        {type:'line',label:'OPM(%)',data:opm.map(()=>y2min),borderColor:'#f0c040',backgroundColor:'rgba(240,192,64,.1)',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
       ]
     },
     options:{
       responsive:true,maintainAspectRatio:false,
+      animation:false,
       plugins:{legend:{labels:{color:'#9aa0b8',font:{size:11}}}},
       scales:{
         x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},maxRotation:30}},
         y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}},
-        y2:{position:'right',min:40,max:75,grid:{display:false},ticks:{color:'#f0c040',font:{size:10},callback:v=>v+'%'}}
+        y2:{position:'right',min:y2min,max:y2max,grid:{display:false},ticks:{color:'#f0c040',font:{size:10},callback:v=>v+'%'}}
       }
     }
+  });
+  requestAnimationFrame(()=>{
+    const c=charts['fund'];
+    if (!c) return;
+    c.options.animation={duration:900,easing:'easeOutQuart'};
+    c.data.datasets[0].data=revenue;
+    c.data.datasets[1].data=netIncome;
+    c.data.datasets[2].data=opm;
+    c.update();
   });
 }
 

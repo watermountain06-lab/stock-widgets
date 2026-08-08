@@ -48,10 +48,44 @@ as a standalone batch job.
    operating profitability from both COGS-structure noise (매출총이익률) and one-time/tax noise
    (순이익률) — see `stock-refresh/SKILL.md`'s "손익계산서 표준 차트" section for the fuller
    design-discussion trail (bar count, line count, and why a dual-chart split was rejected).
-2. **9-box `grid-3` stat block** directly below the chart — one dense grid (revenue, operating income/net income, EPS, margin, prior-FY revenue, prior-FY net income, prior-FY EPS, shareholder-return/cashflow figure, next-earnings date), not split into a smaller grid plus a separate "사업 구성" card.
+   Load animation (added 2026-08-08): `renderFundChart()` creates the chart with every dataset
+   at its own axis baseline (bars at 0, the OPM line at `y2`'s min) and `animation:false`, then
+   on the next frame swaps in the real data and calls `chart.update()` with the actual
+   animation config. This is a two-step create-then-update, **not** a top-level
+   `animations: { y: { ... from ... } }` override — that literal pattern is the one
+   `validate_widget.py` forbids as a "fly-in" anti-pattern. Plain Chart.js defaults were tried
+   first and rejected: bars already grow correctly from 0, but the line snaps to its final
+   shape almost instantly while the bars are still near-zero, so the completed line appears to
+   float above unfinished bars — the "flying in" look the create-then-update fix eliminates by
+   making every series start flat at its own baseline and rise together.
+2. **6-box `grid-3` stat block** directly below the chart (NVDA standard, 2026-08-08 —
+   supersedes the legacy 9-box PM grid, not yet migrated on the other 44 widgets). Kept exactly
+   the boxes that are not already shown somewhere else on the page and dropped everything that
+   duplicates the chart or the top ticker-summary row:
+   - **Dropped** 매출/영업이익/순이익 (all three duplicate the #fund chart directly) and TTM
+     매출 (duplicates the top ticker-summary row — 매출/EPS are shown there on a TTM basis).
+   - **Kept**: 순이익률 (the one bottom-line margin figure not shown anywhere else — distinct
+     from the chart's OPM, which stops at operating income and excludes tax/interest/other
+     income), FCF (cash actually generated, not shown elsewhere), **Capex** (new box, added
+     2026-08-08 — NVDA's own capital spending was completely absent from the widget; every
+     other "capex" mention on the page is *hyperscaler* capex, i.e. NVDA's customers' spending,
+     a different number entirely; FCF and Capex are shown as a pair since FCF = OCF − Capex),
+     현금 및 단기투자 (balance-sheet cash position — 재무 건전성's 유동비율 uses this number
+     but only ever shows the ratio, never the absolute figure), EPS (quarterly, distinct from
+     the TTM EPS already in the top summary row), and 다음 실적 (calendar, no overlap with
+     anything). Each box's `.stat-sub` line leads with a short axis tag (e.g. "현금창출력 ·",
+     "미래 재투자 ·") so a reader can tell at a glance why each box exists and that none of the
+     six repeat each other.
+   - Data source: `scripts/fetch_financials.py` gained `operatingCashFlow` and `capex`
+     concepts (`PaymentsToAcquirePropertyPlantAndEquipment` XBRL tag) for this change — verify
+     any pulled Capex figure against FCF via OCF − Capex ≈ FCF as a sanity check before trusting
+     it (this is how NVDA's own $1.8B Capex figure was confirmed against its existing $48.6B
+     FCF box).
+   - `scripts/audit_widgets.py`'s `check_kpi_count` accepts both 6 (NVDA) and 9 (legacy PM)
+     stat-box counts; `validate_widget.py` does not check box count.
 3. Card: **재무 건전성 — 안정성·활동성** (added 2026-08-08, replacing `#valuation`'s old
-   `stage-grid` card in the same design pass) — directly below the 9-box grid, before 핵심 성장
-   동력. See "재무 건전성 card" subsection below for its internal structure and the underlying
+   `stage-grid` card in the same design pass) — directly below the KPI stat-box grid, before
+   핵심 성장 동력. See "재무 건전성 card" subsection below for its internal structure and the underlying
    ratio formulas.
 4. Card: **핵심 성장 동력** (3개) — `driver-item`/`driver-num`/`driver-title`/`driver-desc` numbered-circle style (NVDA's actual markup — this is the majority convention, 30/45 widgets). Optional CEO quote line above it: "분기 수치 · CEO 이름 "실제 발언(한국어 번역)"" — must be a real, WebSearch-verified quote, translated into Korean like the rest of the document.
 5. Card: **핵심 투자 논리** — narrative paragraph, same text as the header `box-key`.
@@ -61,7 +95,7 @@ as a standalone batch job.
 
 Two sub-sections inside one card, per the 안정성/활동성 steps of the 재무제표 분석 프로세스
 (하마터면 회계를 모르고 일할 뻔했다 — 손익계산서[수익성·성장성] → 재무상태표[안정성] →
-크로스분석[활동성]; 수익성·성장성 is already covered by the #fund chart + 9-box above, so this
+크로스분석[활동성]; 수익성·성장성 is already covered by the #fund chart + KPI stat-box grid above, so this
 card covers steps 3–4 only).
 
 **안정성** (`.diag-summary` + `.diag-list`/`.diag-row`) — a health-checkup-report layout, not a
@@ -177,19 +211,27 @@ depend on 1-year history.
 
 ## PM → NVDA reference change (2026-08-08)
 
-NVDA replaces PM as the widget scripts/docs treat as canonical, for exactly two structural
-changes made together in one design pass with the user (mockups worked out via a claude.ai/design
-project, then applied to NVDA):
+NVDA replaces PM as the widget scripts/docs treat as canonical, for a small, explicitly scoped
+set of structural changes made incrementally across 2026-08-08 (the first two together in one
+design pass with the user, mockups worked out via a claude.ai/design project; the last two in a
+follow-up pass reducing #fund's overall density):
 
 1. `#valuation`'s `stage-grid` card removed (6-card → 5-card valuation order).
 2. `#fund` gained the **재무 건전성 — 안정성·활동성** card (in the slot the removed stage-grid's
    information effectively moved out of), and its chart was standardized to the fixed
    매출/순이익/OPM 3-series set.
+3. `#fund`'s chart load animation changed from Chart.js defaults (line snaps in ahead of the
+   still-growing bars) to a create-flat-then-update pattern so every series rises from its own
+   baseline together — see `#fund` item 1 above for the mechanism.
+4. `#fund`'s 9-box `grid-3` KPI grid trimmed to 6 boxes, dropping everything that duplicated the
+   chart or the top ticker-summary row and adding a new Capex box — see `#fund` item 2 above for
+   the full kept/dropped rationale.
 
 Every *other* PM convention in this doc (candlestick SVG scaffolding, MA-row/zone-item markup,
 tag-pills, box-key structure, 목표가 밴드 formula, etc.) is unaffected and still valid — this
-was a two-card change, not a full reference-ticker rewrite. `scripts/validate_widget.py` accepts
-both the old PM-order and the new NVDA-order so the other 44 widgets don't fail validation
+is a small set of targeted changes, not a full reference-ticker rewrite. `scripts/validate_widget.py`
+accepts both the old PM-order and the new NVDA-order (and `scripts/audit_widgets.py` accepts
+both the old 9-box and new 6-box KPI count) so the other 44 widgets don't fail validation
 outright; migrate each one to the NVDA order when it's next touched for another reason (per this
 project's established stock-refresh pattern), not as a dedicated batch job.
 

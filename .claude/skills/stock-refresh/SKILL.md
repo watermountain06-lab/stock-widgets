@@ -138,8 +138,9 @@ concept (already covers this - no script extension needed for this part, unlike 
 
 ## 재무 건전성 카드 (안정성·활동성) — 2026-08-08
 
-Replaces `#valuation`'s old `stage-grid` card; lives in `#fund`, directly after the 9-box KPI
-grid and before 핵심 성장 동력. See `docs/canonical_widget_spec.md`'s "재무 건전성 card"
+Replaces `#valuation`'s old `stage-grid` card; lives in `#fund`, directly after the KPI stat-box
+grid (9-box on unmigrated widgets, 6-box on NVDA - see "#fund KPI box count" section below) and
+before 핵심 성장 동력. See `docs/canonical_widget_spec.md`'s "재무 건전성 card"
 subsection for the exact formulas and CSS class list (`.diag-*` for 안정성, `.act-*`/`.ccc-*`/
 `.tl-*` for 활동성) - copy NVDA's markup verbatim rather than re-deriving the layout.
 
@@ -180,6 +181,81 @@ building NVDA's card, both fixed in the script rather than worked around per-tic
 - 매입채무 회전율 needs a 매입액 (purchases) figure that's essentially never tagged directly in
   XBRL. Approximate it as 매출원가 + (당기말 재고자산 − 전기말 재고자산) rather than fetching a
   concept that doesn't reliably exist.
+
+## `#fund` chart load animation - grow-from-bottom, not fly-in, 2026-08-08
+
+User reported the `#fund` chart's load animation looked like it was "flying in" rather than
+growing from the bottom, even though nothing in the widget (or the whole fleet, grepped) had any
+custom `animations:` config - Chart.js was running on pure defaults.
+
+Diagnosed live in-browser (destroyed and re-created the chart with an artificially long
+`duration` to slow it down enough to screenshot mid-animation, several iterations): the bars
+were already growing correctly from 0 under Chart.js defaults, but the OPM **line** was not -
+its points reach their final `(x,y)` almost immediately while the bars are still near-zero
+height, so for most of the animation the viewer sees a fully-formed line floating above
+unfinished bars. That mismatch - one series completing instantly while the other visibly grows -
+is what read as "flying in," not a swirl/artifact in the line itself (an earlier scroll-clipped
+screenshot briefly looked like a spiral glitch in the line; re-screenshotting at the correct
+scroll position showed that was just an optical artifact of viewing a curved line through a
+narrow crop, not a real bug).
+
+**Fix**: `renderFundChart()` now creates the chart with `animation:false` and every dataset
+pinned to its own axis baseline (bars at 0, the OPM line at the `y2` scale's `min`), then on the
+next animation frame (`requestAnimationFrame`) swaps in the real data and calls `chart.update()`
+with the actual `animation:{duration,easing}` config. Chart.js's own data-transition animation
+then interpolates every series from that shared flat baseline to its final value in lockstep, so
+bars and line rise together with no snap. This is a two-step create-then-update, not a
+`animations: { y: { ... from ... } }` override - `validate_widget.py` explicitly forbids that
+literal pattern (a past, unrelated "fly-in" bug used it to drop elements in from the wrong
+direction) - so this fix doesn't need a validator exception and passes as-is.
+
+If another widget's chart gets this same complaint, check first whether it's a mixed bar+line
+chart before assuming the fix applies - a pure-bar or pure-line chart doesn't have this
+completion-mismatch in the first place.
+
+## `#fund` KPI box count - 9 to 6, 2026-08-08
+
+The legacy 9-box `grid-3` KPI grid was trimmed to 6 on NVDA after the user flagged that #fund had
+become too dense once the 재무 건전성 card was added on top of it. Rather than picking round
+numbers, went through the full 9 (plus one newly-discovered gap) box by box and kept only what
+wasn't already shown somewhere else on the page:
+
+- **Dropped as chart duplicates**: 매출, 영업이익, 순이익 - all three are now directly on the
+  #fund chart (see "손익계산서 표준 차트" above), so a stat-box repeating one is pure redundancy.
+- **Dropped as top-summary duplicates**: TTM 매출 - the ticker header row above the tabs already
+  shows TTM 매출 and TTM EPS, so this box added nothing a reader couldn't already see without
+  switching tabs.
+- **Kept, each covering a distinct axis with zero overlap with anything else on the page**:
+  순이익률 (the one *final* bottom-line margin figure left anywhere in the widget once 영업이익/
+  순이익 boxes are gone - distinct from the chart's OPM, which stops at operating income),
+  FCF (cash actually generated), **Capex** (see below - a new box), 현금 및 단기투자 (absolute
+  balance-sheet cash figure - the 재무 건전성 card's 유동비율 uses this number internally but
+  only ever displays the *ratio*, never the dollar amount), EPS (quarterly - distinct from the
+  TTM EPS already in the top summary), and 다음 실적 (calendar, always unique).
+- Each box's `.stat-sub` line now leads with a short axis tag before the existing detail (e.g.
+  "현금창출력 · FCF 마진 59.5%", "미래 재투자 · 매출의 2.2%(팹리스)") at the user's request, so a
+  reader can tell at a glance what each box represents and confirm none of the six repeat.
+
+**Capex was a real gap, not just a density trim.** Mid-discussion the user asked whether the
+widget showed how much NVDA itself invests in its future - it didn't. Every existing "capex"
+mention on the page (핵심 투자 논리, 하이퍼스케일러 AI Capex 차트, US 특화 등) is about
+*hyperscaler* capex - Meta/MSFT/Amazon/Alphabet's spending, which is NVDA's demand signal, not
+NVDA's own number. `fetch_financials.py` gained two new concepts for this:
+`PaymentsToAcquirePropertyPlantAndEquipment` (capex) and `NetCashProvidedByUsedInOperatingActivities`
+(operatingCashFlow, added alongside it so FCF = OCF − Capex can be sanity-checked against the
+existing FCF box rather than trusted blindly - this caught nothing wrong for NVDA, OCF $50.3B −
+Capex $1.76B ≈ FCF $48.6B matched, but do this check every time a Capex figure is added to
+another widget). NVDA's Capex is small relative to revenue (~2.2%) because it's fabless (TSMC
+manufactures) - worth a one-line note in the box, not just the bare dollar figure, since a reader
+comparing it to the $700B hyperscaler number nearby could otherwise misread NVDA's own capex
+intensity.
+
+`scripts/audit_widgets.py`'s `check_kpi_count` now accepts both 6 and 9 as valid box counts, the
+same both-old-and-new pattern used for `validate_widget.py`'s valuation card-order check.
+Grid stays `grid-3` (3×2 for 6 boxes) - no CSS change needed. A `.grid-4` class already exists
+in-file (reused from the #tech 구간별 패턴 분석 card) if a future widget lands on exactly 4 boxes
+instead and wants a single row - `.grid-3`/`.grid-4` both already collapse to 2 columns on
+mobile via the existing media query.
 
 ## `#us` sector evidence framework
 
