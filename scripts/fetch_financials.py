@@ -7,7 +7,11 @@ or edit DEFAULT_USER_AGENT below before running at scale.
 
 Usage: python3 fetch_financials.py TICKER [--cik CIK] [--sp500 sp500.json]
 Output: JSON with last 3 annual (10-K) periods + latest quarterly (10-Q) for
-revenue, operating income, net income, EPS, assets, equity, cash, dividends.
+revenue, cost of revenue, operating income, net income, interest expense, EPS,
+assets, current assets/liabilities, inventory, receivables, payables, total
+liabilities, short/long-term debt, equity, cash, dividends - enough for the
+수익성/성장성/안정성/활동성 ratio set (매출총이익률, ROA, ROE, 유동비율, 당좌비율,
+부채비율, 차입금의존도, 이자보상배율, 매출채권/재고자산/매입채무 회전율 등).
 """
 import argparse
 import json
@@ -23,12 +27,26 @@ DEFAULT_USER_AGENT = "second-brain-stock-widgets gptjhss@gmail.com"
 CONCEPTS = {
     "revenue": ["Revenues", "RevenueFromContractWithCustomerExcludingAssessedTax",
                 "SalesRevenueNet", "RevenueFromContractWithCustomerIncludingAssessedTax"],
+    "costOfRevenue": ["CostOfRevenue", "CostOfGoodsAndServicesSold", "CostOfGoodsSold",
+                       "CostOfServices"],
     "operatingIncome": ["OperatingIncomeLoss"],
     "netIncome": ["NetIncomeLoss", "ProfitLoss"],
     "netIncomeAttributableToParent": ["NetIncomeLossAvailableToCommonStockholdersBasic", "NetIncomeLoss"],
+    "interestExpense": ["InterestExpense", "InterestExpenseNonoperating",
+                         "InterestExpenseDebt", "InterestExpenseOther"],
     "epsBasic": ["EarningsPerShareBasic", "EarningsPerShareBasicAndDiluted"],
     "epsDiluted": ["EarningsPerShareDiluted", "EarningsPerShareBasicAndDiluted"],
     "assets": ["Assets"],
+    "currentAssets": ["AssetsCurrent"],
+    "currentLiabilities": ["LiabilitiesCurrent"],
+    "inventory": ["InventoryNet"],
+    "accountsReceivable": ["AccountsReceivableNetCurrent", "ReceivablesNetCurrent",
+                            "AccountsReceivableNet"],
+    "accountsPayable": ["AccountsPayableCurrent", "AccountsPayableTradeCurrent",
+                         "AccountsPayableCurrentAndNoncurrent"],
+    "totalLiabilities": ["Liabilities"],
+    "shortTermDebt": ["ShortTermBorrowings", "DebtCurrent", "LongTermDebtCurrent"],
+    "longTermDebt": ["LongTermDebtNoncurrent", "LongTermDebt"],
     "equityAttributableToParent": ["StockholdersEquity",
                                     "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest"],
     "cash": ["CashAndCashEquivalentsAtCarryingValue",
@@ -38,7 +56,10 @@ CONCEPTS = {
 
 # Balance-sheet concepts are point-in-time ("instant": only an "end" date,
 # no "start") rather than period durations like income-statement concepts.
-INSTANT_CONCEPTS = {"assets", "equityAttributableToParent", "cash"}
+INSTANT_CONCEPTS = {"assets", "currentAssets", "currentLiabilities", "inventory",
+                     "accountsReceivable", "accountsPayable", "totalLiabilities",
+                     "shortTermDebt", "longTermDebt",
+                     "equityAttributableToParent", "cash"}
 
 
 def fetch_json(url, user_agent):
