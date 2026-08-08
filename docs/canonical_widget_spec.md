@@ -1,14 +1,19 @@
 # Canonical Widget Spec
 
 Single source of truth for the 6-tab structure every `widgets/{TICKER}_analysis_widget.html`
-must follow. Extracted from `widgets/PM_analysis_widget.html` (2026-08-07), which is also the
+must follow. Reference implementation is `widgets/NVDA_analysis_widget.html` (updated
+2026-08-08, superseding PM — see "PM → NVDA reference change" below), which is also the
 structural contract `scripts/validate_widget.py` enforces. When this doc and
 `progress_log.md`'s older "Codex Handoff Checklist" disagree, **this doc wins** — see
 "Superseded guidance" at the bottom for what changed and why.
 
-Use this doc, not PM's raw HTML, as the thing to read before building or fixing a widget.
-Still copy PM's actual markup verbatim for anything not spelled out here (exact CSS, inline
-styles, class names) — this doc describes *what* goes where, not full markup.
+Use this doc, not NVDA's raw HTML, as the thing to read before building or fixing a widget.
+Still copy NVDA's actual markup verbatim for anything not spelled out here (exact CSS, inline
+styles, class names) — this doc describes *what* goes where, not full markup. The other 44
+widgets have not been migrated to this NVDA-standard structure yet (2026-08-08) - both the old
+PM-order and new NVDA-order validate, see `validate_widget.py`'s `val_contract_old`/`_new`.
+Migrate a widget to the new structure when you're already touching it for another reason, not
+as a standalone batch job.
 
 ## Common header (outside the 6 tabs)
 
@@ -32,22 +37,97 @@ styles, class names) — this doc describes *what* goes where, not full markup.
 
 ## `#fund` — 기본적 분석
 
-1. Card: **분기 매출/영업이익/OPM 차트** (or 매출·순이익·EPS depending on business — Chart.js bar/line, 8 quarters). Net income as its own series from the start, not retrofitted later.
+1. Card: **분기 매출/순이익/영업이익률(OPM) 차트** (Chart.js, 8 quarters) — fixed to exactly this
+   3-series set (매출 bar + 순이익 bar + OPM% line), not per-ticker variants. This was
+   standardized 2026-08-08 after finding the fleet had drifted into inconsistent sets
+   (GOOGL/META/MSFT plot 영업이익 instead of 순이익; JNJ plots EPS lines instead of a margin
+   line; TSLA has no dollar-value series at all, just GM%/OPM%). The rationale for exactly
+   these three: 영업이익 doesn't need its own bar because it's recoverable from 매출×OPM% once
+   OPM is on the chart, so a dedicated 순이익 bar is more informative than a third $-bar. OPM
+   was kept as the *only* margin line (not 매출총이익률 or 순이익률) because it isolates core
+   operating profitability from both COGS-structure noise (매출총이익률) and one-time/tax noise
+   (순이익률) — see `stock-refresh/SKILL.md`'s "손익계산서 표준 차트" section for the fuller
+   design-discussion trail (bar count, line count, and why a dual-chart split was rejected).
 2. **9-box `grid-3` stat block** directly below the chart — one dense grid (revenue, operating income/net income, EPS, margin, prior-FY revenue, prior-FY net income, prior-FY EPS, shareholder-return/cashflow figure, next-earnings date), not split into a smaller grid plus a separate "사업 구성" card.
-3. Card: **핵심 성장 동력** (3개) — `driver-item`/`driver-num`/`driver-title`/`driver-desc` numbered-circle style (PM's actual markup — this is the majority convention, 30/45 widgets). Optional CEO quote line above it: "분기 수치 · CEO 이름 "실제 발언(한국어 번역)"" — must be a real, WebSearch-verified quote, translated into Korean like the rest of the document.
-4. Card: **핵심 투자 논리** — narrative paragraph, same text as the header `box-key`.
-5. Card: **다음 실적 체크포인트** — "①②③④" checklist tied to real guidance numbers, not plain stat-boxes. Must be the *last* card in `#fund` (`validate_widget.py` enforces `fund` ending with 핵심투자논리 → 다음실적체크포인트).
+3. Card: **재무 건전성 — 안정성·활동성** (added 2026-08-08, replacing `#valuation`'s old
+   `stage-grid` card in the same design pass) — directly below the 9-box grid, before 핵심 성장
+   동력. See "재무 건전성 card" subsection below for its internal structure and the underlying
+   ratio formulas.
+4. Card: **핵심 성장 동력** (3개) — `driver-item`/`driver-num`/`driver-title`/`driver-desc` numbered-circle style (NVDA's actual markup — this is the majority convention, 30/45 widgets). Optional CEO quote line above it: "분기 수치 · CEO 이름 "실제 발언(한국어 번역)"" — must be a real, WebSearch-verified quote, translated into Korean like the rest of the document.
+5. Card: **핵심 투자 논리** — narrative paragraph, same text as the header `box-key`.
+6. Card: **다음 실적 체크포인트** — "①②③④" checklist tied to real guidance numbers, not plain stat-boxes. Must be the *last* card in `#fund` (`validate_widget.py` enforces `fund` ending with 핵심투자논리 → 다음실적체크포인트).
+
+### 재무 건전성 card (안정성·활동성)
+
+Two sub-sections inside one card, per the 안정성/활동성 steps of the 재무제표 분석 프로세스
+(하마터면 회계를 모르고 일할 뻔했다 — 손익계산서[수익성·성장성] → 재무상태표[안정성] →
+크로스분석[활동성]; 수익성·성장성 is already covered by the #fund chart + 9-box above, so this
+card covers steps 3–4 only).
+
+**안정성** (`.diag-summary` + `.diag-list`/`.diag-row`) — a health-checkup-report layout, not a
+bar/gauge (user-tested 2026-08-08: bar gauges were not legible to a lay reader at a glance).
+One green summary banner ("종합 진단: {매우 안정적|주의 필요|...}") plus one `.diag-row` per
+metric with a ✅/⚠️/❌ `.diag-badge`, not a percentage bar:
+
+| 지표 | 공식 | 판정 기준 |
+|---|---|---|
+| 유동비율 | 유동자산 ÷ 유동부채 × 100 | 150%↑ 안정, 50%↓ 위험 |
+| 당좌비율 | (유동자산−재고자산) ÷ 유동부채 × 100 | 100%↑ 양호 |
+| 부채비율 | 부채 ÷ 자기자본 × 100 | 낮을수록 양호, 유동부채비율·차입금의존도와 함께 판단 |
+| 차입금의존도 | (단기+장기차입금) ÷ 자산 × 100 | 30%↓ 양호 |
+| 이자보상배율 | 영업이익 ÷ 이자비용 | 1 미만이면 잠재적 부실기업 명시 필수 |
+| 총자산증가율 | (당기말 자산−전기말 자산) ÷ 전기말 자산 × 100 | 판정 배지 없이 `info` 참고용으로만 표시 (안정성이 아니라 성장성 지표) |
+
+**활동성** (`.activity-grid`/`.act-card` + `.ccc-card`) — icon-card grid for the individual
+turnover metrics, plus a dedicated cash-conversion-cycle (CCC) card with a segmented timeline
+bar (`.tl-bar-wrap`, reusing the same flex-segment technique as 목표가 밴드):
+
+| 지표 | 공식 |
+|---|---|
+| 매출채권 회전율 | 매출액×2 ÷ (전기말+당기말 매출채권) |
+| 재고자산 회전율 | 매출원가×2 ÷ (전기말+당기말 재고자산) |
+| 매입채무 회전율 | 매입액×2 ÷ (전기말+당기말 매입채무) — 매입액이 직접 공시되지 않으면 매출원가+재고증가분으로 근사 |
+| 각 회전기간 | 365 ÷ 해당 회전율 |
+| 영업순환주기 | 매출채권 회전기간 + 재고자산 회전기간 |
+| 현금창출주기 (CCC) | 영업순환주기 − 매입채무 지급기간 |
+
+**CCC is colored neutrally (`var(--gold)`), never red/green** — unlike the 안정성 metrics above,
+활동성 has no universal pass/fail line in the source material; a shorter CCC ties up less cash,
+but what counts as "short" is entirely industry-dependent (a semiconductor maker's CCC is
+structurally longer than a software company's), so a red/green verdict here would be a false
+claim the data doesn't support. Give the CCC card a one-line plain-language explanation of what
+the day-count means (e.g. "재고를 사서 판매 대금을 회수하기까지 N일이 걸리는데, 그중 M일은
+매입채무로 버티고 나머지 X일은 회사가 직접 현금으로 메워야 하는 기간이다") instead of a
+good/bad label.
+
+Data source: `scripts/fetch_financials.py` was extended 2026-08-08 with the balance-sheet
+concepts these ratios need (`currentAssets`, `currentLiabilities`, `inventory`,
+`accountsReceivable`, `accountsPayable`, `totalLiabilities`, `shortTermDebt`, `longTermDebt`,
+`costOfRevenue`, `interestExpense`) — none of these were pulled before. `interestExpense` in
+particular can go stale on companies with negligible debt (NVDA's `InterestExpense` XBRL tag
+stopped being populated after Q1 FY2024); the script now also tries
+`InterestExpenseNonoperating` as a fallback.
 
 ## `#valuation` — 밸류에이션
 
-Fixed 6-card order (`validate_widget.py`-enforced, do not reorder):
+Fixed 5-card order (`validate_widget.py`-enforced, do not reorder) — reduced from 6 to 5
+2026-08-08 when the old `stage-grid` card was dropped (user's call: it only restated the same
+5 multiples the 멀티플 5단계 평가 card above it and the 종합 밸류에이션 paragraph below it
+*already* had to state independently per the rule in card 4 below — three restatements of the
+same distribution was pure redundancy, not new information). Legacy widgets still on the old
+6-card order (with `stage-grid` as card 3) remain valid until migrated — see
+`validate_widget.py`'s `val_contract_old`.
 
 1. **멀티플 5단계 평가** — 5 `val-item`s, each with `stage-badge stage-N` (1–5), a `val-fill` gauge (green→gold→red 3-stop gradient, width = position on the low/mid/high scale), and numeric `val-labels` (never generic "낮음/적정/높음").
 2. **peer 비교** — chart + one paragraph comparing the ticker to its named peer group.
-3. **밸류에이션 5단계** (`.stage-grid`, exactly one per widget) — 5 mini boxes (매우저평가/저평가/적정/고평가/매우고평가), each metric's name tagged into the box matching its own `stage-badge`. Summary sentence below **must restate the same numbers and stages as the 5 val-items above it** — this is where NVDA drifted out of sync (2026-08-07 finding: summary cited different multiples and a wrong stage for PBR/PSR than the val-items actually showed). Regenerate this sentence, don't hand-edit it, whenever the val-items change.
-4. **Per-Share 지표** (`per-share-grid`, 4 cards: EPS/BPS-or-매출/주/FCF-or-영업CF/주/DPS) — title states the share count and as-of quarter.
-5. **종합 밸류에이션** — one narrative paragraph. Title format: `종합 밸류에이션 — {짧은 결론}`. Content must be consistent with card 3's stage distribution (same rule as above).
-6. **시나리오별 공정가치 분석** — 3 vertical `scenario-card`s (Bear/Base/Bull), never `grid-3`. Each states the driving assumption and a fair-value $ range vs. current price %.
+3. **Per-Share 지표** (`per-share-grid`, 4 cards: EPS/BPS-or-매출/주/FCF-or-영업CF/주/DPS) — title states the share count and as-of quarter.
+4. **종합 밸류에이션** — one narrative paragraph. Title format: `종합 밸류에이션 — {짧은 결론}`. Content must state the same numbers and stage distribution as the 5 val-items in card 1 — this is where NVDA drifted out of sync before the stage-grid was dropped (2026-08-07 finding: the old stage-grid's summary cited different multiples and a wrong stage for PBR/PSR than the val-items actually showed). Regenerate this sentence, don't hand-edit it, whenever the val-items change.
+5. **시나리오별 공정가치 분석** — 3 vertical `scenario-card`s (Bear/Base/Bull), never `grid-3`. Each states the driving assumption and a fair-value $ range vs. current price %.
+
+The box-key/`#fund` 핵심 투자 논리 title's 5-tier verdict tag (`초저평가|저평가|적정|고평가|초고평가`)
+is still derived by majority vote across these same 5 `val-item` `stage-badge`s directly — it
+never depended on the `stage-grid` box existing, so removing that card doesn't change how the
+tag gets picked. See `stock-refresh/SKILL.md`'s "Format conventions" section.
 
 ## `#us` — US 특화
 
@@ -94,6 +174,24 @@ legitimately fail the 252-length `DAILY`/`MAn` array checks and can't show a rea
 full 1-year 구간별 패턴 분석. Don't force-fill these — show the real, shorter history and say so,
 per `progress_log.md`'s existing "recent IPOs/ADRs" note. Fill in everything else that doesn't
 depend on 1-year history.
+
+## PM → NVDA reference change (2026-08-08)
+
+NVDA replaces PM as the widget scripts/docs treat as canonical, for exactly two structural
+changes made together in one design pass with the user (mockups worked out via a claude.ai/design
+project, then applied to NVDA):
+
+1. `#valuation`'s `stage-grid` card removed (6-card → 5-card valuation order).
+2. `#fund` gained the **재무 건전성 — 안정성·활동성** card (in the slot the removed stage-grid's
+   information effectively moved out of), and its chart was standardized to the fixed
+   매출/순이익/OPM 3-series set.
+
+Every *other* PM convention in this doc (candlestick SVG scaffolding, MA-row/zone-item markup,
+tag-pills, box-key structure, 목표가 밴드 formula, etc.) is unaffected and still valid — this
+was a two-card change, not a full reference-ticker rewrite. `scripts/validate_widget.py` accepts
+both the old PM-order and the new NVDA-order so the other 44 widgets don't fail validation
+outright; migrate each one to the NVDA order when it's next touched for another reason (per this
+project's established stock-refresh pattern), not as a dedicated batch job.
 
 ## Superseded guidance (progress_log.md "Codex Handoff Checklist", 2026-07-22)
 

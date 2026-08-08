@@ -9,7 +9,7 @@ Work in `/Users/watermountain/Workspace/stock-widgets`. Never touch `widgets/kr_
 
 ## Single source of truth
 
-Read `docs/canonical_widget_spec.md` first - it is the reconciled, current spec for all 6 tabs (order, card titles, formatting rules), built from PM's actual structure and already resolves two places where `progress_log.md`'s older notes had drifted. Don't treat PM's raw HTML or `progress_log.md` as competing specs; when they conflict with the canonical doc, the doc wins. Use PM's HTML only to copy exact markup/CSS scaffolding the doc references but doesn't fully reproduce (e.g. the candlestick SVG renderer).
+Read `docs/canonical_widget_spec.md` first - it is the reconciled, current spec for all 6 tabs (order, card titles, formatting rules), built from PM's actual structure and already resolves two places where `progress_log.md`'s older notes had drifted. Don't treat PM's raw HTML or `progress_log.md` as competing specs; when they conflict with the canonical doc, the doc wins. Use PM's HTML to copy exact markup/CSS scaffolding the doc references but doesn't fully reproduce (e.g. the candlestick SVG renderer) - except for `#fund`'s chart and its new 재무 건전성 card, and `#valuation`'s card count, where **NVDA is the reference instead** (2026-08-08, see the doc's "PM → NVDA reference change" section). Most widgets, including PM itself, haven't been migrated to the NVDA order yet - that's expected, migrate opportunistically per the "Pick a mode" section below, not as a batch job.
 
 ## Pick a mode
 
@@ -98,6 +98,88 @@ For the standard three-range case, apply the printed segment widths, both marker
 - **시계열 뉴스**: newest event first (top of the DOM = most recent date). Check this on every widget touched - at least one existing widget (CAT) had it backwards before this session.
 - **Page width**: `.today-banner`, `.header`, `.box-key`, `.nav`, `.section`, `.disclaimer` all need `max-width:1100px; margin:0 auto` (disclaimer keeps its own top/bottom margin: `margin:28px auto 16px`). `.back-bar` stays full-bleed. Many older widgets are still missing this - check and fix opportunistically when touching a widget for another reason.
 - **box-key** (header-level 핵심 투자 논리 summary): not universal yet (~9/45 widgets have it). If adding one to a widget that lacks it, copy PM's structure - a short stat-based subtitle line ("Q2 매출 $X (+Y%) · PER Zx") plus the same paragraph body as the `#fund` tab's 핵심 투자 논리 card, `max-width:1100px;margin:0 auto 16px` on the `.box-key` CSS rule, background tinted with the widget's own `--accent2` at low alpha.
+
+## 손익계산서 표준 차트 (#fund) — 매출/순이익/OPM, 2026-08-08
+
+The `#fund` chart is now fixed to exactly 3 series: 매출($B) bar, 순이익($B) bar,
+영업이익률(OPM,%) line - single y-axis for the two bars, single secondary y-axis for the one
+line. This replaced real per-ticker drift (GOOGL/META/MSFT plotted 영업이익 instead of 순이익;
+JNJ plotted GAAP/Adjusted EPS lines instead of a margin line; TSLA had no dollar bars at all,
+just GM%/OPM%; AMZN's chart is segment-focused - 매출+AWS+OPM - which is a legitimate ticker-
+specific exception, not drift, since AWS-vs-total is the actual investment story there).
+
+This exact set was reached through several rejected alternatives worth knowing before you touch
+another widget's chart, so the same dead ends aren't re-walked:
+
+1. **5-series single chart** (매출/순이익 bars + OPM/매출총이익률/순이익률 lines, dual axis) -
+   rejected as visually too dense; three overlapping % lines crossing each other made the chart
+   hard to read even though Chart.js rendered it without technical issues.
+2. **Dot-only markers instead of dashed lines** for the two extra margin lines - cleaner than (1)
+   but still added clutter without adding information, once (3) below made the deeper point.
+3. **Two separate charts in one card** (money chart + margin chart, stacked with a divider) -
+   genuinely worked visually (no axis-scale conflict, each sub-chart legible on its own) but was
+   dropped anyway once the real question got asked: **영업이익률 is not derivable from
+   매출총이익률 and 순이익률 together** (판관비 sits between the first two, 영업외손익+세금 sits
+   between the last two - two different, non-substitutable gaps) so all three margins really are
+   distinct information. But practically, OPM alone is the one analysts lean on most because it's
+   the cleanest read of core-business profitability, uncontaminated by COGS-mix noise (매출총이익률)
+   or one-time/tax noise (순이익률) - so the fix wasn't a layout trick, it was dropping the other
+   two margins from the chart entirely, not just changing how they're drawn.
+4. **Bars: settled on 2, not 3.** 영업이익 doesn't need its own bar once OPM is the chart's only
+   line - a reader can back it out as 매출×OPM% - so a dedicated 순이익 bar carries more marginal
+   information than a third $-bar would. This is also why 영업이익 isn't shown as a stat-box
+   duplicate elsewhere without the OPM context nearby.
+
+When migrating an older widget's chart to this standard, don't just relabel an existing 영업이익
+series as 순이익 - the underlying data is different (영업이익 excludes non-operating items,
+순이익 includes them), pull the real net-income series from `fetch_financials.py`'s `netIncome`
+concept (already covers this - no script extension needed for this part, unlike the 재무
+건전성 card below).
+
+## 재무 건전성 카드 (안정성·활동성) — 2026-08-08
+
+Replaces `#valuation`'s old `stage-grid` card; lives in `#fund`, directly after the 9-box KPI
+grid and before 핵심 성장 동력. See `docs/canonical_widget_spec.md`'s "재무 건전성 card"
+subsection for the exact formulas and CSS class list (`.diag-*` for 안정성, `.act-*`/`.ccc-*`/
+`.tl-*` for 활동성) - copy NVDA's markup verbatim rather than re-deriving the layout.
+
+**Why 안정성 uses checkup badges (✅/⚠️), not a bar gauge**: the first prototype used
+`val-track`/`val-fill`-style progress bars (matching the `#valuation` multiples card's visual
+language). The user rejected it after seeing it live - a bar with a threshold marker requires
+the reader to interpret a position-on-a-scale, which isn't legible to a lay reader at a glance,
+unlike a green ✅ badge that states the verdict directly. This is a real, useful pattern:
+**when a metric has a hard pass/fail threshold from the source material** (유동비율 150%/50%,
+당좌비율 100%, 차입금의존도 30%, 이자보상배율 1x - all from 하마터면 회계를 모르고 일할 뻔했다),
+prefer a stated verdict over a bar/gauge visualization of the same fact.
+
+**Why 활동성's CCC number is colored neutrally (`var(--gold)`), never red/green**: the opposite
+lesson from the same design pass. 활동성 metrics have no universal pass/fail line the way 안정성
+does - a shorter CCC ties up less cash, but "how short is good" is entirely industry-dependent
+(a semiconductor maker's CCC is structurally longer than a software company's due to physical
+inventory and validation cycles). Coloring CCC red implied a false "this is bad" verdict the
+data can't actually support without a peer-industry comparison this card doesn't have. Give it a
+one-line plain-language explanation of the day-count instead of a color-coded judgment - and
+resist the urge to add a caveat sentence explaining the industry-comparison nuance in the card
+itself (tried this, user cut it) - the neutral color already communicates "no verdict here",
+spelling it out again in prose was redundant.
+
+**Data pipeline**: `scripts/fetch_financials.py`'s `CONCEPTS` dict was extended for this card -
+`currentAssets`, `currentLiabilities`, `inventory`, `accountsReceivable`, `accountsPayable`,
+`totalLiabilities`, `shortTermDebt`, `longTermDebt`, `costOfRevenue`, `interestExpense` are all
+new (none of the balance-sheet-level detail existed before; the script previously only pulled
+`assets`/`equityAttributableToParent`/`cash` at the balance-sheet level). Two real snags found
+building NVDA's card, both fixed in the script rather than worked around per-ticker:
+
+- `interestExpense`'s first-choice XBRL tag (`InterestExpense`) silently stopped returning
+  current data for NVDA after Q1 FY2024 - plausibly because their real debt became immaterial
+  enough that they stopped tagging it separately. `extract_concept`'s existing recency-comparison
+  logic (picks whichever candidate tag has the most recent data, not just the first with *any*
+  data) already handles this correctly once `InterestExpenseNonoperating` was added as a
+  fallback candidate - don't assume the first tag in a `CONCEPTS` list is still the live one for
+  every ticker, especially for low-debt companies.
+- 매입채무 회전율 needs a 매입액 (purchases) figure that's essentially never tagged directly in
+  XBRL. Approximate it as 매출원가 + (당기말 재고자산 − 전기말 재고자산) rather than fetching a
+  concept that doesn't reliably exist.
 
 ## `#us` sector evidence framework
 
