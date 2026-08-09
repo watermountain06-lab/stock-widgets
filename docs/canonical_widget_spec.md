@@ -98,6 +98,25 @@ Two sub-sections inside one card, per the 안정성/활동성 steps of the 재�
 크로스분석[활동성]; 수익성·성장성 is already covered by the #fund chart + KPI stat-box grid above, so this
 card covers steps 3–4 only).
 
+**Card shell is collapsible (added 2026-08-09, NVDA only so far — not yet propagated to other
+widgets)**: both sub-sections' summary verdict stays visible by default; only the row-level
+detail collapses. Structure, top to bottom:
+
+1. `.section-label` "안정성 — ..." + `.diag-summary` (안정성 verdict, always visible)
+2. `.section-label` "활동성 — ..." + `.diag-summary.watch` (활동성 verdict, always visible)
+3. `.detail-toggle` "안정성 상세 — ..." → its own `.collapsible-body.collapsed` containing the 안정성 `.diag-list`
+4. `.detail-toggle` "활동성 상세 — ..." → its own `.collapsible-body.collapsed` containing the 활동성 `.diag-list` + `.ccc-card`
+
+**Two separate `.detail-toggle`s, not one shared toggle for the whole card** — an earlier pass
+used a single toggle for both sub-sections' detail at once, and the user flagged that expanding
+it merged 안정성 and 활동성 rows into one visually undifferentiated block. Each toggle's
+`onclick="toggleCollapsible(this)"` operates on `header.nextElementSibling` only, so the two are
+fully independent (expanding one doesn't affect the other). `toggleCollapsible()` also flips
+`aria-expanded` and swaps the `.toggle-hint-text` label between "상세 보기"/"상세 숨기기" (or
+"펼치기"/"접기" for the outer card-level toggle, if the whole card itself is also wrapped —
+see `stock-refresh/SKILL.md`'s design-pass notes for why the *card-level* collapse was rejected
+in favor of always-showing both verdicts and only collapsing detail).
+
 **안정성** (`.diag-summary` + `.diag-list`/`.diag-row`) — a health-checkup-report layout, not a
 bar/gauge (user-tested 2026-08-08: bar gauges were not legible to a lay reader at a glance).
 One green summary banner ("종합 진단: {매우 안정적|주의 필요|...}") plus one `.diag-row` per
@@ -112,9 +131,11 @@ metric with a ✅/⚠️/❌ `.diag-badge`, not a percentage bar:
 | 이자보상배율 | 영업이익 ÷ 이자비용 | 1 미만이면 잠재적 부실기업 명시 필수 |
 | 총자산증가율 | (당기말 자산−전기말 자산) ÷ 전기말 자산 × 100 | 판정 배지 없이 `info` 참고용으로만 표시 (안정성이 아니라 성장성 지표) |
 
-**활동성** (`.activity-grid`/`.act-card` + `.ccc-card`) — icon-card grid for the individual
-turnover metrics, plus a dedicated cash-conversion-cycle (CCC) card with a segmented timeline
-bar (`.tl-bar-wrap`, reusing the same flex-segment technique as 목표가 밴드):
+**활동성** (2026-08-09: switched from `.activity-grid`/`.act-card` icon-card grid to the same
+`.diag-summary`/`.diag-list`/`.diag-row` layout 안정성 uses, plus the `.ccc-card` below it —
+visual parity was a direct user request after the two sections looked structurally inconsistent
+side by side. `.activity-grid`/`.act-card` CSS is still defined in NVDA's file but is dead/
+superseded — don't copy it into a newly-migrated widget, use the diag-list pattern instead):
 
 | 지표 | 공식 |
 |---|---|
@@ -125,14 +146,37 @@ bar (`.tl-bar-wrap`, reusing the same flex-segment technique as 목표가 밴드
 | 영업순환주기 | 매출채권 회전기간 + 재고자산 회전기간 |
 | 현금창출주기 (CCC) | 영업순환주기 − 매입채무 지급기간 |
 
-**CCC is colored neutrally (`var(--gold)`), never red/green** — unlike the 안정성 metrics above,
-활동성 has no universal pass/fail line in the source material; a shorter CCC ties up less cash,
-but what counts as "short" is entirely industry-dependent (a semiconductor maker's CCC is
-structurally longer than a software company's), so a red/green verdict here would be a false
-claim the data doesn't support. Give the CCC card a one-line plain-language explanation of what
-the day-count means (e.g. "재고를 사서 판매 대금을 회수하기까지 N일이 걸리는데, 그중 M일은
-매입채무로 버티고 나머지 X일은 회사가 직접 현금으로 메워야 하는 기간이다") instead of a
-good/bad label.
+**CCC's own headline number is colored neutrally (`var(--gold)`), never red/green** — 활동성
+has no universal pass/fail line the way 안정성 does; a shorter CCC ties up less cash, but what
+counts as "short" is entirely industry-dependent (a semiconductor maker's CCC is structurally
+longer than a software company's), so a red/green verdict on the day-count itself would be a
+false claim the data doesn't support. Give the CCC card a one-line plain-language explanation
+(e.g. "재고를 사서 판매 대금을 회수하기까지 N일이 걸리는데, 그중 M일은 매입채무로 버티고
+나머지 X일은 회사가 직접 현금으로 메워야 하는 기간이다") instead of a good/bad label on the
+number itself. (Exception: a genuinely negative CCC, e.g. AMZN — see `stock-refresh/SKILL.md`'s
+2026-08-09 entry — is unambiguous and should be colored green, not neutral.)
+
+**활동성 판정 기준 (added 2026-08-09) — trend-based, not a fixed threshold.** Unlike 안정성's
+accounting-textbook cutoffs (150%, 30%, 1x — industry-agnostic), activity ratios have no universal
+"good" value; a semiconductor maker's 3-4x inventory turnover is normal where a retailer's 10x+
+is normal. Judge each 활동성 row by **direction and magnitude of change vs. the same TTM window
+one year earlier**, computed from SEC EDGAR balance-sheet instants + quarterly revenue/COGS
+(average-balance method — see `stock-refresh/SKILL.md`'s data-pipeline entry for the exact
+computation and how it was validated against NVDA's existing, already-correct figures):
+
+- `.diag-summary.watch` / `.diag-badge.watch` (amber, `var(--gold)`) — new badge tier alongside
+  the existing `.safe` (green) and `.info` (gray), for "notably decelerated, worth watching, not
+  alarming." Reserve for genuinely large swings (NVDA: inventory turnover -31.6%, CCC +33.7%),
+  not routine quarter-to-quarter noise.
+- **Interpret 매입채무 회전율 (AP turnover) direction opposite to AR/재고**: a falling AP
+  turnover means the company is taking *longer* to pay suppliers, which is mild supplier-financed
+  cash-flow relief for the company, not a warning sign — badge it `.info`, never `.watch`, even
+  when the % change is as large as the AR/inventory swings. AR turnover and 재고자산 회전율
+  falling both mean "collecting/selling slower," which is the actual thing worth flagging.
+- Write the summary `.sub` line to name the *dominant driver* of the CCC change (e.g. "재고자산
+  회전 둔화가 주된 원인, 매입채무 지급기간 확대가 일부 상쇄"), not just the headline delta —
+  useful because CCC = 영업순환주기 − AP기간, so a CCC change can come from either side and the
+  two sides often move in ways that partially offset.
 
 Data source: `scripts/fetch_financials.py` was extended 2026-08-08 with the balance-sheet
 concepts these ratios need (`currentAssets`, `currentLiabilities`, `inventory`,
@@ -140,7 +184,10 @@ concepts these ratios need (`currentAssets`, `currentLiabilities`, `inventory`,
 `costOfRevenue`, `interestExpense`) — none of these were pulled before. `interestExpense` in
 particular can go stale on companies with negligible debt (NVDA's `InterestExpense` XBRL tag
 stopped being populated after Q1 FY2024); the script now also tries
-`InterestExpenseNonoperating` as a fallback.
+`InterestExpenseNonoperating` as a fallback. The trend-based 활동성 judgment above additionally
+needs the **same instants and quarterly figures one year earlier** (prior-year TTM window) —
+`fetch_financials.py` does not currently automate this second fetch; it was done by hand against
+`data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json` directly for NVDA (see SKILL.md).
 
 ## `#valuation` — 밸류에이션
 

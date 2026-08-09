@@ -182,6 +182,75 @@ building NVDA's card, both fixed in the script rather than worked around per-tic
   XBRL. Approximate it as 매출원가 + (당기말 재고자산 − 전기말 재고자산) rather than fetching a
   concept that doesn't reliably exist.
 
+## 재무 건전성 카드 — collapsible shell + trend-based 활동성 판정, 2026-08-09
+
+Three follow-up changes to the card above, all NVDA-only so far (not yet propagated to the rest
+of the fleet — do this pass when a widget is otherwise being touched, same "opportunistic
+migration" rule as everything else NVDA-standard).
+
+**1. Card became collapsible, iteratively, across several corrections in one session:**
+
+- First pass wrapped the *entire* card body (both 안정성 and 활동성) behind one click on the
+  card title, default-expanded. User asked for legible title-bar text (first fix touched only
+  the inner content CSS, missed the actual clickable title bar — caught via a screenshot the
+  user sent of the collapsed state) and a pill-badge affordance so it visually reads as
+  interactive, not just a plain title.
+- Then asked "should the default be collapsed?" as an open design question — ran a text-mode
+  `codex exec -` review (see `_system/workflow/codex_review_loop.md` in the second-brain vault)
+  on placement + collapse-default. Codex's answer, adopted: **don't fully collapse the summary
+  verdict** — a card that reads "매우 안정적" only after a click hides the one sentence a reader
+  actually needs first. Split into "always-visible summary + collapsible detail" instead of
+  "always-visible title + collapsible everything."
+- User then asked for the same always-visible treatment on the 활동성 summary (it had been left
+  inside the collapsed body when 안정성's was pulled out) — moved both summaries above the fold.
+- Finally, with both summaries visible and one shared "상세 보기" toggle below them, expanding it
+  merged both sections' detail rows into one block with no visual seam — user flagged this as
+  confusing. Split into two independent `.detail-toggle`s (안정성/활동성), each with its own
+  `.collapsible-body`. See `canonical_widget_spec.md`'s 재무 건전성 subsection for the final
+  structure — don't rebuild from an earlier commit's markup, several intermediate states in this
+  file's git history are superseded.
+- Takeaway for the next widget: build the final two-summary/two-toggle shape directly, don't
+  replay the whole iteration — but if the user asks for opinions on placement/collapse-default
+  again on a *different* widget, the same "summary stays, detail collapses" logic likely still
+  applies since it came from a real readability argument, not a one-off preference.
+
+**2. `.diag-badge`/`.diag-summary` gained a third tone, `.watch` (amber, `var(--gold)`)**,
+alongside the existing `.safe` (green) / `.info` (gray) — for "notable but not alarming," sitting
+between the two. Don't reuse `.info` for genuinely large swings just because there's no red/danger
+tier defined; `.watch` exists precisely so a real deceleration doesn't get flattened into the same
+visual weight as a routine footnote.
+
+**3. 활동성 rows now carry a trend-based judgment (current TTM vs. the same TTM window one year
+earlier), not just a bare number** — this is what `.watch` is for. Computed by hand for NVDA,
+worth automating into `fetch_financials.py` before the next widget needs it:
+
+- Pull `data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json` directly (same endpoint
+  `fetch_financials.py` already uses, just read further back in the same JSON rather than calling
+  the script twice). Need: quarter-end **instant** balances (`AccountsReceivableNetCurrent`,
+  `InventoryNet`, `AccountsPayableCurrent`) at both TTM boundaries (start and end), and quarterly
+  **duration** figures (`Revenues` or `RevenueFromContractWithCustomerExcludingAssessedTax`,
+  `CostOfRevenue` or `CostOfGoodsAndServicesSold`) for all 4 quarters in each TTM window. A fiscal
+  Q4 duration value is usually not tagged standalone — derive it as (annual 10-K figure) − (9-month
+  YTD figure from the Q3 10-Q).
+- Average-balance method: `turnover = TTM_flow / ((balance_at_TTM_start + balance_at_TTM_end) / 2)`.
+  For AP specifically, use **purchases** (COGS + ΔInventory over the same window), not raw COGS —
+  confirmed by reverse-engineering NVDA's own already-published 7.83회/46.6일 AP figures: COGS
+  alone reproduced neither number, COGS+ΔInventory reproduced both exactly.
+  **Always validate the current-period recomputation against the widget's own existing (trusted)
+  figures before computing the prior period** — if the method doesn't reproduce known-correct
+  numbers, the prior-period output can't be trusted either. (NVDA check: recomputed 8.07회/45.2일/
+  3.53회/103.4일/7.83회/46.6일/148.6일/102.0일 all matched the file's existing values exactly.)
+- **Badge direction is asymmetric, not just "turnover down = bad"**: AR turnover falling and
+  재고자산 회전율 falling both genuinely mean "slower" (worth a `.watch` if the magnitude is
+  large). 매입채무 회전율 falling means the *opposite* in practice — the company is stretching
+  supplier payment terms, which is mild cash-flow relief, not deterioration — so badge that
+  `.info`, not `.watch`, regardless of how large the % change is. Getting this backwards would
+  flag a mildly *good* development as a warning.
+- Name the CCC change's dominant driver in the summary `.sub` line (which side of 영업순환주기 −
+  AP기간 actually moved) rather than only stating the delta — NVDA's case was ~92% inventory-
+  driven (+32.7일 of a +35.5일 cycle change), with AR contributing only +2.8일; a reader shouldn't
+  have to infer that split themselves from the row-level numbers.
+
 ## `#fund` chart load animation - grow-from-bottom, not fly-in, 2026-08-08
 
 User reported the `#fund` chart's load animation looked like it was "flying in" rather than
