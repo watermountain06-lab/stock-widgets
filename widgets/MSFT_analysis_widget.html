@@ -42,6 +42,15 @@
   .section-title::before { content: ''; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; display: inline-block; }
   .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px; }
   .card-title { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; font-weight: 600; }
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(0,120,212,0.12); border: 1px solid rgba(0,120,212,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(0,120,212,0.22); border-color: rgba(0,120,212,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
   .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
@@ -55,21 +64,24 @@
   .stat-value.up { color: var(--green); }
   .stat-value.down { color: var(--red); }
   .stat-value.gold { color: var(--accent2); }
-  .section-label { font-size: 12px; color: var(--text2); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
   .section-label .dot { width:6px; height:6px; border-radius:50%; background:#f0c040; }
   .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
   .diag-summary .icon { font-size:24px; }
   .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
-  .diag-summary .sub { font-size:11px; color:var(--text2); margin-top:2px; }
+  .diag-summary .sub { font-size:12px; color:var(--text2); margin-top:2px; line-height:1.4; }
   .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 22px; }
   .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
   .diag-left { display:flex; align-items:baseline; gap:10px; }
-  .diag-label { font-size:12px; color:var(--text2); min-width:96px; }
+  .diag-label { font-size:13px; color:var(--text); font-weight:600; min-width:96px; }
   .diag-value { font-size:15px; font-weight:700; color:var(--text); }
-  .diag-note { font-size:10.5px; color:var(--text3); }
+  .diag-note { font-size:11.5px; color:var(--text2); }
   .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
   .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
   .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .diag-badge.watch { background:rgba(240,192,64,0.16); color:var(--gold); }
+  .diag-summary.watch { background: linear-gradient(90deg, rgba(240,192,64,0.14), rgba(240,192,64,0.03)); border-color: rgba(240,192,64,0.35); }
+  .diag-summary.watch .title { color: var(--gold); }
   .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
   .act-card { background: var(--bg3); border-radius: 8px; padding: 12px 14px; display:flex; align-items:center; gap:12px; }
   .act-icon { font-size: 19px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:rgba(0,120,212,0.1); border-radius:8px; flex-shrink:0; }
@@ -78,15 +90,15 @@
   .act-sub { font-size: 10px; color: var(--text3); margin-top:1px; }
   .ccc-card { background: var(--bg3); border-radius: 8px; padding: 16px 18px 12px; }
   .ccc-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 6px; }
-  .ccc-head-label { font-size:11.5px; color:var(--text2); font-weight:700; }
+  .ccc-head-label { font-size:12.5px; color:var(--text); font-weight:700; }
   .ccc-head-value { font-size:18px; font-weight:800; color:var(--gold); }
-  .ccc-explain { font-size: 10.5px; color: var(--text3); line-height: 1.5; margin-bottom: 22px; }
+  .ccc-explain { font-size: 11.5px; color: var(--text2); line-height: 1.6; margin-bottom: 22px; }
   .tl-bar-wrap { position: relative; margin: 40px 4px 8px; }
   .tl-bar { height: 18px; border-radius: 5px; overflow: hidden; display: flex; }
   .tl-seg-inv { background: linear-gradient(90deg,#3498db,#2980b9); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
   .tl-seg-ar { background: linear-gradient(90deg,#9fdb2f,#76b900); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#0f1117; }
   .tl-marker { position: absolute; top: -18px; width: 2px; background: var(--gold); }
-  .tl-marker-label { position: absolute; top: -32px; transform: translateX(-50%); font-size: 9.5px; font-weight: 700; color: var(--gold); white-space: nowrap; }
+  .tl-marker-label { position: absolute; top: -32px; transform: translateX(-50%); font-size: 10.5px; font-weight: 700; color: var(--gold); white-space: nowrap; }
   .tl-ccc-span { position: absolute; height: 3px; background: rgba(240,192,64,0.6); border-radius: 2px; top: 24px; }
   .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
   .ma-row:last-child { border-bottom: none; }
@@ -211,22 +223,22 @@
     <div class="price-block">
       <div class="price-main">$499.99</div>
       <div class="price-change" style="color:var(--green);">▲ +0.0% (2026.08.07 기준)</div>
-      <div style="font-size:11px;color:var(--text3);margin-top:2px;">52주 최고 $555.45 (2025.07.31) · 최저 $349.200 (2026.06.25)</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px;">52주 최고 $553.72 (2025.10.28) · 최저 $349.200 (2026.06.25)</div>
     </div>
   </div>
   <div class="header-meta">
-    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$2.9T</span></div>
+    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$3.71T</span></div>
     <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Information Technology</span></div>
     <div class="meta-item"><span class="meta-label">FY26 매출</span><span class="meta-value">$331.8B (+18%)</span></div>
     <div class="meta-item"><span class="meta-label">Microsoft Cloud (Q4)</span><span class="meta-value">$59.3B (+27%)</span></div>
     <div class="meta-item"><span class="meta-label">EPS (FY26)</span><span class="meta-value">$17.95</span></div>
-    <div class="meta-item"><span class="meta-label">배당수익률</span><span class="meta-value">0.93% (분기 $0.91)</span></div>
+    <div class="meta-item"><span class="meta-label">배당수익률</span><span class="meta-value">0.73% (분기 $0.91)</span></div>
   </div>
 </div>
 
 <div class="box-key">
-  <div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 역설 <span style="color:#27ae60;">(저평가)</span> — 주가 -10% 조정 vs Azure +43% 재가속</div>
-  <div style="font-size:12px;color:var(--text2);line-height:1.6;">고점 $555(2025.07)에서 현재 $499.86까지 약 -10% 조정됐지만, Q4 FY26 Azure는 43% 성장하고 Microsoft 365 Copilot 유료 시트는 3,000만 개를 넘었다. PER 27.9x와 EV/EBITDA 약 19.0x는 낮아졌으나 FY26 Capex $115.9B가 FCF를 압박하는 구조라, FY27의 투자 효율 개선이 리레이팅 조건이다.</div>
+  <div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 역설 <span style="color:#27ae60;">(저평가)</span> — 주가 -9.7% 조정 vs Azure +43% 재가속</div>
+  <div style="font-size:12px;color:var(--text2);line-height:1.6;">고점 $553.72(2025.10)에서 현재 $499.99까지 약 -9.7% 조정됐지만, Q4 FY26 Azure는 43% 성장하고 Microsoft 365 Copilot 유료 시트는 3,000만 개를 넘었다. PER 27.9x와 EV/EBITDA 약 19.0x는 낮아졌으나 FY26 Capex $115.9B가 FCF를 압박하는 구조라, FY27의 투자 효율 개선이 리레이팅 조건이다.</div>
 </div>
 
 <div class="nav">
@@ -285,8 +297,8 @@
     <div class="grid-4"><div style="background:rgba(46,204,113,0.10);border:1px solid var(--green);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">1개월 · +29.8%</div><div style="font-size:12px;color:var(--text2);">2026.07.10 $385.10 → 2026.08.07 $499.99</div></div><div style="background:rgba(46,204,113,0.10);border:1px solid var(--green);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">3개월 · +20.4%</div><div style="font-size:12px;color:var(--text2);">2026.05.08 $415.12 → 2026.08.07 $499.99</div></div><div style="background:rgba(46,204,113,0.10);border:1px solid var(--green);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">6개월 · +24.6%</div><div style="font-size:12px;color:var(--text2);">2026.02.06 $401.14 → 2026.08.07 $499.99</div></div><div style="background:rgba(231,76,60,0.10);border:1px solid var(--red);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">1년 · -4.0%</div><div style="font-size:12px;color:var(--text2);">2025.08.07 $520.84 → 2026.08.07 $499.99</div></div></div>
   </div>
   <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;">
-    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">빅테크 5개 중 유일 52주 마이너스 수익률</span>
-    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">고점 $555.45 대비 -31.3% — 역배열 압박</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">빅테크 5개 중 META와 함께 52주 마이너스</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">고점 대비 -9.7% · MA 전 구간 상회 — 정배열 강세</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">EV/EBITDA 19.0x — 3년 평균 22.4x 대비 낮은 구간</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">M365 Copilot 유료 시트 3,000만+ · Azure 연매출 $100B 돌파</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(240,192,64,0.18);color:var(--ma60);">Azure +43% 가속 · Q4 Capex $35.8B 부담 병존</span>
@@ -317,9 +329,25 @@
       <div class="icon">🩺</div>
       <div>
         <div class="title">종합 진단: 매우 안정적</div>
-        <div class="sub">유동성·차입 부담 모두 낮은 편 — 클라우드 소프트웨어 기업 특유의 견고한 재무구조</div>
+        <div class="sub">유동비율 123.0% · 차입금의존도 5.3% · CCC -32.9일 — 소프트웨어 기업 특성상 유동비율은 기준치보다 낮지만 부실 위험 없음</div>
       </div>
     </div>
+
+    <div class="section-label" style="margin-top:14px;"><span class="dot" style="background:var(--blue);"></span>활동성 — 회수·재고소진·지급 속도 (TTM 기준 · FY26)</div>
+    <div class="diag-summary">
+      <div class="icon">🔄</div>
+      <div>
+        <div class="title">종합 진단: 안정적 — 마이너스 CCC 폭 확대</div>
+        <div class="sub">CCC -32.9일(전년동기 TTM -17.0일 대비 15.9일 추가 개선) — 매입채무 지급기간 확대가 주된 원인, 재고·매출채권 회전은 안정적으로 유지</div>
+      </div>
+    </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>안정성 상세 — 개별 비율 6개</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+
     <div class="diag-list">
       <div class="diag-row">
         <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">123.0%</span><span class="diag-note">기준 150%↑ · 소프트웨어 기업 특성상 다소 낮게 나옴</span></div>
@@ -347,23 +375,31 @@
       </div>
     </div>
 
-    <div class="section-label"><span class="dot" style="background:var(--blue);"></span>활동성 — 회수·재고소진·지급 속도 (TTM 기준 · Q3 FY25~Q2 FY26 vs Q3 FY26~Q4 FY26 잔액)</div>
-    <div class="activity-grid">
-      <div class="act-card">
-        <div class="act-icon">💳</div>
-        <div><div class="act-label">매출채권 회전율·회전기간</div><div class="act-value">4.40회</div><div class="act-sub">82.9일 만에 현금화</div></div>
+    <div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">차입금의존도·부채비율·이자보상배율 모두 매우 견고 — AI 인프라 투자에도 불구하고 낮은 레버리지를 유지한다.</div>
+    </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>활동성 상세 — 개별 비율·CCC 그래프</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">매출채권 회전율</span><span class="diag-value">4.40회</span><span class="diag-note">82.9일 · 전년동기 4.44회(82.2일)</span></div>
+        <div class="diag-badge info">→ 안정적 유지</div>
       </div>
-      <div class="act-card">
-        <div class="act-icon">📦</div>
-        <div><div class="act-label">재고자산 회전율·회전기간</div><div class="act-value">91.11회</div><div class="act-sub">4.0일 재고 보유(사실상 무재고)</div></div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">재고자산 회전율</span><span class="diag-value">91.11회</span><span class="diag-note">4.0일 · 전년동기 80.44회(4.5일) · 사실상 무재고라 변동 무의미</span></div>
+        <div class="diag-badge info">ℹ️ 참고</div>
       </div>
-      <div class="act-card">
-        <div class="act-icon">🧾</div>
-        <div><div class="act-label">매입채무 회전율·지급기간</div><div class="act-value">3.05회</div><div class="act-sub">119.8일 만에 지급</div></div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">매입채무 회전율</span><span class="diag-value">3.05회</span><span class="diag-note">119.8일 · 전년동기 3.52회(103.7일)</span></div>
+        <div class="diag-badge safe">✅ 지급기간 확대(우호적)</div>
       </div>
-      <div class="act-card">
-        <div class="act-icon">🔄</div>
-        <div><div class="act-label">영업순환주기</div><div class="act-value">86.9일</div><div class="act-sub">재고보유+매출채권 회전기간</div></div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">영업순환주기</span><span class="diag-value">86.9일</span><span class="diag-note">재고+매출채권 · 전년동기 86.7일</span></div>
+        <div class="diag-badge info">→ 안정적 유지</div>
       </div>
     </div>
     <div class="ccc-card">
@@ -371,7 +407,7 @@
         <div class="ccc-head-label">⏱️ 현금창출주기 (CCC)</div>
         <div class="ccc-head-value" style="color:var(--green);">-32.9일</div>
       </div>
-      <div class="ccc-explain">재고는 사실상 없고(4.0일) 매출채권 회수에 82.9일이 걸려 영업순환주기는 86.9일이지만, 매입채무는 119.8일 후에 갚기 때문에 <strong style="color:var(--green);">오히려 32.9일 동안 거래처 자금으로 사업을 운영</strong>하는 구조다 — 엔터프라이즈 소프트웨어·클라우드 기업 특유의 마이너스 현금창출주기다.</div>
+      <div class="ccc-explain">재고는 사실상 없고(4.0일) 매출채권 회수에 82.9일이 걸려 영업순환주기는 86.9일이지만, 매입채무는 119.8일 후에 갚기 때문에 <strong style="color:var(--green);">오히려 32.9일 동안 거래처 자금으로 사업을 운영</strong>하는 구조다 — 엔터프라이즈 소프트웨어·클라우드 기업 특유의 마이너스 현금창출주기다. 전년동기 TTM(-17.0일) 대비 15.9일 더 깊어진 것은 매입채무 지급기간이 16.1일 늘어난 영향이 대부분이다.</div>
       <div class="tl-bar-wrap">
         <div class="tl-marker" style="left:90.9%; height:18px;"></div>
         <div class="tl-marker-label" style="left:90.9%;">매입채무 지급 119.8일</div>
@@ -383,7 +419,8 @@
       </div>
     </div>
 
-    <div style="margin-top:14px;font-size:11px;color:var(--text3);">차입금의존도·부채비율·이자보상배율 모두 매우 견고 — AI 인프라 투자에도 불구하고 낮은 레버리지를 유지한다. 재고가 사실상 없고 매입채무 지급 주기가 매출채권 회수보다 길어 마이너스 CCC 구조이며, 이는 위험 신호가 아니라 소프트웨어·엔터프라이즈 계약 기반 사업의 현금흐름 우위를 보여준다.</div>
+    <div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">재고가 사실상 없고 매입채무 지급 주기가 매출채권 회수보다 길어 마이너스 CCC 구조이며, 전년동기보다 그 폭이 더 커졌다 — 위험 신호가 아니라 소프트웨어·엔터프라이즈 계약 기반 사업의 현금흐름 우위가 강화된 결과다.</div>
+    </div>
   </div>
 
   <div class="card">
@@ -451,7 +488,7 @@
       <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석)</div><div class="ps-value">$17.95</div><div class="ps-sub">FY26 GAAP</div></div>
       <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (주당순자산)</div><div class="ps-value">$59.57</div><div class="ps-sub">2026.06 · 자기자본 $442.4B</div></div>
       <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주</div><div class="ps-value">$9.02</div><div class="ps-sub">FY26 FCF $67.0B</div></div>
-      <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS (연간배당)</div><div class="ps-value">$3.32</div><div class="ps-sub">분기 $0.83→$0.91 인상 지속</div></div>
+      <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS (연간배당)</div><div class="ps-value">$3.64</div><div class="ps-sub">분기 $0.91 균등 · FY25 $3.32→FY26 $3.64</div></div>
     </div>
     <div style="font-size:11px;color:var(--text3);margin-top:10px;">* FY26 FCF는 영업현금흐름 $182.9B에서 유형자산 취득 $115.9B를 차감한 약 $67.0B. Q4 Capex는 $35.8B로, FY27 FCF 회복은 투자 증가율 둔화 여부에 달려 있다.</div>
   </div>
@@ -490,14 +527,14 @@
   </div>
 </div>
 
-<div id="us" class="section">
+<div id="us" class="section" data-us-visual="chart">
   <div class="section-title">US 특화 — S&P 500 상대 성과 · AI 수익화 진척 · 클라우드 경쟁 지도</div>
   <div class="rel-container">
     <div class="rel-title">S&P 500 대비 상대 수익률 (52주)</div>
     <div class="grid-3">
-      <div class="stat-box"><div class="stat-label">MSFT 52주</div><div class="stat-value down">-23.8%</div><div class="stat-sub">빅테크 유일 마이너스</div></div>
+      <div class="stat-box"><div class="stat-label">MSFT 52주</div><div class="stat-value down">-4.0%</div><div class="stat-sub">META와 함께 빅테크 중 마이너스</div></div>
       <div class="stat-box"><div class="stat-label">S&P 500 52주 (추정)</div><div class="stat-value">+15.2%</div></div>
-      <div class="stat-box"><div class="stat-label">상대 언더퍼폼</div><div class="stat-value down">-38.2%p</div><div class="stat-sub">NVDA와 약 64%p 차이</div></div>
+      <div class="stat-box"><div class="stat-label">상대 언더퍼폼</div><div class="stat-value down">-19.2%p</div><div class="stat-sub">NVDA와 약 27.9%p 차이</div></div>
     </div>
     <div class="zone-list" style="margin-top:12px;">
       <div class="zone-item"><span class="zone-label">S&P500 내 비중</span><span class="zone-val">~3.5% (시총 4위)</span></div>
@@ -519,7 +556,7 @@
     <div class="card-title">Capex vs FCF — 핵심 투자 논쟁</div>
     <div class="chart-wrap" style="height:200px;"><canvas id="capexFcfChart"></canvas></div>
     <div style="margin-top:12px;font-size:12px;color:var(--text2);line-height:1.7;">
-      <strong style="color:var(--text);">섹터 ETF:</strong> XLK(기술 ETF) 상위 편입. QQQ 주요 구성. 빅테크 5개 중 유일하게 52주 마이너스 → 비중 축소된 상태 → 재편입 시 수급 수혜 가능. 고점 $555 대비 PEG 1.33은 역대 최저 수준 — 기관 매수 재개 신호 주목.
+      <strong style="color:var(--text);">섹터 ETF:</strong> XLK(기술 ETF) 상위 편입. QQQ 주요 구성. 빅테크 5개 중 META와 함께 52주 마이너스 → 비중 축소된 상태에서 최근 3개월 +20%대 반등 중 → 추가 재편입 여지. 고점 $553.72 대비 PEG 1.33은 역대 최저 수준 — 기관 매수 재개 신호 주목.
     </div>
   </div>
 </div>
@@ -549,7 +586,7 @@
     <div class="bb-box">
       <div class="bb-title bb-bear">🐻 Bear 요인</div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>현금 부담:</strong> Q4 Capex $35.8B·FY26 $115.9B로 FCF 압박.</span></div>
-      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>모멘텀 약세:</strong> 52주 -17.5%, 역배열 기술적 부담.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>단기 급등 부담:</strong> 1개월 +29.8% 급반등으로 밸류에이션 재평가 속도가 빨라 단기 조정 가능성.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>원가 구조 변화:</strong> Copilot AI 토큰 비용 → 마진 압박.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>시장점유율 경쟁:</strong> Azure AWS·GCP 경쟁 심화.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>ESG·규제:</strong> 이스라엘 AI 사용 논란 · 규제 리스크.</span></div>
@@ -567,10 +604,10 @@
         <div style="width:17.1%;height:100%;background:rgba(231,76,60,0.45);"></div>
         <div style="width:11.4%;height:100%;background:var(--bg3);"></div>
       </div>
-      <div style="position:absolute;top:10px;left:54.2%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
-      <div style="position:absolute;top:-6px;left:54.2%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $499.86</div>
-      <div style="position:absolute;top:22px;left:72.9%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
-      <div style="position:absolute;top:48px;left:72.9%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $558.77 (+11.8%)</div>
+      <div style="position:absolute;top:10px;left:54.3%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
+      <div style="position:absolute;top:-6px;left:54.3%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $499.99</div>
+      <div style="position:absolute;top:22px;left:71.1%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
+      <div style="position:absolute;top:48px;left:71.1%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $558.77 (+11.8%)</div>
     </div>
     <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-top:4px;">
       <span style="color:var(--green);">Bear $360~400 (저평가)</span>
@@ -596,10 +633,10 @@
   <div class="card" style="margin-top:16px;">
     <div class="card-title">5개 분석 종합 — 한눈에 보기</div>
     <div class="zone-list">
-      <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:#f0c040">MA60&gt;MA120&gt;현재가&gt;MA20&gt;MA5 · 지지와 저항이 교차하는 혼조 구간</span></div>
+      <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:var(--green);">현재가&gt;MA5&gt;MA20&gt;MA60&gt;MA120 · 전 이평선 상회 — 정배열 강세</span></div>
       <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">Q4 FY26 매출 $90.0B(+18%)·Azure +43%·EPS $4.81(+32%) 강세</span></div>
       <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:#f0c040;">PER 27.9x·EV/EBITDA 19.0x는 낮지만 PCR 55.4x는 Capex 부담 반영</span></div>
-      <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:#f0c040;">52주 -23.0% 빅테크 유일 마이너스 — 재편입 시 수급 수혜 가능</span></div>
+      <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:#f0c040;">52주 -4.0%, META와 함께 빅테크 중 마이너스 — 최근 3개월 급반등</span></div>
       <div class="zone-item"><span class="zone-label">📰 시계열 뉴스</span><span class="zone-val" style="color:var(--green);">Q4 Azure +43%·Cloud $59.3B 확인 — FY27 FCF 전환이 다음 변수</span></div>
     </div>
   </div>
@@ -619,6 +656,32 @@
 </div>
 
 <script>
+// ─── COLLAPSIBLE CARDS ───
+function toggleCollapsible(header) {
+  const body = header.nextElementSibling;
+  const hintText = header.querySelector('.toggle-hint-text');
+  const collapsing = !header.classList.contains('collapsed');
+  if (collapsing) {
+    body.style.maxHeight = body.scrollHeight + 'px';
+    requestAnimationFrame(() => {
+      header.classList.add('collapsed');
+      body.classList.add('collapsed');
+      header.setAttribute('aria-expanded', 'false');
+      if (hintText) hintText.textContent = '상세 보기';
+    });
+  } else {
+    header.classList.remove('collapsed');
+    body.classList.remove('collapsed');
+    body.style.maxHeight = body.scrollHeight + 'px';
+    header.setAttribute('aria-expanded', 'true');
+    if (hintText) hintText.textContent = '상세 숨기기';
+    body.addEventListener('transitionend', function clear() {
+      body.style.maxHeight = '';
+      body.removeEventListener('transitionend', clear);
+    });
+  }
+}
+
 function showSection(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
