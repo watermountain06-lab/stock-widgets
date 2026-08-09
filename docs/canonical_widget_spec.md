@@ -89,7 +89,7 @@ as a standalone batch job.
    ratio formulas.
 4. Card: **핵심 성장 동력** (3개) — `driver-item`/`driver-num`/`driver-title`/`driver-desc` numbered-circle style (NVDA's actual markup — this is the majority convention, 30/45 widgets). Optional CEO quote line above it: "분기 수치 · CEO 이름 "실제 발언(한국어 번역)"" — must be a real, WebSearch-verified quote, translated into Korean like the rest of the document.
 5. Card: **핵심 투자 논리** — narrative paragraph, same text as the header `box-key`.
-6. Card: **다음 실적 체크포인트** — "①②③④" checklist tied to real guidance numbers, not plain stat-boxes. Must be the *last* card in `#fund` (`validate_widget.py` enforces `fund` ending with 핵심투자논리 → 다음실적체크포인트).
+6. Card: **다음 실적 체크포인트** — "①②③④" checklist tied to real guidance numbers, not plain stat-boxes, each item separated by `<br>` inside one `<div>` (not run together with "→" or left as one unbroken paragraph — found unbroken on MSFT's first migration pass, 2026-08-09). Must be the *last* card in `#fund` (`validate_widget.py` enforces `fund` ending with 핵심투자논리 → 다음실적체크포인트).
 
 ### 재무 건전성 card (안정성·활동성)
 
@@ -98,14 +98,22 @@ Two sub-sections inside one card, per the 안정성/활동성 steps of the 재�
 크로스분석[활동성]; 수익성·성장성 is already covered by the #fund chart + KPI stat-box grid above, so this
 card covers steps 3–4 only).
 
-**Card shell is collapsible (added 2026-08-09, NVDA only so far — not yet propagated to other
-widgets)**: both sub-sections' summary verdict stays visible by default; only the row-level
-detail collapses. Structure, top to bottom:
+**Card shell is collapsible (added 2026-08-09, migrated to MSFT 2026-08-09)**: both sub-sections'
+summary verdict stays visible by default; only the row-level detail collapses. **Each section's
+toggle sits directly under that same section's summary — interleaved, not grouped** (2026-08-09
+correction: an earlier version of this doc listed both summaries first and both toggles after,
+which is what NVDA's file looked like mid-edit at one point but is *not* its final/correct state —
+copying that stale doc wording produced exactly this bug on MSFT's first migration, caught only
+by user review after publishing). Structure, top to bottom:
 
 1. `.section-label` "안정성 — ..." + `.diag-summary` (안정성 verdict, always visible)
-2. `.section-label` "활동성 — ..." + `.diag-summary.watch` (활동성 verdict, always visible)
-3. `.detail-toggle` "안정성 상세 — ..." → its own `.collapsible-body.collapsed` containing the 안정성 `.diag-list`
+2. `.detail-toggle` "안정성 상세 — ..." → its own `.collapsible-body.collapsed` containing the 안정성 `.diag-list`
+3. `.section-label` "활동성 — ..." + `.diag-summary` (or `.diag-summary.watch` if the trend verdict warrants it — see below; activity verdicts are not always `.watch`, MSFT's is plain green)
 4. `.detail-toggle` "활동성 상세 — ..." → its own `.collapsible-body.collapsed` containing the 활동성 `.diag-list` + `.ccc-card`
+
+Before migrating another widget, verify against NVDA's *actual current* markup
+(`grep -n "section-label\|detail-toggle" widgets/NVDA_analysis_widget.html`), not against this
+doc's prose alone — the doc can drift out of sync with the reference file, as it just did here.
 
 **Two separate `.detail-toggle`s, not one shared toggle for the whole card** — an earlier pass
 used a single toggle for both sub-sections' detail at once, and the user flagged that expanding
