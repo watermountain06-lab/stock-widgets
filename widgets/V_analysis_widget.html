@@ -56,6 +56,27 @@
   .stat-value.up { color: var(--green); }
   .stat-value.down { color: var(--red); }
   .stat-value.gold { color: var(--accent2); }
+  .section-label { font-size: 12px; color: var(--text2); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:#f0c040; }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:11px; color:var(--text2); margin-top:2px; }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 22px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; }
+  .diag-label { font-size:12px; color:var(--text2); min-width:96px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:10.5px; color:var(--text3); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .act-card { background: var(--bg3); border-radius: 8px; padding: 12px 14px; display:flex; align-items:center; gap:12px; }
+  .act-icon { font-size: 19px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:rgba(0,120,212,0.1); border-radius:8px; flex-shrink:0; }
+  .act-label { font-size: 10.5px; color: var(--text3); margin-bottom:2px; }
+  .act-value { font-size: 15px; font-weight: 700; color: var(--text); }
+  .act-sub { font-size: 10px; color: var(--text3); margin-top:1px; }
   .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
   .ma-row:last-child { border-bottom: none; }
   .ma-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
@@ -186,11 +207,11 @@
     </div>
   </div>
   <div class="header-meta">
-    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$674.4B</span></div>
+    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$681.5B</span></div>
     <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Financials</span></div>
     <div class="meta-item"><span class="meta-label">Q3 FY26 매출</span><span class="meta-value">$11.63B (+14%)</span></div>
-    <div class="meta-item"><span class="meta-label">P/E (TTM)</span><span class="meta-value">31.2x</span></div>
-    <div class="meta-item"><span class="meta-label">GAAP EPS (TTM)</span><span class="meta-value">$11.47</span></div>
+    <div class="meta-item"><span class="meta-label">P/E (TTM)</span><span class="meta-value">30.9x</span></div>
+    <div class="meta-item"><span class="meta-label">GAAP EPS (TTM)</span><span class="meta-value">$11.75</span></div>
     <div class="meta-item"><span class="meta-label">분기 배당</span><span class="meta-value">$0.670 (+14%)</span></div>
   </div>
 </div>
@@ -264,7 +285,7 @@
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">완전 정배열 · 4월 저점 대비 +21.8% 반등</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(255,193,7,0.18);color:#ffc107;">다음 실적 2026년 10월 말 FY2026 Q4 (예상)</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">Credit Card Competition Act 재발의 — 인터체인지 규제 리스크 상존</span>
-    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">52주 수익률 +2.3% — S&P500(+22.1%) 대비 큰 폭 언더퍼폼</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">52주 수익률 +9.2% — S&P500(+15.2%) 대비 소폭 언더퍼폼</span>
   </div>
 </div>
 
@@ -276,19 +297,70 @@
     <div class="chart-wrap" style="height:260px;"><canvas id="vRevChart"></canvas></div>
   </div>
   <div class="grid-3">
-    <div class="stat-box"><div class="stat-label">Q3 FY26 매출</div><div class="stat-value up">$11.63B</div><div class="stat-sub">▲14% YoY, 컨센서스($11.38B) 상회</div></div>
-    <div class="stat-box"><div class="stat-label">Q3 FY26 GAAP 순이익</div><div class="stat-value up">$5.6B</div><div class="stat-sub">▲7% YoY</div></div>
-    <div class="stat-box"><div class="stat-label">Q3 FY26 GAAP EPS</div><div class="stat-value up">$2.97</div><div class="stat-sub">▲10% YoY</div></div>
-    <div class="stat-box"><div class="stat-label">Q3 FY26 Adjusted EPS</div><div class="stat-value up">$3.32</div><div class="stat-sub">▲11% YoY, 컨센서스($3.23) 상회</div></div>
-    <div class="stat-box"><div class="stat-label">Payments Volume</div><div class="stat-value up">+10%</div><div class="stat-sub">불변환율 기준, 분기 사상 첫 $4조 돌파</div></div>
-    <div class="stat-box"><div class="stat-label">Cross-Border Volume</div><div class="stat-value up">+13%</div><div class="stat-sub">역내유럽 제외 +12%</div></div>
-    <div class="stat-box"><div class="stat-label">Processed Transactions</div><div class="stat-value up">+10%</div><div class="stat-sub">717억 건, YoY</div></div>
-    <div class="stat-box"><div class="stat-label">Q4 FY26(E) 매출 가이던스</div><div class="stat-value up">저두자릿수 상단</div><div class="stat-sub">Q3와 유사한 조정 기준 성장률</div></div>
-    <div class="stat-box"><div class="stat-label">FY2026(E) 가이던스</div><div class="stat-value up">매출 저두자릿수·EPS 중두자릿수</div><div class="stat-sub">Q3 실적 발표 시 상향</div></div>
+    <div class="stat-box"><div class="stat-label">Q3 FY26 GAAP 순이익</div><div class="stat-value up">$5.6B</div><div class="stat-sub">GAAP 최종손익 · ▲7% YoY</div></div>
+    <div class="stat-box"><div class="stat-label">Q3 FY26 Adjusted EPS</div><div class="stat-value up">$3.32</div><div class="stat-sub">주당 가치 · GAAP $2.97, 컨센서스($3.23) 상회</div></div>
+    <div class="stat-box"><div class="stat-label">Payments Volume</div><div class="stat-value up">+10%</div><div class="stat-sub">결제 모멘텀 · 불변환율 기준, 분기 사상 첫 $4조 돌파</div></div>
+    <div class="stat-box"><div class="stat-label">Cross-Border Volume</div><div class="stat-value up">+13%</div><div class="stat-sub">고마진 성장축 · 역내유럽 제외 +12%</div></div>
+    <div class="stat-box"><div class="stat-label">Q4 FY26(E) 매출 가이던스</div><div class="stat-value up">저두자릿수 상단</div><div class="stat-sub">향후 전망 · Q3와 유사한 조정 기준 성장률</div></div>
+    <div class="stat-box"><div class="stat-label">FY2026(E) 가이던스</div><div class="stat-value up">매출 저두자릿수·EPS 중두자릿수</div><div class="stat-sub">향후 전망 · Q3 실적 발표 시 상향</div></div>
   </div>
   <div style="margin-top:12px;font-size:12px;color:var(--text3);">Q3 FY26 자사주매입+배당 $6.2B($4.9B 매입·$1.3B 배당) · 같은 날 기술·제품 조직 중심 약 2,600명(전체 7%) 인력 감축 발표</div>
 
   <div class="card" style="margin-top:16px;">
+    <div class="card-title">재무 건전성 — 안정성·활동성 (Q3 FY26 · 2026.06.30 기준)</div>
+
+    <div class="section-label"><span class="dot"></span>안정성 — 단기 지급능력·차입 의존도</div>
+    <div class="diag-summary">
+      <div class="icon">🩺</div>
+      <div>
+        <div class="title">종합 진단: 안정적</div>
+        <div class="sub">이자보상배율·차입금의존도 견고 — 유동비율·부채비율은 결제 네트워크 특유의 대차대조표 구조를 반영</div>
+      </div>
+    </div>
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">98.5%</span><span class="diag-note">기준 150%↑ · 재고 없는 네트워크 서비스업 특성상 낮게 나옴</span></div>
+        <div class="diag-badge info">ℹ️ 업종 특성</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">당좌비율</span><span class="diag-value">98.5%</span><span class="diag-note">재고자산 없음(카드 네트워크 사업) · 유동비율과 동일</span></div>
+        <div class="diag-badge info">ℹ️ 업종 특성</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">차입금의존도</span><span class="diag-value">25.2%</span><span class="diag-note">기준 30%↓</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">이자보상배율</span><span class="diag-value">35.5x</span><span class="diag-note">기준 1x↑ · Q3 FY26 분기 기준</span></div>
+        <div class="diag-badge safe">✅ 매우 안전</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">부채비율</span><span class="diag-value">168.9%</span><span class="diag-note">부채 $59.4B÷자기자본 $35.2B · 부채 대부분 client incentives·정산 관련 항목</span></div>
+        <div class="diag-badge info">ℹ️ 참고</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">총자산증가율</span><span class="diag-value">5.4%</span><span class="diag-note">FY25 $99.6B(전기 $94.5B)</span></div>
+        <div class="diag-badge info">ℹ️ 참고</div>
+      </div>
+    </div>
+
+    <div class="section-label"><span class="dot" style="background:var(--blue);"></span>활동성 — 매출채권 회수 속도 (TTM 기준 · Q4FY25~Q3FY26)</div>
+    <div class="activity-grid">
+      <div class="act-card">
+        <div class="act-icon">💳</div>
+        <div><div class="act-label">매출채권 회전율·회전기간</div><div class="act-value">13.80회</div><div class="act-sub">26.5일 만에 현금화</div></div>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">ℹ️</div>
+        <div><div class="act-label">재고·매입채무 회전율</div><div class="act-value">해당 없음</div><div class="act-sub">카드 네트워크는 재고·매입채무 개념이 없는 수수료 기반 사업</div></div>
+      </div>
+    </div>
+    <div style="margin-top:4px;font-size:11px;color:var(--text3);">Visa는 제조·유통업과 달리 재고·매입채무가 핵심적이지 않은 네트워크 수수료 사업이라 CCC(현금창출주기) 개념이 큰 의미를 갖지 않는다 — 매출채권 회전율만으로 활동성을 판단.</div>
+
+    <div style="margin-top:14px;font-size:11px;color:var(--text3);">차입금의존도·이자보상배율 모두 견고 — 부채비율이 높아 보이는 건 재무 리스크가 아니라 client incentives·정산 부채 등 결제 네트워크 특유의 대차대조표 구조와 지속적 자사주 매입으로 얇아진 자기자본 때문이다.</div>
+  </div>
+
+  <div class="card">
     <div class="card-title">핵심 성장 동력 — 결제 네트워크 vs AI·스테이블코인 확장</div>
     <div class="grid-3">
       <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">핵심 결제 (현재 수익)</div><div style="font-size:12px;color:var(--text2);">Payments Volume +9%<br>Cross-Border +12%<br>Processed Tx +9%<br>소비 심리 둔화에도 견조</div></div>
@@ -316,59 +388,47 @@
     <div class="card">
       <div class="card-title">멀티플 5단계 평가</div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">PER (GAAP TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">31.6x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-header"><span class="val-name">PER (GAAP TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">30.9x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:64%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저(15x)</span><span class="val-mid">적정(25x)</span><span class="val-high">고(40x)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">$357.98÷$11.47 · PEG 1.96 · Mastercard(31.9x)와 거의 동일 수준</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">$362.50÷$11.75 · PEG 1.96 · Mastercard(31.9x)와 거의 동일 수준</div>
       </div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">19.9x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">19.4x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:74%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저(3x)</span><span class="val-mid">적정(10x)</span><span class="val-high">고(25x)</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">지속적 자사주 매입으로 자기자본이 얇아진 결과 — ROE 매우 높은 자산경량 비즈니스 특유의 구조적 고PBR</div>
       </div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">15.9x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">15.3x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:72%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저(3x)</span><span class="val-mid">적정(8x)</span><span class="val-high">고(20x)</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">영업이익률 60% 수준 초고마진 사업에 대한 프리미엄 — 순마진 감안 시 정당화 가능한 구간</div>
       </div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">22.9x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">22.7x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:64%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저(10x)</span><span class="val-mid">적정(18x)</span><span class="val-high">고(30x)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV $686.1B÷EBITDA · 2025년 3월 24.2x에서 18.8x까지 압축됐다가 부분 회복한 수준</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV $692.1B÷Adjusted EBITDA(TTM, 소송충당금 가산) $30.5B · 2025년 3월 24.2x에서 18.8x까지 압축됐다가 부분 회복한 수준</div>
       </div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">FCF수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">3.05%</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
+        <div class="val-header"><span class="val-name">FCF수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">3.08%</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:66%;background:linear-gradient(90deg,#e74c3c,#f0c040,#2ecc71);background-size:151.5% 100%;"></div></div>
         <div class="val-labels"><span class="val-low">저(1.5%)</span><span class="val-mid">적정(+5.0%)</span><span class="val-high">고(4%)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">TTM FCF $21.2B÷시총 $674.4B · 수익률이 높을수록 저평가 신호 — 자산경량 비즈니스의 높은 현금창출력이 프리미엄 멀티플을 상당폭 정당화</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">TTM FCF $21.0B÷시총 $681.5B · 수익률이 높을수록 저평가 신호 — 자산경량 비즈니스의 높은 현금창출력이 프리미엄 멀티플을 상당폭 정당화</div>
       </div>
     </div>
     <div class="card">
       <div class="card-title">결제 네트워크 피어 P/E 비교</div>
       <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:12px;font-size:12px;color:var(--text2);">Visa의 P/E 31.2x는 듀오폴리 파트너 Mastercard(31.9x)와 거의 동일하며, 폐쇄형 네트워크 American Express(22.6x)보다 높고, 규제·경쟁 압박이 큰 PayPal(10.6x)보다 훨씬 높은 프리미엄을 받고 있음.</div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text2);">Visa의 P/E 30.9x는 듀오폴리 파트너 Mastercard(31.9x)와 거의 동일하며, 폐쇄형 네트워크 American Express(22.6x)보다 높고, 규제·경쟁 압박이 큰 PayPal(10.6x)보다 훨씬 높은 프리미엄을 받고 있음.</div>
     </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">밸류에이션 5단계</div>
-    <div class="stage-grid">
-      <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div></div>
-      <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div><div style="font-size:10px;color:var(--green);background:rgba(46,204,113,0.15);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">FCF수익률</div></div>
-      <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div></div>
-      <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:10px;color:var(--red);background:rgba(231,76,60,0.15);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">PER (GAAP TTM)·PBR·PSR (TTM)·EV/EBITDA</div></div>
-      <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div></div>
-    </div>
-    <div style="margin-top:10px;font-size:11px;color:var(--text3);">* 5개 지표가 2~4단계에 분산 — FCF수익률만 2단계(저평가)로, 나머지 이익·자산·매출 기준 지표는 3~4단계. 카드네트워크 특유의 초고마진·낮은 자본소요가 프리미엄 멀티플을 상당 부분 정당화하는 구조.</div>
   </div>
 
   <div class="card">
     <div class="card-title">Per-Share 지표 (TTM 기준 · 약 18.8억 주)</div>
     <div class="per-share-grid">
-      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS · TTM</div><div class="ps-value">$11.47</div><div class="ps-sub">'25.Q3~'26.Q2 합산 · PER 31.2x</div><div style="margin-top:5px;"><span class="stage-badge stage-3">3단계 적정</span></div></div>
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS · TTM</div><div class="ps-value">$11.75</div><div class="ps-sub">'25.Q4~'26.Q3(FY26 Q3, Class A 기준) 합산 · PER 30.9x</div><div style="margin-top:5px;"><span class="stage-badge stage-4">4단계 높음</span></div></div>
       <div class="ps-card"><div class="ps-icon">📊</div><div class="ps-label">Non-GAAP EPS · TTM</div><div class="ps-value">$12.44</div><div class="ps-sub">Non-GAAP PER 28.8x</div><div style="margin-top:5px;"><span class="stage-badge stage-3">3단계 적정</span></div></div>
       <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS · 주당순자산</div><div class="ps-value">$18.97</div><div class="ps-sub">'26.Q2 자기자본 $35.7B</div><div style="margin-top:5px;"><span class="stage-badge stage-4">4단계 높음</span></div></div>
       <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 · FY2025</div><div class="ps-value">$11.48</div><div class="ps-sub">FY25 FCF $21.58B · 매출 대비 54%</div><div style="margin-top:5px;"><span class="stage-badge stage-2">2단계 낮음</span></div></div>
@@ -376,12 +436,12 @@
     <div style="font-size:11px;color:var(--text3);margin-top:10px;">* BPS가 낮고 PBR이 높은 것은 저평가가 아니라 Visa 특유의 자산경량(asset-light) 구조와 대규모 자사주 매입으로 자기자본이 얇아진 결과 — ROE는 오히려 매우 높음(순이익/자기자본 비율 50%대). PER·EV/EBITDA는 5년 평균 대비 적정~약간 낮은 구간.</div>
   </div>
   <div class="info-box">
-    <strong>핵심 전제:</strong> Visa는 TSLA류 성장주와 달리 <strong>영업이익률 60%의 초고마진 검증된 사업</strong>. PER 31.2x·EV/EBITDA 22.8x는 자체 5년 평균 대비 오히려 낮은 편 — 2026년 초 규제 우려·거시 불안으로 밸류에이션이 한 차례 압축된 뒤 아직 완전히 재평가되지 않은 상태.
+    <strong>핵심 전제:</strong> Visa는 TSLA류 성장주와 달리 <strong>영업이익률 60%의 초고마진 검증된 사업</strong>. PER 30.9x·EV/EBITDA 22.7x는 자체 5년 평균 대비 오히려 낮은 편 — 2026년 초 규제 우려·거시 불안으로 밸류에이션이 한 차례 압축된 뒤 아직 완전히 재평가되지 않은 상태.
   </div>
 
   <div class="card">
     <div class="card-title">종합 밸류에이션 — 검증된 고마진 사업, 규제 리스크가 유일한 큰 변수</div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.6;">Visa는 PER·EV/EBITDA가 3단계(적정)로 TSLA류 성장주 대비 훨씬 안정적인 밸류에이션 프로파일. <strong style="color:var(--text);">PBR·PSR이 4단계로 높게 나오는 것은 저마진이 아니라 자산경량 구조 때문 — 실질 리스크는 밸류에이션이 아니라 CCCA 등 규제 리스크.</strong> 공정가치 $280(Bear)~$500+(Bull) — 스펙트럼이 TSLA만큼 넓지 않은, 상대적으로 예측 가능한 종목.</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;">Visa는 Non-GAAP PER(28.8x)이 3단계(적정)에 위치해 TSLA류 성장주 대비 훨씬 안정적인 밸류에이션 프로파일. <strong style="color:var(--text);">GAAP PER·PBR·PSR·EV/EBITDA가 4단계로 높게 나오는 것은 저마진이 아니라 자산경량 구조와 자사주 매입으로 얇아진 자기자본 때문 — 실질 리스크는 밸류에이션이 아니라 CCCA 등 규제 리스크.</strong> 공정가치 $280(Bear)~$500+(Bull) — 스펙트럼이 TSLA만큼 넓지 않은, 상대적으로 예측 가능한 종목.</div>
   </div>
 
   <div class="card">
@@ -407,9 +467,9 @@
   <div class="rel-container">
     <div class="rel-title">S&P 500 상대 수익률</div>
     <div class="grid-3">
-      <div class="stat-box"><div class="stat-label">V 52주</div><div class="stat-value up">+5.0%</div></div>
-      <div class="stat-box"><div class="stat-label">S&P 500 52주</div><div class="stat-value">+22.1%</div></div>
-      <div class="stat-box"><div class="stat-label">알파 (초과수익)</div><div class="stat-value down">-17.1%p</div><div class="stat-sub">큰 폭 언더퍼폼</div></div>
+      <div class="stat-box"><div class="stat-label">V 52주</div><div class="stat-value up">+9.2%</div></div>
+      <div class="stat-box"><div class="stat-label">S&P 500 52주</div><div class="stat-value">+15.2%</div></div>
+      <div class="stat-box"><div class="stat-label">알파 (초과수익)</div><div class="stat-value down">-6.0%p</div><div class="stat-sub">소폭 언더퍼폼</div></div>
     </div>
     <div class="zone-list" style="margin-top:12px;">
       <div class="zone-item"><span class="zone-label">시가총액 순위</span><span class="zone-val">S&P500 내 약 18위권</span></div>
@@ -456,7 +516,7 @@
     <div class="tl-item">
       <div class="tl-dot today"></div>
       <div class="tl-date">2026년 8월 6일 — 현재</div>
-      <div class="tl-title">Q3 실적 발표 후 $370.47, 애널리스트 평균 목표가($401.47)까지 +8.4% 여력</div>
+      <div class="tl-title">Q3 실적 발표 후 $362.50, 애널리스트 평균 목표가($401.47)까지 +10.8% 여력</div>
       <div class="tl-desc">Q3 매출·EPS 모두 컨센서스 상회하고 분기 결제액이 사상 처음 $4조를 돌파했지만, 같은 날 발표된 인력 2,600명(7%) 감축 소식이 겹치며 주가 반응은 혼조. Q4 가이던스 충족과 구조조정 효과가 다음 방향성을 결정할 전망.</div>
     </div><div class="tl-item">
       <div class="tl-dot green"></div>
@@ -513,14 +573,14 @@
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>$20B 신규 자사주 매입 + 배당 14% 인상:</strong> 강력한 주주환원.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>OpenAI 제휴·에이전틱 커머스 선점:</strong> AI 결제 인프라 주도권.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>스테이블코인 정산 연 $7B 규모로 확대:</strong> 위협을 기회로 전환.</span></div>
-      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>PER 31.2x — 5년 평균 대비 낮은 편:</strong> 재평가 여력.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>PER 30.9x — 5년 평균 대비 낮은 편:</strong> 재평가 여력.</span></div>
     </div>
     <div class="bb-box">
       <div class="bb-title bb-bear">🐻 Bear 요인</div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>Credit Card Competition Act 재발의:</strong> 최대 규제 리스크, 통과 시 마진 훼손.</span></div>
-      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>52주 수익률 +2.3% — S&P500 대비 -19.8%p:</strong> 뚜렷한 언더퍼폼.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>52주 수익률 +9.2% — S&P500 대비 -6.0%p:</strong> 소폭 언더퍼폼.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>소비심리 위축(미시간 지수 침체권 근접):</strong> 결제 볼륨 둔화 우려.</span></div>
-      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>PBR 19.6x·PSR 15.7x — 절대 수준은 높음:</strong> 저마진 전환 시 부담.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>PBR 19.4x·PSR 15.3x — 절대 수준은 높음:</strong> 저마진 전환 시 부담.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>스테이블코인發 장기 disintermediation 리스크:</strong> 아직 완전히 해소 안 됨.</span></div>
     </div>
   </div>
@@ -529,23 +589,23 @@
     <div class="card-title">목표가 밴드 — 시나리오별 공정가치 vs 현재가 · 애널리스트 목표가</div>
     <div style="position:relative;height:70px;margin:28px 6px 6px;">
       <div style="position:absolute;top:28px;left:0;right:0;height:10px;border-radius:5px;overflow:hidden;display:flex;">
-        <div style="width:25.0%;height:100%;background:rgba(46,204,113,0.45);"></div>
-        <div style="width:21.9%;height:100%;background:var(--bg3);"></div>
-        <div style="width:28.1%;height:100%;background:rgba(240,192,64,0.5);"></div>
-        <div style="width:1+5.0%;height:100%;background:var(--bg3);"></div>
-        <div style="width:1+5.0%;height:100%;background:rgba(231,76,60,0.45);"></div>
+        <div style="width:9.1%;height:100%;background:rgba(46,204,113,0.45);"></div>
+        <div style="width:36.4%;height:100%;background:var(--bg3);"></div>
+        <div style="width:18.2%;height:100%;background:rgba(240,192,64,0.5);"></div>
+        <div style="width:13.6%;height:100%;background:var(--bg3);"></div>
+        <div style="width:22.7%;height:100%;background:rgba(231,76,60,0.45);"></div>
       </div>
-      <div style="position:absolute;top:10px;left:50.3%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
-      <div style="position:absolute;top:-6px;left:50.3%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $370.47</div>
-      <div style="position:absolute;top:22px;left:69.7%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
-      <div style="position:absolute;top:48px;left:69.7%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $401.47 (+8.4%)</div>
+      <div style="position:absolute;top:10px;left:37.5%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
+      <div style="position:absolute;top:-6px;left:37.5%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $362.50</div>
+      <div style="position:absolute;top:22px;left:55.2%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
+      <div style="position:absolute;top:48px;left:55.2%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $401.47 (+10.8%)</div>
     </div>
     <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-top:4px;">
       <span style="color:var(--green);">약세 $290~330 (CCCA 통과·소비 둔화)</span>
       <span>기본 $365~410 (가이던스 달성)</span>
       <span style="color:var(--red);">강세 $430~450 (규제 리스크 해소)</span>
     </div>
-    <div style="margin-top:10px;font-size:11px;color:var(--text3);">현재가는 기본 밴드 내에 위치 — 4개 분기 연속 EPS 서프라이즈에도 CCCA 규제 우려가 재평가를 억제. 컨센서스 목표가까지 +8.4% 여력.</div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">현재가는 기본 밴드 내에 위치 — 4개 분기 연속 EPS 서프라이즈에도 CCCA 규제 우려가 재평가를 억제. 컨센서스 목표가까지 +10.8% 여력.</div>
 
     <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
       <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">애널리스트 41명 투자의견 분포</div>
@@ -567,8 +627,8 @@
     <div class="zone-list">
       <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:var(--green)">현재가&gt;MA5&gt;MA20&gt;MA60&gt;MA120 · 전 이평선 상회 · 상승 추세</span></div>
       <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">영업이익률 60%·4개 분기 연속 EPS 서프라이즈, $20B 자사주+배당 14% 인상</span></div>
-      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:#f0c040;">PER 31.2x는 5년 평균 대비 낮은 편이나 PBR 19.6x·PSR 15.7x 절대 수준은 높음</span></div>
-      <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:var(--red);">52주 수익률 +5.0% — S&P500 대비 큰 폭 언더퍼폼</span></div>
+      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:#f0c040;">PER 30.9x는 5년 평균 대비 낮은 편이나 PBR 19.4x·PSR 15.3x 절대 수준은 높음</span></div>
+      <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:var(--red);">52주 수익률 +9.2% — S&P500 대비 소폭 언더퍼폼</span></div>
       <div class="zone-item"><span class="zone-label">📰 시계열 뉴스</span><span class="zone-val" style="color:#f0c040;">Credit Card Competition Act 재발의가 핵심 변수, 7/28 Q3 실적 발표 임박</span></div>
     </div>
   </div>
@@ -577,7 +637,7 @@
     <div class="card-title">투자의견 요약</div>
     <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;">
       <div><span style="color:var(--text2);">애널리스트 컨센서스:</span> <strong style="color:var(--green)">Strong Buy (39명 중 31명)</strong></div>
-      <div><span style="color:var(--text2);">평균 목표주가:</span> <strong style="color:var(--accent2)">$401.47 · +8.4%</strong></div>
+      <div><span style="color:var(--text2);">평균 목표주가:</span> <strong style="color:var(--accent2)">$401.47 · +10.8%</strong></div>
       <div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107">2026년 10월 말 Q4 FY2026 (예상)</strong></div>
       <div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">고품질 저변동 복리 성장주 — CCCA 규제 리스크가 유일한 핵심 변수</strong></div>
     </div>
@@ -803,17 +863,21 @@ const V_MA120 = [348.17,348.02,347.85,347.7,347.63,347.6,347.56,347.48,347.41,34
 function renderFundChart() {
   const ctx = document.getElementById('vRevChart');
   if (!ctx || charts['fund']) return;
+  const revenue=[9.6,9.5,9.6,10.2,10.7,10.9,11.2,11.63];
+  const gaapEps=[2.65,2.58,2.32,2.69,2.62,3.03,3.14,2.97];
+  const adjEps=[2.71,2.75,2.76,2.98,2.98,3.17,3.31,3.32];
   charts['fund'] = new Chart(ctx,{
     data:{
-      labels:['Q3 \'24','Q4 \'24','Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26','Q2 \'26'],
+      labels:['Q4 \'24','Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26','Q2 \'26','Q3 \'26'],
       datasets:[
-        {type:'bar',label:'매출($B)',data:[8.9,9.6,9.5,9.6,10.2,10.7,10.9,11.2],backgroundColor:'#1A1F71',borderRadius:4,yAxisID:'y'},
-        {type:'line',label:'GAAP EPS($)',data:[2.40,2.65,2.58,2.32,2.69,2.62,3.03,3.14],borderColor:'#2ecc71',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'},
-        {type:'line',label:'Non-GAAP EPS($)',data:[2.42,2.71,2.75,2.76,2.98,2.98,3.17,3.31],borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:3,borderWidth:2,fill:false,yAxisID:'y2',borderDash:[4,4]}
+        {type:'bar',label:'매출($B)',data:revenue.map(()=>0),backgroundColor:'#1A1F71',borderRadius:4,yAxisID:'y'},
+        {type:'line',label:'GAAP EPS($)',data:gaapEps.map(()=>0),borderColor:'#2ecc71',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'},
+        {type:'line',label:'Non-GAAP EPS($)',data:adjEps.map(()=>0),borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:3,borderWidth:2,fill:false,yAxisID:'y2',borderDash:[4,4]}
       ]
     },
     options:{
       responsive:true,maintainAspectRatio:false,
+      animation:false,
       plugins:{legend:{labels:{color:'#9aa0b8',font:{size:10}}}},
       scales:{
         x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10}}},
@@ -821,6 +885,14 @@ function renderFundChart() {
         y2:{position:'right',min:0,max:4,grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v}}
       }
     }
+  });
+  requestAnimationFrame(()=>{
+    const c=charts['fund']; if (!c) return;
+    c.options.animation={duration:900,easing:'easeOutQuart'};
+    c.data.datasets[0].data=revenue;
+    c.data.datasets[1].data=gaapEps;
+    c.data.datasets[2].data=adjEps;
+    c.update();
   });
 }
 
@@ -833,7 +905,7 @@ function renderPeerChart() {
       labels:['PYPL','AXP','V','MA'],
       datasets:[{
         label:'P/E (TTM)',
-        data:[10.63,22.57,31.2,31.91],
+        data:[10.63,22.57,30.9,31.91],
         backgroundColor:['rgba(154,160,184,0.4)','rgba(154,160,184,0.4)','#6b7fd4','rgba(154,160,184,0.4)'],
         borderRadius:4,borderSkipped:false
       }]
