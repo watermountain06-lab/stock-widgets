@@ -134,6 +134,13 @@
   .card-title.collapsible .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); text-transform: none; letter-spacing: normal; white-space: nowrap; }
   .card-title.collapsible .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
   .card-title.collapsible.collapsed .chevron { transform: rotate(-90deg); }
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(159,219,47,0.12); border: 1px solid rgba(159,219,47,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(159,219,47,0.22); border-color: rgba(159,219,47,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
   .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
   .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -488,17 +495,23 @@
   </div>
 
   <div class="card" style="margin-top:16px;">
-    <div class="card-title collapsible" onclick="toggleCollapsible(this)"><span>재무 건전성 — 안정성·활동성 (Q1 FY27 · 2026.04.26 기준)</span><span class="toggle-hint"><span class="toggle-hint-text">접기</span><span class="chevron">▾</span></span></div>
-    <div class="collapsible-body">
+    <div class="card-title"><span>재무 건전성 — 안정성·활동성 (Q1 FY27 · 2026.04.26 기준)</span></div>
 
     <div class="section-label"><span class="dot"></span>안정성 — 단기 지급능력·차입 의존도</div>
     <div class="diag-summary">
       <div class="icon">🩺</div>
       <div>
         <div class="title">종합 진단: 매우 안정적</div>
-        <div class="sub">5개 항목 모두 기준치 통과 — 단기 부실 위험 없음</div>
+        <div class="sub">유동비율 344.1% · 차입금의존도 3.3% · CCC 102.0일 — 5개 항목 모두 기준치 통과, 단기 부실 위험 없음</div>
       </div>
     </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>상세 지표 — 개별 비율·활동성·CCC 그래프</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+
     <div class="diag-list">
       <div class="diag-row">
         <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">344.1%</span><span class="diag-note">기준 150%↑</span></div>
@@ -973,19 +986,23 @@
 function toggleCollapsible(header) {
   const body = header.nextElementSibling;
   const hintText = header.querySelector('.toggle-hint-text');
+  const expandedLabel = header.classList.contains('detail-toggle') ? '상세 숨기기' : '접기';
+  const collapsedLabel = header.classList.contains('detail-toggle') ? '상세 보기' : '펼치기';
   const collapsing = !header.classList.contains('collapsed');
   if (collapsing) {
     body.style.maxHeight = body.scrollHeight + 'px';
     requestAnimationFrame(() => {
       header.classList.add('collapsed');
       body.classList.add('collapsed');
-      if (hintText) hintText.textContent = '펼치기';
+      header.setAttribute('aria-expanded', 'false');
+      if (hintText) hintText.textContent = collapsedLabel;
     });
   } else {
     header.classList.remove('collapsed');
     body.classList.remove('collapsed');
     body.style.maxHeight = body.scrollHeight + 'px';
-    if (hintText) hintText.textContent = '접기';
+    header.setAttribute('aria-expanded', 'true');
+    if (hintText) hintText.textContent = expandedLabel;
     body.addEventListener('transitionend', function clear() {
       body.style.maxHeight = '';
       body.removeEventListener('transitionend', clear);
