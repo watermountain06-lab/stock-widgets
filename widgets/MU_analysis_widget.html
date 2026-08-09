@@ -56,6 +56,39 @@
   .stat-value.up { color: var(--green); }
   .stat-value.down { color: var(--red); }
   .stat-value.gold { color: var(--accent2); }
+  .section-label { font-size: 12px; color: var(--text2); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:#f0c040; }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:11px; color:var(--text2); margin-top:2px; }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 22px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; }
+  .diag-label { font-size:12px; color:var(--text2); min-width:96px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:10.5px; color:var(--text3); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .act-card { background: var(--bg3); border-radius: 8px; padding: 12px 14px; display:flex; align-items:center; gap:12px; }
+  .act-icon { font-size: 19px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:rgba(159,219,47,0.1); border-radius:8px; flex-shrink:0; }
+  .act-label { font-size: 10.5px; color: var(--text3); margin-bottom:2px; }
+  .act-value { font-size: 15px; font-weight: 700; color: var(--text); }
+  .act-sub { font-size: 10px; color: var(--text3); margin-top:1px; }
+  .ccc-card { background: var(--bg3); border-radius: 8px; padding: 16px 18px 12px; }
+  .ccc-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 6px; }
+  .ccc-head-label { font-size:11.5px; color:var(--text2); font-weight:700; }
+  .ccc-head-value { font-size:18px; font-weight:800; color:#f0c040; }
+  .ccc-explain { font-size: 10.5px; color: var(--text3); line-height: 1.5; margin-bottom: 22px; }
+  .tl-bar-wrap { position: relative; margin: 40px 4px 8px; }
+  .tl-bar { height: 18px; border-radius: 5px; overflow: hidden; display: flex; }
+  .tl-seg-inv { background: linear-gradient(90deg,#3498db,#2980b9); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
+  .tl-seg-ar { background: linear-gradient(90deg,#9fdb2f,#76b900); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#0f1117; }
+  .tl-marker { position: absolute; top: -18px; width: 2px; background: #f0c040; }
+  .tl-marker-label { position: absolute; top: -32px; transform: translateX(-50%); font-size: 9.5px; font-weight: 700; color: #f0c040; white-space: nowrap; }
+  .tl-ccc-span { position: absolute; height: 3px; background: rgba(240,192,64,0.6); border-radius: 2px; top: 24px; }
   .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
   .ma-row:last-child { border-bottom: none; }
   .ma-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
@@ -183,7 +216,7 @@
     </div>
   </div>
   <div class="header-meta">
-    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">약 $960B</span></div>
+    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">약 $991B</span></div>
     <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Information Technology</span></div>
     <div class="meta-item"><span class="meta-label">52주 수익률</span><span class="meta-value">+719.0%</span></div>
     <div class="meta-item"><span class="meta-label">고점 대비</span><span class="meta-value">-28.8% ($1,255)</span></div>
@@ -256,7 +289,7 @@
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">Q2 GM 75% · Q3 실제 GM 84.9% 역대최고</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">Forward PER 10.2x — 빅테크 중 압도적 최저</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(255,193,7,0.18);color:#ffc107;">Q3 FY2026 실적 이후 고점 대비 -28.8%</span>
-    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">Trailing PER 37.8x · 사이클 정점 우려</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(240,192,64,0.18);color:var(--ma60);">Trailing PER 19.9x · 적정 구간 진입</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(240,192,64,0.18);color:var(--ma60);">HBM4 시장점유율 3위 (SK하이닉스 60~70% 지배)</span>
   </div>
 </div>
@@ -268,16 +301,91 @@
     <div class="chart-wrap" style="height:260px;"><canvas id="muRevChart"></canvas></div>
   </div>
   <div class="grid-3">
-    <div class="stat-box"><div class="stat-label">매출 (Q2 FY26)</div><div class="stat-value up">$23.9B</div><div class="stat-sub">▲196% YoY</div></div>
-    <div class="stat-box"><div class="stat-label">GM (Q2 FY26)</div><div class="stat-value up">74.4%</div><div class="stat-sub">역대 최고 근접</div></div>
-    <div class="stat-box"><div class="stat-label">EPS (Q2 FY26)</div><div class="stat-value up">$12.20</div><div class="stat-sub">▲756% YoY</div></div>
-    <div class="stat-box"><div class="stat-label">FCF (Q2 FY26)</div><div class="stat-value up">$5.5B</div><div class="stat-sub">FCF마진 23%</div></div>
-    <div class="stat-box"><div class="stat-label">Q3 가이던스</div><div class="stat-value gold">$33.5B</div><div class="stat-sub">GM ~81%, ▲250%+</div></div>
-    <div class="stat-box"><div class="stat-label">TTM 매출</div><div class="stat-value">$58.1B</div><div class="stat-sub">역대 최고</div></div>
-    <div class="stat-box"><div class="stat-label">TTM EPS</div><div class="stat-value up">$23.64</div><div class="stat-sub">Q3 FY25~Q2 FY26 합산</div></div>
-    <div class="stat-box"><div class="stat-label">순자산 (Q2 FY26)</div><div class="stat-value">$72.5B</div><div class="stat-sub">BPS $63.45 기준</div></div>
-    <div class="stat-box"><div class="stat-label">분기 배당</div><div class="stat-value gold">$0.15</div><div class="stat-sub">직전 대비 30% 인상</div></div>
+    <div class="stat-box"><div class="stat-label">EPS (Q3 FY26)</div><div class="stat-value up">$24.67</div><div class="stat-sub">주당 가치 · 실적 서프라이즈(가이던스 상회)</div></div>
+    <div class="stat-box"><div class="stat-label">FCF (Q3 FY26)</div><div class="stat-value up">$17.6B</div><div class="stat-sub">현금창출력 · FCF마진 42%</div></div>
+    <div class="stat-box"><div class="stat-label">Q4 가이던스</div><div class="stat-value gold">$50.0B±$1.0B</div><div class="stat-sub">전망 · GM ~86%</div></div>
+    <div class="stat-box"><div class="stat-label">TTM 매출</div><div class="stat-value">$90.3B</div><div class="stat-sub">역대 최고 · Q4FY25~Q3FY26</div></div>
+    <div class="stat-box"><div class="stat-label">순자산 (Q3 FY26)</div><div class="stat-value">$100.7B</div><div class="stat-sub">재무 여력 · BPS $89.18</div></div>
+    <div class="stat-box"><div class="stat-label">분기 배당</div><div class="stat-value gold">$0.15</div><div class="stat-sub">일정 · 직전 대비 30% 인상</div></div>
   </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">재무 건전성 — 안정성·활동성 (Q3 FY26 · 2026.05.28 기준)</div>
+
+    <div class="section-label"><span class="dot"></span>안정성 — 단기 지급능력·차입 의존도</div>
+    <div class="diag-summary">
+      <div class="icon">🩺</div>
+      <div>
+        <div class="title">종합 진단: 매우 안정적</div>
+        <div class="sub">메모리 슈퍼사이클 실적 서프라이즈로 유동성·차입 부담 모두 낮음 — 이자비용은 사실상 없는 수준</div>
+      </div>
+    </div>
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">342.4%</span><span class="diag-note">기준 150%↑</span></div>
+        <div class="diag-badge safe">✅ 안정</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">당좌비율</span><span class="diag-value">298.5%</span><span class="diag-note">기준 100%↑</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">차입금의존도</span><span class="diag-value">4.3%</span><span class="diag-note">기준 30%↓</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">이자보상배율</span><span class="diag-value">사실상 무제한</span><span class="diag-note">Q3 FY26 이자비용 사실상 $0 — 순차입 부담 미미</span></div>
+        <div class="diag-badge safe">✅ 안전</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">부채비율</span><span class="diag-value">33.2%</span><span class="diag-note">부채 $33.4B÷자기자본 $100.7B</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">총자산증가율</span><span class="diag-value">19.3%</span><span class="diag-note">FY25 $82.8B(전기 $69.4B)</span></div>
+        <div class="diag-badge info">ℹ️ 참고</div>
+      </div>
+    </div>
+
+    <div class="section-label"><span class="dot" style="background:var(--blue);"></span>활동성 — 회수·재고소진·지급 속도 (TTM 기준 · Q4FY25~Q3FY26)</div>
+    <div class="activity-grid">
+      <div class="act-card">
+        <div class="act-icon">💳</div>
+        <div><div class="act-label">매출채권 회전율·회전기간</div><div class="act-value">5.58회</div><div class="act-sub">65.5일 만에 현금화</div></div>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">📦</div>
+        <div><div class="act-label">재고자산 회전율·회전기간</div><div class="act-value">2.86회</div><div class="act-sub">127.5일 재고 보유</div></div>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">🧾</div>
+        <div><div class="act-label">매입채무 회전율·지급기간</div><div class="act-value">7.68회</div><div class="act-sub">47.5일 만에 지급</div></div>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">🔄</div>
+        <div><div class="act-label">영업순환주기</div><div class="act-value">192.9일</div><div class="act-sub">재고보유+매출채권 회전기간</div></div>
+      </div>
+    </div>
+    <div class="ccc-card">
+      <div class="ccc-head">
+        <div class="ccc-head-label">⏱️ 현금창출주기 (CCC)</div>
+        <div class="ccc-head-value">145.4일</div>
+      </div>
+      <div class="ccc-explain">재고를 사서 판매 대금을 회수하기까지 192.9일이 걸리는데, 그중 47.5일은 매입채무(외상)로 버티고 나머지 <strong style="color:#f0c040;">145.4일은 회사가 직접 현금으로 메워야</strong> 하는 기간이다. NVDA 같은 팹리스와 달리 MU는 자체 팹을 운영하는 종합반도체(IDM)라 재고 회전이 구조적으로 느리다 — CCC가 긴 것 자체는 업종 특성.</div>
+      <div class="tl-bar-wrap">
+        <div class="tl-marker" style="left:24.6%; height:18px;"></div>
+        <div class="tl-marker-label" style="left:24.6%;">매입채무 지급 47.5일</div>
+        <div class="tl-bar">
+          <div class="tl-seg-inv" style="width:66.1%;">재고보유 127.5일</div>
+          <div class="tl-seg-ar" style="width:33.9%;">매출채권회수 65.5일</div>
+        </div>
+        <div class="tl-ccc-span" style="left:24.6%; width:75.4%;"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;font-size:11px;color:var(--text3);">유동비율·당좌비율·차입금의존도·부채비율 모두 기준치를 큰 폭으로 상회 — 슈퍼사이클 호실적으로 재무구조가 크게 개선됐다. CCC 145일은 반도체 제조(IDM) 특성상 구조적으로 긴 편이며, 재고자산이 127.5일치나 쌓여있는 건 수요 대응을 위한 재고 확보로 볼 수도, 사이클 정점 이후 재고 리스크로 볼 수도 있다.</div>
+  </div>
+
   <div class="card" style="margin-top:16px;">
     <div class="card-title">핵심 성장 동력 3가지</div>
     <div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">HBM4 — AI 메모리 핵심</div><div class="driver-desc">NVDA Vera Rubin 인증. 36GB 12H·2.8TB/s. 2025·2026 전량 완판. HBM시장 2028 $100B 목표.</div></div></div>
@@ -297,37 +405,37 @@
 <div id="valuation" class="section">
   <div class="section-title">밸류에이션 (Valuation Multiples) — 현재가 $877.57 · DRAM 3사 비교</div>
   <div class="info-box">
-    <strong>⚠ MU 밸류에이션 핵심:</strong> Trailing 지표는 사이클 초입 → 고평가처럼 보임. Forward 지표(PER 10.2x, PEG 0.07)가 실질 투자 판단 기준. Q3($33.5B)·Q4 가이던스 달성 시 EPS 급등으로 모든 지표 급격 하락.
+    <strong>⚠ MU 밸류에이션 핵심:</strong> Q3 FY26 실적 서프라이즈로 Trailing 지표도 이제 적정 구간에 진입 — 더 이상 "Trailing 고평가"가 아니다. Forward PER 10.2x·PEG 0.07는 여전히 반도체 역사상 최저 수준으로, Q4 가이던스($50.0B±$1.0B, GM ~86%) 달성 시 추가 하락 여지.
   </div>
   <div class="grid-2">
     <div class="card">
       <div class="card-title">멀티플 5단계 평가</div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">PER (Trailing)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">37.1x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-header"><span class="val-name">PER (Trailing)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">19.9x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 5x</span><span class="val-mid">적정 20x</span><span class="val-high">고 60x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">사이클 전환 초입 — 과거 EPS 기준. Forward PER 10.2x(FY2027E)·PEG 0.07 — 반도체 역사상 최저 수준</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">$877.57÷TTM EPS $44.17(Q4FY25~Q3FY26) — 실적 서프라이즈로 적정 구간 진입. Forward PER 10.2x(FY2027E)·PEG 0.07 — 반도체 역사상 최저 수준</div>
       </div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">13.8x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">9.8x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 2x</span><span class="val-mid">적정 10x</span><span class="val-high">고 30x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">자기자본 $72.5B · ROE 40%</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">자기자본 $100.7B(Q3 FY26) · ROE 약 50%</div>
       </div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">17.1x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">11.0x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 10x</span><span class="val-high">고 30x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">8월 5일 종가 기준 시총 약 $1.01T÷TTM 매출 $58.1B. Forward PSR: 약 $1.01T÷FY2026E $85B = 11.9x</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">시총 약 $991B÷TTM 매출 $90.3B(Q4FY25~Q3FY26)</div>
       </div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">FCF Yield (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">0.84%</span><span class="stage-badge stage-4">4단계 낮음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-header"><span class="val-name">FCF Yield (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">2.64%</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">낮음 1%</span><span class="val-mid">적정 3%</span><span class="val-high">높음 6%</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">TTM FCF/주 $7.49 ÷ 8월 5일 종가 $877.57. 순부채 자료 없이 EV/EBITDA를 추정하지 않음.</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">TTM FCF/주 $23.18 ÷ 현재가 $877.57. 순부채 자료 없이 EV/EBITDA를 추정하지 않음.</div>
       </div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">Forward PER (FY2027E)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">10.1x</span><span class="stage-badge stage-1">1단계 매우낮음</span></div></div>
+        <div class="val-header"><span class="val-name">Forward PER (FY2027E)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">10.2x</span><span class="stage-badge stage-1">1단계 매우낮음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:20%;background:linear-gradient(90deg,#2ecc71,#27ae60);"></div></div>
         <div class="val-labels"><span class="val-low">저 8x</span><span class="val-mid">적정 18x</span><span class="val-high">고 30x</span></div>
       </div>
@@ -341,28 +449,18 @@
     </div>
   </div>
   <div class="card">
-    <div class="card-title">밸류에이션 5단계 (Forward vs Trailing)</div>
-    <div class="stage-grid">
-      <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div><div style="font-size:10px;color:var(--green);background:rgba(46,204,113,0.15);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">Forward PER·PEG</div></div>
-      <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div></div>
-      <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div></div>
-      <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:10px;color:#e67e22;background:rgba(231,126,35,0.18);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">Trailing 전 지표</div></div>
-      <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div></div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">Per-Share 지표 (Q2 FY26 기준 · 1.13B 주)</div>
+    <div class="card-title">Per-Share 지표 (Q3 FY26 기준 · 1.13B 주)</div>
     <div class="per-share-grid">
-      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석, TTM)</div><div class="ps-value">$23.64</div><div class="ps-sub">Q3 FY25~Q2 FY26 합산</div></div>
-      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (주당순자산)</div><div class="ps-value">$63.45</div><div class="ps-sub">Q2 FY26 · 자기자본 $72.5B</div></div>
-      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$7.49</div><div class="ps-sub">TTM FCF $8.5B(Capex 압박)</div></div>
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석, TTM)</div><div class="ps-value">$44.17</div><div class="ps-sub">Q4 FY25~Q3 FY26 합산</div></div>
+      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (주당순자산)</div><div class="ps-value">$89.18</div><div class="ps-sub">Q3 FY26 · 자기자본 $100.7B</div></div>
+      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$23.18</div><div class="ps-sub">TTM FCF $26.2B</div></div>
       <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS (분기)</div><div class="ps-value">$0.15</div><div class="ps-sub">$0.115에서 30% 인상 · 수익률 0.05%</div></div>
     </div>
     <div style="font-size:11px;color:var(--text3);margin-top:10px;">* FY2027E EPS 컨센서스 $103~106 → Forward PER 10.2x. 실현 시 반도체 사이클 역사상 가장 저렴한 PER로 거래되는 구간.</div>
   </div>
   <div class="card">
-    <div class="card-title">종합 밸류에이션 — Trailing 기준 4단계(고평가) vs Forward 기준 1단계(매우 저평가) · 사이클 판단이 핵심</div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.6;">Trailing 지표 모두 4단계 — 사이클 전환 초입의 왜곡. Forward PER 10.2x + PEG 0.07 = 반도체 역사상 가장 저렴한 구간. FY2027E EPS $103~106 달성 조건: Q3($33.5B, GM 81%) + Q4(추가 성장) 순차 확인. 6/24 실적이 핵심 촉매 — 사이클이 지속되면 $1,500+, 둔화 신호 시 급락 가능. 고베타(2.17) 주식으로 양방향 변동성 극심.</div>
+    <div class="card-title">종합 밸류에이션 — Trailing 3단계(적정) · Forward 1단계(매우 저평가) · 사이클 판단이 핵심</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;">Q3 실적 서프라이즈로 Trailing 지표(PER·PBR·PSR·FCF Yield)가 모두 3단계 적정으로 개선 — 더 이상 고평가 구간이 아니다. Forward PER 10.2x + PEG 0.07 = 반도체 역사상 가장 저렴한 구간. FY2027E EPS $103~106 달성 조건: Q4 가이던스($50.0B±$1.0B, GM ~86%) 충족 + FY2027 추가 성장 확인. 사이클이 지속되면 상승 여력 크고, 둔화 신호 시 급락 가능. 고베타(2.17) 주식으로 양방향 변동성 극심.</div>
   </div>
 
   <div class="card">
@@ -373,7 +471,7 @@
     </div>
     <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
       <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — FY2027E 컨센서스 달성</div>
-      <div style="font-size:12px;color:var(--text2);">FY2027E EPS $103~106 컨센서스 달성, Forward PER 10x대 유지 시 → 공정가치 <strong style="color:var(--text);">$1,000~1,500/주</strong> (현재가 대비 -88.3% ~ -87.9%)</div>
+      <div style="font-size:12px;color:var(--text2);">FY2027E EPS $103~106 컨센서스 달성, Forward PER 10x대 유지 시 → 공정가치 <strong style="color:var(--text);">$1,000~1,500/주</strong> (현재가 대비 +14.0% ~ +70.9%)</div>
     </div>
     <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
       <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — AI 메모리 슈퍼사이클 지속</div>
@@ -502,7 +600,7 @@
       <div><span style="color:var(--text2);">투자의견:</span> <strong style="color:var(--accent2)">Buy 다수 · GF Value $381(과대평가 경고)</strong></div>
       <div><span style="color:var(--text2);">목표주가:</span> <strong style="color:#ffc107">$1,486 · +68.6%</strong></div>
       <div><span style="color:var(--text2);">다음 실적:</span> <strong style="color:var(--text)">2026년 9월경 (Q4 FY2026 예상)</strong></div>
-      <div><span style="color:var(--text2);">Trailing PER:</span> <strong style="color:var(--red)">48x (사이클 왜곡)</strong></div>
+      <div><span style="color:var(--text2);">Trailing PER:</span> <strong style="color:#ffc107">19.9x</strong></div>
       <div><span style="color:var(--text2);">Forward PER:</span> <strong style="color:var(--green)">10.2x (FY2027E $103~106)</strong></div>
       <div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">HBM 과점 구조 확인되면 사이클 저점 멀티플이 재평가될 잠재력 크다</strong></div>
     </div>
@@ -728,23 +826,36 @@ const MU_MA120 = [98.85,99.02,99.16,99.35,99.53,99.75,99.96,100.21,100.42,100.63
 function renderFundChart() {
   const ctx = document.getElementById('muRevChart');
   if (!ctx || charts['fund']) return;
+  const revenue=[7.8,8.7,8.1,9.3,11.3,13.6,23.9,41.5];
+  const gm=[35.3,38.4,36.8,45.8,44.7,56.0,74.4,84.9];
+  const colors=['rgba(154,160,184,0.3)','rgba(154,160,184,0.3)','rgba(154,160,184,0.3)','rgba(154,160,184,0.3)','rgba(154,160,184,0.3)','#005EB8','#005EB8','#005EB8'];
+  const y2min=10, y2max=90;
   charts['fund'] = new Chart(ctx,{
     data:{
       labels:['Q4 FY24','Q1 FY25','Q2 FY25','Q3 FY25','Q4 FY25','Q1 FY26','Q2 FY26','Q3 FY26'],
       datasets:[
-        {type:'bar',label:'매출($B)',data:[7.8,8.7,8.1,9.3,11.3,13.6,23.9,41.5],backgroundColor:['rgba(154,160,184,0.3)','rgba(154,160,184,0.3)','rgba(154,160,184,0.3)','rgba(154,160,184,0.3)','rgba(154,160,184,0.3)','#005EB8','#005EB8','#005EB8'],borderRadius:4,yAxisID:'y'},
-        {type:'line',label:'GM(%)',data:[35.3,38.4,36.8,45.8,44.7,56.0,74.4,84.9],borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+        {type:'bar',label:'매출($B)',data:revenue.map(()=>0),backgroundColor:colors,borderRadius:4,yAxisID:'y'},
+        {type:'line',label:'GM(%)',data:gm.map(()=>y2min),borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
       ]
     },
     options:{
       responsive:true,maintainAspectRatio:false,
+      animation:false,
       plugins:{legend:{labels:{color:'#9aa0b8',font:{size:10}}}},
       scales:{
         x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:8},maxRotation:30}},
         y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:9},callback:v=>'$'+v+'B'}},
-        y2:{position:'right',min:10,max:90,grid:{display:false},ticks:{color:'#f0c040',font:{size:9},callback:v=>v+'%'}}
+        y2:{position:'right',min:y2min,max:y2max,grid:{display:false},ticks:{color:'#f0c040',font:{size:9},callback:v=>v+'%'}}
       }
     }
+  });
+  requestAnimationFrame(()=>{
+    const c=charts['fund'];
+    if (!c) return;
+    c.options.animation={duration:900,easing:'easeOutQuart'};
+    c.data.datasets[0].data=revenue;
+    c.data.datasets[1].data=gm;
+    c.update();
   });
 }
 function renderCycleChart() {
