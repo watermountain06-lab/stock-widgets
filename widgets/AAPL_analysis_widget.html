@@ -72,6 +72,39 @@
   .stat-value.up { color: var(--green); }
   .stat-value.down { color: var(--red); }
   .stat-value.gold { color: var(--accent2); }
+  .section-label { font-size: 12px; color: var(--text2); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:#f0c040; }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:11px; color:var(--text2); margin-top:2px; }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 22px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; }
+  .diag-label { font-size:12px; color:var(--text2); min-width:96px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:10.5px; color:var(--text3); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .act-card { background: var(--bg3); border-radius: 8px; padding: 12px 14px; display:flex; align-items:center; gap:12px; }
+  .act-icon { font-size: 19px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:rgba(0,120,212,0.1); border-radius:8px; flex-shrink:0; }
+  .act-label { font-size: 10.5px; color: var(--text3); margin-bottom:2px; }
+  .act-value { font-size: 15px; font-weight: 700; color: var(--text); }
+  .act-sub { font-size: 10px; color: var(--text3); margin-top:1px; }
+  .ccc-card { background: var(--bg3); border-radius: 8px; padding: 16px 18px 12px; }
+  .ccc-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 6px; }
+  .ccc-head-label { font-size:11.5px; color:var(--text2); font-weight:700; }
+  .ccc-head-value { font-size:18px; font-weight:800; color:var(--gold); }
+  .ccc-explain { font-size: 10.5px; color: var(--text3); line-height: 1.5; margin-bottom: 22px; }
+  .tl-bar-wrap { position: relative; margin: 40px 4px 8px; }
+  .tl-bar { height: 18px; border-radius: 5px; overflow: hidden; display: flex; }
+  .tl-seg-inv { background: linear-gradient(90deg,#3498db,#2980b9); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
+  .tl-seg-ar { background: linear-gradient(90deg,#9fdb2f,#76b900); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#0f1117; }
+  .tl-marker { position: absolute; top: -18px; width: 2px; background: var(--gold); }
+  .tl-marker-label { position: absolute; top: -32px; transform: translateX(-50%); font-size: 9.5px; font-weight: 700; color: var(--gold); white-space: nowrap; }
+  .tl-ccc-span { position: absolute; height: 3px; background: rgba(240,192,64,0.6); border-radius: 2px; top: 24px; }
   .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
   .ma-row:last-child { border-bottom: none; }
   .ma-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
@@ -176,7 +209,7 @@
 </div>
 </div>
 
-<div class="today-banner">✅ <strong>최근 Q2 FY26 실적</strong> — 매출 $111.2B(+17% YoY) · EPS $2.01(+22%, 컨센서스 상회) · iPhone $58.0B·Services $31.0B 역대최대 · $100B 추가 바이백 승인 · 주가 7/17 사상 최고 $333.74 경신, 다음 Q3 FY26 실적 대기</div>
+<div class="today-banner">✅ <strong>7/30 Q3 FY26 실적 발표 완료</strong> — 매출 $109.4B(+16% YoY, 컨센서스 상회) · EPS $2.02(+29% YoY) · iPhone·Mac·Services 전 부문·전 지역 두자릿수 성장 · 다만 Q4 FY26(9월분기) 가이던스가 공급 제약·환율 역풍으로 매출 +9~11%·GM 47~48%에 그쳐 실적 발표 후 주가 -9% 조정(7/29 $338.19→7/31 $308.91)</div>
 
 <div class="header">
   <div class="header-top">
@@ -197,18 +230,18 @@
     </div>
   </div>
   <div class="header-meta">
-    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$4.9T</span></div>
+    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$4.57T</span></div>
     <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Information Technology</span></div>
-    <div class="meta-item"><span class="meta-label">TTM 매출</span><span class="meta-value">$451.4B</span></div>
+    <div class="meta-item"><span class="meta-label">TTM 매출</span><span class="meta-value">$466.8B</span></div>
     <div class="meta-item"><span class="meta-label">CEO</span><span class="meta-value">Tim Cook (→Ternus 9월)</span></div>
-    <div class="meta-item"><span class="meta-label">EPS (TTM)</span><span class="meta-value">$8.25 · PER 40.5x</span></div>
+    <div class="meta-item"><span class="meta-label">EPS (TTM)</span><span class="meta-value">$8.71 · PER 36.0x</span></div>
     <div class="meta-item"><span class="meta-label">배당수익률</span><span class="meta-value">0.32% (분기 $0.27)</span></div>
   </div>
 </div>
 
 <div class="box-key">
-<div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:#e67e22;">(고평가)</span> — TTM FCF $113B · ROE 141%</div>
-<div style="font-size:12px;color:var(--text2);line-height:1.6;">활성 기기 20억대 이상의 설치 기반 위에 Services 고마진 구조가 매년 복리 성장. TTM FCF $113B으로 분기당 $25~$28B 자사주 매입 가능. ROE 141%는 자본효율성 세계 최고. iPhone 슈퍼사이클 + Services 복리 성장 + AI 업그레이드 수요 = 3중 촉매. 관세 부담은 인도 생산 확대로 점진적 상쇄.</div>
+<div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:#e67e22;">(고평가)</span> — TTM FCF $136.7B · ROE 120%</div>
+<div style="font-size:12px;color:var(--text2);line-height:1.6;">활성 기기 20억대 이상의 설치 기반 위에 Services 고마진 구조가 매년 복리 성장. TTM FCF $136.7B으로 대규모 자사주 매입 지속 가능. ROE 120%는 자본효율성 세계 최고 수준. iPhone·Mac·Services 전 부문 성장 + AI 업그레이드 수요가 강점이나, Q4 FY26 가이던스는 공급 제약·환율 역풍으로 다소 완화. 관세 부담은 인도 생산 확대로 점진적 상쇄.</div>
 </div>
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
@@ -269,7 +302,7 @@
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">완전 정배열 · 7/17 사상 최고 $344.57 경신</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">52주 +60.1% · S&P500 대비 강한 아웃퍼폼</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">$100B 자사주 추가 · 배당 4% 인상</span>
-    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(240,192,64,0.18);color:var(--ma60);">PER 40.5x — 빅테크 내 가장 높은 밸류에이션</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(240,192,64,0.18);color:var(--ma60);">PER 36.0x — 빅테크 내 가장 높은 밸류에이션</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">Tim Cook CEO 교체(9월) · 中 관세 누적 $3.3B</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(162,170,173,0.18);color:var(--accent2);">Services 고마진 확장 → 소프트웨어 기업 프리미엄</span>
   </div>
@@ -278,21 +311,96 @@
 <div id="fund" class="section">
   <div class="section-title">기본적 분석 — 분기 재무제표 (Apple FY 기준, 10월~9월)</div>
   <div class="card">
-    <div class="card-title">분기 매출 / Services 매출 / OPM (Q3 FY24~Q3 FY26)</div>
+    <div class="card-title">분기 매출 / Services 매출 / OPM (Q4 FY24~Q3 FY26)</div>
     <div class="chart-wrap" style="height:260px;"><canvas id="aaplRevChart"></canvas></div>
   </div>
   <div class="grid-3">
-    <div class="stat-box"><div class="stat-label">매출 (Q3 FY26)</div><div class="stat-value up">$109.4B</div><div class="stat-sub">▲16% YoY · 6월분기 역대최대</div></div>
-    <div class="stat-box"><div class="stat-label">iPhone (Q3 FY26)</div><div class="stat-value up">$54.3B</div><div class="stat-sub">▲22% · iPhone 17 수요</div></div>
-    <div class="stat-box"><div class="stat-label">Services (Q3 FY26)</div><div class="stat-value up">$30.7B</div><div class="stat-sub">▲12% · 전 카테고리 역대최대</div></div>
-    <div class="stat-box"><div class="stat-label">OPM / GM (Q3 FY26)</div><div class="stat-value">32.6% / 50.1%</div><div class="stat-sub">영업이익률/매출총이익률 · 관세 환급 +2%p</div></div>
-    <div class="stat-box"><div class="stat-label">EPS (Q3 FY26)</div><div class="stat-value up">$2.02</div><div class="stat-sub">▲29% YoY · 컨센서스 상회</div></div>
-    <div class="stat-box"><div class="stat-label">TTM 매출</div><div class="stat-value">$466.9B</div><div class="stat-sub">Q4 FY25~Q3 FY26 합산</div></div>
-    <div class="stat-box"><div class="stat-label">ROE</div><div class="stat-value gold">141%</div><div class="stat-sub">세계 최고 수준</div></div>
-    <div class="stat-box"><div class="stat-label">자사주 매입 (9M FY26)</div><div class="stat-value">$61.8B</div><div class="stat-sub">배당 $11.7B 포함 주주환원</div></div>
-    <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value gold">10월말 예상</div><div class="stat-sub">Q4 FY2026</div></div>
+    <div class="stat-box"><div class="stat-label">iPhone (Q3 FY26)</div><div class="stat-value up">$54.3B</div><div class="stat-sub">성장 모멘텀 · ▲22% · iPhone 17 수요</div></div>
+    <div class="stat-box"><div class="stat-label">Services (Q3 FY26)</div><div class="stat-value up">$30.7B</div><div class="stat-sub">고마진 성장축 · ▲12% · 전 카테고리 역대최대</div></div>
+    <div class="stat-box"><div class="stat-label">OPM / GM (Q3 FY26)</div><div class="stat-value">32.6% / 50.1%</div><div class="stat-sub">수익성 · 관세 환급 +2%p</div></div>
+    <div class="stat-box"><div class="stat-label">ROE</div><div class="stat-value gold">120%</div><div class="stat-sub">자본효율성 · 세계 최고 수준</div></div>
+    <div class="stat-box"><div class="stat-label">자사주 매입 (9M FY26)</div><div class="stat-value">$61.8B</div><div class="stat-sub">주주환원 · 배당 $11.7B 포함</div></div>
+    <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value gold">10월말 예상</div><div class="stat-sub">일정 · Q4 FY2026</div></div>
   </div>
+
   <div class="card" style="margin-top:16px;">
+    <div class="card-title">재무 건전성 — 안정성·활동성 (Q3 FY26 · 2026.06.27 기준)</div>
+
+    <div class="section-label"><span class="dot"></span>안정성 — 단기 지급능력·차입 의존도</div>
+    <div class="diag-summary">
+      <div class="icon">🩺</div>
+      <div>
+        <div class="title">종합 진단: 안정적</div>
+        <div class="sub">차입금의존도 낮고 부채는 대부분 저금리 장기채 — 유동비율·부채비율은 수십년 자사주 매입으로 얇아진 자기자본의 구조적 결과</div>
+      </div>
+    </div>
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">100.3%</span><span class="diag-note">기준 150%↑ · 공격적 자사주 매입으로 낮게 유지되는 구조</span></div>
+        <div class="diag-badge info">ℹ️ 업종 특성</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">당좌비율</span><span class="diag-value">92.9%</span><span class="diag-note">기준 100%↑</span></div>
+        <div class="diag-badge info">ℹ️ 업종 특성</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">차입금의존도</span><span class="diag-value">22.0%</span><span class="diag-note">기준 30%↓</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">이자보상배율</span><span class="diag-value">해당 정보 없음</span><span class="diag-note">Apple은 이자비용을 별도 공시하지 않음 · TTM FCF $136.7B로 상환능력 충분</span></div>
+        <div class="diag-badge info">ℹ️ 참고</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">부채비율</span><span class="diag-value">256.5%</span><span class="diag-note">부채 $275.7B÷자기자본 $107.5B · 자사주 매입으로 압축된 자본 구조</span></div>
+        <div class="diag-badge info">ℹ️ 참고</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">총자산증가율</span><span class="diag-value">-1.6%</span><span class="diag-note">FY25 $359.2B(전기 $365.0B)</span></div>
+        <div class="diag-badge info">ℹ️ 참고</div>
+      </div>
+    </div>
+
+    <div class="section-label"><span class="dot" style="background:var(--blue);"></span>활동성 — 회수·재고소진·지급 속도 (TTM 기준 · Q4FY25~Q3FY26)</div>
+    <div class="activity-grid">
+      <div class="act-card">
+        <div class="act-icon">💳</div>
+        <div><div class="act-label">매출채권 회전율·회전기간</div><div class="act-value">15.84회</div><div class="act-sub">23.1일 만에 현금화</div></div>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">📦</div>
+        <div><div class="act-label">재고자산 회전율·회전기간</div><div class="act-value">28.17회</div><div class="act-sub">13.0일 재고 보유</div></div>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">🧾</div>
+        <div><div class="act-label">매입채무 회전율·지급기간</div><div class="act-value">4.26회</div><div class="act-sub">85.6일 만에 지급</div></div>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">🔄</div>
+        <div><div class="act-label">영업순환주기</div><div class="act-value">36.0일</div><div class="act-sub">재고보유+매출채권 회전기간</div></div>
+      </div>
+    </div>
+    <div class="ccc-card">
+      <div class="ccc-head">
+        <div class="ccc-head-label">⏱️ 현금창출주기 (CCC)</div>
+        <div class="ccc-head-value" style="color:var(--green);">-49.6일</div>
+      </div>
+      <div class="ccc-explain">재고 소진(13.0일)과 매출채권 회수(23.1일)를 합친 영업순환주기는 36.0일이지만, 매입채무는 85.6일 후에 갚기 때문에 <strong style="color:var(--green);">오히려 49.6일 동안 공급업체 자금으로 사업을 운영</strong>하는 구조다 — JIT 재고 관리와 강력한 구매 협상력이 만든 Apple 특유의 마이너스 현금창출주기.</div>
+      <div class="tl-bar-wrap">
+        <div class="tl-marker" style="left:90.9%; height:18px;"></div>
+        <div class="tl-marker-label" style="left:90.9%;">매입채무 지급 85.6일</div>
+        <div class="tl-bar">
+          <div class="tl-seg-inv" style="width:13.8%;">재고 13.0일</div>
+          <div class="tl-seg-ar" style="width:24.5%;">매출채권회수 23.1일</div>
+        </div>
+        <div class="tl-ccc-span" style="left:38.2%; width:52.7%; background:rgba(46,204,113,0.6);"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;font-size:11px;color:var(--text3);">차입금의존도는 낮고 이익창출력 대비 부채 부담도 크지 않다 — 유동비율·부채비율이 낮아 보이는 건 위험 신호가 아니라 수십년간의 공격적 자사주 매입으로 자기자본이 구조적으로 얇아졌기 때문이다(PBR 42.5x와 동일한 배경). 활동성 지표의 마이너스 CCC는 Apple의 강력한 공급망 협상력을 보여준다.</div>
+  </div>
+
+  <div class="card">
     <div class="card-title">핵심 성장 동력 3가지</div>
     <div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">Services — 고마진 핵심</div><div class="driver-desc">Q2 $31.0B 역대최대. App Store·iCloud·Apple TV+. 유료 구독 10억+ 돌파. GM 75%+ 고마진 구조.</div></div></div>
     <div class="driver-item"><div class="driver-num">2</div><div><div class="driver-title">iPhone — 슈퍼사이클</div><div class="driver-desc">Q2 $58.0B ▲22%. Apple Intelligence 탑재. 인도 공장 전환 가속. iPhone 17 대기 수요.</div></div></div>
@@ -300,7 +408,7 @@
   </div>
   <div class="card">
     <div class="card-title">핵심 투자 논리 <span style="color:#e67e22;">(고평가)</span></div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.7;">활성 기기 20억대 이상의 설치 기반 위에 Services 고마진 구조가 매년 복리 성장. TTM FCF $113B으로 분기당 $25~$28B 자사주 매입 가능. ROE 141%는 자본효율성 세계 최고. iPhone 슈퍼사이클 + Services 복리 성장 + AI 업그레이드 수요 = 3중 촉매. 관세 부담은 인도 생산 확대로 점진적 상쇄.</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.7;">활성 기기 20억대 이상의 설치 기반 위에 Services 고마진 구조가 매년 복리 성장. TTM FCF $136.7B으로 대규모 자사주 매입 지속. ROE 120%는 자본효율성 세계 최고. iPhone·Mac·Services 전 부문 성장 + AI 업그레이드 수요가 강점이나, Q4 FY26 가이던스는 공급 제약·환율 역풍으로 다소 완화됐다. 관세 부담은 인도 생산 확대로 점진적 상쇄.</div>
   </div>
   <div class="card">
     <div class="card-title">다음 실적 체크포인트 — 2026년 7월 말 Q3 FY26</div>
@@ -315,73 +423,62 @@
     <div class="card">
       <div class="card-title">멀티플 5단계 평가</div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">PER (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">38.0x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-header"><span class="val-name">PER (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">36.0x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:60%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 28x</span><span class="val-high">고 50x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">$333.74÷$8.25 · 빅테크 최고 · 10년평균 25x 대비 프리미엄. Forward PER 36.6x·PEG 3.3</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">$313.33÷$8.71(TTM, Q4FY25~Q3FY26) · 빅테크 최고 · 10년평균 25x 대비 프리미엄</div>
       </div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">43.2x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">42.5x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:75%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저 5x</span><span class="val-mid">적정 20x</span><span class="val-high">고 60x</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">자사주 매입으로 BPS 낮음 → PBR 높음이 구조적 특징</div>
       </div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">10.1x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
+        <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">9.8x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:54%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 10x</span><span class="val-high">고 25x</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">Services 고마진으로 하드웨어 PSR보다 정당화</div>
       </div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">PCR (FCF)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">40.6x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-header"><span class="val-name">PCR (FCF)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">33.5x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:47%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저 10x</span><span class="val-mid">적정 25x</span><span class="val-high">고 60x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">FCF마진 25% · 자사주 매입 재원 충분</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">TTM FCF $136.7B(마진 29%) · 자사주 매입 재원 충분</div>
       </div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">28.3x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
+        <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">27.5x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:44%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 10x</span><span class="val-mid">적정 25x</span><span class="val-high">고 50x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV ~$4.8T÷TTM EBITDA $158B · 소비자가전+서비스 혼합 기업으로 30x 프리미엄 논쟁</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV $4.62T÷TTM EBITDA $168.0B · 소비자가전+서비스 혼합 기업으로 프리미엄 논쟁</div>
       </div>
     </div>
     <div class="card">
       <div class="card-title">빅테크 PER 비교 (AAPL이 가장 높음)</div>
       <div class="chart-wrap" style="height:270px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;">AAPL 40.4x는 5개 중 최고 — NVDA(31.5x)·AMZN(27.8x)·GOOGL(24.2x)·MSFT(22.6x) 순이다. PEG 3.3도 가장 부담스러운 수준이다.</div>
+      <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;">AAPL 36.0x는 5개 중 최고 — NVDA(31.5x)·AMZN(27.8x)·GOOGL(24.2x)·MSFT(22.6x) 순이다. PEG 3.3도 가장 부담스러운 수준이다.</div>
     </div>
   </div>
   <div class="card">
-    <div class="card-title">밸류에이션 5단계</div>
-    <div class="stage-grid">
-      <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div></div>
-      <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div></div>
-      <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:10px;color:var(--gold);background:rgba(245,166,35,0.15);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">PSR (TTM)·EV/EBITDA</div></div>
-      <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:10px;color:var(--red);background:rgba(231,76,60,0.15);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">PER (TTM)·PBR·PCR (FCF)</div></div>
-      <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div></div>
-    </div>
-    <div style="margin-top:10px;font-size:11px;color:var(--text3);">5개 지표 중 PSR(10.8x)만 3단계 적정이고, PER·PCR·EV/EBITDA는 4단계 고평가, PBR(46.1x)은 5단계 매우고평가 — 1·2단계가 빈 것은 데이터 누락이 아니라 AAPL의 어떤 지표도 저평가 구간에 있지 않기 때문이다. PBR이 유독 높은 건 자사주 매입으로 BPS가 눌린 구조적 결과라 순수 고평가 신호로만 보기는 어렵다.</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Per-Share 지표 (Q2 FY26 기준 · 14.67B 주)</div>
+    <div class="card-title">Per-Share 지표 (Q3 FY26 기준 · 14.59B 주)</div>
     <div class="per-share-grid">
-      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석, TTM)</div><div class="ps-value">$8.25</div><div class="ps-sub">Q3 FY25~Q2 FY26 합산</div></div>
-      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (주당순자산)</div><div class="ps-value">$7.23</div><div class="ps-sub">Q2 FY26 · 자본 $106.5B</div></div>
-      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$7.72</div><div class="ps-sub">TTM FCF $113.4B</div></div>
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석, TTM)</div><div class="ps-value">$8.71</div><div class="ps-sub">Q4 FY25~Q3 FY26 합산</div></div>
+      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (주당순자산)</div><div class="ps-value">$7.37</div><div class="ps-sub">Q3 FY26 · 자본 $107.5B</div></div>
+      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$9.37</div><div class="ps-sub">TTM FCF $136.7B</div></div>
       <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS (연간배당)</div><div class="ps-value">$1.04</div><div class="ps-sub">분기 $0.26 → $0.27 인상</div></div>
     </div>
-    <div style="font-size:11px;color:var(--text3);margin-top:10px;">* BPS가 낮은 이유: 수십년간 자사주 매입으로 순자산이 압축됨 — PBR 46x는 자본의 극단적 효율성 반영.</div>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">* BPS가 낮은 이유: 수십년간 자사주 매입으로 순자산이 압축됨 — PBR 42.5x는 자본의 극단적 효율성 반영.</div>
   </div>
   <div class="card">
-    <div class="card-title">밸류에이션 종합 코멘트 — 3~5단계 혼재 · 빅테크 최고 프리미엄</div>
+    <div class="card-title">종합 밸류에이션 — 3~4단계 혼재 · 빅테크 최고 프리미엄</div>
     <div class="grid-2">
       <div style="background:var(--bg3);padding:14px;border-radius:8px;">
         <div style="font-size:12px;color:var(--accent2);font-weight:700;margin-bottom:6px;">프리미엄 정당화 근거</div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.6;">PSR 10.8x → 3단계로 여전히 적정 밴드. Services 복리 성장과 설치 기반 20억대 해자가 매출 배수 프리미엄을 정당화.</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.6;">PSR 9.8x → 3단계로 여전히 적정 밴드. Services 복리 성장과 설치 기반 20억대 해자가 매출 배수 프리미엄을 정당화.</div>
       </div>
       <div style="background:var(--bg3);padding:14px;border-radius:8px;">
         <div style="font-size:12px;color:var(--red);font-weight:700;margin-bottom:6px;">주의 요소</div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.6;">PER 40.4x → 4단계(빅테크 최고). PBR 46.1x → 5단계(자사주 구조적). PCR 43.1x·EV/EBITDA 30.2x → 4단계. 5개 지표 평균 4단계 — PEG 3.3으로 성장 대비 가장 비싼 빅테크. 사상 최고가 부근 신규 매수는 신중 필요.</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.6;">PER 36.0x·PBR 42.5x·PCR 33.5x → 4단계(빅테크 최고 수준). EV/EBITDA 27.5x·PSR 9.8x는 3단계 적정. PEG 3.3으로 성장 대비 여전히 비싼 빅테크. 조정폭이 있었지만 신규 매수는 신중 필요.</div>
       </div>
     </div>
   </div>
@@ -394,7 +491,7 @@
     </div>
     <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
       <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 현 밸류에이션·성장세 유지</div>
-      <div style="font-size:12px;color:var(--text2);">PER 40.4x 밴드 유지, Services 고마진 성장 지속 시 → 공정가치 <strong style="color:var(--text);">$290~345/주</strong></div>
+      <div style="font-size:12px;color:var(--text2);">PER 36.0x 밴드 유지, Services 고마진 성장 지속 시 → 공정가치 <strong style="color:var(--text);">$290~345/주</strong></div>
     </div>
     <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
       <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — Services 고성장 지속·멀티플 추가 확장</div>
@@ -462,7 +559,7 @@
     </div>
     <div class="bb-box">
       <div class="bb-title bb-bear">🐻 Bear 요인</div>
-      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>PER 40.4x·PEG 3.3:</strong> 빅테크 최고 밸류, 사상 최고가 부근 고밸류 부담.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>PER 36.0x·PEG 3.3:</strong> 빅테크 최고 밸류, 사상 최고가 부근 고밸류 부담.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>CEO 리스크:</strong> Tim Cook 교체(9월), 리더십 불확실성.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>관세 부담 지속:</strong> 누적 $3.3B, 중국 의존.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>화웨이 경쟁:</strong> 중국 스마트폰 시장 점유율 압박.</span></div>
@@ -479,17 +576,17 @@
         <div style="width:10.8%;height:100%;background:var(--bg3);"></div>
         <div style="width:18.9%;height:100%;background:rgba(231,76,60,0.45);"></div>
       </div>
-      <div style="position:absolute;top:10px;left:52.7%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
-      <div style="position:absolute;top:-6px;left:52.7%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $312.41</div>
-      <div style="position:absolute;top:22px;left:+60.1%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
-      <div style="position:absolute;top:48px;left:+60.1%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $318 (+1.8%)</div>
+      <div style="position:absolute;top:10px;left:53.15%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
+      <div style="position:absolute;top:-6px;left:53.15%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $313.33</div>
+      <div style="position:absolute;top:22px;left:55.68%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
+      <div style="position:absolute;top:48px;left:55.68%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $318 (+1.5%)</div>
     </div>
     <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-top:4px;">
       <span style="color:var(--green);">Bear $215~270 (저평가 매력)</span>
       <span>Base $290~345 (적정)</span>
       <span style="color:var(--red);">Bull $365~400 (고평가)</span>
     </div>
-    <div style="margin-top:10px;font-size:11px;color:var(--text3);">밴드 축은 애널리스트 목표가 레인지($215 최저 ~ $400 최고, 47명) 기준. 현재가 $312.41은 애널리스트 평균 목표 $318.25를 소폭 하회 — Base 밴드 중단에 위치해 AI·Services 재평가가 이어지면 Bull 구간까지 여력이 있다.</div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">밴드 축은 애널리스트 목표가 레인지($215 최저 ~ $400 최고, 47명) 기준. 현재가 $313.33은 애널리스트 평균 목표 $318.25를 소폭 하회 — Base 밴드 중단에 위치해 AI·Services 재평가가 이어지면 Bull 구간까지 여력이 있다.</div>
 
     <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
       <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">애널리스트 47명 투자의견 분포</div>
@@ -510,8 +607,8 @@
     <div class="card-title">5개 분석 종합 — 한눈에 보기</div>
     <div class="zone-list">
       <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:var(--green)">현재가&gt;MA5&gt;MA20&gt;MA60&gt;MA120 · 전 이평선 상회 · 상승 추세</span></div>
-      <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">Q2 매출 $111.2B(+17%)·iPhone $58B·Services $31B 역대최대, ROE 141%</span></div>
-      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:#f0c040;">PER 40.4x·PBR 46x 빅테크 최고, PSR 10.8x는 적정 — 5지표 평균 4단계</span></div>
+      <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">Q3 매출 $109.4B(+16%)·iPhone $54.3B·Services $30.7B 역대최대, ROE 120%</span></div>
+      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:#f0c040;">PER 36.0x·PBR 42.5x 빅테크 최고, PSR 9.8x는 적정 — 5지표 평균 4단계</span></div>
       <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:var(--green);">S&P500 대비 +43.7%p 알파, $100B 바이백·배당 인상 역대급 주주환원</span></div>
       <div class="zone-item"><span class="zone-label">📰 시계열 뉴스</span><span class="zone-val" style="color:var(--red);">CEO 교체(9월 Ternus)·누적 관세 $3.3B·App Store 규제 리스크</span></div>
     </div>
@@ -522,7 +619,7 @@
     <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;">
       <div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107">2026년 7월 말 Q3 FY26 (예상)</strong></div>
       <div><span style="color:var(--text2);">목표주가:</span> <strong style="color:#ffc107">$318 · +1.8%</strong></div>
-      <div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">컨센서스 Buy(47명, 평균 목표 $318) — 압도적 생태계·Services 복리 성장이 강점, 다만 사상 최고가·PER 40.4x의 밸류 부담과 CEO 교체가 핵심 변수</strong></div>
+      <div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">컨센서스 Buy(47명, 평균 목표 $318) — 압도적 생태계·Services 복리 성장이 강점, 다만 사상 최고가·PER 36.0x의 밸류 부담과 CEO 교체가 핵심 변수</strong></div>
     </div>
   </div>
 </div>
@@ -746,17 +843,22 @@ const AAPL_MA120 = [211.06,210.93,210.78,210.66,210.55,210.45,210.32,210.18,210.
 function renderFundChart() {
   const ctx = document.getElementById('aaplRevChart');
   if (!ctx || charts['fund']) return;
+  const revenue=[94.9,124.3,95.4,94.0,102.5,143.8,111.2,109.4];
+  const services=[25.0,26.3,23.9,25.0,24.7,26.3,31.0,30.7];
+  const opm=[31.2,34.5,31.0,30.0,31.7,35.4,32.3,32.6];
+  const y2min=25;
   charts['fund'] = new Chart(ctx,{
     data:{
-      labels:['Q3 FY24','Q4 FY24','Q1 FY25','Q2 FY25','Q3 FY25','Q4 FY25','Q1 FY26','Q2 FY26'],
+      labels:['Q4 FY24','Q1 FY25','Q2 FY25','Q3 FY25','Q4 FY25','Q1 FY26','Q2 FY26','Q3 FY26'],
       datasets:[
-        {type:'bar',label:'매출($B)',data:[85.8,94.9,124.3,95.4,94.0,102.5,143.8,111.2],backgroundColor:'rgba(162,170,173,0.5)',borderColor:'#a2aaad',borderWidth:1,borderRadius:4,yAxisID:'y'},
-        {type:'bar',label:'Services($B)',data:[24.2,25.0,26.3,23.9,25.0,24.7,26.3,31.0],backgroundColor:'rgba(46,204,113,0.5)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4,yAxisID:'y'},
-        {type:'line',label:'OPM(%)',data:[29.6,31.2,34.5,31.0,30.0,31.7,35.4,32.3],borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+        {type:'bar',label:'매출($B)',data:revenue.map(()=>0),backgroundColor:'rgba(162,170,173,0.5)',borderColor:'#a2aaad',borderWidth:1,borderRadius:4,yAxisID:'y'},
+        {type:'bar',label:'Services($B)',data:services.map(()=>0),backgroundColor:'rgba(46,204,113,0.5)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4,yAxisID:'y'},
+        {type:'line',label:'OPM(%)',data:opm.map(()=>y2min),borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
       ]
     },
     options:{
       responsive:true,maintainAspectRatio:false,
+      animation:false,
       plugins:{legend:{labels:{color:'#9aa0b8',font:{size:11}}}},
       scales:{
         x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:9},maxRotation:30}},
@@ -764,6 +866,14 @@ function renderFundChart() {
         y2:{position:'right',min:25,max:42,grid:{display:false},ticks:{color:'#f0c040',font:{size:10},callback:v=>v+'%'}}
       }
     }
+  });
+  requestAnimationFrame(()=>{
+    const c=charts['fund']; if (!c) return;
+    c.options.animation={duration:900,easing:'easeOutQuart'};
+    c.data.datasets[0].data=revenue;
+    c.data.datasets[1].data=services;
+    c.data.datasets[2].data=opm;
+    c.update();
   });
 }
 function renderPeerChart() {
