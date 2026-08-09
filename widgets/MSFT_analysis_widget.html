@@ -116,8 +116,12 @@
   .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
   .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
   .tag-current { background: rgba(0,120,212,0.2); color: var(--accent2); }
-  .val-item { margin-bottom: 18px; }
-  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .val-item { margin-bottom: 18px; padding: 8px; margin-left: -8px; margin-right: -8px; border-radius: 8px; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; }
+  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; cursor: pointer; }
+  .val-item:hover { background: rgba(255,255,255,0.03); }
+  .val-item.selected { background: rgba(0,120,212,0.08); border-color: rgba(0,120,212,0.35); }
+  .val-name { position: relative; }
+  .val-item.selected .val-name::after { content: '▸ 비교 보기'; font-size: 9.5px; font-weight: 600; color: var(--accent2); margin-left: 8px; vertical-align: middle; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
   .val-track { height: 8px; background: var(--bg3); border-radius: 4px; position: relative; overflow: hidden; }
@@ -446,41 +450,36 @@
     <div class="card">
       <div class="card-title">멀티플 5단계 평가 (엔터프라이즈 SW 동종업계 비교)</div>
       <div style="font-size:10.5px;color:var(--text3);line-height:1.5;margin:-4px 0 14px;">※ 핵심 앵커 = MSFT 자체 10년 중간값 + 동종업계(ORCL·CRM·ADBE, 엔터프라이즈 SW·구독형 매출 구조가 비교가능) 실제 값의 중앙값. 빅테크 5(GOOGL·META·AAPL·NVDA)는 사업모델이 광고·반도체 등으로 상이해 참고 앵커로만 병기, 계산엔 미포함 — 단 셋 다 MSFT보다 규모가 작고 성장률도 낮아 동종업계 앵커 자체도 완벽하진 않음. 히스토리컬 중간값은 WebSearch로 확보한 GuruFocus 검색 스니펫 기준으로 원자료 직접 대조는 못함.</div>
-      <div class="val-item">
+      <div class="val-item" data-metric="per" onclick="selectMultiple('per')">
         <div class="val-header"><span class="val-name">PER (FY26)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">27.9x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 24x</span><span class="val-high">고 50x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">적정 24x(핵심 앵커 15.1~32.6x의 중앙값, 동종업계 재검증으로 34x에서 하향) = MSFT 자체 10년 중간값 32.6x·ORCL 25.2x(GAAP)·CRM 22.4x·ADBE 15.1x의 중앙값. 참고: 빅테크 4사 중앙값 34x(GOOGL 정상화 35x·META 25.2x·AAPL 36.0x·NVDA 34.1x). 동종업계 기준으로는 저평가폭이 줄어듦 — PEG 1.33은 빅테크 대비로는 최저</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="pbr" onclick="selectMultiple('pbr')">
         <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">8.4x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 9x</span><span class="val-high">고 30x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">적정 9x(핵심 앵커 4.4~10.7x의 중앙값, 동종업계 재검증으로 11x에서 하향) = MSFT 자체 10년 중간값 10.7x·ORCL 10.0x·CRM 4.4x·ADBE 8.7x의 중앙값. 참고: 빅테크 4사 중앙값 18.7x(GOOGL 6.9x·META 5.98x 역산·AAPL 42.5x·NVDA 27.7x, 편차가 매우 커서 참고용으로만). FY26 말 자기자본 $442.4B · 평균자본 기준 ROE 약 34%</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="psr" onclick="selectMultiple('psr')">
         <div class="val-header"><span class="val-name">PSR (FY26)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">11.2x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 5x</span><span class="val-high">고 20x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">적정 5x(핵심 앵커 3.4~10.3x의 중앙값, 동종업계 재검증으로 10x에서 대폭 하향) = MSFT 자체 10년 중간값 10.3x·ORCL 6.3x·CRM 4.0x·ADBE 3.4x의 중앙값. 참고: 빅테크 4사 중앙값 9.7x(GOOGL 9.6x·META 6.4x·AAPL 9.8x·NVDA 21.4x) — 빅테크 대비로는 적정권이었지만 진짜 SW 동종업계 대비로는 11.2x가 상당히 높은 편. OPM 46% 소프트웨어급 마진이 일부 정당화하나 3단계→4단계로 재평가</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="pcr" onclick="selectMultiple('pcr')">
         <div class="val-header"><span class="val-name">PCR (FCF)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">55.4x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div>
         <div class="val-labels"><span class="val-low">저 5x</span><span class="val-mid">적정 12x</span><span class="val-high">고 45x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">적정 12x(핵심 앵커 9.6~34.0x의 중앙값, 동종업계 재검증으로 34x에서 대폭 하향 — ORCL은 PCR 항목 미공시) = MSFT 자체 10년 중간값 34.0x·CRM 11.9x·ADBE 9.6x의 중앙값. 참고: 빅테크 4사 중앙값 37x(GOOGL 정상화 ~40x·META 30.8x·AAPL 33.5x·NVDA 57.9x). 55.4x는 적정 12x·고 45x를 모두 초과 — FY26 Capex $115.9B 급증에 의한 일시적 FCF 압축이 동종업계 대비로는 훨씬 두드러짐, 4단계→5단계로 재평가</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="evebitda" onclick="selectMultiple('evebitda')">
         <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">19.0x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 8x</span><span class="val-mid">적정 15x</span><span class="val-high">고 30x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">적정 15x(핵심 앵커 10.1~19.5x의 중앙값, 동종업계 재검증으로 25x에서 하향) = MSFT 자체 10년 중간값 19.5x·ORCL 18.5x·CRM 12.4x·ADBE 10.1x의 중앙값. 참고: 빅테크 4사 중앙값 21.8x(GOOGL 25.0x·META 14.1x·AAPL 27.5x·NVDA 32.3x). EV 약 $2.86T÷FY26 EBITDA 약 $193.8B — 2단계에서 3단계로 재평가</div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title">엔터프라이즈 SW 동종업계 PER 비교</div>
-      <div class="chart-wrap" style="height:270px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;">MSFT FY26 PER 27.9x는 진짜 동종업계(엔터프라이즈 SW)인 ORCL(25.2x GAAP)보다 높고 CRM(22.4x)·ADBE(15.1x)보다는 확실히 높다 — 다만 ORCL·CRM·ADBE는 MSFT보다 규모가 작고 성장률도 낮아 완벽한 비교는 아니다. 빅테크 5(GOOGL·META·AAPL·NVDA) 대비로는 가장 낮았지만, 동종업계 대비로는 오히려 가장 비싼 축에 속한다 — 어느 렌즈로 보느냐에 따라 결론이 달라지는 구간.</div>
+      <div class="card-title"><span id="multipleCompareTitle">엔터프라이즈 SW 동종업계 PER 비교</span></div>
+      <div class="chart-wrap" style="height:270px;"><canvas id="multipleChart"></canvas></div>
+      <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText">MSFT FY26 PER 27.9x는 진짜 동종업계(엔터프라이즈 SW)인 ORCL(25.2x GAAP)보다 높고 CRM(22.4x)·ADBE(15.1x)보다는 확실히 높다 — 다만 ORCL·CRM·ADBE는 MSFT보다 규모가 작고 성장률도 낮아 완벽한 비교는 아니다. 빅테크 5(GOOGL·META·AAPL·NVDA) 대비로는 가장 낮았지만, 동종업계 대비로는 오히려 가장 비싼 축에 속한다 — 어느 렌즈로 보느냐에 따라 결론이 달라지는 구간.</div>
     </div>
   </div>
   <div class="card">
@@ -932,30 +931,82 @@ function renderFundChart() {
     c.update();
   });
 }
-function renderPeerChart() {
-  const ctx = document.getElementById('peerChart');
-  if (!ctx || charts['peer']) return;
-  charts['peer'] = new Chart(ctx,{
+// ─── MULTIPLE COMPARE (clickable 멀티플 5단계 ↔ peer chart) ───
+const MULTIPLE_DATA = {
+  per: {
+    title: '엔터프라이즈 SW 동종업계 PER 비교',
+    unit: 'PER(TTM)',
+    labels: ['MSFT','ORCL','CRM','ADBE'],
+    data: [27.9,25.2,22.4,15.1],
+    max: 45,
+    explanation: '적정 24x(핵심 앵커 15.1~32.6x의 중앙값, 동종업계 재검증으로 34x에서 하향) = MSFT 자체 10년 중간값 32.6x·ORCL 25.2x(GAAP)·CRM 22.4x·ADBE 15.1x의 중앙값. 참고: 빅테크 4사 중앙값 34x(GOOGL 정상화 35x·META 25.2x·AAPL 36.0x·NVDA 34.1x). 동종업계 기준으로는 저평가폭이 줄어듦 — PEG 1.33은 빅테크 대비로는 최저.<br><br>MSFT FY26 PER 27.9x는 진짜 동종업계(엔터프라이즈 SW)인 ORCL(25.2x GAAP)보다 높고 CRM(22.4x)·ADBE(15.1x)보다는 확실히 높다 — 다만 ORCL·CRM·ADBE는 MSFT보다 규모가 작고 성장률도 낮아 완벽한 비교는 아니다. 빅테크 5 대비로는 가장 낮았지만, 동종업계 대비로는 오히려 가장 비싼 축에 속한다 — 어느 렌즈로 보느냐에 따라 결론이 달라지는 구간.'
+  },
+  pbr: {
+    title: 'PBR 비교 — 엔터프라이즈 SW 동종업계',
+    unit: 'PBR',
+    labels: ['MSFT','ORCL','CRM','ADBE'],
+    data: [8.4,10.0,4.4,8.7],
+    max: 15,
+    explanation: '적정 9x(핵심 앵커 4.4~10.7x의 중앙값, 동종업계 재검증으로 11x에서 하향) = MSFT 자체 10년 중간값 10.7x·ORCL 10.0x·CRM 4.4x·ADBE 8.7x의 중앙값. 참고: 빅테크 4사 중앙값 18.7x(GOOGL 6.9x·META 5.98x 역산·AAPL 42.5x·NVDA 27.7x, 편차가 매우 커서 참고용으로만). FY26 말 자기자본 $442.4B · 평균자본 기준 ROE 약 34%.<br><br>MSFT 8.4x는 동종업계 중앙값(9x)에 근접해 적정권. ORCL(10.0x)보다는 낮고 CRM(4.4x)·ADBE(8.7x)보다는 높다 — 자사주 매입 강도·ROE 수준은 다르지만 큰 틀에서는 비슷한 자본효율성 프리미엄 구간.'
+  },
+  psr: {
+    title: 'PSR 비교 — 엔터프라이즈 SW 동종업계',
+    unit: 'PSR(FY26)',
+    labels: ['MSFT','ORCL','CRM','ADBE'],
+    data: [11.2,6.3,4.0,3.4],
+    max: 15,
+    explanation: '적정 5x(핵심 앵커 3.4~10.3x의 중앙값, 동종업계 재검증으로 10x에서 대폭 하향) = MSFT 자체 10년 중간값 10.3x·ORCL 6.3x·CRM 4.0x·ADBE 3.4x의 중앙값. 참고: 빅테크 4사 중앙값 9.7x(GOOGL 9.6x·META 6.4x·AAPL 9.8x·NVDA 21.4x) — 빅테크 대비로는 적정권이었지만 진짜 SW 동종업계 대비로는 11.2x가 상당히 높은 편. OPM 46% 소프트웨어급 마진이 일부 정당화하나 3단계→4단계로 재평가.<br><br>MSFT 11.2x는 동종업계 3사(ORCL 6.3x·CRM 4.0x·ADBE 3.4x) 어느 쪽보다도 훨씬 높다 — 빅테크 대비로는 가장 낮은 축이었던 것과 정반대 그림. 어느 비교군을 쓰느냐에 따라 결론이 완전히 달라지는 대표 사례.'
+  },
+  pcr: {
+    title: 'PCR(FCF) 비교 — 동종업계 + AI 인프라 코호트',
+    unit: 'PCR(FCF)',
+    labels: ['MSFT','CRM','ADBE','GOOGL(참고)','META(참고)'],
+    data: [55.4,11.9,9.6,40.0,30.8],
+    max: 65,
+    explanation: '적정 12x(핵심 앵커 9.6~34.0x의 중앙값, 동종업계 재검증으로 34x에서 대폭 하향 — ORCL은 PCR 항목 미공시) = MSFT 자체 10년 중간값 34.0x·CRM 11.9x·ADBE 9.6x의 중앙값. 55.4x는 적정 12x·고 45x를 모두 초과 — FY26 Capex $115.9B 급증에 의한 일시적 FCF 압축이 동종업계 대비로는 훨씬 두드러짐, 4단계→5단계로 재평가.<br><br>참고 — AI 데이터센터를 직접 짓는 하이퍼스케일러(AMZN·GOOGL·META·ORCL)와 비교하면: AMZN은 TTM FCF가 -$7.6B로 마이너스(N/M), ORCL도 Stargate 투자로 FCF 마이너스(N/M), GOOGL은 정상화 기준 ~40x, META는 30.8x — 대규모 AI 인프라를 직접 짓는 회사들도 지금 전반적으로 FCF가 눌려있다는 맥락은 있지만, 그렇다고 55.4x가 "적정"하다는 근거가 되진 않는다 — 핵심 앵커(동종 SW업계)는 여전히 12x를 가리킨다.'
+  },
+  evebitda: {
+    title: 'EV/EBITDA 비교 — 엔터프라이즈 SW 동종업계',
+    unit: 'EV/EBITDA',
+    labels: ['MSFT','ORCL','CRM','ADBE'],
+    data: [19.0,18.5,12.4,10.1],
+    max: 25,
+    explanation: '적정 15x(핵심 앵커 10.1~19.5x의 중앙값, 동종업계 재검증으로 25x에서 하향) = MSFT 자체 10년 중간값 19.5x·ORCL 18.5x·CRM 12.4x·ADBE 10.1x의 중앙값. 참고: 빅테크 4사 중앙값 21.8x(GOOGL 25.0x·META 14.1x·AAPL 27.5x·NVDA 32.3x). EV 약 $2.86T÷FY26 EBITDA 약 $193.8B — 2단계에서 3단계로 재평가.<br><br>MSFT 19.0x는 동종업계 중앙값(15x)보다 다소 높지만 자체 10년 중간값(19.5x)과는 거의 일치 — ORCL(18.5x)과 가장 가깝고 CRM(12.4x)·ADBE(10.1x)보다는 확실히 높다.'
+  }
+};
+
+function renderMultipleChart(key) {
+  const d = MULTIPLE_DATA[key];
+  const ctx = document.getElementById('multipleChart');
+  if (!ctx || !d) return;
+  if (charts['multiple']) charts['multiple'].destroy();
+  const bg = d.labels.map((l,i)=> i===0 ? '#0078D4' : (l.includes('참고') ? 'rgba(231,76,60,0.18)' : 'rgba(154,160,184,0.35)'));
+  const bd = d.labels.map((l,i)=> i===0 ? '#4aa8f0' : (l.includes('참고') ? '#c0392b' : '#5c6282'));
+  charts['multiple'] = new Chart(ctx,{
     type:'bar',
-    data:{
-      labels:['MSFT','ORCL','CRM','ADBE'],
-      datasets:[{
-        label:'PER(TTM)',
-        data:[27.9,25.2,22.4,15.1],
-        backgroundColor:['#0078D4','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)'],
-        borderColor:['#4aa8f0','#5c6282','#5c6282','#5c6282'],
-        borderWidth:1,borderRadius:5
-      }]
-    },
+    data:{ labels:d.labels, datasets:[{ label:d.unit, data:d.data, backgroundColor:bg, borderColor:bd, borderWidth:1, borderRadius:5 }] },
     options:{
       responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`PER ${ctx.raw}x`}}},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${d.unit} ${ctx.raw}x`}}},
       scales:{
         x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
-        y:{max:45,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
+        y:{max:d.max,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
       }
     }
   });
+}
+
+let currentMultipleKey = 'per';
+function selectMultiple(key) {
+  const d = MULTIPLE_DATA[key];
+  if (!d) return;
+  currentMultipleKey = key;
+  document.querySelectorAll('.val-item[data-metric]').forEach(el => el.classList.toggle('selected', el.dataset.metric === key));
+  const titleEl = document.getElementById('multipleCompareTitle');
+  const textEl = document.getElementById('multipleCompareText');
+  if (titleEl) titleEl.textContent = d.title;
+  if (textEl) textEl.innerHTML = d.explanation;
+  renderMultipleChart(key);
 }
 function renderCapexFcfChart() {
   const ctx = document.getElementById('capexFcfChart');
@@ -982,7 +1033,7 @@ function renderCapexFcfChart() {
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
-    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'valuation' && !charts['multiple']) selectMultiple(currentMultipleKey);
     if (sectionId === 'us') renderCapexFcfChart();
   }, 50);
 }

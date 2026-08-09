@@ -315,6 +315,91 @@ smaller and slower-growing than MSFT and don't individually replicate MSFT's act
 no analog in any of the three) - said explicitly in the card's shared caveat rather than presented
 as a clean fix.
 
+### Per-metric peer group can differ within one ticker - denominator comparability, not "industry vs cycle", 2026-08-09
+
+Follow-up question after the above: for MSFT's PCR(FCF), the enterprise-SW peer set (ORCL/CRM/
+ADBE) is contaminated two ways at once - ORCL's own FCF is *negative* right now (Stargate AI-
+datacenter capex, same as MSFT's problem, so it can't even be computed), and CRM/ADBE aren't
+building AI infrastructure at all (so their clean-looking low P/FCF isn't actually the right
+"normal" baseline for a company that is). Proposed switching PCR's core anchor to a "빅테크 AI-
+capex cohort" (GOOGL/META/AAPL/NVDA) instead - sent this to Codex for review before implementing,
+and it was rightly rejected: NVDA is an AI infrastructure *supplier*, not a buyer, so its high P/
+FCF reflects the opposite economics from MSFT's capex-buyer position; AAPL isn't a hyperscaler
+datacenter investor at all; the real hyperscaler peer (AMZN) was missing. Also flagged the correct
+test for telling a genuine methodological exception from post-hoc rationalization: **decide peer
+inclusion blind to the ticker's current stage/multiple, based purely on business description and
+what drives the denominator - and accept the result even if the stage goes the "wrong" way.**
+I already knew switching to 빅테크4사 would move MSFT's PCR stage 5→4 before proposing it, which
+by that test alone made the proposal suspect regardless of whether the underlying economic
+argument had merit.
+
+**Resolution actually implemented**: don't swap the core anchor. Keep PCR's core = enterprise-SW
+median (ORCL N/M, CRM, ADBE + self) exactly as the general methodology above prescribes, and add a
+**second, clearly-labeled supplementary paragraph** naming the true hyperscaler AI-infra cohort
+(AMZN/GOOGL/META/ORCL - not AAPL/NVDA, which don't belong in this specific lens) as *context*, not
+as an input to the "적정" number - including the fact that 2 of those 4 (AMZN, ORCL) also currently
+have negative FCF, which is itself informative (shows how extreme the current AI-capex cycle is
+across the group) without needing to force those N/M companies into a chart or a median. This
+generalizes: **when a metric's "right" comparison axis conflicts with the ticker's own industry
+peer set for a specific, extraneous reason** (a shared macro cycle in this case, not a business-
+model mismatch), don't switch the core anchor - present the second lens as clearly-labeled
+additional context instead, and keep the stage badge tied to the theoretically-correct peer set
+even when a reader might find that badge surprising.
+
+### Clickable 멀티플 5단계 ↔ peer-chart panel, 2026-08-09
+
+User's structural fix for the sourcing-rigor problem above: instead of burying each val-item's
+peer-sourcing reasoning in an 11px subtext line (easy to skip, easy to write thinly), make each of
+the 5 `val-item`s in "멀티플 5단계 평가" clickable, and have the **adjacent peer-comparison card
+switch its chart + explanation to match whichever metric is selected** - so every metric gets a
+real chart and a real written comparison, not just PER (which is the only one that had a chart
+before this). Implemented on both NVDA and MSFT as the new standard structure for this card pair.
+
+**Mechanism**:
+- Each `.val-item` gets `data-metric="per|pbr|psr|pcr|evebitda"` and `onclick="selectMultiple(key)"`
+  on the outer div (not just the header) - clicking anywhere on the row works. The per-item subtext
+  `<div>` is deleted entirely; its content moves into the shared `MULTIPLE_DATA[key].explanation`
+  string (sourcing sentence + a second paragraph interpreting the actual value against the peers,
+  joined with `<br><br>` since it's set via `.innerHTML`).
+- A `MULTIPLE_DATA` object keyed by metric holds `{title, unit, labels, data, max, explanation}` -
+  `labels`/`data` arrays drive the Chart.js bars, `max` sets the y-axis scale per metric (they have
+  very different natural ranges, e.g. PBR ~30 vs PCR ~90).
+- `renderMultipleChart(key)` destroys the previous `charts['multiple']` instance and creates a new
+  one (Chart.js can't cleanly re-scale a bar chart's category axis in place when the label count
+  changes between metrics, e.g. NVDA's PCR chart has 4 bars but PBR has 4 different bars - simplest
+  to always destroy+recreate rather than try to `.update()` a mismatched dataset shape).
+- Bar color is decided by a label-text convention, not a separate data field: any label containing
+  the substring "참고" renders in a reddish reference tint (`rgba(231,76,60,...)`/`#c0392b` border)
+  instead of the default gray core-peer color, and index 0 (the ticker itself) always gets the
+  ticker's own accent color. This makes the 핵심 앵커 vs 참고 앵커 distinction from the sourcing
+  methodology *visible in the chart*, not just stated in text - e.g. NVDA's PBR chart shows
+  `TSM(참고·제외)` as a visually distinct red bar, and MSFT's PCR chart shows `GOOGL(참고)`/
+  `META(참고)` the same way.
+- `selectMultiple(key)` also toggles a `.selected` class on the chosen `.val-item` (CSS shows a
+  tinted background/border plus a `"▸ 비교 보기"` label appended after the metric name via
+  `::after` on `.val-name` - kept as a CSS pseudo-element rather than baked into the HTML so it
+  doesn't count toward `validate_widget.py`'s literal `class="val-item"` substring check, see next
+  point) and updates the title/explanation text elements by id.
+- `currentMultipleKey` (module-level `let`, defaults `'per'`) persists which metric was last
+  selected so navigating away from `#valuation` and back doesn't reset the user's choice - the
+  `renderCharts()` dispatcher calls `selectMultiple(currentMultipleKey)` guarded by
+  `!charts['multiple']` (only (re)renders if the chart instance doesn't already exist, same cache-
+  guard pattern the other chart renderers in this file already use).
+
+**Two validate_widget.py regressions hit and fixed while building this - watch for both on the
+next widget**:
+1. `s.count('class="val-item"') != 5` is a **literal substring match**, not a class-list check -
+   adding `selected` as a second class in the initial HTML (`class="val-item selected"`) breaks
+   the count from 5 to 4 for that ticker. Fix: never hardcode `selected` in the initial HTML: let
+   `selectMultiple()` apply it via JS on first render instead (it already runs once per page via
+   the `renderCharts` dispatcher when the user opens `#valuation`).
+2. `card_titles()` extracts titles via `<div class="card-title">(.*?)</div>` - also a literal
+   match. Adding an `id` directly on that div (`<div class="card-title" id="...">`) breaks the
+   match and drops that card from the detected title list, which then fails the 5-card valuation
+   contract check. Fix: wrap the text in an inner `<span id="...">` instead and leave the outer
+   `<div class="card-title">` untouched - `document.getElementById()` still finds it fine either
+   way, so there's no functional reason to ever put an id on the outer div.
+
 ## 재무 건전성 카드 — collapsible shell + trend-based 활동성 판정, 2026-08-09
 
 Three follow-up changes to the card above, all NVDA-only so far (not yet propagated to the rest

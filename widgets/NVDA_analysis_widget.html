@@ -232,8 +232,12 @@
   .tag-current { background: rgba(118,185,0,0.2); color: var(--accent2); }
 
   /* VALUATION METER */
-  .val-item { margin-bottom: 18px; }
-  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .val-item { margin-bottom: 18px; padding: 8px; margin-left: -8px; margin-right: -8px; border-radius: 8px; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; }
+  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; cursor: pointer; }
+  .val-item:hover { background: rgba(255,255,255,0.03); }
+  .val-item.selected { background: rgba(159,219,47,0.08); border-color: rgba(159,219,47,0.35); }
+  .val-name { position: relative; }
+  .val-item.selected .val-name::after { content: '▸ 비교 보기'; font-size: 9.5px; font-weight: 600; color: var(--accent2); margin-left: 8px; vertical-align: middle; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
   .val-track { height: 8px; background: var(--bg3); border-radius: 4px; position: relative; overflow: hidden; }
@@ -646,7 +650,7 @@
       <div class="card-title">멀티플 5단계 평가 (글로벌 AI 반도체 비교)</div>
       <div style="font-size:10.5px;color:var(--text3);line-height:1.5;margin:-4px 0 14px;">※ 아래 각 "적정" 값의 NVDA 자체 10년 중간값 앵커는 게임GPU→암호화폐→데이터센터→생성형AI로 사업모델이 여러 차례 전환된 기간을 합친 값으로, 단일 국면의 적정가치가 아니라 참고용 장기 앵커임. 히스토리컬 중간값은 WebSearch로 확보한 GuruFocus 검색 스니펫 기준으로, 원자료(1차 데이터) 직접 대조는 못함.</div>
 
-      <div class="val-item">
+      <div class="val-item" data-metric="per" onclick="selectMultiple('per')">
         <div class="val-header">
           <span class="val-name">PER (TTM)</span>
           <div style="display:flex;align-items:center;gap:8px;">
@@ -656,10 +660,9 @@
         </div>
         <div class="val-track"><div class="val-fill" style="width:38%;background:linear-gradient(90deg,#27ae60,#8bc34a);"></div></div>
         <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 53x</span><span class="val-high">고 100x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">적정 53x = NVDA 자체 10년 중간값(핵심 앵커, 위 캐비어트 참고 — 역사적 상단 성격의 장기 기준점이며, 이 자체를 정밀한 내재가치 점추정치로 보기보다 "역사적 기준 대비 할인" 정도로 해석 권장). 팹리스 동일회계기준 피어가 없어 피어 기반 교차검증은 못함 — TSM 27.7x(TTM 기간은 동일하나 IFRS 기준이라 GAAP과 회계기준 자체는 다름, 파운드리 사업모델도 상이)·반도체 업종 중간값 41.0x(광범위 표본)·AVGO(Non-GAAP 50.9x)·AMD(Forward 38x)는 참고 앵커일 뿐 핵심 산출엔 미포함. Forward PER(FY27E) 22x · PEG 0.49(성장률 대비로는 별도로 저평가 근거)</div>
       </div>
 
-      <div class="val-item">
+      <div class="val-item" data-metric="pbr" onclick="selectMultiple('pbr')">
         <div class="val-header">
           <span class="val-name">PBR</span>
           <div style="display:flex;align-items:center;gap:8px;">
@@ -669,10 +672,9 @@
         </div>
         <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 5x</span><span class="val-mid">적정 20x</span><span class="val-high">고 70x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">적정 20x(핵심 앵커 13.3~24.0x의 중앙값 20.3x 반올림) = 자산집약도가 비교 가능한 팹리스 피어 AVGO 24.0x·AMD 13.3x, NVDA 자체 10년 중간값 20.3x. 광범위 반도체 업종 중간값(3.9x)은 저마진·자산집약 소형주가 다수라 제외, TSM(1.8x)은 파운드리 특성상 유형자산·설비투자 비중이 구조적으로 달라 제외 — 두 제외 모두 "팹리스 vs 파운드리·자산집약도" 동일 기준 적용</div>
       </div>
 
-      <div class="val-item">
+      <div class="val-item" data-metric="psr" onclick="selectMultiple('psr')">
         <div class="val-header">
           <span class="val-name">PSR (TTM)</span>
           <div style="display:flex;align-items:center;gap:8px;">
@@ -682,10 +684,9 @@
         </div>
         <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 5x</span><span class="val-mid">적정 23x</span><span class="val-high">고 50x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">적정 23x(핵심 앵커 19.6~27.0x의 중앙값 22.9x 반올림, 기존 15x에서 재검증) = AVGO 27.0x·AMD 22.9x(팹리스, 마진구조 비교 가능), NVDA 자체 10년 중간값 19.6x의 중앙값. TSM 17.1x는 파운드리 위탁제조 마진구조가 달라 PBR과 동일 기준으로 제외. 소프트웨어 수준 마진으로 프리미엄 정당화</div>
       </div>
 
-      <div class="val-item">
+      <div class="val-item" data-metric="pcr" onclick="selectMultiple('pcr')">
         <div class="val-header">
           <span class="val-name">PCR (FCF)</span>
           <div style="display:flex;align-items:center;gap:8px;">
@@ -695,10 +696,9 @@
         </div>
         <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 57x</span><span class="val-high">고 90x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">적정 57x(핵심 앵커 48.1~58.6x의 중앙값, 기존 30x·4단계에서 재검증) = AVGO 58.6x(팹리스, 자본집약도 비교 가능이나 FCF 정의가 NVDA와 정확히 일치하는지는 미검증)·NVDA 자체 10년 중간값 57.1x·반도체 업종 중간값 48.1x의 중앙값. TSM 11.8x는 대규모 파운드리 설비투자 사이클로 FCF가 구조적으로 억눌린 시기라 제외, AMD는 PCR 항목 자체 미공시. 57.9x는 세 앵커 모두와 근접 — 4단계 높음에서 3단계 적정으로 재평가. FCF 마진 59% 반영 시 합리적</div>
       </div>
 
-      <div class="val-item">
+      <div class="val-item" data-metric="evebitda" onclick="selectMultiple('evebitda')">
         <div class="val-header">
           <span class="val-name">EV/EBITDA</span>
           <div style="display:flex;align-items:center;gap:8px;">
@@ -708,16 +708,15 @@
         </div>
         <div class="val-track"><div class="val-fill" style="width:38%;background:linear-gradient(90deg,#27ae60,#8bc34a);"></div></div>
         <div class="val-labels"><span class="val-low">저 10x</span><span class="val-mid">적정 46x</span><span class="val-high">고 80x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV $5.35T÷EBITDA $165.5B(TTM) · 적정 46x(핵심 앵커 42.7x·49.5x의 평균) = AVGO 49.5x(팹리스, 자본집약도 비교 가능이나 EBITDA 정의가 NVDA와 동일한지 미검증 — AVGO는 Adjusted EBITDA를 별도 공시)·NVDA 자체 10년 중간값 42.7x. TSM 20.1x는 파운드리 설비투자 사이클로 자본집약도가 달라 제외, AMD 93.8x는 GAAP 상각 왜곡으로 제외. 32.3x는 적정 46x 대비로도 저평가</div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">글로벌 AI 반도체 PER 비교</div>
+      <div class="card-title"><span id="multipleCompareTitle">글로벌 AI 반도체 PER 비교</span></div>
       <div class="chart-wrap" style="height:270px;">
-        <canvas id="peerChart"></canvas>
+        <canvas id="multipleChart"></canvas>
       </div>
-      <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;">NVDA 34.1x는 AVGO(Non-GAAP 50.9x, GAAP은 M&A 상각 왜곡으로 69.1x)와 TSM(27.7x)보다 낮고, AMD(Forward 38x, GAAP 171.5x는 일시적 왜곡으로 비교 제외)와 비슷하며, 반도체 업종 중간값(41.0x, GuruFocus)보다도 낮다. PEG 0.49로 성장률을 감안하면 5개 중 가장 저평가된 축에 속한다.</div>
+      <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText">NVDA 34.1x는 AVGO(Non-GAAP 50.9x, GAAP은 M&A 상각 왜곡으로 69.1x)와 TSM(27.7x)보다 낮고, AMD(Forward 38x, GAAP 171.5x는 일시적 왜곡으로 비교 제외)와 비슷하며, 반도체 업종 중간값(41.0x, GuruFocus)보다도 낮다. PEG 0.49로 성장률을 감안하면 5개 중 가장 저평가된 축에 속한다.</div>
     </div>
   </div>
 
@@ -1286,31 +1285,82 @@ function renderFundChart() {
   });
 }
 
-// ─── PEER CHART ───
-function renderPeerChart() {
-  const ctx = document.getElementById('peerChart');
-  if (!ctx || charts['peer']) return;
-  charts['peer'] = new Chart(ctx,{
+// ─── MULTIPLE COMPARE (clickable 멀티플 5단계 ↔ peer chart) ───
+const MULTIPLE_DATA = {
+  per: {
+    title: '글로벌 AI 반도체 PER 비교',
+    unit: 'PER(TTM)',
+    labels: ['NVDA','AVGO','TSM','AMD','반도체평균'],
+    data: [34.1,50.9,27.7,38.0,41.0],
+    max: 60,
+    explanation: '적정 53x = NVDA 자체 10년 중간값(핵심 앵커 — 역사적 상단 성격의 장기 기준점이며, 정밀한 내재가치 점추정치보다 "역사적 기준 대비 할인" 정도로 해석 권장). 팹리스 동일회계기준 피어가 없어 피어 기반 교차검증은 못함 — TSM 27.7x(TTM 기간은 동일하나 IFRS 기준이라 회계기준 자체는 다름, 파운드리 사업모델도 상이)·반도체 업종 중간값 41.0x·AVGO(Non-GAAP 50.9x)·AMD(Forward 38x)는 참고 앵커일 뿐 핵심 산출엔 미포함. Forward PER(FY27E) 22x · PEG 0.49(성장률 대비로는 별도로 저평가 근거).<br><br>NVDA 34.1x는 AVGO(Non-GAAP 50.9x, GAAP은 M&A 상각 왜곡으로 69.1x)와 TSM(27.7x)보다 낮고, AMD(Forward 38x, GAAP 171.5x는 일시적 왜곡으로 비교 제외)와 비슷하며, 반도체 업종 중간값(41.0x)보다도 낮다.'
+  },
+  pbr: {
+    title: 'PBR 비교 — 팹리스 자산집약도 기준',
+    unit: 'PBR',
+    labels: ['NVDA','AVGO','AMD','TSM(참고·제외)'],
+    data: [27.7,24.0,13.3,1.8],
+    max: 35,
+    explanation: '적정 20x(핵심 앵커 13.3~24.0x의 중앙값 20.3x 반올림) = 자산집약도가 비교 가능한 팹리스 피어 AVGO 24.0x·AMD 13.3x, NVDA 자체 10년 중간값 20.3x의 중앙값. 광범위 반도체 업종 중간값(3.9x)은 저마진·자산집약 소형주가 다수라 제외, TSM(1.8x)은 파운드리 특성상 유형자산·설비투자 비중이 구조적으로 달라 제외 — 두 제외 모두 "팹리스 vs 파운드리·자산집약도" 동일 기준 적용.<br><br>NVDA 27.7x는 핵심 앵커 3사 중 가장 높지만, 자사주 매입으로 장부가치가 구조적으로 낮아지는 효과가 AVGO·AMD에도 공통이라 셋 다 광범위 업종 평균보다 훨씬 높은 배수에서 거래된다. TSM(1.8x)과의 격차는 저평가 신호가 아니라 파운드리 vs 팹리스의 근본적 사업모델 차이.'
+  },
+  psr: {
+    title: 'PSR 비교 — 팹리스 마진구조 기준',
+    unit: 'PSR(TTM)',
+    labels: ['NVDA','AVGO','AMD','TSM(참고·제외)'],
+    data: [21.4,27.0,22.9,17.1],
+    max: 35,
+    explanation: '적정 23x(핵심 앵커 19.6~27.0x의 중앙값 22.9x 반올림, 기존 15x에서 재검증) = AVGO 27.0x·AMD 22.9x(팹리스, 마진구조 비교 가능), NVDA 자체 10년 중간값 19.6x의 중앙값. TSM 17.1x는 파운드리 위탁제조 마진구조가 달라 PBR과 동일 기준으로 제외.<br><br>NVDA 21.4x는 핵심 앵커 중앙값(22.9x)에 근접해 소프트웨어 수준 마진(OPM 65%+)이 프리미엄을 정당화하는 수준. TSM(17.1x)은 마진구조가 근본적으로 달라 참고만.'
+  },
+  pcr: {
+    title: 'PCR(FCF) 비교 — 팹리스 자본집약도 기준',
+    unit: 'PCR(FCF)',
+    labels: ['NVDA','AVGO','반도체평균','TSM(참고·제외)'],
+    data: [57.9,58.6,48.1,11.8],
+    max: 70,
+    explanation: '적정 57x(핵심 앵커 48.1~58.6x의 중앙값, 기존 30x·4단계에서 재검증) = AVGO 58.6x(팹리스, 자본집약도 비교 가능이나 FCF 정의가 NVDA와 정확히 일치하는지는 미검증)·NVDA 자체 10년 중간값 57.1x·반도체 업종 중간값 48.1x의 중앙값. TSM 11.8x는 대규모 파운드리 설비투자 사이클로 FCF가 구조적으로 억눌린 시기라 제외, AMD는 PCR 항목 자체 미공시.<br><br>57.9x는 세 핵심 앵커 모두와 근접 — 4단계 높음에서 3단계 적정으로 재평가. FCF 마진 59% 반영 시 합리적.'
+  },
+  evebitda: {
+    title: 'EV/EBITDA 비교 — 팹리스 자본집약도 기준',
+    unit: 'EV/EBITDA',
+    labels: ['NVDA','AVGO','TSM(참고·제외)','AMD(참고·GAAP왜곡)'],
+    data: [32.3,49.5,20.1,93.8],
+    max: 100,
+    explanation: 'EV $5.35T÷EBITDA $165.5B(TTM) · 적정 46x(핵심 앵커 42.7x·49.5x의 평균) = AVGO 49.5x(팹리스, 자본집약도 비교 가능이나 EBITDA 정의가 NVDA와 동일한지 미검증 — AVGO는 Adjusted EBITDA를 별도 공시)·NVDA 자체 10년 중간값 42.7x. TSM 20.1x는 파운드리 설비투자 사이클로 자본집약도가 달라 제외, AMD 93.8x는 GAAP 상각 왜곡으로 제외.<br><br>32.3x는 적정 46x 대비로도 저평가.'
+  }
+};
+
+function renderMultipleChart(key) {
+  const d = MULTIPLE_DATA[key];
+  const ctx = document.getElementById('multipleChart');
+  if (!ctx || !d) return;
+  if (charts['multiple']) charts['multiple'].destroy();
+  const bg = d.labels.map((l,i)=> i===0 ? '#76b900' : (l.includes('참고') ? 'rgba(231,76,60,0.18)' : 'rgba(154,160,184,0.35)'));
+  const bd = d.labels.map((l,i)=> i===0 ? '#9fdb2f' : (l.includes('참고') ? '#c0392b' : '#5c6282'));
+  charts['multiple'] = new Chart(ctx,{
     type:'bar',
-    data:{
-      labels:['NVDA','AVGO','TSM','AMD','반도체평균'],
-      datasets:[{
-        label:'PER(TTM)',
-        data:[34.1,50.9,27.7,38.0,41.0],
-        backgroundColor:['#76b900','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','rgba(154,160,184,0.2)'],
-        borderColor:['#9fdb2f','#5c6282','#5c6282','#5c6282','#5c6282'],
-        borderWidth:1,borderRadius:5
-      }]
-    },
+    data:{ labels:d.labels, datasets:[{ label:d.unit, data:d.data, backgroundColor:bg, borderColor:bd, borderWidth:1, borderRadius:5 }] },
     options:{
       responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`PER ${ctx.raw}x`}}},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${d.unit} ${ctx.raw}x`}}},
       scales:{
-        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:11}}},
-        y:{max:60,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
+        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10.5}}},
+        y:{max:d.max,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
       }
     }
   });
+}
+
+let currentMultipleKey = 'per';
+function selectMultiple(key) {
+  const d = MULTIPLE_DATA[key];
+  if (!d) return;
+  currentMultipleKey = key;
+  document.querySelectorAll('.val-item[data-metric]').forEach(el => el.classList.toggle('selected', el.dataset.metric === key));
+  const titleEl = document.getElementById('multipleCompareTitle');
+  const textEl = document.getElementById('multipleCompareText');
+  if (titleEl) titleEl.textContent = d.title;
+  if (textEl) textEl.innerHTML = d.explanation;
+  renderMultipleChart(key);
 }
 
 // ─── CAPEX CHART ───
@@ -1344,7 +1394,7 @@ function renderCapexChart() {
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
-    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'valuation' && !charts['multiple']) selectMultiple(currentMultipleKey);
     if (sectionId === 'us') renderCapexChart();
   }, 50);
 }
