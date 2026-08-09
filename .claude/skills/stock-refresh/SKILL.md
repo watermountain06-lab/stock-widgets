@@ -300,6 +300,20 @@ Ran it fleet-wide once NVDA was fixed: **24 of the other 44 widgets have at leas
 
 Script has a real limitation: it does per-widget name-collision handling (e.g. ABBV's "PER (GAAP TTM)" and "PER (Adjusted TTM)" both strip to "PER" - matches each prose value against its *nearest* canon value, not a single one) but can't verify which number is actually *correct* against live data - it only catches internal inconsistency, same as `validate_widget.py`. A clean run doesn't mean the numbers are right, only that they agree with each other.
 
+## 재무건전성 card on retailers/negative-CCC tickers (AMZN, and watch for WMT/COST) - 2026-08-09
+
+A retailer's activity ratios can produce a genuinely **negative CCC** (AMZN: -46.2일) - it collects cash from customers faster than it pays suppliers, a well-known structural advantage, not a warning sign. Two adaptations from the NVDA template when this happens:
+
+1. **Color the CCC value green, not NVDA's neutral gold.** The "always neutral, no universal threshold" rule was specifically for cases like semiconductor CCC where "how many days is good" is genuinely industry-relative and ambiguous. A *negative* CCC for a retailer has no such ambiguity - it's unambiguously a structural strength, so treat it like any other pass/fail-style metric and color it accordingly.
+2. **Retool the timeline bar** - when AP-payment days (매입채무 지급기간) exceed 영업순환주기 (재고+매출채권 days), the marker can't sit inside the inventory+AR segment bar like NVDA's positive-CCC case. Scale the whole `.tl-bar-wrap` to a total that comfortably fits the *longer* of the two (pad ~10% past it so the marker label doesn't clip at the container edge), place the inventory+AR segments proportionally at the start, and put the AP marker further right with a green `.tl-ccc-span` bridging the gap between them - visually showing the "float" period the company gets to hold cash before paying.
+3. Same reasoning likely applies to WMT/COST and any other low-margin, high-inventory-turnover retailer when they're migrated - check the CCC sign before copying NVDA's positive-CCC card verbatim.
+
+Also found on AMZN's 안정성 metrics: 유동비율(103.3%)/당좌비율(87.5%) both read below the generic 150%/100% "safe" threshold, but this is *normal* for a retailer running tight working capital funded by supplier credit (the negative CCC above is the same fact from a different angle) - don't badge these as a warning. Used the `.diag-badge.info` (ℹ️) style with a "유통업 특성상 낮게 나옴" note rather than inventing a new "warning" badge class - the existing safe/info two-state system was enough once the note explains why info != alarming here.
+
+## Dual-metric GAAP-vs-adjusted framing is not drift - verify before "fixing"
+
+`audit_valuation_consistency.py` flags large val-item-vs-prose gaps as candidates, not confirmed bugs. Before treating a big flagged gap as a NVDA/AVGO-style stale-number error, read the surrounding prose first - AMZN's val-item PER (22.1x, GAAP TTM) vs its own prose "실질 PER ~46x" is a **deliberately explained** ex-one-time-gain figure (Anthropic mark-to-market gains inflating GAAP EPS), not a propagation bug; the two numbers are correctly computed and clearly labeled as different things. This is the same pattern as AVGO's GAAP-vs-Non-GAAP split and ABBV's GAAP-vs-Adjusted PER - **big, well-explained gaps are usually intentional; small, unexplained gaps (NVDA's 2.3%, AVGO's stale $16.40 EPS) are usually the real bugs.** Check the explanation before spending SEC-verification effort on a "fix" that isn't needed.
+
 ## Validation gate
 
 Run in this order, fix every failure before moving on:
