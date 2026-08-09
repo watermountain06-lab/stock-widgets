@@ -180,38 +180,38 @@
   .zone-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
   .zone-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg3); border-radius: 6px; }
   .zone-label { font-size: 12px; color: var(--text2); }
-  .section-label { font-size: 12px; color: var(--text2); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
   .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
   .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
   .diag-summary .icon { font-size:24px; }
   .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
-  .diag-summary .sub { font-size:11px; color:var(--text2); margin-top:2px; }
+  .diag-summary .sub { font-size:12px; color:var(--text2); margin-top:2px; line-height:1.4; }
   .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 22px; }
   .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
   .diag-left { display:flex; align-items:baseline; gap:10px; }
-  .diag-label { font-size:12px; color:var(--text2); min-width:96px; }
+  .diag-label { font-size:13px; color:var(--text); font-weight:600; min-width:96px; }
   .diag-value { font-size:15px; font-weight:700; color:var(--text); }
-  .diag-note { font-size:10.5px; color:var(--text3); }
+  .diag-note { font-size:11.5px; color:var(--text2); }
   .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
   .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
   .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
   .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
   .act-card { background: var(--bg3); border-radius: 8px; padding: 12px 14px; display:flex; align-items:center; gap:12px; }
   .act-icon { font-size: 19px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:rgba(159,219,47,0.1); border-radius:8px; flex-shrink:0; }
-  .act-label { font-size: 10.5px; color: var(--text3); margin-bottom:2px; }
+  .act-label { font-size: 11.5px; color: var(--text2); font-weight:600; margin-bottom:2px; }
   .act-value { font-size: 15px; font-weight: 700; color: var(--text); }
-  .act-sub { font-size: 10px; color: var(--text3); margin-top:1px; }
+  .act-sub { font-size: 11px; color: var(--text2); margin-top:1px; }
   .ccc-card { background: var(--bg3); border-radius: 8px; padding: 16px 18px 12px; }
   .ccc-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 6px; }
-  .ccc-head-label { font-size:11.5px; color:var(--text2); font-weight:700; }
+  .ccc-head-label { font-size:12.5px; color:var(--text); font-weight:700; }
   .ccc-head-value { font-size:18px; font-weight:800; color:var(--gold); }
-  .ccc-explain { font-size: 10.5px; color: var(--text3); line-height: 1.5; margin-bottom: 22px; }
+  .ccc-explain { font-size: 11.5px; color: var(--text2); line-height: 1.6; margin-bottom: 22px; }
   .tl-bar-wrap { position: relative; margin: 40px 4px 8px; }
   .tl-bar { height: 18px; border-radius: 5px; overflow: hidden; display: flex; }
   .tl-seg-inv { background: linear-gradient(90deg,#3498db,#2980b9); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
   .tl-seg-ar { background: linear-gradient(90deg,#9fdb2f,#76b900); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#0f1117; }
   .tl-marker { position: absolute; top: -18px; width: 2px; background: var(--gold); }
-  .tl-marker-label { position: absolute; top: -32px; transform: translateX(-50%); font-size: 9.5px; font-weight: 700; color: var(--gold); white-space: nowrap; }
+  .tl-marker-label { position: absolute; top: -32px; transform: translateX(-50%); font-size: 10.5px; font-weight: 700; color: var(--gold); white-space: nowrap; }
   .tl-ccc-span { position: absolute; height: 3px; background: rgba(240,192,64,0.6); border-radius: 2px; top: 24px; }
   .zone-val { font-size: 13px; font-weight: 700; color: var(--accent2); }
   .zone-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
@@ -560,7 +560,7 @@
       </div>
     </div>
 
-    <div style="margin-top:14px;font-size:11px;color:var(--text3);">유동비율·당좌비율·차입금의존도·이자보상배율 모두 기준치를 큰 폭으로 상회 — 재무구조 자체의 부실 위험은 사실상 없다. 다만 CCC 102일은 반도체 제조·재고 특성상 매출채권과 재고 회수에 3개월 이상 현금이 묶인다는 뜻으로, 수요 급변 시 재고자산 감액 리스크를 함께 봐야 한다.</div>
+    <div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">유동비율·당좌비율·차입금의존도·이자보상배율 모두 기준치를 큰 폭으로 상회 — 재무구조 자체의 부실 위험은 사실상 없다. 다만 CCC 102일은 반도체 제조·재고 특성상 매출채권과 재고 회수에 3개월 이상 현금이 묶인다는 뜻으로, 수요 급변 시 재고자산 감액 리스크를 함께 봐야 한다.</div>
     </div>
   </div>
 
