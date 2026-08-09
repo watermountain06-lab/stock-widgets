@@ -25,10 +25,19 @@ WIDGETS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 # Loose "keyword ... number x" patterns used to find prose mentions outside
 # the val-item badges themselves (news-style sentences, other cards).
 PROSE_PATTERNS = {
-    "PER":        r"(?<!Forward )(?<!EV/E)(?<!Non-GAAP )(?<!GAAP )\bPER\s*(?:\((?:TTM|GAAP TTM)\))?\s*([\d]+\.?\d*)x",
-    "Forward PER":r"Forward\s*P(?:ER|/E)(?:\([^)]*\))?\s*([\d]+\.?\d*)x",
+    # PER immediately preceded by an adjustment qualifier (GAAP, Non-GAAP,
+    # 실질, 조정, Adjusted...) is a *different* metric from bare "PER" and
+    # from *each other* - a ticker can legitimately carry both a GAAP figure
+    # and a separately-labeled adjusted one (AVGO: GAAP 69.1x vs Non-GAAP
+    # 50.9x; AMZN: bare 22.1x vs "실질" ~46x ex-Anthropic). Keep each
+    # qualifier its own bucket so they're only checked for self-consistency,
+    # never cross-compared against an unrelated qualifier's figure.
     "Non-GAAP PER":r"Non-GAAP\s*PER\s*(?:\([^)]*\))?\s*:?\s*(?:\$[\d,.]+÷\$[\d,.]+\([^)]*\)\s*=\s*)?([\d]+\.?\d*)x",
     "GAAP PER":   r"(?<!Non-)\bGAAP\s*PER\s*([\d]+\.?\d*)x",
+    "실질 PER":    r"실질\s*PER\s*(?:기준)?\s*~?\s*([\d]+\.?\d*)x",
+    "조정 PER":    r"조정후?\s*PER\s*~?\s*([\d]+\.?\d*)x",
+    "PER":        r"(?<!Forward )(?<!EV/E)(?<!Non-GAAP )(?<!GAAP )(?<!실질 )(?<!조정 )(?<!조정후 )\bPER\s*(?:\((?:TTM|GAAP TTM)\))?\s*([\d]+\.?\d*)x",
+    "Forward PER":r"Forward\s*P(?:ER|/E)(?:\([^)]*\))?\s*([\d]+\.?\d*)x",
     "PBR":        r"\bPBR\s*([\d]+\.?\d*)x",
     "PSR":        r"\bPSR\s*(?:\([^)]*\))?\s*([\d]+\.?\d*)x",
     "PCR":        r"\bPCR\s*(?:\([^)]*\))?\s*([\d]+\.?\d*)x",

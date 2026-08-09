@@ -54,6 +54,39 @@
   .stat-value.up { color: var(--green); }
   .stat-value.down { color: var(--red); }
   .stat-value.gold { color: var(--accent2); }
+  .section-label { font-size: 12px; color: var(--text2); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:11px; color:var(--text2); margin-top:2px; }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 22px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; }
+  .diag-label { font-size:12px; color:var(--text2); min-width:96px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:10.5px; color:var(--text3); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .act-card { background: var(--bg3); border-radius: 8px; padding: 12px 14px; display:flex; align-items:center; gap:12px; }
+  .act-icon { font-size: 19px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:rgba(159,219,47,0.1); border-radius:8px; flex-shrink:0; }
+  .act-label { font-size: 10.5px; color: var(--text3); margin-bottom:2px; }
+  .act-value { font-size: 15px; font-weight: 700; color: var(--text); }
+  .act-sub { font-size: 10px; color: var(--text3); margin-top:1px; }
+  .ccc-card { background: var(--bg3); border-radius: 8px; padding: 16px 18px 12px; }
+  .ccc-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 6px; }
+  .ccc-head-label { font-size:11.5px; color:var(--text2); font-weight:700; }
+  .ccc-head-value { font-size:18px; font-weight:800; color:var(--gold); }
+  .ccc-explain { font-size: 10.5px; color: var(--text3); line-height: 1.5; margin-bottom: 22px; }
+  .tl-bar-wrap { position: relative; margin: 40px 4px 8px; }
+  .tl-bar { height: 18px; border-radius: 5px; overflow: hidden; display: flex; }
+  .tl-seg-inv { background: linear-gradient(90deg,#3498db,#2980b9); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
+  .tl-seg-ar { background: linear-gradient(90deg,#9fdb2f,#76b900); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#0f1117; }
+  .tl-marker { position: absolute; top: -18px; width: 2px; background: var(--gold); }
+  .tl-marker-label { position: absolute; top: -32px; transform: translateX(-50%); font-size: 9.5px; font-weight: 700; color: var(--gold); white-space: nowrap; }
+  .tl-ccc-span { position: absolute; height: 3px; background: rgba(240,192,64,0.6); border-radius: 2px; top: 24px; }
   .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
   .ma-row:last-child { border-bottom: none; }
   .ma-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
@@ -267,17 +300,92 @@
     <div class="chart-wrap" style="height:260px;"><canvas id="amznRevChart"></canvas></div>
   </div>
   <div class="grid-3">
-    <div class="stat-box"><div class="stat-label">매출 (Q2 2026)</div><div class="stat-value up">$200.6B</div><div class="stat-sub">▲20% YoY</div></div>
-    <div class="stat-box"><div class="stat-label">AWS 매출 (Q2 2026)</div><div class="stat-value up">$42.2B</div><div class="stat-sub">▲37% · 18분기만에 최고 성장</div></div>
-    <div class="stat-box"><div class="stat-label">AWS 영업이익</div><div class="stat-value up">$16.6B</div><div class="stat-sub">마진 39.4% · 전년 $10.2B</div></div>
-    <div class="stat-box"><div class="stat-label">영업이익 (Q2 2026)</div><div class="stat-value up">$27.5B</div><div class="stat-sub">▲43% YoY</div></div>
-    <div class="stat-box"><div class="stat-label">순이익 (Q2 2026)</div><div class="stat-value">$62.6B</div><div class="stat-sub">Anthropic 평가익 $53.4B 포함·GAAP</div></div>
-    <div class="stat-box"><div class="stat-label">희석 EPS (Q2 2026)</div><div class="stat-value">$5.75</div><div class="stat-sub">전년 $1.68</div></div>
-    <div class="stat-box"><div class="stat-label">TTM 매출</div><div class="stat-value">$775.7B</div><div class="stat-sub">세계 최대 매출</div></div>
-    <div class="stat-box"><div class="stat-label">TTM FCF</div><div class="stat-value down">-$7.6B</div><div class="stat-sub">AI 투자로 적자전환 · FY26 capex $220B</div></div>
-    <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value gold">10월 22일 예정</div><div class="stat-sub">Q3 2026</div></div>
+    <div class="stat-box"><div class="stat-label">AWS 영업이익</div><div class="stat-value up">$16.6B</div><div class="stat-sub">세그먼트 수익성 · 마진 39.4%(전년 $10.2B)</div></div>
+    <div class="stat-box"><div class="stat-label">영업이익 (Q2 2026)</div><div class="stat-value up">$27.5B</div><div class="stat-sub">전사 수익성 · ▲43% YoY</div></div>
+    <div class="stat-box"><div class="stat-label">순이익 (Q2 2026)</div><div class="stat-value">$62.6B</div><div class="stat-sub">GAAP 최종손익 · Anthropic 평가익 $53.4B 포함</div></div>
+    <div class="stat-box"><div class="stat-label">희석 EPS (Q2 2026)</div><div class="stat-value">$5.75</div><div class="stat-sub">주당 가치 · 전년 $1.68</div></div>
+    <div class="stat-box"><div class="stat-label">TTM FCF</div><div class="stat-value down">-$7.6B</div><div class="stat-sub">현금창출력 · FY26 capex $220B로 적자전환</div></div>
+    <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value gold">10월 22일 예정</div><div class="stat-sub">일정 · Q3 2026</div></div>
   </div>
+
   <div class="card" style="margin-top:16px;">
+    <div class="card-title">재무 건전성 — 안정성·활동성 (Q2 2026 · 2026.06.30 기준)</div>
+
+    <div class="section-label"><span class="dot"></span>안정성 — 단기 지급능력·차입 의존도</div>
+    <div class="diag-summary">
+      <div class="icon">🩺</div>
+      <div>
+        <div class="title">종합 진단: 안정적</div>
+        <div class="sub">차입금·이자보상은 양호 — 유동비율은 유통업 특성상 낮게 나오는 게 정상 (아래 활동성 참고)</div>
+      </div>
+    </div>
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">103.3%</span><span class="diag-note">기준 150%↑ · 유통업 특성상 낮게 나옴</span></div>
+        <div class="diag-badge info">ℹ️ 유통업 특성</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">당좌비율</span><span class="diag-value">87.5%</span><span class="diag-note">기준 100%↑ · 유통업 특성상 낮게 나옴</span></div>
+        <div class="diag-badge info">ℹ️ 유통업 특성</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">차입금의존도</span><span class="diag-value">11.8%</span><span class="diag-note">기준 30%↓</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">이자보상배율</span><span class="diag-value">20.9x</span><span class="diag-note">기준 1x↑ · Q2 2026 분기 기준</span></div>
+        <div class="diag-badge safe">✅ 안전</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">부채비율</span><span class="diag-value">98.6%</span><span class="diag-note">부채 $544.1B÷자기자본 $551.6B · AI 투자로 부채 확대</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">총자산증가율</span><span class="diag-value">30.9%</span><span class="diag-note">FY25 $818.0B(전기 $624.9B)</span></div>
+        <div class="diag-badge info">ℹ️ 참고</div>
+      </div>
+    </div>
+
+    <div class="section-label"><span class="dot" style="background:var(--blue);"></span>활동성 — 회수·재고소진·지급 속도 (TTM 기준 · Q3'25~Q2'26)</div>
+    <div class="activity-grid">
+      <div class="act-card">
+        <div class="act-icon">💳</div>
+        <div><div class="act-label">매출채권 회전율·회전기간</div><div class="act-value">10.66회</div><div class="act-sub">34.2일 만에 현금화</div></div>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">📦</div>
+        <div><div class="act-label">재고자산 회전율·회전기간</div><div class="act-value">9.67회</div><div class="act-sub">37.8일 재고 보유</div></div>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">🧾</div>
+        <div><div class="act-label">매입채무 회전율·지급기간</div><div class="act-value">3.09회</div><div class="act-sub">118.2일 만에 지급</div></div>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">🔄</div>
+        <div><div class="act-label">영업순환주기</div><div class="act-value">72.0일</div><div class="act-sub">재고보유+매출채권 회전기간</div></div>
+      </div>
+    </div>
+    <div class="ccc-card">
+      <div class="ccc-head">
+        <div class="ccc-head-label">⏱️ 현금창출주기 (CCC)</div>
+        <div class="ccc-head-value" style="color:var(--green);">-46.2일</div>
+      </div>
+      <div class="ccc-explain">재고를 사서 판매 대금을 회수하기까지는 72.0일이 걸리지만, 매입채무는 118.2일 후에 갚기 때문에 <strong style="color:var(--green);">오히려 46.2일 동안 공급업체 자금으로 사업을 운영</strong>하는 구조다 — 유통업 특유의 마이너스 현금창출주기로, 현금이 묶이기는커녕 여유 현금을 만들어낸다.</div>
+      <div class="tl-bar-wrap">
+        <div class="tl-marker" style="left:91.0%; height:18px;"></div>
+        <div class="tl-marker-label" style="left:91.0%;">매입채무 지급 118.2일</div>
+        <div class="tl-bar">
+          <div class="tl-seg-inv" style="width:29.0%;">재고보유 37.8일</div>
+          <div class="tl-seg-ar" style="width:26.3%;">매출채권회수 34.2일</div>
+        </div>
+        <div class="tl-ccc-span" style="left:55.3%; width:35.7%; background:rgba(46,204,113,0.6);"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;font-size:11px;color:var(--text3);">차입금의존도·이자보상배율·부채비율은 모두 양호 — AI 인프라 투자로 부채가 늘었지만 이를 감당할 수익성은 충분하다. 유동비율·당좌비율이 낮은 건 위험 신호가 아니라 공급업체 자금(매입채무)으로 운영하는 유통업 구조 때문이며, 활동성 지표의 마이너스 CCC가 이를 뒷받침한다.</div>
+  </div>
+
+  <div class="card">
     <div class="card-title">핵심 성장 동력 3가지</div>
     <div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">AWS — 핵심 수익원</div><div class="driver-desc">Q1 $37.6B ▲28%. OI $14.2B(OPM 37.8%). 백로그 $244B. Anthropic·OpenAI 최대 클라우드.</div></div></div>
     <div class="driver-item"><div class="driver-num">2</div><div><div class="driver-title">광고 — 고마진 성장</div><div class="driver-desc">Q1 ~$14B ▲19%. 아마존닷컴 내 광고 독점. 프라임 비디오 광고 확대. OPM 60%+ 초고마진.</div></div></div>
@@ -335,17 +443,6 @@
       <div class="chart-wrap" style="height:270px;"><canvas id="peerChart"></canvas></div>
       <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;">AMZN 22.1x는 빅테크 5개 중 MSFT(22.6x)·GOOGL(24.2x)·NVDA(31.5x)·AAPL(40.4x)보다 낮은 최저 수준이나, Anthropic 평가익으로 TTM EPS가 부풀려진 영향이 크다. EV/EBITDA 18.0x는 5년 평균 21x를 밑돈다.</div>
     </div>
-  </div>
-  <div class="card">
-    <div class="card-title">밸류에이션 5단계</div>
-    <div class="stage-grid">
-      <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div></div>
-      <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div><div style="font-size:10px;color:var(--green);background:rgba(46,204,113,0.15);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">PER·PBR·PSR (TTM)·PCR (운영CF)·EV/EBITDA</div></div>
-      <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div></div>
-      <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div></div>
-      <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div></div>
-    </div>
-    <div style="margin-top:10px;font-size:11px;color:var(--text3);">5개 지표 모두 2단계 낮음에 몰려 있다. 단 PER(22.1x)은 Anthropic 투자 평가이익(TTM 약 $70B)이 순이익을 크게 부풀린 결과라, 이를 제외한 실질 영업 EPS 기준 PER은 약 46x로 훨씬 높다 — GAAP 순이익 기반 지표만으로 저평가를 단정하기는 어렵다.</div>
   </div>
   <div class="card">
     <div class="card-title">Per-Share 지표 (Q2 2026 기준 · 10.90B 주)</div>
@@ -726,24 +823,38 @@ const AMZN_MA120 = [205.7,205.65,205.61,205.56,205.58,205.7,205.85,206.01,206.12
 function renderFundChart() {
   const ctx = document.getElementById('amznRevChart');
   if (!ctx || charts['fund']) return;
+  const revenue=[158.9,187.8,155.7,167.7,180.2,213.4,181.5,200.6];
+  const aws=[27.5,28.8,29.3,30.9,33.0,35.6,37.6,42.2];
+  const opm=[11.0,11.3,11.8,11.4,9.7,11.7,13.1,13.7];
+  const y2min=6, y2max=18;
   charts['fund'] = new Chart(ctx,{
     data:{
       labels:['Q3\'24','Q4\'24','Q1\'25','Q2\'25','Q3\'25','Q4\'25','Q1\'26','Q2\'26'],
       datasets:[
-        {type:'bar',label:'매출($B)',data:[158.9,187.8,155.7,167.7,180.2,213.4,181.5,200.6],backgroundColor:'rgba(255,153,0,0.55)',borderColor:'#FF9900',borderWidth:1,borderRadius:4,yAxisID:'y'},
-        {type:'bar',label:'AWS($B)',data:[27.5,28.8,29.3,30.9,33.0,35.6,37.6,42.2],backgroundColor:'rgba(46,204,113,0.5)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4,yAxisID:'y'},
-        {type:'line',label:'OPM(%)',data:[11.0,11.3,11.8,11.4,9.7,11.7,13.1,13.7],borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+        {type:'bar',label:'매출($B)',data:revenue.map(()=>0),backgroundColor:'rgba(255,153,0,0.55)',borderColor:'#FF9900',borderWidth:1,borderRadius:4,yAxisID:'y'},
+        {type:'bar',label:'AWS($B)',data:aws.map(()=>0),backgroundColor:'rgba(46,204,113,0.5)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4,yAxisID:'y'},
+        {type:'line',label:'OPM(%)',data:opm.map(()=>y2min),borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
       ]
     },
     options:{
       responsive:true,maintainAspectRatio:false,
+      animation:false,
       plugins:{legend:{labels:{color:'#9aa0b8',font:{size:11}}}},
       scales:{
         x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:11}}},
         y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}},
-        y2:{position:'right',min:6,max:18,grid:{display:false},ticks:{color:'#f0c040',font:{size:10},callback:v=>v+'%'}}
+        y2:{position:'right',min:y2min,max:y2max,grid:{display:false},ticks:{color:'#f0c040',font:{size:10},callback:v=>v+'%'}}
       }
     }
+  });
+  requestAnimationFrame(()=>{
+    const c=charts['fund'];
+    if (!c) return;
+    c.options.animation={duration:900,easing:'easeOutQuart'};
+    c.data.datasets[0].data=revenue;
+    c.data.datasets[1].data=aws;
+    c.data.datasets[2].data=opm;
+    c.update();
   });
 }
 function renderPeerChart() {
