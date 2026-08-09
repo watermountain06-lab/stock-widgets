@@ -183,70 +183,100 @@ building NVDA's card, both fixed in the script rather than worked around per-tic
   XBRL. Approximate it as 매출원가 + (당기말 재고자산 − 전기말 재고자산) rather than fetching a
   concept that doesn't reliably exist.
 
-## 멀티플 5단계 평가 — "적정" reference values need sourcing, not eyeballing, 2026-08-09
+## 멀티플 5단계 평가 — "적정" reference values need sourcing, not eyeballing, 2026-08-09 (revised after 3-round Codex review)
 
-User asked, of NVDA's own card: "적정 20x, 적정 15x 이런 기준값이 뭘 근거로 정해진 거야?" Checked all
-5 `val-item`s and found the card's own low/mid/high labels had never been documented as needing a
-*source* - only `EV/EBITDA`'s subtext cited one ("반도체 평균 ~30x보다 소폭 높으나 10년 중간값
-42.7x 대비로는 저평가"), the other 4 (`PER`/`PBR`/`PSR`/`PCR`) had plausible-looking round numbers
-with zero stated justification. Verified all 5 against real data and found 2 of the 4 unsourced
-ones were actually wrong, not just unsourced - **this is a real accuracy bug class, not a
-documentation gap**, worth checking on every widget's `#valuation` card going forward.
+User asked, of NVDA's own card: "적정 20x, 적정 15x 이런 기준값이 뭘 근거로 정해진 거야?" Only
+`EV/EBITDA`'s subtext cited a source; `PER`/`PBR`/`PSR`/`PCR` were plausible-looking round numbers
+with none. First pass fixed the sourcing gap but got real things wrong - a 3-round Codex text-mode
+review (`codex_review_loop.md`) caught a `val-fill` model error and an actual arithmetic error in
+round 1 and round 2 respectively. **Both rounds of Codex feedback changed the final numbers, not
+just the wording** - don't skip the review loop on this kind of quantitative-methodology work, and
+don't stop after round 1 just because the diagnosis sounds complete; the concrete errors surfaced
+across rounds 1→2→3, not all at once.
 
-**Methodology**: for each val-item, get two independent anchors and cite both in the subtext:
+### `val-fill` width is NOT a continuous formula - it's 5 fixed coordinates
 
-1. **The ticker's own long-run historical median** (GuruFocus's `term/{metric}/{TICKER}` pages
-   consistently expose "current — N% above/below its N-year median" for PE(TTM)/PB/PS/EV-EBITDA/
-   P-FCF; WebSearch these rather than guessing - `gurufocus.com` itself 403s on WebFetch, but its
-   numbers surface fine through search result snippets). This anchor is a company-specific
-   long-run norm, immune to being distorted by a temporarily hot or cold peer group.
-2. **A real peer average from the fleet's own already-verified widgets** (`grep` each peer's own
-   `val-item`s directly, e.g. `grep -n 'val-name">.*val-number' widgets/AVGO_analysis_widget.html`)
-   - **not** GuruFocus's broad "industry median"(hundreds of companies spanning analog/memory/
-   equipment/commodity names at wildly different margins and capital structures - NVDA's PB was
-   "616% above" this broad median, which is meaningless noise, not a real overvaluation signal).
-   If the card's own title already scopes the comparison narrowly (NVDA's says "글로벌 AI 반도체
-   비교" - a handful of named large-cap peers, not the whole sector), the "적정" anchor should
-   match that same narrow scope, not silently swap in a broader/different peer set.
+First pass reverse-engineered a two-segment linear-interpolation formula from how well it matched
+4 of 5 existing items, and used it to compute new widths for edited items. **This was wrong.**
+`grep -oE 'val-fill" style="width:[0-9]+%' widgets/*.html | grep -oE '[0-9]+%' | sort | uniq -c`
+across the whole fleet (PM's reference widget included) shows `19%/38%/57%/76%/95%` accounting for
+the overwhelming majority of every instance, confirmed directly mapped to stage 1-5 (`stage-N` →
+`19*N`%) by checking `stage-badge` next to `val-fill` in real widgets. The formula's apparent
+4-out-5 match was coincidental proximity, not the real mechanism - EV/EBITDA's stored 38% (which
+didn't match the formula) was right all along; it's simply stage-2's fixed coordinate.
 
-**GAAP distortion means "peer average" isn't just arithmetic - decide which of each peer's own
-numbers is comparable first**, same GAAP-vs-adjusted judgment already established elsewhere in
-this doc: AVGO's own widget carries both PER(GAAP) 69.1x (M&A amortization-inflated) and a
-Non-GAAP 50.9x specifically labeled as the comparable figure - use the Non-GAAP one. AMD's TTM
-PER 171.5x is a similar outlier (very likely earnings-base distortion) with no non-GAAP
-alternative on its card, but it does carry a Forward PER (~38x) - use that instead of either
-excluding AMD or averaging in the distorted 171.5x. When a peer has no clean alternative for a
-given metric at all (AMD has no PCR/FCF line), drop it from that one average rather than forcing
-a number.
+**Correct procedure**: decide the stage (1-5) qualitatively from where the actual value sits
+relative to low/mid/high (a judgment call - the fleet does not use a strict cutoff formula for
+this either, confirmed by comparing multiple real widgets' stage assignments against their own
+low/mid/high labels), then look up the width from the fixed table and pick the matching gradient
+(stage-1 deepest green → stage-2 `#27ae60→#8bc34a` → stage-3 `#f0c040→#e67e22` gold → stage-4
+`#e67e22→#e74c3c` → stage-5 `#e74c3c→#c0392b` deepest red). Never compute width from the raw
+numbers.
 
-**Capital-structure-sensitive metrics (PBR, PSR) need the self-historical anchor weighted more
-heavily than the peer average**, because named peers can differ structurally in ways that break
-comparability even within a narrow "AI semiconductor" set - TSM's PBR (1.8x) is a foundry's
-asset-heavy book value, structurally incomparable to fabless NVDA/AVGO/AMD (13-27x), not a
-signal TSM is "cheaper." Exclude the structurally-different peer from that specific average
-rather than letting it drag a blended number to a meaningless place, and say why in the subtext.
+### Sourcing the "적정" (mid) value
 
-**A stage-badge can flip once the reference value is corrected, not just the wording** - NVDA's
-PCR(FCF) "적정" anchor was 30x with no sourcing; real anchors (NVDA's own 10yr median 57.1x,
-sector median 48.1x) put fair value near 50x, and the actual 57.9x almost exactly matches NVDA's
-own historical median - the stage badge changed from **4단계 높음 to 3단계 적정**, a substantive
-valuation-read change, not a cosmetic one. When a mid value moves, recompute `val-fill` width via
-the two-segment formula below, re-pick the gradient (stage-2 `#27ae60→#8bc34a` green / stage-3
-`#f0c040→#e67e22` gold / stage-4 `#e67e22→#e74c3c` red-orange), and **propagate to every other
-place that cites the old stage** - the same multi-location grep discipline as the general
-stale-multiple-propagation section above found this in the "종합 밸류에이션" two-box card (which
-needed its whole 주의 요소 paragraph rewritten, plus the card-title's "N~N단계 혼재" range) and a
-Bear-factor bullet in `#invest` citing "PCR 4단계 부담" by name.
+**Two-tier anchor system, decided per-metric *before* looking at what number it produces** (a
+post-hoc "which peers to include" decision is exactly what Codex round 1 flagged as looking like
+picking sources to fit the desired outcome):
 
-**`val-fill` width formula** (reverse-engineered from the 4/5 items that matched cleanly; treat
-as a working approximation, not a certainty - EV/EBITDA's stored width didn't match this formula
-and was left alone rather than "corrected" against an unverified assumption):
-```
-if value <= mid: width% = 50 * (value - low) / (mid - low)
-else:            width% = 50 + 50 * (value - mid) / (high - mid)
-```
-`mid` always lands exactly at 50% width by construction - this is *why* stage-3 badges cluster
-near values close to mid regardless of which side they're on.
+1. **핵심 앵커 (core anchor, used in the actual median/average that sets the mid value)**: only
+   values on a basis genuinely comparable to the ticker's own actual val-item basis - same
+   accounting standard (GAAP vs IFRS vs adjusted/non-GAAP are three *different* things, not
+   interchangeable - TSMC reports under IFRS, not US GAAP, "동일 TTM 기간" is not the same claim
+   as "동일 회계기준", a distinction Codex caught in round 3 after round 1/2 had already blurred
+   it), same TTM window, and a structurally comparable business model (fabless chip designer vs
+   asset-heavy foundry is not the same model even when the accounting standard happens to align -
+   exclude the foundry from PBR/PSR/PCR/EV-EBITDA peer sets, not just PBR). The ticker's own
+   long-run historical median (GuruFocus `term/{metric}/{TICKER}`, surfaced via WebSearch since
+   `gurufocus.com` itself 403s on WebFetch) is always a valid core anchor for itself - it's a
+   single continuous company/accounting-basis series even if the *business* went through
+   different regimes.
+2. **참고 앵커 (reference anchor, cited in the subtext, explicitly excluded from the mid
+   calculation)**: everything comparable in spirit but not in basis - a peer's Non-GAAP or Forward
+   figure when the ticker's own val-item is GAAP TTM, a structurally different business model, or
+   a broad cross-sectional "industry median" spanning hundreds of unrelated companies (NVDA's own
+   PBR was "616% above" GuruFocus's broad semiconductor-industry PBR median - meaningless noise
+   from small/asset-heavy names, not a real overvaluation signal).
+
+**When a metric has zero usable core peer anchors on a matching basis, the core anchor set
+legitimately shrinks to just the ticker's own historical median alone** - this happened for NVDA's
+PER (AVGO only has Non-GAAP, AMD only has Forward/a GAAP-TTM outlier, TSM is same-basis but a
+different business model) and is the *correct* outcome of the "matching basis only" rule, not a
+bug to work around by loosening the rule for that one metric. Say so explicitly and flag the
+resulting single-source dependency as a real, stated limitation (Codex round 3: "단일 소스 의존
+리스크는 분명히 새로 생겼습니다... '방법론 오류'라기보다는 '추정치의 신뢰도 제한'"). Do **not**
+patch a thin anchor set by blending in the excluded reference anchors at an arbitrary low weight -
+an unjustified weight just adds false precision on top of the same underlying arbitrariness
+(Codex round 3, explicitly rejected this as an option when asked).
+
+**Compute the actual statistic, don't eyeball a round number that "feels" like the median** -
+round 1 of this exact task claimed "median" while actually writing hand-picked round numbers; the
+real median() of the stated anchor set differed from the displayed value on 3 of 5 items (caught
+in round 2). Compute it: sort the anchor set, take the middle value (or the mean when there are
+exactly 2 anchors, since a 2-element set has no meaningful median vs mean distinction). Round to a
+clean number only after computing, and if you round by more than ~1x, say so ("반올림" is fine;
+silently rounding a computed 57.1 down to a stated "55" and calling it the median is not).
+
+**A stage-badge can flip once the reference value is corrected, not just the wording** - this is a
+substantive valuation-read change, not cosmetic, and needs the same multi-location propagation
+discipline as the general stale-multiple-propagation section above: NVDA's PCR(FCF) flipped
+**4단계 높음 → 3단계 적정** once its mid moved from an unsourced 30x to a sourced ~57x, which
+required updating the "종합 밸류에이션" two-box card (주의 요소 paragraph + card-title's "N~N단계
+혼재" range) and a Bear-factor bullet in `#invest` that named "PCR 4단계" specifically.
+
+**Add one shared caveat near the top of the card, not five repeated ones**, when every metric's
+self-historical anchor spans a real business-model regime change (NVDA: gaming GPU → crypto →
+datacenter → generative AI) and relies on WebSearch snippets rather than primary data - Codex
+round 2 specifically flagged that putting this caveat on only one val-item (PER) implies the other
+four's historical medians are somehow more reliable, when the same limitation applies to all five.
+
+**Don't let a single metric's point estimate read as a strong intrinsic-value conclusion when it's
+a thin, single-source anchor** - Codex round 3's distinction: "NVDA의 장기 역사적 PER 중앙값은 약
+53x다" is defensible; "따라서 NVDA의 현재 적정 PER은 53x다" is not, for the same number. Frame the
+val-item subtext and any card-level summary sentence as a discount-vs-historical-anchor read, not
+a precise fair-value verdict, when the anchor set is this thin - and keep a strong-conclusion
+sentence (e.g. "PEG 0.49 = 극단적 저평가") explicitly scoped to the metric it's actually about,
+not blended with a weaker-evidence metric's conclusion in the same sentence.
 
 ## 재무 건전성 카드 — collapsible shell + trend-based 활동성 판정, 2026-08-09
 
