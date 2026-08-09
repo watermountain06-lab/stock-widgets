@@ -25,8 +25,10 @@ WIDGETS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 # Loose "keyword ... number x" patterns used to find prose mentions outside
 # the val-item badges themselves (news-style sentences, other cards).
 PROSE_PATTERNS = {
-    "PER":        r"(?<!Forward )(?<!EV/E)\bPER\s*(?:\((?:TTM|GAAP TTM)\))?\s*([\d]+\.?\d*)x",
+    "PER":        r"(?<!Forward )(?<!EV/E)(?<!Non-GAAP )(?<!GAAP )\bPER\s*(?:\((?:TTM|GAAP TTM)\))?\s*([\d]+\.?\d*)x",
     "Forward PER":r"Forward\s*P(?:ER|/E)(?:\([^)]*\))?\s*([\d]+\.?\d*)x",
+    "Non-GAAP PER":r"Non-GAAP\s*PER\s*(?:\([^)]*\))?\s*:?\s*(?:\$[\d,.]+÷\$[\d,.]+\([^)]*\)\s*=\s*)?([\d]+\.?\d*)x",
+    "GAAP PER":   r"(?<!Non-)\bGAAP\s*PER\s*([\d]+\.?\d*)x",
     "PBR":        r"\bPBR\s*([\d]+\.?\d*)x",
     "PSR":        r"\bPSR\s*(?:\([^)]*\))?\s*([\d]+\.?\d*)x",
     "PCR":        r"\bPCR\s*(?:\([^)]*\))?\s*([\d]+\.?\d*)x",
@@ -66,7 +68,8 @@ def check_metric_consistency(s):
         if canon is None:
             if len(prose_vals) > 1:
                 spread = (float(prose_vals[-1]) - float(prose_vals[0])) / float(prose_vals[0])
-                issues.append((spread, f"{keyword}: prose mentions disagree with each other: {prose_vals} ({spread*100:.0f}% spread)"))
+                if spread > 0.01:  # >1% - below that it's just decimal rounding (69 vs 69.1)
+                    issues.append((spread, f"{keyword}: prose mentions disagree with each other: {prose_vals} ({spread*100:.0f}% spread)"))
             continue
         # A keyword can legitimately map to >1 val-item (e.g. ABBV's "PER
         # (GAAP TTM)" and "PER (Adjusted TTM)" both strip to "PER") - compare
