@@ -346,6 +346,54 @@ model mismatch), don't switch the core anchor - present the second lens as clear
 additional context instead, and keep the stage badge tied to the theoretically-correct peer set
 even when a reader might find that badge surprising.
 
+### 핵심 앵커 자격 규칙 - broad industry/sector aggregates almost never qualify, 2026-08-09
+
+Found via Codex review: NVDA's PCR(FCF) had a 반도체 업종 중간값(48.1x) sitting in the *core*
+anchor set (median of 3: broad median, AVGO, self-history), while the exact same kind of broad
+aggregate had already been correctly excluded to reference-only in PBR and PSR on the same
+widget, with no stated reason PCR should be treated differently. Numerically almost inert (median
+57.1x → 2-anchor average 57.85x, same stage), but a real "why does this one metric get an
+unexplained exception" consistency gap - exactly the kind of thing that looks like post-hoc
+result-fitting even when it isn't (see the PCR peer-scope case above).
+
+**The general rule, formalized via Codex review and now the standard to apply going forward**:
+
+Core anchors are only ever one of two things:
+1. **Self-history anchor** - the ticker's own long-run historical median/central tendency (flag
+   confidence if the company crossed a business-model or accounting-policy transition during that
+   window).
+2. **A verified individual peer** - a single named company whose value can be traced back
+   individually, and which meets *all* of: economically comparable business model, similar
+   denominator-construction structure for that specific metric, same measurement period (TTM-vs-
+   TTM or forward-vs-forward, not mixed), GAAP/IFRS or adjusted-vs-reported differences either
+   reconciled or immaterial, and no unresolved one-time/M&A-amortization/negative-denominator
+   distortion.
+
+**A broad industry/sector/mega-cap-cohort median or average is reference-only by default** - its
+constituent list, weighting, and treatment of negative/outlier values usually aren't disclosed, so
+it can't be individually verified the way a single named peer can. The narrow exception: an
+aggregate built from a small, explicitly-named, pre-screened cohort where every member individually
+clears the peer bar above can be treated as core (rare in practice - if you can't name the
+constituents and show they'd each pass on their own, it's reference-only).
+
+**Anchor-count-dependent framing** (also from the Codex review, apply on every "적정" derivation
+going forward, not just when fixing an existing one):
+- 3+ valid core anchors → median, present as-is.
+- 2 valid core anchors → their average, but the prose must call it out as a thin-sample midpoint,
+  not a confident point estimate (see the corrected PCR text as the pattern to copy).
+- 1 valid core anchor → frame as "역사적 기준점"/single-source reference, not an intrinsic-value
+  conclusion (NVDA's PER already does this correctly - no comparable-basis fabless peer exists).
+- 0 valid core anchors → don't force a number; show the reference range only.
+
+**Checklist for auditing this on any other ticker/metric** (from the same review, use before
+declaring a valuation-tab pass complete): can every number inside the "적정" derivation be reverse-
+computed from what's written? Are core vs reference anchors visually/textually distinguishable, not
+blended in one list? Did a sector/mega-cap/broad median slip into the core formula? Is the
+aggregate's own constituent list and methodology actually disclosed? Are GAAP/adjusted/forward
+bases kept separate rather than mixed into one median? Does a peer with negative or one-time-
+distorted denominator get silently multiplied instead of marked N/M? Does the same ticker's other
+metrics use a visibly different core-vs-reference line for no stated reason?
+
 ### Clickable 멀티플 5단계 ↔ peer-chart panel, 2026-08-09
 
 User's structural fix for the sourcing-rigor problem above: instead of burying each val-item's
