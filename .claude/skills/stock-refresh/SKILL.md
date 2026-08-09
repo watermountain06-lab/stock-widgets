@@ -183,6 +183,71 @@ building NVDA's card, both fixed in the script rather than worked around per-tic
   XBRL. Approximate it as 매출원가 + (당기말 재고자산 − 전기말 재고자산) rather than fetching a
   concept that doesn't reliably exist.
 
+## 멀티플 5단계 평가 — "적정" reference values need sourcing, not eyeballing, 2026-08-09
+
+User asked, of NVDA's own card: "적정 20x, 적정 15x 이런 기준값이 뭘 근거로 정해진 거야?" Checked all
+5 `val-item`s and found the card's own low/mid/high labels had never been documented as needing a
+*source* - only `EV/EBITDA`'s subtext cited one ("반도체 평균 ~30x보다 소폭 높으나 10년 중간값
+42.7x 대비로는 저평가"), the other 4 (`PER`/`PBR`/`PSR`/`PCR`) had plausible-looking round numbers
+with zero stated justification. Verified all 5 against real data and found 2 of the 4 unsourced
+ones were actually wrong, not just unsourced - **this is a real accuracy bug class, not a
+documentation gap**, worth checking on every widget's `#valuation` card going forward.
+
+**Methodology**: for each val-item, get two independent anchors and cite both in the subtext:
+
+1. **The ticker's own long-run historical median** (GuruFocus's `term/{metric}/{TICKER}` pages
+   consistently expose "current — N% above/below its N-year median" for PE(TTM)/PB/PS/EV-EBITDA/
+   P-FCF; WebSearch these rather than guessing - `gurufocus.com` itself 403s on WebFetch, but its
+   numbers surface fine through search result snippets). This anchor is a company-specific
+   long-run norm, immune to being distorted by a temporarily hot or cold peer group.
+2. **A real peer average from the fleet's own already-verified widgets** (`grep` each peer's own
+   `val-item`s directly, e.g. `grep -n 'val-name">.*val-number' widgets/AVGO_analysis_widget.html`)
+   - **not** GuruFocus's broad "industry median"(hundreds of companies spanning analog/memory/
+   equipment/commodity names at wildly different margins and capital structures - NVDA's PB was
+   "616% above" this broad median, which is meaningless noise, not a real overvaluation signal).
+   If the card's own title already scopes the comparison narrowly (NVDA's says "글로벌 AI 반도체
+   비교" - a handful of named large-cap peers, not the whole sector), the "적정" anchor should
+   match that same narrow scope, not silently swap in a broader/different peer set.
+
+**GAAP distortion means "peer average" isn't just arithmetic - decide which of each peer's own
+numbers is comparable first**, same GAAP-vs-adjusted judgment already established elsewhere in
+this doc: AVGO's own widget carries both PER(GAAP) 69.1x (M&A amortization-inflated) and a
+Non-GAAP 50.9x specifically labeled as the comparable figure - use the Non-GAAP one. AMD's TTM
+PER 171.5x is a similar outlier (very likely earnings-base distortion) with no non-GAAP
+alternative on its card, but it does carry a Forward PER (~38x) - use that instead of either
+excluding AMD or averaging in the distorted 171.5x. When a peer has no clean alternative for a
+given metric at all (AMD has no PCR/FCF line), drop it from that one average rather than forcing
+a number.
+
+**Capital-structure-sensitive metrics (PBR, PSR) need the self-historical anchor weighted more
+heavily than the peer average**, because named peers can differ structurally in ways that break
+comparability even within a narrow "AI semiconductor" set - TSM's PBR (1.8x) is a foundry's
+asset-heavy book value, structurally incomparable to fabless NVDA/AVGO/AMD (13-27x), not a
+signal TSM is "cheaper." Exclude the structurally-different peer from that specific average
+rather than letting it drag a blended number to a meaningless place, and say why in the subtext.
+
+**A stage-badge can flip once the reference value is corrected, not just the wording** - NVDA's
+PCR(FCF) "적정" anchor was 30x with no sourcing; real anchors (NVDA's own 10yr median 57.1x,
+sector median 48.1x) put fair value near 50x, and the actual 57.9x almost exactly matches NVDA's
+own historical median - the stage badge changed from **4단계 높음 to 3단계 적정**, a substantive
+valuation-read change, not a cosmetic one. When a mid value moves, recompute `val-fill` width via
+the two-segment formula below, re-pick the gradient (stage-2 `#27ae60→#8bc34a` green / stage-3
+`#f0c040→#e67e22` gold / stage-4 `#e67e22→#e74c3c` red-orange), and **propagate to every other
+place that cites the old stage** - the same multi-location grep discipline as the general
+stale-multiple-propagation section above found this in the "종합 밸류에이션" two-box card (which
+needed its whole 주의 요소 paragraph rewritten, plus the card-title's "N~N단계 혼재" range) and a
+Bear-factor bullet in `#invest` citing "PCR 4단계 부담" by name.
+
+**`val-fill` width formula** (reverse-engineered from the 4/5 items that matched cleanly; treat
+as a working approximation, not a certainty - EV/EBITDA's stored width didn't match this formula
+and was left alone rather than "corrected" against an unverified assumption):
+```
+if value <= mid: width% = 50 * (value - low) / (mid - low)
+else:            width% = 50 + 50 * (value - mid) / (high - mid)
+```
+`mid` always lands exactly at 50% width by construction - this is *why* stage-3 badges cluster
+near values close to mid regardless of which side they're on.
+
 ## 재무 건전성 카드 — collapsible shell + trend-based 활동성 판정, 2026-08-09
 
 Three follow-up changes to the card above, all NVDA-only so far (not yet propagated to the rest
