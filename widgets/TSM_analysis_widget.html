@@ -71,8 +71,11 @@
   .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
   .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
   .tag-current { background: rgba(91,143,214,0.2); color: var(--accent2); }
-  .val-item { margin-bottom: 18px; }
-  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .val-item { margin-bottom: 18px; padding: 8px; margin-left: -8px; margin-right: -8px; border-radius: 8px; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; }
+  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; cursor: pointer; }
+  .val-item:hover { background: rgba(255,255,255,0.03); }
+  .val-item.selected { background: rgba(91,143,214,0.08); border-color: rgba(91,143,214,0.35); }
+  .val-item.selected .val-name::after { content: '▸ 비교 보기'; font-size: 9.5px; font-weight: 600; color: var(--accent2); margin-left: 8px; vertical-align: middle; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
   .val-track { height: 8px; background: var(--bg3); border-radius: 4px; position: relative; overflow: hidden; }
@@ -115,6 +118,31 @@
   .driver-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent3); color: var(--accent2); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .driver-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
   .driver-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(91,143,214,0.12); border: 1px solid rgba(91,143,214,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(91,143,214,0.22); border-color: rgba(91,143,214,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
+  .section-label { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:12px; color:var(--text2); margin-top:2px; line-height:1.4; }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 22px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; }
+  .diag-label { font-size:13px; color:var(--text); font-weight:600; min-width:96px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:11.5px; color:var(--text2); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .diag-badge.watch { background:rgba(240,192,64,0.16); color:var(--gold); }
   .per-share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
   .ps-card { background: var(--bg3); border-radius: 8px; padding: 16px; text-align: center; }
   .ps-icon { font-size: 22px; margin-bottom: 6px; }
@@ -162,7 +190,7 @@
 </div>
 </div>
 
-<div class="today-banner">✅ <strong>Q2 2026 실적 발표 완료</strong> — 매출 $40.20B(+33.7% YoY) · ADR EPS $4.31 · GM 67.7%, Q3 매출 가이던스 $44.6~45.8B · 현재가 $418.20</div>
+<div class="today-banner">✅ <strong>Q2 2026 실적 발표 완료</strong> — 매출 $40.20B(+33.7% YoY) · ADR EPS $4.31 · GM 67.7%, Q3 매출 가이던스 $44.6~45.8B · 현재가 $420.04</div>
 
 <div class="header">
   <div class="header-top">
@@ -187,11 +215,11 @@
     <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Information Technology (반도체)</span></div>
     <div class="meta-item"><span class="meta-label">Q2 매출</span><span class="meta-value">$40.20B (+33.7%)</span></div>
     <div class="meta-item"><span class="meta-label">HPC 매출 비중</span><span class="meta-value">66% (AI 수요)</span></div>
-    <div class="meta-item"><span class="meta-label">EPS (TTM, ADR)</span><span class="meta-value">$15.16</span></div>
+    <div class="meta-item"><span class="meta-label">EPS (TTM, ADR)</span><span class="meta-value">$13.86</span></div>
     <div class="meta-item"><span class="meta-label">배당(ADR)</span><span class="meta-value">분기 $0.955</span></div>
   </div>
 </div>
-<div class="box-key"><div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:#27ae60;">(저평가)</span> — Q2 매출 $40.20B (+33.7%) · Forward PER 22.2x</div><div style="font-size:12px;color:var(--text2);line-height:1.6;">2nm 이하 첨단공정을 제조할 수 있는 기업은 지구상 TSMC뿐. NVDA·AMD·AAPL·GOOGL 모두 TSMC 없이는 AI 칩을 만들 수 없음. GM 66%는 소프트웨어에 근접한 하드웨어 마진. Arizona 누적 $265B 투자로 지정학 리스크 헤지 + CHIPS법 $6.6B 보조금 + 미국 내 완전 AI 칩 공급망 완성(2028) = 구조적 해자 강화.</div></div>
+<div class="box-key"><div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:#e67e22;">(고평가)</span> — Q2 매출 $40.20B (+33.7%) · Forward PER 22.2x</div><div style="font-size:12px;color:var(--text2);line-height:1.6;">2nm 이하 첨단공정을 제조할 수 있는 기업은 지구상 TSMC뿐. NVDA·AMD·AAPL·GOOGL 모두 TSMC 없이는 AI 칩을 만들 수 없음. GM 66%는 소프트웨어에 근접한 하드웨어 마진. Arizona 누적 $265B 투자로 지정학 리스크 헤지 + CHIPS법 $6.6B 보조금 + 미국 내 완전 AI 칩 공급망 완성(2028) = 구조적 해자 강화. 다만 순수 파운드리 피어(UMC·GFS) 및 자체 역사 기준으로는 TTM 멀티플 5개 중 3개(PBR·PSR·PCR)가 4단계(높음) — 트레일링 기준으로는 저평가가 아니며, Forward PER 22.2x는 향후 이익 성장을 전제로 한 참고 지표.</div></div>
 
 <div class="note-box">※ Q2 2026 TSMC 공시 기준 · 재무제표 원본은 NT$(대만달러), ADR 1주 = 보통주 5주</div>
 
@@ -251,10 +279,10 @@
     <div class="grid-4"><div style="background:rgba(231,76,60,0.10);border:1px solid var(--red);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">1개월 · -3.2%</div><div style="font-size:12px;color:var(--text2);">2026.07.10 $434.11 → 2026.08.07 $420.04</div></div><div style="background:rgba(46,204,113,0.10);border:1px solid var(--green);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">3개월 · +2.0%</div><div style="font-size:12px;color:var(--text2);">2026.05.08 $411.68 → 2026.08.07 $420.04</div></div><div style="background:rgba(46,204,113,0.10);border:1px solid var(--green);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">6개월 · +20.4%</div><div style="font-size:12px;color:var(--text2);">2026.02.06 $348.85 → 2026.08.07 $420.04</div></div><div style="background:rgba(46,204,113,0.10);border:1px solid var(--green);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">1년 · +73.1%</div><div style="font-size:12px;color:var(--text2);">2025.08.07 $242.62 → 2026.08.07 $420.04</div></div></div>
   </div>
   <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;">
-    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">완전 정배열 · 52주 +98% 폭발적 상승</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">4개 중 3개 이평선 상회 · 52주 +73% 상승</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">Q2 매출 +33.7% · GM 67.7%</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">2nm 양산 진입 · CoWoS AI 수요 독점</span>
-    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(240,192,64,0.18);color:var(--ma60);">고점 $449 대비 -5.6% 소폭 조정 · Forward PER 27x</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(240,192,64,0.18);color:var(--ma60);">고점 $479 대비 -12.3% 조정 · Forward PER 22.2x</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">대만 지정학 리스크 · 단일 지역 집중</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(91,143,214,0.18);color:var(--accent2);">Arizona $265B 투자 — 지정학 헤지 구조 강화</span>
   </div>
@@ -267,16 +295,56 @@
     <div class="chart-wrap" style="height:260px;"><canvas id="tsmRevChart"></canvas></div>
   </div>
   <div class="grid-3">
-    <div class="stat-box"><div class="stat-label">매출 (Q2 2026)</div><div class="stat-value up">$40.20B</div><div class="stat-sub">▲33.7% YoY (USD)</div></div>
-    <div class="stat-box"><div class="stat-label">총이익률(GM)</div><div class="stat-value up">67.7%</div><div class="stat-sub">가이던스 상단 상회</div></div>
-    <div class="stat-box"><div class="stat-label">영업이익률(OPM)</div><div class="stat-value up">60.3%</div><div class="stat-sub">Q2 실제</div></div>
+    <div class="stat-box"><div class="stat-label">순이익률 (Q2 2026)</div><div class="stat-value up">55.6%</div><div class="stat-sub">GAAP 기준 · 순이익 $22.4B</div></div>
+    <div class="stat-box"><div class="stat-label">FCF (Q1 2026)</div><div class="stat-value gold">$11.0B</div><div class="stat-sub">현금창출력 · FCF마진 30.7%</div></div>
+    <div class="stat-box"><div class="stat-label">Capex (FY2025)</div><div class="stat-value">$40.9B</div><div class="stat-sub">미래 재투자 · 2nm·CoWoS 증설</div></div>
+    <div class="stat-box"><div class="stat-label">현금 및 단기투자</div><div class="stat-value">$111.3B</div><div class="stat-sub">2026.06.30 기준(NT$3,518B)</div></div>
     <div class="stat-box"><div class="stat-label">EPS (ADR, Q2 2026)</div><div class="stat-value up">$4.31</div><div class="stat-sub">▲77.4% YoY</div></div>
-    <div class="stat-box"><div class="stat-label">순이익 (Q2 2026)</div><div class="stat-value up">$22.4B</div><div class="stat-sub">▲77.4% YoY · 5분기 연속 최고</div></div>
-    <div class="stat-box"><div class="stat-label">FCF (Q1 2026)</div><div class="stat-value gold">$11.0B</div><div class="stat-sub">FCF마진 30.7%</div></div>
-    <div class="stat-box"><div class="stat-label">ROE (연환산)</div><div class="stat-value gold">40.5%</div><div class="stat-sub">역대 최고</div></div>
-    <div class="stat-box"><div class="stat-label">TTM EPS (ADR)</div><div class="stat-value">$15.16</div><div class="stat-sub">PER 27.6x · Q2 반영</div></div>
     <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value gold">10월 중순 예상</div><div class="stat-sub">Q3 2026</div></div>
   </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title"><span>재무 건전성 — 안정성 (Q2 2026·2026.06.30 기준)</span></div>
+    <div style="font-size:10.5px;color:var(--text3);line-height:1.5;margin:-4px 0 14px;">※ TSM은 20-F 외국 민간 발행인이라 SEC 6-K가 상세 XBRL 대차대조표를 태깅하지 않음 — 안정성 4개 비율은 TSMC 자체 공시(NT$)로 직접 계산했으나, 활동성(회전율·CCC)은 전기 대차대조표·매입채무 세부 항목을 안정적으로 확보하지 못해 이번 패스에서는 제외.</div>
+
+    <div class="section-label"><span class="dot"></span>안정성 — 단기 지급능력·차입 의존도</div>
+    <div class="diag-summary">
+      <div class="icon">🩺</div>
+      <div>
+        <div class="title">종합 진단: 매우 안정적</div>
+        <div class="sub">유동비율 약 234%(추정)·차입금의존도 11.3%·부채비율 44.8% — 저레버리지, 대규모 순현금 포지션</div>
+      </div>
+    </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>안정성 상세 — 개별 비율 4개</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">약 234%</span><span class="diag-note">기준 150%↑ · 현금+매출채권+재고자산 합산 추정</span></div>
+        <div class="diag-badge safe">✅ 안정</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">당좌비율</span><span class="diag-value">약 213%</span><span class="diag-note">기준 100%↑ · 재고 제외 추정</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">차입금의존도</span><span class="diag-value">11.3%</span><span class="diag-note">기준 30%↓ · 총차입금 NT$1,057B÷총자산 NT$9,376B</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">부채비율</span><span class="diag-value">44.8%</span><span class="diag-note">부채 NT$2,901B÷자기자본 NT$6,474B</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">4개 비율 모두 기준치를 상회 — 대규모 순현금(현금·단기투자 $111.3B)과 낮은 차입금의존도(11.3%)로 대규모 Capex 사이클(FY2025 $40.9B) 중에도 재무구조 자체의 부실 위험은 낮다. 장기차입금이 대부분(NT$864B)이라 단기 상환 압박도 제한적.</div>
+    </div>
+  </div>
+
   <div class="card" style="margin-top:16px;">
     <div class="card-title">핵심 성장 동력 3가지</div>
     <div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">HPC (AI 반도체 · 61%)</div><div class="driver-desc">NVIDIA Blackwell·Rubin. AMD MI350·MI400. Apple M-칩 · Google TPU. 2년 만에 매출 2배.</div></div></div>
@@ -284,8 +352,8 @@
     <div class="driver-item"><div class="driver-num">3</div><div><div class="driver-title">CoWoS (AI 패키징)</div><div class="driver-desc">AI 칩 생산의 병목 해소. NVIDIA CoWoS 50%+ 독점. Arizona AP1/AP2 건설. 2028 미국 내 풀 서비스.</div></div></div>
   </div>
   <div class="card">
-    <div class="card-title">핵심 투자 논리 <span style="color:#27ae60;">(저평가)</span></div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.7;">2nm 이하 첨단공정을 제조할 수 있는 기업은 지구상 TSMC뿐. NVDA·AMD·AAPL·GOOGL 모두 TSMC 없이는 AI 칩을 만들 수 없음. GM 66%는 소프트웨어에 근접한 하드웨어 마진. Arizona 누적 $265B 투자로 지정학 리스크 헤지 + CHIPS법 $6.6B 보조금 + 미국 내 완전 AI 칩 공급망 완성(2028) = 구조적 해자 강화.</div>
+    <div class="card-title">핵심 투자 논리 <span style="color:#e67e22;">(고평가)</span></div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.7;">2nm 이하 첨단공정을 제조할 수 있는 기업은 지구상 TSMC뿐. NVDA·AMD·AAPL·GOOGL 모두 TSMC 없이는 AI 칩을 만들 수 없음. GM 66%는 소프트웨어에 근접한 하드웨어 마진. Arizona 누적 $265B 투자로 지정학 리스크 헤지 + CHIPS법 $6.6B 보조금 + 미국 내 완전 AI 칩 공급망 완성(2028) = 구조적 해자 강화. 순수 파운드리 피어(UMC·GFS) 대비로는 PER·PBR·PCR 모두 프리미엄 — 기술 리더십과 Capex 사이클 정점 통과 여부가 이 프리미엄의 정당성을 가른다.</div>
   </div>
   <div class="card">
     <div class="card-title">다음 실적 체크포인트 — Q3 2026</div>
@@ -299,57 +367,53 @@
   <div class="grid-2">
     <div class="card">
       <div class="card-title">멀티플 5단계 평가</div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">PER (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">27.7x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:38%;background:linear-gradient(90deg,#27ae60,#8bc34a);"></div></div>
-        <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 35x</span><span class="val-high">고 80x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">반도체 평균 ~50x. Forward PER 22.2x(FY26E)·PEG 0.5 — 성장 대비 저평가 · 업종 내 하위 31.7%</div>
-      </div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">1.8x</span><span class="stage-badge stage-1">1단계 매우낮음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:19%;background:linear-gradient(90deg,#2ecc71,#27ae60);"></div></div>
-        <div class="val-labels"><span class="val-low">저 1x</span><span class="val-mid">적정 4x</span><span class="val-high">고 12x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">ROE 40.5% 감안 시 합리적</div>
-      </div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">17.1x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+      <div style="font-size:10.5px;color:var(--text3);line-height:1.5;margin:-4px 0 14px;">※ 핵심 앵커 = TSM 자체 10년 중간값 + 순수 파운드리 동종피어(UMC·GlobalFoundries=GFS) 중앙값. PSR만 예외 — UMC·GFS는 레거시 공정 중심이라 영업이익률이 TSM(약 50~60%)의 절반 미만(UMC 18.5%·GFS 11.7%)이라 매출배수 직접비교가 왜곡돼 참고로만 병기.</div>
+      <div class="val-item" data-metric="per" onclick="selectMultiple('per')">
+        <div class="val-header"><span class="val-name">PER (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">30.3x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
-        <div class="val-labels"><span class="val-low">저 5x</span><span class="val-mid">적정 18x</span><span class="val-high">고 40x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">OPM 58% 소프트웨어급으로 프리미엄 정당화</div>
+        <div class="val-labels"><span class="val-low">저 10x</span><span class="val-mid">적정 20x</span><span class="val-high">고 45x</span></div>
       </div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">PCR (FCF)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">11.8x</span><span class="stage-badge stage-1">1단계 매우낮음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:19%;background:linear-gradient(90deg,#2ecc71,#27ae60);"></div></div>
-        <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 35x</span><span class="val-high">고 80x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">Capex $52~56B 급증으로 FCF 일시 압박 중</div>
+      <div class="val-item" data-metric="pbr" onclick="selectMultiple('pbr')">
+        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">10.6x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-labels"><span class="val-low">저 1x</span><span class="val-mid">적정 3x</span><span class="val-high">고 15x</span></div>
       </div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">20.1x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+      <div class="val-item" data-metric="psr" onclick="selectMultiple('psr')">
+        <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">15.2x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-labels"><span class="val-low">저 2x</span><span class="val-mid">적정 7x</span><span class="val-high">고 25x</span></div>
+      </div>
+      <div class="val-item" data-metric="pcr" onclick="selectMultiple('pcr')">
+        <div class="val-header"><span class="val-name">PCR (FCF)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">62.8x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 26x</span><span class="val-high">고 80x</span></div>
+      </div>
+      <div class="val-item" data-metric="evebitda" onclick="selectMultiple('evebitda')">
+        <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">18.5x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
-        <div class="val-labels"><span class="val-low">저 8x</span><span class="val-mid">적정 20x</span><span class="val-high">고 40x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV ~$2.2T÷TTM EBITDA $108B · 5년 평균 ~14.5x · 역사적 적정 구간</div>
+        <div class="val-labels"><span class="val-low">저 8x</span><span class="val-mid">적정 14x</span><span class="val-high">고 40x</span></div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title">반도체 기업 PER 비교</div>
-      <div class="chart-wrap" style="height:270px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;">TSM 26.6x는 NVDA(31.3x)·AVGO(30.2x)보다 낮고 AMD(47.0x)·반도체 평균(52.0x)을 크게 하회한다. Q2 ADR EPS $4.31 반영 후 성장률 대비 할인 폭이 확대됐다.</div>
+      <div class="card-title"><span id="multipleCompareTitle">PER 비교 — 순수 파운드리 동종업계 기준</span></div>
+      <div class="chart-wrap" style="height:270px;"><canvas id="multipleChart"></canvas></div>
+      <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText"></div>
     </div>
   </div>
   
   <div class="card">
     <div class="card-title">Per-Share 지표 (ADR 기준, 1ADR=5 보통주 · USD 환산)</div>
     <div class="per-share-grid">
-      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (ADR, TTM)</div><div class="ps-value">$15.16</div><div class="ps-sub">Q3 2025~Q2 2026 · Q2 공시 반영</div></div>
-      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (ADR)</div><div class="ps-value">$219.3</div><div class="ps-sub">자기자본 $186B(USD)</div></div>
-      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/ADR (TTM)</div><div class="ps-value">$35.7</div><div class="ps-sub">TTM FCF $34.7B(USD)</div></div>
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (ADR, TTM)</div><div class="ps-value">$13.86</div><div class="ps-sub">Q3 2025~Q2 2026 실제 분기 ADR EPS 합산</div></div>
+      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (ADR)</div><div class="ps-value">$39.51</div><div class="ps-sub">자기자본 NT$6,474B(≈$204.9B)</div></div>
+      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/ADR (TTM)</div><div class="ps-value">$6.69</div><div class="ps-sub">TTM FCF 약 $34.7B(USD)</div></div>
       <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS (ADR, 연간배당)</div><div class="ps-value">~$3.6</div><div class="ps-sub">분기 $0.955 · 배당률 1.4%</div></div>
     </div>
-    <div style="font-size:11px;color:var(--text3);margin-top:10px;">※ 환산 기준: NT$→USD 환율 31.59 적용 · ADR 1주=보통주 5주 기준. TTM FCF $34.7B = Q2~Q4 2025 + Q1 2026 합산 NT$ 기준 환산.</div>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">※ 환산 기준: SEC 6-K 분기 공시 원본(NT$) + 공시된 ADR EPS 직접 합산 · ADR 1주=보통주 5주. TTM = Q3 2025~Q2 2026(2026.08 기준 최신 4개 분기).</div>
   </div>
   <div class="card">
-    <div class="card-title">종합 밸류에이션 — 2~3단계 혼재 · PEG 0.5 — 성장 대비 합리적 · 지정학 디스카운트 내포</div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.6;">PER 26.6x → 2단계(반도체 평균 52x 대비). PBR 1.84x → 1단계(매우낮음), PCR도 1단계. PSR 16.4x·EV/EBITDA 19.4x는 3단계. Q2의 67.7% GM과 Q3 매출 $44.6~45.8B 가이던스를 감안하면 성장 대비 합리적이나, 지정학·대규모 Capex 리스크는 할인 요인이다.</div>
+    <div class="card-title">종합 밸류에이션 — 5개 지표 중 3개 4단계(높음) · PEG 0.5(Forward 기준)</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;">순수 파운드리 피어(UMC·GFS)+자체 10년 중간값 기준 PER 30.3x·EV/EBITDA 18.5x는 3단계 적정이지만, PBR 10.6x·PSR 15.2x·PCR 62.8x는 4단계 높음 — 이익 기준 멀티플은 방어적이나 자산·매출·현금흐름 기준으로는 트레일링 프리미엄이 뚜렷하다. PCR의 극단적 수치(62.8x)는 대부분 2nm·CoWoS 증설에 따른 일시적 Capex 급증(FY2025 약 $40.9B) 영향으로, Capex 사이클이 완화되면 정상화될 여지가 있다. Q2 GM 67.7%·Q3 매출 가이던스 $44.6~45.8B의 실적 모멘텀과 Forward PER 22.2x·PEG 0.5는 여전히 긍정적이나, 트레일링 기준으로는 "저평가"보다 "고성장에 대한 프리미엄 지불" 구간으로 보는 게 정확하다.</div>
   </div>
 
   <div class="card">
@@ -359,8 +423,8 @@
       <div style="font-size:12px;color:var(--text2);">지정학 리스크 프리미엄이 확대되고 첨단 노드 수요가 둔화될 경우 → 공정가치 <strong style="color:var(--red);">$354~400/주</strong> (애널리스트 목표가 하단)</div>
     </div>
     <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
-      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — Forward PER 22x·PEG 0.5 밴드 유지</div>
-      <div style="font-size:12px;color:var(--text2);">현재 Forward PER 22x·PEG 0.5 밸류에이션이 유지될 경우 → 공정가치 <strong style="color:var(--text);">$490~550/주</strong> (애널리스트 평균 목표가 $520.37과 부합)</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 이익 성장 지속·애널리스트 컨센서스 수준</div>
+      <div style="font-size:12px;color:var(--text2);">Q3 가이던스($44.6~45.8B)대로 이익 성장이 이어지며 애널리스트 컨센서스 수준을 유지할 경우 → 공정가치 <strong style="color:var(--text);">$490~550/주</strong> (애널리스트 평균 목표가 $520.37과 부합)</div>
     </div>
     <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
       <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — 지정학 디스카운트 해소·AI 파운드리 수요 가속</div>
@@ -428,7 +492,7 @@
       <div class="bb-title bb-bull">🐂 Bull 요인</div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>2nm 이하 독점:</strong> 세계 유일 AI 칩 독점 제조, 교체 불가 해자.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>GM 66%·OPM 58%:</strong> 역대 최고 마진, 마진 확장 지속.</span></div>
-      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>PEG 0.5·Forward PER 22x:</strong> 성장 대비 저평가.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>PEG 0.5·Forward PER 22x:</strong> 이익 성장 반영 시 상대적으로 낮은 배수(단, TTM 트레일링 기준으론 프리미엄).</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Arizona $265B·CHIPS법 $6.6B:</strong> 지정학 위험 감소.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>2nm 2026H2 양산:</strong> 1.6nm 로드맵 확보, 기술 우위 유지.</span></div>
     </div>
@@ -451,17 +515,17 @@
         <div style="width:17.3%;height:100%;background:var(--bg3);"></div>
         <div style="width:23.1%;height:100%;background:rgba(231,76,60,0.45);"></div>
       </div>
-      <div style="position:absolute;top:10px;left:18.6%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
-      <div style="position:absolute;top:-6px;left:18.6%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $418.20</div>
+      <div style="position:absolute;top:10px;left:19.1%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
+      <div style="position:absolute;top:-6px;left:19.1%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $420.04</div>
       <div style="position:absolute;top:22px;left:48.1%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
-      <div style="position:absolute;top:48px;left:48.1%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 평균목표 $520.37 (+24.4%)</div>
+      <div style="position:absolute;top:48px;left:48.1%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 평균목표 $520.37 (+23.9%)</div>
     </div>
     <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-top:4px;">
-      <span style="color:var(--green);">최저 $354 (저평가권)</span>
-      <span>평균 $520 (적정)</span>
+      <span style="color:var(--green);">최저 $354 (애널리스트 하단)</span>
+      <span>평균 $520 (컨센서스)</span>
       <span style="color:var(--red);">최고 $700 (상단)</span>
     </div>
-    <div style="margin-top:10px;font-size:11px;color:var(--text3);">애널리스트 19명 12개월 목표가 밴드 $354~$700 · 평균 $520.37. 현재가 $418.20은 밴드 하단권에 위치 — 6/30 신고가 $479 이후 조정으로 평균 목표까지 +24.4% 상단 여력. 밸류에이션(Forward PER 22x·PEG 0.5)과 결합 시 성장 대비 저평가 국면.</div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">애널리스트 19명 12개월 목표가 밴드 $354~$700 · 평균 $520.37. 현재가 $420.04는 밴드 하단권에 위치 — 6/30 신고가 $479 이후 조정으로 평균 목표까지 +23.9% 상단 여력. 다만 이는 애널리스트 12개월 목표가 기준이며, TTM 트레일링 멀티플(PBR·PSR·PCR 4단계)로는 이미 순수 파운드리 피어 대비 프리미엄 구간 — 상승 여력은 Forward 이익 성장에 대한 베팅 성격이 크다.</div>
 
     <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
       <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">애널리스트 19명 투자의견 분포 (컨센서스 Strong Buy)</div>
@@ -481,9 +545,9 @@
   <div class="card" style="margin-top:16px;">
     <div class="card-title">5개 분석 종합 — 한눈에 보기</div>
     <div class="zone-list">
-      <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:var(--red)">MA60&gt;MA20&gt;MA5&gt;MA120&gt;현재가 · 전 이평선 하회 · 기술적 약세</span></div>
+      <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:var(--green)">MA60&gt;현재가&gt;MA5&gt;MA20&gt;MA120 · 4개 중 3개 이평선 상회 · 기술적 강세</span></div>
       <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">Q2 매출 +33.7%·GM 67.7%, HPC 66%·2nm 성장</span></div>
-      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:var(--green);">Forward PER 22x·PEG 0.5 — 성장 대비 저평가</span></div>
+      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:#e67e22;">TTM 멀티플 5개 중 3개 4단계(높음), Forward PER 22x·PEG 0.5는 상대적으로 낮음</span></div>
       <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:#f0c040;">S&P500 대비 압도적 알파, 단 대만 지정학 디스카운트 상존</span></div>
       <div class="zone-item"><span class="zone-label">📰 시계열 뉴스</span><span class="zone-val" style="color:var(--red);">트럼프 대만 반도체 관세·양안 긴장 재부각 — 조정 요인</span></div>
     </div>
@@ -494,8 +558,8 @@
     <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;">
       <div>📅 다음 실적: <strong style="color:#ffc107;">2026년 10월 중순 (Q3 2026 예상)</strong></div>
       <div>투자의견: <strong style="color:var(--accent2);">Strong Buy (애널리스트 19명 컨센서스)</strong></div>
-      <div>목표주가: <strong style="color:#ffc107;">$520.37 · +24.4%</strong></div>
-      <div>결론: <strong style="color:var(--text);">첨단공정 독점력과 성장 대비 저평가 밸류에이션이 대만 지정학 디스카운트를 상쇄한다.</strong></div>
+      <div>목표주가: <strong style="color:#ffc107;">$520.37 · +23.9%</strong></div>
+      <div>결론: <strong style="color:var(--text);">첨단공정 독점력과 이익 성장 모멘텀이 TTM 트레일링 멀티플 프리미엄과 대만 지정학 디스카운트를 상쇄한다 — 저평가보다는 고성장에 대한 프리미엄 지불 구간.</strong></div>
     </div>
   </div>
 </div>
@@ -505,6 +569,32 @@
 </div>
 
 <script>
+function toggleCollapsible(header) {
+  const body = header.nextElementSibling;
+  const hintText = header.querySelector('.toggle-hint-text');
+  const expandedLabel = header.classList.contains('detail-toggle') ? '상세 숨기기' : '접기';
+  const collapsedLabel = header.classList.contains('detail-toggle') ? '상세 보기' : '펼치기';
+  const collapsing = !header.classList.contains('collapsed');
+  if (collapsing) {
+    body.style.maxHeight = body.scrollHeight + 'px';
+    requestAnimationFrame(() => {
+      header.classList.add('collapsed');
+      body.classList.add('collapsed');
+      header.setAttribute('aria-expanded', 'false');
+      if (hintText) hintText.textContent = collapsedLabel;
+    });
+  } else {
+    header.classList.remove('collapsed');
+    body.classList.remove('collapsed');
+    body.style.maxHeight = body.scrollHeight + 'px';
+    header.setAttribute('aria-expanded', 'true');
+    if (hintText) hintText.textContent = expandedLabel;
+    body.addEventListener('transitionend', function clear() {
+      body.style.maxHeight = '';
+      body.removeEventListener('transitionend', clear);
+    });
+  }
+}
 function showSection(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -739,30 +829,71 @@ function renderFundChart() {
     }
   });
 }
-function renderPeerChart() {
-  const ctx = document.getElementById('peerChart');
-  if (!ctx || charts['peer']) return;
-  charts['peer'] = new Chart(ctx,{
-    type:'bar',
-    data:{
-      labels:['MSFT','NVDA','TSM','AVGO','AMD','반도체평균'],
-      datasets:[{
-        label:'PER(TTM)',
-        data:[23.2,31.3,31.8,30.2,47.0,52.0],
-        backgroundColor:['rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','#5b8fd6','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','rgba(154,160,184,0.2)'],
-        borderColor:['#5c6282','#5c6282','#8bb0e8','#5c6282','#5c6282','#5c6282'],
-        borderWidth:1,borderRadius:5
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`PER ${ctx.raw}x`}}},
-      scales:{
-        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:9}}},
-        y:{max:60,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
-      }
-    }
-  });
+// ─── MULTIPLE COMPARE (clickable 멀티플 5단계 ↔ peer chart) ───
+const MULTIPLE_DATA = {
+  per: {
+    title: 'PER 비교 — 순수 파운드리 동종업계 기준',
+    unit: 'PER(TTM)',
+    labels: ['TSM','UMC','GFS','반도체평균(참고)'],
+    data: [30.3,17.22,42.12,52.0],
+    max: 60,
+    explanation: '적정 20x(핵심 앵커 19.82x·17.22x·42.12x의 중앙값) = TSM 자체 10년 중간값 19.82x·UMC(순수 파운드리) 17.22x·GFS(순수 파운드리) 42.12x의 중앙값. 반도체 업종 전체 평균(52.0x)은 팹리스·IDM이 섞인 광범위 집계라 참고로만 병기. Forward PER 22.2x(FY26E)·PEG 0.5는 성장률까지 반영한 별도 참고 지표.<br><br>TSM 30.3x는 UMC(17.22x)보다 높고 GFS(42.12x)보다는 낮다 — 세 핵심 앵커 중간이지만 자체 역사(19.82x)와 업계 하위 UMC 대비로는 확실한 프리미엄. 2nm 기술 리더십이 이 프리미엄을 정당화하는지가 핵심 논점.'
+  },
+  pbr: {
+    title: 'PBR 비교 — 순수 파운드리 동종업계 기준',
+    unit: 'PBR',
+    labels: ['TSM','UMC','GFS'],
+    data: [10.6,3.24,2.50],
+    max: 15,
+    explanation: '적정 3x(핵심 앵커 4.81x·3.24x·2.50x의 중앙값) = TSM 자체 10년 중간값 4.81x·UMC 3.24x·GFS 2.50x의 중앙값. ROE로 보면 TSM(약 35%)이 UMC·GFS보다 월등히 높아 프리미엄 자체는 정당화되지만, 배율의 절대 크기(핵심 앵커의 3배 이상)는 상당하다.<br><br>TSM 10.6x는 UMC(3.24x)·GFS(2.50x) 모두보다 3배 이상 높다 — 순수 파운드리 피어 중 압도적 프리미엄.'
+  },
+  psr: {
+    title: 'PSR 비교 — 자체 역사값 단일 소스(마진 격차로 피어 참고만)',
+    unit: 'PSR(TTM)',
+    labels: ['TSM','UMC(참고·마진상이)','GFS(참고·마진상이)'],
+    data: [15.2,5.73,4.27],
+    max: 25,
+    explanation: '적정 7x = TSM 자체 10년 중간값(6.91x) 단일 소스 — UMC(영업이익률 18.5%)·GFS(11.7%)는 레거시 공정 중심이라 TSM(약 50~60%)의 절반에도 못 미쳐, 마진 구조가 크게 다른 상태에서 매출 배수를 직접 비교하면 마진 차이가 고평가 신호처럼 왜곡될 수 있어 참고로만 병기(정상화 영업마진이 대상 기업의 절반 미만이면 참고 앵커로 강등하는 규칙 적용 — PER·EV/EBITDA는 마진이 이미 분모에 반영돼 있어 이 예외를 적용하지 않음).<br><br>TSM 15.2x는 UMC(5.73x)·GFS(4.27x) 모두보다 2~3배 이상 높지만, 자체 10년 중간값(6.91x) 대비로도 이미 2배 이상 — 마진 차이를 감안해도 절대적으로 낮다고 보기는 어렵다.'
+  },
+  pcr: {
+    title: 'PCR(FCF) 비교 — 순수 파운드리 동종업계 기준',
+    unit: 'PCR(FCF)',
+    labels: ['TSM','UMC','GFS'],
+    data: [62.8,26.06,26.05],
+    max: 70,
+    explanation: '적정 26x(핵심 앵커 35.52x·26.06x·26.05x의 중앙값) = TSM 자체 10년 중간값 35.52x·UMC 26.06x·GFS 26.05x의 중앙값. 2nm·CoWoS 첨단공정 증설로 Capex가 급증(FY2025 약 $40.9B)해 FCF가 구조적으로 압박받는 시기.<br><br>TSM 62.8x는 세 핵심 앵커 모두를 크게 상회 — 5개 지표 중 고평가 신호가 가장 뚜렷하다. 다만 이는 밸류에이션 부담이라기보다 대규모 선제 투자로 FCF가 일시적으로 눌린 영향이 커, Capex 사이클이 완화되면 자연히 정상화될 가능성이 있다.'
+  },
+  evebitda: {
+    title: 'EV/EBITDA 비교 — 순수 파운드리 동종업계 기준',
+    unit: 'EV/EBITDA',
+    labels: ['TSM','UMC','GFS'],
+    data: [18.5,14.28,13.65],
+    max: 25,
+    explanation: '적정 14x(핵심 앵커 10.05x·14.28x·13.65x의 중앙값) = TSM 자체 10년 중간값 10.05x·UMC 14.28x·GFS 13.65x의 중앙값. EV 약 $2.11T÷TTM EBITDA 약 $114B(추정).<br><br>TSM 18.5x는 UMC(14.28x)·GFS(13.65x) 모두보다 높고 자체 10년 중간값(10.05x) 대비로도 확실한 프리미엄이지만, 5개 지표 중에서는 프리미엄 폭이 가장 작다 — PER과 함께 상대적으로 방어적인 지표.'
+  }
+};
+function renderMultipleChart(key) {
+  const d = MULTIPLE_DATA[key];
+  const ctx = document.getElementById('multipleChart');
+  if (!ctx || !d) return;
+  if (charts['multiple']) charts['multiple'].destroy();
+  const bg = d.labels.map((l,i)=> i===0 ? '#003087' : (l.includes('참고') ? 'rgba(231,76,60,0.18)' : 'rgba(154,160,184,0.35)'));
+  const bd = d.labels.map((l,i)=> i===0 ? '#5b8fd6' : (l.includes('참고') ? '#c0392b' : '#5c6282'));
+  charts['multiple'] = new Chart(ctx,{ type:'bar', data:{ labels:d.labels, datasets:[{ label:d.unit, data:d.data, backgroundColor:bg, borderColor:bd, borderWidth:1, borderRadius:5 }] },
+    options:{ responsive:true,maintainAspectRatio:false, plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${d.unit} ${ctx.raw}x`}}},
+      scales:{ x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10.5}}}, y:{max:d.max,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}} } } });
+}
+let currentMultipleKey = 'per';
+function selectMultiple(key) {
+  const d = MULTIPLE_DATA[key];
+  if (!d) return;
+  currentMultipleKey = key;
+  document.querySelectorAll('.val-item[data-metric]').forEach(el => el.classList.toggle('selected', el.dataset.metric === key));
+  const titleEl = document.getElementById('multipleCompareTitle');
+  const textEl = document.getElementById('multipleCompareText');
+  if (titleEl) titleEl.textContent = d.title;
+  if (textEl) textEl.innerHTML = d.explanation;
+  renderMultipleChart(key);
 }
 function renderArizonaInvestChart() {
   const ctx = document.getElementById('arizonaInvestChart');
@@ -793,7 +924,7 @@ function renderArizonaInvestChart() {
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
-    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'valuation' && !charts['multiple']) selectMultiple(currentMultipleKey);
     if (sectionId === 'us') renderArizonaInvestChart();
   }, 50);
 }
