@@ -81,6 +81,28 @@
   .stat-value.up { color: var(--green); }
   .stat-value.down { color: var(--red); }
   .stat-value.re { color: var(--accent2); }
+  .section-label { font-size: 12px; color: var(--text2); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:#f0c040; }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(240,192,64,0.14), rgba(240,192,64,0.03)); border:1px solid rgba(240,192,64,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:#f0c040; }
+  .diag-summary .sub { font-size:11px; color:var(--text2); margin-top:2px; }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 22px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; }
+  .diag-label { font-size:12px; color:var(--text2); min-width:96px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:10.5px; color:var(--text3); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .diag-badge.warn { background:rgba(231,76,60,0.16); color:var(--red); }
+  .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .act-card { background: var(--bg3); border-radius: 8px; padding: 12px 14px; display:flex; align-items:center; gap:12px; }
+  .act-icon { font-size: 19px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:rgba(192,64,64,0.1); border-radius:8px; flex-shrink:0; }
+  .act-label { font-size: 10.5px; color: var(--text3); margin-bottom:2px; }
+  .act-value { font-size: 15px; font-weight: 700; color: var(--text); }
+  .act-sub { font-size: 10px; color: var(--text3); margin-top:1px; }
   .stat-value.te { color: var(--teal); }
 
   .chart-wrap { position: relative; }
@@ -224,7 +246,7 @@
 <a class="peer-nav-link" href="HD_analysis_widget.html">다음 HD ▶</a>
 </div>
 </div>
-<div class="today-banner">⚠️ <strong>2026년 7월 17일 종가 기준</strong> — 현재 $117.74, 52주 신저가($114.50) 당일 경신. 52주 최고 $345.72(2025.09.10) 대비 -63.4% 대폭 조정. 52주 수익률 -52.9%.</div>
+<div class="today-banner">⚠️ <strong>2026년 8월 7일 종가 기준</strong> — 현재 $147.02, 7월 24일 52주 신저가($114.50) 이후 +28.4% 반등. 52주 최고 $345.72(2025.09.10) 대비는 여전히 -57.5% 조정 상태. 52주 수익률 -52.9%.</div>
 
 <!-- HEADER -->
 <div class="header">
@@ -244,7 +266,7 @@
     </div>
   </div>
   <div class="header-meta">
-    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value hl">$662B</span></div>
+    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value hl">$423B</span></div>
     <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">소프트웨어·클라우드</span></div>
     <div class="meta-item"><span class="meta-label">FY2026 매출</span><span class="meta-value hl">$67.4B (+17%)</span></div>
     <div class="meta-item"><span class="meta-label">RPO (수주잔고)</span><span class="meta-value hl">$638B</span></div>
@@ -255,7 +277,7 @@
 
 <!-- NAV -->
 <div class="box-key">
-<div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:#e67e22;">(고평가)</span> — RPO $638B(연매출 9.5배) · OCI Q4 FY26 +93%</div>
+<div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:#f0c040;">(적정)</span> — RPO $638B(연매출 9.5배) · OCI Q4 FY26 +93%</div>
 <div style="font-size:12px;color:var(--text2);line-height:1.6;">OCI가 Q4 FY26 +93% 폭발 성장하며 Stargate($300B+ AI 인프라)의 핵심 파트너로 자리잡았다. RPO $638B는 FY2026 연매출의 9.5배에 달하는 역대 최대 수주잔고로, 다년간 매출 가시성을 확보했다는 낙관론의 근거다. Fusion ERP·멀티클라우드 협정을 통해 레거시 고객을 OCI로 자연스럽게 전환시키며 이탈을 방지하는 구조다. 핵심 논쟁은 이 거대한 RPO가 실제 매출로 전환되는 속도와, 이를 뒷받침할 Capex 부담을 감당할 수 있는지다.</div>
 </div>
 <div class="nav">
@@ -350,15 +372,62 @@
   </div>
 
   <div class="grid-3">
-    <div class="stat-box"><div class="stat-label">매출 (Q4 FY26)</div><div class="stat-value re">$19.2B</div><div class="stat-sub">YoY +20.6% / FY2026 역대최고</div></div>
-    <div class="stat-box"><div class="stat-label">클라우드 매출 (Q4 FY26)</div><div class="stat-value te">$9.9B</div><div class="stat-sub">+47% YoY / 전체의 52%</div></div>
-    <div class="stat-box"><div class="stat-label">OCI(IaaS) (Q4 FY26)</div><div class="stat-value re">$5.8B</div><div class="stat-sub">+93% YoY / AI 수요 폭발</div></div>
-    <div class="stat-box"><div class="stat-label">FY2026 연간 매출</div><div class="stat-value up">$67.4B</div><div class="stat-sub">YoY +17% / 역대 최고</div></div>
-    <div class="stat-box"><div class="stat-label">FY2026 클라우드 매출</div><div class="stat-value up">$34.0B</div><div class="stat-sub">YoY +39% / 총매출 50%+</div></div>
-    <div class="stat-box"><div class="stat-label">영업이익 (Q4 FY26)</div><div class="stat-value">$6.1B</div><div class="stat-sub">OPM 32.0%</div></div>
-    <div class="stat-box"><div class="stat-label">순이익 (Q4 FY26)</div><div class="stat-value up">$4.22B</div><div class="stat-sub">희석 EPS $1.45 · ▲21%</div></div>
-    <div class="stat-box"><div class="stat-label">RPO (잔여계약잔액)</div><div class="stat-value te">$638B</div><div class="stat-sub">▲363% YoY · AI 대형계약 반영</div></div>
-    <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value re">9월 중순 예상</div><div class="stat-sub">Q1 FY2027</div></div>
+    <div class="stat-box"><div class="stat-label">클라우드 매출 (Q4 FY26)</div><div class="stat-value te">$9.9B</div><div class="stat-sub">세그먼트 성장 · +47% YoY, 전체의 52%</div></div>
+    <div class="stat-box"><div class="stat-label">OCI(IaaS) (Q4 FY26)</div><div class="stat-value re">$5.8B</div><div class="stat-sub">AI 인프라 수요 · +93% YoY</div></div>
+    <div class="stat-box"><div class="stat-label">FY2026 클라우드 매출</div><div class="stat-value up">$34.0B</div><div class="stat-sub">연간 성장 · +39% YoY, 총매출 50%+</div></div>
+    <div class="stat-box"><div class="stat-label">순이익 (Q4 FY26)</div><div class="stat-value up">$4.22B</div><div class="stat-sub">GAAP 최종손익 · 희석 EPS $1.45(▲21%)</div></div>
+    <div class="stat-box"><div class="stat-label">연간 OCF (FY2026)</div><div class="stat-value up">$32.5B</div><div class="stat-sub">현금창출력 · OCF마진 ~48%</div></div>
+    <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value re">9월 중순 예상</div><div class="stat-sub">일정 · Q1 FY2027</div></div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">재무 건전성 — 안정성·활동성 (Q4 FY2026 · 2026.05.31 기준)</div>
+
+    <div class="section-label"><span class="dot"></span>안정성 — 단기 지급능력·차입 의존도</div>
+    <div class="diag-summary">
+      <div class="icon">⚠️</div>
+      <div>
+        <div class="title">종합 진단: 유동성은 양호하나 레버리지 높음</div>
+        <div class="sub">AI 데이터센터 Capex를 대규모 부채로 조달 — 차입금의존도·부채비율이 기준치를 크게 상회</div>
+      </div>
+    </div>
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">111.5%</span><span class="diag-note">기준 150%↑ · 소프트웨어 기업 특성상 재고 없음</span></div>
+        <div class="diag-badge info">ℹ️ 참고</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">당좌비율</span><span class="diag-value">111.5%</span><span class="diag-note">기준 100%↑ · 재고자산 사실상 없어 유동비율과 동일</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">차입금의존도</span><span class="diag-value">49.5%</span><span class="diag-note">기준 30%↓ · AI 인프라 부채 조달로 기준치 크게 상회</span></div>
+        <div class="diag-badge warn">⚠️ 높음</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">이자보상배율</span><span class="diag-value">4.3x</span><span class="diag-note">기준 1x↑ · Q4 FY26 분기 기준 — 여유 있으나 빅테크 대비 얇음</span></div>
+        <div class="diag-badge safe">✅ 안전</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">부채비율</span><span class="diag-value">515.8%</span><span class="diag-note">부채 $219.3B÷자기자본 $42.5B · 장기간 자사주 매입으로 자기자본 자체가 작음</span></div>
+        <div class="diag-badge warn">⚠️ 매우 높음</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">총자산증가율</span><span class="diag-value">55.5%</span><span class="diag-note">FY26 $261.8B(전기 $168.4B) · AI 데이터센터 투자로 자산 급증</span></div>
+        <div class="diag-badge info">ℹ️ 참고</div>
+      </div>
+    </div>
+
+    <div class="section-label"><span class="dot" style="background:var(--blue);"></span>활동성 — 매출채권 회수 속도</div>
+    <div class="activity-grid">
+      <div class="act-card">
+        <div class="act-icon">💳</div>
+        <div><div class="act-label">매출채권 회전율·회전기간</div><div class="act-value">7.11회</div><div class="act-sub">51.3일 만에 현금화 (TTM 기준)</div></div>
+      </div>
+    </div>
+    <div style="margin-top:6px;font-size:11px;color:var(--text3);">Oracle은 소프트웨어·클라우드 기업으로 물리적 재고가 사실상 없어, 재고자산 회전율·매입채무 지급기간·CCC 같은 제조업형 활동성 지표는 적용하지 않는다. 매출채권 회수기간(51.3일)만으로도 현금 전환 속도를 충분히 가늠할 수 있다.</div>
+
+    <div style="margin-top:14px;font-size:11px;color:var(--text3);">유동성 자체는 문제없지만, 차입금의존도(49.5%)·부채비율(515.8%) 모두 기준치를 크게 웃돈다 — RPO $638B를 실현하기 위한 데이터센터 투자를 부채로 조달한 결과다. 이자보상배율 4.3x는 아직 안전하지만 NVDA·AMZN 같은 현금 풍부한 빅테크보다 훨씬 얇은 여유라, 금리 상승이나 실적 둔화 시 레버리지 부담이 빠르게 부각될 수 있다.</div>
   </div>
 
   <div class="card" style="margin-top:16px;">
@@ -394,7 +463,7 @@
     </div>
   </div>
   <div class="card">
-    <div class="card-title">핵심 투자 논리 <span style="color:#e67e22;">(고평가)</span></div>
+    <div class="card-title">핵심 투자 논리 <span style="color:#f0c040;">(적정)</span></div>
     <div style="font-size:12px;color:var(--text2);line-height:1.7;">OCI가 Q4 FY26 +93% 폭발 성장하며 Stargate($300B+ AI 인프라)의 핵심 파트너로 자리잡았다. RPO $638B는 FY2026 연매출의 9.5배에 달하는 역대 최대 수주잔고로, 다년간 매출 가시성을 확보했다는 낙관론의 근거다. Fusion ERP·멀티클라우드 협정을 통해 레거시 고객을 OCI로 자연스럽게 전환시키며 이탈을 방지하는 구조다. 핵심 논쟁은 이 거대한 RPO가 실제 매출로 전환되는 속도와, 이를 뒷받침할 Capex 부담을 감당할 수 있는지다.</div>
   </div>
   <div class="card">
@@ -415,58 +484,48 @@
       <div class="card-title">멀티플 5단계 평가</div>
 
       <div class="val-item">
-        <div class="val-header"><span class="val-name">PER (FY2026 GAAP)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">56.8x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div>
+        <div class="val-header"><span class="val-name">PER (FY2026 GAAP)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">25.2x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
+        <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 28x</span><span class="val-high">고 50x</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:3px;">현재가 $147.02÷EPS $5.83 — 52주 저점 대비 반등했지만 여전히 고점($345.72) 대비 대폭 할인된 가격</div>
+      </div>
+
+      <div class="val-item">
+        <div class="val-header"><span class="val-name">Non-GAAP PER (FY26)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">19.3x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:38%;background:linear-gradient(90deg,#27ae60,#8bc34a);"></div></div>
         <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 28x</span><span class="val-high">고 50x</span></div>
       </div>
 
       <div class="val-item">
-        <div class="val-header"><span class="val-name">Non-GAAP PER (FY26)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">43.2x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
-        <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 28x</span><span class="val-high">고 50x</span></div>
-      </div>
-
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">PBR (Q4 FY26)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">18.1x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-header"><span class="val-name">PBR (FY2026)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">10.0x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 10x</span><span class="val-high">고 30x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:3px;">※ 자사주 매입 과거 레거시·피인수로 자기자본 소수 — 비교 무의미 수준</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:3px;">자기자본 $42.5B(FY2026 기말) · 대규모 AI 인프라 부채 조달로 자기자본 대비 레버리지 높음</div>
       </div>
 
       <div class="val-item">
-        <div class="val-header"><span class="val-name">PSR (시총/연매출)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">11.4x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
+        <div class="val-header"><span class="val-name">PSR (시총/연매출)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">6.3x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:38%;background:linear-gradient(90deg,#27ae60,#8bc34a);"></div></div>
         <div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 10x</span><span class="val-high">고 25x</span></div>
       </div>
 
       <div class="val-item">
-        <div class="val-header"><span class="val-name">EV/EBITDA (FY26 TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">~28x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:52%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-header"><span class="val-name">EV/EBITDA (FY26)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">18.5x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 10x</span><span class="val-mid">적정 22x</span><span class="val-high">고 45x</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:3px;">EV 약 $522B(부채 $129.5B 포함)÷EBITDA 약 $28.2B</div>
       </div>
 
       <div style="margin-top:10px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">
-        ※ PSR 9.8x는 클라우드 성장+RPO $638B 감안 시 <strong style="color:var(--accent2);">합리적 수준</strong>. 고가치 클라우드 전환 스토리가 핵심.
+        ※ PSR 6.3x·Non-GAAP PER 19.3x 모두 저평가 구간 — 52주 고점 대비 -57.5% 조정된 현재가에는 RPO $638B의 가치가 거의 반영되지 않고 있다. 고가치 클라우드 전환 스토리가 핵심.
       </div>
     </div>
 
     <div class="card">
       <div class="card-title">클라우드 피어 비교 (Non-GAAP PER 기준)</div>
       <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:10px;font-size:12px;color:var(--text2);">* ORCL Non-GAAP PER 37x는 MSFT·AMZN 대비 할인. OCI 성장률(+93%)은 Azure·AWS보다 높아 갭 축소 중.</div>
+      <div style="margin-top:10px;font-size:12px;color:var(--text2);">* ORCL Non-GAAP PER 19.3x는 MSFT·AMZN 대비 상당한 할인. OCI 성장률(+93%)은 Azure·AWS보다 높아 저평가 매력이 부각된다.</div>
     </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">밸류에이션 5단계</div>
-    <div class="stage-grid">
-      <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div></div>
-      <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div></div>
-      <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div><div style="font-size:10px;color:#f0c040;background:rgba(245,166,35,0.15);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">PBR (Q4 FY26)·PSR (시총/연매출)</div></div>
-      <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:10px;color:var(--red);background:rgba(231,76,60,0.15);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">Non-GAAP PER (FY26)·EV/EBITDA (FY26 TTM)</div></div>
-      <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div><div style="font-size:10px;color:var(--red);background:rgba(231,76,60,0.15);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">PER (FY2026 GAAP)</div></div>
-    </div>
-    <div style="margin-top:10px;font-size:11px;color:var(--text3);">PSR 9.8x만 3단계 적정이고, PER·Non-GAAP PER·EV/EBITDA 3개는 4단계 높음, PBR(15.6x)만 5단계 매우높음이다. RPO $638B(연매출의 9.5배)라는 압도적 수주잔고를 감안하면 PSR이 적정 구간에 있다는 점이 밸류에이션 부담을 상당 부분 상쇄한다.</div>
   </div>
 
   <div class="card">
@@ -513,7 +572,7 @@
   <div class="rel-container">
     <div class="rel-title">S&P 500 대비 상대 성과 (52주)</div>
     <div class="grid-3" style="margin-top:12px;">
-      <div class="stat-box"><div class="stat-label">ORCL 52주</div><div class="stat-value down">-52.9%</div><div class="stat-sub">현재가 $117.74 기준</div></div>
+      <div class="stat-box"><div class="stat-label">ORCL 52주</div><div class="stat-value down">-52.9%</div><div class="stat-sub">현재가 $147.02 기준</div></div>
       <div class="stat-box"><div class="stat-label">S&P500 동기간</div><div class="stat-value up">+15.2%</div><div class="stat-sub">추정치</div></div>
       <div class="stat-box"><div class="stat-label">알파 (S&amp;P 500 대비 초과수익률)</div><div class="stat-value down">-68.1%p</div><div class="stat-sub">큰 폭 언더퍼폼</div></div>
     </div>
@@ -629,7 +688,7 @@
       <div class="bb-title bb-bear">🐻 Bear 요인</div>
       <div class="bb-item"><span>▼</span><span><strong>FCF 음수·부채 $156B:</strong> AI 데이터센터 Capex로 FCF 적자. 총부채 $156B(순부채 $124B). 고금리 환경에서 이자비용 분기 $1.4B. 재무 레버리지 위험.</span></div>
       <div class="bb-item"><span>▼</span><span><strong>RPO→수익 전환 불확실성:</strong> $638B RPO가 언제 어떻게 인식되는지 명확치 않음. 집단소송(RPO 공시 오해)이 신뢰도 타격. "숫자가 크지만 실현 가능한가?" 시장 회의.</span></div>
-      <div class="bb-item"><span>▼</span><span><strong>GAAP PER 48.8x 고평가:</strong> 클라우드 전환 중 수익성 압박. SaaS GM은 높지만 OCI Capex가 전체 수익성 희석. Non-GAAP 37x도 클라우드 레거시 대비 고가.</span></div>
+      <div class="bb-item"><span>▼</span><span><strong>부채 $129.5B 부담:</strong> AI 데이터센터 Capex를 대규모 부채로 조달 — 금리·차입 비용이 향후 수익성을 압박할 수 있다. RPO 실현이 지연되면 레버리지 리스크 부각.</span></div>
       <div class="bb-item"><span>▼</span><span><strong>AWS·Azure·GCP와의 경쟁:</strong> 하이퍼스케일러 대비 에코시스템·개발자 편의성 뒤처짐. OCI 시장점유율 아직 한 자릿수. CUDA 생태계처럼 락인이 강하지 않음.</span></div>
       <div class="bb-item"><span>▼</span><span><strong>Ellison 리스크:</strong> 81세 창업자 중심 의사결정 구조. Catz→Sicilia CEO 교체 후 전략 연속성 불확실. 후계 계획 미흡.</span></div>
     </div>
@@ -645,17 +704,17 @@
         <div style="width:16.7%;height:100%;background:var(--bg3);"></div>
         <div style="width:16.7%;height:100%;background:rgba(46,204,113,0.45);"></div>
       </div>
-      <div style="position:absolute;top:10px;left:8.8%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
-      <div style="position:absolute;top:-6px;left:8.8%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $117.74</div>
+      <div style="position:absolute;top:10px;left:15.7%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
+      <div style="position:absolute;top:-6px;left:15.7%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $147.02</div>
       <div style="position:absolute;top:22px;left:50.62%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
-      <div style="position:absolute;top:48px;left:50.62%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $251.85 (+113.9%)</div>
+      <div style="position:absolute;top:48px;left:50.62%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $251.85 (+71.3%)</div>
     </div>
     <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-top:4px;">
       <span style="color:var(--red);">약세 $100~155 (현재 위치)</span>
       <span>기본 $230~300 (RPO 정상 인식)</span>
       <span style="color:var(--green);">강세 $350~400 (RPO 수익 전환 가속)</span>
     </div>
-    <div style="margin-top:10px;font-size:11px;color:var(--text3);">현재가는 애널리스트 최저 목표가($155)보다도 낮은 극단적 저평가 구간 — 컨센서스 목표가까지 +99.2% 괴리. 애널리스트 목표가가 아직 폭락을 완전히 반영하지 못했을 가능성과, 시장이 RPO 실현 가능성에 심각한 의구심을 갖고 있다는 신호가 공존.</div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">52주 저점($114.50)에서 +28.4% 반등했지만 여전히 애널리스트 최저 목표가($155)보다 낮은 구간 — 컨센서스 목표가까지 +71.3% 괴리. 애널리스트 목표가가 아직 폭락을 완전히 반영하지 못했을 가능성과, 시장이 RPO 실현 가능성에 의구심을 갖고 있다는 신호가 공존.</div>
 
     <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
       <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">애널리스트 43명 투자의견 분포</div>
@@ -685,7 +744,7 @@
 
   <div class="card" style="margin-top:16px;">
     <div class="card-title">투자의견 요약</div>
-    <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;"><div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107">2026년 9월 중순 예상</strong></div><div><span style="color:var(--text2);">투자의견:</span> <strong style="color:var(--accent2)">Buy · 매수 37/43명(86.0%)</strong></div><div><span style="color:var(--text2);">목표주가:</span> <strong style="color:var(--text)">$251.85 · +113.9%</strong></div><div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">RPO 잠재력과 Capex·부채 위험이 공존</strong></div></div>
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;"><div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107">2026년 9월 중순 예상</strong></div><div><span style="color:var(--text2);">투자의견:</span> <strong style="color:var(--accent2)">Buy · 매수 37/43명(86.0%)</strong></div><div><span style="color:var(--text2);">목표주가:</span> <strong style="color:var(--text)">$251.85 · +71.3%</strong></div><div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">RPO 잠재력과 Capex·부채 위험이 공존</strong></div></div>
   </div>
 </div>
 
@@ -920,20 +979,31 @@ function renderFund() {
   const rev = [13.31, 14.06, 14.13, 15.90, 14.93, 16.06, 17.19, 19.18];
   const op  = [3.99,  4.22,  4.36,  5.11,  4.28,  4.73,  5.46,  6.13];
   const opm = [30.0,  30.0,  30.8,  32.1,  28.7,  29.5,  31.8,  32.0];
+  const y2min=20, y2max=40;
   charts['fund'] = new Chart(ctx, {
     data:{ labels, datasets:[
-      {type:'bar', label:'매출 ($B)', data:rev, backgroundColor:'rgba(192,64,64,0.5)', borderColor:'#c04040', borderWidth:1, yAxisID:'y'},
-      {type:'bar', label:'영업이익 ($B)', data:op, backgroundColor:'rgba(240,112,112,0.55)', borderColor:'#f07070', borderWidth:1, yAxisID:'y'},
-      {type:'line',label:'OPM (%)', data:opm, borderColor:'#f0c040', borderWidth:2, fill:false, tension:0.3, pointRadius:4, yAxisID:'y2'}
+      {type:'bar', label:'매출 ($B)', data:rev.map(()=>0), backgroundColor:'rgba(192,64,64,0.5)', borderColor:'#c04040', borderWidth:1, yAxisID:'y'},
+      {type:'bar', label:'영업이익 ($B)', data:op.map(()=>0), backgroundColor:'rgba(240,112,112,0.55)', borderColor:'#f07070', borderWidth:1, yAxisID:'y'},
+      {type:'line',label:'OPM (%)', data:opm.map(()=>y2min), borderColor:'#f0c040', borderWidth:2, fill:false, tension:0.3, pointRadius:4, yAxisID:'y2'}
     ]},
     options:{ responsive:true, maintainAspectRatio:false,
+      animation:false,
       plugins:{ legend:{labels:{color:'#8888c8',font:{size:11}}}, tooltip:{mode:'index',intersect:false} },
       scales:{
         x:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#8888c8',font:{size:11}}},
         y:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#8888c8',font:{size:11},callback:v=>`$${v}B`}, position:'left'},
-        y2:{ticks:{color:'#f0c040',font:{size:11},callback:v=>`${v}%`}, position:'right', grid:{display:false}, min:20, max:40}
+        y2:{ticks:{color:'#f0c040',font:{size:11},callback:v=>`${v}%`}, position:'right', grid:{display:false}, min:y2min, max:y2max}
       }
     }
+  });
+  requestAnimationFrame(()=>{
+    const c=charts['fund'];
+    if (!c) return;
+    c.options.animation={duration:900,easing:'easeOutQuart'};
+    c.data.datasets[0].data=rev;
+    c.data.datasets[1].data=op;
+    c.data.datasets[2].data=opm;
+    c.update();
   });
 }
 
@@ -968,7 +1038,7 @@ function renderPeer() {
       labels:['MSFT','ORCL','NOW','CRM','SAP'],
       datasets:[{
         label:'Non-GAAP PER (FY26E, x)',
-        data:[32, 37, 55, 45, 29],
+        data:[32, 19.3, 55, 45, 29],
         backgroundColor:['rgba(192,64,64,0.4)','#c04040','rgba(192,64,64,0.4)','rgba(192,64,64,0.4)','rgba(192,64,64,0.35)'],
         borderColor:['#c04040','#f07070','#c04040','#c04040','#c04040'], borderWidth:1
       }]
