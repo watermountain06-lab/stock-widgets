@@ -278,6 +278,43 @@ a precise fair-value verdict, when the anchor set is this thin - and keep a stro
 sentence (e.g. "PEG 0.49 = 극단적 저평가") explicitly scoped to the metric it's actually about,
 not blended with a weaker-evidence metric's conclusion in the same sentence.
 
+### Peer-set scope choice can flip the verdict entirely - "market-cap tier" is not "industry", 2026-08-09
+
+Applied this methodology to MSFT right after NVDA, using the fleet's existing "빅테크 5" framing
+(GOOGL/META/AAPL/NVDA) as MSFT's peer set - same accounting basis (all US GAAP, unlike NVDA's
+TSM/IFRS problem), so it looked clean. User then asked a basic but important question: PER/PSR
+are textbook *same-industry* comparisons, so is "빅테크" (mega-cap tech by market-cap tier) even
+the right peer group for MSFT, an enterprise software/cloud company, when it's grouped with an ad-
+auction platform (GOOGL/META), a hardware+services company (AAPL), and a semiconductor maker
+(NVDA)? **Re-ran the whole card against real enterprise-software peers (ORCL/CRM/ADBE) instead,
+and the result wasn't a small correction - it flipped 3 of 5 stage badges and the card's overall
+verdict from 저평가 to 적정**: PER 34x→24x, PBR 11x→9x (mild moves, badges stayed 2단계), but
+PSR 10x→5x (badge 3단계→4단계) and PCR(FCF) 34x→12x (badge 4단계→**5단계**, actual 55.4x now
+exceeds even the "고" bound) - MSFT's SaaS-adjacent revenue/cash-flow multiples look rich against
+genuine software peers even though they looked cheap against "빅테크" as a basket.
+
+**Takeaway: a peer set chosen by market-cap tier ("빅테크", "매그니피센트7") is not the same claim
+as a peer set chosen by industry/business-model comparability, even when every ticker in it
+happens to be on the same accounting basis.** GAAP-consistency (checked in the section above) is
+necessary but not sufficient - a same-GAAP-basis peer can still be economically incomparable if
+its revenue/margin/growth drivers differ (ad auctions vs. subscription software vs. semiconductor
+cycles). When a widget's existing peer-comparison card was built around a "빅테크"/"매그니피센트7"/
+market-cap-tier framing (check the fleet for this - MSFT, AAPL, GOOGL, META, AMZN, NVDA all
+plausibly reference each other this way), don't assume it's already the right 핵심 앵커 set - ask
+whether a narrower, real-industry peer set exists in the fleet or is fetchable, and if the two
+sets disagree meaningfully, **use the industry set as 핵심 앵커 and keep the market-cap-tier set
+as 참고 앵커** (cited, not blended into the computed median) rather than picking one silently.
+Surface both reads in the subtext when they diverge - "빅테크 대비로는 X, 진짜 동종업계 대비로는
+Y" is more honest than resolving the tension invisibly, especially when (as here) it changes which
+direction the reader should lean.
+
+A narrower industry peer set is not automatically a *better-fitting* one, either - flag this too,
+don't overclaim precision just because the peers are more industry-accurate. ORCL/CRM/ADBE are all
+smaller and slower-growing than MSFT and don't individually replicate MSFT's actual business mix
+(large-scale cloud infrastructure comparable to AWS/GCP, plus a consumer/gaming segment that has
+no analog in any of the three) - said explicitly in the card's shared caveat rather than presented
+as a clean fix.
+
 ## 재무 건전성 카드 — collapsible shell + trend-based 활동성 판정, 2026-08-09
 
 Three follow-up changes to the card above, all NVDA-only so far (not yet propagated to the rest
