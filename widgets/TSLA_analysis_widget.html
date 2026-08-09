@@ -56,6 +56,40 @@
   .stat-value.up { color: var(--green); }
   .stat-value.down { color: var(--red); }
   .stat-value.gold { color: var(--accent2); }
+  .section-label { font-size: 12px; color: var(--text2); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:11px; color:var(--text2); margin-top:2px; }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 22px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; }
+  .diag-label { font-size:12px; color:var(--text2); min-width:96px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:10.5px; color:var(--text3); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .diag-badge.warn { background:rgba(231,76,60,0.16); color:var(--red); }
+  .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .act-card { background: var(--bg3); border-radius: 8px; padding: 12px 14px; display:flex; align-items:center; gap:12px; }
+  .act-icon { font-size: 19px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:rgba(159,219,47,0.1); border-radius:8px; flex-shrink:0; }
+  .act-label { font-size: 10.5px; color: var(--text3); margin-bottom:2px; }
+  .act-value { font-size: 15px; font-weight: 700; color: var(--text); }
+  .act-sub { font-size: 10px; color: var(--text3); margin-top:1px; }
+  .ccc-card { background: var(--bg3); border-radius: 8px; padding: 16px 18px 12px; }
+  .ccc-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 6px; }
+  .ccc-head-label { font-size:11.5px; color:var(--text2); font-weight:700; }
+  .ccc-head-value { font-size:18px; font-weight:800; color:#f0c040; }
+  .ccc-explain { font-size: 10.5px; color: var(--text3); line-height: 1.5; margin-bottom: 22px; }
+  .tl-bar-wrap { position: relative; margin: 40px 4px 8px; }
+  .tl-bar { height: 18px; border-radius: 5px; overflow: hidden; display: flex; }
+  .tl-seg-inv { background: linear-gradient(90deg,#3498db,#2980b9); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
+  .tl-seg-ar { background: linear-gradient(90deg,#9fdb2f,#76b900); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#0f1117; }
+  .tl-marker { position: absolute; top: -18px; width: 2px; background: #f0c040; }
+  .tl-marker-label { position: absolute; top: -32px; transform: translateX(-50%); font-size: 9.5px; font-weight: 700; color: #f0c040; white-space: nowrap; }
+  .tl-ccc-span { position: absolute; height: 3px; background: rgba(240,192,64,0.6); border-radius: 2px; top: 24px; }
   .ma-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
   .ma-row:last-child { border-bottom: none; }
   .ma-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
@@ -184,10 +218,10 @@
     </div>
   </div>
   <div class="header-meta">
-    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$1.27T</span></div>
+    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$1.30T</span></div>
     <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Consumer Discretionary</span></div>
     <div class="meta-item"><span class="meta-label">Q2 2026 인도량</span><span class="meta-value">480,126대</span></div>
-    <div class="meta-item"><span class="meta-label">Forward PER</span><span class="meta-value">204x</span></div>
+    <div class="meta-item"><span class="meta-label">Forward PER</span><span class="meta-value">155.7x</span></div>
     <div class="meta-item"><span class="meta-label">GAAP EPS (TTM)</span><span class="meta-value">$1.08</span></div>
     <div class="meta-item"><span class="meta-label">2026 Capex 계획</span><span class="meta-value">$25B+</span></div>
   </div>
@@ -261,7 +295,7 @@
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">유럽 판매 +107% YoY 회복 · 브랜드 재건</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">Robotaxi 마이애미·달라스·오스틴 상용화 진행</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">Q2 OPM 1.4% · FCF -$1.1B — AI 투자비 부담</span>
-    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">Forward PER 168x — AI 시나리오 전제 극단 고평가</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">Forward PER 155.7x — AI 시나리오 전제 극단 고평가</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">2026 FCF 마이너스 예상 · Capex $25B 급증</span>
   </div>
 </div>
@@ -274,17 +308,90 @@
     <div class="chart-wrap" style="height:260px;"><canvas id="tslaRevChart"></canvas></div>
   </div>
   <div class="grid-3">
-    <div class="stat-box"><div class="stat-label">Q1 2026 매출</div><div class="stat-value up">$22.4B</div><div class="stat-sub">▲16% YoY · 적정</div></div>
-    <div class="stat-box"><div class="stat-label">Q1 2026 GM</div><div class="stat-value up">21.1%</div><div class="stat-sub">▲478bp YoY · 적정</div></div>
-    <div class="stat-box"><div class="stat-label">Q1 2026 OPM</div><div class="stat-value down">4.2%</div><div class="stat-sub">매우 낮음 · 낮음 단계</div></div>
-    <div class="stat-box"><div class="stat-label">Q1 2026 GAAP EPS</div><div class="stat-value">$0.13</div><div class="stat-sub">▲8% YoY · 낮음</div></div>
-    <div class="stat-box"><div class="stat-label">Q1 2026 Non-GAAP EPS</div><div class="stat-value up">$0.41</div><div class="stat-sub">▲56% YoY · 적정</div></div>
-    <div class="stat-box"><div class="stat-label">Q2 2026 인도량</div><div class="stat-value up">480,126대</div><div class="stat-sub">역대 최대</div></div>
-    <div class="stat-box"><div class="stat-label">Q2 2026 매출</div><div class="stat-value up">$28.24B</div><div class="stat-sub">▲26% YoY</div></div>
-    <div class="stat-box"><div class="stat-label">Q2 2026 GAAP EPS</div><div class="stat-value">$0.32</div><div class="stat-sub">순이익 $1.11B</div></div>
-    <div class="stat-box"><div class="stat-label">2026 Capex</div><div class="stat-value down">$25B+</div><div class="stat-sub">2025년 $8.5B의 3배</div></div>
+    <div class="stat-box"><div class="stat-label">Q1 2026 GAAP EPS</div><div class="stat-value">$0.13</div><div class="stat-sub">주당 가치(저점) · ▲8% YoY</div></div>
+    <div class="stat-box"><div class="stat-label">Q2 2026 GAAP EPS</div><div class="stat-value up">$0.32</div><div class="stat-sub">주당 가치(반등) · 순이익 $1.11B</div></div>
+    <div class="stat-box"><div class="stat-label">Q1 2026 Non-GAAP EPS</div><div class="stat-value up">$0.41</div><div class="stat-sub">조정 수익력 · ▲56% YoY</div></div>
+    <div class="stat-box"><div class="stat-label">Non-GAAP EPS (TTM)</div><div class="stat-value">$1.55</div><div class="stat-sub">조정 수익력 · Forward $2.11(FY26E)</div></div>
+    <div class="stat-box"><div class="stat-label">FCF (Q2 2026)</div><div class="stat-value down">-$1.1B</div><div class="stat-sub">현금창출력 · AI/Capex 투자로 적자전환</div></div>
+    <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value gold">10월 하순 예상</div><div class="stat-sub">일정 · Q3 2026</div></div>
   </div>
-  <div style="margin-top:12px;font-size:12px;color:var(--text3);">FCF 전망: 2026~2027 마이너스 예상</div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">재무 건전성 — 안정성·활동성 (Q2 2026 · 2026.06.30 기준)</div>
+
+    <div class="section-label"><span class="dot"></span>안정성 — 단기 지급능력·차입 의존도</div>
+    <div class="diag-summary">
+      <div class="icon">🩺</div>
+      <div>
+        <div class="title">종합 진단: 안정적</div>
+        <div class="sub">유동성·차입 의존도는 양호 — 다만 이자보상배율은 다른 빅테크 대비 얇은 편(Q2 영업이익이 크게 위축된 영향)</div>
+      </div>
+    </div>
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">194.1%</span><span class="diag-note">기준 150%↑</span></div>
+        <div class="diag-badge safe">✅ 안정</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">당좌비율</span><span class="diag-value">155.3%</span><span class="diag-note">기준 100%↑</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">차입금의존도</span><span class="diag-value">6.1%</span><span class="diag-note">기준 30%↓</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">이자보상배율</span><span class="diag-value">4.9x</span><span class="diag-note">기준 1x↑ · Q2 2026 분기 기준 — Q2 영업이익 급감으로 얇아짐</span></div>
+        <div class="diag-badge safe">✅ 안전</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">부채비율</span><span class="diag-value">70.2%</span><span class="diag-note">부채 $61.0B÷자기자본 $86.9B</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">총자산증가율</span><span class="diag-value">12.9%</span><span class="diag-note">FY25 $137.8B(전기 $122.1B)</span></div>
+        <div class="diag-badge info">ℹ️ 참고</div>
+      </div>
+    </div>
+
+    <div class="section-label"><span class="dot" style="background:var(--blue);"></span>활동성 — 회수·재고소진·지급 속도 (TTM 기준 · Q3'25~Q2'26)</div>
+    <div class="activity-grid">
+      <div class="act-card">
+        <div class="act-icon">💳</div>
+        <div><div class="act-label">매출채권 회전율·회전기간</div><div class="act-value">26.15회</div><div class="act-sub">14.0일 만에 현금화</div></div>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">📦</div>
+        <div><div class="act-label">재고자산 회전율·회전기간</div><div class="act-value">5.94회</div><div class="act-sub">61.5일 재고 보유</div></div>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">🧾</div>
+        <div><div class="act-label">매입채무 회전율·지급기간</div><div class="act-value">5.84회</div><div class="act-sub">62.5일 만에 지급</div></div>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">🔄</div>
+        <div><div class="act-label">영업순환주기</div><div class="act-value">75.5일</div><div class="act-sub">재고보유+매출채권 회전기간</div></div>
+      </div>
+    </div>
+    <div class="ccc-card">
+      <div class="ccc-head">
+        <div class="ccc-head-label">⏱️ 현금창출주기 (CCC)</div>
+        <div class="ccc-head-value">13.0일</div>
+      </div>
+      <div class="ccc-explain">재고를 사서 판매 대금을 회수하기까지 75.5일이 걸리는데, 그중 62.5일은 매입채무(외상)로 버티고 나머지 <strong style="color:#f0c040;">13.0일은 회사가 직접 현금으로 메워야</strong> 하는 기간이다.</div>
+      <div class="tl-bar-wrap">
+        <div class="tl-marker" style="left:82.8%; height:18px;"></div>
+        <div class="tl-marker-label" style="left:82.8%;">매입채무 지급 62.5일</div>
+        <div class="tl-bar">
+          <div class="tl-seg-inv" style="width:81.5%;">재고보유 61.5일</div>
+          <div class="tl-seg-ar" style="width:18.5%;">매출채권회수 14.0일</div>
+        </div>
+        <div class="tl-ccc-span" style="left:82.8%; width:17.2%;"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;font-size:11px;color:var(--text3);">유동비율·당좌비율·차입금의존도·부채비율 모두 기준치를 상회 — 재무구조 자체의 부실 위험은 낮다. 다만 이자보상배율 4.9x는 Q2 영업이익이 AI/Capex 투자 부담으로 크게 위축된 결과라, 수익성 회복 속도를 계속 지켜봐야 한다. CCC 13.0일은 자동차 업종치고는 짧은 편으로, 재고회전이 상대적으로 빠르다.</div>
+  </div>
 
   <div class="card" style="margin-top:16px;">
     <div class="card-title">핵심 성장 동력 — EV 회사인가, AI 회사인가</div>
@@ -306,16 +413,6 @@
 <div id="valuation" class="section">
   <div class="section-title">상대 투자지표 — TSLA의 밸류에이션은 전통 지표로 평가 불가</div>
 
-  <div class="card">
-    <div class="card-title">Per-Share 지표 (Q1 2026 기준 · 3.23B 주)</div>
-    <div class="per-share-grid">
-      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS · TTM</div><div class="ps-value">$1.08</div><div class="ps-sub">Q2~Q1 합산 · Trailing PER 290x</div><div style="margin-top:5px;"><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
-      <div class="ps-card"><div class="ps-icon">📊</div><div class="ps-label">Non-GAAP EPS · TTM</div><div class="ps-value">$1.55</div><div class="ps-sub">Forward EPS $2.11 (FY2026E)</div><div style="margin-top:5px;"><span class="stage-badge stage-4">4단계 높음</span></div></div>
-      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS · 주당순자산</div><div class="ps-value">$22.73</div><div class="ps-sub">Q1 2026 · 자기자본 $73.4B</div><div style="margin-top:5px;"><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
-      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 · 2025</div><div class="ps-value">$1.93</div><div class="ps-sub">2026 마이너스 전환 예상</div><div style="margin-top:5px;"><span class="stage-badge stage-1">1단계 매우낮음</span></div></div>
-    </div>
-    <div style="font-size:11px;color:var(--text3);margin-top:10px;">* GAAP PER 290x, Non-GAAP PER 254x, Forward PER 168x(FY2026E) — 어떤 기준을 써도 전통 밸류에이션 기준 극단적 고평가. 시장은 Robotaxi·Optimus 수익화 시나리오를 이미 상당 부분 반영.</div>
-  </div>
   <div class="info-box">
     <strong>핵심 전제:</strong> Tesla를 전통 자동차 기업(Toyota PER 10x)으로 보면 <strong>극단적 고평가</strong>. AI·로봇 플랫폼 기업(NVDA 수준)으로 보면 <strong>옵션가치 미반영 저평가</strong>. 투자자가 어떤 시나리오를 믿느냐에 따라 공정가치 $127~$500+ 분기.
   </div>
@@ -326,50 +423,54 @@
         <div class="val-header"><span class="val-name">PER (GAAP TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">304.4x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div>
         <div class="val-labels"><span class="val-low">저(10x)</span><span class="val-mid">적정(30x)</span><span class="val-high">고(100x)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">$328.58÷$1.08 · 자동차 평균 10x · AI기업 평균 30x · Forward PER(FY2026E) 186x — 어떤 기준도 정당화 불가, AI 시나리오 전제 시에만 성립</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">$328.58÷$1.08 · 자동차 평균 10x · AI기업 평균 30x · Forward PER(FY2026E) 155.7x — 어떤 기준도 정당화 불가, AI 시나리오 전제 시에만 성립</div>
       </div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">14.5x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">14.9x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저(1x)</span><span class="val-mid">적정(5x)</span><span class="val-high">고(20x)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">$328.58÷$22.73 · ROE 5.9% — 극히 낮음 · 자동차 기업 PBR 1~3x 대비 6배 고평가</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">$328.58÷$22.0 · ROE 4.9% — 극히 낮음 · 자동차 기업 PBR 1~3x 대비 6배 고평가</div>
       </div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">11.2x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">12.5x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저(0.5x)</span><span class="val-mid">적정(3x)</span><span class="val-high">고(15x)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">시총 $1.27T÷TTM $97.4B · OPM 4%인 기업에 PSR 13x는 소프트웨어 수준</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">시총 $1.30T÷TTM $103.6B · OPM 4%인 기업에 PSR 12.5x는 소프트웨어 수준</div>
       </div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">72.2x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
+        <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">88.5x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div>
         <div class="val-labels"><span class="val-low">저(5x)</span><span class="val-mid">적정(15x)</span><span class="val-high">고(50x)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV $1.22T÷TTM EBITDA $14.6B · 자동차 평균 7x 대비 11배 · Toyota 6x, GM 3x, BYD 20x 대비</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV $1.29T÷TTM EBITDA 약 $14.6B · 자동차 평균 7x 대비 13배 · Toyota 6x, GM 3x, BYD 20x 대비</div>
       </div>
       <div class="val-item">
-        <div class="val-header"><span class="val-name">PCR (FCF)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">170.1x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
+        <div class="val-header"><span class="val-name">PCR (FCF)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">185.4x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div>
         <div class="val-labels"><span class="val-low">저(20x)</span><span class="val-mid">적정(50x)</span><span class="val-high">고(100x)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">시총 $1.27T÷TTM FCF $7.0B · 2026년 대규모 Capex(공장 6곳·AI 인프라·Optimus)로 FCF가 전년 대비 급감하며 지표가 극단적으로 악화</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">시총 $1.30T÷TTM FCF 약 $7.0B · 2026년 대규모 Capex(공장 6곳·AI 인프라·Optimus)로 FCF가 전년 대비 급감하며 지표가 극단적으로 악화</div>
       </div>
     </div>
     <div class="card">
       <div class="card-title">자동차·AI 피어 EV/EBITDA 비교</div>
       <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:12px;font-size:12px;color:var(--text2);">TSLA의 EV/EBITDA 68.7x는 자동차 피어(Toyota 6.2x, GM 3.1x, BYD 20.4x) 대비 압도적으로 높고, AI 빅테크 피어(NVDA 27.6x, META 13.8x)와 비교해도 최고 수준.</div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text2);">TSLA의 EV/EBITDA 88.5x는 자동차 피어(Toyota 6.2x, GM 3.1x, BYD 20.4x) 대비 압도적으로 높고, AI 빅테크 피어(NVDA 27.6x, META 13.8x)와 비교해도 최고 수준.</div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-title">밸류에이션 5단계</div>
-    <div class="stage-grid">
-      <div class="stage-mini stage-1"><div class="stage-mini-num">1</div><div class="stage-mini-label">매우 저평가</div></div>
-      <div class="stage-mini stage-2"><div class="stage-mini-num">2</div><div class="stage-mini-label">저평가</div></div>
-      <div class="stage-mini stage-3"><div class="stage-mini-num">3</div><div class="stage-mini-label">적정</div></div>
-      <div class="stage-mini stage-4"><div class="stage-mini-num">4</div><div class="stage-mini-label">고평가</div><div style="font-size:10px;color:var(--red);background:rgba(231,76,60,0.15);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">PBR·PSR (TTM)</div></div>
-      <div class="stage-mini stage-5"><div class="stage-mini-num">5</div><div class="stage-mini-label">매우 고평가</div><div style="font-size:10px;color:var(--red);background:rgba(231,76,60,0.15);border-radius:3px;padding:2px 6px;display:inline-block;margin-top:5px;">PER (GAAP TTM)·EV/EBITDA·PCR (FCF)</div></div>
+    <div class="card-title">Per-Share 지표 (Q2 2026 기준 · 3.95B 주)</div>
+    <div class="per-share-grid">
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS · TTM</div><div class="ps-value">$1.08</div><div class="ps-sub">Q3'25~Q2'26 합산 · Trailing PER 304.4x</div><div style="margin-top:5px;"><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
+      <div class="ps-card"><div class="ps-icon">📊</div><div class="ps-label">Non-GAAP EPS · TTM</div><div class="ps-value">$1.55</div><div class="ps-sub">Forward EPS $2.11 (FY2026E)</div><div style="margin-top:5px;"><span class="stage-badge stage-4">4단계 높음</span></div></div>
+      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS · 주당순자산</div><div class="ps-value">$22.0</div><div class="ps-sub">Q2 2026 · 자기자본 $86.9B</div><div style="margin-top:5px;"><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
+      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 · 2025</div><div class="ps-value">$1.93</div><div class="ps-sub">2026 마이너스 전환 예상</div><div style="margin-top:5px;"><span class="stage-badge stage-1">1단계 매우낮음</span></div></div>
     </div>
-    <div style="margin-top:10px;font-size:11px;color:var(--text3);">* 5개 지표 전부 4~5단계 — 1·2·3단계에 해당하는 지표가 하나도 없음. 순수 이익·현금흐름 기준으로는 어떤 전통적 잣대로도 정당화되지 않는 밸류에이션이며, AI/로보택시 등 미래 시나리오를 전제해야만 성립하는 구조.</div>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">* GAAP PER 304.4x, Non-GAAP PER 212.0x, Forward PER 155.7x(FY2026E) — 어떤 기준을 써도 전통 밸류에이션 기준 극단적 고평가. 시장은 Robotaxi·Optimus 수익화 시나리오를 이미 상당 부분 반영.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">종합 밸류에이션 — 전 지표 4~5단계 · 역대 10종목 중 전통 밸류에이션 최고 부담</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;">TSLA는 전통 재무 지표로는 평가 불가. <strong style="color:var(--text);">PER 304.4x, EV/EBITDA 88.5x — 자동차 기업으론 정당화 불가. AI·로봇 기업으로 봐야만 성립하는 가격.</strong> 5개 지표 전부 4~5단계 — 1·2·3단계에 해당하는 지표가 하나도 없다. 순수 이익·현금흐름 기준으로는 어떤 전통적 잣대로도 정당화되지 않는 밸류에이션이며, AI/로보택시 등 미래 시나리오를 전제해야만 성립하는 구조. 공정가치 $127(Bear)~$700+(Bull) 스펙트럼 — 어느 시나리오를 믿느냐의 문제. 불확실성이 가장 높은 종목.</div>
   </div>
 
   <div class="card">
@@ -386,11 +487,6 @@
       <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — Robotaxi + Optimus 완전 수익화 · Wedbush $500</div>
       <div style="font-size:12px;color:var(--text2);">Robotaxi TAM $10T + Optimus 생산 1억대 + FSD 글로벌 라이선스 = 공정가치 <strong style="color:var(--green);">$500~700+/주</strong> (UBS 목표 $442, Wedbush $500)</div>
     </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">종합 밸류에이션 — 전 지표 4~5단계 · 역대 10종목 중 전통 밸류에이션 최고 부담</div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.6;">TSLA는 전통 재무 지표로는 평가 불가. <strong style="color:var(--text);">PER 290x, EV/EBITDA 69x — 자동차 기업으론 정당화 불가. AI·로봇 기업으로 봐야만 성립하는 가격.</strong> 공정가치 $127(Bear)~$700+(Bull) 스펙트럼 — 어느 시나리오를 믿느냐의 문제. 불확실성이 가장 높은 종목.</div>
   </div>
 </div>
 
@@ -497,7 +593,7 @@
     </div>
     <div class="bb-box">
       <div class="bb-title bb-bear">🐻 Bear 요인</div>
-      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>PER 290x · EV/EBITDA 69x — 전 지표 5단계:</strong> 극단 고평가.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>PER 304.4x · EV/EBITDA 88.5x — 전 지표 5단계:</strong> 극단 고평가.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>2026 FCF 마이너스 예상 · Capex $25B:</strong> 현금 소진.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>OPM 4.2% — 자동차 기업 수익성 최저:</strong> 마진 취약.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>Musk 리스크 — 경영 집중도 분산:</strong> CEO 리스크.</span></div>
@@ -547,7 +643,7 @@
     <div class="zone-list">
       <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:var(--red)">MA60&gt;MA120&gt;MA20&gt;MA5&gt;현재가 · 전 이평선 하회 · 기술적 약세</span></div>
       <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:#f0c040;">FSD 유료 128만명(+51%)·유럽 판매 +107% 성장, 다만 OPM 4.2%로 자동차 기업 중 최저</span></div>
-      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:var(--red);">PER 290x·EV/EBITDA 69x — 전 지표 최상위 고평가 구간</span></div>
+      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:var(--red);">PER 304.4x·EV/EBITDA 88.5x — 전 지표 최상위 고평가 구간</span></div>
       <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:var(--red);">Musk 경영 집중도 분산 리스크, 애널리스트 의견 극단 양분(매수 47%·매도 13%)</span></div>
       <div class="zone-item"><span class="zone-label">📰 시계열 뉴스</span><span class="zone-val" style="color:#f0c040;">7/22 Q2 2026 실적 발표 임박 — Robotaxi·FSD 진행 상황이 다음 방향성 결정</span></div>
     </div>
@@ -784,24 +880,38 @@ const TSLA_MA120 = [298.38,298.16,298.03,297.87,297.74,297.73,297.73,298.0,298.3
 function renderFundChart() {
   const ctx = document.getElementById('tslaRevChart');
   if (!ctx || charts['fund']) return;
+  const revenue=[25.2,25.7,19.3,22.5,28.1,24.9,22.4,28.2];
+  const gm=[19.8,16.3,16.3,17.2,18.0,20.1,21.1,16.8];
+  const opm=[10.8,6.2,2.1,4.1,5.8,5.7,4.2,1.4];
+  const y2min=0, y2max=28;
   charts['fund'] = new Chart(ctx,{
     data:{
       labels:['Q3 \'24','Q4 \'24','Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26','Q2 \'26'],
       datasets:[
-        {type:'bar',label:'매출($B)',data:[25.2,25.7,19.3,22.5,28.1,24.9,22.4,28.2],backgroundColor:'#E31937',borderRadius:4,yAxisID:'y'},
-        {type:'line',label:'GM%',data:[19.8,16.3,16.3,17.2,18.0,20.1,21.1,16.8],borderColor:'#2ecc71',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'},
-        {type:'line',label:'OPM%',data:[10.8,6.2,2.1,4.1,5.8,5.7,4.2,1.4],borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:3,borderWidth:2,fill:false,yAxisID:'y2',borderDash:[4,4]}
+        {type:'bar',label:'매출($B)',data:revenue.map(()=>0),backgroundColor:'#E31937',borderRadius:4,yAxisID:'y'},
+        {type:'line',label:'GM%',data:gm.map(()=>y2min),borderColor:'#2ecc71',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'},
+        {type:'line',label:'OPM%',data:opm.map(()=>y2min),borderColor:'#f0c040',backgroundColor:'transparent',tension:.35,pointRadius:3,borderWidth:2,fill:false,yAxisID:'y2',borderDash:[4,4]}
       ]
     },
     options:{
       responsive:true,maintainAspectRatio:false,
+      animation:false,
       plugins:{legend:{labels:{color:'#9aa0b8',font:{size:10}}}},
       scales:{
         x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10}}},
         y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}},
-        y2:{position:'right',min:0,max:28,grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'%'}}
+        y2:{position:'right',min:y2min,max:y2max,grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'%'}}
       }
     }
+  });
+  requestAnimationFrame(()=>{
+    const c=charts['fund'];
+    if (!c) return;
+    c.options.animation={duration:900,easing:'easeOutQuart'};
+    c.data.datasets[0].data=revenue;
+    c.data.datasets[1].data=gm;
+    c.data.datasets[2].data=opm;
+    c.update();
   });
 }
 
@@ -814,7 +924,7 @@ function renderPeerChart() {
       labels:['Toyota','GM','BYD','TSLA','NVDA','META'],
       datasets:[{
         label:'EV/EBITDA',
-        data:[6.2,3.1,20.4,83.6,27.6,13.8],
+        data:[6.2,3.1,20.4,88.5,27.6,13.8],
         backgroundColor:['rgba(154,160,184,0.4)','rgba(154,160,184,0.4)','rgba(154,160,184,0.4)','#E31937','rgba(154,160,184,0.4)','rgba(154,160,184,0.4)'],
         borderRadius:4,borderSkipped:false
       }]
