@@ -128,6 +128,12 @@
     margin-bottom: 16px;
   }
   .card-title { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; font-weight: 600; }
+  .card-title.collapsible { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; }
+  .card-title.collapsible:hover { color: var(--text2); }
+  .card-title.collapsible .chevron { font-size: 10px; color: var(--text3); transition: transform 0.25s ease; flex-shrink: 0; }
+  .card-title.collapsible.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
   .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
@@ -480,7 +486,8 @@
   </div>
 
   <div class="card" style="margin-top:16px;">
-    <div class="card-title">재무 건전성 — 안정성·활동성 (Q1 FY27 · 2026.04.26 기준)</div>
+    <div class="card-title collapsible" onclick="toggleCollapsible(this)"><span>재무 건전성 — 안정성·활동성 (Q1 FY27 · 2026.04.26 기준)</span><span class="chevron">▾</span></div>
+    <div class="collapsible-body">
 
     <div class="section-label"><span class="dot"></span>안정성 — 단기 지급능력·차입 의존도</div>
     <div class="diag-summary">
@@ -554,6 +561,7 @@
     </div>
 
     <div style="margin-top:14px;font-size:11px;color:var(--text3);">유동비율·당좌비율·차입금의존도·이자보상배율 모두 기준치를 큰 폭으로 상회 — 재무구조 자체의 부실 위험은 사실상 없다. 다만 CCC 102일은 반도체 제조·재고 특성상 매출채권과 재고 회수에 3개월 이상 현금이 묶인다는 뜻으로, 수요 급변 시 재고자산 감액 리스크를 함께 봐야 한다.</div>
+    </div>
   </div>
 
   <div class="card">
@@ -959,6 +967,27 @@
 </div>
 
 <script>
+// ─── COLLAPSIBLE CARDS ───
+function toggleCollapsible(header) {
+  const body = header.nextElementSibling;
+  const collapsing = !header.classList.contains('collapsed');
+  if (collapsing) {
+    body.style.maxHeight = body.scrollHeight + 'px';
+    requestAnimationFrame(() => {
+      header.classList.add('collapsed');
+      body.classList.add('collapsed');
+    });
+  } else {
+    header.classList.remove('collapsed');
+    body.classList.remove('collapsed');
+    body.style.maxHeight = body.scrollHeight + 'px';
+    body.addEventListener('transitionend', function clear() {
+      body.style.maxHeight = '';
+      body.removeEventListener('transitionend', clear);
+    });
+  }
+}
+
 // ─── NAV ───
 function showSection(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
