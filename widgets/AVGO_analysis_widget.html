@@ -70,8 +70,11 @@
   .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
   .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
   .tag-current { background: rgba(204,9,47,0.2); color: var(--accent2); }
-  .val-item { margin-bottom: 18px; }
-  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .val-item { margin-bottom: 18px; padding: 8px; margin-left: -8px; margin-right: -8px; border-radius: 8px; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; }
+  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; cursor: pointer; }
+  .val-item:hover { background: rgba(255,255,255,0.03); }
+  .val-item.selected { background: rgba(204,9,47,0.08); border-color: rgba(204,9,47,0.35); }
+  .val-item.selected .val-name::after { content: '▸ 비교 보기'; font-size: 9.5px; font-weight: 600; color: var(--accent2); margin-left: 8px; vertical-align: middle; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
   .val-track { height: 8px; background: var(--bg3); border-radius: 4px; position: relative; overflow: hidden; }
@@ -114,6 +117,45 @@
   .driver-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent3); color: var(--accent2); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .driver-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
   .driver-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(204,9,47,0.12); border: 1px solid rgba(204,9,47,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(204,9,47,0.22); border-color: rgba(204,9,47,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
+  .section-label { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:12px; color:var(--text2); margin-top:2px; line-height:1.4; }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 22px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; }
+  .diag-label { font-size:13px; color:var(--text); font-weight:600; min-width:96px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:11.5px; color:var(--text2); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .diag-badge.watch { background:rgba(240,192,64,0.16); color:var(--gold); }
+  .diag-summary.watch { background: linear-gradient(90deg, rgba(240,192,64,0.14), rgba(240,192,64,0.03)); border-color: rgba(240,192,64,0.35); }
+  .diag-summary.watch .title { color: var(--gold); }
+  .ccc-card { background: var(--bg3); border-radius: 8px; padding: 16px 18px 12px; }
+  .ccc-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 6px; }
+  .ccc-head-label { font-size:12.5px; color:var(--text); font-weight:700; }
+  .ccc-head-value { font-size:18px; font-weight:800; color:var(--gold); }
+  .ccc-explain { font-size: 11.5px; color: var(--text2); line-height: 1.6; margin-bottom: 22px; }
+  .tl-bar-wrap { position: relative; margin: 40px 4px 8px; }
+  .tl-bar { height: 18px; border-radius: 5px; overflow: hidden; display: flex; }
+  .tl-seg-inv { background: linear-gradient(90deg,#3498db,#2980b9); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
+  .tl-seg-ar { background: linear-gradient(90deg,#2ecc71,#27ae60); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#0f1117; }
+  .tl-marker { position: absolute; top: -18px; width: 2px; background: var(--gold); }
+  .tl-marker-label { position: absolute; top: -32px; transform: translateX(-50%); font-size: 10.5px; font-weight: 700; color: var(--gold); white-space: nowrap; }
+  .tl-ccc-span { position: absolute; height: 3px; background: rgba(240,192,64,0.6); border-radius: 2px; top: 24px; }
   .per-share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
   .ps-card { background: var(--bg3); border-radius: 8px; padding: 16px; text-align: center; }
   .ps-icon { font-size: 22px; margin-bottom: 6px; }
@@ -193,8 +235,8 @@
 </div>
 
 <div class="box-key">
-  <div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 역설 <span style="color:#f0c040;">(적정)</span> — AI XPU +143% 성장 vs Q2 직후 -13% 급락</div>
-  <div style="font-size:12px;color:var(--text2);line-height:1.6;">Q2 FY26: AI 반도체 $10.8B(▲143%), Q3 가이던스 $29.4B(▲84%) — 역대 최대. 그러나 연간 AI 전망 불변 발표로 하루 -13% 급락. XPU 고객 Google·Meta·ByteDance·Anthropic·Fujitsu·OpenAI 6개사 확보. Non-GAAP EBITDA 69% — 소프트웨어 수준 마진. PEG 0.57로 성장 대비 준수한 밸류에이션이 핵심 논리.</div>
+  <div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 역설 <span style="color:#e67e22;">(고평가)</span> — AI XPU +143% 성장 vs Q2 직후 -13% 급락</div>
+  <div style="font-size:12px;color:var(--text2);line-height:1.6;">Q2 FY26: AI 반도체 $10.8B(▲143%), Q3 가이던스 $29.4B(▲84%) — 역대 최대. 그러나 연간 AI 전망 불변 발표로 하루 -13% 급락. XPU 고객 Google·Meta·ByteDance·Anthropic·Fujitsu·OpenAI 6개사 확보. Non-GAAP EBITDA 69% — 소프트웨어 수준 마진. 반도체+SW 가중평균 앵커 대비로는 5개 지표 중 3개가 4단계(높음) — PEG 0.57(성장률 대비)이 프리미엄을 일부 정당화하나 밸류에이션 부담은 실재한다.</div>
 </div>
 
 <div class="nav">
@@ -268,16 +310,116 @@
     <div class="chart-wrap" style="height:260px;"><canvas id="avgoRevChart"></canvas></div>
   </div>
   <div class="grid-3">
-    <div class="stat-box"><div class="stat-label">총매출 (Q2 FY26)</div><div class="stat-value up">$22.2B</div><div class="stat-sub">▲48% YoY</div></div>
-    <div class="stat-box"><div class="stat-label">AI 반도체 (Q2 FY26)</div><div class="stat-value up">$10.8B</div><div class="stat-sub">▲143% YoY</div></div>
-    <div class="stat-box"><div class="stat-label">FCF (Q2 FY26)</div><div class="stat-value up">$10.3B</div><div class="stat-sub">FCF 마진 46%</div></div>
-    <div class="stat-box"><div class="stat-label">Adj. EBITDA (Q2 FY26)</div><div class="stat-value up">$15.2B</div><div class="stat-sub">69% 마진, 역대최고</div></div>
-    <div class="stat-box"><div class="stat-label">Non-GAAP EPS (Q2 FY26)</div><div class="stat-value up">$2.44</div><div class="stat-sub">컨센서스 $2.32 상회</div></div>
-    <div class="stat-box"><div class="stat-label">AI 백로그</div><div class="stat-value gold">$73B</div><div class="stat-sub">2025~2027 예약</div></div>
-    <div class="stat-box"><div class="stat-label">GAAP 영업이익 (Q2 FY26)</div><div class="stat-value up">$10.79B</div><div class="stat-sub">마진 48.6% · Non-GAAP $14.9B</div></div>
-    <div class="stat-box"><div class="stat-label">GAAP 순이익 (Q2 FY26)</div><div class="stat-value up">$9.31B</div><div class="stat-sub">Non-GAAP $12.07B</div></div>
+    <div class="stat-box"><div class="stat-label">순이익률 (Q2 FY26)</div><div class="stat-value up">42.0%</div><div class="stat-sub">GAAP 기준 · 순이익 $9.31B</div></div>
+    <div class="stat-box"><div class="stat-label">FCF (Q2 FY26)</div><div class="stat-value up">$10.3B</div><div class="stat-sub">현금창출력 · FCF 마진 46%</div></div>
+    <div class="stat-box"><div class="stat-label">Capex (H1 FY26)</div><div class="stat-value">$481M</div><div class="stat-sub">미래 재투자 · 매출의 1.2%(팹리스+SW)</div></div>
+    <div class="stat-box"><div class="stat-label">현금 및 단기투자</div><div class="stat-value">$19.6B</div><div class="stat-sub">2026.05.03 기준</div></div>
+    <div class="stat-box"><div class="stat-label">GAAP EPS (희석, Q2 FY26)</div><div class="stat-value up">$1.91</div><div class="stat-sub">Non-GAAP $2.44</div></div>
     <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value gold">9월초 예상</div><div class="stat-sub">Q3 FY2026</div></div>
   </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title"><span>재무 건전성 — 안정성·활동성 (안정성: Q2 FY26·2026.05.03 기준 / 활동성: FY2025 연간 기준)</span></div>
+
+    <div class="section-label"><span class="dot"></span>안정성 — 단기 지급능력·차입 의존도</div>
+    <div class="diag-summary watch">
+      <div class="icon">🩺</div>
+      <div>
+        <div class="title">종합 진단: 유동성 매우 안정적, 차입금의존도는 기준 소폭 초과</div>
+        <div class="sub">유동비율 223.8%·이자보상배율 13.9x로 단기 부실 위험은 없으나, VMware 인수 관련 차입금의존도 36.2%가 기준(30%)을 소폭 초과</div>
+      </div>
+    </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>안정성 상세 — 개별 비율 6개</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">223.8%</span><span class="diag-note">기준 150%↑</span></div>
+        <div class="diag-badge safe">✅ 안정</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">당좌비율</span><span class="diag-value">200.9%</span><span class="diag-note">기준 100%↑</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">차입금의존도</span><span class="diag-value">36.2%</span><span class="diag-note">기준 30%↓</span></div>
+        <div class="diag-badge watch">⚠️ 기준 초과</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">이자보상배율</span><span class="diag-value">13.9x</span><span class="diag-note">기준 1x↑ · Q2 FY26 분기 기준</span></div>
+        <div class="diag-badge safe">✅ 매우안전</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">부채비율</span><span class="diag-value">104.3%</span><span class="diag-note">부채 $91.5B÷자기자본 $87.7B · VMware 인수부채 포함</span></div>
+        <div class="diag-badge info">ℹ️ 참고</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">총자산증가율</span><span class="diag-value">3.3%</span><span class="diag-note">FY25 $171.1B(전기 $165.6B)</span></div>
+        <div class="diag-badge info">ℹ️ 참고</div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">유동비율·당좌비율·이자보상배율은 기준치를 큰 폭으로 상회해 단기 부실 위험은 없다. 다만 VMware 인수($69B, 2023) 관련 장기차입금이 커 차입금의존도가 30% 기준을 소폭 넘는다 — 이자보상배율(13.9x)이 충분히 높아 당장의 상환 부담으로 보기는 어렵다.</div>
+    </div>
+
+    <div class="section-label" style="margin-top:14px;"><span class="dot" style="background:var(--blue);"></span>활동성 — 회수·재고소진·지급 속도 (FY2025 연간 기준)</div>
+    <div class="diag-summary">
+      <div class="icon">🔄</div>
+      <div>
+        <div class="title">종합 진단: 회전 다소 둔화 — 매출채권 회수 지연이 주된 원인</div>
+        <div class="sub">CCC 40.9일(FY2024 34.1일 대비 +6.8일) — 매출채권 회전율 -18.9%가 주된 원인, 재고·매입채무는 거의 안정적</div>
+      </div>
+    </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>활동성 상세 — 개별 비율·CCC 그래프</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">매출채권 회전율</span><span class="diag-value">11.05회</span><span class="diag-note">33.0일 · FY24 13.63회(26.8일)</span></div>
+        <div class="diag-badge watch">🟡 회수 지연</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">재고자산 회전율</span><span class="diag-value">10.22회</span><span class="diag-note">35.7일 · FY24 10.42회(35.0일)</span></div>
+        <div class="diag-badge info">→ 거의 안정적</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">매입채무 회전율</span><span class="diag-value">13.10회</span><span class="diag-note">27.9일 · FY24 13.18회(27.7일)</span></div>
+        <div class="diag-badge info">ℹ️ 거의 안정적</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">영업순환주기</span><span class="diag-value">68.7일</span><span class="diag-note">재고+매출채권 · FY24 61.8일</span></div>
+        <div class="diag-badge info">→ 소폭 확장</div>
+      </div>
+    </div>
+    <div class="ccc-card">
+      <div class="ccc-head">
+        <div class="ccc-head-label">⏱️ 현금창출주기 (CCC)</div>
+        <div class="ccc-head-value">40.9일</div>
+      </div>
+      <div class="ccc-explain">재고를 사서 판매 대금을 회수하기까지 68.7일이 걸리는데, 그중 27.9일은 매입채무(외상)로 버티고 나머지 <strong style="color:var(--gold);">40.9일은 회사가 직접 현금으로 메워야</strong> 하는 기간이다. FY2024(34.1일) 대비 6.8일 늘어난 것은 대부분 매출채권 회수 지연(+6.2일) 때문이며, 재고·매입채무 변화는 미미하다.</div>
+      <div class="tl-bar-wrap">
+        <div class="tl-marker" style="left:40.5%; height:18px;"></div>
+        <div class="tl-marker-label" style="left:40.5%;">매입채무 지급 27.9일</div>
+        <div class="tl-bar">
+          <div class="tl-seg-inv" style="width:52.0%;">재고보유 35.7일</div>
+          <div class="tl-seg-ar" style="width:48.0%;">매출채권회수 33.0일</div>
+        </div>
+        <div class="tl-ccc-span" style="left:40.5%; width:59.5%;"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">매출채권 회전율만 유의미하게 둔화(-18.9%)됐고 재고·매입채무는 거의 변화가 없다 — VMware 통합 이후 매출 구성이 반도체+SW로 바뀌면서 청구·수금 주기가 다소 길어졌을 가능성이 있다. NVDA 사례(-31.6%/+33.7%) 대비로는 완만한 둔화라 아직 경계 수준은 아니다.</div>
+    </div>
+  </div>
+
   <div class="card" style="margin-top:16px;">
     <div class="card-title">핵심 성장 동력 3가지</div>
     <div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">AI XPU — 폭발 성장</div><div class="driver-desc">Q2 $10.8B ▲143%. Google·Meta·ByteDance·Anthropic·Fujitsu·OpenAI. Meta 2027 1GW → $12~15B.</div></div></div>
@@ -285,12 +427,12 @@
     <div class="driver-item"><div class="driver-num">3</div><div><div class="driver-title">VMware — SW 고마진</div><div class="driver-desc">$69B 인수 → 완전 통합. 분기 ~$6.5B 안정 수익. OPM 60%+ 초고마진. 구독 전환 완료·안정화.</div></div></div>
   </div>
   <div class="card">
-    <div class="card-title">핵심 투자 논리 <span style="color:#f0c040;">(적정)</span></div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.7;">NVDA와 달리 범용 GPU가 아닌 고객 맞춤형 XPU 설계 → 고객 이탈 불가 구조. 각 XPU 고객은 3~5년 반복 수익 확보. 2027 목표: Meta 1GW($12~15B) + OpenAI XPU 대규모 배포 → 연 매출 $100B 돌파 가시권. GAAP PER 69.1x는 M&A 상각 비용 왜곡 — Non-GAAP 기준 50.9x(Forward 37.7x) · PEG 0.57 = NVDA(PEG 0.49)보다는 다소 비싸지만 여전히 성장 대비 준수한 수준.</div>
+    <div class="card-title">핵심 투자 논리 <span style="color:#e67e22;">(고평가)</span></div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.7;">NVDA와 달리 범용 GPU가 아닌 고객 맞춤형 XPU 설계 → 고객 이탈 불가 구조. 각 XPU 고객은 3~5년 반복 수익 확보. 2027 목표: Meta 1GW($12~15B) + OpenAI XPU 대규모 배포 → 연 매출 $100B 돌파 가시권. GAAP PER 69.1x는 M&A 상각 비용 왜곡 — Non-GAAP 기준 50.9x(Forward 37.7x) · PEG 0.57 = NVDA(PEG 0.49)보다는 다소 비싸지만 여전히 성장 대비 준수한 수준. 다만 반도체+SW 가중평균 앵커 기준으로는 PBR·PSR·PCR 3개 지표가 4단계(높음)로, 절대 밸류에이션 부담은 실재한다.</div>
   </div>
   <div class="card">
     <div class="card-title">다음 실적 체크포인트 — 2026년 9월 초 Q3 FY2026</div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.8;">① AI 반도체 매출이 Q2 $10.8B(+143%)의 급성장세를 유지하는지 → ② Q3 가이던스 $29.4B(+84%)를 충족하는지 → ③ Meta 1GW XPU 배포($12~15B)·OpenAI 수주가 실제 매출로 인식되기 시작하는지 → ④ XPU 고객 6개사 락인 구조에 추가 고객사가 확보되는지 확인.</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.8;">① AI 반도체 매출이 Q2 $10.8B(+143%)의 급성장세를 유지하는지<br>② Q3 가이던스 $29.4B(+84%)를 충족하는지<br>③ Meta 1GW XPU 배포($12~15B)·OpenAI 수주가 실제 매출로 인식되기 시작하는지<br>④ XPU 고객 6개사 락인 구조에 추가 고객사가 확보되는지 확인.</div>
   </div>
 </div>
 
@@ -300,41 +442,37 @@
   <div class="grid-2">
     <div class="card">
       <div class="card-title">멀티플 5단계 평가</div>
-      <div class="val-item">
+      <div style="font-size:10.5px;color:var(--text3);line-height:1.5;margin:-4px 0 14px;">※ 핵심 앵커 = AVGO 자체 10년 중간값 + 반도체·SW 사업비중(Q2 FY26 매출 기준 반도체 68%·인프라SW 32%) 가중평균 피어[반도체 MRVL, SW ORCL·IBM 평균]. 단, AVGO 자체 10년 중간값은 VMware 인수($69B, 2023) 이전 기간이 대부분이라 현재의 반도체+SW 혼합 구조와는 사업 구성이 달랐던 시기를 포함하는 참고용 장기 앵커임.</div>
+      <div class="val-item" data-metric="per" onclick="selectMultiple('per')">
         <div class="val-header"><span class="val-name">PER (GAAP)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">69.1x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
-        <div class="val-labels"><span class="val-low">저 20x</span><span class="val-mid">적정 50x</span><span class="val-high">고 120x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">VMware 상각 포함. Non-GAAP PER: $427.76÷$8.41(TTM) = 50.9x · Forward(FY26E EPS $11.35) 37.7x · PEG 0.57</div>
+        <div class="val-labels"><span class="val-low">저 20x</span><span class="val-mid">적정 51x</span><span class="val-high">고 120x</span></div>
       </div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">24.0x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
-        <div class="val-labels"><span class="val-low">저 5x</span><span class="val-mid">적정 20x</span><span class="val-high">고 60x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">$427.76÷$17.98(BPS) · 자기자본 $88B · Goodwill $98B 포함 · ROE 37%</div>
+      <div class="val-item" data-metric="pbr" onclick="selectMultiple('pbr')">
+        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">24.0x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-labels"><span class="val-low">저 5x</span><span class="val-mid">적정 9x</span><span class="val-high">고 60x</span></div>
       </div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">27.0x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
-        <div class="val-labels"><span class="val-low">저 5x</span><span class="val-mid">적정 20x</span><span class="val-high">고 50x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">시총 $2.04T÷TTM $75.5B · AI+SW 혼합 50%+ 마진으로 높은 PSR 정당화</div>
+      <div class="val-item" data-metric="psr" onclick="selectMultiple('psr')">
+        <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">27.0x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-labels"><span class="val-low">저 5x</span><span class="val-mid">적정 12x</span><span class="val-high">고 50x</span></div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="pcr" onclick="selectMultiple('pcr')">
         <div class="val-header"><span class="val-name">PCR (FCF)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">58.6x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
-        <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 35x</span><span class="val-high">고 80x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">FCF 마진 46% · $1 수익에 $1.5의 성장 자금 재투자</div>
+        <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 18x</span><span class="val-high">고 80x</span></div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="evebitda" onclick="selectMultiple('evebitda')">
         <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">49.5x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
-        <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 35x</span><span class="val-high">고 80x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV $2.08T÷TTM EBITDA $42B. Adj.EBITDA 기준: EV÷$47.7B = 43.6x · FY26E 성장률 66% 고려 시 준수</div>
+        <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 37x</span><span class="val-high">고 80x</span></div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title">빅테크+반도체 Non-GAAP PER 비교</div>
-      <div class="chart-wrap" style="height:270px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;">AVGO Non-GAAP 50.9x는 5개 중 가장 높아 AAPL(37.3x)·NVDA(31.3x)·GOOGL(27.8x)·MSFT(23.2x) 모두보다 비싸다. GAAP PER 69.1x보다는 낮지만, M&A 무형자산 상각을 걷어내도 절대적으로 저렴하다고 보기는 어렵다 — 프리미엄은 AI XPU 고성장에 대한 베팅으로 봐야 한다.</div>
+      <div class="card-title"><span id="multipleCompareTitle">PER 비교 — AI 반도체·커스텀 실리콘 동종업계 기준</span></div>
+      <div class="chart-wrap" style="height:270px;"><canvas id="multipleChart"></canvas></div>
+      <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText"></div>
     </div>
   </div>
   
@@ -352,8 +490,8 @@
     <strong>⚠ AVGO 밸류에이션 주의:</strong> VMware 인수 무형자산 상각($2.2B/분기)으로 GAAP EPS·PER이 왜곡됨 — Non-GAAP 기준(Forward PER 37.7x, PEG 0.57)이 더 실질적인 지표이긴 하나, 이 기준으로도 저렴한 편은 아니며 프리미엄은 AI 반도체 고성장에 대한 베팅으로 봐야 함.
   </div>
   <div class="card">
-    <div class="card-title">종합 밸류에이션 — GAAP·Non-GAAP 모두 3단계(적정) · PEG 0.57</div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.6;">GAAP 기준 5개 지표 중 4개(PER·PBR·PSR·EV/EBITDA)가 3단계 적정, PCR만 4단계 — VMware 상각($2.2B/분기)이 GAAP EPS를 짓누르긴 하지만 "GAAP은 다 고평가"라는 것은 아니다. Non-GAAP 기준 Forward PER 37.7x·PEG 0.57 = FY26E 성장률 66% 대비 NVDA(PEG 0.49)보다는 다소 비싸지만 여전히 준수한 수준. 극단적 저평가는 아니고, 적정~다소 프리미엄 구간의 고성장주로 보는 게 정확하다. Q3 가이던스 $29.4B(▲84%) 시현 시 PER 추가 하락 여지.</div>
+    <div class="card-title">종합 밸류에이션 — 5개 지표 중 3개 4단계(높음) · PEG 0.57</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;">반도체+SW 가중평균 앵커 기준 PER 69.1x·EV/EBITDA 49.5x는 3단계 적정이지만, PBR 24.0x·PSR 27.0x·PCR 58.6x는 4단계 높음 — 자산·매출·현금흐름 기준 멀티플이 이익 기준보다 부담이 크다. VMware 상각($2.2B/분기)이 GAAP EPS를 짓누르긴 하지만 "GAAP만 비싸다"는 것은 아니다. Non-GAAP 기준 Forward PER 37.7x·PEG 0.57 = FY26E 성장률 66% 대비 NVDA(PEG 0.49)보다는 다소 비싸지만 성장 대비로는 준수한 수준. 극단적 고평가까지는 아니나, 절대 밸류에이션 부담은 실재하는 고성장주로 보는 게 정확하다. Q3 가이던스 $29.4B(▲84%) 시현 시 배수 부담 완화 여지.</div>
   </div>
 
   <div class="card">
@@ -481,7 +619,7 @@
     <div class="zone-list">
       <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:var(--red)">MA60&gt;MA20&gt;MA5&gt;MA120&gt;현재가 · 전 이평선 하회 · 기술적 약세</span></div>
       <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">AI 반도체 +143%·Q3 가이던스 +84% 역대최대, EBITDA 69%</span></div>
-      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:#f0c040;">GAAP PER 69x·Non-GAAP 50.9x 모두 부담, PEG 0.57은 성장 대비 준수한 수준</span></div>
+      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:#e67e22;">5개 지표 중 3개(PBR·PSR·PCR) 4단계 높음, PEG 0.57은 성장 대비 준수한 수준</span></div>
       <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:var(--green);">XPU 6개사 락인, 애널리스트 48명 中 44명 매수 (Strong Buy)</span></div>
       <div class="zone-item"><span class="zone-label">📰 시계열 뉴스</span><span class="zone-val" style="color:var(--red);">연간 AI 전망 불변 → -13% 급락, 고객 집중·VMware 부채 $65B</span></div>
     </div>
@@ -504,6 +642,32 @@
 </div>
 
 <script>
+function toggleCollapsible(header) {
+  const body = header.nextElementSibling;
+  const hintText = header.querySelector('.toggle-hint-text');
+  const expandedLabel = header.classList.contains('detail-toggle') ? '상세 숨기기' : '접기';
+  const collapsedLabel = header.classList.contains('detail-toggle') ? '상세 보기' : '펼치기';
+  const collapsing = !header.classList.contains('collapsed');
+  if (collapsing) {
+    body.style.maxHeight = body.scrollHeight + 'px';
+    requestAnimationFrame(() => {
+      header.classList.add('collapsed');
+      body.classList.add('collapsed');
+      header.setAttribute('aria-expanded', 'false');
+      if (hintText) hintText.textContent = collapsedLabel;
+    });
+  } else {
+    header.classList.remove('collapsed');
+    body.classList.remove('collapsed');
+    body.style.maxHeight = body.scrollHeight + 'px';
+    header.setAttribute('aria-expanded', 'true');
+    if (hintText) hintText.textContent = expandedLabel;
+    body.addEventListener('transitionend', function clear() {
+      body.style.maxHeight = '';
+      body.removeEventListener('transitionend', clear);
+    });
+  }
+}
 function showSection(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -738,30 +902,71 @@ function renderFundChart() {
     }
   });
 }
-function renderPeerChart() {
-  const ctx = document.getElementById('peerChart');
-  if (!ctx || charts['peer']) return;
-  charts['peer'] = new Chart(ctx,{
-    type:'bar',
-    data:{
-      labels:['MSFT','GOOGL','NVDA','AAPL','AVGO(NG)'],
-      datasets:[{
-        label:'Non-GAAP PER',
-        data:[23.2,27.8,31.3,37.3,50.9],
-        backgroundColor:['rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','#CC092F'],
-        borderColor:['#5c6282','#5c6282','#5c6282','#5c6282','#ff5c76'],
-        borderWidth:1,borderRadius:5
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`Non-GAAP PER ${ctx.raw}x`}}},
-      scales:{
-        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:9}}},
-        y:{max:60,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
-      }
-    }
-  });
+// ─── MULTIPLE COMPARE (clickable 멀티플 5단계 ↔ peer chart) ───
+const MULTIPLE_DATA = {
+  per: {
+    title: 'PER 비교 — 반도체+SW 가중평균 기준',
+    unit: 'PER(GAAP)',
+    labels: ['AVGO','MRVL','ORCL','IBM','QCOM(참고)'],
+    data: [69.1,75.55,25.22,21.10,19.53],
+    max: 90,
+    explanation: '적정 51x(핵심 앵커 43.95x·58.79x의 평균) = AVGO 자체 10년 중간값 43.95x·반도체+SW 가중평균 피어 58.79x[Q2 FY26 매출 비중(반도체 68%·인프라SW 32%) 기준 — 반도체 MRVL 75.55x×68% + SW평균(ORCL 25.22x·IBM 21.10x 평균 23.16x)×32%]의 평균. VMware 인수 관련 분기 $2.2B 무형자산 상각이 GAAP EPS를 짓눌러 GAAP PER 자체가 부풀려진 상태 — Non-GAAP PER $427.76÷$8.41(TTM)=50.9x·Forward(FY26E EPS $11.35) 37.7x·PEG 0.57은 별도 참고. QCOM(19.53x)은 모바일 중심으로 사업모델이 달라 참고만.<br><br>AVGO 69.1x는 MRVL(75.55x)보다는 낮고 ORCL(25.22x)·IBM(21.10x)·QCOM(19.53x) 모두보다 높다 — 반도체 프리미엄이 소프트웨어 저배수를 크게 상회한다.'
+  },
+  pbr: {
+    title: 'PBR 비교 — 반도체+SW 가중평균 기준',
+    unit: 'PBR',
+    labels: ['AVGO','MRVL','ORCL','IBM'],
+    data: [24.0,10.51,11.27,6.49],
+    max: 30,
+    explanation: '적정 9x(핵심 앵커 7.67x·9.99x의 평균, 반올림) = AVGO 자체 10년 중간값 7.67x·반도체+SW 가중평균 피어 9.99x[반도체 MRVL 10.51x×68% + SW평균(ORCL 11.27x·IBM 6.49x 평균 8.88x)×32%]의 평균. 자사주 매입 누적과 인수부채 관련 이자비용이 자기자본을 낮추는 요인 — Goodwill($98B)은 자산으로 인식되므로 장부가치를 낮추는 항목은 아니지만, 그 자체가 자기자본을 직접 늘린다고 일반화할 수도 없다. ROE 37%.<br><br>AVGO 24.0x는 MRVL(10.51x)·ORCL(11.27x)·IBM(6.49x) 모두보다 2배 이상 높다.'
+  },
+  psr: {
+    title: 'PSR 비교 — 반도체+SW 가중평균 기준',
+    unit: 'PSR(TTM)',
+    labels: ['AVGO','MRVL','ORCL','IBM'],
+    data: [27.0,21.97,6.29,3.24],
+    max: 35,
+    explanation: '적정 12x(핵심 앵커 7.36x·16.46x의 평균, 반올림) = AVGO 자체 10년 중간값 7.36x·반도체+SW 가중평균 피어 16.46x[반도체 MRVL 21.97x×68% + SW평균(ORCL 6.29x·IBM 3.24x 평균 4.77x)×32%]의 평균 — VMware 구독형 매출과 MRVL 반도체 매출은 마진구조가 달라 동일가중이 아닌 실제 매출 비중으로 가중.<br><br>AVGO 27.0x는 MRVL(21.97x)보다 높고 ORCL(6.29x)·IBM(3.24x)보다는 훨씬 높다 — 반도체+SW 혼합 마진(50%대)이 프리미엄 일부를 정당화하나, 핵심 앵커(12x) 대비로는 여전히 확장 구간.'
+  },
+  pcr: {
+    title: 'PCR(FCF) 비교 — 자체 역사값 단일 소스',
+    unit: 'PCR(FCF)',
+    labels: ['AVGO','MRVL(참고·편차큼)'],
+    data: [58.6,127.97],
+    max: 180,
+    explanation: '적정 18x = AVGO 자체 10년 중간값(P/FCF 18.37x) 단일 소스. MRVL의 P/FCF는 출처별로 104x~170x까지 큰 편차를 보여(GuruFocus 127.97x, 타 소스 104~170x) FCF 정의·측정기간의 일치 여부가 확인되지 않아 핵심 앵커에서 제외했다 — 이는 데이터 신뢰도 문제이며, 기존 저·고 범위와의 정합성은 제외 판단의 근거로 쓰지 않았다. ORCL·IBM 등 SW 피어의 P/FCF도 반도체와 재투자·운전자본 구조가 달라 가중평균 대상으로 삼지 않았다. FCF 마진 46% — 매출 $1당 FCF 약 $0.46, Q2 Capex는 $231M로 크지 않음.<br><br>58.6x는 자체 10년 중간값(18.37x)의 3배 이상으로 5개 지표 중 유일하게 4단계(높음) 판정 — Capex 자체는 작아 재투자 부담으로 설명하기 어렵고, 1차 원인은 분자 측(주가·시가총액) 밸류에이션 프리미엄으로 보는 게 정확하다(무형자산 상각은 비현금비용이라 FCF 계산에 다시 가산되므로 직접적인 원인은 아니다).'
+  },
+  evebitda: {
+    title: 'EV/EBITDA 비교 — 반도체+SW 가중평균 기준',
+    unit: 'EV/EBITDA',
+    labels: ['AVGO','MRVL','ORCL','IBM','QCOM(참고)'],
+    data: [49.5,72.20,18.70,15.97,15.79],
+    max: 90,
+    explanation: '적정 37x(핵심 앵커 18.49x·54.64x의 평균, 반올림) = AVGO 자체 10년 중간값 18.49x·반도체+SW 가중평균 피어 54.64x[반도체 MRVL 72.20x×68% + SW평균(ORCL 18.70x·IBM 15.97x 평균 17.34x)×32%]의 평균. GAAP 기준 EV $2.08T÷TTM EBITDA $42B = 49.5x, Adj.EBITDA($47.7B) 기준으로는 43.6x로 더 낮음. QCOM(15.79x)은 모바일 중심으로 참고만.<br><br>49.5x는 핵심 앵커(37x)보다 다소 높다 — MRVL(72.20x)보다는 낮고 ORCL(18.70x)·IBM(15.97x)·QCOM(15.79x) 모두보다 높다. FY26E 성장률 66% 고려 시 준수한 수준.'
+  }
+};
+function renderMultipleChart(key) {
+  const d = MULTIPLE_DATA[key];
+  const ctx = document.getElementById('multipleChart');
+  if (!ctx || !d) return;
+  if (charts['multiple']) charts['multiple'].destroy();
+  const bg = d.labels.map((l,i)=> i===0 ? '#CC092F' : (l.includes('참고') ? 'rgba(231,76,60,0.18)' : 'rgba(154,160,184,0.35)'));
+  const bd = d.labels.map((l,i)=> i===0 ? '#ff5c76' : (l.includes('참고') ? '#c0392b' : '#5c6282'));
+  charts['multiple'] = new Chart(ctx,{ type:'bar', data:{ labels:d.labels, datasets:[{ label:d.unit, data:d.data, backgroundColor:bg, borderColor:bd, borderWidth:1, borderRadius:5 }] },
+    options:{ responsive:true,maintainAspectRatio:false, plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${d.unit} ${ctx.raw}x`}}},
+      scales:{ x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10.5}}}, y:{max:d.max,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}} } } });
+}
+let currentMultipleKey = 'per';
+function selectMultiple(key) {
+  const d = MULTIPLE_DATA[key];
+  if (!d) return;
+  currentMultipleKey = key;
+  document.querySelectorAll('.val-item[data-metric]').forEach(el => el.classList.toggle('selected', el.dataset.metric === key));
+  const titleEl = document.getElementById('multipleCompareTitle');
+  const textEl = document.getElementById('multipleCompareText');
+  if (titleEl) titleEl.textContent = d.title;
+  if (textEl) textEl.innerHTML = d.explanation;
+  renderMultipleChart(key);
 }
 function renderAiChart() {
   const ctx = document.getElementById('aiChart');
@@ -788,7 +993,7 @@ function renderAiChart() {
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
-    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'valuation' && !charts['multiple']) selectMultiple(currentMultipleKey);
     if (sectionId === 'us') renderAiChart();
   }, 50);
 }
