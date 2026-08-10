@@ -27,6 +27,7 @@
     --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f;
     --orange: #e67e22;
     --purple: #9b59b6;
+    --gold: #f0c040;
     --radius: 10px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -110,8 +111,38 @@
   .bk-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: #fff; }
   .bk-val { font-size: 12px; font-weight: 700; color: var(--accent2); width: 75px; text-align: right; flex-shrink: 0; }
 
-  /* VALUATION */
-  .val-item { margin-bottom: 18px; }
+  /* COLLAPSIBLE / 재무 건전성 */
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(0,180,216,0.12); border: 1px solid rgba(0,180,216,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(0,180,216,0.22); border-color: rgba(0,180,216,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
+  .section-label { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:12px; color:var(--text2); margin-top:2px; line-height:1.4; }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 12px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .diag-label { font-size:13px; color:var(--text); font-weight:600; min-width:90px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:11.5px; color:var(--text2); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .diag-badge.watch { background:rgba(240,192,64,0.16); color:var(--gold); }
+
+  .val-item { margin-bottom: 18px; padding: 8px; margin-left: -8px; margin-right: -8px; border-radius: 8px; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; cursor: pointer; }
+  .val-item:hover { background: rgba(255,255,255,0.03); }
+  .val-item.selected { background: rgba(0,180,216,0.08); border-color: rgba(0,180,216,0.35); }
+  .val-name { position: relative; }
+  .val-item.selected .val-name::after { content: '▸ 비교 보기'; font-size: 9.5px; font-weight: 600; color: var(--accent2); margin-left: 8px; vertical-align: middle; }
   .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
@@ -217,7 +248,7 @@
 <a class="peer-nav-link" href="XOM_analysis_widget.html">다음 XOM ▶</a>
 </div>
 </div>
-<div class="today-banner">✅ <strong>2026년 7월 17일 종가 기준</strong> — 현재 $1,550.69(전일 대비 -2.09%), 52주 최고 $1,999.96(2026.06.30) 대비 -12.6% 조정 국면. 52주 수익률 +115.8%.</div>
+<div class="today-banner">✅ <strong>2026년 8월 7일 종가 기준</strong> — 현재 $1,740.99(전일 대비 +2.1%), 52주 최고 $1,999.96(2026.06.30) 대비 -12.9%. 7/15 Q2 2026 실적(매출 €9.3B·순이익 €2.9B, 가이던스 상향) 이후 반등 중. 52주 수익률 +144.2%.</div>
 
 <!-- HEADER -->
 <div class="header">
@@ -240,7 +271,7 @@
     <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value hl">$663B</span></div>
     <div class="meta-item"><span class="meta-label">국적</span><span class="meta-value">네덜란드 (EUR 기준)</span></div>
     <div class="meta-item"><span class="meta-label">FY2025 매출</span><span class="meta-value hl">€34.9B (+4.9%)</span></div>
-    <div class="meta-item"><span class="meta-label">2026 가이던스</span><span class="meta-value hl">€36~40B</span></div>
+    <div class="meta-item"><span class="meta-label">2026 가이던스</span><span class="meta-value hl">€43~45B (상향)</span></div>
     <div class="meta-item"><span class="meta-label">수주잔고 (년말 2025)</span><span class="meta-value hl">€38.8B</span></div>
     <div class="meta-item"><span class="meta-label">EUV 독점도</span><span class="meta-value hl">100%</span></div>
   </div>
@@ -338,24 +369,71 @@
   </div>
 
   <div class="card">
-    <div class="card-title">분기 매출(EUR) / 영업이익 / OPM (최근 8분기)</div>
+    <div class="card-title">분기 매출(EUR) / 순이익 / OPM (최근 8분기)</div>
     <div class="chart-wrap" style="height:260px;"><canvas id="fundChart"></canvas></div>
   </div>
 
   <div class="grid-3">
-    <div class="stat-box"><div class="stat-label">매출 (Q1 2026)</div><div class="stat-value cy">€8.77B</div><div class="stat-sub">YoY +13.3% / $9.47B 환산</div></div>
-    <div class="stat-box"><div class="stat-label">영업이익 (Q1 2026)</div><div class="stat-value cy">€3.16B</div><div class="stat-sub">OPM 36.0% / 견조</div></div>
-    <div class="stat-box"><div class="stat-label">총이익률 (Q1 2026)</div><div class="stat-value cy">53.0%</div><div class="stat-sub">역대 최고 수준</div></div>
-    <div class="stat-box"><div class="stat-label">수주잔고 (2025년말)</div><div class="stat-value up">€38.8B</div><div class="stat-sub">다년간 매출 시현 보장</div></div>
-    <div class="stat-box"><div class="stat-label">Q4 2025 신규수주</div><div class="stat-value up">€13.2B</div><div class="stat-sub">역대 최고 / EUV €7.4B</div></div>
-    <div class="stat-box"><div class="stat-label">2026 가이던스</div><div class="stat-value up">€36~40B</div><div class="stat-sub">YoY +3~15% / 상향 여지</div></div>
-    <div class="stat-box"><div class="stat-label">순이익률 (Q1 2026)</div><div class="stat-value cy">30.3%</div><div class="stat-sub">고마진 독점 사업 구조</div></div>
-    <div class="stat-box"><div class="stat-label">EUV 수주 (Q4 2025)</div><div class="stat-value up">€7.4B</div><div class="stat-sub">신규수주의 56%</div></div>
-    <div class="stat-box"><div class="stat-label">High-NA 출하 계획</div><div class="stat-value up">10대</div><div class="stat-sub">2026년 예정</div></div>
+    <div class="stat-box"><div class="stat-label">순이익률 (Q2 2026)</div><div class="stat-value cy">31.3%</div><div class="stat-sub">최종 마진 · 가이던스 상회</div></div>
+    <div class="stat-box"><div class="stat-label">총이익률 (Q2 2026)</div><div class="stat-value cy">54.0%</div><div class="stat-sub">IBM 매출 비중 확대 효과</div></div>
+    <div class="stat-box"><div class="stat-label">수주잔고 (2025년말)</div><div class="stat-value up">€38.8B</div><div class="stat-sub">다년간 매출 시현 보장 · 분기 신규수주는 2026년부터 비공개</div></div>
+    <div class="stat-box"><div class="stat-label">2026 매출 가이던스</div><div class="stat-value up">€43~45B</div><div class="stat-sub">Q2 실적 발표 시 상향(기존 €36~40B)</div></div>
+    <div class="stat-box"><div class="stat-label">EPS (Q2 2026)</div><div class="stat-value cy">€7.59</div><div class="stat-sub">분기 · 기본 EPS</div></div>
+    <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value up">10월 14일 예상</div><div class="stat-sub">Q3 2026</div></div>
   </div>
 
   <div class="card" style="margin-top:16px;">
-    <div class="card-title">제품 유형별 수주 현황 (Q4 2025 €13.2B 기준)</div>
+    <div class="card-title"><span>재무 건전성 — 자본구조 (Q2 2026 기준, EUR)</span></div>
+    <div style="font-size:11px;color:var(--text3);line-height:1.5;margin:-4px 0 14px;">※ ASML은 네덜란드 IFRS 보고 기업(SEC 20-F)이라 미국 GAAP XBRL 표준 태그를 사용하지 않아, 유동비율·활동성(재고·매출채권 회전율) 세부지표는 이번 마이그레이션에서 정밀 산출하지 않고 자본구조 핵심 지표만 제공.</div>
+
+    <div class="section-label"><span class="dot"></span>안정성 — 자본구조·차입 의존도</div>
+    <div class="diag-summary">
+      <div class="icon">🩺</div>
+      <div>
+        <div class="title">종합 진단: 매우 안정적</div>
+        <div class="sub">자기자본비율 43.5% · 장기차입금 €2.0B로 부채가 대부분 계약부채(선수금·이연매출)에서 발생 — 순현금 포지션(현금·단기투자 €7.6B &gt; 장기차입금)</div>
+      </div>
+    </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>안정성 상세 — 개별 지표</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">자기자본비율</span><span class="diag-value">43.5%</span><span class="diag-note">자기자본 €21.8B÷자산 €50.2B</span></div>
+        <div class="diag-badge safe">✅ 매우 안정</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">부채비율</span><span class="diag-value">130.1%</span><span class="diag-note">부채 €28.4B÷자기자본 €21.8B — 상당 부분 고객 선수금·계약부채</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">장기차입금의존도</span><span class="diag-value">4.0%</span><span class="diag-note">장기차입금 €2.0B÷자산 €50.2B — 매우 낮음</span></div>
+        <div class="diag-badge safe">✅ 매우 낮음</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">현금·단기투자</span><span class="diag-value">€7.6B</span><span class="diag-note">장기차입금(€2.0B)의 3.8배 — 순현금 포지션</span></div>
+        <div class="diag-badge safe">✅ 순현금</div>
+      </div>
+    </div>
+    <div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">ASML의 부채비율이 130%로 보일 수 있으나, 이는 대부분 고객이 EUV 장비 주문 시 선지급하는 계약부채·선수금이지 이자부 차입금이 아니다. 실제 장기차입금은 자산의 4%에 불과하고 보유 현금·단기투자(€7.6B)가 이를 크게 상회하는 순현금 구조라 재무 레버리지 리스크는 낮다.</div>
+    </div>
+
+    <div class="section-label" style="margin-top:14px;"><span class="dot" style="background:var(--accent);"></span>활동성 — 수주잔고 기반 매출 가시성</div>
+    <div class="diag-summary">
+      <div class="icon">🔄</div>
+      <div>
+        <div class="title">종합 진단: 다년간 매출 가시성 확보</div>
+        <div class="sub">수주잔고 €38.8B(2025년말) — 표준 재고·매출채권 회전율 대신 장비 산업 특성상 수주잔고 규모로 매출 가시성을 판단. 다만 2026년부터 분기 신규수주 비공개로 최신 추이 확인은 제한적</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <div class="card-title">제품 유형별 수주 현황 (Q4 2025 €13.2B 기준 · ASML이 2026년부터 분기 수주 비공개로 최신 자료)</div>
     <div class="bk-row"><span class="bk-label">🔵 EUV 수주</span><div class="bk-bar-w"><div class="bk-bar" style="width:56%;background:linear-gradient(90deg,#00b4d8,#48cae4);">56%</div></div><span class="bk-val">€7.4B</span></div>
     <div class="bk-row"><span class="bk-label">🟣 DUV 수주</span><div class="bk-bar-w"><div class="bk-bar" style="width:38%;background:linear-gradient(90deg,#9b59b6,#c39bd3);">38%</div></div><span class="bk-val">€5.0B</span></div>
     <div class="bk-row"><span class="bk-label">🟡 서비스/IBM</span><div class="bk-bar-w"><div class="bk-bar" style="width:6%;background:linear-gradient(90deg,#f0c040,#f4d03f);">6%</div></div><span class="bk-val">€0.8B</span></div>
@@ -410,34 +488,33 @@
     <div class="card">
       <div class="card-title">멀티플 5단계 평가</div>
 
-      <div class="val-item">
+      <div class="val-item" data-metric="per" onclick="selectMultiple('per')">
         <div class="val-header"><span class="val-name">PER (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">62.8x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div>
         <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 28x</span><span class="val-high">고 50x</span></div>
       </div>
 
-      <div class="val-item">
+      <div class="val-item" data-metric="fwdper" onclick="selectMultiple('fwdper')">
         <div class="val-header"><span class="val-name">Forward PER (2026E)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">~42x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:73%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 28x</span><span class="val-high">고 50x</span></div>
-        <div style="font-size:11px;color:var(--accent2);margin-top:4px;">※ 독점 장비사 기준 상향 (고 80x 이상도 이력 있음)</div>
       </div>
 
-      <div class="val-item">
+      <div class="val-item" data-metric="pbr" onclick="selectMultiple('pbr')">
         <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">31.7x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div>
         <div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 10x</span><span class="val-high">고 30x</span></div>
       </div>
 
-      <div class="val-item">
+      <div class="val-item" data-metric="psr" onclick="selectMultiple('psr')">
         <div class="val-header"><span class="val-name">PSR (시총/매출 TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">18.4x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 10x</span><span class="val-high">고 25x</span></div>
       </div>
 
-      <div class="val-item">
+      <div class="val-item" data-metric="evebitda" onclick="selectMultiple('evebitda')">
         <div class="val-header"><span class="val-name">EV/EBITDA (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">~47x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:100%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div>
         <div class="val-labels"><span class="val-low">저 10x</span><span class="val-mid">적정 22x</span><span class="val-high">고 45x</span></div>
       </div>
 
@@ -447,9 +524,9 @@
     </div>
 
     <div class="card">
-      <div class="card-title">반도체 장비 피어 비교 (Forward PER)</div>
-      <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:10px;font-size:12px;color:var(--text2);">* ASML 42x 프리미엄은 100% 독점 지위 반영. AMAT·LRCX·KLA 대비 40~50% 프리미엄 지속.</div>
+      <div class="card-title"><span id="multipleCompareTitle">반도체 장비 피어 비교 (Forward PER)</span></div>
+      <div class="chart-wrap" style="height:240px;"><canvas id="multipleChart"></canvas></div>
+      <div style="margin-top:10px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText">ASML 42x 프리미엄은 100% 독점 지위 반영. AMAT·LRCX·KLA 대비 40~50% 프리미엄 지속.</div>
     </div>
   </div>
 
@@ -631,17 +708,17 @@
         <div style="width:11.6%;height:100%;background:var(--bg3);"></div>
         <div style="width:23.1%;height:100%;background:rgba(231,76,60,0.45);"></div>
       </div>
-      <div style="position:absolute;top:10px;left:42.12%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
-      <div style="position:absolute;top:-6px;left:42.12%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $1,550.69</div>
-      <div style="position:absolute;top:22px;left:70.92%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
-      <div style="position:absolute;top:48px;left:70.92%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $2,122 (+36.8%)</div>
+      <div style="position:absolute;top:10px;left:41.6%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
+      <div style="position:absolute;top:-6px;left:41.6%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $1,740.99</div>
+      <div style="position:absolute;top:22px;left:70.9%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
+      <div style="position:absolute;top:48px;left:70.9%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $2,122 (+21.9%)</div>
     </div>
     <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-top:4px;">
       <span style="color:var(--green);">약세 $1,200~1,450 (MATCH Act 통과)</span>
       <span>기본 $1,800~2,050 (가이던스 달성)</span>
       <span style="color:var(--red);">강세 $2,200~2,500 (High-NA 램프 가속)</span>
     </div>
-    <div style="margin-top:10px;font-size:11px;color:var(--text3);">현재가는 약세~기본 밴드 사이 조정 구간 — 컨센서스 목표가까지 +36.8% 여력. 10/14 Q3 실적과 MATCH Act 입법 동향이 다음 방향성의 핵심 변수.</div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">현재가는 약세~기본 밴드 사이 조정 구간 — 7/15 Q2 실적(가이던스 상향) 이후 반등했으나 컨센서스 목표가까지 +21.9% 여력. 10/14 Q3 실적과 MATCH Act 입법 동향이 다음 방향성의 핵심 변수.</div>
 
     <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
       <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">애널리스트 44명 투자의견 분포</div>
@@ -664,7 +741,7 @@
       <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:var(--red)">MA20&gt;MA60&gt;MA5&gt;MA120&gt;현재가 · 전 이평선 하회 · 기술적 약세</span></div>
       <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">€38.8B 수주잔고·High-NA EUV 신시장, 중국 감소가 오히려 마진 개선(GM 53%)</span></div>
       <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:var(--red);">TTM PER 63x·EV/EBITDA 47x — 극단적 고평가, 수주 실망 시 급락 반복 이력</span></div>
-      <div class="zone-item"><span class="zone-label">🌍 글로벌 특화</span><span class="zone-val" style="color:var(--green);">EUV 리소그래피 100% 독점, 52주 수익률 +115.8%</span></div>
+      <div class="zone-item"><span class="zone-label">🌍 글로벌 특화</span><span class="zone-val" style="color:var(--green);">EUV 리소그래피 100% 독점, 52주 수익률 +144.2%</span></div>
       <div class="zone-item"><span class="zone-label">📰 시계열 뉴스</span><span class="zone-val" style="color:#f0c040;">MATCH Act(중국 DUV 규제) 입법 동향이 최대 변수 — 7/15 Q2 실적 반영 여부 주목</span></div>
     </div>
   </div>
@@ -674,7 +751,7 @@
     <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;">
       <div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107">2026년 10월 14일 (Q3 2026 예상)</strong></div>
       <div><span style="color:var(--text2);">투자의견:</span> <strong style="color:var(--green)">Strong Buy (애널리스트 44명 중 39명 매수)</strong></div>
-      <div><span style="color:var(--text2);">목표주가:</span> <strong style="color:#ffc107">$2,122 · +36.8%</strong></div>
+      <div><span style="color:var(--text2);">목표주가:</span> <strong style="color:#ffc107">$2,122 · +21.9%</strong></div>
       <div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">EUV 독점적 지위가 반도체 공급망의 최강 병목이자 해자, 다만 중국 수출규제(MATCH Act)가 최대 변수</strong></div>
     </div>
   </div>
@@ -715,8 +792,68 @@ function showSection(id, e) {
 }
 function renderCharts(id) {
   if(id==='fund') renderFund();
-  if(id==='valuation') { renderPeer(); renderPS(); }
+  if(id==='valuation') { if (!charts['multiple']) selectMultiple(currentMultipleKey); renderPS(); }
   if(id==='us') { renderRel(); renderBook(); }
+}
+
+function toggleCollapsible(header) {
+  const body = header.nextElementSibling;
+  const collapsed = body.classList.toggle('collapsed');
+  header.classList.toggle('collapsed', collapsed);
+  header.setAttribute('aria-expanded', String(!collapsed));
+  const hintText = header.querySelector('.toggle-hint-text');
+  if (hintText) hintText.textContent = collapsed ? '상세 보기' : '상세 숨기기';
+}
+
+const MULTIPLE_DATA = {
+  per: { title:'PER 비교 — 반도체 장비 피어', unit:'PER', labels:['ASML(현재)'], data:[62.8], max:70,
+    explanation: 'PER 62.8x는 전 지표 중 가장 높지만, EUV 100% 독점 지위와 €38.8B 수주잔고에 근거한 다년간 매출 가시성이 프리미엄의 핵심 근거다. 이력적으로 ASML은 종종 이보다 높은 PER 밴드에서도 거래된 바 있다.' },
+  fwdper: { title:'반도체 장비 피어 비교 (Forward PER)', unit:'Forward PER', labels:['ASML','AMAT','LRCX','KLA','TEL'], data:[42, 19, 18, 22, 17], max:50,
+    explanation: 'ASML 42x 프리미엄은 100% 독점 지위 반영. AMAT·LRCX·KLA 대비 40~50% 프리미엄 지속. 독점 장비사 특성상 적정 구간 자체를 일반 반도체 장비주보다 상향(고 50x 이상도 이력 있음)해서 판단.' },
+  pbr: { title:'PBR 비교', unit:'PBR', labels:['ASML(현재)'], data:[31.7], max:35,
+    explanation: 'PBR 31.7x는 순자산 대비로도 매우 높은 수준 — 다만 ASML은 자사주매입으로 장부가치가 구조적으로 낮아지는 효과가 있어 단순 PBR 비교는 한계가 있다.' },
+  psr: { title:'PSR 비교', unit:'PSR', labels:['ASML(현재)'], data:[18.4], max:25,
+    explanation: 'PSR 18.4x는 반도체 장비업 평균 대비 높으나, 마진율(순이익률 30%대)이 업계 최고 수준이라 매출 대비 배수만으로는 고평가를 단정하기 어렵다.' },
+  evebitda: { title:'EV/EBITDA 비교', unit:'EV/EBITDA', labels:['ASML(현재)'], data:[47], max:55,
+    explanation: 'EV/EBITDA ~47x는 5개 지표 중 가장 신뢰도 높은 규모 조정 배수인데도 매우 높은 수준. 순현금 포지션(현금·단기투자 €7.6B)이 EV를 낮추는 효과가 있음에도 절대 수준은 여전히 프리미엄 구간.' }
+};
+
+function renderMultipleChart(key) {
+  const d = MULTIPLE_DATA[key];
+  const ctx = document.getElementById('multipleChart');
+  if (!ctx || !d) return;
+  if (charts['multiple']) charts['multiple'].destroy();
+  const bg = d.labels.map((l,i)=> i===0 ? '#00b4d8' : 'rgba(0,180,216,0.4)');
+  const bd = d.labels.map((l,i)=> i===0 ? '#48cae4' : '#00b4d8');
+  charts['multiple'] = new Chart(ctx,{
+    type:'bar',
+    data:{ labels:d.labels, datasets:[{ label:d.unit, data:d.data, backgroundColor:bg, borderColor:bd, borderWidth:1, borderRadius:5 }] },
+    options:{
+      indexAxis: d.labels.length > 1 ? 'y' : 'x',
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${d.unit} ${ctx.raw}x`}}},
+      scales: d.labels.length > 1 ? {
+        x:{max:d.max,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#6898c8',font:{size:10},callback:v=>v+'x'}},
+        y:{grid:{display:false},ticks:{color:'#6898c8',font:{size:10.5}}}
+      } : {
+        x:{grid:{display:false},ticks:{color:'#6898c8',font:{size:10.5}}},
+        y:{max:d.max,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#6898c8',font:{size:10},callback:v=>v+'x'}}
+      }
+    }
+  });
+}
+
+let currentMultipleKey = 'fwdper';
+function selectMultiple(key) {
+  const d = MULTIPLE_DATA[key];
+  if (!d) return;
+  currentMultipleKey = key;
+  document.querySelectorAll('.val-item[data-metric]').forEach(el => el.classList.toggle('selected', el.dataset.metric === key));
+  const titleEl = document.getElementById('multipleCompareTitle');
+  const textEl = document.getElementById('multipleCompareText');
+  if (titleEl) titleEl.textContent = d.title;
+  if (textEl) textEl.innerHTML = d.explanation;
+  renderMultipleChart(key);
 }
 
 const MONTHS = ['7월','8월','9월','10월','11월','12월','1월','2월','3월','4월','5월','6월'];
@@ -926,17 +1063,18 @@ const ASML_MA120 = [724.23,723.98,723.79,723.77,723.87,724.02,724.07,724.22,724.
 function renderFund() {
   if(charts['fund']) return;
   const ctx = document.getElementById('fundChart'); if(!ctx) return;
-  const labels = ['Q2\'24','Q3\'24','Q4\'24','Q1\'25','Q2\'25','Q3\'25','Q4\'25','Q1\'26'];
-  const rev = [6.24, 7.47, 9.26, 7.74, 7.69, 7.52, 9.72, 8.77];
-  const op  = [1.84, 2.44, 3.36, 2.74, 2.66, 2.47, 3.43, 3.16];
-  const opm = [29.4, 32.7, 36.2, 35.4, 34.6, 32.8, 35.3, 36.0];
+  const labels = ['Q3\'24','Q4\'24','Q1\'25','Q2\'25','Q3\'25','Q4\'25','Q1\'26','Q2\'26'];
+  const rev = [7.47, 9.26, 7.74, 7.69, 7.52, 9.72, 8.77, 9.3];
+  const netIncome = [1.96, 2.54, 2.23, 2.18, 2.04, 2.73, 2.66, 2.9];
+  const opm = [32.7, 36.2, 35.4, 34.6, 32.8, 35.3, 36.0, 37.1];
+  const zeros = rev.map(() => 0);
   charts['fund'] = new Chart(ctx, {
     data:{ labels, datasets:[
-      {type:'bar', label:'매출 (€B)', data:rev, backgroundColor:'rgba(0,180,216,0.45)', borderColor:'#00b4d8', borderWidth:1, yAxisID:'y'},
-      {type:'bar', label:'영업이익 (€B)', data:op, backgroundColor:'rgba(72,202,228,0.55)', borderColor:'#48cae4', borderWidth:1, yAxisID:'y'},
-      {type:'line',label:'OPM (%)', data:opm, borderColor:'#f0c040', borderWidth:2, fill:false, tension:0.3, pointRadius:4, yAxisID:'y2'}
+      {type:'bar', label:'매출 (€B)', data:zeros, backgroundColor:'rgba(0,180,216,0.45)', borderColor:'#00b4d8', borderWidth:1, yAxisID:'y'},
+      {type:'bar', label:'순이익 (€B)', data:zeros, backgroundColor:'rgba(72,202,228,0.55)', borderColor:'#48cae4', borderWidth:1, yAxisID:'y'},
+      {type:'line',label:'OPM (%)', data:opm.map(()=>20), borderColor:'#f0c040', borderWidth:2, fill:false, tension:0.3, pointRadius:4, yAxisID:'y2'}
     ]},
-    options:{ responsive:true, maintainAspectRatio:false,
+    options:{ responsive:true, maintainAspectRatio:false, animation:false,
       plugins:{ legend:{labels:{color:'#6898c8',font:{size:11}}}, tooltip:{mode:'index',intersect:false, callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.y.toFixed(1)}${c.dataset.label.includes('%') ? '%' : '€B'}`}} },
       scales:{
         x:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#6898c8',font:{size:11}}},
@@ -944,6 +1082,12 @@ function renderFund() {
         y2:{ticks:{color:'#f0c040',font:{size:11},callback:v=>`${v}%`}, position:'right', grid:{display:false}, min:20, max:42}
       }
     }
+  });
+  requestAnimationFrame(() => {
+    charts['fund'].data.datasets[0].data = rev;
+    charts['fund'].data.datasets[1].data = netIncome;
+    charts['fund'].data.datasets[2].data = opm;
+    charts['fund'].update({ duration: 700, easing: 'easeOutQuart' });
   });
 }
 
@@ -966,30 +1110,6 @@ function renderPS() {
       scales:{
         x:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#6898c8',font:{size:11}}},
         y:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#6898c8',font:{size:11},callback:v=>`€${v}`}}
-      }
-    }
-  });
-}
-
-function renderPeer() {
-  if(charts['peer']) return;
-  const ctx = document.getElementById('peerChart'); if(!ctx) return;
-  charts['peer'] = new Chart(ctx, {
-    type:'bar',
-    data:{
-      labels:['ASML','AMAT','LRCX','KLA','TEL'],
-      datasets:[{
-        label:'Forward PER (2026E, x)',
-        data:[42, 19, 18, 22, 17],
-        backgroundColor:['#00b4d8','rgba(0,180,216,0.4)','rgba(0,180,216,0.4)','rgba(0,180,216,0.4)','rgba(0,180,216,0.35)'],
-        borderColor:['#48cae4','#00b4d8','#00b4d8','#00b4d8','#00b4d8'], borderWidth:1
-      }]
-    },
-    options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y',
-      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>`Forward PER ${c.parsed.x}x`}} },
-      scales:{
-        x:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#6898c8',font:{size:11},callback:v=>`${v}x`}},
-        y:{ticks:{color:'#6898c8',font:{size:11}}}
       }
     }
   });
