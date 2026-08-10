@@ -72,7 +72,35 @@
   .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
   .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
   .tag-current { background: rgba(56,189,248,0.2); color: var(--accent2); }
-  .val-item { margin-bottom: 18px; }
+  /* COLLAPSIBLE / 재무 건전성 */
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(52,152,219,0.12); border: 1px solid rgba(52,152,219,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(52,152,219,0.22); border-color: rgba(52,152,219,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
+  .section-label { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:12px; color:var(--text2); margin-top:2px; line-height:1.4; }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 12px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .diag-label { font-size:13px; color:var(--text); font-weight:600; min-width:90px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:11.5px; color:var(--text2); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .diag-badge.watch { background:rgba(240,192,64,0.16); color:var(--gold); }
+  .val-item { margin-bottom: 18px; padding: 8px; margin-left: -8px; margin-right: -8px; border-radius: 8px; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; cursor: pointer; }
+  .val-item:hover { background: rgba(56,189,248,0.06); }
+  .val-item.selected { background: rgba(56,189,248,0.1); border-color: rgba(56,189,248,0.35); }
   .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
@@ -159,7 +187,7 @@
 <a href="../index.html"><span class="brand-icon">◧</span>US Stock Widgets · 전체 종목 목록</a>
 <div class="back-bar-nav"><a class="peer-nav-link" href="NVS_analysis_widget.html">◀ NVS</a><span class="back-bar-ticker">PLTR · 시총 44위</span><a class="peer-nav-link" href="RTX_analysis_widget.html">다음 RTX ▶</a></div>
 </div>
-<div class="today-banner">✅ <strong>Q1 2026 실적 발표 완료 · Q2 발표 8/3 예정</strong> — 매출 $1.63B(+85%) · 미국 상업 +133% · 조정 영업마진 60%</div>
+<div class="today-banner">✅ <strong>8/4 Q2 2026 실적 발표 완료</strong> — 매출 $1.94B(+93%) · 미국 상업 매출 $764M(+149%) · GAAP 영업마진 47%(Adj. 62%) · FY26 매출 가이던스 $8.15~8.16B로 상향 · 8분기 연속 실적 서프라이즈</div>
 <div class="header">
 <div class="header-top">
 <div class="ticker-block">
@@ -173,23 +201,23 @@
 </div>
 </div>
 <div class="price-block">
-<div class="price-main">$125.65</div>
-<div class="price-change" style="color:var(--green);">▲ +2.1% (2026.08.03 기준)</div>
+<div class="price-main">$172.01</div>
+<div class="price-change" style="color:var(--green);">▲ +10.3% (2026.08.07 기준)</div>
 <div style="font-size:11px;color:var(--text3);margin-top:2px;">52주 $106.37–$207.52</div>
 </div>
 </div>
 <div class="header-meta">
-<div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$303B</span></div>
+<div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$441.8B</span></div>
 <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Information Technology</span></div>
-<div class="meta-item"><span class="meta-label">Q1 매출</span><span class="meta-value">$1.63B (+85%)</span></div>
-<div class="meta-item"><span class="meta-label">미국 상업 성장</span><span class="meta-value">133%</span></div>
-<div class="meta-item"><span class="meta-label">EPS (TTM)</span><span class="meta-value">$0.65</span></div>
+<div class="meta-item"><span class="meta-label">Q2 매출</span><span class="meta-value">$1.94B (+93%)</span></div>
+<div class="meta-item"><span class="meta-label">미국 상업 성장</span><span class="meta-value">149%</span></div>
+<div class="meta-item"><span class="meta-label">EPS (TTM)</span><span class="meta-value">$1.16</span></div>
 <div class="meta-item"><span class="meta-label">배당수익률</span><span class="meta-value">배당 없음</span></div>
 </div>
 </div>
 <div class="box-key">
-<div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:var(--red);">(초고평가)</span> — Q1 매출 $1.63B (+85%) · 미국 상업 성장 133%</div>
-<div style="font-size:12px;color:var(--text2);line-height:1.6;">AIP가 정부와 기업의 실전 AI 배치 표준으로 자리 잡으며 성장률 85%와 조정 영업마진 60%를 동시에 달성했다. 다만 매출 대비 50배 이상인 가격은 장기간 초고성장을 전제해 작은 가이던스 미달에도 민감하다.</div>
+<div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:var(--red);">(초고평가)</span> — Q2 매출 $1.94B (+93%) · 미국 상업 성장 149%</div>
+<div style="font-size:12px;color:var(--text2);line-height:1.6;">AIP가 정부와 기업의 실전 AI 배치 표준으로 자리 잡으며 성장률 93%와 조정 영업마진 62%를 동시에 달성, 8분기 연속 실적 서프라이즈를 이어갔다. 다만 TTM 매출 대비 70배 이상인 가격은 장기간 초고성장을 전제해 작은 가이던스 미달에도 민감하다.</div>
 </div>
 <div class="nav">
 <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
@@ -200,7 +228,7 @@
 <button class="nav-btn" onclick="showSection('invest')">🎯 투자 포인트</button>
 </div>
 <div class="section active" id="tech">
-<div class="section-title">기술적 분석 — 일봉 캔들스틱 (2025.08 ~ 2026.08) · 52주 수익률 -18.6%</div>
+<div class="section-title">기술적 분석 — 일봉 캔들스틱 (2025.08 ~ 2026.08) · 52주 수익률 -5.6%</div>
 <div class="price-chart-container">
 <div style="margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
 <div class="range-toggle" id="pltrRangeToggle">
@@ -219,54 +247,96 @@
 </div>
 <svg aria-label="PLTR 일봉 캔들스틱 차트" id="pltrCandleSvg" role="img" style="display:block;background:var(--bg3);border-radius:8px 8px 0 0;padding:4px;" viewbox="0 0 720 240" width="100%"></svg>
 <svg aria-label="PLTR 거래량 차트" id="pltrVolumeSvg" role="img" style="display:block;background:var(--bg3);border-radius:0 0 8px 8px;padding:0 4px 4px;" viewbox="0 0 720 70" width="100%"></svg>
-<div style="font-size:11px;color:var(--text3);margin-top:10px;">52주 최저 $106.37 (2026.06) → 52주 최고 $207.52 (2025.11) → 현재 $125.65</div>
+<div style="font-size:11px;color:var(--text3);margin-top:10px;">52주 최저 $106.37 (2026.06) → 52주 최고 $207.52 (2025.11) → 현재 $172.01</div>
 </div>
 <div class="grid-2">
 <div class="card">
 <div class="card-title">핵심 가격대</div>
-<div class="zone-list"><div class="zone-item"><span class="zone-label">52주 최고</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$207.52 (2025.11.03)</span><span class="zone-tag tag-resist">저항선</span></div></div><div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$125.65 (고점 대비 -39.5%)</span><span class="zone-tag tag-current">현재</span></div></div><div class="zone-item"><span class="zone-label">MA120</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$137.74</span><span class="zone-tag tag-resist">저항선</span></div></div><div class="zone-item"><span class="zone-label">52주 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$106.37 (2026.06.25)</span><span class="zone-tag tag-support">강지지</span></div></div><div class="zone-item"><span class="zone-label">52주 수익률</span><span class="zone-val" style="color:var(--red);">-18.6%</span></div></div>
+<div class="zone-list"><div class="zone-item"><span class="zone-label">52주 최고</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$207.52 (2025.11.03)</span><span class="zone-tag tag-resist">저항선</span></div></div><div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$172.01 (고점 대비 -17.1%)</span><span class="zone-tag tag-current">현재</span></div></div><div class="zone-item"><span class="zone-label">MA120</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$138.37</span><span class="zone-tag tag-support">지지선</span></div></div><div class="zone-item"><span class="zone-label">52주 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$106.37 (2026.06.25)</span><span class="zone-tag tag-support">강지지</span></div></div><div class="zone-item"><span class="zone-label">52주 수익률</span><span class="zone-val" style="color:var(--red);">-5.6%</span></div></div>
 </div>
 <div class="card">
 <div class="card-title">이동평균선 현황</div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$124.87</span><span class="ma-status status-below">현재가 하회</span></div></div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$129.54</span><span class="ma-status status-below">현재가 하회</span></div></div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$132.04</span><span class="ma-status status-below">현재가 하회</span></div></div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$137.74</span><span class="ma-status status-below">현재가 하회</span></div></div>
-<div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">MA120&gt;MA60&gt;MA20&gt;현재가&gt;MA5 순 — 4개 이평선 중 1개 상회 · 기술적 약세. 현재가 $125.65, 52주 고점 $207.52 대비 -39.5%.</div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$154.93</span><span class="ma-status status-above">현재가 상회</span></div></div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$135.04</span><span class="ma-status status-above">현재가 상회</span></div></div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$132.98</span><span class="ma-status status-above">현재가 상회</span></div></div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$138.37</span><span class="ma-status status-above">현재가 상회</span></div></div>
+<div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">현재가&gt;MA5&gt;MA120&gt;MA20&gt;MA60 순 — 4개 이평선 전부 상회 · 기술적 강세. 현재가 $172.01, 52주 고점 $207.52 대비 -17.1%. Q2 실적 서프라이즈 이후 급반등.</div>
 </div>
 </div>
 <div class="card">
 <div class="card-title">구간별 패턴 분석</div>
-<div class="grid-4"><div style="background:rgba(231,76,60,0.10);border:1px solid var(--red);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">1개월 · -5.2%</div><div style="font-size:12px;color:var(--text2);">2026.07.06 $132.54 → 2026.08.03 $125.65</div></div><div style="background:rgba(231,76,60,0.10);border:1px solid var(--red);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">3개월 · -14.0%</div><div style="font-size:12px;color:var(--text2);">2026.05.04 $146.03 → 2026.08.03 $125.65</div></div><div style="background:rgba(231,76,60,0.10);border:1px solid var(--red);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">6개월 · -15.0%</div><div style="font-size:12px;color:var(--text2);">2026.02.02 $147.76 → 2026.08.03 $125.65</div></div><div style="background:rgba(231,76,60,0.10);border:1px solid var(--red);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">1년 · -18.6%</div><div style="font-size:12px;color:var(--text2);">2025.08.01 $154.27 → 2026.08.03 $125.65</div></div></div>
+<div class="grid-4"><div style="background:rgba(46,204,113,0.10);border:1px solid var(--green);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">1개월 · +30.1%</div><div style="font-size:12px;color:var(--text2);">2026.07.08 $132.22 → 2026.08.07 $172.01</div></div><div style="background:rgba(46,204,113,0.10);border:1px solid var(--green);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">3개월 · +24.8%</div><div style="font-size:12px;color:var(--text2);">2026.05.08 $137.80 → 2026.08.07 $172.01</div></div><div style="background:rgba(46,204,113,0.10);border:1px solid var(--green);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">6개월 · +26.6%</div><div style="font-size:12px;color:var(--text2);">2026.02.06 $135.90 → 2026.08.07 $172.01</div></div><div style="background:rgba(231,76,60,0.10);border:1px solid var(--red);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">1년 · -5.6%</div><div style="font-size:12px;color:var(--text2);">2025.08.07 $182.20 → 2026.08.07 $172.01</div></div></div>
 </div>
-<div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;"><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,.15);color:var(--green);">Q1 매출 +85%</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,.15);color:var(--green);">미국 상업 +133%</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,.15);color:var(--green);">Rule of 40 145%</span></div>
+<div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;"><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,.15);color:var(--green);">Q2 매출 +93%</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,.15);color:var(--green);">미국 상업 +149%</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,.15);color:var(--green);">Rule of 40 155%</span></div>
 </div>
 <div class="section" id="fund">
 <div class="section-title">기본적 분석 — 최근 8개 분기 (Palantir Technologies Inc.)</div>
 <div class="card">
-<div class="card-title">분기 매출 / 영업이익 / OPM (Q1 FY25~Q4 FY26)</div>
+<div class="card-title">분기 매출·순이익·영업이익률(OPM) 추이 (Q3 2024 ~ Q2 2026, 2년치)</div>
 <div class="chart-wrap" style="height:260px;"><canvas id="pltrRevChart"></canvas></div>
 </div>
 <div class="grid-3">
 <div class="stat-box"><div class="stat-label">매출 (Q2 2026)</div><div class="stat-value gold">$1.94B</div><div class="stat-sub">▲93% YoY</div></div>
 <div class="stat-box"><div class="stat-label">미국 상업 매출</div><div class="stat-value up">$764M</div><div class="stat-sub">▲149% YoY</div></div>
 <div class="stat-box"><div class="stat-label">GAAP 영업이익</div><div class="stat-value up">$912M</div><div class="stat-sub">마진 47%</div></div>
-<div class="stat-box"><div class="stat-label">Adj. 영업이익</div><div class="stat-value up">$1.19B</div><div class="stat-sub">마진 62%</div></div>
-<div class="stat-box"><div class="stat-label">순이익 (Q2 2026)</div><div class="stat-value up">$1.07B</div><div class="stat-sub">전년 $329M</div></div>
 <div class="stat-box"><div class="stat-label">희석 EPS (Q2 2026)</div><div class="stat-value up">$0.41</div><div class="stat-sub">전년 $0.13</div></div>
 <div class="stat-box"><div class="stat-label">FY26 매출 가이던스</div><div class="stat-value gold">$8.15~8.16B</div><div class="stat-sub">▲82%로 상향</div></div>
-<div class="stat-box"><div class="stat-label">FY26 미국상업 가이던스</div><div class="stat-value gold">$3.42B+</div><div class="stat-sub">▲134%+ 상향</div></div>
 <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value gold">11월 2일 예상</div><div class="stat-sub">Q3 2026</div></div>
 </div>
 <div class="card" style="margin-top:16px;">
+<div class="card-title"><span>재무 건전성 — 안정성·활동성 (Q2 2026 기준)</span></div>
+<div class="section-label"><span class="dot"></span>안정성 — 단기 지급능력·차입 의존도</div>
+<div class="diag-summary">
+  <div class="icon">🩺</div>
+  <div>
+    <div class="title">종합 진단: 사실상 무차입 — 업계 최상위권 재무건전성</div>
+    <div class="sub">유동비율 722.8%·부채비율 18.4%로 대부분 이연매출(선수금)이며 이자부 차입금은 사실상 없음 · 현금 $2.03B 보유</div>
+  </div>
+</div>
+<div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+  <span>안정성 상세 — 개별 지표</span>
+  <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+</div>
+<div class="collapsible-body collapsed">
+<div class="diag-list">
+  <div class="diag-row">
+    <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">722.8%</span><span class="diag-note">유동자산 $11.10B÷유동부채 $1.54B</span></div>
+    <div class="diag-badge safe">✅ 매우 안전</div>
+  </div>
+  <div class="diag-row">
+    <div class="diag-left"><span class="diag-label">부채비율</span><span class="diag-value">18.4%</span><span class="diag-note">부채 $1.79B÷자기자본 $9.77B — 부채 대부분이 이연매출(계약부채)</span></div>
+    <div class="diag-badge safe">✅ 매우 안전</div>
+  </div>
+  <div class="diag-row">
+    <div class="diag-left"><span class="diag-label">차입금의존도</span><span class="diag-value">0%</span><span class="diag-note">이자부 장단기 차입금 사실상 전무 — 완전 무차입 경영</span></div>
+    <div class="diag-badge safe">✅ 무차입</div>
+  </div>
+  <div class="diag-row">
+    <div class="diag-left"><span class="diag-label">이자보상배율</span><span class="diag-value">해당없음</span><span class="diag-note">이자비용이 사실상 없어 산출 대상 자체가 아님(상환 부담 없음)</span></div>
+    <div class="diag-badge safe">✅ 무차입</div>
+  </div>
+</div>
+<div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">PLTR은 이자부 차입금이 사실상 없는 완전 무차입 경영 구조다. 부채비율 18.4%는 대부분 계약부채(고객 선수금)로, 재무 리스크가 아니라 영업 성장의 결과다. 밸류에이션 부담은 존재하지만 재무건전성 자체는 대형 기술주 중에서도 최상위권이다.</div>
+</div>
+<div class="section-label" style="margin-top:14px;"><span class="dot" style="background:var(--blue);"></span>활동성 — 매출채권 회수 속도</div>
+<div class="diag-summary">
+  <div class="icon">🔄</div>
+  <div>
+    <div class="title">종합 진단: 매출채권 회전일수 73.9일</div>
+    <div class="sub">소프트웨어·플랫폼 기업 특성상 재고자산이 없고 매입채무도 미미해 표준 CCC 분석이 적용되지 않음 — 매출채권 회수 속도만이 의미 있는 활동성 지표</div>
+  </div>
+</div>
+<div style="margin-top:8px;font-size:11.5px;color:var(--text2);line-height:1.6;">정부·대기업 대상 대형 계약이 많아 매출채권 회전일수(73.9일)가 소비자向 SaaS 대비 다소 긴 편이나, 급성장하는 매출 규모와 견고한 현금 포지션을 감안하면 우려할 수준은 아니다.</div>
+</div>
+<div class="card" style="margin-top:16px;">
 <div class="card-title">핵심 성장 동력 3가지</div>
-<div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">Q1 매출 +85%</div><div class="driver-desc">미국 정부와 상업 부문이 동시에 가속해 매출 $1.63B를 기록했다.</div></div></div>
-<div class="driver-item"><div class="driver-num">2</div><div><div class="driver-title">미국 상업 +133%</div><div class="driver-desc">AIP 도입이 대기업 실사용 계약으로 전환되고 있다.</div></div></div>
-<div class="driver-item"><div class="driver-num">3</div><div><div class="driver-title">Rule of 40 145%</div><div class="driver-desc">성장률 85%와 조정 영업마진 60%를 동시에 달성했다.</div></div></div>
+<div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">Q2 매출 +93%</div><div class="driver-desc">미국 정부와 상업 부문이 동시에 가속해 매출 $1.94B를 기록, 8분기 연속 서프라이즈를 이어갔다.</div></div></div>
+<div class="driver-item"><div class="driver-num">2</div><div><div class="driver-title">미국 상업 +149%</div><div class="driver-desc">AIP 도입이 대기업 실사용 계약으로 전환되며 $764M을 기록했다.</div></div></div>
+<div class="driver-item"><div class="driver-num">3</div><div><div class="driver-title">Rule of 40 155%</div><div class="driver-desc">성장률 93%와 조정 영업마진 62%를 동시에 달성했다.</div></div></div>
 </div>
 <div class="card">
 <div class="card-title">핵심 투자 논리</div>
-<div style="font-size:12px;color:var(--text2);line-height:1.7;">AIP가 정부와 기업의 실전 AI 배치 표준으로 자리 잡으며 성장률 85%와 조정 영업마진 60%를 동시에 달성했다. 다만 매출 대비 50배 이상인 가격은 장기간 초고성장을 전제해 작은 가이던스 미달에도 민감하다.</div>
+<div style="font-size:12px;color:var(--text2);line-height:1.7;">AIP가 정부와 기업의 실전 AI 배치 표준으로 자리 잡으며 성장률 93%와 조정 영업마진 62%를 동시에 달성, 8분기 연속 실적 서프라이즈를 이어갔다. 다만 TTM 매출 대비 70배 이상인 가격은 장기간 초고성장을 전제해 작은 가이던스 미달에도 민감하다.</div>
 </div>
 <div class="card">
 <div class="card-title">다음 실적 체크포인트 — Q3 2026 · 2026년 11월 2일 예상</div>
@@ -274,42 +344,42 @@
 </div>
 </div>
 <div class="section" id="valuation">
-<div class="section-title">밸류에이션 — 현재가 $125.65 · 섹터 비교</div>
+<div class="section-title">밸류에이션 — 현재가 $172.01 · 섹터 비교</div>
 <div class="grid-2">
 <div class="card">
 <div class="card-title">멀티플 5단계 평가</div>
-<div class="val-item"><div class="val-header"><span class="val-name">Forward PER</span><span class="val-number">120.6x</span><span class="stage-badge stage-5">5단계 매우높음</span></div><div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div><div class="val-labels"><span class="val-low">저 35x</span><span class="val-mid">적정 65x</span><span class="val-high">고 110x</span></div></div>
-<div class="val-item"><div class="val-header"><span class="val-name">EV/Sales</span><span class="val-number">56.2x</span><span class="stage-badge stage-5">5단계 매우높음</span></div><div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div><div class="val-labels"><span class="val-low">저 12x</span><span class="val-mid">적정 25x</span><span class="val-high">고 45x</span></div></div>
-<div class="val-item"><div class="val-header"><span class="val-name">P/S</span><span class="val-number">53.1x</span><span class="stage-badge stage-5">5단계 매우높음</span></div><div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div><div class="val-labels"><span class="val-low">저 10x</span><span class="val-mid">적정 25x</span><span class="val-high">고 45x</span></div></div>
-<div class="val-item"><div class="val-header"><span class="val-name">FCF 수익률</span><span class="val-number">0.9%</span><span class="stage-badge stage-5">5단계 매우높음</span></div><div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div><div class="val-labels"><span class="val-low">저 1%</span><span class="val-mid">적정 3%</span><span class="val-high">고 5%</span></div></div>
-<div class="val-item"><div class="val-header"><span class="val-name">PEG</span><span class="val-number">2.5x</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 1x</span><span class="val-mid">적정 2x</span><span class="val-high">고 3x</span></div></div>
+<div class="val-item" data-metric="fwdpe" onclick="selectMultiple('fwdpe')"><div class="val-header"><span class="val-name">Forward PER</span><span class="val-number">84.0x</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:65%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 35x</span><span class="val-mid">적정 65x</span><span class="val-high">고 110x</span></div></div>
+<div class="val-item" data-metric="evsales" onclick="selectMultiple('evsales')"><div class="val-header"><span class="val-name">EV/Sales</span><span class="val-number">71.4x</span><span class="stage-badge stage-5">5단계 매우높음</span></div><div class="val-track"><div class="val-fill" style="width:100%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div><div class="val-labels"><span class="val-low">저 12x</span><span class="val-mid">적정 25x</span><span class="val-high">고 45x</span></div></div>
+<div class="val-item" data-metric="ps" onclick="selectMultiple('ps')"><div class="val-header"><span class="val-name">P/S</span><span class="val-number">71.8x</span><span class="stage-badge stage-5">5단계 매우높음</span></div><div class="val-track"><div class="val-fill" style="width:100%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div><div class="val-labels"><span class="val-low">저 10x</span><span class="val-mid">적정 25x</span><span class="val-high">고 45x</span></div></div>
+<div class="val-item" data-metric="fcfyield" onclick="selectMultiple('fcfyield')"><div class="val-header"><span class="val-name">FCF 수익률</span><span class="val-number">0.76%</span><span class="stage-badge stage-5">5단계 매우높음</span></div><div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div><div class="val-labels"><span class="val-low">저 1%</span><span class="val-mid">적정 3%</span><span class="val-high">고 5%</span></div></div>
+<div class="val-item" data-metric="peg" onclick="selectMultiple('peg')"><div class="val-header"><span class="val-name">PEG</span><span class="val-number">약 3.4x</span><span class="stage-badge stage-5">5단계 매우높음</span></div><div class="val-track"><div class="val-fill" style="width:100%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div><div class="val-labels"><span class="val-low">저 1x</span><span class="val-mid">적정 2x</span><span class="val-high">고 3x</span></div></div>
 </div>
 <div class="card">
-<div class="card-title">Information Technology 비교 — PLTR 밸류에이션</div>
-<div class="chart-wrap" style="height:270px;"><canvas id="peerChart"></canvas></div>
-<div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;">PLTR의 현재 멀티플을 Information Technology 비교군과 함께 본다. 회사별 기존 5단계 평가와 현재가 기준을 유지했다.</div>
+<div class="card-title"><span id="multipleCompareTitle">Information Technology 비교 — PLTR 밸류에이션</span></div>
+<div class="chart-wrap" style="height:270px;"><canvas id="multipleChart"></canvas></div>
+<div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText">PLTR의 현재 멀티플을 Information Technology 비교군과 함께 본다. 8분기 연속 실적 서프라이즈와 가속하는 성장률이 프리미엄을 지지하지만, IT 섹터 중앙값 대비 압도적으로 높은 수준이다.</div>
 </div>
 </div>
 
 <div class="card">
-<div class="card-title">Per-Share 지표 (TTM·현재 밸류에이션 기준)</div>
+<div class="card-title">Per-Share 지표 (TTM·현재 밸류에이션 기준 · 약 25.7억 주)</div>
 <div class="per-share-grid">
-<div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석)</div><div class="ps-value">$0.65</div><div class="ps-sub">TTM</div></div>
-<div class="ps-card"><div class="ps-icon">🧾</div><div class="ps-label">매출/주</div><div class="ps-value">약 $2.37</div><div class="ps-sub">P/S 52x 기준</div></div>
-<div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주</div><div class="ps-value">약 $1.11</div><div class="ps-sub">FCF 수익률 0.9% 기준</div></div>
+<div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석)</div><div class="ps-value">$1.16</div><div class="ps-sub">TTM(Q3FY25~Q2FY26 SEC 합산)</div></div>
+<div class="ps-card"><div class="ps-icon">🧾</div><div class="ps-label">매출/주</div><div class="ps-value">약 $2.40</div><div class="ps-sub">TTM 매출 $6.16B 기준</div></div>
+<div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주</div><div class="ps-value">약 $1.31</div><div class="ps-sub">TTM FCF $3.36B 기준</div></div>
 <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS</div><div class="ps-value">없음</div><div class="ps-sub">성장 재투자 우선</div></div>
 </div>
-<div style="font-size:11px;color:var(--text3);margin-top:10px;">* Per-Share 값과 기준 시점은 기존 PLTR 카드의 최신 공시·시장 데이터 기준이다.</div>
+<div style="font-size:11px;color:var(--text3);margin-top:10px;">* EPS·매출/주·FCF/주는 TTM(Q3FY25~Q2FY26) SEC 공시를 약 25.7억 주 기준으로 환산했다.</div>
 </div>
 <div class="card">
 <div class="card-title">종합 밸류에이션 — 성장 프리미엄과 가격 규율</div>
-<div style="font-size:12px;color:var(--text2);line-height:1.6;">AIP가 정부와 기업의 실전 AI 배치 표준으로 자리 잡으며 성장률 85%와 조정 영업마진 60%를 동시에 달성했다. 다만 매출 대비 50배 이상인 가격은 장기간 초고성장을 전제해 작은 가이던스 미달에도 민감하다.</div>
+<div style="font-size:12px;color:var(--text2);line-height:1.6;">AIP가 정부와 기업의 실전 AI 배치 표준으로 자리 잡으며 Q2 매출 성장률 93%와 GAAP 영업마진 47%를 동시에 달성하며 8분기 연속 서프라이즈를 이어갔다. 다만 TTM 매출 대비 70배 이상인 가격은 장기간 초고성장을 전제해 작은 가이던스 미달에도 민감하다.</div>
 </div>
 <div class="card">
 <div class="card-title">시나리오별 공정가치 분석</div>
-<div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;"><div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — 성장 정상화·멀티플 압축</div><div style="font-size:12px;color:var(--text2);">미국 상업 성장률이 둔화될 경우 → 공정가치 <strong style="color:var(--red);">$70~85/주</strong></div></div>
-<div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;"><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 고성장 지속</div><div style="font-size:12px;color:var(--text2);">AIP 확장과 가이던스 달성 시 → 공정가치 <strong>$105~125/주</strong></div></div>
-<div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);"><div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — AI 플랫폼 초과 성장</div><div style="font-size:12px;color:var(--text2);">미국 상업 성장과 마진이 재가속할 경우 → 공정가치 <strong style="color:var(--green);">$140~155/주</strong></div></div>
+<div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;"><div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — 성장 정상화·멀티플 압축</div><div style="font-size:12px;color:var(--text2);">미국 상업 성장률이 둔화되거나 가이던스에 미달할 경우 → 공정가치 <strong style="color:var(--red);">$130~150/주</strong></div></div>
+<div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;"><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 고성장 지속</div><div style="font-size:12px;color:var(--text2);">AIP 확장과 상향된 FY26 가이던스 달성 시 → 공정가치 <strong>$165~195/주</strong></div></div>
+<div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);"><div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — AI 플랫폼 초과 성장</div><div style="font-size:12px;color:var(--text2);">미국 상업 성장과 마진이 추가 재가속할 경우 → 공정가치 <strong style="color:var(--green);">$210~230/주</strong></div></div>
 </div>
 </div>
 <div class="section" id="us" data-us-visual="chart">
@@ -317,9 +387,9 @@
 <div class="rel-container">
 <div class="rel-title">S&P 500 대비 상대 수익률 (52주)</div>
 <div class="grid-3">
-<div class="stat-box"><div class="stat-label">PLTR 52주</div><div class="stat-value down">-21.3%</div></div>
-<div class="stat-box"><div class="stat-label">S&P 500 52주</div><div class="stat-value">16.8%</div></div>
-<div class="stat-box"><div class="stat-label">알파 (S&amp;P 500 대비 초과수익률)</div><div class="stat-value down">-38.1%p</div></div>
+<div class="stat-box"><div class="stat-label">PLTR 52주</div><div class="stat-value down">-5.6%</div></div>
+<div class="stat-box"><div class="stat-label">S&P 500 52주</div><div class="stat-value">+19.6%</div></div>
+<div class="stat-box"><div class="stat-label">알파 (S&amp;P 500 대비 초과수익률)</div><div class="stat-value down">-25.2%p</div></div>
 </div>
 <div class="zone-list" style="margin-top:12px;">
 <div class="zone-item"><span class="zone-label">S&P 500 내 비중</span><span class="zone-val">약 0.45%</span></div>
@@ -329,9 +399,9 @@
 <div class="card">
 <div class="card-title">미국 AIP 수익화 — 상업·정부 동시 가속</div>
 <div class="zone-list">
-<div class="zone-item"><span class="zone-label">글로벌 총매출 · Q1 2026</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$1.63B · +85%</span><span class="zone-tag tag-support">보고</span></div></div>
-<div class="zone-item"><span class="zone-label">미국 상업 매출 성장 · Q1 2026</span><span class="zone-val">+133%</span></div>
-<div class="zone-item"><span class="zone-label">미국 정부 매출 성장 · Q1 2026</span><span class="zone-val">+84%</span></div>
+<div class="zone-item"><span class="zone-label">글로벌 총매출 · Q2 2026</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$1.94B · +93%</span><span class="zone-tag tag-support">보고</span></div></div>
+<div class="zone-item"><span class="zone-label">미국 상업 매출 성장 · Q2 2026</span><span class="zone-val">+149% ($764M)</span></div>
+<div class="zone-item"><span class="zone-label">미국 정부 매출 성장 · Q2 2026</span><span class="zone-val">+90% ($809M)</span></div>
 <div class="zone-item"><span class="zone-label">미국 상업 TCV · Q1 2026</span><span class="zone-val">$1.18B · +45%</span></div>
 <div class="zone-item"><span class="zone-label">글로벌 조정 FCF · Q1 2026</span><span class="zone-val">$925M · 57% 마진</span></div>
 <div class="zone-item"><span class="zone-label">글로벌 $1M+ 계약 · Q1 2026</span><span class="zone-val">206건</span></div>
@@ -351,7 +421,7 @@
 <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block;"></span>부정</span>
 <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--event-neutral);display:inline-block;"></span>중립</span>
 </div>
-<div class="timeline"><div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2026.08.03</div><div class="tl-title">Q2 실적 발표 예정</div><div class="tl-desc">초고성장 지속과 가이던스 상향 여부가 핵심이다.</div><a class="tl-source" href="https://investors.palantir.com/files/Palantir%20-%20Q1%202026%20Business%20Update.pdf" rel="noopener" target="_blank">공식 자료 보기 →</a></div><div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2026.05.04</div><div class="tl-title">Q1 매출 $1.63B</div><div class="tl-desc">전년 대비 85% 성장했다.</div><a class="tl-source" href="https://investors.palantir.com/files/Palantir%20-%20Q1%202026%20Business%20Update.pdf" rel="noopener" target="_blank">공식 자료 보기 →</a></div><div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2026.05.04</div><div class="tl-title">미국 상업 +133%</div><div class="tl-desc">AIP 계약 전환이 가속했다.</div><a class="tl-source" href="https://investors.palantir.com/files/Palantir%20-%20Q1%202026%20Business%20Update.pdf" rel="noopener" target="_blank">공식 자료 보기 →</a></div><div class="tl-item"><div class="tl-dot neutral"></div><div class="tl-date">2026.05.04</div><div class="tl-title">조정 FCF $925M</div><div class="tl-desc">57% 마진의 현금창출을 기록했다.</div><a class="tl-source" href="https://investors.palantir.com/files/Palantir%20-%20Q1%202026%20Business%20Update.pdf" rel="noopener" target="_blank">공식 자료 보기 →</a></div><div class="tl-item"><div class="tl-dot neutral"></div><div class="tl-date">2026.05.04</div><div class="tl-title">대형 계약 206건</div><div class="tl-desc">$1M 이상 거래가 크게 늘었다.</div><a class="tl-source" href="https://investors.palantir.com/files/Palantir%20-%20Q1%202026%20Business%20Update.pdf" rel="noopener" target="_blank">공식 자료 보기 →</a></div></div>
+<div class="timeline"><div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2026.08.04</div><div class="tl-title">Q2 2026 실적 발표 — 매출 $1.94B(+93%), 8분기 연속 서프라이즈</div><div class="tl-desc">미국 상업 매출 $764M(+149%), 미국 정부 매출 $809M(+90%), GAAP 영업마진 47%(Adj. 62%). FY26 매출 가이던스 $8.15~8.16B(+82%)로 상향, 주가는 발표 후 이틀 만에 52주 신고가권까지 급등.</div><a class="tl-source" href="https://www.cnbc.com/2026/08/03/palantir-pltr-earnings-q2-2026.html" rel="noopener" target="_blank">CNBC 보도 보기 →</a></div><div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2026.05.04</div><div class="tl-title">Q1 매출 $1.63B</div><div class="tl-desc">전년 대비 85% 성장했다.</div><a class="tl-source" href="https://investors.palantir.com/files/Palantir%20-%20Q1%202026%20Business%20Update.pdf" rel="noopener" target="_blank">공식 자료 보기 →</a></div><div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">2026.05.04</div><div class="tl-title">미국 상업 +133%</div><div class="tl-desc">AIP 계약 전환이 가속했다.</div><a class="tl-source" href="https://investors.palantir.com/files/Palantir%20-%20Q1%202026%20Business%20Update.pdf" rel="noopener" target="_blank">공식 자료 보기 →</a></div><div class="tl-item"><div class="tl-dot neutral"></div><div class="tl-date">2026.05.04</div><div class="tl-title">조정 FCF $925M</div><div class="tl-desc">57% 마진의 현금창출을 기록했다.</div><a class="tl-source" href="https://investors.palantir.com/files/Palantir%20-%20Q1%202026%20Business%20Update.pdf" rel="noopener" target="_blank">공식 자료 보기 →</a></div><div class="tl-item"><div class="tl-dot neutral"></div><div class="tl-date">2026.05.04</div><div class="tl-title">대형 계약 206건</div><div class="tl-desc">$1M 이상 거래가 크게 늘었다.</div><a class="tl-source" href="https://investors.palantir.com/files/Palantir%20-%20Q1%202026%20Business%20Update.pdf" rel="noopener" target="_blank">공식 자료 보기 →</a></div></div>
 </div>
 <div class="section" id="invest">
 <div class="section-title">2026년 핵심 투자 포인트</div>
@@ -359,14 +429,14 @@
 <div class="bb-box">
 <div class="bb-title bb-bull">🐂 Bull 요인</div>
 <div class="bb-item"><span class="bb-icon">•</span><span><strong>AIP:</strong> 기업 AI 운영체제 선점</span></div>
-<div class="bb-item"><span class="bb-icon">•</span><span><strong>미국 상업:</strong> Q1 매출 +133%</span></div>
-<div class="bb-item"><span class="bb-icon">•</span><span><strong>정부:</strong> Q1 미국 정부 매출 +84%</span></div>
-<div class="bb-item"><span class="bb-icon">•</span><span><strong>마진:</strong> 조정 영업마진 60%</span></div>
+<div class="bb-item"><span class="bb-icon">•</span><span><strong>미국 상업:</strong> Q2 매출 +149%</span></div>
+<div class="bb-item"><span class="bb-icon">•</span><span><strong>정부:</strong> Q2 미국 정부 매출 +90%</span></div>
+<div class="bb-item"><span class="bb-icon">•</span><span><strong>마진:</strong> 조정 영업마진 62%</span></div>
 <div class="bb-item"><span class="bb-icon">•</span><span><strong>계약:</strong> $1M 이상 거래 206건</span></div>
 </div>
 <div class="bb-box">
 <div class="bb-title bb-bear">🐻 Bear 요인</div>
-<div class="bb-item"><span class="bb-icon">•</span><span><strong>밸류에이션:</strong> 매출 대비 50배 이상</span></div>
+<div class="bb-item"><span class="bb-icon">•</span><span><strong>밸류에이션:</strong> TTM 매출 대비 70배 이상</span></div>
 <div class="bb-item"><span class="bb-icon">•</span><span><strong>기대치:</strong> 작은 둔화에도 멀티플 압축</span></div>
 <div class="bb-item"><span class="bb-icon">•</span><span><strong>집중:</strong> 미국 정부 예산 의존</span></div>
 <div class="bb-item"><span class="bb-icon">•</span><span><strong>주식보상:</strong> 주당가치 희석 가능성</span></div>
@@ -377,48 +447,48 @@
 <div class="card-title">목표가 밴드 — 시나리오별 공정가치 vs 현재가 · 애널리스트 목표가</div>
 <div style="position:relative;height:70px;margin:28px 6px 6px;">
 <div style="position:absolute;top:28px;left:0;right:0;height:10px;border-radius:5px;overflow:hidden;display:flex;">
-<div style="width:16.7%;height:100%;background:var(--bg3);"></div>
-<div style="width:12.5%;height:100%;background:rgba(46,204,113,0.45);"></div>
-<div style="width:16.7%;height:100%;background:var(--bg3);"></div>
-<div style="width:16.7%;height:100%;background:rgba(240,192,64,0.5);"></div>
-<div style="width:12.5%;height:100%;background:var(--bg3);"></div>
-<div style="width:12.5%;height:100%;background:rgba(231,76,60,0.45);"></div>
-<div style="width:12.5%;height:100%;background:var(--bg3);"></div>
+<div style="width:11.5%;height:100%;background:var(--bg3);"></div>
+<div style="width:15.4%;height:100%;background:rgba(231,76,60,0.45);"></div>
+<div style="width:11.5%;height:100%;background:var(--bg3);"></div>
+<div style="width:23.1%;height:100%;background:rgba(240,192,64,0.5);"></div>
+<div style="width:11.5%;height:100%;background:var(--bg3);"></div>
+<div style="width:15.4%;height:100%;background:rgba(46,204,113,0.45);"></div>
+<div style="width:11.5%;height:100%;background:var(--bg3);"></div>
 </div>
-<div style="position:absolute;top:10px;left:63.0%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
-<div style="position:absolute;top:-6px;left:63.0%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $125.65</div>
-<div style="position:absolute;top:22px;left:87.1%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
-<div style="position:absolute;top:48px;left:87.1%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $182</div>
+<div style="position:absolute;top:10px;left:43.9%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
+<div style="position:absolute;top:-6px;left:43.9%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $172.01</div>
+<div style="position:absolute;top:22px;left:57.6%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
+<div style="position:absolute;top:48px;left:57.6%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $189.90 (+10.4%)</div>
 </div>
 <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-top:4px;">
-<span style="color:var(--red);">Bear $70~85</span><span>Base $105~125</span><span style="color:var(--green);">Bull $140~155</span>
+<span style="color:var(--red);">Bear $130~150</span><span>Base $165~195</span><span style="color:var(--green);">Bull $210~230</span>
 </div>
-<div style="margin-top:10px;font-size:11px;color:var(--text3);">기존 PLTR 카드의 Bear/Base/Bull 공정가치와 현재가를 PLTR 목표가 게이지 형식으로 표시했다.</div>
+<div style="margin-top:10px;font-size:11px;color:var(--text3);">Q2 실적 서프라이즈로 상향된 시나리오 기준 — 현재가는 Base 밴드 하단 부근, 32명 애널리스트 평균 목표가($189.90)까지 +10.4% 여력.</div>
 <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
 <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">애널리스트 투자의견 — 32명 중 매수 53%</div>
 <div style="height:8px;border-radius:4px;overflow:hidden;display:flex;">
 <div style="width:53%;height:100%;background:var(--green);"></div><div style="width:47%;height:100%;background:#f0c040;"></div>
 </div>
 <div style="display:flex;justify-content:space-between;font-size:10.5px;margin-top:6px;">
-<span style="color:var(--green);">매수 비중 53%</span><span style="color:#f0c040;">중립·기타 47%</span><span style="color:var(--accent2);">평균 목표가 $182</span>
+<span style="color:var(--green);">매수 비중 53%</span><span style="color:#f0c040;">중립·기타 47%</span><span style="color:var(--accent2);">평균 목표가 $189.90</span>
 </div>
 </div>
 </div>
 <div class="card" style="margin-top:16px;">
 <div class="card-title">5개 분석 종합 — 한눈에 보기</div>
 <div class="zone-list">
-<div class="zone-item"><span class="zone-label">📈 기술적</span><span class="zone-val" style="color:var(--red);">모든 이동평균선 하회</span></div>
-<div class="zone-item"><span class="zone-label">📊 펀더멘털</span><span class="zone-val" style="color:var(--green);">매출 +85%·미국 상업 +133%</span></div>
+<div class="zone-item"><span class="zone-label">📈 기술적</span><span class="zone-val" style="color:var(--green);">모든 이동평균선 상회 · Q2 실적 서프라이즈 이후 급반등</span></div>
+<div class="zone-item"><span class="zone-label">📊 펀더멘털</span><span class="zone-val" style="color:var(--green);">매출 +93%·미국 상업 +149%</span></div>
 <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:var(--red);">4개 지표 5단계</span></div>
-<div class="zone-item"><span class="zone-label">🇺🇸 상대성과</span><span class="zone-val" style="color:var(--red);">-38.1%p</span></div>
+<div class="zone-item"><span class="zone-label">🇺🇸 상대성과</span><span class="zone-val" style="color:var(--red);">-25.2%p</span></div>
 <div class="zone-item"><span class="zone-label">📰 핵심 변수</span><span class="zone-val" style="color:var(--gold);">Q2 실적·가이던스 상향 폭</span></div>
 </div>
 </div>
 <div class="card" style="margin-top:16px;">
 <div class="card-title">투자의견 요약</div>
 <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;">
-<div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107">Q2 2026 · 2026년 8월 3일</strong></div>
-<div><span style="color:var(--text2);">투자의견:</span> <strong style="color:var(--gold)">매수 비중 53%</strong></div><div><span style="color:var(--text2);">목표주가:</span> <strong style="color:#ffc107">$182 · +48.0%</strong></div><div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">초고성장과 극단적 멀티플을 함께 관리</strong></div>
+<div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107">Q3 2026 · 2026년 11월 2일 예상</strong></div>
+<div><span style="color:var(--text2);">투자의견:</span> <strong style="color:var(--gold)">Buy 컨센서스 (32명)</strong></div><div><span style="color:var(--text2);">목표주가:</span> <strong style="color:#ffc107">$189.90 · +10.4%</strong></div><div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">8분기 연속 실적 서프라이즈로 초고성장은 확인됐으나, 극단적 멀티플이 향후 작은 미스에도 민감하게 반응할 수 있어 가격 규율이 필요</strong></div>
 </div>
 </div>
 </div>
@@ -435,11 +505,11 @@ function showSection(id) {
 }
 const charts = {};
 
-const PLTR_DAILY = [["2025-08-01",155.05,158.19,151.06,154.27,61287000],["2025-08-04",158.53,161.4,157.93,160.66,82993600],["2025-08-05",171.81,176.33,169.22,173.27,130917500],["2025-08-06",171.18,180.58,171.01,179.54,82924800],["2025-08-07",181.01,184.48,178.17,182.2,77829200],["2025-08-08",184.74,187.99,184.41,186.96,62657900],["2025-08-11",186.47,187.18,181.92,182.68,56125600],["2025-08-12",184.7,190.0,182.1,186.97,54819000],["2025-08-13",189.0,189.46,183.59,184.37,53610000],["2025-08-14",182.41,185.33,179.2,181.02,53472900],["2025-08-15",179.73,180.0,173.38,177.17,60288700],["2025-08-18",175.27,177.9,171.39,174.03,62656600],["2025-08-19",171.36,172.3,156.9,157.75,137922700],["2025-08-20",152.3,156.46,142.34,156.01,220336400],["2025-08-21",157.17,157.97,153.81,156.18,94678600],["2025-08-22",155.32,163.2,151.77,158.74,102099200],["2025-08-25",156.1,158.59,149.37,157.17,86879800],["2025-08-26",155.39,162.13,154.57,160.87,86573700],["2025-08-27",162.32,162.4,155.98,156.72,76380600],["2025-08-28",157.63,158.23,152.55,158.12,57885200],["2025-08-29",156.98,158.42,153.0,156.71,45270500],["2025-09-02",151.2,158.39,150.28,157.09,65435000],["2025-09-03",158.0,161.15,152.71,154.9,66052300],["2025-09-04",154.87,157.04,153.16,156.14,53292300],["2025-09-05",157.82,158.97,148.04,153.11,81855900],["2025-09-08",154.91,158.3,154.84,156.1,47643000],["2025-09-09",157.25,162.75,156.37,162.36,61359500],["2025-09-10",166.0,169.0,163.44,166.74,62211400],["2025-09-11",167.24,167.46,163.22,164.36,42025500],["2025-09-12",165.35,171.53,164.01,171.43,54498500],["2025-09-15",169.6,171.8,167.41,171.21,45396100],["2025-09-16",171.04,171.31,168.96,170.26,34598700],["2025-09-17",169.02,169.68,161.27,168.33,69255500],["2025-09-18",170.27,178.8,169.39,176.97,70768600],["2025-09-19",177.07,184.42,176.71,182.39,109129900],["2025-09-22",180.88,182.25,178.29,179.33,45916700],["2025-09-23",182.51,185.75,177.01,182.55,62354800],["2025-09-24",183.91,184.85,177.12,179.56,45379700],["2025-09-25",175.8,184.32,174.29,179.12,72321200],["2025-09-26",179.05,180.12,174.91,177.57,44275800],["2025-09-29",179.64,181.48,177.16,178.86,38413800],["2025-09-30",178.98,182.77,178.22,182.42,43561700],["2025-10-01",181.32,186.28,179.5,184.95,45717300],["2025-10-02",186.7,188.2,182.95,187.05,39849200],["2025-10-03",186.4,186.84,170.77,173.07,105533400],["2025-10-06",179.18,182.95,177.83,179.53,52504200],["2025-10-07",180.31,186.18,179.42,182.17,58179300],["2025-10-08",182.8,184.26,181.2,183.56,36299700],["2025-10-09",183.58,187.62,179.95,185.47,45050300],["2025-10-10",185.17,187.1,173.53,175.44,55194000],["2025-10-13",178.68,179.22,173.45,177.21,41332400],["2025-10-14",176.0,182.34,170.82,179.74,49261400],["2025-10-15",181.65,184.35,176.02,179.62,37372100],["2025-10-16",181.78,184.82,176.45,178.12,42870900],["2025-10-17",177.75,181.59,173.95,178.15,43421500],["2025-10-20",179.49,183.09,177.44,181.59,31975800],["2025-10-21",182.06,182.39,178.65,181.51,27528100],["2025-10-22",181.93,182.21,169.42,175.49,58263100],["2025-10-23",175.45,181.56,175.01,180.48,35812300],["2025-10-24",182.88,186.17,182.85,184.63,34813500],["2025-10-27",188.97,192.83,187.52,189.18,47153100],["2025-10-28",189.48,191.78,186.78,189.6,38201000],["2025-10-29",191.08,199.85,190.49,198.81,65537300],["2025-10-30",198.43,199.67,194.12,194.55,43541700],["2025-10-31",199.2,204.18,197.92,200.47,52697600],["2025-11-03",205.04,207.52,201.82,207.18,81016800],["2025-11-04",192.07,195.7,185.56,190.74,121380900],["2025-11-05",189.0,190.32,181.21,187.9,76121000],["2025-11-06",187.99,191.09,174.53,175.05,78468600],["2025-11-07",173.15,178.7,168.91,177.93,73989700],["2025-11-10",184.31,194.93,183.52,193.61,87764200],["2025-11-11",190.34,192.93,187.13,190.96,49819700],["2025-11-12",190.58,190.58,180.4,184.17,55347100],["2025-11-13",181.71,182.7,170.73,172.14,63188800],["2025-11-14",166.98,177.29,164.5,174.01,62596800],["2025-11-17",170.53,174.24,167.68,171.25,50339000],["2025-11-18",168.37,172.83,165.5,167.33,53710100],["2025-11-19",167.8,169.6,162.42,165.42,46108200],["2025-11-20",172.07,174.57,154.4,155.74,78443900],["2025-11-21",156.01,158.11,147.56,154.85,71346400],["2025-11-24",157.47,165.17,157.0,162.25,57877800],["2025-11-25",160.07,164.65,156.55,163.55,36523500],["2025-11-26",166.85,168.34,163.88,165.77,34610500],["2025-11-28",167.76,168.8,165.88,168.45,17199500],["2025-12-01",165.0,169.1,163.12,167.49,27779600],["2025-12-02",169.59,175.75,169.59,170.69,35368000],["2025-12-03",170.14,177.91,168.83,176.08,30541600],["2025-12-04",176.37,178.44,174.43,177.92,29217800],["2025-12-05",178.23,182.15,177.16,181.76,32079300],["2025-12-08",182.21,183.88,179.54,181.49,30456700],["2025-12-09",180.97,182.85,180.38,181.84,18937600],["2025-12-10",184.95,190.39,182.75,187.91,59398000],["2025-12-11",184.8,188.05,180.21,187.54,36843200],["2025-12-12",185.81,186.52,177.67,183.57,42427400],["2025-12-15",185.08,187.78,180.03,183.25,32796100],["2025-12-16",181.65,188.5,181.14,187.75,42070300],["2025-12-17",187.71,187.75,176.5,177.29,50424700],["2025-12-18",181.51,187.33,181.51,185.69,40221500],["2025-12-19",186.74,195.0,186.73,193.38,76929400],["2025-12-22",195.04,198.88,192.43,193.98,36686000],["2025-12-23",192.82,195.37,191.74,194.13,24041000],["2025-12-24",193.16,195.17,192.83,194.17,11710100],["2025-12-26",195.01,196.35,188.62,188.71,26262000],["2025-12-29",186.85,187.2,183.64,184.18,28242000],["2025-12-30",184.35,184.73,180.7,180.84,23336300],["2025-12-31",181.13,181.53,177.25,177.75,22997400],["2026-01-02",181.3,181.35,166.35,167.86,60634100],["2026-01-05",174.88,175.82,171.79,174.04,39511700],["2026-01-06",175.76,180.19,174.77,179.71,34838600],["2026-01-07",179.8,187.28,177.66,181.68,45349000],["2026-01-08",185.62,185.66,174.37,176.86,47304300],["2026-01-09",177.02,178.72,174.75,177.49,31362900],["2026-01-12",177.68,182.5,176.34,179.41,34954500],["2026-01-13",178.88,181.1,176.14,178.96,27769400],["2026-01-14",178.12,181.6,173.95,178.4,33651400],["2026-01-15",178.71,180.6,176.53,177.07,31109200],["2026-01-16",179.36,182.43,170.01,170.96,59483600],["2026-01-20",167.62,171.97,166.24,168.53,36708500],["2026-01-21",168.4,169.49,161.11,165.33,47851200],["2026-01-22",168.93,169.0,164.95,165.9,28499500],["2026-01-23",167.27,172.0,166.3,169.6,30285700],["2026-01-26",168.21,170.59,167.32,167.47,22777200],["2026-01-27",167.48,169.44,164.69,165.7,26542300],["2026-01-28",164.4,165.04,157.24,157.35,44822800],["2026-01-29",157.63,157.63,147.12,151.86,59846800],["2026-01-30",150.05,151.0,145.14,146.59,47271000],["2026-02-02",150.94,151.4,146.65,147.76,72811100],["2026-02-03",165.05,165.08,153.12,157.88,113169200],["2026-02-04",155.41,155.85,135.68,139.54,113199500],["2026-02-05",136.82,137.98,128.32,130.01,93690800],["2026-02-06",135.33,137.69,132.35,135.9,62661400],["2026-02-09",136.58,145.87,134.78,142.91,58042500],["2026-02-10",144.96,145.56,137.77,139.51,56061300],["2026-02-11",139.02,139.25,132.95,135.68,52796100],["2026-02-12",135.36,135.89,126.56,129.13,74090600],["2026-02-13",127.9,133.56,126.23,131.41,49438100],["2026-02-17",128.9,134.32,127.29,133.02,48407100],["2026-02-18",135.89,140.96,134.87,135.38,59677100],["2026-02-19",132.31,136.16,131.01,134.89,42197200],["2026-02-20",132.37,136.21,131.17,135.24,53726800],["2026-02-23",132.04,132.04,127.39,130.6,52512200],["2026-02-24",129.01,130.24,126.37,128.84,47121400],["2026-02-25",130.61,136.09,129.18,134.19,53078300],["2026-02-26",133.85,137.51,132.63,135.94,45100000],["2026-02-27",134.07,138.1,133.98,137.19,59412400],["2026-03-02",140.77,147.14,140.52,145.17,72683900],["2026-03-03",142.1,147.5,138.2,147.22,67460200],["2026-03-04",148.43,154.52,148.06,153.19,60062200],["2026-03-05",152.94,156.38,149.61,152.67,50714500],["2026-03-06",150.44,161.45,150.29,157.16,74980900],["2026-03-09",155.69,158.44,152.97,156.43,47574200],["2026-03-10",155.99,156.66,150.14,151.14,47501400],["2026-03-11",151.38,153.17,149.33,151.6,33955900],["2026-03-12",153.01,155.88,150.98,153.5,54409800],["2026-03-13",153.3,154.56,148.58,150.95,42460600],["2026-03-16",152.45,153.86,151.17,152.72,32898900],["2026-03-17",152.4,156.75,152.12,155.08,37118500],["2026-03-18",154.95,156.69,152.61,152.77,32476700],["2026-03-19",153.1,156.15,150.5,155.68,33915900],["2026-03-20",155.2,156.65,149.09,150.68,48700200],["2026-03-23",153.24,161.08,153.24,160.84,57507100],["2026-03-24",160.07,162.4,151.64,154.78,56155700],["2026-03-25",157.42,160.27,154.85,154.96,38543300],["2026-03-26",153.05,153.12,147.25,147.56,43038400],["2026-03-27",145.88,145.96,141.56,143.06,35790800],["2026-03-30",143.27,144.12,136.3,137.55,41289800],["2026-03-31",140.02,147.86,138.97,146.28,45558600],["2026-04-01",147.0,148.3,144.47,146.49,34171000],["2026-04-02",143.49,148.51,137.99,148.46,30437000],["2026-04-06",148.36,150.61,146.63,147.93,25142200],["2026-04-07",146.88,150.27,144.45,150.07,28671100],["2026-04-08",154.76,156.28,139.17,140.76,64827700],["2026-04-09",139.4,139.54,128.47,130.49,92361400],["2026-04-10",128.48,129.2,122.68,128.06,116656800],["2026-04-13",130.23,134.42,129.15,132.37,65772800],["2026-04-14",134.43,138.07,134.0,135.7,52786800],["2026-04-15",136.79,142.58,134.93,142.15,48389400],["2026-04-16",144.29,145.55,139.53,142.76,43746000],["2026-04-17",145.32,148.28,143.3,146.39,50657600],["2026-04-20",145.0,147.2,143.83,145.89,33482700],["2026-04-21",146.81,149.87,144.0,145.97,44830000],["2026-04-22",148.36,152.68,147.41,152.62,43701500],["2026-04-23",149.7,150.29,139.92,141.57,58654400],["2026-04-24",142.96,143.33,138.93,143.09,38677200],["2026-04-27",141.25,145.07,141.01,143.1,31275400],["2026-04-28",142.3,143.85,140.42,141.18,24757200],["2026-04-29",139.76,139.76,134.68,137.97,33348100],["2026-04-30",138.48,140.2,136.65,139.11,32523600],["2026-05-01",143.25,146.44,141.39,144.07,33219900],["2026-05-04",147.75,149.64,145.23,146.03,70525900],["2026-05-05",140.29,142.98,134.72,135.91,89747100],["2026-05-06",133.71,135.7,131.15,133.79,55524800],["2026-05-07",135.1,140.95,134.78,137.05,50184900],["2026-05-08",135.87,137.88,133.02,137.8,41745400],["2026-05-11",134.91,137.14,132.77,136.89,41414500],["2026-05-12",136.6,137.43,133.46,136.0,38781100],["2026-05-13",134.01,136.99,128.75,130.05,55189400],["2026-05-14",129.65,134.48,129.45,133.73,37052600],["2026-05-15",132.8,135.64,132.29,133.99,32629700],["2026-05-18",132.5,135.93,131.33,135.14,32034600],["2026-05-19",135.17,137.47,133.6,135.26,29777300],["2026-05-20",134.15,137.24,132.42,137.15,31307700],["2026-05-21",135.8,138.55,135.42,137.41,24311900],["2026-05-22",137.43,139.02,134.3,136.88,27578000],["2026-05-26",136.16,138.68,133.3,136.6,31723900],["2026-05-27",133.3,135.73,131.63,132.51,34159800],["2026-05-28",133.16,145.0,133.0,143.34,52085200],["2026-05-29",147.82,157.78,145.79,156.54,92196600],["2026-06-01",159.98,163.7,155.88,160.65,57654000],["2026-06-02",156.69,159.55,149.8,152.17,43163100],["2026-06-03",149.7,151.68,141.25,142.2,41072500],["2026-06-04",145.46,146.37,140.27,141.7,40834000],["2026-06-05",140.32,141.97,134.02,135.53,38283500],["2026-06-08",135.68,137.76,135.28,136.47,26978900],["2026-06-09",134.87,136.99,127.35,132.07,38680000],["2026-06-10",129.32,133.18,128.8,130.21,30612600],["2026-06-11",128.78,131.52,127.17,131.08,27554500],["2026-06-12",130.91,131.09,126.65,127.99,35378000],["2026-06-15",130.02,134.98,129.7,134.71,41748200],["2026-06-16",134.59,134.59,129.62,133.25,30409900],["2026-06-17",131.76,136.1,129.92,130.63,32290800],["2026-06-18",130.84,131.43,125.01,128.47,55338000],["2026-06-22",125.74,128.87,119.2,119.5,56924500],["2026-06-23",120.15,120.94,116.18,116.7,44661900],["2026-06-24",114.12,118.0,112.25,113.5,46520700],["2026-06-25",111.38,112.15,106.37,107.27,61840100],["2026-06-26",109.04,114.08,108.47,112.93,61360500],["2026-06-29",116.23,119.08,114.7,115.7,45017400],["2026-06-30",114.95,118.7,114.57,116.67,38069700],["2026-07-01",120.05,128.25,119.35,125.73,58561300],["2026-07-02",128.99,132.88,127.95,129.3,60641000],["2026-07-06",127.24,134.07,126.64,132.54,37360100],["2026-07-07",133.73,138.9,131.46,134.37,52570400],["2026-07-08",129.49,132.39,126.71,132.22,40587800],["2026-07-09",127.72,129.19,124.81,129.04,35286100],["2026-07-10",132.14,132.28,125.77,126.79,31163000],["2026-07-13",127.29,130.72,126.19,130.04,39786500],["2026-07-14",123.61,135.79,122.64,133.72,49963700],["2026-07-15",134.34,136.88,132.88,133.76,26064500],["2026-07-16",133.08,136.21,128.68,134.44,28951300],["2026-07-17",131.79,134.77,129.05,132.38,31875100],["2026-07-20",131.88,136.62,131.82,134.85,30571300],["2026-07-21",133.83,134.68,131.23,132.66,23161800],["2026-07-22",132.22,132.35,123.45,124.57,38588300],["2026-07-23",125.93,126.4,120.73,123.37,29757900],["2026-07-24",125.17,125.31,122.02,122.92,21177000],["2026-07-27",126.15,132.41,125.31,131.53,36708200],["2026-07-28",125.84,127.19,117.89,123.53,43597300],["2026-07-29",124.0,127.28,122.45,123.0,27207900],["2026-07-30",121.14,123.67,120.27,122.26,27801600],["2026-07-31",122.29,123.39,119.62,123.06,29085100],["2026-08-03",126.7,126.96,123.66,125.65,72406300]];
-const PLTR_MA5 = [157.07,157.63,161.03,165.22,169.99,176.53,180.93,183.67,184.64,184.4,182.44,180.71,174.87,169.2,164.23,160.54,157.17,157.79,157.94,158.32,157.92,157.9,156.71,156.59,155.59,155.47,156.52,158.89,160.53,164.2,167.22,168.8,169.12,171.64,173.83,175.46,177.91,180.16,180.59,179.63,179.53,179.51,180.58,182.17,181.27,181.4,181.35,181.08,180.76,181.23,180.77,180.28,179.5,178.03,178.57,179.44,179.8,178.97,179.44,180.74,182.26,183.88,188.54,191.35,194.52,198.12,198.35,196.17,192.27,187.76,185.05,185.09,184.34,183.76,182.98,178.51,173.78,170.03,166.75,162.92,161.12,160.36,160.43,162.97,165.5,167.19,169.7,172.13,174.79,177.59,179.82,182.18,184.11,184.47,184.82,186.0,183.88,183.51,185.47,187.62,188.89,192.27,192.87,191.03,188.41,185.13,179.87,176.93,176.04,176.21,176.03,177.96,179.03,178.88,178.22,178.27,176.96,174.78,172.06,169.56,168.06,167.37,166.8,165.2,162.4,157.79,153.85,152.29,148.73,144.36,142.22,141.25,137.57,136.8,136.63,135.73,133.75,132.92,132.77,133.99,133.83,132.99,132.75,132.96,133.35,136.27,139.94,143.74,147.09,151.08,153.33,154.12,153.8,153.97,152.72,151.98,152.77,153.0,153.44,153.39,155.01,154.95,155.39,153.76,152.24,147.58,145.88,144.19,144.37,145.34,147.85,146.74,143.54,139.46,136.35,133.48,133.75,136.21,139.87,142.58,144.63,146.73,146.49,145.83,145.27,144.31,141.38,140.89,141.09,141.67,140.62,139.78,139.37,138.12,136.29,136.31,135.56,134.89,134.13,133.78,133.63,135.05,135.79,136.37,136.66,136.11,137.35,141.17,145.93,149.04,150.98,150.65,146.45,141.61,137.59,135.2,133.07,131.56,131.21,131.45,131.53,131.01,129.31,125.71,121.76,117.09,113.98,113.22,113.21,115.66,120.07,123.99,127.72,130.83,131.49,130.99,130.49,130.36,130.67,131.75,132.87,133.83,133.62,131.78,129.57,127.67,127.01,125.18,124.87,124.65,124.68,123.5];
-const PLTR_MA20 = [150.86,151.94,153.62,155.44,157.42,159.66,161.34,163.26,164.93,166.28,167.47,168.58,169.01,169.08,169.15,169.15,169.11,169.34,169.25,169.23,169.36,169.18,168.26,167.09,165.64,164.09,163.08,162.06,161.06,160.58,160.29,160.1,160.63,161.68,162.99,164.02,165.28,166.22,167.34,168.31,169.42,170.69,172.19,173.73,174.73,175.9,176.89,177.73,178.79,178.99,179.29,179.76,180.33,180.39,180.17,180.29,180.24,180.03,180.1,180.45,180.97,181.33,182.02,182.4,183.77,185.15,185.58,185.79,185.27,185.4,186.22,186.78,187.01,186.71,186.5,185.98,185.27,184.77,183.53,182.04,180.7,179.4,177.74,176.44,174.79,172.97,172.23,171.73,172.07,172.25,171.66,171.51,171.67,172.25,172.71,173.53,174.03,175.04,176.93,178.88,180.48,182.01,183.15,183.94,184.61,184.96,184.55,184.36,184.25,184.26,184.01,183.49,183.09,182.86,182.61,182.08,181.76,180.91,179.5,178.1,176.87,175.54,174.39,173.05,171.6,170.04,169.03,168.23,166.22,163.63,161.59,159.86,157.86,155.7,153.23,150.95,149.05,147.4,145.87,144.34,142.39,140.46,138.88,137.81,137.08,137.01,136.98,136.75,137.4,138.76,139.79,140.2,140.8,141.7,142.79,143.85,144.95,145.82,146.86,147.64,149.15,150.44,151.48,152.06,152.36,151.98,151.93,151.59,151.38,150.92,150.6,150.09,149.03,147.76,146.83,145.98,145.33,144.83,144.37,144.13,143.38,143.28,142.61,142.38,142.38,142.57,142.15,141.78,141.56,141.47,140.76,140.41,140.74,141.23,141.45,141.47,140.86,140.41,139.79,139.25,138.72,137.94,137.74,137.43,137.1,136.67,136.94,137.81,138.64,138.94,139.26,139.65,139.58,139.51,139.27,138.98,139.03,138.74,138.78,138.69,138.45,138.02,137.12,136.12,134.96,133.7,132.18,130.14,127.94,126.62,125.97,125.51,125.45,125.24,125.09,124.92,124.87,125.15,125.11,125.17,125.25,125.57,126.23,126.62,127.12,127.9,128.83,129.22,129.54,129.36,129.05,128.71];
-const PLTR_MA60 = [137.1,137.94,138.84,139.88,140.94,141.92,142.79,143.77,144.69,145.6,146.46,147.35,147.94,148.49,149.03,149.62,150.2,150.68,151.09,151.51,151.95,152.57,153.03,153.43,153.77,154.09,154.55,155.04,155.42,155.97,156.49,157.04,157.52,158.08,158.74,159.32,160.19,160.91,161.71,162.47,163.21,163.93,164.69,165.42,165.93,166.55,167.1,167.69,168.26,168.62,169.01,169.48,169.99,170.38,170.77,171.15,171.54,171.86,172.23,172.67,173.25,173.73,174.16,174.41,174.71,175.05,175.18,175.2,175.04,174.99,175.26,175.55,175.99,176.26,176.55,176.76,176.93,177.01,176.99,176.94,177.03,177.14,177.32,177.52,177.76,178.01,178.23,178.42,178.71,178.88,179.06,179.35,179.67,179.78,179.79,179.93,179.85,179.95,180.19,180.46,180.71,180.91,180.97,180.93,181.05,181.03,180.79,180.63,180.53,180.64,180.63,180.59,180.59,180.6,180.61,180.53,180.36,180.24,179.99,179.68,179.35,178.98,178.43,177.81,177.0,175.99,175.27,174.77,174.18,173.38,172.42,171.62,170.87,170.27,169.52,168.85,168.28,167.78,167.43,167.11,166.58,166.0,165.48,164.93,164.43,164.0,163.52,163.11,162.63,162.22,161.8,161.18,160.58,160.08,159.54,158.96,158.59,158.04,157.41,156.69,156.14,155.48,154.92,154.31,153.68,153.01,152.65,152.19,151.67,151.11,150.66,150.05,149.23,148.38,147.62,146.93,146.45,146.02,145.7,145.37,144.97,144.73,144.32,144.09,143.94,143.85,143.69,143.38,143.45,143.72,143.72,143.57,143.52,143.56,143.69,143.77,143.72,143.69,143.67,143.67,143.75,143.89,143.94,143.96,143.95,143.74,143.67,143.73,143.86,143.78,143.54,143.38,143.12,142.83,142.52,142.14,141.74,141.33,140.98,140.69,140.19,139.75,139.16,138.64,138.15,137.64,137.09,136.58,136.05,135.68,135.33,135.19,135.26,135.33,135.27,135.12,134.92,134.77,134.56,134.37,134.14,133.85,133.7,133.39,133.06,132.76,132.65,132.39,132.04,131.64,131.43,131.29];
-const PLTR_MA120 = [116.34,116.7,117.21,117.73,118.26,118.83,119.31,119.94,120.59,121.25,121.97,122.69,123.26,123.85,124.45,125.07,125.68,126.27,126.91,127.52,128.19,128.84,129.44,130.08,130.63,131.21,131.86,132.53,133.17,133.84,134.46,135.08,135.71,136.44,137.24,138.03,138.85,139.62,140.41,141.27,142.12,142.99,143.77,144.59,145.29,146.02,146.71,147.47,148.23,148.94,149.63,150.29,150.89,151.43,151.96,152.51,153.03,153.53,154.0,154.5,155.17,155.83,156.5,157.14,157.82,158.48,158.99,159.49,159.87,160.3,160.86,161.45,161.96,162.37,162.79,163.19,163.56,163.84,164.04,164.22,164.49,164.85,165.17,165.48,165.76,166.05,166.39,166.73,167.06,167.43,167.77,168.2,168.59,168.93,169.27,169.63,170.02,170.43,170.95,171.47,171.96,172.42,172.83,173.17,173.49,173.79,173.95,174.16,174.4,174.63,174.82,175.04,175.29,175.49,175.69,175.84,175.95,176.05,176.11,176.17,176.3,176.36,176.29,176.11,175.85,175.52,175.23,174.98,174.61,174.19,173.84,173.58,173.43,173.26,173.04,172.81,172.61,172.39,172.21,172.02,171.8,171.57,171.4,171.23,171.1,171.0,170.88,170.77,170.67,170.55,170.43,170.27,170.13,169.93,169.67,169.45,169.22,169.0,168.8,168.58,168.43,168.2,167.95,167.62,167.37,167.02,166.72,166.41,166.1,165.87,165.64,165.32,164.91,164.49,164.11,163.73,163.4,163.13,162.84,162.52,162.16,161.85,161.38,160.95,160.47,159.92,159.48,159.07,158.82,158.55,158.07,157.59,157.2,156.91,156.6,156.31,156.0,155.74,155.55,155.39,155.16,154.95,154.71,154.45,154.19,153.87,153.6,153.42,153.24,153.0,152.67,152.28,151.85,151.46,151.03,150.55,150.17,149.69,149.2,148.69,148.16,147.61,147.04,146.47,145.91,145.33,144.87,144.38,143.86,143.39,142.99,142.62,142.24,141.85,141.44,141.02,140.68,140.39,140.13,139.87,139.56,139.29,139.01,138.74,138.5,138.3,138.17,137.88,137.74,137.68,137.57,137.43];
+const PLTR_DAILY = [["2025-08-07",181.01,184.48,178.17,182.2,77829200],["2025-08-08",184.74,187.99,184.41,186.96,62657900],["2025-08-11",186.47,187.18,181.92,182.68,56125600],["2025-08-12",184.7,190.0,182.1,186.97,54819000],["2025-08-13",189.0,189.46,183.59,184.37,53610000],["2025-08-14",182.41,185.33,179.2,181.02,53472900],["2025-08-15",179.73,180.0,173.38,177.17,60288700],["2025-08-18",175.27,177.9,171.39,174.03,62656600],["2025-08-19",171.36,172.3,156.9,157.75,137922700],["2025-08-20",152.3,156.46,142.34,156.01,220336400],["2025-08-21",157.17,157.97,153.81,156.18,94678600],["2025-08-22",155.32,163.2,151.77,158.74,102099200],["2025-08-25",156.1,158.59,149.37,157.17,86879800],["2025-08-26",155.39,162.13,154.57,160.87,86573700],["2025-08-27",162.32,162.4,155.98,156.72,76380600],["2025-08-28",157.63,158.23,152.55,158.12,57885200],["2025-08-29",156.98,158.42,153.0,156.71,45270500],["2025-09-02",151.2,158.39,150.28,157.09,65435000],["2025-09-03",158.0,161.15,152.71,154.9,66052300],["2025-09-04",154.87,157.04,153.16,156.14,53292300],["2025-09-05",157.82,158.97,148.04,153.11,81855900],["2025-09-08",154.91,158.3,154.84,156.1,47643000],["2025-09-09",157.25,162.75,156.37,162.36,61359500],["2025-09-10",166.0,169.0,163.44,166.74,62211400],["2025-09-11",167.24,167.46,163.22,164.36,42025500],["2025-09-12",165.35,171.53,164.01,171.43,54498500],["2025-09-15",169.6,171.8,167.41,171.21,45396100],["2025-09-16",171.04,171.31,168.96,170.26,34598700],["2025-09-17",169.02,169.68,161.27,168.33,69255500],["2025-09-18",170.27,178.8,169.39,176.97,70768600],["2025-09-19",177.07,184.42,176.71,182.39,109129900],["2025-09-22",180.88,182.25,178.29,179.33,45916700],["2025-09-23",182.51,185.75,177.01,182.55,62354800],["2025-09-24",183.91,184.85,177.12,179.56,45379700],["2025-09-25",175.8,184.32,174.29,179.12,72321200],["2025-09-26",179.05,180.12,174.91,177.57,44275800],["2025-09-29",179.64,181.48,177.16,178.86,38413800],["2025-09-30",178.98,182.77,178.22,182.42,43561700],["2025-10-01",181.32,186.28,179.5,184.95,45717300],["2025-10-02",186.7,188.2,182.95,187.05,39849200],["2025-10-03",186.4,186.84,170.77,173.07,105533400],["2025-10-06",179.18,182.95,177.83,179.53,52504200],["2025-10-07",180.31,186.18,179.42,182.17,58179300],["2025-10-08",182.8,184.26,181.2,183.56,36299700],["2025-10-09",183.58,187.62,179.95,185.47,45050300],["2025-10-10",185.17,187.1,173.53,175.44,55194000],["2025-10-13",178.68,179.22,173.45,177.21,41332400],["2025-10-14",176.0,182.34,170.82,179.74,49261400],["2025-10-15",181.65,184.35,176.02,179.62,37372100],["2025-10-16",181.78,184.82,176.45,178.12,42870900],["2025-10-17",177.75,181.59,173.95,178.15,43421500],["2025-10-20",179.49,183.09,177.44,181.59,31975800],["2025-10-21",182.06,182.39,178.65,181.51,27528100],["2025-10-22",181.93,182.21,169.42,175.49,58263100],["2025-10-23",175.45,181.56,175.01,180.48,35812300],["2025-10-24",182.88,186.17,182.85,184.63,34813500],["2025-10-27",188.97,192.83,187.52,189.18,47153100],["2025-10-28",189.48,191.78,186.78,189.6,38201000],["2025-10-29",191.08,199.85,190.49,198.81,65537300],["2025-10-30",198.43,199.67,194.12,194.55,43541700],["2025-10-31",199.2,204.18,197.92,200.47,52697600],["2025-11-03",205.04,207.52,201.82,207.18,81016800],["2025-11-04",192.07,195.7,185.56,190.74,121380900],["2025-11-05",189.0,190.32,181.21,187.9,76121000],["2025-11-06",187.99,191.09,174.53,175.05,78468600],["2025-11-07",173.15,178.7,168.91,177.93,73989700],["2025-11-10",184.31,194.93,183.52,193.61,87764200],["2025-11-11",190.34,192.93,187.13,190.96,49819700],["2025-11-12",190.58,190.58,180.4,184.17,55347100],["2025-11-13",181.71,182.7,170.73,172.14,63188800],["2025-11-14",166.98,177.29,164.5,174.01,62596800],["2025-11-17",170.53,174.24,167.68,171.25,50339000],["2025-11-18",168.37,172.83,165.5,167.33,53710100],["2025-11-19",167.8,169.6,162.42,165.42,46108200],["2025-11-20",172.07,174.57,154.4,155.74,78443900],["2025-11-21",156.01,158.11,147.56,154.85,71346400],["2025-11-24",157.47,165.17,157.0,162.25,57877800],["2025-11-25",160.07,164.65,156.55,163.55,36523500],["2025-11-26",166.85,168.34,163.88,165.77,34610500],["2025-11-28",167.76,168.8,165.88,168.45,17199500],["2025-12-01",165.0,169.1,163.12,167.49,27779600],["2025-12-02",169.59,175.75,169.59,170.69,35368000],["2025-12-03",170.14,177.91,168.83,176.08,30541600],["2025-12-04",176.37,178.44,174.43,177.92,29217800],["2025-12-05",178.23,182.15,177.16,181.76,32079300],["2025-12-08",182.21,183.88,179.54,181.49,30456700],["2025-12-09",180.97,182.85,180.38,181.84,18937600],["2025-12-10",184.95,190.39,182.75,187.91,59398000],["2025-12-11",184.8,188.05,180.21,187.54,36843200],["2025-12-12",185.81,186.52,177.67,183.57,42427400],["2025-12-15",185.08,187.78,180.03,183.25,32796100],["2025-12-16",181.65,188.5,181.14,187.75,42070300],["2025-12-17",187.71,187.75,176.5,177.29,50424700],["2025-12-18",181.51,187.33,181.51,185.69,40221500],["2025-12-19",186.74,195.0,186.73,193.38,76929400],["2025-12-22",195.04,198.88,192.43,193.98,36686000],["2025-12-23",192.82,195.37,191.74,194.13,24041000],["2025-12-24",193.16,195.17,192.83,194.17,11710100],["2025-12-26",195.01,196.35,188.62,188.71,26262000],["2025-12-29",186.85,187.2,183.64,184.18,28242000],["2025-12-30",184.35,184.73,180.7,180.84,23336300],["2025-12-31",181.13,181.53,177.25,177.75,22997400],["2026-01-02",181.3,181.35,166.35,167.86,60634100],["2026-01-05",174.88,175.82,171.79,174.04,39511700],["2026-01-06",175.76,180.19,174.77,179.71,34838600],["2026-01-07",179.8,187.28,177.66,181.68,45349000],["2026-01-08",185.62,185.66,174.37,176.86,47304300],["2026-01-09",177.02,178.72,174.75,177.49,31362900],["2026-01-12",177.68,182.5,176.34,179.41,34954500],["2026-01-13",178.88,181.1,176.14,178.96,27769400],["2026-01-14",178.12,181.6,173.95,178.4,33651400],["2026-01-15",178.71,180.6,176.53,177.07,31109200],["2026-01-16",179.36,182.43,170.01,170.96,59483600],["2026-01-20",167.62,171.97,166.24,168.53,36708500],["2026-01-21",168.4,169.49,161.11,165.33,47851200],["2026-01-22",168.93,169.0,164.95,165.9,28499500],["2026-01-23",167.27,172.0,166.3,169.6,30285700],["2026-01-26",168.21,170.59,167.32,167.47,22777200],["2026-01-27",167.48,169.44,164.69,165.7,26542300],["2026-01-28",164.4,165.04,157.24,157.35,44822800],["2026-01-29",157.63,157.63,147.12,151.86,59846800],["2026-01-30",150.05,151.0,145.14,146.59,47271000],["2026-02-02",150.94,151.4,146.65,147.76,72811100],["2026-02-03",165.05,165.08,153.12,157.88,113169200],["2026-02-04",155.41,155.85,135.68,139.54,113199500],["2026-02-05",136.82,137.98,128.32,130.01,93690800],["2026-02-06",135.33,137.69,132.35,135.9,62661400],["2026-02-09",136.58,145.87,134.78,142.91,58042500],["2026-02-10",144.96,145.56,137.77,139.51,56061300],["2026-02-11",139.02,139.25,132.95,135.68,52796100],["2026-02-12",135.36,135.89,126.56,129.13,74090600],["2026-02-13",127.9,133.56,126.23,131.41,49438100],["2026-02-17",128.9,134.32,127.29,133.02,48407100],["2026-02-18",135.89,140.96,134.87,135.38,59677100],["2026-02-19",132.31,136.16,131.01,134.89,42197200],["2026-02-20",132.37,136.21,131.17,135.24,53726800],["2026-02-23",132.04,132.04,127.39,130.6,52512200],["2026-02-24",129.01,130.24,126.37,128.84,47121400],["2026-02-25",130.61,136.09,129.18,134.19,53078300],["2026-02-26",133.85,137.51,132.63,135.94,45100000],["2026-02-27",134.07,138.1,133.98,137.19,59412400],["2026-03-02",140.77,147.14,140.52,145.17,72683900],["2026-03-03",142.1,147.5,138.2,147.22,67460200],["2026-03-04",148.43,154.52,148.06,153.19,60062200],["2026-03-05",152.94,156.38,149.61,152.67,50714500],["2026-03-06",150.44,161.45,150.29,157.16,74980900],["2026-03-09",155.69,158.44,152.97,156.43,47574200],["2026-03-10",155.99,156.66,150.14,151.14,47501400],["2026-03-11",151.38,153.17,149.33,151.6,33955900],["2026-03-12",153.01,155.88,150.98,153.5,54409800],["2026-03-13",153.3,154.56,148.58,150.95,42460600],["2026-03-16",152.45,153.86,151.17,152.72,32898900],["2026-03-17",152.4,156.75,152.12,155.08,37118500],["2026-03-18",154.95,156.69,152.61,152.77,32476700],["2026-03-19",153.1,156.15,150.5,155.68,33915900],["2026-03-20",155.2,156.65,149.09,150.68,48700200],["2026-03-23",153.24,161.08,153.24,160.84,57507100],["2026-03-24",160.07,162.4,151.64,154.78,56155700],["2026-03-25",157.42,160.27,154.85,154.96,38543300],["2026-03-26",153.05,153.12,147.25,147.56,43038400],["2026-03-27",145.88,145.96,141.56,143.06,35790800],["2026-03-30",143.27,144.12,136.3,137.55,41289800],["2026-03-31",140.02,147.86,138.97,146.28,45558600],["2026-04-01",147.0,148.3,144.47,146.49,34171000],["2026-04-02",143.49,148.51,137.99,148.46,30437000],["2026-04-06",148.36,150.61,146.63,147.93,25142200],["2026-04-07",146.88,150.27,144.45,150.07,28671100],["2026-04-08",154.76,156.28,139.17,140.76,64827700],["2026-04-09",139.4,139.54,128.47,130.49,92361400],["2026-04-10",128.48,129.2,122.68,128.06,116656800],["2026-04-13",130.23,134.42,129.15,132.37,65772800],["2026-04-14",134.43,138.07,134.0,135.7,52786800],["2026-04-15",136.79,142.58,134.93,142.15,48389400],["2026-04-16",144.29,145.55,139.53,142.76,43746000],["2026-04-17",145.32,148.28,143.3,146.39,50657600],["2026-04-20",145.0,147.2,143.83,145.89,33482700],["2026-04-21",146.81,149.87,144.0,145.97,44830000],["2026-04-22",148.36,152.68,147.41,152.62,43701500],["2026-04-23",149.7,150.29,139.92,141.57,58654400],["2026-04-24",142.96,143.33,138.93,143.09,38677200],["2026-04-27",141.25,145.07,141.01,143.1,31275400],["2026-04-28",142.3,143.85,140.42,141.18,24757200],["2026-04-29",139.76,139.76,134.68,137.97,33348100],["2026-04-30",138.48,140.2,136.65,139.11,32523600],["2026-05-01",143.25,146.44,141.39,144.07,33219900],["2026-05-04",147.75,149.64,145.23,146.03,70525900],["2026-05-05",140.29,142.98,134.72,135.91,89747100],["2026-05-06",133.71,135.7,131.15,133.79,55524800],["2026-05-07",135.1,140.95,134.78,137.05,50184900],["2026-05-08",135.87,137.88,133.02,137.8,41745400],["2026-05-11",134.91,137.14,132.77,136.89,41414500],["2026-05-12",136.6,137.43,133.46,136.0,38781100],["2026-05-13",134.01,136.99,128.75,130.05,55189400],["2026-05-14",129.65,134.48,129.45,133.73,37052600],["2026-05-15",132.8,135.64,132.29,133.99,32629700],["2026-05-18",132.5,135.93,131.33,135.14,32034600],["2026-05-19",135.17,137.47,133.6,135.26,29777300],["2026-05-20",134.15,137.24,132.42,137.15,31307700],["2026-05-21",135.8,138.55,135.42,137.41,24311900],["2026-05-22",137.43,139.02,134.3,136.88,27578000],["2026-05-26",136.16,138.68,133.3,136.6,31723900],["2026-05-27",133.3,135.73,131.63,132.51,34159800],["2026-05-28",133.16,145.0,133.0,143.34,52085200],["2026-05-29",147.82,157.78,145.79,156.54,92196600],["2026-06-01",159.98,163.7,155.88,160.65,57654000],["2026-06-02",156.69,159.55,149.8,152.17,43163100],["2026-06-03",149.7,151.68,141.25,142.2,41072500],["2026-06-04",145.46,146.37,140.27,141.7,40834000],["2026-06-05",140.32,141.97,134.02,135.53,38283500],["2026-06-08",135.68,137.76,135.28,136.47,26978900],["2026-06-09",134.87,136.99,127.35,132.07,38680000],["2026-06-10",129.32,133.18,128.8,130.21,30612600],["2026-06-11",128.78,131.52,127.17,131.08,27554500],["2026-06-12",130.91,131.09,126.65,127.99,35378000],["2026-06-15",130.02,134.98,129.7,134.71,41748200],["2026-06-16",134.59,134.59,129.62,133.25,30409900],["2026-06-17",131.76,136.1,129.92,130.63,32290800],["2026-06-18",130.84,131.43,125.01,128.47,55338000],["2026-06-22",125.74,128.87,119.2,119.5,56924500],["2026-06-23",120.15,120.94,116.18,116.7,44661900],["2026-06-24",114.12,118.0,112.25,113.5,46520700],["2026-06-25",111.38,112.15,106.37,107.27,61840100],["2026-06-26",109.04,114.08,108.47,112.93,61360500],["2026-06-29",116.23,119.08,114.7,115.7,45017400],["2026-06-30",114.95,118.7,114.57,116.67,38069700],["2026-07-01",120.05,128.25,119.35,125.73,58561300],["2026-07-02",128.99,132.88,127.95,129.3,60641000],["2026-07-06",127.24,134.07,126.64,132.54,37360100],["2026-07-07",133.73,138.9,131.46,134.37,52570400],["2026-07-08",129.49,132.39,126.71,132.22,40587800],["2026-07-09",127.72,129.19,124.81,129.04,35286100],["2026-07-10",132.14,132.28,125.77,126.79,31163000],["2026-07-13",127.29,130.72,126.19,130.04,39786500],["2026-07-14",123.61,135.79,122.64,133.72,49963700],["2026-07-15",134.34,136.88,132.88,133.76,26064500],["2026-07-16",133.08,136.21,128.68,134.44,28951300],["2026-07-17",131.79,134.77,129.05,132.38,31875100],["2026-07-20",131.88,136.62,131.82,134.85,30571300],["2026-07-21",133.83,134.68,131.23,132.66,23161800],["2026-07-22",132.22,132.35,123.45,124.57,38588300],["2026-07-23",125.93,126.4,120.73,123.37,29757900],["2026-07-24",125.17,125.31,122.02,122.92,21177000],["2026-07-27",126.15,132.41,125.31,131.53,36708200],["2026-07-28",125.84,127.19,117.89,123.53,43597300],["2026-07-29",124.0,127.28,122.45,123.0,27207900],["2026-07-30",121.14,123.67,120.27,122.26,27801600],["2026-07-31",122.29,123.39,119.62,123.06,29085100],["2026-08-03",126.7,126.96,123.66,125.65,77282900],["2026-08-04",145.15,164.52,143.28,162.66,175034700],["2026-08-05",162.0,166.08,158.25,158.43,63515900],["2026-08-06",155.87,158.0,152.7,155.92,41751400],["2026-08-07",160.07,172.41,159.96,172.01,77382900]];
+const PLTR_MA5 = [169.99,176.53,180.93,183.67,184.64,184.4,182.44,180.71,174.87,169.2,164.23,160.54,157.17,157.79,157.94,158.32,157.92,157.9,156.71,156.59,155.59,155.47,156.52,158.89,160.53,164.2,167.22,168.8,169.12,171.64,173.83,175.46,177.91,180.16,180.59,179.63,179.53,179.51,180.58,182.17,181.27,181.4,181.35,181.08,180.76,181.23,180.77,180.28,179.5,178.03,178.57,179.44,179.8,178.97,179.44,180.74,182.26,183.88,188.54,191.35,194.52,198.12,198.35,196.17,192.27,187.76,185.05,185.09,184.34,183.76,182.98,178.51,173.78,170.03,166.75,162.92,161.12,160.36,160.43,162.97,165.5,167.19,169.7,172.13,174.79,177.59,179.82,182.18,184.11,184.47,184.82,186.0,183.88,183.51,185.47,187.62,188.89,192.27,192.87,191.03,188.41,185.13,179.87,176.93,176.04,176.21,176.03,177.96,179.03,178.88,178.22,178.27,176.96,174.78,172.06,169.56,168.06,167.37,166.8,165.2,162.4,157.79,153.85,152.29,148.73,144.36,142.22,141.25,137.57,136.8,136.63,135.73,133.75,132.92,132.77,133.99,133.83,132.99,132.75,132.96,133.35,136.27,139.94,143.74,147.09,151.08,153.33,154.12,153.8,153.97,152.72,151.98,152.77,153.0,153.44,153.39,155.01,154.95,155.39,153.76,152.24,147.58,145.88,144.19,144.37,145.34,147.85,146.74,143.54,139.46,136.35,133.48,133.75,136.21,139.87,142.58,144.63,146.73,146.49,145.83,145.27,144.31,141.38,140.89,141.09,141.67,140.62,139.78,139.37,138.12,136.29,136.31,135.56,134.89,134.13,133.78,133.63,135.05,135.79,136.37,136.66,136.11,137.35,141.17,145.93,149.04,150.98,150.65,146.45,141.61,137.59,135.2,133.07,131.56,131.21,131.45,131.53,131.01,129.31,125.71,121.76,117.09,113.98,113.22,113.21,115.66,120.07,123.99,127.72,130.83,131.49,130.99,130.49,130.36,130.67,131.75,132.87,133.83,133.62,131.78,129.57,127.67,127.01,125.18,124.87,124.65,124.68,123.5,131.33,138.41,145.14,154.93];
+const PLTR_MA20 = [157.42,159.66,161.34,163.26,164.93,166.28,167.47,168.58,169.01,169.08,169.15,169.15,169.11,169.34,169.25,169.23,169.36,169.18,168.26,167.09,165.64,164.09,163.08,162.06,161.06,160.58,160.29,160.1,160.63,161.68,162.99,164.02,165.28,166.22,167.34,168.31,169.42,170.69,172.19,173.73,174.73,175.9,176.89,177.73,178.79,178.99,179.29,179.76,180.33,180.39,180.17,180.29,180.24,180.03,180.1,180.45,180.97,181.33,182.02,182.4,183.77,185.15,185.58,185.79,185.27,185.4,186.22,186.78,187.01,186.71,186.5,185.98,185.27,184.77,183.53,182.04,180.7,179.4,177.74,176.44,174.79,172.97,172.23,171.73,172.07,172.25,171.66,171.51,171.67,172.25,172.71,173.53,174.03,175.04,176.93,178.88,180.48,182.01,183.15,183.94,184.61,184.96,184.55,184.36,184.25,184.26,184.01,183.49,183.09,182.86,182.61,182.08,181.76,180.91,179.5,178.1,176.87,175.54,174.39,173.05,171.6,170.04,169.03,168.23,166.22,163.63,161.59,159.86,157.86,155.7,153.23,150.95,149.05,147.4,145.87,144.34,142.39,140.46,138.88,137.81,137.08,137.01,136.98,136.75,137.4,138.76,139.79,140.2,140.8,141.7,142.79,143.85,144.95,145.82,146.86,147.64,149.15,150.44,151.48,152.06,152.36,151.98,151.93,151.59,151.38,150.92,150.6,150.09,149.03,147.76,146.83,145.98,145.33,144.83,144.37,144.13,143.38,143.28,142.61,142.38,142.38,142.57,142.15,141.78,141.56,141.47,140.76,140.41,140.74,141.23,141.45,141.47,140.86,140.41,139.79,139.25,138.72,137.94,137.74,137.43,137.1,136.67,136.94,137.81,138.64,138.94,139.26,139.65,139.58,139.51,139.27,138.98,139.03,138.74,138.78,138.69,138.45,138.02,137.12,136.12,134.96,133.7,132.18,130.14,127.94,126.62,125.97,125.51,125.45,125.24,125.09,124.92,124.87,125.15,125.11,125.17,125.25,125.57,126.23,126.62,127.12,127.9,128.83,129.22,129.54,129.36,129.05,128.71,130.12,131.43,132.78,135.04];
+const PLTR_MA60 = [140.94,141.92,142.79,143.77,144.69,145.6,146.46,147.35,147.94,148.49,149.03,149.62,150.2,150.68,151.09,151.51,151.95,152.57,153.03,153.43,153.77,154.09,154.55,155.04,155.42,155.97,156.49,157.04,157.52,158.08,158.74,159.32,160.19,160.91,161.71,162.47,163.21,163.93,164.69,165.42,165.93,166.55,167.1,167.69,168.26,168.62,169.01,169.48,169.99,170.38,170.77,171.15,171.54,171.86,172.23,172.67,173.25,173.73,174.16,174.41,174.71,175.05,175.18,175.2,175.04,174.99,175.26,175.55,175.99,176.26,176.55,176.76,176.93,177.01,176.99,176.94,177.03,177.14,177.32,177.52,177.76,178.01,178.23,178.42,178.71,178.88,179.06,179.35,179.67,179.78,179.79,179.93,179.85,179.95,180.19,180.46,180.71,180.91,180.97,180.93,181.05,181.03,180.79,180.63,180.53,180.64,180.63,180.59,180.59,180.6,180.61,180.53,180.36,180.24,179.99,179.68,179.35,178.98,178.43,177.81,177.0,175.99,175.27,174.77,174.18,173.38,172.42,171.62,170.87,170.27,169.52,168.85,168.28,167.78,167.43,167.11,166.58,166.0,165.48,164.93,164.43,164.0,163.52,163.11,162.63,162.22,161.8,161.18,160.58,160.08,159.54,158.96,158.59,158.04,157.41,156.69,156.14,155.48,154.92,154.31,153.68,153.01,152.65,152.19,151.67,151.11,150.66,150.05,149.23,148.38,147.62,146.93,146.45,146.02,145.7,145.37,144.97,144.73,144.32,144.09,143.94,143.85,143.69,143.38,143.45,143.72,143.72,143.57,143.52,143.56,143.69,143.77,143.72,143.69,143.67,143.67,143.75,143.89,143.94,143.96,143.95,143.74,143.67,143.73,143.86,143.78,143.54,143.38,143.12,142.83,142.52,142.14,141.74,141.33,140.98,140.69,140.19,139.75,139.16,138.64,138.15,137.64,137.09,136.58,136.05,135.68,135.33,135.19,135.26,135.33,135.27,135.12,134.92,134.77,134.56,134.37,134.14,133.85,133.7,133.39,133.06,132.76,132.65,132.39,132.04,131.64,131.43,131.29,131.72,132.06,132.38,132.98];
+const PLTR_MA120 = [118.26,118.83,119.31,119.94,120.59,121.25,121.97,122.69,123.26,123.85,124.45,125.07,125.68,126.27,126.91,127.52,128.19,128.84,129.44,130.08,130.63,131.21,131.86,132.53,133.17,133.84,134.46,135.08,135.71,136.44,137.24,138.03,138.85,139.62,140.41,141.27,142.12,142.99,143.77,144.59,145.29,146.02,146.71,147.47,148.23,148.94,149.63,150.29,150.89,151.43,151.96,152.51,153.03,153.53,154.0,154.5,155.17,155.83,156.5,157.14,157.82,158.48,158.99,159.49,159.87,160.3,160.86,161.45,161.96,162.37,162.79,163.19,163.56,163.84,164.04,164.22,164.49,164.85,165.17,165.48,165.76,166.05,166.39,166.73,167.06,167.43,167.77,168.2,168.59,168.93,169.27,169.63,170.02,170.43,170.95,171.47,171.96,172.42,172.83,173.17,173.49,173.79,173.95,174.16,174.4,174.63,174.82,175.04,175.29,175.49,175.69,175.84,175.95,176.05,176.11,176.17,176.3,176.36,176.29,176.11,175.85,175.52,175.23,174.98,174.61,174.19,173.84,173.58,173.43,173.26,173.04,172.81,172.61,172.39,172.21,172.02,171.8,171.57,171.4,171.23,171.1,171.0,170.88,170.77,170.67,170.55,170.43,170.27,170.13,169.93,169.67,169.45,169.22,169.0,168.8,168.58,168.43,168.2,167.95,167.62,167.37,167.02,166.72,166.41,166.1,165.87,165.64,165.32,164.91,164.49,164.11,163.73,163.4,163.13,162.84,162.52,162.16,161.85,161.38,160.95,160.47,159.92,159.48,159.07,158.82,158.55,158.07,157.59,157.2,156.91,156.6,156.31,156.0,155.74,155.55,155.39,155.16,154.95,154.71,154.45,154.19,153.87,153.6,153.42,153.24,153.0,152.67,152.28,151.85,151.46,151.03,150.55,150.17,149.69,149.2,148.69,148.16,147.61,147.04,146.47,145.91,145.33,144.87,144.38,143.86,143.39,142.99,142.62,142.24,141.85,141.44,141.02,140.68,140.39,140.13,139.87,139.56,139.29,139.01,138.74,138.5,138.3,138.17,137.88,137.74,137.68,137.57,137.43,137.62,137.81,138.03,138.37];
 
 (function(){
   const svgCandle = document.getElementById('pltrCandleSvg');
@@ -637,8 +707,62 @@ const PLTR_MA120 = [116.34,116.7,117.21,117.73,118.26,118.83,119.31,119.94,120.5
   draw('1Y');
 })();
 
-function renderFundChart(){let ctx=document.getElementById('pltrRevChart');if(!ctx||charts.fund)return;charts.fund=new Chart(ctx,{data:{labels:["Q3'24", "Q4'24", "Q1'25", "Q2'25", "Q3'25", "Q4'25", "Q1'26", "Q2'26"],datasets:[{type:'bar',label:'매출 ($B)',data:[0.678, 0.726, 0.828, 0.884, 0.936, 1.181, 1.407, 1.634],backgroundColor:'rgba(56,189,248,.45)',borderColor:'#38bdf8',borderWidth:1,borderRadius:4,yAxisID:'y'},{type:'bar',label:'순이익 ($B)',data:[0.134, 0.144, 0.079, 0.214, 0.328, 0.476, 0.608, 0.63],backgroundColor:'rgba(46,204,113,.45)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4,yAxisID:'y'},{type:'line',label:'EPS',data:[0.06, 0.06, 0.03, 0.08, 0.13, 0.18, 0.24, 0.34],borderColor:'#f0c040',tension:.35,pointRadius:4,borderWidth:2.5,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:900,easing:'easeOutQuart'},scales:{x:{ticks:{color:'#9aa0b8'}},y:{beginAtZero:true,ticks:{color:'#9aa0b8'}},y1:{position:'right',beginAtZero:true,ticks:{color:'#f0c040'}}},plugins:{legend:{labels:{color:'#9aa0b8'}}}}})}
-function renderPeerChart(){let ctx=document.getElementById('peerChart');if(!ctx||charts.peer)return;charts.peer=new Chart(ctx,{type:'bar',data:{labels:['PLTR','섹터 중앙값','S&P 500'],datasets:[{data:[118,24,22],backgroundColor:['#38bdf8','rgba(154,160,184,.35)','rgba(154,160,184,.35)'],borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:900,easing:'easeOutQuart'},scales:{y:{beginAtZero:true,ticks:{color:'#9aa0b8'}},x:{ticks:{color:'#9aa0b8'}}},plugins:{legend:{display:false}}}})}
+function renderFundChart(){let ctx=document.getElementById('pltrRevChart');if(!ctx||charts.fund)return;charts.fund=new Chart(ctx,{data:{labels:["Q3'24", "Q4'24", "Q1'25", "Q2'25", "Q3'25", "Q4'25", "Q1'26", "Q2'26"],datasets:[{type:'bar',label:'매출 ($B)',data:[0.726, 0.828, 0.884, 1.004, 1.181, 1.407, 1.633, 1.935],backgroundColor:'rgba(56,189,248,.45)',borderColor:'#38bdf8',borderWidth:1,borderRadius:4,yAxisID:'y'},{type:'bar',label:'순이익 ($B)',data:[0.144, 0.079, 0.214, 0.327, 0.476, 0.609, 0.871, 1.062],backgroundColor:'rgba(46,204,113,.45)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4,yAxisID:'y'},{type:'line',label:'영업이익률(%)',data:[15.6, 1.3, 19.9, 26.8, 33.3, 40.9, 46.2, 47.1],borderColor:'#f0c040',tension:.35,pointRadius:4,borderWidth:2.5,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:900,easing:'easeOutQuart'},scales:{x:{ticks:{color:'#9aa0b8'}},y:{beginAtZero:true,ticks:{color:'#9aa0b8'}},y1:{position:'right',beginAtZero:true,max:60,ticks:{color:'#f0c040',callback:v=>v+'%'}}},plugins:{legend:{labels:{color:'#9aa0b8'}}}}})}
+const MULTIPLE_DATA = {
+  fwdpe: { title:'Information Technology 비교 — Forward PER', unit:'Fwd PER', labels:['PLTR','섹터 중앙값','S&P 500'], data:[84,24,22], max:130,
+    explanation: '컨센서스 Forward EPS 기준 · 8분기 연속 실적 서프라이즈로 애널리스트들이 forward EPS 추정치를 큰 폭으로 상향해, 최근 급등한 주가에도 불구하고 Forward PER은 오히려 이전보다 낮아졌다.' },
+  evsales: { title:'EV/Sales 비교', unit:'EV/Sales', labels:['PLTR(현재)'], data:[71.4], max:80,
+    explanation: 'EV 약 $439.8B÷TTM 매출 $6.16B · Information Technology 섹터 밴드를 압도적으로 초과 — AI 플랫폼 프리미엄이 극단적으로 반영된 수준.' },
+  ps: { title:'P/S 비교', unit:'P/S', labels:['PLTR(현재)'], data:[71.8], max:80,
+    explanation: '시가총액 $441.8B÷TTM 매출 $6.16B · EV/Sales와 거의 동일한 수준(순부채가 미미해 시총≈EV).' },
+  fcfyield: { title:'FCF 수익률 비교', unit:'FCF수익률', labels:['PLTR(현재)'], data:[0.76], max:5,
+    explanation: 'TTM FCF $3.36B÷시가총액 $441.8B · FCF 수익률이 낮을수록 고평가 신호 — 1% 미만은 극단적 프리미엄 구간을 의미한다.' },
+  peg: { title:'PEG 비교 (추정)', unit:'PEG', labels:['PLTR(현재)'], data:[3.4], max:5,
+    explanation: 'Forward PER을 매출 성장률로 나눈 근사치 · 8분기 연속 가속하는 성장에도 불구, 밸류에이션이 성장률 대비로도 부담스러운 수준임을 시사.' }
+};
+
+function renderMultipleChart(key) {
+  const d = MULTIPLE_DATA[key];
+  const ctx = document.getElementById('multipleChart');
+  if (!ctx || !d) return;
+  if (charts.multiple) charts.multiple.destroy();
+  const bg = d.labels.map(l => l==='PLTR' || l.includes('현재') ? '#38bdf8' : 'rgba(154,160,184,0.35)');
+  charts.multiple = new Chart(ctx,{
+    type:'bar',
+    data:{ labels:d.labels, datasets:[{ label:d.unit, data:d.data, backgroundColor:bg, borderRadius:5 }] },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      animation:{duration:900,easing:'easeOutQuart'},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${d.unit} ${ctx.raw}${key==='fcfyield'?'%':'x'}`}}},
+      scales:{
+        y:{beginAtZero:true,max:d.max,ticks:{color:'#9aa0b8',callback:v=>v+(key==='fcfyield'?'%':'x')}},
+        x:{ticks:{color:'#9aa0b8'}}
+      }
+    }
+  });
+}
+
+let currentMultipleKey = 'fwdpe';
+function selectMultiple(key) {
+  const d = MULTIPLE_DATA[key];
+  if (!d) return;
+  currentMultipleKey = key;
+  document.querySelectorAll('.val-item[data-metric]').forEach(el => el.classList.toggle('selected', el.dataset.metric === key));
+  const titleEl = document.getElementById('multipleCompareTitle');
+  const textEl = document.getElementById('multipleCompareText');
+  if (titleEl) titleEl.textContent = d.title;
+  if (textEl) textEl.innerHTML = d.explanation;
+  renderMultipleChart(key);
+}
+
+function toggleCollapsible(header) {
+  const body = header.nextElementSibling;
+  const collapsed = body.classList.toggle('collapsed');
+  header.classList.toggle('collapsed', collapsed);
+  header.setAttribute('aria-expanded', String(!collapsed));
+  const hintText = header.querySelector('.toggle-hint-text');
+  if (hintText) hintText.textContent = collapsed ? '상세 보기' : '상세 숨기기';
+}
 function renderCapexFcfChart() {
   const ctx = document.getElementById('capexFcfChart');
   if (!ctx || charts['capexfcf']) return;
@@ -646,7 +770,7 @@ function renderCapexFcfChart() {
     type:'bar',
     data:{
       labels:["Q3'24","Q4'24","Q1'25","Q2'25","Q3'25","Q4'25","Q1'26","Q2'26"],
-      datasets:[{label:'매출($B)',data:[.678,.726,.828,.884,.936,1.181,1.407,1.634],backgroundColor:'rgba(56,189,248,.5)',borderColor:'#38bdf8',borderWidth:1,borderRadius:4}]
+      datasets:[{label:'매출($B)',data:[.726,.828,.884,1.004,1.181,1.407,1.633,1.935],backgroundColor:'rgba(56,189,248,.5)',borderColor:'#38bdf8',borderWidth:1,borderRadius:4}]
     },
     options:{
       responsive:true,maintainAspectRatio:false,
@@ -661,7 +785,7 @@ function renderCapexFcfChart() {
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
-    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'valuation' && !charts.multiple) selectMultiple(currentMultipleKey);
     if (sectionId === 'us') renderCapexFcfChart();
   }, 50);
 }
