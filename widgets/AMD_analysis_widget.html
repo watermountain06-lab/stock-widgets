@@ -78,6 +78,7 @@
   .stat-sub { font-size: 11px; color: var(--text3); }
   .stat-value.up { color: var(--green); }
   .stat-value.or { color: var(--accent2); }
+  .stat-value.gold { color: var(--gold); }
   .stat-value.pu { color: var(--purple); }
 
   .chart-wrap { position: relative; }
@@ -120,8 +121,11 @@
   .seg-val { font-size: 12px; font-weight: 700; color: var(--accent2); width: 60px; text-align: right; flex-shrink: 0; }
 
   /* VALUATION */
-  .val-item { margin-bottom: 18px; }
-  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .val-item { margin-bottom: 18px; padding: 8px; margin-left: -8px; margin-right: -8px; border-radius: 8px; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; }
+  .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; cursor: pointer; }
+  .val-item:hover { background: rgba(255,255,255,0.03); }
+  .val-item.selected { background: rgba(255,140,80,0.08); border-color: rgba(255,140,80,0.35); }
+  .val-item.selected .val-name::after { content: '▸ 비교 보기'; font-size: 9.5px; font-weight: 600; color: var(--accent2); margin-left: 8px; vertical-align: middle; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
   .val-track { height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
@@ -140,6 +144,47 @@
   .stage-mini { text-align: center; padding: 16px 8px; border-radius: 8px; }
   .stage-mini-num { font-size: 22px; font-weight: 700; }
   .stage-mini-label { font-size: 12px; margin-top: 4px; }
+
+  /* 재무 건전성 */
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(255,140,80,0.12); border: 1px solid rgba(255,140,80,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(255,140,80,0.22); border-color: rgba(255,140,80,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
+  .section-label { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:12px; color:var(--text2); margin-top:2px; line-height:1.4; }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 22px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; }
+  .diag-label { font-size:13px; color:var(--text); font-weight:600; min-width:96px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:11.5px; color:var(--text2); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .diag-badge.watch { background:rgba(240,192,64,0.16); color:var(--gold); }
+  .diag-summary.watch { background: linear-gradient(90deg, rgba(240,192,64,0.14), rgba(240,192,64,0.03)); border-color: rgba(240,192,64,0.35); }
+  .diag-summary.watch .title { color: var(--gold); }
+  .ccc-card { background: var(--bg3); border-radius: 8px; padding: 16px 18px 12px; }
+  .ccc-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 6px; }
+  .ccc-head-label { font-size:12.5px; color:var(--text); font-weight:700; }
+  .ccc-head-value { font-size:18px; font-weight:800; color:var(--gold); }
+  .ccc-explain { font-size: 11.5px; color: var(--text2); line-height: 1.6; margin-bottom: 22px; }
+  .tl-bar-wrap { position: relative; margin: 40px 4px 8px; }
+  .tl-bar { height: 18px; border-radius: 5px; overflow: hidden; display: flex; }
+  .tl-seg-inv { background: linear-gradient(90deg,#3498db,#2980b9); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
+  .tl-seg-ar { background: linear-gradient(90deg,#2ecc71,#27ae60); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#0f1117; }
+  .tl-marker { position: absolute; top: -18px; width: 2px; background: var(--gold); }
+  .tl-marker-label { position: absolute; top: -32px; transform: translateX(-50%); font-size: 10.5px; font-weight: 700; color: var(--gold); white-space: nowrap; }
+  .tl-ccc-span { position: absolute; height: 3px; background: rgba(240,192,64,0.6); border-radius: 2px; top: 24px; }
 
   /* DRIVER */
   .driver-item { display: flex; gap: 12px; padding: 12px; background: var(--bg3); border-radius: 8px; margin-bottom: 10px; }
@@ -229,7 +274,7 @@
 <a class="peer-nav-link" href="V_analysis_widget.html">다음 V ▶</a>
 </div>
 </div>
-<div class="today-banner">✅ <strong>2026년 7월 17일 종가 기준</strong> — 현재 $429.56(전일 대비 -1.03%), 52주 최고 $584.73(2026.06.30) 대비 -15.2% 조정 국면. 52주 수익률 +142.1%.</div>
+<div class="today-banner">✅ <strong>2026년 8월 7일 종가 기준</strong> — 현재 $483.36(전일 대비 -1.21%), 52주 최고 $584.73(2026.06.30) 대비 -17.3% 조정 국면. 52주 수익률 +179.8%.</div>
 
 <!-- HEADER -->
 <div class="header">
@@ -249,13 +294,13 @@
     </div>
   </div>
   <div class="header-meta">
-    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value hl">$885B</span></div>
+    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value hl">$789B</span></div>
     <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">반도체·AI</span></div>
-    <div class="meta-item"><span class="meta-label">연매출 (TTM)</span><span class="meta-value">$37.5B</span></div>
+    <div class="meta-item"><span class="meta-label">연매출 (TTM)</span><span class="meta-value">$41.3B</span></div>
     <div class="meta-item"><span class="meta-label">CEO</span><span class="meta-value">Lisa Su</span></div>
-    <div class="meta-item"><span class="meta-label">EPS (TTM 희석)</span><span class="meta-value">$3.08</span></div>
+    <div class="meta-item"><span class="meta-label">EPS (TTM 희석)</span><span class="meta-value">$3.89</span></div>
     <div class="meta-item"><span class="meta-label">FY2025 매출</span><span class="meta-value hl">$34.6B (+34%)</span></div>
-    <div class="meta-item"><span class="meta-label">데이터센터 비중</span><span class="meta-value hl">60%+</span></div>
+    <div class="meta-item"><span class="meta-label">데이터센터 비중</span><span class="meta-value hl">58%</span></div>
   </div>
 </div>
 
@@ -352,23 +397,122 @@
   </div>
 
   <div class="grid-3">
-    <div class="stat-box"><div class="stat-label">매출 (Q1 2026)</div><div class="stat-value or">$10.25B</div><div class="stat-sub">YoY +37.9% ▲ 역대최고</div></div>
-    <div class="stat-box"><div class="stat-label">영업이익 (Q1 2026)</div><div class="stat-value or">$1.48B</div><div class="stat-sub">OPM 14.4% / YoY 폭증</div></div>
-    <div class="stat-box"><div class="stat-label">데이터센터 매출 (Q4 2025)</div><div class="stat-value or">$5.4B</div><div class="stat-sub">분기 사상 최고</div></div>
-    <div class="stat-box"><div class="stat-label">FY2025 연매출</div><div class="stat-value up">$34.6B</div><div class="stat-sub">YoY +34% / 역대최고</div></div>
-    <div class="stat-box"><div class="stat-label">FCF (Q1 2026)</div><div class="stat-value up">$2.57B</div><div class="stat-sub">FCF 마진 25.0% 폭발</div></div>
-    <div class="stat-box"><div class="stat-label">2026 데이터센터 전망</div><div class="stat-value up">$28.7B</div><div class="stat-sub">YoY +73% 전망 (S&P Global)</div></div>
-    <div class="stat-box"><div class="stat-label">총이익률 (Q1 2026)</div><div class="stat-value or">52.8%</div><div class="stat-sub">고마진 데이터센터 믹스</div></div>
-    <div class="stat-box"><div class="stat-label">FCF 마진 (Q1 2026)</div><div class="stat-value up">25.0%</div><div class="stat-sub">현금창출력 개선</div></div>
-    <div class="stat-box"><div class="stat-label">순현금 (Q1 2026)</div><div class="stat-value up">+$8.5B</div><div class="stat-sub">무차입 순현금 구조</div></div>
+    <div class="stat-box"><div class="stat-label">순이익률 (Q2 2026)</div><div class="stat-value up">19.9%</div><div class="stat-sub">GAAP 기준 · 순이익 $2.30B</div></div>
+    <div class="stat-box"><div class="stat-label">FCF (Q2 2026)</div><div class="stat-value up">$1.55B</div><div class="stat-sub">현금창출력 · FCF마진 13.5%</div></div>
+    <div class="stat-box"><div class="stat-label">Capex (H1 2026)</div><div class="stat-value">$1.20B</div><div class="stat-sub">미래 재투자 · 팹리스라 매출 대비 낮음</div></div>
+    <div class="stat-box"><div class="stat-label">현금 및 단기투자</div><div class="stat-value up">$13.11B</div><div class="stat-sub">2026.06.27 기준 · 순현금 $9.89B</div></div>
+    <div class="stat-box"><div class="stat-label">EPS (희석, Q2 2026)</div><div class="stat-value up">$1.38</div><div class="stat-sub">Non-GAAP $1.66</div></div>
+    <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value gold">11월 초 예상</div><div class="stat-sub">Q3 2026</div></div>
   </div>
 
   <div class="card" style="margin-top:16px;">
-    <div class="card-title">사업 세그먼트 매출 비중 (Q1 2026 $10.25B 기준)</div>
-    <div class="seg-row"><span class="seg-name">🖥️ Data Center</span><div class="seg-bar-w"><div class="seg-bar" style="width:62%;background:linear-gradient(90deg,#e05a20,#ff8c50);">~62%</div></div><span class="seg-val">~$6.4B</span></div>
-    <div class="seg-row"><span class="seg-name">💻 Client (PC)</span><div class="seg-bar-w"><div class="seg-bar" style="width:21%;background:linear-gradient(90deg,#3498db,#5dade2);">~21%</div></div><span class="seg-val">~$2.1B</span></div>
-    <div class="seg-row"><span class="seg-name">🎮 Gaming</span><div class="seg-bar-w"><div class="seg-bar" style="width:10%;background:linear-gradient(90deg,#9b59b6,#c39bd3);">~10%</div></div><span class="seg-val">~$1.0B</span></div>
-    <div class="seg-row"><span class="seg-name">🏭 Embedded</span><div class="seg-bar-w"><div class="seg-bar" style="width:7%;background:linear-gradient(90deg,#27ae60,#52be80);">~7%</div></div><span class="seg-val">~$0.7B</span></div>
+    <div class="card-title"><span>재무 건전성 — 안정성·활동성 (안정성: Q2 2026·2026.06.27 기준 / 활동성: FY2025 연간 기준)</span></div>
+
+    <div class="section-label"><span class="dot"></span>안정성 — 단기 지급능력·차입 의존도</div>
+    <div class="diag-summary">
+      <div class="icon">🩺</div>
+      <div>
+        <div class="title">종합 진단: 전 지표 안전 기준 충족 — 매우 낮은 레버리지</div>
+        <div class="sub">유동비율 260.9%·이자보상배율 53.8x로 단기 부실 위험 없음. 차입금의존도 3.8%로 자산 대비 차입 규모가 극히 작아 재무 여력이 넉넉함</div>
+      </div>
+    </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>안정성 상세 — 개별 비율 6개</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">260.9%</span><span class="diag-note">기준 150%↑</span></div>
+        <div class="diag-badge safe">✅ 매우안전</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">당좌비율</span><span class="diag-value">190.8%</span><span class="diag-note">기준 100%↑</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">차입금의존도</span><span class="diag-value">3.8%</span><span class="diag-note">기준 30%↓</span></div>
+        <div class="diag-badge safe">✅ 매우안전</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">이자보상배율</span><span class="diag-value">53.8x</span><span class="diag-note">기준 1x↑ · Q2 2026 분기 기준</span></div>
+        <div class="diag-badge safe">✅ 매우안전</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">부채비율</span><span class="diag-value">25.6%</span><span class="diag-note">부채 $17.24B÷자기자본 $67.22B</span></div>
+        <div class="diag-badge info">ℹ️ 참고</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">총자산증가율</span><span class="diag-value">11.1%</span><span class="diag-note">FY25 $76.9B(전기 $69.2B)</span></div>
+        <div class="diag-badge info">ℹ️ 참고</div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">유동비율·당좌비율·이자보상배율 모두 기준치를 크게 상회하고, 차입금의존도(3.8%)도 극히 낮아 단기 유동성·차입 부담 우려는 없다. 순현금 $9.89B(현금 $13.11B - 총차입금 $3.23B) 보유로 MI400 램프에 필요한 투자를 외부 차입 없이 감당할 수 있는 구조.</div>
+    </div>
+
+    <div class="section-label" style="margin-top:14px;"><span class="dot" style="background:var(--blue, #3498db);"></span>활동성 — 회수·재고소진·지급 속도 (FY2025 연간 기준)</div>
+    <div class="diag-summary">
+      <div class="icon">🔄</div>
+      <div>
+        <div class="title">종합 진단: 회전 다소 개선 — 매출채권 회수 속도 개선이 주된 요인</div>
+        <div class="sub">CCC 170.6일(FY2024 178.9일 대비 -8.3일) — 매출채권 회전율 +31.9%가 주된 개선 요인. 재고 보유기간은 MI400 램프 준비용 재고 확보로 소폭 확대</div>
+      </div>
+    </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>활동성 상세 — 개별 비율·CCC 그래프</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">매출채권 회전율</span><span class="diag-value">5.49회</span><span class="diag-note">66.5일 · FY24 4.16회(87.7일)</span></div>
+        <div class="diag-badge safe">✅ 회수 개선</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">재고자산 회전율</span><span class="diag-value">2.21회</span><span class="diag-note">165.2일 · FY24 2.28회(160.1일)</span></div>
+        <div class="diag-badge info">→ 소폭 둔화(MI400 재고 확보)</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">매입채무 회전율</span><span class="diag-value">5.97회</span><span class="diag-note">61.1일 · FY24 5.30회(68.9일)</span></div>
+        <div class="diag-badge info">ℹ️ 지급 다소 빨라짐</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">영업순환주기</span><span class="diag-value">231.7일</span><span class="diag-note">재고+매출채권 · FY24 247.8일</span></div>
+        <div class="diag-badge safe">✅ 단축</div>
+      </div>
+    </div>
+    <div class="ccc-card">
+      <div class="ccc-head">
+        <div class="ccc-head-label">⏱️ 현금창출주기 (CCC)</div>
+        <div class="ccc-head-value">170.6일</div>
+      </div>
+      <div class="ccc-explain">재고를 사서 판매 대금을 회수하기까지 231.7일이 걸리는데, 그중 61.1일은 매입채무(외상)로 버티고 나머지 <strong style="color:var(--gold);">170.6일은 회사가 직접 현금으로 메워야</strong> 하는 기간이다. FY2024(178.9일) 대비 8.3일 줄어든 것은 매출채권 회수 속도 개선(+31.9%) 덕분이며, 재고 보유기간은 MI400 출시를 앞둔 선제적 재고 확보로 소폭 늘었다.</div>
+      <div class="tl-bar-wrap">
+        <div class="tl-marker" style="left:26.4%; height:18px;"></div>
+        <div class="tl-marker-label" style="left:26.4%;">매입채무 지급 61.1일</div>
+        <div class="tl-bar">
+          <div class="tl-seg-inv" style="width:71.3%;">재고보유 165.2일</div>
+          <div class="tl-seg-ar" style="width:28.7%;">매출채권회수 66.5일</div>
+        </div>
+        <div class="tl-ccc-span" style="left:26.4%; width:73.6%;"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">매출채권 회전율이 뚜렷이 개선(+31.9%)되며 CCC가 단축됐다. 재고자산 회전율은 소폭 둔화됐는데, 이는 MI400 Helios 램프(H2 2026 양산)를 앞둔 선제적 재고 확보 성격이 강해 통상적인 재고 부실 신호로 보기는 어렵다.</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title">사업 세그먼트 매출 비중 (Q2 2026 $11.54B 기준)</div>
+    <div class="seg-row"><span class="seg-name">🖥️ Data Center</span><div class="seg-bar-w"><div class="seg-bar" style="width:58%;background:linear-gradient(90deg,#e05a20,#ff8c50);">~58%</div></div><span class="seg-val">$6.7B</span></div>
+    <div class="seg-row"><span class="seg-name">💻 Client (PC)</span><div class="seg-bar-w"><div class="seg-bar" style="width:27%;background:linear-gradient(90deg,#3498db,#5dade2);">~27%</div></div><span class="seg-val">$3.1B</span></div>
+    <div class="seg-row"><span class="seg-name">🏭 Embedded</span><div class="seg-bar-w"><div class="seg-bar" style="width:9%;background:linear-gradient(90deg,#27ae60,#52be80);">~9%</div></div><span class="seg-val">$0.98B</span></div>
+    <div class="seg-row"><span class="seg-name">🎮 Gaming</span><div class="seg-bar-w"><div class="seg-bar" style="width:7%;background:linear-gradient(90deg,#9b59b6,#c39bd3);">~7%</div></div><span class="seg-val">$0.78B(-31%)</span></div>
   </div>
 
   <div class="card">
@@ -412,48 +556,39 @@
 
   <div class="grid-2">
     <div class="card">
-      <div class="card-title">멀티플 5단계 평가 (AI반도체 섹터 기준)</div>
-
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">PER (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">171.5x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
+      <div class="card-title">멀티플 5단계 평가</div>
+      <div style="font-size:10.5px;color:var(--text3);line-height:1.5;margin:-4px 0 14px;">※ 핵심 앵커 = AMD 자체 역사값 + NVDA(가장 비교 가능한 AI 반도체 피어)의 평균. PER은 GAAP 10년 중간값(104x, 과거 저수익 시기 왜곡)이 아닌 정상화 기준(P/E without NRI, 51.21x)을 사용. INTC는 팹 보유·현재 적자 등 회계·재무 구조가 근본적으로 달라 5개 지표 모두 참고로만 병기, 핵심 산출엔 미포함.</div>
+      <div class="val-item" data-metric="per" onclick="selectMultiple('per')">
+        <div class="val-header"><span class="val-name">PER (GAAP TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">124.3x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div>
-        <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 28x</span><span class="val-high">고 50x</span></div>
+        <div class="val-labels"><span class="val-low">저 20x</span><span class="val-mid">적정 43x</span><span class="val-high">고 140x</span></div>
       </div>
-
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">Forward PER (2026E)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">~38x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:65%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
-        <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 28x</span><span class="val-high">고 50x</span></div>
-        <div style="font-size:11px;color:var(--accent2);margin-top:4px;">※ 반도체·AI 성장주는 기준 상향 적용 (고 50x → 80x)</div>
+      <div class="val-item" data-metric="pbr" onclick="selectMultiple('pbr')">
+        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">11.7x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:38%;background:linear-gradient(90deg,#27ae60,#8bc34a);"></div></div>
+        <div class="val-labels"><span class="val-low">저 5x</span><span class="val-mid">적정 22x</span><span class="val-high">고 35x</span></div>
       </div>
-
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">13.3x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+      <div class="val-item" data-metric="psr" onclick="selectMultiple('psr')">
+        <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">19.1x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
-        <div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 10x</span><span class="val-high">고 30x</span></div>
+        <div class="val-labels"><span class="val-low">저 5x</span><span class="val-mid">적정 14x</span><span class="val-high">고 30x</span></div>
       </div>
-
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">PSR (시총/매출 TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">22.9x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+      <div class="val-item" data-metric="pcr" onclick="selectMultiple('pcr')">
+        <div class="val-header"><span class="val-name">PCR (FCF)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">93.9x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
-        <div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 10x</span><span class="val-high">고 25x</span></div>
+        <div class="val-labels"><span class="val-low">저 25x</span><span class="val-mid">적정 65x</span><span class="val-high">고 120x</span></div>
       </div>
-
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">EV/EBITDA (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">93.8x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
+      <div class="val-item" data-metric="evebitda" onclick="selectMultiple('evebitda')">
+        <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">82.0x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div>
-        <div class="val-labels"><span class="val-low">저 10x</span><span class="val-mid">적정 22x</span><span class="val-high">고 45x</span></div>
-      </div>
-
-      <div style="margin-top:10px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">
-        ※ TTM 기준 고평가이나, <strong style="color:var(--accent2);">Forward 2026E 기준(PER ~38x, EV/EBITDA ~25x)</strong>은 AI 고성장 감안 시 정당화 가능. 수익 급증 중.
+        <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 39x</span><span class="val-high">고 90x</span></div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">AI 반도체 피어 비교 (Forward PER 기준)</div>
-      <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:10px;font-size:12px;color:var(--text2);">* AMD Forward PER ~38x는 NVDA(~30x) 대비 다소 높지만, 성장 모멘텀 가속도 감안 시 합리적 범위.</div>
+      <div class="card-title"><span id="multipleCompareTitle">PER 비교 — AI 반도체 동종업계 기준</span></div>
+      <div class="chart-wrap" style="height:270px;"><canvas id="multipleChart"></canvas></div>
+      <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText"></div>
     </div>
   </div>
 
@@ -462,21 +597,17 @@
   <div class="card">
     <div class="card-title">Per-Share 지표</div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;">
-      <div class="ps-card"><div class="ps-label">EPS (TTM 희석)</div><div class="ps-value">$3.08</div><div class="ps-sub">Q2'25~Q1'26 합산 / YoY 폭증</div></div>
-      <div class="ps-card"><div class="ps-label">BPS (Q1 2026)</div><div class="ps-value">$39.54</div><div class="ps-sub">순자산 $64.5B ÷ 1.63B주</div></div>
-      <div class="ps-card"><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$4.19</div><div class="ps-sub">TTM FCF $6.84B ÷ 1.63B주</div></div>
+      <div class="ps-card"><div class="ps-label">EPS (TTM 희석)</div><div class="ps-value">$3.89</div><div class="ps-sub">Q3'25~Q2'26 합산 · GAAP</div></div>
+      <div class="ps-card"><div class="ps-label">BPS (Q2 2026)</div><div class="ps-value">$41.19</div><div class="ps-sub">자기자본 $67.2B ÷ 1.63B주</div></div>
+      <div class="ps-card"><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$5.15</div><div class="ps-sub">TTM FCF 약 $8.40B</div></div>
       <div class="ps-card"><div class="ps-label">배당금 (DPS)</div><div class="ps-value">$0.00</div><div class="ps-sub">무배당 / R&D·자사주 집중</div></div>
     </div>
     <div class="chart-wrap" style="height:220px;"><canvas id="perShareChart"></canvas></div>
   </div>
 
   <div class="card">
-    <div class="card-title">종합 밸류에이션 — 수익성 & 자본 구조 요약</div>
-    <div class="grid-3">
-      <div class="stat-box"><div class="stat-label">총이익률 (Q1 2026)</div><div class="stat-value or">52.8%</div><div class="stat-sub">반도체 팹리스 고마진</div></div>
-      <div class="stat-box"><div class="stat-label">FCF Margin (Q1 2026)</div><div class="stat-value or">25.0%</div><div class="stat-sub">역대급 현금창출력</div></div>
-      <div class="stat-box"><div class="stat-label">순현금 (Q1 2026)</div><div class="stat-value up">+$8.5B</div><div class="stat-sub">무차입 순현금 구조</div></div>
-    </div>
+    <div class="card-title">종합 밸류에이션 — 5개 지표 중 3개 4단계 이상(높음~매우높음)</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;">AI 반도체 핵심 앵커(AMD 자체 역사값+NVDA 평균) 기준 PER 124.3x·EV/EBITDA 82.0x는 5단계 매우높음, PCR 93.9x는 4단계 높음 — 이익·현금흐름·기업가치 기준 멀티플 모두 상당한 프리미엄 구간이다. 반면 PBR 11.7x는 2단계 낮음으로 5개 지표 중 유일한 저평가 신호, PSR 19.1x는 3단계 적정. Xilinx 인수 관련 무형자산 상각이 GAAP PER을 끌어올리는 효과가 있어 Non-GAAP 기준(TTM EPS $5.76, Non-GAAP PER 83.9x)으로도 여전히 높은 편이나 GAAP만큼 극단적이진 않다. 데이터센터 매출 비중 확대(58%, Q2 +107% YoY)가 프리미엄을 일부 정당화하지만, 절대 밸류에이션 부담은 실재한다.</div>
   </div>
 
   <div class="card">
@@ -487,7 +618,7 @@
     </div>
     <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
       <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — Forward 전망치 부합</div>
-      <div style="font-size:12px;color:var(--text2);">Forward PER ~38x 밴드 유지, MI400 양산이 전망치대로 진행될 경우 → 공정가치 <strong style="color:var(--text);">$550~650/주</strong></div>
+      <div style="font-size:12px;color:var(--text2);">데이터센터 매출 성장이 이어지며 MI400 양산이 전망치대로 진행될 경우 → 공정가치 <strong style="color:var(--text);">$550~650/주</strong></div>
     </div>
     <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
       <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — MI400 수요 초과 달성</div>
@@ -501,12 +632,12 @@
   <div class="section-title">US 특화 — S&P 500 대비 상대 성과 & AI GPU 로드맵</div>
 
   <div class="rel-container">
-    <div class="rel-title">S&P500 대비 상대 성과 (2025.07 ~ 2026.06, 기준=100)</div>
+    <div class="rel-title">S&P500 대비 상대 성과 (2025.08 ~ 2026.08, 기준=100)</div>
     <div class="chart-wrap" style="height:200px;"><canvas id="relChart"></canvas></div>
     <div class="grid-3" style="margin-top:12px;">
-      <div class="stat-box"><div class="stat-label">AMD 1년 수익률</div><div class="stat-value up">+282%</div><div class="stat-sub">$142→$543</div></div>
+      <div class="stat-box"><div class="stat-label">AMD 1년 수익률</div><div class="stat-value up">+179.8%</div><div class="stat-sub">$172.76→$483.36</div></div>
       <div class="stat-box"><div class="stat-label">S&P500 동기간</div><div class="stat-value up">+15.2%</div><div class="stat-sub">추정치</div></div>
-      <div class="stat-box"><div class="stat-label">초과 수익</div><div class="stat-value up">+267%p</div><div class="stat-sub">압도적 아웃퍼폼</div></div>
+      <div class="stat-box"><div class="stat-label">초과 수익</div><div class="stat-value up">+164.6%p</div><div class="stat-sub">압도적 아웃퍼폼</div></div>
     </div>
   </div>
 
@@ -552,12 +683,13 @@
   <div class="card">
     <div class="card-title">데이터센터 매출 폭발 성장 & FCF 추이</div>
     <div class="chart-wrap" style="height:220px;"><canvas id="dcChart"></canvas></div>
+    <div style="margin-top:10px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">Q2 2026 데이터센터 매출 $6.7B(+107% YoY, 전사 매출의 58%)로 8개 분기 연속 성장. FCF는 Q2 $1.55B로 전분기($2.57B) 대비 축소됐는데, MI400 램프를 앞둔 재고·설비 투자 확대가 주된 요인.</div>
   </div>
 </div>
 
 <!-- ===================== S6: 시계열 뉴스 ===================== -->
 <div id="news" class="section">
-  <div class="section-title">시계열 뉴스 — 2025.07 ~ 2026.06 주요 이벤트</div>
+  <div class="section-title">시계열 뉴스 — 2025.08 ~ 2026.08 주요 이벤트</div>
   <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:11px;color:var(--text2);">
     <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--event-major);display:inline-block;"></span>초대형 이벤트</span>
     <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--green);display:inline-block;"></span>긍정</span>
@@ -566,6 +698,12 @@
   </div>
   <div class="timeline">
     <div class="tl-item">
+      <div class="tl-dot green"></div>
+      <div class="tl-date">2026년 8월 4일</div>
+      <div class="tl-title">Q2 2026 어닝 — 매출 $11.54B(+50%), 데이터센터 $6.7B(+107%) 역대최고</div>
+      <div class="tl-desc">매출 $11.54B(+50% YoY, 역대최고). 데이터센터 매출 $6.7B(+107%, 전사 매출의 58%) — EPYC CPU·Instinct GPU 견인. GAAP 영업이익 $1.99B(OPM 17.3%), GAAP EPS $1.38, Non-GAAP EPS $1.66. Q3 가이던스 매출 약 $13.0B(±$300M, YoY +41%). Gaming 부문은 세미커스텀 수요 감소로 -31% YoY.</div>
+      <a class="tl-source" href="https://ir.amd.com/news-events/press-releases/detail/1295/amd-reports-second-quarter-2026-financial-results" target="_blank" rel="noopener">관련 뉴스 보기 (AMD IR) →</a>
+    </div><div class="tl-item">
       <div class="tl-dot green"></div>
       <div class="tl-date">2026년 5월</div>
       <div class="tl-title">Q1 2026 어닝 — 매출 $10.25B, FCF $2.57B 역대최고</div>
@@ -639,11 +777,11 @@
       <div class="bb-item"><span>▲</span><span><strong>OpenAI 10% 지분 + 6GW 공급:</strong> 세계 최대 AI 기업과의 전략적 공급망 통합. 엔비디아 의존도 분산 수요의 최대 수혜자.</span></div>
       <div class="bb-item"><span>▲</span><span><strong>ROCm 생태계 성숙:</strong> PyTorch3.1 네이티브 지원. 700,000+ 허깅페이스 모델 검증. CUDA 전환 비용 급감. 소프트웨어 병목 해소 중.</span></div>
       <div class="bb-item"><span>▲</span><span><strong>EPYC CPU 동반 성장:</strong> 서버 CPU 2026E $12.8B(+40%). GPU+CPU 풀스택으로 데이터센터 점유율 동시 확대. Helios 랙 솔루션 완전체.</span></div>
-      <div class="bb-item"><span>▲</span><span><strong>FCF 폭발:</strong> Q1 2026 FCF $2.57B(마진 25%). 팹리스 모델로 Capex 경쟁 없이 이익 극대화. 순현금 $8.5B 무차입 구조.</span></div>
+      <div class="bb-item"><span>▲</span><span><strong>탄탄한 재무구조:</strong> 순현금 $9.89B, 부채비율 5%. 팹리스 모델로 Capex 경쟁 없이 데이터센터 성장에 집중.</span></div>
     </div>
     <div class="bb-box">
       <div class="bb-title bb-bear">🐻 Bear 요인</div>
-      <div class="bb-item"><span>▼</span><span><strong>TTM PER 176x·EV/EBITDA 96x 극단적 고평가:</strong> 성장 기대 완전 반영. 어닝 미스·가이던스 하향 시 멀티플 급수축 위험.</span></div>
+      <div class="bb-item"><span>▼</span><span><strong>GAAP PER 124.3x·EV/EBITDA 82.0x 고평가:</strong> 성장 기대 완전 반영. 어닝 미스·가이던스 하향 시 멀티플 급수축 위험.</span></div>
       <div class="bb-item"><span>▼</span><span><strong>엔비디아 CUDA 생태계 해자:</strong> 80~95% 시장점유율. H100/B200 고객 전환 비용 높음. AMD ROCm은 여전히 기술 부채 잔존.</span></div>
       <div class="bb-item"><span>▼</span><span><strong>무형자산·굿윌 $41.5B:</strong> 자일링스 인수(2022) 무형자산 상각 연간 $3B+ 지속. 실질 영업이익 과소 표현.</span></div>
       <div class="bb-item"><span>▼</span><span><strong>수출규제 리스크:</strong> AI 칩 BIS 수출통제 강화. 중국 매출 제한. 유럽·중동 소버린 AI 인허가 복잡성 증가.</span></div>
@@ -661,17 +799,17 @@
         <div style="width:10%;height:100%;background:var(--bg3);"></div>
         <div style="width:30%;height:100%;background:rgba(231,76,60,0.45);"></div>
       </div>
-      <div style="position:absolute;top:10px;left:29.15%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
-      <div style="position:absolute;top:-6px;left:29.15%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $429.56</div>
-      <div style="position:absolute;top:22px;left:35.08%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
-      <div style="position:absolute;top:48px;left:35.08%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $525.40 (+22.3%)</div>
+      <div style="position:absolute;top:10px;left:26.7%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
+      <div style="position:absolute;top:-6px;left:26.7%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $483.36</div>
+      <div style="position:absolute;top:22px;left:35.1%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
+      <div style="position:absolute;top:48px;left:35.1%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $525.40 (+8.7%)</div>
     </div>
     <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-top:4px;">
       <span style="color:var(--green);">약세 $350~430 (MI400 지연·규제 강화)</span>
       <span>기본 $550~650 (전망치 부합)</span>
       <span style="color:var(--red);">강세 $700~850 (수요 초과 달성)</span>
     </div>
-    <div style="margin-top:10px;font-size:11px;color:var(--text3);">현재가는 약세~기본 밴드 사이 조정 구간 — 6/30 신고가 $584.73 이후 -15.2% 조정. 컨센서스 목표가까지 +22.3% 여력, MI400 양산 성공 시 기본 시나리오 재진입 가능.</div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">현재가는 약세~기본 밴드 사이 조정 구간 — 6/30 신고가 $584.73 이후 -17.3% 조정. 컨센서스 목표가까지 +8.7% 여력, MI400 양산 성공 시 기본 시나리오 재진입 가능.</div>
 
     <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
       <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">애널리스트 51명 투자의견 분포</div>
@@ -691,10 +829,10 @@
   <div class="card" style="margin-top:16px;">
     <div class="card-title">5개 분석 종합 — 한눈에 보기</div>
     <div class="zone-list">
-      <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:#f0c040">MA20&gt;MA60&gt;MA5&gt;현재가&gt;MA120 · 지지와 저항이 교차하는 혼조 구간</span></div>
-      <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">MI400 사이클 개막·OpenAI 6GW 공급, FCF $2.57B(마진 25%)</span></div>
-      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:var(--red);">TTM PER 176x·EV/EBITDA 96x — 극단적 고평가, 성장 기대 완전 반영</span></div>
-      <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:var(--green);">52주 수익률 +142.1% — 반도체 섹터 중 최상위권 폭등</span></div>
+      <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:var(--red);">MA60&gt;MA20&gt;MA5&gt;현재가&gt;MA120 · 4개 이평선 중 1개 상회 · 기술적 약세</span></div>
+      <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">MI400 사이클 개막·OpenAI 6GW 공급, 데이터센터 매출 +107% YoY</span></div>
+      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:var(--red);">GAAP PER 124.3x·EV/EBITDA 82.0x — 고평가, 성장 기대 상당 부분 반영</span></div>
+      <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:var(--green);">52주 수익률 +179.8% — 반도체 섹터 중 최상위권 폭등</span></div>
       <div class="zone-item"><span class="zone-label">📰 시계열 뉴스</span><span class="zone-val" style="color:#f0c040;">MI400·Helios 랙 양산 임박이 핵심 촉매, 신고가 이후 조정 국면 진입</span></div>
     </div>
   </div>
@@ -704,8 +842,8 @@
     <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;">
       <div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107">2026년 11월 3일 (Q3 2026 예상)</strong></div>
       <div><span style="color:var(--text2);">투자의견:</span> <strong style="color:var(--green)">Strong Buy (애널리스트 51명 중 41명 매수)</strong></div>
-      <div><span style="color:var(--text2);">목표주가:</span> <strong style="color:#ffc107">$525.40 · +22.3%</strong></div>
-      <div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">MI400·Helios 양산이 2026~2027 수익 폭발의 핵심 촉매이나, TTM PER 176x·EV/EBITDA 96x는 이미 극단적 고평가를 반영</strong></div>
+      <div><span style="color:var(--text2);">목표주가:</span> <strong style="color:#ffc107">$525.40 · +8.7%</strong></div>
+      <div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">MI400·Helios 양산이 2026~2027 수익 폭발의 핵심 촉매이나, GAAP PER 124.3x·EV/EBITDA 82.0x는 이미 상당한 프리미엄을 반영</strong></div>
     </div>
   </div>
 
@@ -735,6 +873,32 @@
 </div>
 
 <script>
+function toggleCollapsible(header) {
+  const body = header.nextElementSibling;
+  const hintText = header.querySelector('.toggle-hint-text');
+  const expandedLabel = header.classList.contains('detail-toggle') ? '상세 숨기기' : '접기';
+  const collapsedLabel = header.classList.contains('detail-toggle') ? '상세 보기' : '펼치기';
+  const collapsing = !header.classList.contains('collapsed');
+  if (collapsing) {
+    body.style.maxHeight = body.scrollHeight + 'px';
+    requestAnimationFrame(() => {
+      header.classList.add('collapsed');
+      body.classList.add('collapsed');
+      header.setAttribute('aria-expanded', 'false');
+      if (hintText) hintText.textContent = collapsedLabel;
+    });
+  } else {
+    header.classList.remove('collapsed');
+    body.classList.remove('collapsed');
+    body.style.maxHeight = body.scrollHeight + 'px';
+    header.setAttribute('aria-expanded', 'true');
+    if (hintText) hintText.textContent = expandedLabel;
+    body.addEventListener('transitionend', function clear() {
+      body.style.maxHeight = '';
+      body.removeEventListener('transitionend', clear);
+    });
+  }
+}
 const charts = {};
 function showSection(id, e) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -745,11 +909,11 @@ function showSection(id, e) {
 }
 function renderCharts(id) {
   if(id==='fund') renderFund();
-  if(id==='valuation') { renderPeer(); renderPS(); }
+  if(id==='valuation') { if (!charts['multiple']) selectMultiple(currentMultipleKey); renderPS(); }
   if(id==='us') { renderRel(); renderDC(); }
 }
 
-const MONTHS = ['7월','8월','9월','10월','11월','12월','1월','2월','3월','4월','5월','6월'];
+const MONTHS = ['8월','9월','10월','11월','12월','1월','2월','3월','4월','5월','6월','7월','8월'];
 
 const AMD_DAILY = [["2025-08-07",166.84,175.75,166.7,172.4,95448300],["2025-08-08",174.04,176.48,170.52,172.76,68866700],["2025-08-11",170.04,178.82,169.38,172.28,70651000],["2025-08-12",173.32,175.16,168.5,174.95,52243500],["2025-08-13",179.91,186.65,179.38,184.42,108305100],["2025-08-14",179.83,185.44,179.56,180.95,66308800],["2025-08-15",180.06,180.14,176.25,177.51,51543100],["2025-08-18",176.76,178.8,174.36,176.14,35937500],["2025-08-19",173.1,173.17,166.1,166.55,64455000],["2025-08-20",164.1,166.65,158.25,165.2,60233200],["2025-08-21",165.86,165.88,162.26,163.71,37880500],["2025-08-22",162.17,168.53,161.8,167.76,43998600],["2025-08-25",165.55,165.59,161.72,163.36,36134700],["2025-08-26",168.65,169.77,164.91,166.62,52138600],["2025-08-27",166.04,167.68,164.65,167.13,37031000],["2025-08-28",168.5,170.99,166.65,168.58,36285200],["2025-08-29",166.81,168.57,161.9,162.63,37516800],["2025-09-02",158.42,162.39,156.62,162.32,38656100],["2025-09-03",161.81,164.75,160.58,162.13,30752800],["2025-09-04",159.94,162.05,157.79,161.79,32103500],["2025-09-05",157.12,157.14,150.18,151.14,78256000],["2025-09-08",151.8,152.64,149.22,151.41,41849000],["2025-09-09",151.99,156.66,151.93,155.82,42802500],["2025-09-10",163.54,164.53,158.0,159.54,52465300],["2025-09-11",158.62,160.21,154.99,155.67,48817700],["2025-09-12",157.0,160.41,154.92,158.57,42232800],["2025-09-15",160.01,162.3,157.6,161.16,36808700],["2025-09-16",161.37,161.95,159.22,160.46,27946500],["2025-09-17",159.28,161.63,155.76,159.16,41823800],["2025-09-18",150.96,158.77,149.85,157.92,84549500],["2025-09-19",157.38,159.84,155.9,157.39,55448100],["2025-09-22",157.42,162.68,157.42,159.79,46505500],["2025-09-23",160.52,163.39,159.21,160.9,39448300],["2025-09-24",162.98,165.1,158.43,160.88,38464100],["2025-09-25",157.14,161.63,154.78,161.27,36809900],["2025-09-26",160.52,162.11,157.05,159.46,30316900],["2025-09-29",160.12,164.3,159.9,161.36,39828800],["2025-09-30",160.79,162.28,159.33,161.79,29669300],["2025-10-01",160.93,164.18,160.49,164.01,39895200],["2025-10-02",168.68,171.06,166.12,169.73,55475200],["2025-10-03",170.68,170.68,163.14,164.67,42699100],["2025-10-06",226.45,226.71,203.01,203.71,248859600],["2025-10-07",214.85,218.9,209.28,211.51,115748100],["2025-10-08",212.95,235.87,210.7,235.56,159983500],["2025-10-09",236.3,240.1,229.53,232.89,94290700],["2025-10-10",232.77,234.22,213.2,214.9,118656600],["2025-10-13",220.2,224.19,214.9,216.42,63104000],["2025-10-14",219.2,224.98,215.9,218.09,71216300],["2025-10-15",222.71,239.24,220.76,238.6,108481000],["2025-10-16",236.29,241.2,232.24,234.56,69726400],["2025-10-17",233.26,235.38,227.91,233.08,55804200],["2025-10-20",236.47,242.88,234.4,240.56,56741700],["2025-10-21",239.39,242.26,234.02,238.03,47122400],["2025-10-22",236.85,240.13,224.88,230.23,59668800],["2025-10-23",230.16,235.9,228.54,234.99,39024400],["2025-10-24",243.36,253.39,241.95,252.92,71221100],["2025-10-27",257.88,260.42,249.8,259.67,65613100],["2025-10-28",259.14,264.58,257.0,258.01,47448700],["2025-10-29",264.19,267.08,257.4,264.33,49335600],["2025-10-30",259.92,263.88,252.31,254.84,45162500],["2025-10-31",259.6,262.13,253.41,256.12,34449200],["2025-11-03",259.33,260.91,253.89,259.65,36351400],["2025-11-04",250.35,257.38,247.39,250.05,56491800],["2025-11-05",243.24,259.65,242.81,256.33,67366600],["2025-11-06",253.47,253.51,235.74,237.7,66049700],["2025-11-07",230.94,235.87,224.64,233.54,52162600],["2025-11-10",242.14,248.9,240.5,243.98,43361600],["2025-11-11",241.66,248.46,234.64,237.52,61336800],["2025-11-12",253.13,263.51,250.0,258.89,108942000],["2025-11-13",251.9,259.63,246.06,247.96,63178600],["2025-11-14",240.11,253.44,235.08,246.81,47655600],["2025-11-17",242.75,248.77,237.15,240.52,37942200],["2025-11-18",236.78,238.0,224.71,230.29,45619900],["2025-11-19",230.26,235.28,219.71,223.55,52093400],["2025-11-20",232.7,234.25,204.53,206.02,66342900],["2025-11-21",208.81,208.83,195.0,203.78,67421100],["2025-11-24",207.16,217.13,205.85,215.05,46749600],["2025-11-25",201.48,206.58,194.28,206.13,69773500],["2025-11-26",210.05,215.59,207.0,214.24,43270200],["2025-11-28",216.14,218.3,214.02,217.53,18658000],["2025-12-01",213.88,220.98,213.5,219.76,30768700],["2025-12-02",221.79,225.98,214.39,215.24,42002500],["2025-12-03",216.26,218.2,211.77,217.6,28545200],["2025-12-04",216.88,219.12,214.14,215.98,24478200],["2025-12-05",217.17,223.64,216.24,217.97,33292400],["2025-12-08",219.09,223.71,218.36,221.11,30943200],["2025-12-09",221.04,224.84,217.91,221.62,25166100],["2025-12-10",222.0,222.61,218.67,221.42,23279400],["2025-12-11",217.81,221.5,210.19,221.43,30694600],["2025-12-12",218.37,222.49,209.06,210.78,37073900],["2025-12-15",212.28,215.36,206.58,207.58,27222200],["2025-12-16",206.92,210.22,205.11,209.17,23467600],["2025-12-17",210.04,211.5,197.53,198.11,31595400],["2025-12-18",203.82,206.36,200.5,201.06,29720100],["2025-12-19",204.6,215.18,204.2,213.43,58445500],["2025-12-22",220.0,220.17,213.31,214.95,24950700],["2025-12-23",212.86,217.03,212.28,214.9,20272300],["2025-12-24",214.98,216.54,213.97,215.04,7956800],["2025-12-26",215.43,216.83,213.03,214.99,15792600],["2025-12-29",211.58,216.05,209.24,215.61,20326900],["2025-12-30",215.87,216.82,214.33,215.34,16409600],["2025-12-31",215.82,217.64,213.8,214.16,17591600],["2026-01-02",218.9,227.15,218.9,223.47,36446200],["2026-01-05",230.25,234.02,220.48,221.08,31941100],["2026-01-06",222.71,222.92,211.25,214.35,40033200],["2026-01-07",212.13,212.13,207.17,210.02,29715500],["2026-01-08",210.9,210.94,203.33,204.68,27505000],["2026-01-09",205.72,207.3,203.07,203.17,24217300],["2026-01-12",201.18,209.88,199.8,207.69,27287300],["2026-01-13",215.1,223.11,214.98,220.97,56894900],["2026-01-14",217.54,224.09,215.11,223.6,40466500],["2026-01-15",227.9,238.35,227.22,227.92,55270200],["2026-01-16",234.3,234.49,228.86,231.83,42545600],["2026-01-20",226.08,239.5,225.41,231.92,44327700],["2026-01-21",235.99,252.9,235.78,249.8,62385600],["2026-01-22",251.75,256.08,246.63,253.73,37945000],["2026-01-23",261.18,266.96,256.25,259.68,47525900],["2026-01-26",256.75,258.29,250.3,251.31,30672500],["2026-01-27",252.16,255.55,247.96,252.03,25691600],["2026-01-28",254.13,257.4,250.21,252.74,27061200],["2026-01-29",254.66,260.53,240.91,252.18,31685200],["2026-01-30",236.93,245.24,234.55,236.73,40035700],["2026-02-02",235.77,249.97,235.0,246.27,36308100],["2026-02-03",251.55,252.65,237.04,242.11,53097100],["2026-02-04",215.0,218.58,199.15,200.19,107173300],["2026-02-05",201.86,204.04,190.72,192.5,62196400],["2026-02-06",197.13,209.27,196.43,208.44,54504500],["2026-02-09",206.9,217.6,204.15,216.0,38810800],["2026-02-10",215.14,219.39,213.13,213.57,25326700],["2026-02-11",217.88,219.65,209.21,213.58,33384700],["2026-02-12",215.83,218.46,205.14,205.94,32181000],["2026-02-13",204.02,210.05,203.88,207.32,26123900],["2026-02-17",202.15,205.3,194.83,203.08,33712100],["2026-02-18",198.41,203.2,195.0,200.12,35664100],["2026-02-19",200.11,204.1,198.29,203.37,25842300],["2026-02-20",200.12,204.87,198.56,200.15,36317300],["2026-02-23",198.09,199.38,194.15,196.6,28187900],["2026-02-24",211.63,216.71,206.5,213.84,81367000],["2026-02-25",214.82,216.7,210.33,210.86,44588100],["2026-02-26",208.8,209.79,201.46,203.68,35020500],["2026-02-27",200.11,201.89,197.74,200.21,31312400],["2026-03-02",193.85,198.74,190.0,198.62,34120200],["2026-03-03",191.46,193.64,188.22,190.95,37785700],["2026-03-04",192.12,202.44,189.86,202.07,40912600],["2026-03-05",197.77,203.79,194.88,199.45,36000700],["2026-03-06",195.27,200.24,191.25,192.43,33913800],["2026-03-09",189.36,202.97,189.02,202.68,38877200],["2026-03-10",202.51,206.59,202.2,203.23,29139200],["2026-03-11",205.11,209.21,203.63,204.83,23076400],["2026-03-12",202.83,203.62,196.67,197.74,28886900],["2026-03-13",198.11,199.68,192.27,193.39,27561900],["2026-03-16",194.98,200.17,194.8,196.58,30285200],["2026-03-17",196.68,199.21,195.26,196.31,22779700],["2026-03-18",196.0,202.86,195.75,199.46,28569100],["2026-03-19",195.03,205.88,192.83,205.27,32245300],["2026-03-20",204.89,206.3,198.26,201.33,37265100],["2026-03-23",206.4,209.11,201.71,202.68,31857800],["2026-03-24",201.39,206.43,200.13,205.37,27258800],["2026-03-25",211.51,221.33,211.51,220.27,48518300],["2026-03-26",217.98,221.0,203.43,203.77,49213000],["2026-03-27",201.77,203.27,197.69,201.99,29206600],["2026-03-30",204.95,208.43,192.87,196.04,41053300],["2026-03-31",198.05,204.0,196.41,203.43,42318700],["2026-04-01",207.59,213.83,205.84,210.21,40835800],["2026-04-02",204.05,217.78,200.62,217.5,38463500],["2026-04-06",219.28,226.31,217.73,220.18,30786400],["2026-04-07",218.26,222.1,215.38,221.53,26483000],["2026-04-08",232.12,234.0,227.09,231.82,35496400],["2026-04-09",233.01,237.1,230.91,236.64,27126200],["2026-04-10",239.0,249.58,238.96,245.04,36477200],["2026-04-13",245.03,247.33,242.03,246.83,22781800],["2026-04-14",249.79,255.46,245.7,255.07,25733200],["2026-04-15",254.96,258.18,251.85,258.12,24695200],["2026-04-16",264.99,279.34,261.51,278.26,64850800],["2026-04-17",281.0,281.05,274.14,278.39,35519900],["2026-04-20",280.6,287.61,272.0,274.95,34833900],["2026-04-21",277.33,286.2,276.62,284.49,38950900],["2026-04-22",291.22,304.25,286.14,303.46,49054200],["2026-04-23",302.01,310.22,299.76,305.33,45619700],["2026-04-24",336.76,352.99,334.54,347.81,81616700],["2026-04-27",346.32,349.21,328.81,334.63,50585300],["2026-04-28",311.86,327.5,310.0,323.21,43002500],["2026-04-29",326.58,340.17,318.86,337.11,44704400],["2026-04-30",341.36,354.96,332.6,354.49,42115300],["2026-05-01",351.87,362.79,349.25,360.54,34279200],["2026-05-04",360.31,361.85,338.7,341.54,42000200],["2026-05-05",351.51,359.57,344.88,355.26,64235100],["2026-05-06",409.49,430.6,402.04,421.39,87732200],["2026-05-07",417.07,421.71,401.08,408.46,44885500],["2026-05-08",418.59,456.29,418.29,455.19,58134900],["2026-05-11",460.55,469.22,450.88,458.79,46085400],["2026-05-12",449.25,458.8,426.11,448.29,39140100],["2026-05-13",457.04,459.5,432.65,445.5,30423400],["2026-05-14",440.6,453.31,435.68,449.7,26113600],["2026-05-15",433.34,439.0,423.36,424.1,29131600],["2026-05-18",429.5,438.8,410.71,420.99,28432100],["2026-05-19",412.6,428.75,393.36,414.05,38756900],["2026-05-20",428.04,449.39,426.05,447.58,36137500],["2026-05-21",441.99,451.2,431.6,449.59,27252000],["2026-05-22",469.84,481.41,461.71,467.51,34758600],["2026-05-26",484.74,506.96,480.23,503.89,38473800],["2026-05-27",508.0,510.21,486.66,495.54,27589300],["2026-05-28",499.0,527.2,493.52,518.09,31438500],["2026-05-29",520.8,522.0,503.43,516.1,30803200],["2026-06-01",500.16,517.5,486.8,510.13,33309200],["2026-06-02",506.3,522.49,501.22,521.54,24293200],["2026-06-03",533.75,546.44,524.3,542.52,29411100],["2026-06-04",514.75,532.19,499.87,523.2,29110000],["2026-06-05",499.53,505.62,463.95,466.38,46900600],["2026-06-08",485.0,494.97,477.71,490.33,25158800],["2026-06-09",502.75,505.0,437.23,475.51,37799800],["2026-06-10",467.97,477.45,448.33,452.4,27777400],["2026-06-11",461.6,490.46,458.02,488.45,30463100],["2026-06-12",499.69,521.71,494.0,511.57,31553100],["2026-06-15",535.75,558.37,530.5,547.26,33482400],["2026-06-16",546.89,548.95,507.25,507.29,28411700],["2026-06-17",529.66,532.5,507.3,512.48,27085300],["2026-06-18",531.58,539.69,526.32,537.37,43805600],["2026-06-22",545.5,562.99,535.71,551.63,25983200],["2026-06-23",509.08,528.49,506.81,519.85,30196800],["2026-06-24",520.82,524.96,503.5,519.74,26548300],["2026-06-25",543.93,550.88,507.0,532.57,27031300],["2026-06-26",519.8,525.11,502.61,521.58,52705100],["2026-06-29",522.84,542.19,495.35,539.49,26671000],["2026-06-30",545.57,584.73,545.57,580.91,34488500],["2026-07-01",557.53,564.09,538.74,540.88,28326800],["2026-07-02",538.16,547.65,506.0,517.82,28142500],["2026-07-06",535.35,572.5,527.0,552.05,30684200],["2026-07-07",515.91,524.97,503.11,516.11,29166800],["2026-07-08",504.81,522.98,498.15,517.41,23768500],["2026-07-09",537.27,559.5,535.2,546.72,26900800],["2026-07-10",544.01,560.25,540.05,557.89,20704500],["2026-07-13",537.5,551.87,526.92,534.39,22957400],["2026-07-14",567.22,574.2,546.77,548.13,21201400],["2026-07-15",556.02,558.89,509.57,529.14,27826200],["2026-07-16",509.33,518.74,491.8,500.94,27093700],["2026-07-17",476.88,505.88,460.21,495.76,32115900],["2026-07-20",517.0,522.44,502.36,503.57,23440700],["2026-07-21",526.0,548.14,522.6,544.43,29045100],["2026-07-22",526.88,561.47,526.6,552.33,24776700],["2026-07-23",544.74,556.49,525.0,539.69,27155100],["2026-07-24",546.92,549.0,518.0,521.95,27200700],["2026-07-27",527.51,528.0,476.93,494.95,31800300],["2026-07-28",467.0,472.75,442.27,454.62,36315500],["2026-07-29",452.68,457.22,424.03,429.56,32304900],["2026-07-30",460.0,498.2,457.68,485.39,36936600],["2026-07-31",510.28,515.62,475.76,476.15,26615700],["2026-08-03",461.79,490.95,455.3,484.64,24422300],["2026-08-04",504.0,530.13,502.2,518.58,48463600],["2026-08-05",484.5,502.0,478.2,482.05,49615800],["2026-08-06",471.75,496.72,469.5,489.28,24675300],["2026-08-07",497.94,498.99,476.06,483.36,26560000]];
 const AMD_MA5 = [171.66,171.87,170.97,171.1,175.36,177.07,178.02,178.79,177.11,173.27,169.82,167.87,165.32,165.33,165.72,166.69,165.66,165.46,164.56,163.49,160.0,157.76,156.46,155.94,154.72,156.2,158.15,159.08,159.0,159.45,159.22,158.94,159.03,159.38,160.05,160.46,160.77,160.95,161.58,163.27,164.31,172.78,182.73,197.04,209.67,219.71,222.26,223.57,224.18,224.51,228.15,232.98,236.97,235.29,235.38,239.35,243.17,247.16,253.98,257.95,258.59,258.59,257.0,255.4,251.97,247.45,244.32,241.81,242.33,244.38,247.03,246.34,244.89,237.83,229.44,220.83,215.74,210.91,209.04,211.35,214.54,214.58,216.87,217.22,217.31,217.58,218.86,219.62,220.71,219.27,216.57,214.08,209.41,205.34,205.87,207.34,208.49,211.88,214.66,215.1,215.18,215.03,216.71,217.93,217.68,216.62,214.72,210.66,207.98,209.31,212.02,216.67,222.4,227.25,233.01,239.04,245.39,249.29,253.31,253.9,253.59,249.0,247.99,246.01,235.5,223.56,217.9,211.85,206.14,208.82,211.51,211.28,208.7,206.01,203.97,202.81,200.66,202.82,204.96,205.03,205.04,205.44,200.86,199.11,198.26,196.7,197.52,199.97,200.52,200.18,200.37,199.15,197.77,196.7,198.2,199.79,201.01,202.82,206.98,206.68,206.82,205.49,205.1,203.09,205.83,209.47,214.57,220.25,225.53,231.04,236.37,243.08,248.34,256.66,263.33,268.96,274.84,283.91,289.32,303.21,315.14,322.89,329.62,339.45,342.0,343.38,349.79,366.64,377.44,396.37,419.82,438.42,443.25,451.49,445.28,437.72,430.87,431.28,431.26,439.94,456.52,472.82,486.92,500.23,508.75,512.28,521.68,522.7,512.75,508.79,499.59,481.56,474.61,483.65,495.04,501.39,513.41,523.19,531.21,525.72,528.21,532.23,529.07,526.65,538.86,543.09,540.14,546.23,541.55,528.85,530.02,538.04,534.5,540.91,543.25,534.1,521.67,515.51,514.77,519.41,527.16,532.39,530.67,512.71,488.15,477.29,468.13,466.07,478.86,489.36,490.14,491.58];
@@ -956,10 +1120,10 @@ const AMD_MA120 = [118.86,119.36,119.84,120.34,120.93,121.51,122.09,122.69,123.2
 function renderFund() {
   if(charts['fund']) return;
   const ctx = document.getElementById('fundChart'); if(!ctx) return;
-  const labels = ['Q2\'24','Q3\'24','Q4\'24','Q1\'25','Q2\'25','Q3\'25','Q4\'25','Q1\'26'];
-  const rev =  [5.84,  6.82,  7.66,  7.44,  7.69,  9.25, 10.27, 10.25];
-  const op  =  [0.269, 0.724, 0.871, 0.806, -0.134, 1.270, 1.752, 1.476];
-  const opm =  [4.6,   10.6,  11.4,  10.8,  -1.7,  13.7,  17.1,  14.4];
+  const labels = ['Q2\'24','Q3\'24','Q4\'24','Q1\'25','Q2\'25','Q3\'25','Q4\'25','Q1\'26','Q2\'26'];
+  const rev =  [5.84,  6.82,  7.66,  7.44,  7.69,  9.25, 10.27, 10.25, 11.54];
+  const op  =  [0.269, 0.724, 0.871, 0.806, -0.134, 1.270, 1.752, 1.476, 1.990];
+  const opm =  [4.6,   10.6,  11.4,  10.8,  -1.7,  13.7,  17.1,  14.4,  17.3];
   charts['fund'] = new Chart(ctx, {
     data:{ labels, datasets:[
       {type:'bar', label:'매출 ($B)', data:rev, backgroundColor:'rgba(224,90,32,0.5)', borderColor:'#e05a20', borderWidth:1, yAxisID:'y'},
@@ -999,35 +1163,78 @@ function renderPS() {
   });
 }
 
-function renderPeer() {
-  if(charts['peer']) return;
-  const ctx = document.getElementById('peerChart'); if(!ctx) return;
-  charts['peer'] = new Chart(ctx, {
-    type:'bar',
-    data:{
-      labels:['NVDA','AMD','AVGO','QCOM','INTC'],
-      datasets:[{
-        label:'Forward PER (2026E, x)',
-        data:[30, 38, 25, 15, 22],
-        backgroundColor:['rgba(224,90,32,0.4)','#e05a20','rgba(224,90,32,0.4)','rgba(224,90,32,0.35)','rgba(224,90,32,0.3)'],
-        borderColor:['#e05a20','#ff8c50','#e05a20','#e05a20','#e05a20'], borderWidth:1
-      }]
-    },
-    options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y',
-      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>`Forward PER ${c.parsed.x}x`}} },
-      scales:{
-        x:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#c08080',font:{size:11},callback:v=>`${v}x`}},
-        y:{ticks:{color:'#c08080',font:{size:11}}}
-      }
-    }
-  });
+// ─── MULTIPLE COMPARE (clickable 멀티플 5단계 ↔ peer chart) ───
+const MULTIPLE_DATA = {
+  per: {
+    title: 'PER 비교 — AI 반도체 동종업계 기준',
+    unit: 'PER(GAAP)',
+    labels: ['AMD','NVDA'],
+    data: [124.3,34.30],
+    max: 150,
+    explanation: '적정 43x(핵심 앵커 51.21x·34.30x의 평균) = AMD 자체 정상화 PER(P/E without NRI 10년 중간값 51.21x — GAAP 10년 중간값 104.35x는 과거 저수익·적자에 가까웠던 시기가 섞여 왜곡돼 참고로만 병기)·NVDA(가장 비교 가능한 AI 반도체 피어) 34.30x의 평균. INTC는 현재 적자라 PER 산출 자체가 불가능해 제외.<br><br>AMD 124.3x는 두 핵심 앵커 모두를 큰 폭으로 상회 — 5개 지표 중 밸류에이션 부담이 가장 뚜렷하다. Xilinx 인수 관련 무형자산 상각이 GAAP EPS를 짓누르는 영향도 있어 Non-GAAP 기준(TTM EPS $5.76, Non-GAAP PER 83.9x)으로도 여전히 높은 편.'
+  },
+  pbr: {
+    title: 'PBR 비교 — AI 반도체 동종업계 기준',
+    unit: 'PBR',
+    labels: ['AMD','NVDA','INTC(참고)'],
+    data: [11.7,27.75,5.86],
+    max: 35,
+    explanation: '적정 22x(핵심 앵커 16.27x·27.75x의 평균) = AMD 자체 10년 중간값 16.27x·NVDA 27.75x의 평균. INTC(5.86x)는 대규모 파운드리 설비투자로 자산집약도가 근본적으로 달라(팹 보유 vs AMD 팹리스) 참고로만 병기.<br><br>AMD 11.7x는 핵심 앵커 평균(22x)의 절반 수준으로 5개 지표 중 유일하게 저평가 신호 — Xilinx 인수 관련 Goodwill이 크지만 그럼에도 NVDA 대비로는 상당히 낮은 배수.'
+  },
+  psr: {
+    title: 'PSR 비교 — AI 반도체 동종업계 기준',
+    unit: 'PSR(TTM)',
+    labels: ['AMD','NVDA','INTC(참고)'],
+    data: [19.1,21.40,8.99],
+    max: 30,
+    explanation: '적정 14x(핵심 앵커 7.35x·21.40x의 평균) = AMD 자체 10년 중간값 7.35x·NVDA 21.40x의 평균. INTC(8.99x)는 파운드리 전환 비용·낮은 수익성이 매출 구조에 섞여 있어 참고로만 병기.<br><br>AMD 19.1x는 NVDA(21.40x)에 근접하지만 핵심 앵커 평균(14x) 대비로는 확실한 프리미엄 — 데이터센터 매출 비중 확대(58%)가 이 프리미엄을 일부 정당화.'
+  },
+  pcr: {
+    title: 'PCR(FCF) 비교 — AI 반도체 동종업계 기준(낮은 신뢰도)',
+    unit: 'PCR(FCF)',
+    labels: ['AMD','NVDA'],
+    data: [93.9,42.71],
+    max: 120,
+    explanation: '적정 65x(핵심 앵커 88.10x·42.71x의 평균, 신뢰도 낮음) = AMD 자체 10년 중간값 88.10x(과거 FCF가 0에 가깝던 시기가 섞여 왜곡 가능성 있어 참고 성격이 강함)·NVDA 42.71x의 평균. INTC는 현재 FCF가 마이너스라 PCR 산출 자체가 불가능해 제외. 현재값은 Q2 2026 실적 반영 후 최신 기준(93.9x) — Q2 반영 전 구버전 소스(105.1x)는 기준일 불일치로 배제.<br><br>AMD 93.9x는 두 핵심 앵커 모두를 상회하나, 앵커 자체(특히 자체 역사값)의 신뢰도가 낮아 이 지표의 "적정 65x" 판정은 다른 지표보다 불확실성이 크다는 점을 감안해야 한다.'
+  },
+  evebitda: {
+    title: 'EV/EBITDA 비교 — AI 반도체 동종업계 기준',
+    unit: 'EV/EBITDA',
+    labels: ['AMD','NVDA','INTC(참고)'],
+    data: [82.0,32.53,43.35],
+    max: 90,
+    explanation: '적정 39x(핵심 앵커 44.84x·32.53x의 평균) = AMD 자체 10년 중간값 44.84x·NVDA 32.53x의 평균. INTC(43.35x)는 감가상각을 다시 더하는 EBITDA 특성상 자본집약적 사업구조가 유리하게 보일 수 있어 참고로만 병기.<br><br>AMD 82.0x는 두 핵심 앵커 모두를 크게 상회 — PER과 함께 5개 지표 중 가장 고평가된 지표.'
+  }
+};
+function renderMultipleChart(key) {
+  const d = MULTIPLE_DATA[key];
+  const ctx = document.getElementById('multipleChart');
+  if (!ctx || !d) return;
+  if (charts['multiple']) charts['multiple'].destroy();
+  const bg = d.labels.map((l,i)=> i===0 ? '#e05a20' : (l.includes('참고') ? 'rgba(231,76,60,0.18)' : 'rgba(154,160,184,0.35)'));
+  const bd = d.labels.map((l,i)=> i===0 ? '#ff8c50' : (l.includes('참고') ? '#c0392b' : '#5c6282'));
+  charts['multiple'] = new Chart(ctx,{ type:'bar', data:{ labels:d.labels, datasets:[{ label:d.unit, data:d.data, backgroundColor:bg, borderColor:bd, borderWidth:1, borderRadius:5 }] },
+    options:{ responsive:true,maintainAspectRatio:false, plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${d.unit} ${ctx.raw}x`}}},
+      scales:{ x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10.5}}}, y:{max:d.max,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}} } } });
+}
+let currentMultipleKey = 'per';
+function selectMultiple(key) {
+  const d = MULTIPLE_DATA[key];
+  if (!d) return;
+  currentMultipleKey = key;
+  document.querySelectorAll('.val-item[data-metric]').forEach(el => el.classList.toggle('selected', el.dataset.metric === key));
+  const titleEl = document.getElementById('multipleCompareTitle');
+  const textEl = document.getElementById('multipleCompareText');
+  if (titleEl) titleEl.textContent = d.title;
+  if (textEl) textEl.innerHTML = d.explanation;
+  renderMultipleChart(key);
 }
 
 function renderRel() {
   if(charts['rel']) return;
   const ctx = document.getElementById('relChart'); if(!ctx) return;
-  const amd = [100, 91.6, 109.7, 171.0, 171.0, 154.8, 154.8, 245.2, 277.4, 296.8, 335.5, 350.3];
-  const sp  = [100, 98.0, 103.0, 107.5, 112.8, 117.0, 118.2, 112.0, 114.0, 109.0, 113.5, 115.2];
+  const amd = [100.0, 99.5, 157.5, 133.8, 131.7, 145.6, 123.1, 125.1, 218.0, 317.4, 357.2, 292.8, 297.2];
+  const sp  = [100, 98.5, 101.0, 104.0, 107.0, 109.5, 108.0, 106.5, 110.0, 112.0, 116.5, 112.0, 115.2];
   charts['rel'] = new Chart(ctx, {
     type:'line',
     data:{ labels:MONTHS, datasets:[
@@ -1047,9 +1254,9 @@ function renderRel() {
 function renderDC() {
   if(charts['dc']) return;
   const ctx = document.getElementById('dcChart'); if(!ctx) return;
-  const labels = ['Q2\'24','Q3\'24','Q4\'24','Q1\'25','Q2\'25','Q3\'25','Q4\'25','Q1\'26'];
-  const dc = [2.8, 3.5, 3.9, 3.7, 4.2, 5.1, 5.4, 6.4];
-  const fcf= [0.439, 0.496, 1.091, 0.727, 0.267, 1.901, 2.378, 2.566];
+  const labels = ['Q2\'24','Q3\'24','Q4\'24','Q1\'25','Q2\'25','Q3\'25','Q4\'25','Q1\'26','Q2\'26'];
+  const dc = [2.8, 3.5, 3.9, 3.7, 4.2, 5.1, 5.4, 6.4, 6.7];
+  const fcf= [0.439, 0.496, 1.091, 0.727, 0.267, 1.901, 2.378, 2.566, 1.55];
   charts['dc'] = new Chart(ctx, {
     data:{ labels, datasets:[
       {type:'bar', label:'데이터센터 매출 ($B)', data:dc, backgroundColor:'rgba(224,90,32,0.6)', borderColor:'#e05a20', borderWidth:1},
