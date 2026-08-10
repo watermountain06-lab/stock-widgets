@@ -113,8 +113,41 @@
   .km-value { font-size: 18px; font-weight: 800; color: var(--accent2); }
   .km-sub { font-size: 10px; color: var(--text3); margin-top: 3px; }
 
+  /* COLLAPSIBLE / 재무 건전성 */
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(46,125,212,0.12); border: 1px solid rgba(46,125,212,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(46,125,212,0.22); border-color: rgba(46,125,212,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
+  .section-label { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:12px; color:var(--text2); margin-top:2px; line-height:1.4; }
+  .diag-summary.watch { background: linear-gradient(90deg, rgba(240,192,64,0.14), rgba(240,192,64,0.03)); border-color: rgba(240,192,64,0.35); }
+  .diag-summary.watch .title { color: var(--gold); }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 12px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .diag-label { font-size:13px; color:var(--text); font-weight:600; min-width:90px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:11.5px; color:var(--text2); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .diag-badge.watch { background:rgba(240,192,64,0.16); color:var(--gold); }
+
   /* VALUATION */
-  .val-item { margin-bottom: 18px; }
+  .val-item { margin-bottom: 18px; padding: 8px; margin-left: -8px; margin-right: -8px; border-radius: 8px; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; cursor: pointer; }
+  .val-item:hover { background: rgba(255,255,255,0.03); }
+  .val-item.selected { background: rgba(46,125,212,0.08); border-color: rgba(46,125,212,0.35); }
+  .val-name { position: relative; }
+  .val-item.selected .val-name::after { content: '▸ 비교 보기'; font-size: 9.5px; font-weight: 600; color: var(--accent2); margin-left: 8px; vertical-align: middle; }
   .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
@@ -339,15 +372,61 @@
 
   <!-- 은행 핵심 지표 -->
   <div class="grid-3">
-    <div class="stat-box"><div class="stat-label">ROTCE (Q2 2026)</div><div class="stat-value">23%</div><div class="stat-sub">자기자본이익률</div></div>
-    <div class="stat-box"><div class="stat-label">CET1 비율 (Q2 2026)</div><div class="stat-value">14.2%</div><div class="stat-sub">규제기준 11.9% 상회</div></div>
-    <div class="stat-box"><div class="stat-label">순이자마진 (Q2 2026)</div><div class="stat-value">~2.7%</div><div class="stat-sub">고금리 환경 수혜</div></div>
-    <div class="stat-box"><div class="stat-label">대손충당금 (Q1 2026)</div><div class="stat-value">$2.5B</div><div class="stat-sub">전분기 $4.7B</div></div>
-    <div class="stat-box"><div class="stat-label">효율성 비율 (Q1 2026)</div><div class="stat-value">53.9%</div><div class="stat-sub">낮을수록 효율적</div></div>
-    <div class="stat-box"><div class="stat-label">총자산 (Q1 2026)</div><div class="stat-value">$4.9T</div><div class="stat-sub">미국 최대 · YoY +19%</div></div>
-    <div class="stat-box"><div class="stat-label">NII (Q1 2026)</div><div class="stat-value">$25.4B</div><div class="stat-sub">YoY +9%</div></div>
-    <div class="stat-box"><div class="stat-label">총수익 (Q1 2026)</div><div class="stat-value">$49.8B</div><div class="stat-sub">CIB 45% 기여</div></div>
-    <div class="stat-box"><div class="stat-label">분기 배당</div><div class="stat-value">$1.50</div><div class="stat-sub">YoY +20%</div></div>
+    <div class="stat-box"><div class="stat-label">ROTCE (Q2 2026, 일회성 제외)</div><div class="stat-value">23%</div><div class="stat-sub">헤드라인 29%는 Visa 매각익 포함</div></div>
+    <div class="stat-box"><div class="stat-label">CET1 비율 (Q2 2026)</div><div class="stat-value">14.2%</div><div class="stat-sub">Advanced 기준, 규제최소 상회</div></div>
+    <div class="stat-box"><div class="stat-label">대손충당금 (Q2 2026)</div><div class="stat-value">$2.5B</div><div class="stat-sub">전분기 $2.5B 수준 유지</div></div>
+    <div class="stat-box"><div class="stat-label">효율성 비율 (Q2 2026)</div><div class="stat-value">47%</div><div class="stat-sub">Managed 기준, 낮을수록 효율적</div></div>
+    <div class="stat-box"><div class="stat-label">EPS (Q2 2026)</div><div class="stat-value">$7.70</div><div class="stat-sub">GAAP · Visa 매각익 ~$1.56 포함</div></div>
+    <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value">10월 13일 예상</div><div class="stat-sub">Q3 2026</div></div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title"><span>재무 건전성 — 자본건전성·자산건전성 (Q2 2026 기준)</span></div>
+    <div style="font-size:11px;color:var(--text3);line-height:1.5;margin:-4px 0 14px;">※ JPM은 은행 특성상 분류 재무상태표를 작성하지 않아 유동비율·차입금의존도·표준 회전율 지표가 적용되지 않는다. 은행업 표준인 규제자본비율(CET1)·자산건전성 지표로 대체했다.</div>
+
+    <div class="section-label"><span class="dot"></span>자본건전성 — 규제자본·레버리지</div>
+    <div class="diag-summary">
+      <div class="icon">🩺</div>
+      <div>
+        <div class="title">종합 진단: 매우 안정적</div>
+        <div class="sub">CET1 14.2%(Advanced 기준)로 규제 최소 요건을 크게 상회 · 자기자본/자산 비율 7.5%는 은행업 표준 레버리지 구조(고레버리지 자체가 위험 신호는 아님)</div>
+      </div>
+    </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>자본건전성 상세 — 개별 지표</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">CET1 비율</span><span class="diag-value">14.2%</span><span class="diag-note">Advanced 기준(Standardized 14.1%) · 규제최소 요건 대비 여유 큼</span></div>
+        <div class="diag-badge safe">✅ 매우 안정</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">자기자본비율</span><span class="diag-value">7.5%</span><span class="diag-note">자기자본 $374.6B÷자산 $5,015.1B — 은행 표준 레버리지 구조</span></div>
+        <div class="diag-badge info">ℹ️ 은행 표준</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">대손충당금</span><span class="diag-value">$2.5B</span><span class="diag-note">Q2 2026 · 전분기 대비 안정적 유지</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">효율성 비율(managed)</span><span class="diag-value">47%</span><span class="diag-note">낮을수록 효율적 · 대형은행 평균보다 양호</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+    </div>
+    <div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">은행은 예금·차입을 레버리지 삼아 대출·투자를 운용하는 사업모델이라 일반 기업의 부채비율 잣대가 적용되지 않는다. 대신 규제당국이 요구하는 CET1(보통주자본비율)이 핵심 건전성 지표이며, JPM은 규제 최소 요건을 크게 상회하는 초과자본을 자사주매입·배당으로 환원 중이다.</div>
+    </div>
+
+    <div class="section-label" style="margin-top:14px;"><span class="dot" style="background:var(--accent);"></span>자산건전성 — NII·신용손실 추이</div>
+    <div class="diag-summary">
+      <div class="icon">🔄</div>
+      <div>
+        <div class="title">종합 진단: 견조 — NII 확대·충당금 안정적 유지</div>
+        <div class="sub">Q2 2026 NII $25.5B(+10% YoY), 대손충당금 $2.5B로 전분기 대비 안정적 — 표준 재고·매출채권 회전율 대신 은행 고유의 NII·충당금 추이로 대체(상세 그래프는 US 특화 탭 참고)</div>
+      </div>
+    </div>
   </div>
 
   <div class="card" style="margin-top:4px;">
@@ -403,34 +482,34 @@
     <div class="card">
       <div class="card-title">멀티플 5단계 평가 (대형은행 기준)</div>
 
-      <div class="val-item">
+      <div class="val-item" data-metric="per" onclick="selectMultiple('per')">
         <div class="val-header"><span class="val-name">PER (GAAP TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">15.3x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:61%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
+        <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 8x</span><span class="val-mid">적정 13x</span><span class="val-high">고 20x</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">$357.52÷TTM EPS $23.35(Q3FY25~Q2FY26) · Q2 2026 EPS $7.70에는 Visa 지분 매각이익 $4.6B 등 일회성 이익 ~$1.56/주 포함 — 이를 제외한 핵심 EPS 기준 PER은 16.4x</div>
       </div>
 
-      <div class="val-item">
+      <div class="val-item" data-metric="pbr" onclick="selectMultiple('pbr')">
         <div class="val-header"><span class="val-name">PBR (순자산 기준)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">2.7x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저 0.8x</span><span class="val-mid">적정 1.5x</span><span class="val-high">고 2.5x</span></div>
       </div>
 
-      <div class="val-item">
+      <div class="val-item" data-metric="ptbv" onclick="selectMultiple('ptbv')">
         <div class="val-header"><span class="val-name">P/TBV (유형순자산)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">3.2x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:80%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저 1.0x</span><span class="val-mid">적정 1.8x</span><span class="val-high">고 3.0x</span></div>
       </div>
 
-      <div class="val-item">
+      <div class="val-item" data-metric="div" onclick="selectMultiple('div')">
         <div class="val-header"><span class="val-name">배당수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">1.67%</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:40%;background:linear-gradient(90deg,#27ae60,#2e7dd4);"></div></div>
+        <div class="val-track"><div class="val-fill" style="width:38%;background:linear-gradient(90deg,#27ae60,#2e7dd4);"></div></div>
         <div class="val-labels"><span class="val-low">고 3%+</span><span class="val-mid">적정 2%</span><span class="val-high">저 1%</span></div>
       </div>
 
-      <div class="val-item">
+      <div class="val-item" data-metric="rotce" onclick="selectMultiple('rotce')">
         <div class="val-header"><span class="val-name">ROTCE (은행 효율)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">23%</span><span class="stage-badge stage-1">1단계 최우수</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:100%;background:linear-gradient(90deg,#2ecc71,#27ae60);"></div></div>
+        <div class="val-track"><div class="val-fill" style="width:19%;background:linear-gradient(90deg,#2ecc71,#27ae60);"></div></div>
         <div class="val-labels"><span class="val-low">저 10%</span><span class="val-mid">적정 15%</span><span class="val-high">고 20%+</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">Q2 2026 핵심(Visa 지분 매각이익 등 일회성 항목 제외) 기준 — GAAP 포함 기준으로는 이보다 더 높음</div>
       </div>
@@ -441,9 +520,9 @@
     </div>
 
     <div class="card">
-      <div class="card-title">대형은행 피어 비교 — P/TBV (2026.08.07 스냅샷)</div>
-      <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:10px;font-size:12px;color:var(--text2);">* JPM P/TBV 3.26x는 피어 최고 수준 — ROTCE 업계 1위 반영. BAC·WFC·C 대비 현저한 프리미엄.</div>
+      <div class="card-title"><span id="multipleCompareTitle">P/TBV 비교 — 대형은행 피어 기준</span></div>
+      <div class="chart-wrap" style="height:240px;"><canvas id="multipleChart"></canvas></div>
+      <div style="margin-top:10px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText">JPM P/TBV 3.26x는 피어 최고 수준 — ROTCE 업계 1위 반영. BAC·WFC·C 대비 현저한 프리미엄.</div>
     </div>
   </div>
 
@@ -454,7 +533,7 @@
     <div class="bank-note">⚠️ 은행주 FCF/주는 트레이딩자산 변동으로 분기별 극단적 등락 — 은행 분석 기준으로는 미사용. EPS·BPS·배당·ROTCE로 평가.</div>
     <div class="per-share-grid">
       <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (TTM 기본)</div><div class="ps-value">$20.98</div><div class="ps-sub">Q2\'25~Q1\'26 합산 / YoY +5.6%</div></div>
-      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (Q1 2026)</div><div class="ps-value">$133.83</div><div class="ps-sub">순자산 $364B ÷ 2.72B주</div></div>
+      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (Q2 2026)</div><div class="ps-value">$136.37</div><div class="ps-sub">순자산 $374.6B ÷ 2.747B주</div></div>
       <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">배당금 (분기 최신)</div><div class="ps-value">$1.50</div><div class="ps-sub">연 $6.00 / 8월 7일 수익률 1.67%</div></div>
       <div class="ps-card"><div class="ps-icon">🏦</div><div class="ps-label">TBV/주 (Q1 2026)</div><div class="ps-value">$110.19</div><div class="ps-sub">유형자산 기준 / YoY +18%</div></div>
     </div>
@@ -511,7 +590,7 @@
       <div>
         <div style="font-size:12px;color:var(--text3);font-weight:600;margin-bottom:10px;">📊 규모 & 시장 지위</div>
         <div class="zone-list">
-          <div class="zone-item"><span class="zone-label">총자산 (Q1 2026)</span><div style="display:flex;align-items:center;gap:6px;"><span class="zone-val">$4.9T</span><span class="zone-tag tag-s">미국 1위</span></div></div>
+          <div class="zone-item"><span class="zone-label">총자산 (Q2 2026)</span><div style="display:flex;align-items:center;gap:6px;"><span class="zone-val">$5.02T</span><span class="zone-tag tag-s">미국 1위</span></div></div>
           <div class="zone-item"><span class="zone-label">총예금</span><div style="display:flex;align-items:center;gap:6px;"><span class="zone-val">$2.68T</span></div></div>
           <div class="zone-item"><span class="zone-label">순대출 잔액</span><div style="display:flex;align-items:center;gap:6px;"><span class="zone-val">$1.48T</span><span class="zone-tag tag-s">+15% YoY</span></div></div>
           <div class="zone-item"><span class="zone-label">손실흡수력 (TLAC)</span><div style="display:flex;align-items:center;gap:6px;"><span class="zone-val">$572B</span></div></div>
@@ -723,8 +802,68 @@ function showSection(id, e) {
 }
 function renderCharts(id) {
   if(id==='fund') renderFund();
-  if(id==='valuation') { renderPeer(); renderPS(); }
+  if(id==='valuation') { if (!charts['multiple']) selectMultiple(currentMultipleKey); renderPS(); }
   if(id==='us') { renderRel(); renderNII(); }
+}
+
+function toggleCollapsible(header) {
+  const body = header.nextElementSibling;
+  const collapsed = body.classList.toggle('collapsed');
+  header.classList.toggle('collapsed', collapsed);
+  header.setAttribute('aria-expanded', String(!collapsed));
+  const hintText = header.querySelector('.toggle-hint-text');
+  if (hintText) hintText.textContent = collapsed ? '상세 보기' : '상세 숨기기';
+}
+
+const MULTIPLE_DATA = {
+  per: { title:'PER 비교 — GAAP TTM', unit:'PER', labels:['JPM(현재)'], data:[15.3], max:20,
+    explanation: '$357.52÷TTM EPS $23.35(Q3FY25~Q2FY26). Q2 2026 EPS엔 Visa 지분 매각이익 등 일회성 이익 ~$1.56/주 포함 — 제외 시 핵심 PER 16.4x. 대형은행 평균(8~13x) 대비 프리미엄이나 ROTCE 업계 최고 수익성이 근거.' },
+  pbr: { title:'PBR 비교 — 순자산 기준', unit:'PBR', labels:['JPM(현재)'], data:[2.7], max:4,
+    explanation: '순자산(자기자본) 기준 PBR 2.7x. 대형은행 평균(0.8~1.5x) 대비 크게 높으나, ROTCE 23%의 최고 수준 자본 효율성이 프리미엄을 정당화하는 근거로 흔히 인용된다.' },
+  ptbv: { title:'P/TBV 비교 — 대형은행 피어 기준', unit:'P/TBV', labels:['JPM','GS','MS','BAC','WFC','C'], data:[3.26,1.85,2.10,1.35,1.55,0.72], max:4,
+    explanation: 'JPM P/TBV 3.26x는 피어 최고 수준 — ROTCE 업계 1위(23%)를 반영. BAC(1.35x)·WFC(1.55x)·C(0.72x) 등 소비자금융 비중이 큰 은행 대비 현저한 프리미엄, GS(1.85x)·MS(2.10x) 등 IB 중심 은행보다도 높다.' },
+  div: { title:'배당수익률 비교', unit:'배당수익률', labels:['JPM(현재)'], data:[1.67], max:4,
+    explanation: '배당수익률 1.67%는 대형은행 평균(2~4%) 대비 낮은 편 — 이익 대비 배당성향을 낮게 가져가는 대신 자사주매입으로 초과자본을 환원하는 JPM의 정책 방향과 일치한다.' },
+  rotce: { title:'ROTCE 비교 — 은행 자본 효율성', unit:'ROTCE', labels:['JPM(현재, 핵심)'], data:[23], max:30,
+    explanation: 'Q2 2026 핵심(일회성 항목 제외) ROTCE 23%는 대형은행 평균(10~15%)을 크게 상회 — 업계 최고 수준 자본 효율성. GAAP 포함 기준(일회성 Visa 매각이익 반영)으로는 29%까지 상승.' }
+};
+
+function renderMultipleChart(key) {
+  const d = MULTIPLE_DATA[key];
+  const ctx = document.getElementById('multipleChart');
+  if (!ctx || !d) return;
+  if (charts['multiple']) charts['multiple'].destroy();
+  const bg = d.labels.map((l,i)=> i===0 ? '#2e7dd4' : 'rgba(154,160,184,0.35)');
+  const bd = d.labels.map((l,i)=> i===0 ? '#60b0f8' : '#5c6282');
+  charts['multiple'] = new Chart(ctx,{
+    type:'bar',
+    data:{ labels:d.labels, datasets:[{ label:d.unit, data:d.data, backgroundColor:bg, borderColor:bd, borderWidth:1, borderRadius:5 }] },
+    options:{
+      indexAxis: d.labels.length > 1 ? 'y' : 'x',
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${d.unit} ${ctx.raw}${key==='div'||key==='rotce'?'%':'x'}`}}},
+      scales: d.labels.length > 1 ? {
+        x:{max:d.max,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#7aa8d0',font:{size:10},callback:v=>v+'x'}},
+        y:{grid:{display:false},ticks:{color:'#7aa8d0',font:{size:10.5}}}
+      } : {
+        x:{grid:{display:false},ticks:{color:'#7aa8d0',font:{size:10.5}}},
+        y:{max:d.max,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#7aa8d0',font:{size:10},callback:v=>v+(key==='div'||key==='rotce'?'%':'x')}}
+      }
+    }
+  });
+}
+
+let currentMultipleKey = 'ptbv';
+function selectMultiple(key) {
+  const d = MULTIPLE_DATA[key];
+  if (!d) return;
+  currentMultipleKey = key;
+  document.querySelectorAll('.val-item[data-metric]').forEach(el => el.classList.toggle('selected', el.dataset.metric === key));
+  const titleEl = document.getElementById('multipleCompareTitle');
+  const textEl = document.getElementById('multipleCompareText');
+  if (titleEl) titleEl.textContent = d.title;
+  if (textEl) textEl.innerHTML = d.explanation;
+  renderMultipleChart(key);
 }
 
 const MONTHS = ['7월','8월','9월','10월','11월','12월','1월','2월','3월','4월','5월','6월'];
@@ -934,10 +1073,10 @@ const JPM_MA120 = [261.96,262.06,262.14,262.26,262.45,262.7,262.95,263.23,263.5,
 function renderFund() {
   if(charts['fund']) return;
   const ctx = document.getElementById('fundChart'); if(!ctx) return;
-  const labels = ['Q2\'24','Q3\'24','Q4\'24','Q1\'25','Q2\'25','Q3\'25','Q4\'25','Q1\'26'];
-  const nii = [22.75, 23.41, 23.35, 23.27, 23.21, 23.97, 25.00, 25.37];
-  const ni  = [18.15, 12.90, 14.01, 14.64, 14.99, 14.39, 13.03, 16.49];
-  const noni= [27.45, 19.25, 19.42, 22.04, 21.70, 22.46, 20.80, 24.47];
+  const labels = ['Q3\'24','Q4\'24','Q1\'25','Q2\'25','Q3\'25','Q4\'25','Q1\'26','Q2\'26'];
+  const nii = [23.41, 23.35, 23.27, 23.21, 23.97, 25.00, 25.37, 25.51];
+  const ni  = [12.90, 14.01, 14.64, 14.99, 14.39, 13.03, 16.49, 21.16];
+  const noni= [19.25, 19.42, 22.04, 21.70, 22.46, 20.80, 24.47, 31.84];
   charts['fund'] = new Chart(ctx, {
     data:{ labels, datasets:[
       {type:'bar', label:'NII ($B)', data:nii, backgroundColor:'rgba(46,125,212,0.5)', borderColor:'#2e7dd4', borderWidth:1, yAxisID:'y'},
@@ -948,7 +1087,7 @@ function renderFund() {
       plugins:{ legend:{labels:{color:'#7aa8d0',font:{size:11}}}, tooltip:{mode:'index',intersect:false, callbacks:{label:c=>`${c.dataset.label}: $${c.parsed.y.toFixed(1)}B`}} },
       scales:{
         x:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#7aa8d0',font:{size:11}}},
-        y:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#7aa8d0',font:{size:11},callback:v=>`$${v}B`}, position:'left', max:32},
+        y:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#7aa8d0',font:{size:11},callback:v=>`$${v}B`}, position:'left', max:36},
         y2:{display:false}
       }
     }
@@ -972,30 +1111,6 @@ function renderPS() {
       scales:{
         x:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#7aa8d0',font:{size:11}}},
         y:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#7aa8d0',font:{size:11},callback:v=>`$${v}`}}
-      }
-    }
-  });
-}
-
-function renderPeer() {
-  if(charts['peer']) return;
-  const ctx = document.getElementById('peerChart'); if(!ctx) return;
-  charts['peer'] = new Chart(ctx, {
-    type:'bar',
-    data:{
-      labels:['JPM','GS','MS','BAC','WFC','C'],
-      datasets:[{
-        label:'P/TBV (x)',
-        data:[3.26, 1.85, 2.10, 1.35, 1.55, 0.72],
-        backgroundColor:['#2e7dd4','rgba(46,125,212,0.45)','rgba(46,125,212,0.4)','rgba(46,125,212,0.35)','rgba(46,125,212,0.35)','rgba(46,125,212,0.3)'],
-        borderColor:['#60b0f8','#2e7dd4','#2e7dd4','#2e7dd4','#2e7dd4','#2e7dd4'], borderWidth:1
-      }]
-    },
-    options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y',
-      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>`P/TBV ${c.parsed.x}x`}} },
-      scales:{
-        x:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#7aa8d0',font:{size:11},callback:v=>`${v}x`}},
-        y:{ticks:{color:'#7aa8d0',font:{size:11}}}
       }
     }
   });
