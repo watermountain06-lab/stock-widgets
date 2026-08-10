@@ -30,6 +30,8 @@ CONCEPTS = {
     "costOfRevenue": ["CostOfRevenue", "CostOfGoodsAndServicesSold", "CostOfGoodsSold",
                        "CostOfServices"],
     "operatingIncome": ["OperatingIncomeLoss"],
+    "pretaxIncome": ["IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+                      "IncomeLossFromContinuingOperationsBeforeIncomeTaxesMinorityInterestAndIncomeLossFromEquityMethodInvestments"],
     "netIncome": ["NetIncomeLoss", "ProfitLoss"],
     "netIncomeAttributableToParent": ["NetIncomeLossAvailableToCommonStockholdersBasic", "NetIncomeLoss"],
     "interestExpense": ["InterestExpense", "InterestExpenseNonoperating",
@@ -54,7 +56,7 @@ CONCEPTS = {
     "dividendPerShare": ["CommonStockDividendsPerShareDeclared", "CommonStockDividendsPerShareCashPaid"],
     "operatingCashFlow": ["NetCashProvidedByUsedInOperatingActivities",
                            "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations"],
-    "capex": ["PaymentsToAcquirePropertyPlantAndEquipment", "PaymentsToAcquireProductiveAssets"],
+    "capex": ["PaymentsToAcquirePropertyPlantAndEquipment", "PaymentsToAcquireProductiveAssets", "PaymentsToAcquireOtherPropertyPlantAndEquipment"],
 }
 
 # Balance-sheet concepts are point-in-time ("instant": only an "end" date,
