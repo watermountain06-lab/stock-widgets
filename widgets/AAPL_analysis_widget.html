@@ -87,6 +87,15 @@
   .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
   .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
   .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(162,170,173,0.12); border: 1px solid rgba(162,170,173,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(162,170,173,0.22); border-color: rgba(162,170,173,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
   .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
   .act-card { background: var(--bg3); border-radius: 8px; padding: 12px 14px; display:flex; align-items:center; gap:12px; }
   .act-icon { font-size: 19px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:rgba(0,120,212,0.1); border-radius:8px; flex-shrink:0; }
@@ -121,7 +130,10 @@
   .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
   .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
   .tag-current { background: rgba(162,170,173,0.2); color: var(--accent2); }
-  .val-item { margin-bottom: 18px; }
+  .val-item { margin-bottom: 18px; cursor: pointer; border: 1px solid transparent; border-radius: 8px; padding: 6px; margin-left: -6px; margin-right: -6px; transition: background 0.15s ease, border-color 0.15s ease; }
+  .val-item:hover { background: rgba(162,170,173,0.06); }
+  .val-item.selected { background: rgba(162,170,173,0.08); border-color: rgba(162,170,173,0.35); }
+  .val-item.selected .val-name::after { content: '▸ 비교 보기'; font-size: 9.5px; font-weight: 600; color: var(--accent2); margin-left: 8px; vertical-align: middle; }
   .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
@@ -300,7 +312,7 @@
   </div>
   <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;">
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">완전 정배열 · 7/17 사상 최고 $344.57 경신</span>
-    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">52주 +60.1% · S&P500 대비 강한 아웃퍼폼</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">52주 +42.4% · S&P500 대비 강한 아웃퍼폼</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">$100B 자사주 추가 · 배당 4% 인상</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(240,192,64,0.18);color:var(--ma60);">PER 36.0x — 빅테크 내 가장 높은 밸류에이션</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">Tim Cook CEO 교체(9월) · 中 관세 누적 $3.3B</span>
@@ -334,6 +346,13 @@
         <div class="sub">차입금의존도 낮고 부채는 대부분 저금리 장기채 — 유동비율·부채비율은 수십년 자사주 매입으로 얇아진 자기자본의 구조적 결과</div>
       </div>
     </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>안정성 상세 — 개별 비율 6개</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+
     <div class="diag-list">
       <div class="diag-row">
         <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">100.3%</span><span class="diag-note">기준 150%↑ · 공격적 자사주 매입으로 낮게 유지되는 구조</span></div>
@@ -360,8 +379,23 @@
         <div class="diag-badge info">ℹ️ 참고</div>
       </div>
     </div>
+    </div>
 
-    <div class="section-label"><span class="dot" style="background:var(--blue);"></span>활동성 — 회수·재고소진·지급 속도 (TTM 기준 · Q4FY25~Q3FY26)</div>
+    <div class="section-label" style="margin-top:14px;"><span class="dot" style="background:var(--blue);"></span>활동성 — 회수·재고소진·지급 속도 (TTM 기준 · Q4FY25~Q3FY26)</div>
+    <div class="diag-summary">
+      <div class="icon">🔄</div>
+      <div>
+        <div class="title">종합 진단: 마이너스 CCC — 공급업체 자금으로 운영</div>
+        <div class="sub">CCC -49.6일 — 강력한 구매 협상력으로 매입채무 지급을 늦추며 사실상 무비용 운전자본을 확보하는 구조</div>
+      </div>
+    </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>활동성 상세 — 개별 비율·CCC 그래프</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+
     <div class="activity-grid">
       <div class="act-card">
         <div class="act-icon">💳</div>
@@ -398,6 +432,7 @@
     </div>
 
     <div style="margin-top:14px;font-size:11px;color:var(--text3);">차입금의존도는 낮고 이익창출력 대비 부채 부담도 크지 않다 — 유동비율·부채비율이 낮아 보이는 건 위험 신호가 아니라 수십년간의 공격적 자사주 매입으로 자기자본이 구조적으로 얇아졌기 때문이다(PBR 42.5x와 동일한 배경). 활동성 지표의 마이너스 CCC는 Apple의 강력한 공급망 협상력을 보여준다.</div>
+    </div>
   </div>
 
   <div class="card">
@@ -422,31 +457,32 @@
   <div class="grid-2">
     <div class="card">
       <div class="card-title">멀티플 5단계 평가</div>
-      <div class="val-item">
+      <div style="font-size:10.5px;color:var(--text3);line-height:1.5;margin:-4px 0 14px;">※ 핵심 앵커 = 빅테크 4개(MSFT·AMZN·GOOGL·NVDA) 평균. PBR·PCR·EV/EBITDA는 자사주 매입으로 자기자본이 구조적으로 압축된 결과라 절대 수치보다 방향성 참고.</div>
+      <div class="val-item" data-metric="per" onclick="selectMultiple('per')">
         <div class="val-header"><span class="val-name">PER (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">36.0x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:60%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 28x</span><span class="val-high">고 50x</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">$313.33÷$8.71(TTM, Q4FY25~Q3FY26) · 빅테크 최고 · 10년평균 25x 대비 프리미엄</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="pbr" onclick="selectMultiple('pbr')">
         <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">42.5x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:75%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저 5x</span><span class="val-mid">적정 20x</span><span class="val-high">고 60x</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">자사주 매입으로 BPS 낮음 → PBR 높음이 구조적 특징</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="psr" onclick="selectMultiple('psr')">
         <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">9.8x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:54%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 10x</span><span class="val-high">고 25x</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">Services 고마진으로 하드웨어 PSR보다 정당화</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="pcr" onclick="selectMultiple('pcr')">
         <div class="val-header"><span class="val-name">PCR (FCF)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">33.5x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:47%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저 10x</span><span class="val-mid">적정 25x</span><span class="val-high">고 60x</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">TTM FCF $136.7B(마진 29%) · 자사주 매입 재원 충분</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="evebitda" onclick="selectMultiple('evebitda')">
         <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">27.5x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:44%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 10x</span><span class="val-mid">적정 25x</span><span class="val-high">고 50x</span></div>
@@ -454,9 +490,9 @@
       </div>
     </div>
     <div class="card">
-      <div class="card-title">빅테크 PER 비교 (AAPL이 가장 높음)</div>
-      <div class="chart-wrap" style="height:270px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;">AAPL 36.0x는 5개 중 최고 — NVDA(31.5x)·AMZN(27.8x)·GOOGL(24.2x)·MSFT(22.6x) 순이다. PEG 3.3도 가장 부담스러운 수준이다.</div>
+      <div class="card-title"><span id="multipleCompareTitle">PER 비교 — 빅테크 기준</span></div>
+      <div class="chart-wrap" style="height:270px;"><canvas id="multipleChart"></canvas></div>
+      <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText"></div>
     </div>
   </div>
   <div class="card">
@@ -500,14 +536,14 @@
   </div>
 </div>
 
-<div id="us" class="section">
+<div id="us" class="section" data-us-visual="chart">
   <div class="section-title">US 특화 — S&P 500 상대 성과 · 사업 구성 · 주주환원</div>
   <div class="rel-container">
     <div class="rel-title">S&P 500 대비 상대 수익률 (52주)</div>
     <div class="grid-3">
-      <div class="stat-box"><div class="stat-label">AAPL 52주</div><div class="stat-value up">+60.1%</div></div>
+      <div class="stat-box"><div class="stat-label">AAPL 52주</div><div class="stat-value up">+42.4%</div></div>
       <div class="stat-box"><div class="stat-label">S&P 500 52주 (추정)</div><div class="stat-value">+15.2%</div></div>
-      <div class="stat-box"><div class="stat-label">알파 (초과수익)</div><div class="stat-value gold">+43.7%p</div><div class="stat-sub">아웃퍼폼</div></div>
+      <div class="stat-box"><div class="stat-label">알파 (초과수익)</div><div class="stat-value gold">+27.2%p</div><div class="stat-sub">아웃퍼폼</div></div>
     </div>
     <div class="zone-list" style="margin-top:12px;">
       <div class="zone-item"><span class="zone-label">S&P500 내 비중</span><span class="zone-val">~5.8% (시총 2위)</span></div>
@@ -609,7 +645,7 @@
       <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:var(--green)">현재가&gt;MA5&gt;MA20&gt;MA60&gt;MA120 · 전 이평선 상회 · 상승 추세</span></div>
       <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">Q3 매출 $109.4B(+16%)·iPhone $54.3B·Services $30.7B 역대최대, ROE 120%</span></div>
       <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:#f0c040;">PER 36.0x·PBR 42.5x 빅테크 최고, PSR 9.8x는 적정 — 5지표 평균 4단계</span></div>
-      <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:var(--green);">S&P500 대비 +43.7%p 알파, $100B 바이백·배당 인상 역대급 주주환원</span></div>
+      <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:var(--green);">S&P500 대비 +27.2%p 알파, $100B 바이백·배당 인상 역대급 주주환원</span></div>
       <div class="zone-item"><span class="zone-label">📰 시계열 뉴스</span><span class="zone-val" style="color:var(--red);">CEO 교체(9월 Ternus)·누적 관세 $3.3B·App Store 규제 리스크</span></div>
     </div>
   </div>
@@ -629,6 +665,32 @@
 </div>
 
 <script>
+function toggleCollapsible(header) {
+  const body = header.nextElementSibling;
+  const hintText = header.querySelector('.toggle-hint-text');
+  const expandedLabel = header.classList.contains('detail-toggle') ? '상세 숨기기' : '접기';
+  const collapsedLabel = header.classList.contains('detail-toggle') ? '상세 보기' : '펼치기';
+  const collapsing = !header.classList.contains('collapsed');
+  if (collapsing) {
+    body.style.maxHeight = body.scrollHeight + 'px';
+    requestAnimationFrame(() => {
+      header.classList.add('collapsed');
+      body.classList.add('collapsed');
+      header.setAttribute('aria-expanded', 'false');
+      if (hintText) hintText.textContent = collapsedLabel;
+    });
+  } else {
+    header.classList.remove('collapsed');
+    body.classList.remove('collapsed');
+    body.style.maxHeight = body.scrollHeight + 'px';
+    header.setAttribute('aria-expanded', 'true');
+    if (hintText) hintText.textContent = expandedLabel;
+    body.addEventListener('transitionend', function clear() {
+      body.style.maxHeight = '';
+      body.removeEventListener('transitionend', clear);
+    });
+  }
+}
 function showSection(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -876,30 +938,71 @@ function renderFundChart() {
     c.update();
   });
 }
-function renderPeerChart() {
-  const ctx = document.getElementById('peerChart');
-  if (!ctx || charts['peer']) return;
-  charts['peer'] = new Chart(ctx,{
-    type:'bar',
-    data:{
-      labels:['GOOGL','META','NVDA','MSFT','AAPL'],
-      datasets:[{
-        label:'PER(TTM)',
-        data:[24.2,25.8,31.5,22.6,40.4],
-        backgroundColor:['rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','#a2aaad'],
-        borderColor:['#5c6282','#5c6282','#5c6282','#5c6282','#d0d5d7'],
-        borderWidth:1,borderRadius:5
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`PER ${ctx.raw}x`}}},
-      scales:{
-        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
-        y:{max:45,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
-      }
-    }
-  });
+// ─── MULTIPLE COMPARE (clickable 멀티플 5단계 ↔ peer chart) ───
+const MULTIPLE_DATA = {
+  per: {
+    title: 'PER 비교 — 빅테크 기준',
+    unit: 'PER',
+    labels: ['AAPL','MSFT','AMZN','GOOGL(조정)','NVDA'],
+    data: [36.0,27.93,29.31,35.0,34.30],
+    max: 45,
+    explanation: '적정 28x는 빅테크 4개(MSFT 27.93x·AMZN 29.31x·GOOGL 조정PER 35.0x·NVDA 34.30x) 평균 근사치. AAPL 36.0x는 이 중에서도 가장 높은 편에 속해 빅테크 내 최고 밸류에이션 부담을 보여준다.<br><br>다만 20억대 활성 기기 설치 기반과 Services 고마진 복리 성장이 프리미엄의 일부 근거가 된다.'
+  },
+  pbr: {
+    title: 'PBR 비교 — 빅테크 기준',
+    unit: 'PBR',
+    labels: ['AAPL','빅테크 평균(추정)'],
+    data: [42.5,20],
+    max: 60,
+    explanation: '적정 20x는 빅테크 평균 추정치. AAPL 42.5x는 이를 두 배 이상 상회 — 다만 이는 수십 년간의 공격적 자사주 매입으로 장부상 자기자본이 극단적으로 압축된 결과라, 통상적 의미의 "고평가"보다는 자본효율성 극대화 전략의 부산물로 해석해야 한다.'
+  },
+  psr: {
+    title: 'PSR 비교 — 빅테크 기준',
+    unit: 'PSR(TTM)',
+    labels: ['AAPL','빅테크 평균(추정)'],
+    data: [9.8,10],
+    max: 25,
+    explanation: '적정 10x는 빅테크 평균 추정치. AAPL 9.8x는 이와 거의 일치 — 매출 기반 지표라 자사주 매입에 따른 왜곡이 없어 PBR보다 신뢰도 높은 비교. Services 고마진 비중 확대가 이 수준을 정당화.'
+  },
+  pcr: {
+    title: 'PCR(FCF) 비교 — 빅테크 기준',
+    unit: 'PCR(FCF)',
+    labels: ['AAPL','빅테크 평균(추정)'],
+    data: [33.5,25],
+    max: 60,
+    explanation: '적정 25x는 빅테크 평균 추정치. AAPL 33.5x는 이를 상회하나, TTM FCF $136.7B(마진 29%)의 절대 규모 자체는 압도적 — 자사주 매입·배당 재원이 충분함을 보여준다.'
+  },
+  evebitda: {
+    title: 'EV/EBITDA 비교 — 빅테크 기준',
+    unit: 'EV/EBITDA',
+    labels: ['AAPL','빅테크 평균(추정)'],
+    data: [27.5,25],
+    max: 50,
+    explanation: '적정 25x는 빅테크 평균 추정치. AAPL 27.5x는 이와 근접한 수준 — EV/EBITDA는 자본구조(부채·자사주) 영향을 상대적으로 덜 받아 PBR보다 공정한 비교 지표다.'
+  }
+};
+function renderMultipleChart(key) {
+  const d = MULTIPLE_DATA[key];
+  const ctx = document.getElementById('multipleChart');
+  if (!ctx || !d) return;
+  if (charts['multiple']) charts['multiple'].destroy();
+  const bg = d.labels.map((l,i)=> i===0 ? '#a2aaad' : (l.includes('참고') ? 'rgba(231,76,60,0.18)' : 'rgba(154,160,184,0.35)'));
+  const bd = d.labels.map((l,i)=> i===0 ? '#d0d5d7' : (l.includes('참고') ? '#c0392b' : '#5c6282'));
+  charts['multiple'] = new Chart(ctx,{ type:'bar', data:{ labels:d.labels, datasets:[{ label:d.unit, data:d.data, backgroundColor:bg, borderColor:bd, borderWidth:1, borderRadius:5 }] },
+    options:{ responsive:true,maintainAspectRatio:false, plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${d.unit} ${ctx.raw}x`}}},
+      scales:{ x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10.5}}}, y:{max:d.max,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}} } } });
+}
+let currentMultipleKey = 'per';
+function selectMultiple(key) {
+  const d = MULTIPLE_DATA[key];
+  if (!d) return;
+  currentMultipleKey = key;
+  document.querySelectorAll('.val-item').forEach(el => el.classList.toggle('selected', el.dataset.metric === key));
+  const titleEl = document.getElementById('multipleCompareTitle');
+  const textEl = document.getElementById('multipleCompareText');
+  if (titleEl) titleEl.textContent = d.title;
+  if (textEl) textEl.innerHTML = d.explanation;
+  renderMultipleChart(key);
 }
 function renderServChart() {
   const ctx = document.getElementById('servChart');
@@ -927,7 +1030,7 @@ function renderServChart() {
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
-    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'valuation') { if (!charts['multiple']) selectMultiple(currentMultipleKey); }
     if (sectionId === 'us') renderServChart();
   }, 50);
 }
