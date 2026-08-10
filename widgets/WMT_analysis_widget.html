@@ -115,7 +115,52 @@
   .above { background: rgba(46,204,113,0.15); color: var(--green); }
   .below { background: rgba(231,76,60,0.15); color: var(--red); }
 
-  .val-item { margin-bottom: 18px; }
+  /* COLLAPSIBLE / 재무 건전성 */
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(93,186,59,0.12); border: 1px solid rgba(93,186,59,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(93,186,59,0.22); border-color: rgba(93,186,59,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
+  .section-label { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:12px; color:var(--text2); margin-top:2px; line-height:1.4; }
+  .diag-summary.watch { background: linear-gradient(90deg, rgba(240,192,64,0.14), rgba(240,192,64,0.03)); border-color: rgba(240,192,64,0.35); }
+  .diag-summary.watch .title { color: var(--gold); }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 12px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .diag-label { font-size:13px; color:var(--text); font-weight:600; min-width:90px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:11.5px; color:var(--text2); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .diag-badge.watch { background:rgba(240,192,64,0.16); color:var(--gold); }
+  .ccc-card { background: var(--bg3); border-radius: 8px; padding: 16px 18px 12px; }
+  .ccc-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 6px; }
+  .ccc-head-label { font-size:12.5px; color:var(--text); font-weight:700; }
+  .ccc-head-value { font-size:18px; font-weight:800; color:var(--gold); }
+  .ccc-explain { font-size: 11.5px; color: var(--text2); line-height: 1.6; margin-bottom: 22px; }
+  .tl-bar-wrap { position: relative; margin: 40px 4px 8px; }
+  .tl-bar { height: 18px; border-radius: 5px; overflow: hidden; display: flex; }
+  .tl-seg-inv { background: linear-gradient(90deg,#3498db,#2980b9); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
+  .tl-seg-ar { background: linear-gradient(90deg,#5dba3b,#8fe06a); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#0f1117; }
+  .tl-marker { position: absolute; top: -18px; width: 2px; background: var(--gold); }
+  .tl-marker-label { position: absolute; top: -32px; transform: translateX(-50%); font-size: 10.5px; font-weight: 700; color: var(--gold); white-space: nowrap; }
+  .tl-ccc-span { position: absolute; height: 3px; background: rgba(240,192,64,0.6); border-radius: 2px; top: 24px; }
+
+  .val-item { margin-bottom: 18px; padding: 8px; margin-left: -8px; margin-right: -8px; border-radius: 8px; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; cursor: pointer; }
+  .val-item:hover { background: rgba(255,255,255,0.03); }
+  .val-item.selected { background: rgba(93,186,59,0.08); border-color: rgba(93,186,59,0.35); }
+  .val-name { position: relative; }
+  .val-item.selected .val-name::after { content: '▸ 비교 보기'; font-size: 9.5px; font-weight: 600; color: var(--accent2); margin-left: 8px; vertical-align: middle; }
   .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
@@ -221,7 +266,7 @@
 </div>
 </div>
 
-<div class="today-banner">✅ <strong>다음 실적 Q2 FY2027 8월 중순 발표 예정</strong> — 8월 5일 종가 $112.34, 52주 최고 $135.16(2026.05.19) 대비 -16.9%. MA5($111.38)·MA20($112.10) 위, MA60($117.29)·MA120($121.86) 아래의 중기 조정 구간.</div>
+<div class="today-banner">✅ <strong>다음 실적 Q2 FY2027 8월 중순 발표 예정</strong> — 8월 7일 종가 $111.85, 52주 최고 $135.16(2026.05.19) 대비 -17.2%. MA5($111.70) 위, MA20($111.99)·MA60($116.72)·MA120($121.49) 아래의 중기 조정 구간.</div>
 
 <!-- HEADER -->
 <div class="header">
@@ -331,20 +376,115 @@
   </div>
 
   <div class="card">
-    <div class="card-title">분기 매출 / 영업이익 / OPM (최근 8분기)</div>
+    <div class="card-title">분기 매출 / 순이익 / OPM (최근 8분기)</div>
     <div class="chart-wrap" style="height:260px;"><canvas id="fundChart"></canvas></div>
   </div>
 
   <div class="grid-3">
-    <div class="stat-box"><div class="stat-label">매출 (Q1 FY27)</div><div class="stat-value gr">$177.8B</div><div class="stat-sub">YoY +7.3% ▲</div></div>
-    <div class="stat-box"><div class="stat-label">영업이익 (Q1 FY27)</div><div class="stat-value gr">$7.49B</div><div class="stat-sub">OPM 4.2% / YoY +8.7%</div></div>
-    <div class="stat-box"><div class="stat-label">순이익 (Q1 FY27)</div><div class="stat-value">$5.49B</div><div class="stat-sub">YoY +18.8%</div></div>
-    <div class="stat-box"><div class="stat-label">이커머스 성장 (FY26)</div><div class="stat-value gr">+22%</div><div class="stat-sub">글로벌 / 매출 18% 비중</div></div>
-    <div class="stat-box"><div class="stat-label">광고매출 (FY2025)</div><div class="stat-value yl">$4.4B</div><div class="stat-sub">YoY +27% / 고마진 사업</div></div>
-    <div class="stat-box"><div class="stat-label">총이익률 추이</div><div class="stat-value">25.1%</div><div class="stat-sub">Q1 FY27 / 지속 개선 중</div></div>
-    <div class="stat-box"><div class="stat-label">FY2026 매출</div><div class="stat-value gr">$681.0B</div><div class="stat-sub">연간 기준</div></div>
-    <div class="stat-box"><div class="stat-label">FY2026 EPS</div><div class="stat-value">$2.76</div><div class="stat-sub">기본 EPS</div></div>
-    <div class="stat-box"><div class="stat-label">분기 배당</div><div class="stat-value yl">$0.247</div><div class="stat-sub">연환산 약 $0.94</div></div>
+    <div class="stat-box"><div class="stat-label">순이익률 (Q1 FY27)</div><div class="stat-value">3.0%</div><div class="stat-sub">최종 마진 · GAAP</div></div>
+    <div class="stat-box"><div class="stat-label">FCF (Q1 FY27)</div><div class="stat-value gr">-$1.9B</div><div class="stat-sub">현금창출력 · OCF $4.7B−Capex $6.7B, 계절적 재고보충</div></div>
+    <div class="stat-box"><div class="stat-label">Capex (Q1 FY27)</div><div class="stat-value">$6.7B</div><div class="stat-sub">미래 재투자 · 매출의 3.8%, 이커머스·자동화 투자</div></div>
+    <div class="stat-box"><div class="stat-label">현금 및 단기투자</div><div class="stat-value gr">$10.7B</div><div class="stat-sub">잔고 · Q1 FY27 현금성자산</div></div>
+    <div class="stat-box"><div class="stat-label">EPS (Q1 FY27)</div><div class="stat-value">$0.66</div><div class="stat-sub">분기 · GAAP 기본</div></div>
+    <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value yl">8월 중순 예상</div><div class="stat-sub">일정 · Q2 FY2027</div></div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title"><span>재무 건전성 — 안정성·활동성 (Q1 FY27 기준)</span></div>
+
+    <div class="section-label"><span class="dot"></span>안정성 — 단기 지급능력·차입 의존도</div>
+    <div class="diag-summary">
+      <div class="icon">🩺</div>
+      <div>
+        <div class="title">종합 진단: 유동성 구조는 유통업 특성상 정상, 레버리지는 낮음</div>
+        <div class="sub">당좌비율 22.5%로 낮게 나오나 재고 회전이 빠른 유통업 특성 — 이자보상배율 13.1x·차입금의존도 16.4%로 재무 레버리지 자체는 건전</div>
+      </div>
+    </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>안정성 상세 — 개별 지표</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">77.1%</span><span class="diag-note">기준 150%↑ 안정 — 유통업은 재고 회전이 빨라 통상 낮게 나옴</span></div>
+        <div class="diag-badge info">ℹ️ 유통업 특성상 낮게 나옴</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">당좌비율</span><span class="diag-value">22.5%</span><span class="diag-note">기준 100%↑ — 재고 비중이 큰 유통업 특성상 구조적으로 낮음</span></div>
+        <div class="diag-badge info">ℹ️ 유통업 특성상 낮게 나옴</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">부채비율</span><span class="diag-value">207.0%</span><span class="diag-note">부채 $195.3B÷자기자본 $94.3B</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">차입금의존도</span><span class="diag-value">16.4%</span><span class="diag-note">기준 30%↓ 양호</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">이자보상배율</span><span class="diag-value">13.1x</span><span class="diag-note">기준 1x↑ · Q1 FY27 영업이익÷이자비용</span></div>
+        <div class="diag-badge safe">✅ 매우안전</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">총자산증가율</span><span class="diag-value">+9.1%</span><span class="diag-note">FY2026 $284.7B(전기 $260.8B) · 참고용</span></div>
+        <div class="diag-badge info">ℹ️ 참고</div>
+      </div>
+    </div>
+    <div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">유동비율·당좌비율이 낮은 건 자산의 상당 부분이 빠르게 회전하는 재고로 구성된 유통업 공통 특성으로, 실제 부실 위험 신호는 아니다(아마존 등 다른 대형 유통업체도 동일 패턴). 부채비율·차입금의존도·이자보상배율 등 실제 레버리지·상환능력 지표는 모두 건전한 수준이다.</div>
+    </div>
+
+    <div class="section-label" style="margin-top:14px;"><span class="dot" style="background:var(--accent);"></span>활동성 — 회수·재고소진·지급 속도 (TTM 기준)</div>
+    <div class="diag-summary">
+      <div class="icon">🔄</div>
+      <div>
+        <div class="title">종합 진단: 매우 효율적 — 전년동기 대비 거의 변화 없음</div>
+        <div class="sub">CCC 5.3일(전년동기 TTM 4.8일 대비 +0.5일) — 재고자산 회전율이 사실상 유지되며 초단기 현금창출주기를 계속 유지</div>
+      </div>
+    </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>활동성 상세 — 개별 비율·CCC 그래프</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">매출채권 회전율</span><span class="diag-value">71.3회</span><span class="diag-note">5.1일 · 전년동기 73.0회(5.0일)</span></div>
+        <div class="diag-badge info">→ 거의 변화없음</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">재고자산 회전율</span><span class="diag-value">9.07회</span><span class="diag-note">40.3일 · 전년동기 9.12회(40.0일)</span></div>
+        <div class="diag-badge info">→ 거의 변화없음</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">매입채무 회전율</span><span class="diag-value">9.11회</span><span class="diag-note">40.1일 · 전년동기 9.08회(40.2일)</span></div>
+        <div class="diag-badge info">→ 거의 변화없음</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">영업순환주기</span><span class="diag-value">45.4일</span><span class="diag-note">재고+매출채권 · 전년동기 45.0일</span></div>
+        <div class="diag-badge info">→ 거의 변화없음</div>
+      </div>
+    </div>
+    <div class="ccc-card">
+      <div class="ccc-head">
+        <div class="ccc-head-label">⏱️ 현금창출주기 (CCC)</div>
+        <div class="ccc-head-value">5.3일</div>
+      </div>
+      <div class="ccc-explain">재고를 사서 판매 대금을 회수하기까지 45.4일이 걸리는데, 그중 40.1일은 매입채무(외상)로 버티고 나머지 <strong style="color:var(--gold);">5.3일은 회사가 직접 현금으로 메워야</strong> 하는 기간이다. 전년동기 TTM(4.8일) 대비 거의 변화가 없다 — 대형 유통업체 특유의 공급업체 결제 기간 활용이 안정적으로 유지되고 있다.</div>
+      <div class="tl-bar-wrap">
+        <div class="tl-marker" style="left:88.3%; height:18px;"></div>
+        <div class="tl-marker-label" style="left:88.3%;">매입채무 지급 40.1일</div>
+        <div class="tl-bar">
+          <div class="tl-seg-inv" style="width:88.7%;">재고보유 40.3일</div>
+          <div class="tl-seg-ar" style="width:11.3%;">매출채권회수 5.1일</div>
+        </div>
+        <div class="tl-ccc-span" style="left:88.3%; width:11.7%;"></div>
+      </div>
+    </div>
+    <div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">활동성 지표는 전년동기 대비 사실상 변화가 없다 — CCC 5일은 재고 매입부터 판매 대금 회수까지 사실상 공급업체 결제 기간(40일)으로 거의 다 조달된다는 뜻으로, 대형 유통업체의 강력한 협상력을 보여준다. 아마존처럼 완전한 음(-)의 CCC는 아니지만 거의 근접한 수준.</div>
+    </div>
   </div>
 
   <div class="card" style="margin-top:16px;">
@@ -397,31 +537,31 @@
     <div class="card">
       <div class="card-title">멀티플 5단계 평가</div>
 
-      <div class="val-item">
+      <div class="val-item" data-metric="per" onclick="selectMultiple('per')">
         <div class="val-header"><span class="val-name">PER (FY2026 TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">40.5x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 28x</span><span class="val-high">고 50x</span></div>
       </div>
 
-      <div class="val-item">
+      <div class="val-item" data-metric="fwdper" onclick="selectMultiple('fwdper')">
         <div class="val-header"><span class="val-name">Forward PER (FY27E)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">~36x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:62%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
+        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 28x</span><span class="val-high">고 50x</span></div>
       </div>
 
-      <div class="val-item">
+      <div class="val-item" data-metric="pbr" onclick="selectMultiple('pbr')">
         <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">9.5x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 10x</span><span class="val-high">고 30x</span></div>
       </div>
 
-      <div class="val-item">
+      <div class="val-item" data-metric="psr" onclick="selectMultiple('psr')">
         <div class="val-header"><span class="val-name">PSR (시총/매출)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">1.2x</span><span class="stage-badge stage-1">1단계 매우낮음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:19%;background:linear-gradient(90deg,#2ecc71,#27ae60);"></div></div>
         <div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 10x</span><span class="val-high">고 25x</span></div>
       </div>
 
-      <div class="val-item">
+      <div class="val-item" data-metric="evebitda" onclick="selectMultiple('evebitda')">
         <div class="val-header"><span class="val-name">EV/EBITDA (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">22.8x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 10x</span><span class="val-mid">적정 22x</span><span class="val-high">고 45x</span></div>
@@ -433,9 +573,9 @@
     </div>
 
     <div class="card">
-      <div class="card-title">리테일 피어 비교 — TTM PER (2026.08.05 스냅샷)</div>
-      <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:10px;font-size:12px;color:var(--text2);">* WMT 40.7x는 전통 리테일 대비 높지만 광고·이커머스 성장 프리미엄을 반영하며, 같은 스냅샷의 AMZN·COST보다는 낮다.</div>
+      <div class="card-title"><span id="multipleCompareTitle">리테일 피어 비교 — TTM PER</span></div>
+      <div class="chart-wrap" style="height:240px;"><canvas id="multipleChart"></canvas></div>
+      <div style="margin-top:10px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText">WMT 40.7x는 전통 리테일(TGT 16.2x·KR 14.5x) 대비 높지만 광고·이커머스 성장 프리미엄을 반영하며, 같은 스냅샷의 AMZN(55.0x)·COST(52.0x)보다는 낮다.</div>
     </div>
   </div>
 
@@ -497,7 +637,7 @@
     <div class="rel-title">S&P500 대비 상대 성과 (2025.07 ~ 2026.06, 기준=100)</div>
     <div class="chart-wrap" style="height:200px;"><canvas id="relChart"></canvas></div>
     <div class="grid-3" style="margin-top:12px;">
-      <div class="stat-box"><div class="stat-label">WMT 1년 수익률</div><div class="stat-value up">+13.1%</div><div class="stat-sub">$99.29→$112.34</div></div>
+      <div class="stat-box"><div class="stat-label">WMT 1년 수익률</div><div class="stat-value up">+12.7%</div><div class="stat-sub">$99.29→$111.85</div></div>
       <div class="stat-box"><div class="stat-label">S&P500 동기간</div><div class="stat-value up">+15.2%</div><div class="stat-sub">추정치</div></div>
       <div class="stat-box"><div class="stat-label">상대 수익</div><div class="stat-value" style="color:var(--gold);">-2.1%p</div><div class="stat-sub">소폭 언더퍼폼</div></div>
     </div>
@@ -506,6 +646,7 @@
   <div class="card">
     <div class="card-title">이커머스 성장 추이 & 광고매출 (분기별)</div>
     <div class="chart-wrap" style="height:220px;"><canvas id="ecomChart"></canvas></div>
+    <div style="margin-top:10px;font-size:12px;color:var(--text2);">이커머스는 매출 18% 비중까지 확대되며 연 20%대 성장을 유지 중이고, Walmart Connect 광고매출은 고마진(80%+) 사업으로 전체 이익 구조를 견인하고 있다. 두 지표 모두 미국 사업 내 성장 축으로, 오프라인 매장 성장률을 크게 상회한다.</div>
   </div>
 
   <div class="card">
@@ -724,8 +865,68 @@ function showSection(id, e) {
 }
 function renderCharts(id) {
   if(id==='fund') renderFund();
-  if(id==='valuation') { renderPeer(); renderPS(); }
+  if(id==='valuation') { if (!charts['multiple']) selectMultiple(currentMultipleKey); renderPS(); }
   if(id==='us') { renderRel(); renderEcom(); }
+}
+
+function toggleCollapsible(header) {
+  const body = header.nextElementSibling;
+  const collapsed = body.classList.toggle('collapsed');
+  header.classList.toggle('collapsed', collapsed);
+  header.setAttribute('aria-expanded', String(!collapsed));
+  const hintText = header.querySelector('.toggle-hint-text');
+  if (hintText) hintText.textContent = collapsed ? '상세 보기' : '상세 숨기기';
+}
+
+const MULTIPLE_DATA = {
+  per: { title:'리테일 피어 비교 — TTM PER', unit:'PER', labels:['WMT','AMZN','COST','TGT','KR'], data:[40.7,55.0,52.0,16.2,14.5], max:60,
+    explanation: 'WMT 40.7x는 전통 리테일(TGT 16.2x·KR 14.5x) 대비 높지만 광고·이커머스 성장 프리미엄을 반영하며, 같은 스냅샷의 AMZN(55.0x)·COST(52.0x)보다는 낮다.' },
+  fwdper: { title:'Forward PER 비교 (FY27E)', unit:'Fwd PER', labels:['WMT(현재)'], data:[36], max:50,
+    explanation: 'Forward PER ~36x는 TTM PER(40.5x) 대비 낮아져 이익 성장이 지속될 것으로 시장이 반영 중임을 시사한다. 전통 리테일 평균(15~20x)보다는 여전히 높다.' },
+  pbr: { title:'PBR 비교', unit:'PBR', labels:['WMT(현재)'], data:[9.5], max:15,
+    explanation: 'PBR 9.5x는 대형 유통업체 중 높은 편이나, ROE가 구조적으로 높은 유통업 특성상 순자산 대비 배수만으로 고평가를 단정하기는 어렵다.' },
+  psr: { title:'PSR 비교 — 유통업 기준', unit:'PSR', labels:['WMT(현재)'], data:[1.2], max:3,
+    explanation: 'PSR 1.2x는 유통업 평균 범위(0.5~2x) 내 정상 수준 — 박리다매 구조의 유통업은 원래 매출 대비 시가총액 배수가 낮게 형성된다.' },
+  evebitda: { title:'EV/EBITDA 비교', unit:'EV/EBITDA', labels:['WMT(현재)'], data:[22.8], max:30,
+    explanation: 'EV/EBITDA 22.8x는 전통 유통업 평균(10~15x) 대비 높으나, 광고·이커머스 등 고마진 신사업 비중 확대를 반영한 밸류에이션으로 해석된다.' }
+};
+
+function renderMultipleChart(key) {
+  const d = MULTIPLE_DATA[key];
+  const ctx = document.getElementById('multipleChart');
+  if (!ctx || !d) return;
+  if (charts['multiple']) charts['multiple'].destroy();
+  const bg = d.labels.map((l,i)=> i===0 ? '#5dba3b' : 'rgba(93,186,59,0.4)');
+  const bd = d.labels.map((l,i)=> i===0 ? '#8fe06a' : '#5dba3b');
+  charts['multiple'] = new Chart(ctx,{
+    type:'bar',
+    data:{ labels:d.labels, datasets:[{ label:d.unit, data:d.data, backgroundColor:bg, borderColor:bd, borderWidth:1, borderRadius:5 }] },
+    options:{
+      indexAxis: d.labels.length > 1 ? 'y' : 'x',
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${d.unit} ${ctx.raw}x`}}},
+      scales: d.labels.length > 1 ? {
+        x:{max:d.max,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#96b080',font:{size:10},callback:v=>v+'x'}},
+        y:{grid:{display:false},ticks:{color:'#96b080',font:{size:10.5}}}
+      } : {
+        x:{grid:{display:false},ticks:{color:'#96b080',font:{size:10.5}}},
+        y:{max:d.max,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#96b080',font:{size:10},callback:v=>v+'x'}}
+      }
+    }
+  });
+}
+
+let currentMultipleKey = 'per';
+function selectMultiple(key) {
+  const d = MULTIPLE_DATA[key];
+  if (!d) return;
+  currentMultipleKey = key;
+  document.querySelectorAll('.val-item[data-metric]').forEach(el => el.classList.toggle('selected', el.dataset.metric === key));
+  const titleEl = document.getElementById('multipleCompareTitle');
+  const textEl = document.getElementById('multipleCompareText');
+  if (titleEl) titleEl.textContent = d.title;
+  if (textEl) textEl.innerHTML = d.explanation;
+  renderMultipleChart(key);
 }
 
 const MONTHS = ['7월','8월','9월','10월','11월','12월','1월','2월','3월','4월','5월','6월'];
@@ -938,22 +1139,29 @@ function renderFund() {
   // Q2FY25~Q1FY27 (8분기)
   const labels = ['Q2FY25','Q3FY25','Q4FY25','Q1FY26','Q2FY26','Q3FY26','Q4FY26','Q1FY27'];
   const rev = [169.3, 169.6, 180.6, 165.6, 177.4, 179.5, 190.7, 177.8];
-  const op  = [7.94,  6.84,  7.86,  7.14,  7.29,  6.70,  8.71,  7.49];
+  const netIncome = [4.50, 4.58, 5.25, 4.49, 7.03, 6.14, 4.24, 5.33];
   const opm = [4.69,  4.24,  4.35,  4.31,  4.11,  3.73,  4.57,  4.22];
+  const zeros = rev.map(() => 0);
   charts['fund'] = new Chart(ctx, {
     data:{ labels, datasets:[
-      {type:'bar', label:'매출 ($B)', data:rev, backgroundColor:'rgba(93,186,59,0.45)', borderColor:'#5dba3b', borderWidth:1, yAxisID:'y'},
-      {type:'bar', label:'영업이익 ($B)', data:op, backgroundColor:'rgba(241,196,15,0.55)', borderColor:'#f1c40f', borderWidth:1, yAxisID:'y'},
-      {type:'line',label:'OPM (%)', data:opm, borderColor:'#3498db', borderWidth:2, fill:false, tension:0.3, pointRadius:4, yAxisID:'y2'}
+      {type:'bar', label:'매출 ($B)', data:zeros, backgroundColor:'rgba(93,186,59,0.45)', borderColor:'#5dba3b', borderWidth:1, yAxisID:'y'},
+      {type:'bar', label:'순이익 ($B)', data:zeros, backgroundColor:'rgba(241,196,15,0.55)', borderColor:'#f1c40f', borderWidth:1, yAxisID:'y'},
+      {type:'line',label:'OPM (%)', data:opm.map(()=>2), borderColor:'#3498db', borderWidth:2, fill:false, tension:0.3, pointRadius:4, yAxisID:'y2'}
     ]},
-    options:{ responsive:true, maintainAspectRatio:false,
+    options:{ responsive:true, maintainAspectRatio:false, animation:false,
       plugins:{ legend:{labels:{color:'#96b080',font:{size:11}}}, tooltip:{mode:'index',intersect:false} },
       scales:{
         x:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#96b080',font:{size:11}}},
-        y:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#96b080',font:{size:11},callback:v=>`$${v}B`}, position:'left'},
+        y:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#96b080',font:{size:11},callback:v=>`$${v}B`}, position:'left', max:200},
         y2:{ticks:{color:'#3498db',font:{size:11},callback:v=>`${v}%`}, position:'right', grid:{display:false}, min:2, max:7}
       }
     }
+  });
+  requestAnimationFrame(() => {
+    charts['fund'].data.datasets[0].data = rev;
+    charts['fund'].data.datasets[1].data = netIncome;
+    charts['fund'].data.datasets[2].data = opm;
+    charts['fund'].update({ duration: 700, easing: 'easeOutQuart' });
   });
 }
 
@@ -974,30 +1182,6 @@ function renderPS() {
       scales:{
         x:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#96b080',font:{size:11}}},
         y:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#96b080',font:{size:11},callback:v=>`$${v}`}, min:-0.5, max:1.2}
-      }
-    }
-  });
-}
-
-function renderPeer() {
-  if(charts['peer']) return;
-  const ctx = document.getElementById('peerChart'); if(!ctx) return;
-  charts['peer'] = new Chart(ctx, {
-    type:'bar',
-    data:{
-      labels:['WMT','AMZN','COST','TGT','KR'],
-      datasets:[{
-        label:'PER (x)',
-        data:[40.7, 55.0, 52.0, 16.2, 14.5],
-        backgroundColor:['#5dba3b','rgba(93,186,59,0.4)','rgba(93,186,59,0.4)','rgba(93,186,59,0.4)','rgba(93,186,59,0.4)'],
-        borderColor:['#8fe06a','#5dba3b','#5dba3b','#5dba3b','#5dba3b'], borderWidth:1
-      }]
-    },
-    options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y',
-      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>`PER ${c.parsed.x}x`}} },
-      scales:{
-        x:{grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#96b080',font:{size:11},callback:v=>`${v}x`}},
-        y:{ticks:{color:'#96b080',font:{size:11}}}
       }
     }
   });
