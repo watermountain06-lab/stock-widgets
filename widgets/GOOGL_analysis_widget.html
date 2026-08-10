@@ -153,6 +153,15 @@
   .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
   .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
   .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(66,133,244,0.12); border: 1px solid rgba(66,133,244,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(66,133,244,0.22); border-color: rgba(66,133,244,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
   .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
   .act-card { background: var(--bg3); border-radius: 8px; padding: 12px 14px; display:flex; align-items:center; gap:12px; }
   .act-icon { font-size: 19px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:rgba(0,120,212,0.1); border-radius:8px; flex-shrink:0; }
@@ -187,7 +196,10 @@
   .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
   .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
   .tag-current { background: rgba(66,133,244,0.2); color: var(--accent2); }
-  .val-item { margin-bottom: 18px; }
+  .val-item { margin-bottom: 18px; cursor: pointer; border: 1px solid transparent; border-radius: 8px; padding: 6px; margin-left: -6px; margin-right: -6px; transition: background 0.15s ease, border-color 0.15s ease; }
+  .val-item:hover { background: rgba(66,133,244,0.06); }
+  .val-item.selected { background: rgba(66,133,244,0.08); border-color: rgba(66,133,244,0.35); }
+  .val-item.selected .val-name::after { content: '▸ 비교 보기'; font-size: 9.5px; font-weight: 600; color: var(--accent2); margin-left: 8px; vertical-align: middle; }
   .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
@@ -311,18 +323,18 @@
     </div>
   </div>
   <div class="header-meta">
-    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$4.28T</span></div>
+    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$4.33T</span></div>
     <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Communication Services</span></div>
     <div class="meta-item"><span class="meta-label">연매출 (TTM)</span><span class="meta-value">$445.9B</span></div>
-    <div class="meta-item"><span class="meta-label">Cloud 백로그</span><span class="meta-value">$460B+</span></div>
+    <div class="meta-item"><span class="meta-label">Cloud 백로그</span><span class="meta-value">$514B+</span></div>
     <div class="meta-item"><span class="meta-label">EPS (TTM, GAAP)</span><span class="meta-value">$19.91</span></div>
     <div class="meta-item"><span class="meta-label">배당수익률</span><span class="meta-value">0.23% (분기 $0.21)</span></div>
   </div>
 </div>
 
 <div class="box-key">
-<div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:#f0c040;">(적정)</span> — 정상화 PER 35x 안팎 · Cloud 백로그 $460B</div>
-<div style="font-size:12px;color:var(--text2);line-height:1.6;">TTM GAAP EPS $19.91에는 SpaceX 상장·Anthropic 지분 재평가이익 ~$99B(Q2)이 포함돼 GAAP PER(17.8x)이 착시적으로 낮다 — Operating Income 기준 정상화 PER은 35x 안팎으로 MSFT(35x)·AAPL(33x)과 비슷한 수준. Cloud 백로그 $460B는 향후 2년치 매출 가시성. AI Overviews가 검색 잠식 우려를 불식시키며 오히려 이용량 증가 확인. Search 방어 + Cloud 폭증 + Waymo 옵션가치 = 3중 성장 구조.</div>
+<div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:#f0c040;">(적정)</span> — 조정 PER 35x 안팎 · Cloud 백로그 $514B</div>
+<div style="font-size:12px;color:var(--text2);line-height:1.6;">TTM GAAP EPS $19.91에는 SpaceX 상장·Anthropic 지분 재평가이익 ~$99B(Q2)이 포함돼 GAAP PER(17.8x)이 착시적으로 낮다 — Operating Income 기준 조정 PER은 35x 안팎으로 MSFT(35x)·AAPL(33x)과 비슷한 수준. Cloud 백로그 $514B는 향후 2년치 매출 가시성. AI Overviews가 검색 잠식 우려를 불식시키며 오히려 이용량 증가 확인. Search 방어 + Cloud 폭증 + Waymo 옵션가치 = 3중 성장 구조.</div>
 </div>
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
@@ -405,7 +417,7 @@
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">Cloud 백로그 $514B — 향후 매출 가시성 강화</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(240,192,64,0.18);color:var(--ma60);">역대 최고 $408.61 대비 -21.7% 조정 · MA5·20·60 하회</span>
     <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">$80B 유상증자 희석 우려 · DOJ 반독점 진행 중</span>
-    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(66,133,244,0.18);color:var(--accent2);">정상화 PER 35x 안팎 — 빅테크 평균 수준</span>
+    <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(66,133,244,0.18);color:var(--accent2);">조정 PER 35x 안팎 — 빅테크 평균 수준</span>
   </div>
 </div>
 
@@ -417,12 +429,12 @@
     <div class="chart-wrap" style="height:260px;"><canvas id="googlRevChart"></canvas></div>
   </div>
   <div class="grid-3">
-    <div class="stat-box"><div class="stat-label">Cloud 매출 (Q2 2026)</div><div class="stat-value up">$24.8B</div><div class="stat-sub">성장 모멘텀 · ▲82% YoY</div></div>
-    <div class="stat-box"><div class="stat-label">Cloud 영업이익</div><div class="stat-value up">$8.8B</div><div class="stat-sub">수익성 전환 · 전년 $2.8B</div></div>
-    <div class="stat-box"><div class="stat-label">영업이익 (Q2 2026)</div><div class="stat-value up">$40.8B</div><div class="stat-sub">핵심 이익창출력 · ▲30% YoY · OPM 34%</div></div>
-    <div class="stat-box"><div class="stat-label">순이익 (Q2 2026)</div><div class="stat-value up">$112.1B</div><div class="stat-sub">GAAP 최종손익 · 지분증권 평가익 $98.0B 포함</div></div>
-    <div class="stat-box"><div class="stat-label">Cloud 백로그</div><div class="stat-value gold">$514B</div><div class="stat-sub">미래 매출 가시성 · QoQ 추가 증가</div></div>
-    <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value gold">10월 27일 예정</div><div class="stat-sub">일정 · Q3 2026</div></div>
+    <div class="stat-box"><div class="stat-label">순이익률 (Q2 2026)</div><div class="stat-value up">93.6%*</div><div class="stat-sub">GAAP 기준 · 지분평가이익 $98.0B 포함(정상화 시 ~11.8%)</div></div>
+    <div class="stat-box"><div class="stat-label">FCF (Q2 2026)</div><div class="stat-value down">-$5.9B</div><div class="stat-sub">Capex 급증으로 마이너스 전환 · TTM $53.3B</div></div>
+    <div class="stat-box"><div class="stat-label">Capex (H1 2026)</div><div class="stat-value">$80.6B</div><div class="stat-sub">AI 인프라 투자 · 연간 가이던스 $195~205B</div></div>
+    <div class="stat-box"><div class="stat-label">현금 및 단기투자</div><div class="stat-value up">$242.5B</div><div class="stat-sub">2026.06.30 기준 · 순현금 $142.3B</div></div>
+    <div class="stat-box"><div class="stat-label">EPS (희석, Q2 2026)</div><div class="stat-value up">$9.11</div><div class="stat-sub">GAAP · 지분평가이익 포함</div></div>
+    <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value gold">10월 27일 예정</div><div class="stat-sub">Q3 2026</div></div>
   </div>
 
   <div class="card" style="margin-top:16px;">
@@ -433,9 +445,16 @@
       <div class="icon">🩺</div>
       <div>
         <div class="title">종합 진단: 매우 안정적</div>
-        <div class="sub">유동성·차입 부담 모두 매우 낮음 — SpaceX·Anthropic 지분 재평가 이전에도 이미 견고했던 대차대조표</div>
+        <div class="sub">유동성·차입 부담 모두 매우 낮음 — $98.2B 신규 장기부채 발행에도 현금·단기투자($242.5B)가 총차입금($100.2B)을 크게 웃돌아 순현금 $142.3B 유지</div>
       </div>
     </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>안정성 상세 — 개별 비율 6개</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+
     <div class="diag-list">
       <div class="diag-row">
         <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">272.4%</span><span class="diag-note">기준 150%↑ · SpaceX 지분 재평가로 더 강화(전분기도 200%대)</span></div>
@@ -450,8 +469,8 @@
         <div class="diag-badge safe">✅ 양호</div>
       </div>
       <div class="diag-row">
-        <div class="diag-left"><span class="diag-label">이자보상배율</span><span class="diag-value">해당 정보 없음</span><span class="diag-note">Alphabet은 이자비용을 별도 공시하지 않음 · 영업이익 대비 부채 규모는 매우 낮은 수준</span></div>
-        <div class="diag-badge info">ℹ️ 참고</div>
+        <div class="diag-left"><span class="diag-label">이자보상배율</span><span class="diag-value">31.9x</span><span class="diag-note">기준 1x↑ · 영업이익 $40.77B÷이자비용 $1.28B(Q2 2026, 신규 부채 반영)</span></div>
+        <div class="diag-badge safe">✅ 매우 양호</div>
       </div>
       <div class="diag-row">
         <div class="diag-left"><span class="diag-label">부채비율</span><span class="diag-value">44.0%</span><span class="diag-note">부채 $281.5B÷자기자본 $640.5B</span></div>
@@ -462,8 +481,24 @@
         <div class="diag-badge info">ℹ️ 참고</div>
       </div>
     </div>
+    <div style="margin-top:14px;font-size:11px;color:var(--text3);">차입금의존도·부채비율 모두 견고 — SpaceX 상장·Anthropic 지분 재평가로 유동성이 한층 더 강화됐다. $98.2B 신규 장기부채 발행에도 현금·단기투자가 총차입금을 압도해 순현금 $142.3B을 유지 중이다.</div>
+    </div>
 
-    <div class="section-label"><span class="dot" style="background:var(--blue);"></span>활동성 — 회수·재고소진·지급 속도 (TTM 기준 · Q3'25~Q2'26)</div>
+    <div class="section-label" style="margin-top:14px;"><span class="dot" style="background:var(--blue);"></span>활동성 — 회수·재고소진·지급 속도 (TTM 기준 · Q3'25~Q2'26)</div>
+    <div class="diag-summary">
+      <div class="icon">🔄</div>
+      <div>
+        <div class="title">종합 진단: 운전자본 부담 소폭 확대, 절대 규모는 여전히 작음</div>
+        <div class="sub">CCC +33.9일 — AI 인프라용 하드웨어 재고가 늘기 시작한 초기 신호이나 매출 규모 대비 절대 금액은 작아 경고 신호는 아님</div>
+      </div>
+    </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>활동성 상세 — 개별 비율·CCC 그래프</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+
     <div class="activity-grid">
       <div class="act-card">
         <div class="act-icon">💳</div>
@@ -498,18 +533,27 @@
       </div>
     </div>
 
-    <div style="margin-top:14px;font-size:11px;color:var(--text3);">차입금의존도·부채비율 모두 견고 — SpaceX 상장·Anthropic 지분 재평가로 유동성이 한층 더 강화됐다. 활동성 지표의 플러스 CCC(+33.9일)는 AI 인프라용 하드웨어 재고가 늘기 시작한 초기 신호이나, 매출 규모 대비 절대 금액은 아직 작아 지켜볼 요소이지 경고 신호는 아니다.</div>
+    <div style="margin-top:14px;font-size:11px;color:var(--text3);">활동성 지표의 플러스 CCC(+33.9일)는 AI 인프라용 하드웨어 재고가 늘기 시작한 초기 신호이나, 매출 규모 대비 절대 금액은 아직 작아 지켜볼 요소이지 경고 신호는 아니다.</div>
+    </div>
   </div>
 
   <div class="card">
+    <div class="card-title">Cloud 사업 하이라이트 (Q2 2026)</div>
+    <div class="grid-3">
+      <div class="stat-box"><div class="stat-label">Cloud 매출</div><div class="stat-value up">$24.8B</div><div class="stat-sub">성장 모멘텀 · ▲82% YoY</div></div>
+      <div class="stat-box"><div class="stat-label">Cloud 영업이익</div><div class="stat-value up">$8.8B</div><div class="stat-sub">수익성 전환 · 전년 $2.8B</div></div>
+      <div class="stat-box"><div class="stat-label">Cloud 백로그</div><div class="stat-value gold">$514B</div><div class="stat-sub">미래 매출 가시성 · 전분기 대비 $50B+ 증가</div></div>
+    </div>
+  </div>
+  <div class="card">
     <div class="card-title">핵심 성장 동력 3가지</div>
-    <div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">Google Cloud — 최고 성장</div><div class="driver-desc">Q1 매출 $20.0B ▲63%. 백로그 $460B — QoQ 2배. Gemini AI 기업 솔루션. 자체 TPU 칩 경쟁력.</div></div></div>
+    <div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">Google Cloud — 최고 성장</div><div class="driver-desc">Q2 매출 $24.8B ▲82%. 백로그 $514B — 전분기 대비 $50B+ 증가. Gemini AI 기업 솔루션. 자체 TPU 칩 경쟁력.</div></div></div>
     <div class="driver-item"><div class="driver-num">2</div><div><div class="driver-title">Search & AI Overviews</div><div class="driver-desc">Q1 검색 매출 ▲19%. AI Overviews 15억 MAU. Gemini 2.5 최고 성능. AI가 검색 확장 견인.</div></div></div>
     <div class="driver-item"><div class="driver-num">3</div><div><div class="driver-title">Waymo & Other Bets</div><div class="driver-desc">주 50만+ 자율주행. 로보택시 급속 확장. $80B 증자 AI인프라 재투자. Berkshire $10B 투자 참여.</div></div></div>
   </div>
   <div class="card">
     <div class="card-title">핵심 투자 논리 <span style="color:#f0c040;">(적정)</span></div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.7;">TTM GAAP EPS $19.91에는 SpaceX 상장·Anthropic 지분 재평가이익 ~$99B(Q2)이 포함돼 GAAP PER(17.8x)이 착시적으로 낮다 — Operating Income 기준 정상화 PER은 35x 안팎으로 MSFT(35x)·AAPL(33x)과 비슷한 수준. Cloud 백로그 $460B는 향후 2년치 매출 가시성. AI Overviews가 검색 잠식 우려를 불식시키며 오히려 이용량 증가 확인. Search 방어 + Cloud 폭증 + Waymo 옵션가치 = 3중 성장 구조.</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.7;">TTM GAAP EPS $19.91에는 SpaceX 상장·Anthropic 지분 재평가이익 ~$99B(Q2)이 포함돼 GAAP PER(17.8x)이 착시적으로 낮다 — Operating Income 기준 조정 PER은 35x 안팎으로 MSFT(35x)·AAPL(33x)과 비슷한 수준. Cloud 백로그 $514B는 향후 2년치 매출 가시성. AI Overviews가 검색 잠식 우려를 불식시키며 오히려 이용량 증가 확인. Search 방어 + Cloud 폭증 + Waymo 옵션가치 = 3중 성장 구조.</div>
   </div>
   <div class="card">
     <div class="card-title">다음 실적 체크포인트 — 2026년 10월 27일 예정 Q3 FY2026</div>
@@ -525,63 +569,64 @@
   <div class="grid-2">
     <div class="card">
       <div class="card-title">멀티플 5단계 평가</div>
-      <div class="val-item">
+      <div style="font-size:10.5px;color:var(--text3);line-height:1.5;margin:-4px 0 14px;">※ 핵심 앵커 = 빅테크 5개(MSFT·AAPL·AMZN·META·NVDA) 평균. PER은 GAAP TTM(17.8x)이 SpaceX·Anthropic 지분평가이익 ~$99B으로 착시적으로 낮아 Operating Income 기준 조정 PER(~35x)을 별도 병기 — PBR·PSR·PCR·EV/EBITDA는 매출·자산·현금흐름 기반 지표라 해당 착시 없음.</div>
+      <div class="val-item" data-metric="per" onclick="selectMultiple('per')">
         <div class="val-header"><span class="val-name">PER (TTM, GAAP)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">17.8x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:6%;background:linear-gradient(90deg,#27ae60,#8bc34a);"></div></div>
         <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 30x</span><span class="val-high">고 60x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">⚠️ SpaceX 상장·Anthropic 지분 재평가이익 ~$99B(Q2)이 TTM EPS $19.91에 그대로 반영돼 착시적으로 낮음 — Operating Income 기준 정상화 PER은 35x 안팎(빅테크 평균 ~32x와 비슷)으로 추정</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">⚠️ SpaceX 상장·Anthropic 지분 재평가이익 ~$99B(Q2)이 TTM EPS $19.91에 그대로 반영돼 착시적으로 낮음 — Operating Income 기준 조정 PER은 35x 안팎(빅테크 평균 ~30x와 비슷)으로 추정</div>
       </div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">6.9x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
+      <div class="val-item" data-metric="pbr" onclick="selectMultiple('pbr')">
+        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">6.8x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:14%;background:linear-gradient(90deg,#27ae60,#8bc34a);"></div></div>
         <div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 10x</span><span class="val-high">고 30x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">보통주 자기자본 $622B · 지분평가이익으로 급증 — 실질 사업가치 대비 다소 저평가된 착시 포함</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">보통주 자기자본 $640.5B(Q2 2026, $80B 유상증자 반영) · 지분평가이익으로 급증 — 실질 사업가치 대비 다소 저평가된 착시 포함</div>
       </div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">9.6x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
+      <div class="val-item" data-metric="psr" onclick="selectMultiple('psr')">
+        <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">9.7x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:30%;background:linear-gradient(90deg,#27ae60,#8bc34a);"></div></div>
         <div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 10x</span><span class="val-high">고 25x</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">OPM 32~36%로 프리미엄 정당화 · 매출 기반 지표라 지분평가이익 영향 없음</div>
       </div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">PCR (FCF)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">80.4x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+      <div class="val-item" data-metric="pcr" onclick="selectMultiple('pcr')">
+        <div class="val-header"><span class="val-name">PCR (FCF)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">81.3x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:100%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 35x</span><span class="val-high">고 80x</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">TTM FCF $53.3B(연간 Capex 급증으로 압축, 분기 FCF는 일부 마이너스) · 정상화 시 40x대 추정</div>
       </div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">25.0x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:38%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
+      <div class="val-item" data-metric="evebitda" onclick="selectMultiple('evebitda')">
+        <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">24.2x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:36%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 10x</span><span class="val-mid">적정 25x</span><span class="val-high">고 50x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV $4.33T÷TTM EBITDA $172.9B(Operating Income 기준, 지분평가이익 영향 없음) · 빅테크 평균 ~25x와 부합</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV $4.19T(시가총액 $4.33T+총차입금 $100.2B-현금·단기투자 $242.5B)÷TTM EBITDA $172.9B(Operating Income 기준, 지분평가이익 영향 없음) · 빅테크 평균 ~25x와 부합</div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title">빅테크 PER 비교</div>
-      <div class="chart-wrap" style="height:270px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;">GOOGL의 GAAP TTM PER은 17.8x로 표에서 가장 낮게 보이지만, 이는 SpaceX 상장·Anthropic 지분 재평가이익 ~$99B이 반영된 착시다. Operating Income 기준 정상화 PER 35x 안팎(위 차트에 표시)으로 비교하면 MSFT(22.6x)보다 높고 AMZN(27.8x)·NVDA(31.5x)와 비슷한 중간 수준. Cloud +82%와 백로그 $514B가 재평가 근거지만 대규모 Capex와 FCF 압박은 부담이다.</div>
+      <div class="card-title"><span id="multipleCompareTitle">PER 비교 — 빅테크 기준</span></div>
+      <div class="chart-wrap" style="height:270px;"><canvas id="multipleChart"></canvas></div>
+      <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText"></div>
     </div>
   </div>
   <div class="card">
-    <div class="card-title">Per-Share 지표 (Q2 2026 기준 · 12.09B 주)</div>
+    <div class="card-title">Per-Share 지표 (Q2 2026 기준 · 12.23B 주)</div>
     <div class="per-share-grid">
       <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석, TTM, GAAP)</div><div class="ps-value">$19.91</div><div class="ps-sub">Q3 2025~Q2 2026 합산 · 지분평가이익 포함</div></div>
-      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (주당순자산)</div><div class="ps-value">$51.50</div><div class="ps-sub">Q2 2026 · 보통주 자기자본 $622B</div></div>
-      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$4.41</div><div class="ps-sub">TTM FCF $53.3B</div></div>
-      <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">Net Cash/주</div><div class="ps-value">-$3.50</div><div class="ps-sub">순부채 전환 -$42.3B (Q2 2026, AI 인프라 부채조달)</div></div>
+      <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS (주당순자산)</div><div class="ps-value">$52.37</div><div class="ps-sub">Q2 2026 · 보통주 자기자본 $640.5B</div></div>
+      <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 (TTM)</div><div class="ps-value">$4.36</div><div class="ps-sub">TTM FCF $53.3B</div></div>
+      <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">Net Cash/주</div><div class="ps-value">+$11.64</div><div class="ps-sub">순현금 +$142.3B (Q2 2026, 현금·단기투자 $242.5B - 총차입금 $100.2B)</div></div>
     </div>
-    <div style="font-size:11px;color:var(--text3);margin-top:10px;">* FCF Q2 2026 단독은 마이너스(영업현금흐름 $39.1B - Capex $44.9B) — Capex 급증으로 분기 FCF가 압축. TTM 기준 $53.3B. Net Cash는 $98.2B 장기부채 신규 발행으로 순현금에서 순부채로 전환됐다(AI 인프라 투자 재원).</div>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">* FCF Q2 2026 단독은 마이너스(영업현금흐름 $39.1B - Capex $44.9B) — Capex 급증으로 분기 FCF가 압축. TTM 기준 $53.3B. $98.2B 장기부채를 신규 발행했지만 현금·단기투자($242.5B)가 총차입금($100.2B)을 크게 웃돌아 여전히 순현금 $142.3B 규모의 견고한 재무구조를 유지하고 있다.</div>
   </div>
   <div class="card">
     <div class="card-title">종합 밸류에이션 — GAAP PER은 착시, 정상화 기준 2~3단계</div>
     <div class="grid-2">
       <div style="background:var(--bg3);padding:14px;border-radius:8px;">
         <div style="font-size:12px;color:var(--green);font-weight:700;margin-bottom:6px;">저평가 근거</div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.6;">PBR 6.9x·PSR 9.6x가 2단계. Cloud +82%와 백로그 $514B를 반영하면 빅테크 내 높은 성장 대비 낮은 배수다. (GAAP PER 17.8x는 지분평가이익 포함 착시로 별도 판단 필요)</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.6;">PBR 6.8x·PSR 9.7x가 2단계. Cloud +82%와 백로그 $514B를 반영하면 빅테크 내 높은 성장 대비 낮은 배수다. (GAAP PER 17.8x는 지분평가이익 포함 착시로 별도 판단 필요)</div>
       </div>
       <div style="background:var(--bg3);padding:14px;border-radius:8px;">
         <div style="font-size:12px;color:var(--accent2);font-weight:700;margin-bottom:6px;">주의 요소</div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.6;">EV/EBITDA 25.0x는 3단계. PCR 80.4x는 4단계로, 연간 Capex $195~205B와 분기 FCF 마이너스 전환이 현금흐름 밸류에이션의 핵심 부담이다.</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.6;">EV/EBITDA 24.2x는 3단계. PCR 81.3x는 4단계로, 연간 Capex $195~205B와 분기 FCF 마이너스 전환이 현금흐름 밸류에이션의 핵심 부담이다.</div>
       </div>
     </div>
   </div>
@@ -594,17 +639,17 @@
     </div>
     <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
       <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — Cloud 성장 지속·컨센서스 목표가 수준</div>
-      <div style="font-size:12px;color:var(--text2);">Cloud +63% 성장세와 정상화 PER 35x 안팎 밴드가 유지될 경우 → 공정가치 <strong style="color:var(--text);">$400~460/주</strong> (애널리스트 평균 목표가 $433와 부합)</div>
+      <div style="font-size:12px;color:var(--text2);">Cloud +63% 성장세와 조정 PER 35x 안팎 밴드가 유지될 경우 → 공정가치 <strong style="color:var(--text);">$400~460/주</strong> (애널리스트 평균 목표가 $433와 부합)</div>
     </div>
     <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
       <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — Cloud 백로그 수익화 가속</div>
-      <div style="font-size:12px;color:var(--text2);">$460B Cloud 백로그가 빠르게 매출로 전환되며 멀티플이 재평가될 경우 → 공정가치 <strong style="color:var(--green);">$480~515/주</strong></div>
+      <div style="font-size:12px;color:var(--text2);">$514B Cloud 백로그가 빠르게 매출로 전환되며 멀티플이 재평가될 경우 → 공정가치 <strong style="color:var(--green);">$480~515/주</strong></div>
     </div>
   </div>
 </div>
 
 <!-- SECTION 5 -->
-<div id="us" class="section">
+<div id="us" class="section" data-us-visual="chart">
   <div class="section-title">US 특화 — S&P 500 상대 성과 · 사업 구성 · 대형 이벤트</div>
   <div class="rel-container">
     <div class="rel-title">S&P 500 대비 상대 수익률 (52주)</div>
@@ -619,13 +664,13 @@
     </div>
   </div>
   <div class="card">
-    <div class="card-title">사업별 매출 비중 (Q1 2026)</div>
+    <div class="card-title">사업별 매출 비중 (Q2 2026)</div>
     <div class="zone-list">
-      <div class="zone-item"><span class="zone-label">Google Search & other</span><span class="zone-val">$50.7B · 46%</span></div>
-      <div class="zone-item"><span class="zone-label">Google Cloud</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$20.0B · 18%</span><span class="zone-tag tag-support">▲63%</span></div></div>
-      <div class="zone-item"><span class="zone-label">YouTube Ads</span><span class="zone-val">$8.9B · 8%</span></div>
-      <div class="zone-item"><span class="zone-label">Google Subscriptions/기타</span><span class="zone-val">$10.4B · 9%</span></div>
-      <div class="zone-item"><span class="zone-label">Other Bets (Waymo 등)</span><span class="zone-val">$450M</span></div>
+      <div class="zone-item"><span class="zone-label">Google Search & other</span><span class="zone-val">$63.3B · 53%</span></div>
+      <div class="zone-item"><span class="zone-label">Google Cloud</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$24.8B · 21%</span><span class="zone-tag tag-support">▲82%</span></div></div>
+      <div class="zone-item"><span class="zone-label">YouTube Ads</span><span class="zone-val">$11.1B · 9%</span></div>
+      <div class="zone-item"><span class="zone-label">Google Subscriptions/기타</span><span class="zone-val">$12.9B · 11%</span></div>
+      <div class="zone-item"><span class="zone-label">Other Bets (Waymo 등)</span><span class="zone-val">$382M</span></div>
       <div class="zone-item"><span class="zone-label">자사주 매입 (2025년)</span><span class="zone-val">분기 $15B 규모 지속</span></div>
     </div>
   </div>
@@ -693,8 +738,8 @@
   <div class="bull-bear">
     <div class="bb-box">
       <div class="bb-title bb-bull">🐂 Bull 요인</div>
-      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>정상화 PER 35x 안팎:</strong> GAAP PER 17.8x는 지분평가이익 착시, 정상화 기준으로도 빅테크 평균 수준.</span></div>
-      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Cloud 백로그 $460B:</strong> 2년 매출 가시성.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>조정 PER 35x 안팎:</strong> GAAP PER 17.8x는 지분평가이익 착시, 정상화 기준으로도 빅테크 평균 수준.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Cloud 백로그 $514B:</strong> 2년 매출 가시성.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Search AI Overviews:</strong> 잠식 우려 불식, 해자 강화.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>OPM 36% · ROE 39%:</strong> 수익성 최고, 마진 확장.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Waymo 자율주행:</strong> 대형 옵션가치.</span></div>
@@ -728,7 +773,7 @@
       <span>Base $400~460 (컨센서스 $433)</span>
       <span style="color:var(--red);">Bull $480~515 (강세 시나리오)</span>
     </div>
-    <div style="margin-top:10px;font-size:11px;color:var(--text3);">밸류에이션 탭(정상화 PER 35x 안팎·PBR 6.9x·EV/EBITDA 25.0x)과 Cloud 백로그 $460B를 반영한 밴드 — 현재가 $354.30는 Bear와 Base 사이에 위치해 애널리스트 평균 목표가 $433.51까지 +22.4% 여력. Street 목표가 범위는 최저 $340 ~ 최고 $515.</div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">밸류에이션 탭(조정 PER 35x 안팎·PBR 6.8x·EV/EBITDA 24.2x)과 Cloud 백로그 $514B를 반영한 밴드 — 현재가 $354.30는 Bear와 Base 사이에 위치해 애널리스트 평균 목표가 $433.51까지 +22.4% 여력. Street 목표가 범위는 최저 $340 ~ 최고 $515.</div>
 
     <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
       <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">애널리스트 64명 투자의견 분포</div>
@@ -748,8 +793,8 @@
     <div class="card-title">5개 분석 종합 — 한눈에 보기</div>
     <div class="zone-list">
       <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:#f0c040">MA60&gt;MA20&gt;MA120&gt;현재가&gt;MA5 · 지지와 저항이 교차하는 혼조 구간</span></div>
-      <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">Q1 매출 $109.9B(+21.8%)·Cloud +63%·OPM 36.1%, 백로그 $460B QoQ 2배</span></div>
-      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:var(--green);">PBR 6.9x·PSR 9.6x 2단계 낮음, EV/EBITDA 3단계 적정 · GAAP PER은 지분평가이익 포함 착시(정상화 시 35x 안팎)</span></div>
+      <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">Q2 매출 $119.8B(+24%)·Cloud +82%·OPM 34.0%, 백로그 $514B</span></div>
+      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:var(--green);">PBR 6.8x·PSR 9.7x 2단계 낮음, EV/EBITDA 3단계 적정 · GAAP PER은 지분평가이익 포함 착시(조정 시 35x 안팎)</span></div>
       <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:var(--green);">S&P500 대비 +97.2%p 알파, Cloud·Search·Waymo 3중 성장 구조</span></div>
       <div class="zone-item"><span class="zone-label">📰 시계열 뉴스</span><span class="zone-val" style="color:var(--red);">$80B 유상증자 희석 우려(버크셔 $10B 참여로 일부 상쇄), DOJ 반독점 리스크 잔존</span></div>
     </div>
@@ -773,6 +818,32 @@
 </div>
 
 <script>
+function toggleCollapsible(header) {
+  const body = header.nextElementSibling;
+  const hintText = header.querySelector('.toggle-hint-text');
+  const expandedLabel = header.classList.contains('detail-toggle') ? '상세 숨기기' : '접기';
+  const collapsedLabel = header.classList.contains('detail-toggle') ? '상세 보기' : '펼치기';
+  const collapsing = !header.classList.contains('collapsed');
+  if (collapsing) {
+    body.style.maxHeight = body.scrollHeight + 'px';
+    requestAnimationFrame(() => {
+      header.classList.add('collapsed');
+      body.classList.add('collapsed');
+      header.setAttribute('aria-expanded', 'false');
+      if (hintText) hintText.textContent = collapsedLabel;
+    });
+  } else {
+    header.classList.remove('collapsed');
+    body.classList.remove('collapsed');
+    body.style.maxHeight = body.scrollHeight + 'px';
+    header.setAttribute('aria-expanded', 'true');
+    if (hintText) hintText.textContent = expandedLabel;
+    body.addEventListener('transitionend', function clear() {
+      body.style.maxHeight = '';
+      body.removeEventListener('transitionend', clear);
+    });
+  }
+}
 function showSection(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -1020,40 +1091,81 @@ function renderFundChart() {
     c.update();
   });
 }
-function renderPeerChart() {
-  const ctx = document.getElementById('peerChart');
-  if (!ctx || charts['peer']) return;
-  charts['peer'] = new Chart(ctx,{
-    type:'bar',
-    data:{
-      labels:['GOOGL','META','NVDA','AAPL','MSFT','AMZN'],
-      datasets:[{
-        label:'PER(TTM)',
-        data:[35.0,25.8,31.5,40.4,22.6,27.8],
-        backgroundColor:['#4285F4','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)'],
-        borderColor:['#7ab0ff','#5c6282','#5c6282','#5c6282','#5c6282','#5c6282'],
-        borderWidth:1,borderRadius:5
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`PER ${ctx.raw}x`}}},
-      scales:{
-        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
-        y:{max:45,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
-      }
-    }
-  });
+// ─── MULTIPLE COMPARE (clickable 멀티플 5단계 ↔ peer chart) ───
+const MULTIPLE_DATA = {
+  per: {
+    title: 'PER 비교 — 빅테크 기준',
+    unit: 'PER',
+    labels: ['GOOGL(정상화)','MSFT','AAPL','AMZN','META','NVDA'],
+    data: [35.0,27.93,34.71,29.31,25.95,34.30],
+    max: 45,
+    explanation: '적정 30x = 빅테크 5개(MSFT 27.93x·AAPL 34.71x·AMZN 29.31x·META 25.95x·NVDA 34.30x) 평균. GOOGL의 GAAP TTM PER(17.8x)은 SpaceX 상장·Anthropic 지분 재평가이익 ~$99B이 반영된 착시라 비교에서 제외하고, Operating Income 기준 조정 PER(35x 안팎)을 대신 사용.<br><br>조정 PER 35x는 빅테크 평균(30x)보다 다소 높지만 AAPL(34.71x)·NVDA(34.30x)와 비슷한 수준 — Cloud +82%·백로그 $514B의 성장 프리미엄이 일부 반영된 것으로 해석 가능.'
+  },
+  pbr: {
+    title: 'PBR 비교 — 빅테크 기준',
+    unit: 'PBR',
+    labels: ['GOOGL','빅테크 평균(추정)'],
+    data: [6.8,10],
+    max: 30,
+    explanation: '적정 10x는 빅테크 평균 추정치(AAPL은 자사주 매입 누적으로 장부가 자기자본이 크게 줄어 PBR이 40x대까지 치솟는 회계적 특이 케이스라 평균 산정에서 참고로만 취급). GOOGL 6.8x는 그 절반 수준으로 5개 지표 중 가장 뚜렷한 저평가 신호 — $80B 유상증자로 자기자본이 급증($415B→$640B)한 효과가 크다.'
+  },
+  psr: {
+    title: 'PSR 비교 — 빅테크 기준',
+    unit: 'PSR(TTM)',
+    labels: ['GOOGL','빅테크 평균(추정)'],
+    data: [9.7,10],
+    max: 25,
+    explanation: '적정 10x는 빅테크 평균 추정치. GOOGL 9.7x는 이와 거의 일치 — 매출 기반 지표라 지분평가이익 착시가 없어 PER보다 신뢰도가 높은 비교. OPM 32~36%의 높은 수익성이 이 수준의 배수를 정당화.'
+  },
+  pcr: {
+    title: 'PCR(FCF) 비교 — 빅테크 기준',
+    unit: 'PCR(FCF)',
+    labels: ['GOOGL','빅테크 평균(추정)'],
+    data: [81.3,35],
+    max: 90,
+    explanation: '적정 35x는 빅테크 평균 추정치. GOOGL 81.3x는 이를 큰 폭으로 상회 — 연간 Capex $195~205B 가이던스로 TTM FCF가 압축된 결과이며, 5개 지표 중 가장 고평가된 지표다. Capex 정상화 시(추정) 40x대로 낮아질 것으로 예상되나 AI 인프라 투자가 지속되는 한 당분간 부담 요인.'
+  },
+  evebitda: {
+    title: 'EV/EBITDA 비교 — 빅테크 기준',
+    unit: 'EV/EBITDA',
+    labels: ['GOOGL','빅테크 평균(추정)'],
+    data: [24.2,25],
+    max: 50,
+    explanation: '적정 25x는 빅테크 평균 추정치. GOOGL 24.2x는 이와 거의 일치 — Operating Income 기준이라 지분평가이익 영향이 없고, 순현금 $142.3B(현금·단기투자 $242.5B - 총차입금 $100.2B) 덕분에 EV가 시가총액보다 오히려 작아(EV $4.19T < 시총 $4.33T) 밸류에이션 부담을 낮추는 요인으로 작용한다.'
+  }
+};
+function renderMultipleChart(key) {
+  const d = MULTIPLE_DATA[key];
+  const ctx = document.getElementById('multipleChart');
+  if (!ctx || !d) return;
+  if (charts['multiple']) charts['multiple'].destroy();
+  const bg = d.labels.map((l,i)=> i===0 ? '#4285F4' : (l.includes('참고') ? 'rgba(231,76,60,0.18)' : 'rgba(154,160,184,0.35)'));
+  const bd = d.labels.map((l,i)=> i===0 ? '#7ab0ff' : (l.includes('참고') ? '#c0392b' : '#5c6282'));
+  charts['multiple'] = new Chart(ctx,{ type:'bar', data:{ labels:d.labels, datasets:[{ label:d.unit, data:d.data, backgroundColor:bg, borderColor:bd, borderWidth:1, borderRadius:5 }] },
+    options:{ responsive:true,maintainAspectRatio:false, plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${d.unit} ${ctx.raw}x`}}},
+      scales:{ x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10.5}}}, y:{max:d.max,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}} } } });
+}
+let currentMultipleKey = 'per';
+function selectMultiple(key) {
+  const d = MULTIPLE_DATA[key];
+  if (!d) return;
+  currentMultipleKey = key;
+  document.querySelectorAll('.val-item').forEach(el => el.classList.toggle('selected', el.dataset.metric === key));
+  const titleEl = document.getElementById('multipleCompareTitle');
+  const textEl = document.getElementById('multipleCompareText');
+  if (titleEl) titleEl.textContent = d.title;
+  if (textEl) textEl.innerHTML = d.explanation;
+  renderMultipleChart(key);
 }
 function renderCloudChart() {
   const ctx = document.getElementById('cloudChart');
   if (!ctx || charts['cloud']) return;
   charts['cloud'] = new Chart(ctx,{
     data:{
-      labels:['Q1\'24','Q2\'24','Q3\'24','Q4\'24','Q1\'25','Q2\'25','Q3\'25','Q4\'25','Q1\'26'],
+      labels:['Q1\'24','Q2\'24','Q3\'24','Q4\'24','Q1\'25','Q2\'25','Q3\'25','Q4\'25','Q1\'26','Q2\'26'],
       datasets:[
-        {type:'bar',label:'Cloud 매출($B)',data:[9.6,10.4,11.4,12.0,12.3,14.3,15.7,17.7,20.0],backgroundColor:'rgba(46,204,113,0.55)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4},
-        {type:'line',label:'YoY 성장률%',data:[28.4,29.2,35.1,30.2,28.4,37.3,38.3,48.0,63.0],borderColor:'#e74c3c',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2,yAxisID:'y2'}
+        {type:'bar',label:'Cloud 매출($B)',data:[9.6,10.4,11.4,12.0,12.3,14.3,15.7,17.7,20.0,24.8],backgroundColor:'rgba(46,204,113,0.55)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4},
+        {type:'line',label:'YoY 성장률%',data:[28.4,29.2,35.1,30.2,28.4,37.3,38.3,48.0,63.0,82.0],borderColor:'#e74c3c',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2,yAxisID:'y2'}
       ]
     },
     options:{
@@ -1062,7 +1174,7 @@ function renderCloudChart() {
       scales:{
         x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:9},maxRotation:30}},
         y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}},
-        y2:{position:'right',min:20,max:75,grid:{display:false},ticks:{color:'#e74c3c',font:{size:10},callback:v=>v+'%'}}
+        y2:{position:'right',min:20,max:85,grid:{display:false},ticks:{color:'#e74c3c',font:{size:10},callback:v=>v+'%'}}
       }
     }
   });
@@ -1070,7 +1182,7 @@ function renderCloudChart() {
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
-    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'valuation') { if (!charts['multiple']) selectMultiple(currentMultipleKey); }
     if (sectionId === 'us') renderCloudChart();
   }, 50);
 }
