@@ -11,7 +11,7 @@
     --text: #e8eaf0; --text2: #9aa0b8; --text3: #5c6282;
     --accent: #3b82f6; --accent2: #60a5fa; --accent3: #4a0e1c;
     --bull: #D85A30; --bear: #185FA5; --ma5: #ff6b9d; --ma20: #9b59b6; --ma60: #f0c040; --ma120: #22d3ee;
-    --green: #2ecc71; --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+    --green: #2ecc71; --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f; --blue: #3498db; --gold: #f0c040; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
@@ -73,7 +73,35 @@
   .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
   .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
   .tag-current { background: rgba(209,87,114,0.2); color: var(--accent2); }
-  .val-item { margin-bottom: 18px; }
+  /* COLLAPSIBLE / 재무 건전성 */
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(52,152,219,0.12); border: 1px solid rgba(52,152,219,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(52,152,219,0.22); border-color: rgba(52,152,219,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
+  .section-label { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:12px; color:var(--text2); margin-top:2px; line-height:1.4; }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 12px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .diag-label { font-size:13px; color:var(--text); font-weight:600; min-width:90px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:11.5px; color:var(--text2); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .diag-badge.watch { background:rgba(240,192,64,0.16); color:var(--gold); }
+  .val-item { margin-bottom: 18px; padding: 8px; margin-left: -8px; margin-right: -8px; border-radius: 8px; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; cursor: pointer; }
+  .val-item:hover { background: rgba(255,255,255,0.03); }
+  .val-item.selected { background: rgba(52,152,219,0.08); border-color: rgba(52,152,219,0.35); }
   .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
@@ -167,25 +195,74 @@
 </div>
 <div class="nav"><button class="nav-btn active" onclick="showSection('tech',event)">📈 기술적 분석</button><button class="nav-btn" onclick="showSection('fund',event)">📊 기본적 분석</button><button class="nav-btn" onclick="showSection('valuation',event)">⚖️ 밸류에이션</button><button class="nav-btn" onclick="showSection('us',event)">🇺🇸 US 특화</button><button class="nav-btn" onclick="showSection('news',event)">📰 시계열 뉴스</button><button class="nav-btn" onclick="showSection('invest',event)">🎯 투자 포인트</button></div>
 
-<div id="tech" class="section active"><div class="section-title">기술적 분석 — 일봉 캔들스틱 (2025.08 ~ 2026.08) · 52주 수익률 +214.0%</div><div class="price-chart-container"><div style="margin-bottom:10px;display:flex;justify-content:space-between;gap:8px;"><div class="range-toggle" id="lrcxRangeToggle"><button class="range-btn" data-range="1M">1개월</button><button class="range-btn" data-range="3M">3개월</button><button class="range-btn" data-range="6M">6개월</button><button class="range-btn active" data-range="1Y">1년</button></div><div id="lrcxMaToggle"><button class="ma-toggle-btn" data-ma="ma5" style="color:var(--ma5);border-color:var(--ma5);">● MA5</button><button class="ma-toggle-btn" data-ma="ma20" style="color:var(--ma20);border-color:var(--ma20);">● MA20</button><button class="ma-toggle-btn" data-ma="ma60" style="color:var(--ma60);border-color:var(--ma60);">● MA60</button><button class="ma-toggle-btn" data-ma="ma120" style="color:var(--ma120);border-color:var(--ma120);">● MA120</button><button class="ma-toggle-btn" data-ma="pricelabels" style="color:var(--text2);border-color:var(--text2);margin-left:4px;">◆ 가격라벨</button></div></div><svg id="lrcxCandleSvg" viewBox="0 0 720 240" width="100%"></svg><svg id="lrcxVolumeSvg" viewBox="0 0 720 70" width="100%"></svg><div style="font-size:11px;color:var(--text3);margin-top:10px;">52주 최저 $90.94 → 최고 $438.500 → 현재 $311.35</div></div><div class="grid-2"><div class="card"><div class="card-title">핵심 가격대</div><div class="zone-list"><div class="zone-item"><span class="zone-label">52주 최고</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--red);">$438.50 (2026.06.30)</span><span class="zone-tag tag-resist">저항선</span></div></div><div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--accent2);">$311.35 (고점 대비 -29.0%)</span><span class="zone-tag tag-current">현재</span></div></div><div class="zone-item"><span class="zone-label">MA60 저항</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--red);">$328.89</span><span class="zone-tag tag-resist">현재가 하회</span></div></div><div class="zone-item"><span class="zone-label">MA120 지지</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$286.92</span><span class="zone-tag tag-support">지지선</span></div></div><div class="zone-item"><span class="zone-label">52주 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--green);">$94.11 (2025.09.02)</span><span class="zone-tag tag-support">강지지</span></div></div></div></div><div class="card"><div class="card-title">이동평균선 현황</div><div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$287.71</span><span class="ma-status status-below">현재가 하회</span></div></div></div><div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$324.40</span><span class="ma-status status-below">현재가 하회</span></div></div></div><div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$328.89</span><span class="ma-status status-below">현재가 하회</span></div></div></div><div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$282.54</span><span class="ma-status status-below">현재가 하회</span></div></div></div><div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">MA60&gt;현재가&gt;MA20&gt;MA5&gt;MA120 순 — 4개 이평선 중 3개 상회 · 기술적 강세. 현재가 $311.35, 52주 고점 $438.50 대비 -29.0%.</div></div></div><div class="card"><div class="card-title">구간별 패턴 분석</div><div class="grid-4"><div style="background:rgba(231,76,60,0.10);border:1px solid var(--red);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">1개월 · -11.1%</div><div style="font-size:12px;color:var(--text2);">2026.07.10 $350.33 → 2026.08.07 $311.35</div></div><div style="background:rgba(46,204,113,0.10);border:1px solid var(--green);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">3개월 · +5.9%</div><div style="font-size:12px;color:var(--text2);">2026.05.08 $294.05 → 2026.08.07 $311.35</div></div><div style="background:rgba(46,204,113,0.10);border:1px solid var(--green);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">6개월 · +34.8%</div><div style="font-size:12px;color:var(--text2);">2026.02.06 $231.01 → 2026.08.07 $311.35</div></div><div style="background:rgba(46,204,113,0.10);border:1px solid var(--green);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">1년 · +214.0%</div><div style="font-size:12px;color:var(--text2);">2025.08.07 $99.15 → 2026.08.07 $311.35</div></div></div></div>
+<div id="tech" class="section active"><div class="section-title">기술적 분석 — 일봉 캔들스틱 (2025.08 ~ 2026.08) · 52주 수익률 +214.0%</div><div class="price-chart-container"><div style="margin-bottom:10px;display:flex;justify-content:space-between;gap:8px;"><div class="range-toggle" id="lrcxRangeToggle"><button class="range-btn" data-range="1M">1개월</button><button class="range-btn" data-range="3M">3개월</button><button class="range-btn" data-range="6M">6개월</button><button class="range-btn active" data-range="1Y">1년</button></div><div id="lrcxMaToggle"><button class="ma-toggle-btn" data-ma="ma5" style="color:var(--ma5);border-color:var(--ma5);">● MA5</button><button class="ma-toggle-btn" data-ma="ma20" style="color:var(--ma20);border-color:var(--ma20);">● MA20</button><button class="ma-toggle-btn" data-ma="ma60" style="color:var(--ma60);border-color:var(--ma60);">● MA60</button><button class="ma-toggle-btn" data-ma="ma120" style="color:var(--ma120);border-color:var(--ma120);">● MA120</button><button class="ma-toggle-btn" data-ma="pricelabels" style="color:var(--text2);border-color:var(--text2);margin-left:4px;">◆ 가격라벨</button></div></div><svg id="lrcxCandleSvg" viewBox="0 0 720 240" width="100%"></svg><svg id="lrcxVolumeSvg" viewBox="0 0 720 70" width="100%"></svg><div style="font-size:11px;color:var(--text3);margin-top:10px;">52주 최저 $90.94 → 최고 $438.500 → 현재 $311.35</div></div><div class="grid-2"><div class="card"><div class="card-title">핵심 가격대</div><div class="zone-list"><div class="zone-item"><span class="zone-label">52주 최고</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--red);">$438.50 (2026.06.30)</span><span class="zone-tag tag-resist">저항선</span></div></div><div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--accent2);">$311.35 (고점 대비 -29.0%)</span><span class="zone-tag tag-current">현재</span></div></div><div class="zone-item"><span class="zone-label">MA60 저항</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--red);">$328.89</span><span class="zone-tag tag-resist">현재가 하회</span></div></div><div class="zone-item"><span class="zone-label">MA120 지지</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$286.92</span><span class="zone-tag tag-support">지지선</span></div></div><div class="zone-item"><span class="zone-label">52주 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--green);">$94.11 (2025.09.02)</span><span class="zone-tag tag-support">강지지</span></div></div></div></div><div class="card"><div class="card-title">이동평균선 현황</div><div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$287.71</span><span class="ma-status status-above">현재가 상회</span></div></div></div><div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$324.40</span><span class="ma-status status-below">현재가 하회</span></div></div></div><div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$328.89</span><span class="ma-status status-below">현재가 하회</span></div></div></div><div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$282.54</span><span class="ma-status status-above">현재가 상회</span></div></div></div><div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">MA60&gt;MA20&gt;현재가&gt;MA5&gt;MA120 순 — 4개 이평선 중 2개 상회 · 혼조 구간. 현재가 $311.35, 52주 고점 $438.50 대비 -29.0%.</div></div></div><div class="card"><div class="card-title">구간별 패턴 분석</div><div class="grid-4"><div style="background:rgba(231,76,60,0.10);border:1px solid var(--red);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--red);font-weight:700;margin-bottom:6px;">1개월 · -11.1%</div><div style="font-size:12px;color:var(--text2);">2026.07.10 $350.33 → 2026.08.07 $311.35</div></div><div style="background:rgba(46,204,113,0.10);border:1px solid var(--green);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">3개월 · +5.9%</div><div style="font-size:12px;color:var(--text2);">2026.05.08 $294.05 → 2026.08.07 $311.35</div></div><div style="background:rgba(46,204,113,0.10);border:1px solid var(--green);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">6개월 · +34.8%</div><div style="font-size:12px;color:var(--text2);">2026.02.06 $231.01 → 2026.08.07 $311.35</div></div><div style="background:rgba(46,204,113,0.10);border:1px solid var(--green);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">1년 · +214.0%</div><div style="font-size:12px;color:var(--text2);">2025.08.07 $99.15 → 2026.08.07 $311.35</div></div></div></div>
 <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:12px;">
   <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">Q4 FY26 매출 $6.72B · GAAP EPS $1.81 확정</span>
   <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">AI·HBM 수요가 메모리 장비 슈퍼사이클 주도, WFE 전망 $140B로 상향</span>
-  <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">52주 수익률 +155.1% — S&P500(+19.6%) 대비 +185.1%p 압도적 아웃퍼폼</span>
+  <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,0.15);color:var(--green);">52주 수익률 +155.1% — S&P500(+19.6%) 대비 +135.5%p 압도적 아웃퍼폼</span>
   <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(255,193,7,0.18);color:#ffc107;">Q4 FY2026 확정 매출 $6.72B · GAAP EPS $1.81</span>
   <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">최근 30일 -10.1% — AI 메모리 수요 둔화 우려 부각</span>
   <span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,0.15);color:var(--red);">중국 매출 34% — 수출규제 리스크 상존</span>
 </div>
 </div>
-<div id="fund" class="section"><div class="section-title">기본적 분석 — FY2026 확정 실적과 사업 체력</div><div class="card"><div class="card-title">최근 8분기 매출·GAAP 순이익·EPS</div><div class="chart-wrap" style="height:280px;"><canvas id="lrcxRevChart"></canvas></div><div style="margin-top:8px;font-size:11px;color:var(--text3);">Q4 FY26은 2026년 7월 29일 발표된 확정치다.</div></div><div class="grid-3"><div class="stat-box"><div class="stat-label">Q4 FY26 매출</div><div class="stat-value up">$6.72B</div><div class="stat-sub">가이던스 중간값 상회</div></div><div class="stat-box"><div class="stat-label">Q4 GAAP 순이익</div><div class="stat-value up">$2.28B</div><div class="stat-sub">순이익률 33.9%</div></div><div class="stat-box"><div class="stat-label">Q4 GAAP EPS</div><div class="stat-value up">$1.81</div><div class="stat-sub">조정 $1.82</div></div><div class="stat-box"><div class="stat-label">Q4 조정 EPS</div><div class="stat-value up">$1.82</div><div class="stat-sub">시장 예상 상회</div></div><div class="stat-box"><div class="stat-label">FY2026 매출</div><div class="stat-value">$23.23B</div><div class="stat-sub">4개 분기 합산</div></div><div class="stat-box"><div class="stat-label">FY2026 순이익</div><div class="stat-value">$7.27B</div><div class="stat-sub">GAAP · 분기 합산</div></div><div class="stat-box"><div class="stat-label">FY2026 EPS</div><div class="stat-value">$5.76</div><div class="stat-sub">GAAP · 분기 합산</div></div><div class="stat-box"><div class="stat-label">주주환원</div><div class="stat-value">$0.26</div><div class="stat-sub">최근 분기 배당/주</div></div><div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value gold">10월 예상</div><div class="stat-sub">Q1 FY2027</div></div></div><div class="card"><div class="card-title">핵심 성장 동력 3가지</div><div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">AI·HBM</div><div class="driver-desc">고종횡비 식각과 첨단 증착 공정 수요 확대</div></div></div><div class="driver-item"><div class="driver-num">2</div><div><div class="driver-title">설치기반 서비스</div><div class="driver-desc">부품·업그레이드 반복매출로 사이클 완충</div></div></div><div class="driver-item"><div class="driver-num">3</div><div><div class="driver-title">비중국 WFE</div><div class="driver-desc">미국·한국·대만 AI 팹 투자가 성장축</div></div></div></div><div class="card"><div class="card-title">핵심 투자 논리 — 확정 실적이 높은 멀티플을 지지하는가 <span style="color:var(--red);">(초고평가)</span></div><div class="tl-desc">Q4 FY26 매출 $6.72B와 GAAP EPS $1.81은 AI·HBM 장비 강도를 확인했다. 다만 중국 매출 비중과 수출통제, 메모리 CAPEX 집중도 때문에 성장률 둔화 시 멀티플 압축 폭이 클 수 있다.</div></div><div class="card"><div class="card-title">다음 실적 체크포인트 — FY2027 9월 분기</div><div class="tl-desc">① Q1 FY2027 매출·EPS가 기존 가이던스를 충족하는지<br>② Q2 FY2027 매출·EPS 가이던스와 WFE 수요 전망<br>③ Customer Support 성장률과 중국 매출 비중·수출 라이선스 영향<br>④ HBM4·첨단 패키징 수주가 비중국 WFE 성장을 이어가는지</div></div></div>
+<div id="fund" class="section"><div class="section-title">기본적 분석 — FY2026 확정 실적과 사업 체력</div><div class="card"><div class="card-title">최근 8분기 매출·GAAP 순이익·EPS</div><div class="chart-wrap" style="height:280px;"><canvas id="lrcxRevChart"></canvas></div><div style="margin-top:8px;font-size:11px;color:var(--text3);">Q4 FY26은 2026년 7월 29일 발표된 확정치다.</div></div><div class="grid-3"><div class="stat-box"><div class="stat-label">Q4 FY26 매출</div><div class="stat-value up">$6.72B</div><div class="stat-sub">가이던스 중간값 상회</div></div><div class="stat-box"><div class="stat-label">Q4 GAAP EPS</div><div class="stat-value up">$1.81</div><div class="stat-sub">조정 $1.82</div></div><div class="stat-box"><div class="stat-label">FY2026 매출</div><div class="stat-value">$23.23B</div><div class="stat-sub">4개 분기 합산</div></div><div class="stat-box"><div class="stat-label">FY2026 EPS</div><div class="stat-value">$5.76</div><div class="stat-sub">GAAP · 분기 합산</div></div><div class="stat-box"><div class="stat-label">주주환원</div><div class="stat-value">$0.26</div><div class="stat-sub">최근 분기 배당/주</div></div><div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value gold">10월 예상</div><div class="stat-sub">Q1 FY2027</div></div></div><div class="card"><div class="card-title"><span>재무 건전성 — 안정성·활동성 (FY2026 연간 기준)</span></div>
+<div class="section-label"><span class="dot"></span>안정성 — 단기 지급능력·차입 의존도</div>
+<div class="diag-summary">
+  <div class="icon">🩺</div>
+  <div>
+    <div class="title">종합 진단: 매우 안정적</div>
+    <div class="sub">유동비율 262.9%·이자보상배율 52.3x로 업계 최상위권 재무건전성 · 차입금의존도 15.9%로 기준선(30%)의 절반 수준</div>
+  </div>
+</div>
+<div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+  <span>안정성 상세 — 개별 지표</span>
+  <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+</div>
+<div class="collapsible-body collapsed">
+<div class="diag-list">
+  <div class="diag-row">
+    <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">262.9%</span><span class="diag-note">유동자산 $15.61B÷유동부채 $5.94B</span></div>
+    <div class="diag-badge safe">✅ 매우 안전</div>
+  </div>
+  <div class="diag-row">
+    <div class="diag-left"><span class="diag-label">당좌비율</span><span class="diag-value">190.9%</span><span class="diag-note">(유동자산−재고 $4.28B)÷유동부채</span></div>
+    <div class="diag-badge safe">✅ 매우 안전</div>
+  </div>
+  <div class="diag-row">
+    <div class="diag-left"><span class="diag-label">부채비율</span><span class="diag-value">88.7%</span><span class="diag-note">부채 $11.06B÷자기자본 $12.47B</span></div>
+    <div class="diag-badge safe">✅ 안전</div>
+  </div>
+  <div class="diag-row">
+    <div class="diag-left"><span class="diag-label">차입금의존도</span><span class="diag-value">15.9%</span><span class="diag-note">기준 30%↓ 안전 · 총차입금 $3.73B÷자산 $23.53B</span></div>
+    <div class="diag-badge safe">✅ 안전</div>
+  </div>
+  <div class="diag-row">
+    <div class="diag-left"><span class="diag-label">이자보상배율</span><span class="diag-value">52.3x</span><span class="diag-note">기준 1x↑ · FY26 영업이익$8.20B÷이자비용$157M</span></div>
+    <div class="diag-badge safe">✅ 매우 안전</div>
+  </div>
+</div>
+<div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">유동비율·당좌비율·부채비율·차입금의존도·이자보상배율 5개 지표 모두 안전 범위 — 반도체 장비 피어 중에서도 최상위권 재무건전성이다. AI·HBM 슈퍼사이클에 따른 밸류에이션 부담이 크지만, 이는 성장주 프리미엄의 문제이지 재무 리스크는 아니다.</div>
+</div>
+<div class="section-label" style="margin-top:14px;"><span class="dot" style="background:var(--blue);"></span>활동성 — 재고소진·회수 속도</div>
+<div class="diag-summary">
+  <div class="icon">🔄</div>
+  <div>
+    <div class="title">종합 진단: CCC 170.3일 — 반도체 장비 산업 특성상 긴 제조·조달 주기</div>
+    <div class="sub">매출채권회전일수 68.5일 + 재고자산회전일수 136.1일 − 매입채무회전일수 34.3일 = CCC 170.3일 · 첨단 장비 제조·설치 리드타임이 반영된 구조적 결과</div>
+  </div>
+</div>
+<div style="margin-top:8px;font-size:11.5px;color:var(--text2);line-height:1.6;">반도체 장비는 고객사 팹 설치까지 긴 리드타임이 소요되는 자본재 특성상 재고자산회전일수(136.1일)가 구조적으로 길다 — AMAT 등 동종 장비업체와 유사한 업종 특성이다.</div>
+</div>
+<div class="card" style="margin-top:16px;">
+<div class="card-title">핵심 성장 동력 3가지</div><div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">AI·HBM</div><div class="driver-desc">고종횡비 식각과 첨단 증착 공정 수요 확대</div></div></div><div class="driver-item"><div class="driver-num">2</div><div><div class="driver-title">설치기반 서비스</div><div class="driver-desc">부품·업그레이드 반복매출로 사이클 완충</div></div></div><div class="driver-item"><div class="driver-num">3</div><div><div class="driver-title">비중국 WFE</div><div class="driver-desc">미국·한국·대만 AI 팹 투자가 성장축</div></div></div></div><div class="card"><div class="card-title">핵심 투자 논리 — 확정 실적이 높은 멀티플을 지지하는가 <span style="color:var(--red);">(초고평가)</span></div><div class="tl-desc">Q4 FY26 매출 $6.72B와 GAAP EPS $1.81은 AI·HBM 장비 강도를 확인했다. 다만 중국 매출 비중과 수출통제, 메모리 CAPEX 집중도 때문에 성장률 둔화 시 멀티플 압축 폭이 클 수 있다.</div></div><div class="card"><div class="card-title">다음 실적 체크포인트 — FY2027 9월 분기</div><div class="tl-desc">① Q1 FY2027 매출·EPS가 기존 가이던스를 충족하는지<br>② Q2 FY2027 매출·EPS 가이던스와 WFE 수요 전망<br>③ Customer Support 성장률과 중국 매출 비중·수출 라이선스 영향<br>④ HBM4·첨단 패키징 수주가 비중국 WFE 성장을 이어가는지</div></div></div>
 <div id="valuation" class="section"><div class="section-title">밸류에이션 — 멀티플 5단계 평가</div><div class="grid-2"><div class="card"><div class="card-title">멀티플 5단계 평가</div>
-<div class="val-item"><div class="val-header"><span class="val-name">PER (TTM)</span><div><span class="val-number">59.2x</span> <span class="stage-badge stage-5">5단계 매우높음</span></div></div><div class="val-track"><div class="val-fill" style="width:100%;"></div></div><div class="val-labels"><span class="val-low">저(18x)</span><span class="val-mid">적정(30x)</span><span class="val-high">고(45x)</span></div></div>
-<div class="val-item"><div class="val-header"><span class="val-name">Forward PER</span><div><span class="val-number">49.6x</span> <span class="stage-badge stage-4">4단계 높음</span></div></div><div class="val-track"><div class="val-fill" style="width:100%;"></div></div><div class="val-labels"><span class="val-low">저(18x)</span><span class="val-mid">적정(30x)</span><span class="val-high">고(45x)</span></div></div>
-<div class="val-item"><div class="val-header"><span class="val-name">PBR</span><div><span class="val-number">36.9x</span> <span class="stage-badge stage-5">5단계 매우높음</span></div></div><div class="val-track"><div class="val-fill" style="width:100%;"></div></div><div class="val-labels"><span class="val-low">저(5x)</span><span class="val-mid">적정(12x)</span><span class="val-high">고(22x)</span></div></div>
-<div class="val-item"><div class="val-header"><span class="val-name">PSR</span><div><span class="val-number">18.0x</span> <span class="stage-badge stage-5">5단계 매우높음</span></div></div><div class="val-track"><div class="val-fill" style="width:100%;"></div></div><div class="val-labels"><span class="val-low">저(4x)</span><span class="val-mid">적정(8x)</span><span class="val-high">고(14x)</span></div></div>
-<div class="val-item"><div class="val-header"><span class="val-name">EV/EBITDA</span><div><span class="val-number">약 48x</span> <span class="stage-badge stage-5">5단계</span></div></div><div class="val-track"><div class="val-fill" style="width:100%;"></div></div><div class="val-labels"><span class="val-low">저(12x)</span><span class="val-mid">적정(24x)</span><span class="val-high">고(38x)</span></div></div><div style="font-size:11px;color:var(--text3);">* 7월 20일 완료 거래일과 최근 공시 기준 추정치.</div></div><div class="card"><div class="card-title">반도체 장비 피어 Forward PER</div><div class="chart-wrap" style="height:250px;"><canvas id="peerChart"></canvas></div></div></div>
-<div class="card"><div class="card-title">Per-Share 데이터 (참고 · TTM 기준 · 약 12.5억 주)</div><div class="per-share-grid"><div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">TTM EPS</div><div class="ps-value">약 $5.25</div><div class="ps-sub">GAAP</div></div><div class="ps-card"><div class="ps-icon">📘</div><div class="ps-label">BPS</div><div class="ps-value">약 $8.46</div><div class="ps-sub">최근 분기 장부가</div></div><div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주</div><div class="ps-value">약 $4.80</div><div class="ps-sub">TTM 추정</div></div><div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">분기 배당</div><div class="ps-value">$0.26</div><div class="ps-sub">최근 선언액</div></div></div></div>>
-<div class="card"><div class="card-title">종합 밸류에이션 — 5개 지표 전부 매우고평가, 그러나 애널리스트는 여전히 Buy</div><div style="font-size:12px;color:var(--text2);line-height:1.6;">PER 58.4x·Forward PER 48.7x·PBR 36.3x·PSR 17.7x·EV/EBITDA 약 48x — 반도체 장비 피어(AMAT·KLAC·ASML) 대비로도, 자체 역사적 밴드 대비로도 전 지표가 최상단 구간이다. <strong style="color:var(--text);">그럼에도 31명 애널리스트 평균 목표가 $340.58(Strong Buy)이 현재가보다 높다는 건, 시장이 이 밸류에이션을 "AI 반도체 장비 슈퍼사이클 초입"으로 보고 있다는 뜻</strong> — Q4 FY26 확정 실적은 성장 가설을 지지했지만, FY2027 가이던스와 중국 수출통제 영향이 높은 멀티플의 지속 가능성을 결정한다.</div></div><div class="card"><div class="card-title">시나리오별 공정가치 분석</div>
+<div class="val-item" data-metric="per" onclick="selectMultiple('per')"><div class="val-header"><span class="val-name">PER (TTM)</span><div><span class="val-number">54.1x</span> <span class="stage-badge stage-5">5단계 매우높음</span></div></div><div class="val-track"><div class="val-fill" style="width:100%;"></div></div><div class="val-labels"><span class="val-low">저(18x)</span><span class="val-mid">적정(30x)</span><span class="val-high">고(45x)</span></div></div>
+<div class="val-item" data-metric="fwdpe" onclick="selectMultiple('fwdpe')"><div class="val-header"><span class="val-name">Forward PER</span><div><span class="val-number">49.6x</span> <span class="stage-badge stage-4">4단계 높음</span></div></div><div class="val-track"><div class="val-fill" style="width:100%;"></div></div><div class="val-labels"><span class="val-low">저(18x)</span><span class="val-mid">적정(30x)</span><span class="val-high">고(45x)</span></div></div>
+<div class="val-item" data-metric="pbr" onclick="selectMultiple('pbr')"><div class="val-header"><span class="val-name">PBR</span><div><span class="val-number">31.5x</span> <span class="stage-badge stage-5">5단계 매우높음</span></div></div><div class="val-track"><div class="val-fill" style="width:100%;"></div></div><div class="val-labels"><span class="val-low">저(5x)</span><span class="val-mid">적정(12x)</span><span class="val-high">고(22x)</span></div></div>
+<div class="val-item" data-metric="psr" onclick="selectMultiple('psr')"><div class="val-header"><span class="val-name">PSR</span><div><span class="val-number">16.9x</span> <span class="stage-badge stage-5">5단계 매우높음</span></div></div><div class="val-track"><div class="val-fill" style="width:100%;"></div></div><div class="val-labels"><span class="val-low">저(4x)</span><span class="val-mid">적정(8x)</span><span class="val-high">고(14x)</span></div></div>
+<div class="val-item" data-metric="evebitda" onclick="selectMultiple('evebitda')"><div class="val-header"><span class="val-name">EV/EBITDA</span><div><span class="val-number">약 45.5x</span> <span class="stage-badge stage-5">5단계</span></div></div><div class="val-track"><div class="val-fill" style="width:100%;"></div></div><div class="val-labels"><span class="val-low">저(12x)</span><span class="val-mid">적정(24x)</span><span class="val-high">고(38x)</span></div></div><div style="font-size:11px;color:var(--text3);">* 8월 7일 종가와 FY2026 확정 실적 기준.</div></div><div class="card"><div class="card-title"><span id="multipleCompareTitle">반도체 장비 피어 Forward PER</span></div><div class="chart-wrap" style="height:250px;"><canvas id="multipleChart"></canvas></div><div style="margin-top:12px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText">컨센서스 Forward EPS 기준 · LRCX는 반도체 장비 피어 중 가장 높은 프리미엄에서 거래된다 — AI·HBM 슈퍼사이클 기대가 반영된 수준.</div></div></div>
+<div class="card"><div class="card-title">Per-Share 데이터 (참고 · TTM 기준 · 약 12.61억 주)</div><div class="per-share-grid"><div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">TTM EPS</div><div class="ps-value">$5.76</div><div class="ps-sub">GAAP · FY2026 확정</div></div><div class="ps-card"><div class="ps-icon">📘</div><div class="ps-label">BPS</div><div class="ps-value">$9.89</div><div class="ps-sub">FY2026 기말 장부가</div></div><div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주</div><div class="ps-value">$3.88</div><div class="ps-sub">TTM FCF $4.89B 기준</div></div><div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">분기 배당</div><div class="ps-value">$0.26</div><div class="ps-sub">최근 선언액</div></div></div></div>>
+<div class="card"><div class="card-title">종합 밸류에이션 — 5개 지표 전부 매우고평가, 그러나 애널리스트는 여전히 Buy</div><div style="font-size:12px;color:var(--text2);line-height:1.6;">PER 54.1x·Forward PER 49.6x·PBR 31.5x·PSR 16.9x·EV/EBITDA 약 45.5x — 반도체 장비 피어(AMAT·KLAC·ASML) 대비로도, 자체 역사적 밴드 대비로도 전 지표가 최상단 구간이다. <strong style="color:var(--text);">그럼에도 35명 애널리스트 평균 목표가 $368.13(Strong Buy)이 현재가보다 높다는 건, 시장이 이 밸류에이션을 "AI 반도체 장비 슈퍼사이클 초입"으로 보고 있다는 뜻</strong> — Q4 FY26 확정 실적은 성장 가설을 지지했지만, FY2027 가이던스와 중국 수출통제 영향이 높은 멀티플의 지속 가능성을 결정한다.</div></div><div class="card"><div class="card-title">시나리오별 공정가치 분석</div>
 <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;"><div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear 시나리오 — 中 규제 재강화·메모리 CAPEX 둔화</div><div style="font-size:12px;color:var(--text2);">FY2027 가이던스가 기대를 하회, 추가 대중국 수출규제로 매출 34% 비중이 실질 타격받고 DRAM/NAND 투자 사이클이 조기 피크아웃 시 → 공정가치 <strong style="color:var(--red);">$170~220/주</strong> (현재가 대비 -45.4% ~ -29.3%) (Trailing PER 31~40x 정상화 가정)</div></div>
 <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;"><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 가이던스 달성·비중국 수요로 상쇄 지속</div><div style="font-size:12px;color:var(--text2);">FY2027 성장률이 시장 기대에 부합, 中 리스크는 이미 알려진 수준에서 관리되며 AI·HBM 투자가 완만히 지속 → 공정가치 <strong style="color:var(--text);">$250~310/주</strong> (현재가 대비 -19.7% ~ -0.4%) (현재가 $311.35은 이 구간 상단)</div></div>
 <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);"><div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — 가이던스 상회·AI 슈퍼사이클 가속</div><div style="font-size:12px;color:var(--text2);">FY2027 가이던스가 상향되고 HBM4·첨단 패키징向 신규 수주가 확인될 경우 → 공정가치 <strong style="color:var(--green);">$335~400/주</strong> (현재가 대비 +7.6% ~ +28.5%)</div></div>
@@ -197,23 +274,23 @@
 <div id="invest" class="section"><div class="section-title">투자 포인트 — Bull / Bear</div><div class="bull-bear"><div class="bb-box"><div class="bb-title bb-bull">🐂 Bull 요인</div><div class="bb-item"><span>▲</span><span>AI·HBM이 식각·증착 단계와 장비 강도를 확대.</span></div><div class="bb-item"><span>▲</span><span>기록적 매출과 35% 영업이익률.</span></div><div class="bb-item"><span>▲</span><span>고객지원 매출의 반복성.</span></div><div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span>Q4 FY26 매출 $6.72B·EPS $1.81로 성장 모멘텀이 확인됐다.</span></div><div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span>비중국 AI 팹 투자가 수출통제 충격을 완충한다.</span></div></div><div class="bb-box"><div class="bb-title bb-bear">🐻 Bear 요인</div><div class="bb-item"><span>▼</span><span>5개 밸류에이션 지표 모두 매우 고평가 구간.</span></div><div class="bb-item"><span>▼</span><span>중국 매출 34%와 수출규제 위험.</span></div><div class="bb-item"><span>▼</span><span>메모리 CAPEX 사이클 둔화 위험.</span></div><div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span>고객 CAPEX 집중으로 주문 변동성이 확대될 수 있다.</span></div><div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span>고점 대비 큰 조정에도 멀티플 부담이 남아 있다.</span></div></div></div><div class="card"><div class="card-title">목표가 밴드 — 시나리오별 공정가치 vs 현재가 · 애널리스트 목표가</div>
 <div style="position:relative;height:70px;margin:28px 6px 6px;">
   <div style="position:absolute;top:28px;left:0;right:0;height:10px;border-radius:5px;overflow:hidden;display:flex;">
-    <div style="width:21.7%;height:100%;background:rgba(46,204,113,0.45);"></div>
+    <div style="width:21.7%;height:100%;background:rgba(231,76,60,0.45);"></div>
     <div style="width:13.0%;height:100%;background:var(--bg3);"></div>
     <div style="width:26.1%;height:100%;background:rgba(240,192,64,0.5);"></div>
     <div style="width:10.9%;height:100%;background:var(--bg3);"></div>
-    <div style="width:28.3%;height:100%;background:rgba(231,76,60,0.45);"></div>
+    <div style="width:28.3%;height:100%;background:rgba(46,204,113,0.45);"></div>
   </div>
   <div style="position:absolute;top:10px;left:61.5%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
   <div style="position:absolute;top:-6px;left:61.5%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $311.35</div>
-  <div style="position:absolute;top:22px;left:74.2%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
-  <div style="position:absolute;top:48px;left:74.2%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $340.58 (+9.4%)</div>
+  <div style="position:absolute;top:22px;left:86.1%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
+  <div style="position:absolute;top:48px;left:86.1%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $368.13 (+18.2%)</div>
 </div>
 <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-top:4px;">
-  <span style="color:var(--green);">Bear $170~220 (中 규제 재강화)</span>
+  <span style="color:var(--red);">Bear $170~220 (中 규제 재강화)</span>
   <span>Base $250~310 (가이던스 달성)</span>
-  <span style="color:var(--red);">Bull $335~400 (AI 슈퍼사이클)</span>
+  <span style="color:var(--green);">Bull $335~400 (AI 슈퍼사이클)</span>
 </div>
-<div style="margin-top:10px;font-size:11px;color:var(--text3);">31명 애널리스트 평균 목표가 $340.58(Strong Buy, 최고 $480·최저 $220)은 현재가 대비 +9.4% 상단 — 밸류에이션은 5단계(매우 고평가)지만 애널리스트 다수는 여전히 추가 상승 여지를 보고 있다는 점이 특징적.</div>
+<div style="margin-top:10px;font-size:11px;color:var(--text3);">35명 애널리스트 평균 목표가 $368.13(Strong Buy, 최고 $500·최저 $290)은 현재가 대비 +18.2% 상단 — 밸류에이션은 5단계(매우 고평가)지만 애널리스트 다수는 여전히 추가 상승 여지를 보고 있다는 점이 특징적.</div>
 <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);">
   <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">애널리스트 26명 투자의견 분포</div>
   <div style="height:8px;border-radius:4px;overflow:hidden;display:flex;">
@@ -226,7 +303,7 @@
     <span style="color:var(--red);">매도 0명</span>
   </div>
 </div>
-</div><div class="card"><div class="card-title">5개 분석 종합 — 한눈에 보기</div><div class="zone-list"><div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:var(--red)">MA60&gt;MA20&gt;MA5&gt;MA120&gt;현재가 · 전 이평선 하회 · 기술적 약세</span></div><div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">Q4 FY26 매출 $6.72B·GAAP EPS $1.81 확정</span></div><div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:var(--red);">5개 지표 모두 매우 고평가, 애널리스트 목표가는 그래도 +11% 상단</span></div><div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:var(--green);">S&P500 대비 +185.1%p 알파, 단 중국 수출규제 리스크 상존</span></div><div class="zone-item"><span class="zone-label">📰 시계열 뉴스</span><span class="zone-val" style="color:#f0c040;">AI 메모리 수요 둔화 우려로 최근 조정, FY2027 가이던스가 다음 방향 결정</span></div></div></div><div class="card"><div class="card-title">투자의견 요약</div><div style="display:flex;flex-direction:column;gap:10px;font-size:13px;"><div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107;">FY2027 9월 분기</strong></div><div><span style="color:var(--text2);">목표주가:</span> <strong style="color:#ffc107;">$340.58 · +9.4%</strong></div><div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text);">AI·HBM 슈퍼사이클의 구조적 지속 vs 최근 조정이 신호하는 밸류에이션 재평가 — FY2027 가이던스가 핵심 변수</strong></div></div></div></div>
+</div><div class="card"><div class="card-title">5개 분석 종합 — 한눈에 보기</div><div class="zone-list"><div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:#f0c040">MA60&gt;MA20&gt;현재가&gt;MA5&gt;MA120 · 4개 중 2개 상회 · 혼조 구간</span></div><div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">Q4 FY26 매출 $6.72B·GAAP EPS $1.81 확정</span></div><div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:var(--red);">5개 지표 모두 매우 고평가, 애널리스트 목표가는 그래도 +18% 상단</span></div><div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:var(--green);">S&P500 대비 +135.5%p 알파, 단 중국 수출규제 리스크 상존</span></div><div class="zone-item"><span class="zone-label">📰 시계열 뉴스</span><span class="zone-val" style="color:#f0c040;">AI 메모리 수요 둔화 우려로 최근 조정, FY2027 가이던스가 다음 방향 결정</span></div></div></div><div class="card"><div class="card-title">투자의견 요약</div><div style="display:flex;flex-direction:column;gap:10px;font-size:13px;"><div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107;">FY2027 9월 분기</strong></div><div><span style="color:var(--text2);">목표주가:</span> <strong style="color:#ffc107;">$368.13 · +18.2%</strong></div><div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text);">AI·HBM 슈퍼사이클의 구조적 지속 vs 최근 조정이 신호하는 밸류에이션 재평가 — FY2027 가이던스가 핵심 변수</strong></div></div></div></div>
 <div class="disclaimer">⚠️ SEC EDGAR, Lam Research IR, Yahoo Finance 및 공개 자료 기반 정보 제공용 분석입니다. 투자 권고가 아닙니다.</div>
 
 <script>
@@ -446,12 +523,65 @@ function renderFundChart() {
   charts.fund=new Chart(ctx,{data:{labels:["Q1 '25","Q2 '25","Q3 '25","Q4 '25","Q1 '26","Q2 '26","Q3 '26","Q4 '26"],datasets:[{type:'bar',label:'매출($B)',data:[4.168,4.376,4.720,5.171,5.324,5.345,5.841,6.720],backgroundColor:'#3b82f6',borderRadius:4,yAxisID:'y'},{type:'bar',label:'GAAP 순이익($B)',data:[1.116,1.191,1.331,1.720,1.569,1.594,1.825,2.280],backgroundColor:'rgba(240,192,64,.55)',borderRadius:4,yAxisID:'y'},{type:'line',label:'GAAP EPS($)',data:[0.86,0.92,1.03,1.35,1.24,1.26,1.45,1.81],borderColor:'#2ecc71',tension:.3,pointRadius:4,yAxisID:'y2'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#9aa0b8'}}},scales:{x:{ticks:{color:'#9aa0b8'}},y:{ticks:{color:'#9aa0b8'}},y2:{position:'right',grid:{display:false},ticks:{color:'#9aa0b8'}}}}});
 }
 
-function renderPeerChart() { const ctx=document.getElementById('peerChart'); if(!ctx||charts.peer)return; charts.peer=new Chart(ctx,{type:'bar',data:{labels:['AMAT','KLAC','LRCX','ASML'],datasets:[{label:'Forward P/E',data:[32.8,36,48.7,42],backgroundColor:['#777','#777','#3b82f6','#777']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#9aa0b8'}},y:{ticks:{color:'#9aa0b8'}}}}}); }
+const MULTIPLE_DATA = {
+  per: { title:'PER (TTM) 비교', unit:'PER', labels:['LRCX(현재)'], data:[54.1], max:60,
+    explanation: '$311.35÷TTM EPS $5.76(FY2026 확정 실적) · 반도체 장비 피어 밴드 상단을 크게 초과.' },
+  fwdpe: { title:'반도체 장비 피어 Forward PER', unit:'Forward P/E', labels:['AMAT','KLAC','LRCX','ASML'], data:[32.8,36,49.6,42], max:55,
+    explanation: '컨센서스 Forward EPS 기준 · LRCX는 반도체 장비 피어 중 가장 높은 프리미엄에서 거래된다 — AI·HBM 슈퍼사이클 기대가 반영된 수준.' },
+  pbr: { title:'PBR 비교', unit:'PBR', labels:['LRCX(현재)'], data:[31.5], max:35,
+    explanation: 'BPS $9.89(FY2026 기말 장부가) 기준 · 자사주매입 누적으로 장부가치가 희석된 자산경량 장비 비즈니스 특성 반영.' },
+  psr: { title:'PSR 비교', unit:'PSR', labels:['LRCX(현재)'], data:[16.9], max:20,
+    explanation: '시총 약 $392.7B÷TTM 매출 $23.23B · 전통 반도체 장비 밴드를 크게 초과.' },
+  evebitda: { title:'EV/EBITDA 비교', unit:'EV/EBITDA', labels:['LRCX(현재)'], data:[45.5], max:50,
+    explanation: 'EV 약 $390.9B÷TTM EBITDA 약 $8.58B · 이익 기반 지표로도 밴드 상단을 크게 초과 — AI 장비 프리미엄이 이익·자산·매출 전반에 반영.' }
+};
+
+function renderMultipleChart(key) {
+  const d = MULTIPLE_DATA[key];
+  const ctx = document.getElementById('multipleChart');
+  if (!ctx || !d) return;
+  if (charts.multiple) charts.multiple.destroy();
+  const bg = d.labels.map(l => l==='LRCX' || l.includes('현재') ? '#3b82f6' : '#777');
+  charts.multiple = new Chart(ctx,{
+    type:'bar',
+    data:{ labels:d.labels, datasets:[{ label:d.unit, data:d.data, backgroundColor:bg, borderRadius:4 }] },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${d.unit} ${ctx.raw}x`}}},
+      scales:{
+        x:{ticks:{color:'#9aa0b8'}},
+        y:{max:d.max,ticks:{color:'#9aa0b8',callback:v=>v+'x'}}
+      }
+    }
+  });
+}
+
+let currentMultipleKey = 'fwdpe';
+function selectMultiple(key) {
+  const d = MULTIPLE_DATA[key];
+  if (!d) return;
+  currentMultipleKey = key;
+  document.querySelectorAll('.val-item[data-metric]').forEach(el => el.classList.toggle('selected', el.dataset.metric === key));
+  const titleEl = document.getElementById('multipleCompareTitle');
+  const textEl = document.getElementById('multipleCompareText');
+  if (titleEl) titleEl.textContent = d.title;
+  if (textEl) textEl.innerHTML = d.explanation;
+  renderMultipleChart(key);
+}
+
+function toggleCollapsible(header) {
+  const body = header.nextElementSibling;
+  const collapsed = body.classList.toggle('collapsed');
+  header.classList.toggle('collapsed', collapsed);
+  header.setAttribute('aria-expanded', String(!collapsed));
+  const hintText = header.querySelector('.toggle-hint-text');
+  if (hintText) hintText.textContent = collapsed ? '상세 보기' : '상세 숨기기';
+}
 function renderLrcxUsRegionChart() { const ctx=document.getElementById('lrcxUsRegionChart'); if(!ctx||charts.usregion)return; charts.usregion=new Chart(ctx,{type:'doughnut',data:{labels:['글로벌 중국','글로벌 기타 지역'],datasets:[{data:[34,66],backgroundColor:['#e74c3c','#3b82f6'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:{color:'#9aa0b8',font:{size:10}}},tooltip:{callbacks:{label:c=>c.label+': 약 '+c.raw+'%'}}}}}); }
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
-    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'valuation' && !charts.multiple) selectMultiple(currentMultipleKey);
     if (sectionId === 'us') renderLrcxUsRegionChart();
   }, 50);
 }
