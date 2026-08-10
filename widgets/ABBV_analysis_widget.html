@@ -11,7 +11,7 @@
     --text: #e8eaf0; --text2: #9aa0b8; --text3: #5c6282;
     --accent: #1f4e8c; --accent2: #4a90d9; --accent3: #0d2340;
     --bull: #D85A30; --bear: #185FA5; --ma5: #ff6b9d; --ma20: #9b59b6; --ma60: #f0c040; --ma120: #22d3ee;
-    --green: #2ecc71; --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f; --blue: #3498db; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+    --green: #2ecc71; --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f; --blue: #3498db; --gold: #f0c040; --radius: 10px; --shadow: 0 4px 20px rgba(0,0,0,0.4);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', -apple-system, sans-serif; font-size: 14px; line-height: 1.6; }
@@ -73,7 +73,37 @@
   .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
   .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
   .tag-current { background: rgba(56,189,248,0.2); color: var(--blue); }
-  .val-item { margin-bottom: 18px; }
+  /* COLLAPSIBLE / 재무 건전성 */
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(52,152,219,0.12); border: 1px solid rgba(52,152,219,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(52,152,219,0.22); border-color: rgba(52,152,219,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
+  .section-label { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:12px; color:var(--text2); margin-top:2px; line-height:1.4; }
+  .diag-summary.watch { background: linear-gradient(90deg, rgba(240,192,64,0.14), rgba(240,192,64,0.03)); border-color: rgba(240,192,64,0.35); }
+  .diag-summary.watch .title { color: var(--gold); }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 12px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .diag-label { font-size:13px; color:var(--text); font-weight:600; min-width:90px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:11.5px; color:var(--text2); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .diag-badge.watch { background:rgba(240,192,64,0.16); color:var(--gold); }
+  .val-item { margin-bottom: 18px; padding: 8px; margin-left: -8px; margin-right: -8px; border-radius: 8px; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; cursor: pointer; }
+  .val-item:hover { background: rgba(74,144,217,0.06); }
+  .val-item.selected { background: rgba(74,144,217,0.1); border-color: rgba(74,144,217,0.35); }
   .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
@@ -190,18 +220,18 @@
     </div>
   </div>
   <div class="header-meta">
-    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$451.9B</span></div>
+    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$434.8B</span></div>
     <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Health Care</span></div>
     <div class="meta-item"><span class="meta-label">Q2 FY26 매출</span><span class="meta-value">$16.99B (+10.2%)</span></div>
-    <div class="meta-item"><span class="meta-label">P/E (TTM, Adj)</span><span class="meta-value">24.9x</span></div>
-    <div class="meta-item"><span class="meta-label">GAAP EPS (TTM)</span><span class="meta-value">$2.03</span></div>
+    <div class="meta-item"><span class="meta-label">P/E (TTM, Adj)</span><span class="meta-value">22.6x</span></div>
+    <div class="meta-item"><span class="meta-label">GAAP EPS (TTM)</span><span class="meta-value">$3.54</span></div>
     <div class="meta-item"><span class="meta-label">분기 배당</span><span class="meta-value">$1.73 (+약 4%)</span></div>
   </div>
 </div>
 
 <div class="box-key">
-<div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:#f0c040;">(적정)</span> — GAAP PER 124.8x는 회계 왜곡, Adjusted PER 24.9x가 실질 밸류에이션</div>
-<div style="font-size:12px;color:var(--text2);line-height:1.6;">GAAP EPS(TTM) $2.03은 Allergan 인수발 무형자산 상각과 반복적 인수 IPR&D 충당금이 만든 회계상 수치로, PER을 계산하면 124.8x라는 왜곡된 값이 나온다. 반면 Adjusted EPS(TTM) $10.19 기준 PER은 24.9x로 대형 제약 피어 밴드 내에 있다. <strong style="color:var(--text);">핵심 논쟁은 "Humira 특허절벽 이후에도 Skyrizi·Rinvoq가 성장을 지속할 수 있는가" 그리고 "Apogee 등 반복적 M&A가 실제 파이프라인 가치를 창출하는가, 단순히 상각비만 늘리는가"이다.</strong></div>
+<div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:#f0c040;">(적정)</span> — GAAP PER 69.5x는 회계 왜곡, Adjusted PER 22.6x가 실질 밸류에이션</div>
+<div style="font-size:12px;color:var(--text2);line-height:1.6;">GAAP EPS(TTM) $3.54는 Allergan 인수발 무형자산 상각과 반복적 인수 IPR&D 충당금이 만든 회계상 수치로, PER을 계산하면 69.5x라는 왜곡된 값이 나온다. 반면 Adjusted EPS(TTM) $10.87 기준 PER은 22.6x로 대형 제약 피어 밴드 내에 있다. <strong style="color:var(--text);">핵심 논쟁은 "Humira 특허절벽 이후에도 Skyrizi·Rinvoq가 성장을 지속할 수 있는가" 그리고 "Apogee 등 반복적 M&A가 실제 파이프라인 가치를 창출하는가, 단순히 상각비만 늘리는가"이다.</strong></div>
 </div>
 <div class="nav">
   <button class="nav-btn active" onclick="showSection('tech')">📈 기술적 분석</button>
@@ -287,18 +317,68 @@
   </div>
   <div class="grid-3">
     <div class="stat-box"><div class="stat-label">Q2 FY26 매출</div><div class="stat-value up">$16.99B</div><div class="stat-sub">▲10.2% YoY</div></div>
-    <div class="stat-box"><div class="stat-label">Q2 FY26 GAAP 순이익</div><div class="stat-value up">$3,613M</div><div class="stat-sub">▲290.4% YoY(전년 IPR&D 충당금 기저효과)</div></div>
     <div class="stat-box"><div class="stat-label">Q2 FY26 GAAP EPS</div><div class="stat-value up">$2.03</div><div class="stat-sub">Adjusted 대비 낮음(상각비 영향)</div></div>
     <div class="stat-box"><div class="stat-label">Q2 FY26 Adjusted EPS</div><div class="stat-value up">$3.65</div><div class="stat-sub">▲22.9% YoY</div></div>
-    <div class="stat-box"><div class="stat-label">Skyrizi 매출 (Q2 FY26)</div><div class="stat-value up">$5.505B</div><div class="stat-sub">Rinvoq $2.525B와 함께 Immunology 견인</div></div>
     <div class="stat-box"><div class="stat-label">면역(Immunology) 매출</div><div class="stat-value up">$8.786B</div><div class="stat-sub">Q2 FY26, ▲15.1% YoY</div></div>
     <div class="stat-box"><div class="stat-label">FY2026(E) 매출 가이던스</div><div class="stat-value gold">~$67.6B</div><div class="stat-sub">Q2 실적 발표 시 상향</div></div>
     <div class="stat-box"><div class="stat-label">FY2026(E) Adj EPS 가이던스</div><div class="stat-value gold">$13.87~14.07</div><div class="stat-sub">Q2 실적 발표 시 조정(Apogee 희석 반영)</div></div>
-    <div class="stat-box"><div class="stat-label">분기배당</div><div class="stat-value up">$1.73</div><div class="stat-sub">▲약 4% — Dividend King(53년+)</div></div>
   </div>
   <div style="margin-top:12px;font-size:12px;color:var(--text3);">Q2 FY26 매출 $16.99B(+10.2% YoY) · 면역질환(Skyrizi·Rinvoq)이 성장의 핵심 축, Apogee 인수 희석으로 FY26 Adj EPS 가이던스는 소폭 하향 조정</div>
 
   <div class="card" style="margin-top:16px;">
+    <div class="card-title"><span>재무 건전성 — 안정성·활동성 (Q2 FY26 기준)</span></div>
+    <div style="font-size:11px;color:var(--text3);line-height:1.5;margin:-4px 0 14px;">※ ABBV는 Allergan 인수 부채와 지속적 자사주매입 누적으로 자기자본이 마이너스(-$5.94B)다. 부채비율(부채÷자기자본)은 음수로 계산 자체가 무의미해 표시하지 않으며, 대신 이자보상배율과 유동성 지표로 실질 상환능력을 판단한다.</div>
+
+    <div class="section-label"><span class="dot"></span>안정성 — 단기 지급능력·차입 부담</div>
+    <div class="diag-summary watch">
+      <div class="icon">🩺</div>
+      <div>
+        <div class="title">종합 진단: 레버리지는 높으나 상환능력은 견고</div>
+        <div class="sub">차입금의존도 52.4%로 기준선 상회하지만, 이자보상배율 8.6x가 보여주듯 영업이익만으로 이자비용을 8배 이상 커버 · 유동비율 80.9%는 대형 제약 M&A 기업의 전형적 특징</div>
+      </div>
+    </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>안정성 상세 — 개별 지표</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">80.9%</span><span class="diag-note">유동자산 $33.67B÷유동부채 $41.64B</span></div>
+        <div class="diag-badge watch">⚠️ 관찰</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">당좌비율</span><span class="diag-value">68.6%</span><span class="diag-note">(유동자산−재고 $5.13B)÷유동부채</span></div>
+        <div class="diag-badge watch">⚠️ 관찰</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">부채비율</span><span class="diag-value">산출불가</span><span class="diag-note">자기자본 -$5.94B(마이너스) — Allergan 인수·자사주매입 누적 결과</span></div>
+        <div class="diag-badge" style="background:rgba(154,160,184,0.14);color:var(--text2);">ℹ️ 회계적 특이</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">차입금의존도</span><span class="diag-value">52.4%</span><span class="diag-note">기준 30%↓ 양호 · (단기+장기차입금) $70.8B÷자산 $135.1B</span></div>
+        <div class="diag-badge watch">⚠️ 관찰</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">이자보상배율</span><span class="diag-value">8.6x</span><span class="diag-note">기준 1x↑ · Q2 FY26 영업이익$6.43B÷이자비용$746M</span></div>
+        <div class="diag-badge safe">✅ 안전</div>
+      </div>
+    </div>
+    <div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">유동비율·당좌비율이 100% 아래인 점과 자기자본 마이너스는 언뜻 위험 신호로 보이지만, 이는 2020년 Allergan 인수($63B)를 부채로 조달하고 이후 자사주매입을 지속해온 자본배분 전략의 결과다. 실질 상환능력을 보여주는 이자보상배율(8.6x)이 견고하고, Dividend King(53년 연속 증배)으로서 잉여현금흐름 창출력이 검증된 만큼 파산 위험 신호로 해석하기는 어렵다.</div>
+    </div>
+
+    <div class="section-label" style="margin-top:14px;"><span class="dot" style="background:var(--blue);"></span>활동성 — 재고소진·회수 속도</div>
+    <div class="diag-summary">
+      <div class="icon">🔄</div>
+      <div>
+        <div class="title">종합 진단: 대형 제약 표준 수준</div>
+        <div class="sub">재고자산 $5.13B, 매출채권 $13.82B로 대형 제약 M&A 기업 표준 범위 — 정밀 회전율 트렌드 분석은 이번 마이그레이션 범위 밖</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:4px;">
     <div class="card-title">핵심 성장 동력 — Immunology(Skyrizi·Rinvoq) vs Humira 특허절벽 vs M&A 파이프라인</div>
     <div class="grid-3">
       <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">Immunology (Skyrizi·Rinvoq)</div><div style="font-size:12px;color:var(--text2);">Skyrizi Q2 FY26 $5.505B(+24%) — 건선·궤양성대장염 등 적응증 확대<br>Rinvoq $2.525B도 두 자릿수 고성장 지속<br>2027년까지 Humira 전성기 매출을 상회할 전망</div></div>
@@ -309,7 +389,7 @@
 
   <div class="card">
     <div class="card-title">핵심 투자 논리 — GAAP 적자성 지표가 실제 사업 부실을 의미하는가 <span style="color:#f0c040;">(적정)</span></div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.7;">GAAP EPS(TTM) $2.03은 Allergan 인수발 무형자산 상각과 반복적 인수 IPR&D 충당금이 만든 회계상 수치로, PER을 계산하면 124.8x라는 왜곡된 값이 나온다. 반면 Adjusted EPS(TTM) $10.19 기준 PER은 24.9x로 대형 제약 피어 밴드 내에 있다. <strong style="color:var(--text);">핵심 논쟁은 "Humira 특허절벽 이후에도 Skyrizi·Rinvoq가 성장을 지속할 수 있는가" 그리고 "Apogee 등 반복적 M&A가 실제 파이프라인 가치를 창출하는가, 단순히 상각비만 늘리는가"이다.</strong></div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.7;">GAAP EPS(TTM) $3.54는 Allergan 인수발 무형자산 상각과 반복적 인수 IPR&D 충당금이 만든 회계상 수치로, PER을 계산하면 69.5x라는 왜곡된 값이 나온다. 반면 Adjusted EPS(TTM) $10.87 기준 PER은 22.6x로 대형 제약 피어 밴드 내에 있다. <strong style="color:var(--text);">핵심 논쟁은 "Humira 특허절벽 이후에도 Skyrizi·Rinvoq가 성장을 지속할 수 있는가" 그리고 "Apogee 등 반복적 M&A가 실제 파이프라인 가치를 창출하는가, 단순히 상각비만 늘리는가"이다.</strong></div>
   </div>
 
   <div class="card">
@@ -328,65 +408,60 @@
 <div id="valuation" class="section">
   <div class="section-title">Per-Share & 밸류에이션 — GAAP PER은 왜곡, Adjusted 기준으로는 대형 제약 피어 대비 합리적</div>
   <div class="info-box">
-    <strong>핵심 전제:</strong> GAAP TTM PER 124.8x는 Allergan 인수발 무형자산상각으로 왜곡된 수치다 — Adjusted EPS(TTM) $10.19 기준 PER 24.9x가 실질 밸류에이션에 가깝고, Forward P/E 17.9x는 대형 제약 피어 대비 오히려 저평가된 수준이다.
+    <strong>핵심 전제:</strong> GAAP TTM PER 69.5x는 Allergan 인수발 무형자산상각으로 왜곡된 수치다 — Adjusted EPS(TTM) $10.87 기준 PER 22.6x가 실질 밸류에이션에 가깝고, Forward P/E 17.6x는 대형 제약 피어 대비 오히려 저평가된 수준이다.
   </div>
   <div class="grid-2">
     <div class="card">
       <div class="card-title">멀티플 5단계 평가</div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">PER (GAAP TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">121.3x</span><span class="stage-badge" style="background:rgba(154,160,184,0.2);color:var(--text2);">무형자산상각 왜곡</span></div></div>
+      <div class="val-item" data-metric="gaapper" onclick="selectMultiple('gaapper')">
+        <div class="val-header"><span class="val-name">PER (GAAP TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">69.5x</span><span class="stage-badge" style="background:rgba(154,160,184,0.2);color:var(--text2);">무형자산상각 왜곡</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:100%;background:rgba(154,160,184,0.35);"></div></div>
-        <div class="val-labels"><span class="val-low">&nbsp;</span><span class="val-mid">GAAP EPS(TTM) $2.03</span><span class="val-high">&nbsp;</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">Allergan 인수발 무형자산 상각·반복적 IPR&D 충당금이 GAAP 순이익을 지속 압박</div>
+        <div class="val-labels"><span class="val-low">&nbsp;</span><span class="val-mid">GAAP EPS(TTM) $3.54</span><span class="val-high">&nbsp;</span></div>
       </div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">PER (Adjusted TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">24.2x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);background-size:204.1% 100%;"></div></div>
+      <div class="val-item" data-metric="adjper" onclick="selectMultiple('adjper')">
+        <div class="val-header"><span class="val-name">PER (Adjusted TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">22.6x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:41%;background:linear-gradient(90deg,#f0c040,#e67e22);background-size:204.1% 100%;"></div></div>
         <div class="val-labels"><span class="val-low">저(18x)</span><span class="val-mid">적정(24x)</span><span class="val-high">고(32x)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">$246.04÷Adjusted EPS(TTM) $10.19 · JNJ(Adjusted 23.3x)와 거의 동일한 대형제약 밸류에이션</div>
       </div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">Forward P/E (2026E 가이던스)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">17.4x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:38%;background:linear-gradient(90deg,#27ae60,#8bc34a);background-size:333.3% 100%;"></div></div>
+      <div class="val-item" data-metric="fwdpe" onclick="selectMultiple('fwdpe')">
+        <div class="val-header"><span class="val-name">Forward P/E (2026E 가이던스)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">17.6x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:17%;background:linear-gradient(90deg,#27ae60,#8bc34a);background-size:333.3% 100%;"></div></div>
         <div class="val-labels"><span class="val-low">저(15x)</span><span class="val-mid">적정(22x)</span><span class="val-high">고(30x)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">FY2026(E) Adjusted EPS 가이던스 중간값($14.18) 기준 · 대형 제약 피어 대비 할인된 밸류에이션</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="pbr" onclick="selectMultiple('pbr')">
         <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">N/A</span><span class="stage-badge" style="background:rgba(231,76,60,0.2);color:var(--red);">자기자본 마이너스</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:100%;background:rgba(231,76,60,0.35);"></div></div>
-        <div class="val-labels"><span class="val-low">&nbsp;</span><span class="val-mid">자기자본 -$6.66B(2026.03.31)</span><span class="val-high">&nbsp;</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">Allergan 인수 부채·자사주매입 누적으로 장부상 자기자본이 마이너스 — PBR 산출 자체가 불가능(부실이 아닌 회계·자본배분 구조의 결과)</div>
+        <div class="val-labels"><span class="val-low">&nbsp;</span><span class="val-mid">자기자본 -$5.94B(2026.06.30)</span><span class="val-high">&nbsp;</span></div>
       </div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">PSR (시총/매출)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">7.0x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
+      <div class="val-item" data-metric="psr" onclick="selectMultiple('psr')">
+        <div class="val-header"><span class="val-name">PSR (시총/매출)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">6.8x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div>
         <div class="val-labels"><span class="val-low">저(3x)</span><span class="val-mid">적정(4.5x)</span><span class="val-high">고(6x)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">시총 $451.9B÷TTM 매출 $62.8B · GAAP EPS 왜곡과 무관한 지표라 PER 계열보다 실질 프리미엄을 더 정직하게 보여줌 — 대형 제약 밴드(3~6x) 상단 초과</div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title">대형 제약 피어 P/E 비교 (GAAP 왜곡 조정)</div>
-      <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:12px;font-size:12px;color:var(--text2);">AbbVie의 Adjusted P/E 24.9x는 JNJ(Adjusted 23.3x)와 거의 동일하며, GLP-1發 고성장주 Eli Lilly(40.5x, GAAP)보다 낮고, 실적 부진의 Pfizer(7.9x, GAAP)보다는 높은 합리적 중간 지대에 위치한다.</div>
+      <div class="card-title"><span id="multipleCompareTitle">대형 제약 피어 P/E 비교 (GAAP 왜곡 조정)</span></div>
+      <div class="chart-wrap" style="height:240px;"><canvas id="multipleChart"></canvas></div>
+      <div style="margin-top:12px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText">AbbVie의 Adjusted P/E 22.6x는 JNJ(Adjusted 23.3x)와 거의 동일하며, GLP-1發 고성장주 Eli Lilly(40.5x, GAAP)보다 낮고, 실적 부진의 Pfizer(7.9x, GAAP)보다는 높은 합리적 중간 지대에 위치한다.</div>
     </div>
   </div>
 
   
 
   <div class="card">
-    <div class="card-title">Per-Share 지표 (TTM·최근 공시 기준 · 약 17.8억 주)</div>
+    <div class="card-title">Per-Share 지표 (TTM·최근 공시 기준 · 약 17.7억 주)</div>
     <div class="per-share-grid">
-      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석)</div><div class="ps-value">$2.03</div><div class="ps-sub">TTM GAAP</div></div>
-      <div class="ps-card"><div class="ps-icon">💎</div><div class="ps-label">Adjusted EPS</div><div class="ps-value">$10.19</div><div class="ps-sub">TTM 비GAAP</div></div>
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석)</div><div class="ps-value">$3.54</div><div class="ps-sub">TTM GAAP</div></div>
+      <div class="ps-card"><div class="ps-icon">💎</div><div class="ps-label">Adjusted EPS</div><div class="ps-value">$10.87</div><div class="ps-sub">TTM 비GAAP</div></div>
       <div class="ps-card"><div class="ps-icon">📘</div><div class="ps-label">BPS</div><div class="ps-value" style="color:var(--red);">N/A</div><div class="ps-sub">음(-)의 장부가치</div></div>
-      <div class="ps-card"><div class="ps-icon">🧾</div><div class="ps-label">매출/주</div><div class="ps-value">$35.25</div><div class="ps-sub">최근 4개 분기</div></div>
+      <div class="ps-card"><div class="ps-icon">🧾</div><div class="ps-label">매출/주</div><div class="ps-value">$36.44</div><div class="ps-sub">최근 4개 분기</div></div>
     </div>
-    <div style="font-size:11px;color:var(--text3);margin-top:10px;">* EPS·매출/주는 최근 4개 분기를 약 17.8억 주 기준으로 환산했다. M&A 회계와 무형자산 상각 영향을 구분하기 위해 GAAP·Adjusted EPS를 함께 표시하고, 음(-)의 장부가치에는 PBR을 적용하지 않았다.</div>
+    <div style="font-size:11px;color:var(--text3);margin-top:10px;">* EPS·매출/주는 최근 4개 분기를 약 17.7억 주 기준으로 환산했다. M&A 회계와 무형자산 상각 영향을 구분하기 위해 GAAP·Adjusted EPS를 함께 표시하고, 음(-)의 장부가치에는 PBR을 적용하지 않았다.</div>
   </div>
 
   <div class="card">
     <div class="card-title">종합 밸류에이션 — Humira 이후 성장 스토리의 지속 여부가 핵심 변수</div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.6;">GAAP PER·PBR만 보면 각각 극단적 고평가·산출불가로 보이지만, 이는 Allergan 인수발 회계상 왜곡일 뿐이다. <strong style="color:var(--text);">Adjusted PER 24.9x·Forward P/E 17.9x는 대형 제약 피어 밴드 내(3단계 적정)~할인(2단계 저평가) 수준으로, 시장은 Humira 이후 성장 스토리를 이미 합리적으로 반영하고 있다.</strong> 공정가치 $190(Bear)~$320(Bull) — 실질 리스크는 밸류에이션이 아니라 Skyrizi·Rinvoq의 성장 지속과 M&A 파이프라인의 실제 가치 창출 여부.</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;">GAAP PER·PBR만 보면 각각 극단적 고평가·산출불가로 보이지만, 이는 Allergan 인수발 회계상 왜곡일 뿐이다. <strong style="color:var(--text);">Adjusted PER 22.6x·Forward P/E 17.6x는 대형 제약 피어 밴드 내(3단계 적정)~할인(2단계 저평가) 수준으로, 시장은 Humira 이후 성장 스토리를 이미 합리적으로 반영하고 있다.</strong> 공정가치 $190(Bear)~$320(Bull) — 실질 리스크는 밸류에이션이 아니라 Skyrizi·Rinvoq의 성장 지속과 M&A 파이프라인의 실제 가치 창출 여부.</div>
   </div>
 
   <div class="card">
@@ -397,7 +472,7 @@
     </div>
     <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
       <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — 가이던스 달성·Skyrizi·Rinvoq 성장 지속</div>
-      <div style="font-size:12px;color:var(--text2);">FY2026 Adj EPS $14.08~14.28 가이던스 달성, Skyrizi·Rinvoq 고성장 지속 시 → 공정가치 <strong style="color:var(--text);">$245~270/주</strong> (현재가 대비 -94.3% ~ -94.2% · 애널리스트 평균 목표가 $256.67와 부합)</div>
+      <div style="font-size:12px;color:var(--text2);">FY2026 Adj EPS $14.08~14.28 가이던스 달성, Skyrizi·Rinvoq 고성장 지속 시 → 공정가치 <strong style="color:var(--text);">$245~270/주</strong> (현재가 대비 -0.4% ~ +9.7% · 애널리스트 평균 목표가 $256.67와 부합)</div>
     </div>
     <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
       <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — Apogee 파이프라인 조기 성과·밸류에이션 리레이팅</div>
@@ -452,8 +527,8 @@
   <div class="timeline">
     <div class="tl-item">
       <div class="tl-dot today"></div>
-      <div class="tl-date">2026년 8월 6일 — 현재</div>
-      <div class="tl-title">Q2 실적 발표 후 $243.87, 애널리스트 평균 목표가($256.67) 소폭 하회</div>
+      <div class="tl-date">2026년 8월 7일 — 현재</div>
+      <div class="tl-title">Q2 실적 발표 후 $246.04, 애널리스트 평균 목표가($256.67) 소폭 하회</div>
       <div class="tl-desc">Q2 실적이 매출·Adjusted EPS 모두 YoY 두 자릿수 성장을 기록하며 FY26 매출 가이던스가 상향됐지만, Apogee 인수 희석으로 Adj EPS 가이던스는 소폭 낮아져 주가는 실적 발표 이후 오히려 조정. Skyrizi·Rinvoq 모멘텀 지속 여부가 다음 방향성을 결정할 전망.</div>
     </div><div class="tl-item">
       <div class="tl-dot green"></div>
@@ -516,7 +591,7 @@
       <div class="bb-title bb-bull">🐂 Bull 요인</div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Skyrizi·Rinvoq 고성장:</strong> Humira 특허절벽을 성공적으로 대체, Skyrizi 단일분기 $4.5B 돌파.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Apogee Therapeutics 인수($10.9B):</strong> 면역·호흡기 파이프라인 확장.</span></div>
-      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Forward P/E 17.9x:</strong> 대형 제약 피어 대비 오히려 저평가.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Forward P/E 17.6x:</strong> 대형 제약 피어 대비 오히려 저평가.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>52주 수익률 +37.7%:</strong> S&P500 대비 +14.3%p 아웃퍼폼.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Dividend King(53년+ 연속 인상):</strong> 배당수익률 2.73%의 안정적 현금흐름.</span></div>
     </div>
@@ -539,10 +614,10 @@
         <div style="width:15.4%;height:100%;background:var(--bg3);"></div>
         <div style="width:23.1%;height:100%;background:rgba(46,204,113,0.45);"></div>
       </div>
-      <div style="position:absolute;top:10px;left:41.4%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
-      <div style="position:absolute;top:-6px;left:41.4%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $243.87</div>
+      <div style="position:absolute;top:10px;left:43.1%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
+      <div style="position:absolute;top:-6px;left:43.1%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $246.04</div>
       <div style="position:absolute;top:22px;left:51.3%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
-      <div style="position:absolute;top:48px;left:51.3%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $256.67 (+5.2%)</div>
+      <div style="position:absolute;top:48px;left:51.3%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $256.67 (+4.3%)</div>
     </div>
     <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-top:4px;">
       <span style="color:var(--red);">Bear $190~210 (Humira 재악화)</span>
@@ -580,7 +655,7 @@
     <div class="card-title">투자의견 요약</div>
     <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;">
       <div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107">2026년 10월 말 Q3 FY2026 (예상)</strong></div>
-      <div><span style="color:var(--text2);">목표주가:</span> <strong style="color:#ffc107">$256.67 · +5.2%</strong></div>
+      <div><span style="color:var(--text2);">목표주가:</span> <strong style="color:#ffc107">$256.67 · +4.3%</strong></div>
       <div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">Humira 특허절벽을 Skyrizi·Rinvoq로 성공적으로 대체한 실적 모멘텀에 Apogee 인수까지 더해지며 파이프라인이 확장 중이나, GAAP 지표 왜곡과 Q2 가이던스 하회는 여전히 주의가 필요 — Adjusted 실적 기준 성장 지속 여부가 핵심 변수</strong></div>
     </div>
   </div>
@@ -807,12 +882,12 @@ function renderFundChart() {
   if (!ctx || charts['fund']) return;
   charts['fund'] = new Chart(ctx,{
     data:{
-      labels:['Q3 \'24','Q4 \'24','Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26','Q2 \'26(E)'],
+      labels:['Q3 \'24','Q4 \'24','Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26','Q2 \'26'],
       datasets:[
-        {type:'bar',label:'매출($B)',data:[14.46,15.10,13.3,15.4,15.8,16.618,15.0,16.4],backgroundColor:'#1f4e8c',borderRadius:4,barPercentage:0.7,categoryPercentage:0.7,yAxisID:'y'},
-        {type:'bar',label:'GAAP 순이익($B)',data:[1.564,-0.023,1.289,0.941,0.188,1.815,0.697,null],backgroundColor:'rgba(74,144,217,0.5)',borderRadius:4,barPercentage:0.7,categoryPercentage:0.7,yAxisID:'y'},
-        {type:'line',label:'GAAP EPS($)',data:[0.87,-0.02,0.72,0.52,0.10,1.02,0.39,null],borderColor:'#e74c3c',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'},
-        {type:'line',label:'Adjusted EPS($)',data:[3.00,2.16,2.46,2.97,1.86,2.71,2.65,3.59],borderColor:'#4a90d9',backgroundColor:'transparent',tension:.35,pointRadius:3,borderWidth:2,fill:false,yAxisID:'y2',borderDash:[4,4]}
+        {type:'bar',label:'매출($B)',data:[14.46,15.10,13.3,15.4,15.8,16.618,15.0,16.99],backgroundColor:'#1f4e8c',borderRadius:4,barPercentage:0.7,categoryPercentage:0.7,yAxisID:'y'},
+        {type:'bar',label:'GAAP 순이익($B)',data:[1.564,-0.023,1.289,0.941,0.188,1.815,0.697,3.613],backgroundColor:'rgba(74,144,217,0.5)',borderRadius:4,barPercentage:0.7,categoryPercentage:0.7,yAxisID:'y'},
+        {type:'line',label:'GAAP EPS($)',data:[0.87,-0.02,0.72,0.52,0.10,1.02,0.39,2.03],borderColor:'#e74c3c',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'},
+        {type:'line',label:'Adjusted EPS($)',data:[3.00,2.16,2.46,2.97,1.86,2.71,2.65,3.65],borderColor:'#4a90d9',backgroundColor:'transparent',tension:.35,pointRadius:3,borderWidth:2,fill:false,yAxisID:'y2',borderDash:[4,4]}
       ]
     },
     options:{
@@ -827,29 +902,59 @@ function renderFundChart() {
   });
 }
 
-function renderPeerChart() {
-  const ctx = document.getElementById('peerChart');
-  if (!ctx || charts['peer']) return;
-  charts['peer'] = new Chart(ctx,{
+const MULTIPLE_DATA = {
+  gaapper: { title:'PER (GAAP TTM) — 무형자산상각 왜곡', unit:'PER', labels:['ABBV(GAAP 왜곡)'], data:[0], max:80,
+    explanation: 'GAAP EPS(TTM) $3.54 · Allergan 인수발 무형자산 상각·반복적 IPR&D 충당금이 GAAP 순이익을 지속 압박해 PER 69.5x라는 왜곡된 값이 나온다. 밸류에이션 판단은 Adjusted PER·PSR 등 다른 지표에 의존해야 한다.' },
+  adjper: { title:'대형 제약 피어 P/E 비교 (GAAP 왜곡 조정)', unit:'P/E', labels:['PFE','ABBV','JNJ','LLY'], data:[7.9,22.6,23.3,40.5], max:45,
+    explanation: 'AbbVie의 Adjusted P/E 22.6x는 JNJ(Adjusted 23.3x)와 거의 동일하며, GLP-1發 고성장주 Eli Lilly(40.5x, GAAP)보다 낮고, 실적 부진의 Pfizer(7.9x, GAAP)보다는 높은 합리적 중간 지대에 위치한다.' },
+  fwdpe: { title:'Forward P/E (2026E 가이던스)', unit:'Fwd P/E', labels:['ABBV(현재)'], data:[17.6], max:30,
+    explanation: 'FY2026(E) Adjusted EPS 가이던스 중간값($13.97) 기준 · 대형 제약 피어 대비 할인된 밸류에이션으로, TTM PER(22.6x)보다도 낮은 2단계(저평가) 구간.' },
+  pbr: { title:'PBR — 자기자본 마이너스로 산출 불가', unit:'PBR', labels:['ABBV(자기자본 마이너스)'], data:[0], max:5,
+    explanation: '자기자본 -$5.94B(2026.06.30) · Allergan 인수 부채·자사주매입 누적으로 장부상 자기자본이 마이너스 — PBR 산출 자체가 불가능(부실이 아닌 회계·자본배분 구조의 결과).' },
+  psr: { title:'PSR (시총/매출)', unit:'PSR', labels:['ABBV(현재)'], data:[6.8], max:10,
+    explanation: '시총 $434.8B÷TTM 매출 $64.4B · GAAP EPS 왜곡과 무관한 지표라 PER 계열보다 실질 프리미엄을 더 정직하게 보여줌 — 대형 제약 밴드(3~6x) 상단 초과.' }
+};
+
+function renderMultipleChart(key) {
+  const d = MULTIPLE_DATA[key];
+  const ctx = document.getElementById('multipleChart');
+  if (!ctx || !d) return;
+  if (charts['multiple']) charts['multiple'].destroy();
+  const bg = d.labels.map(l => l==='ABBV' || l.includes('현재') || l.includes('왜곡') || l.includes('마이너스') ? '#4a90d9' : 'rgba(154,160,184,0.4)');
+  charts['multiple'] = new Chart(ctx,{
     type:'bar',
-    data:{
-      labels:['PFE','ABBV','JNJ','LLY'],
-      datasets:[{
-        label:'P/E',
-        data:[7.9,24.9,23.3,40.5],
-        backgroundColor:['rgba(154,160,184,0.4)','#4a90d9','rgba(154,160,184,0.4)','rgba(154,160,184,0.4)'],
-        borderRadius:4,borderSkipped:false
-      }]
-    },
+    data:{ labels:d.labels, datasets:[{ label:d.unit, data:d.data, backgroundColor:bg, borderRadius:4, borderSkipped:false }] },
     options:{
       responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`P/E ${ctx.raw}x`}}},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${d.unit} ${ctx.raw}x`}}},
       scales:{
         x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
-        y:{max:45,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
+        y:{max:d.max,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
       }
     }
   });
+}
+
+let currentMultipleKey = 'adjper';
+function selectMultiple(key) {
+  const d = MULTIPLE_DATA[key];
+  if (!d) return;
+  currentMultipleKey = key;
+  document.querySelectorAll('.val-item[data-metric]').forEach(el => el.classList.toggle('selected', el.dataset.metric === key));
+  const titleEl = document.getElementById('multipleCompareTitle');
+  const textEl = document.getElementById('multipleCompareText');
+  if (titleEl) titleEl.textContent = d.title;
+  if (textEl) textEl.innerHTML = d.explanation;
+  renderMultipleChart(key);
+}
+
+function toggleCollapsible(header) {
+  const body = header.nextElementSibling;
+  const collapsed = body.classList.toggle('collapsed');
+  header.classList.toggle('collapsed', collapsed);
+  header.setAttribute('aria-expanded', String(!collapsed));
+  const hintText = header.querySelector('.toggle-hint-text');
+  if (hintText) hintText.textContent = collapsed ? '상세 보기' : '상세 숨기기';
 }
 
 function renderAbbvUsMixChart() {
@@ -874,7 +979,7 @@ function renderAbbvUsMixChart() {
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
-    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'valuation' && !charts['multiple']) selectMultiple(currentMultipleKey);
     if (sectionId === 'us') renderAbbvUsMixChart();
   }, 50);
 }
