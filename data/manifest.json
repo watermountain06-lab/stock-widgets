@@ -412,5 +412,14 @@
     "accentColor": "#0176D3",
     "page": "widgets/CRM_analysis_widget.html",
     "lastUpdated": "2026-08-09"
+  },
+  {
+    "rank": 47,
+    "ticker": "ADBE",
+    "name": "Adobe",
+    "sector": "Information Technology",
+    "accentColor": "#FA0F00",
+    "page": "widgets/ADBE_analysis_widget.html",
+    "lastUpdated": "2026-08-09"
   }
 ]
