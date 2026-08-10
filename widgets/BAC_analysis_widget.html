@@ -72,7 +72,35 @@
   .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
   .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
   .tag-current { background: rgba(255,90,114,0.2); color: var(--accent2); }
-  .val-item { margin-bottom: 18px; }
+  /* COLLAPSIBLE / 재무 건전성 */
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(52,152,219,0.12); border: 1px solid rgba(52,152,219,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(52,152,219,0.22); border-color: rgba(52,152,219,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
+  .section-label { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:12px; color:var(--text2); margin-top:2px; line-height:1.4; }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 12px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .diag-label { font-size:13px; color:var(--text); font-weight:600; min-width:90px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:11.5px; color:var(--text2); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .diag-badge.watch { background:rgba(240,192,64,0.16); color:var(--gold); }
+  .val-item { margin-bottom: 18px; padding: 8px; margin-left: -8px; margin-right: -8px; border-radius: 8px; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; cursor: pointer; }
+  .val-item:hover { background: rgba(255,90,114,0.06); }
+  .val-item.selected { background: rgba(255,90,114,0.1); border-color: rgba(255,90,114,0.35); }
   .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
@@ -178,10 +206,10 @@
     </div>
   </div>
   <div class="header-meta">
-    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$454.4B</span></div>
+    <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$460.7B</span></div>
     <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Financials</span></div>
     <div class="meta-item"><span class="meta-label">Q2 FY26 매출</span><span class="meta-value">$31.6B (+15%)</span></div>
-    <div class="meta-item"><span class="meta-label">P/E (TTM)</span><span class="meta-value">13.9x</span></div>
+    <div class="meta-item"><span class="meta-label">P/E (TTM)</span><span class="meta-value">14.6x</span></div>
     <div class="meta-item"><span class="meta-label">EPS (TTM)</span><span class="meta-value">$4.34</span></div>
     <div class="meta-item"><span class="meta-label">분기 배당</span><span class="meta-value">$0.28</span></div>
   </div>
@@ -263,24 +291,70 @@
 <div id="fund" class="section">
   <div class="section-title">기본적 분석 — 분기 재무제표 (SEC 8-K 실적발표 기준)</div>
   <div class="card">
-    <div class="card-title">분기 매출·순이익·EPS 추이 (Q3 FY24 ~ Q2 FY26, 2년치)</div>
+    <div class="card-title">분기 NII·비이자이익·순이익 추이 (Q3 FY24 ~ Q2 FY26, 2년치)</div>
     <div class="chart-wrap" style="height:260px;"><canvas id="bacRevChart"></canvas></div>
-    <div style="margin-top:8px;font-size:11px;color:var(--text3);">* 대형 은행은 대체로 GAAP·조정 실적 괴리가 크지 않아 단일 EPS 라인으로 표시. 8개 분기 연속 매출·EPS 우상향 추세가 뚜렷.</div>
+    <div style="margin-top:8px;font-size:11px;color:var(--text3);">* 은행업 특성상 표준 매출 대신 순이자이익(NII)과 비이자이익(트레이딩·IB 수수료 등)으로 분해해 표시. 비이자이익이 Q2 FY26 $15.6B로 트레이딩·IB 슈퍼사이클을 타고 NII를 상회하기 시작.</div>
   </div>
   <div class="grid-3">
     <div class="stat-box"><div class="stat-label">Q2 FY26 매출</div><div class="stat-value up">$31.6B</div><div class="stat-sub">▲15% YoY</div></div>
     <div class="stat-box"><div class="stat-label">Q2 FY26 순이익</div><div class="stat-value up">$9.1B</div><div class="stat-sub">▲27% YoY</div></div>
     <div class="stat-box"><div class="stat-label">Q2 FY26 EPS</div><div class="stat-value up">$1.21</div><div class="stat-sub">▲34% YoY, 컨센서스($1.12) 상회</div></div>
-    <div class="stat-box"><div class="stat-label">주식 트레이딩 매출</div><div class="stat-value up">$3.6B</div><div class="stat-sub">▲70% YoY, Q2 기준</div></div>
-    <div class="stat-box"><div class="stat-label">투자은행 수수료</div><div class="stat-value up">$2.1B</div><div class="stat-sub">▲50% YoY, Q2 기준</div></div>
     <div class="stat-box"><div class="stat-label">전체 트레이딩 매출</div><div class="stat-value up">$7.1B</div><div class="stat-sub">▲33% YoY, 17분기 연속 성장</div></div>
     <div class="stat-box"><div class="stat-label">순이자마진(NII) 성장</div><div class="stat-value gold">6~8% 상단</div><div class="stat-sub">FY2026 가이던스 상향</div></div>
-    <div class="stat-box"><div class="stat-label">영업 레버리지 목표</div><div class="stat-value gold">300~400bp</div><div class="stat-sub">FY2026 가이던스 상향</div></div>
     <div class="stat-box"><div class="stat-label">분기배당</div><div class="stat-value up">$0.28</div><div class="stat-sub">배당수익률 약 1.9%</div></div>
   </div>
   <div style="margin-top:12px;font-size:12px;color:var(--text3);">CEO Brian Moynihan "소비자 은행 부문은 건전하며, 광범위한 사업부에서 고른 성장을 보이고 있다"</div>
 
   <div class="card" style="margin-top:16px;">
+    <div class="card-title"><span>재무 건전성 — 자본건전성·자산건전성 (Q2 2026 기준)</span></div>
+    <div style="font-size:11px;color:var(--text3);line-height:1.5;margin:-4px 0 14px;">※ BAC는 은행 특성상 분류 재무상태표를 작성하지 않아 유동비율·차입금의존도·표준 회전율 지표가 적용되지 않는다. 은행업 표준인 규제자본비율(CET1)·자산건전성 지표로 대체했다.</div>
+
+    <div class="section-label"><span class="dot"></span>자본건전성 — 규제자본·레버리지</div>
+    <div class="diag-summary">
+      <div class="icon">🩺</div>
+      <div>
+        <div class="title">종합 진단: 매우 안정적</div>
+        <div class="sub">CET1 11.2%로 규제 최소 요건을 상회 · 자기자본/자산 비율 8.6%는 은행업 표준 레버리지 구조(고레버리지 자체가 위험 신호는 아님)</div>
+      </div>
+    </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>자본건전성 상세 — 개별 지표</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">CET1 비율</span><span class="diag-value">11.2%</span><span class="diag-note">Standardized 기준 · CET1 자본 $201.6B · 규제최소 요건 상회</span></div>
+        <div class="diag-badge safe">✅ 매우 안정</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">자기자본비율</span><span class="diag-value">8.6%</span><span class="diag-note">자기자본 $301.1B÷자산 $3,499.2B — 은행 표준 레버리지 구조</span></div>
+        <div class="diag-badge info">ℹ️ 은행 표준</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">대손충당금</span><span class="diag-value">$1.4B</span><span class="diag-note">Q2 2026 · 전년 동기($1.6B) 대비 감소, 전분기와 유사</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">효율성 비율</span><span class="diag-value">59%</span><span class="diag-note">낮을수록 효율적 · 영업레버리지 +6.6%p로 개선세</span></div>
+        <div class="diag-badge info">ℹ️ 개선세</div>
+      </div>
+    </div>
+    <div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">은행은 예금·차입을 레버리지 삼아 대출·투자를 운용하는 사업모델이라 일반 기업의 부채비율 잣대가 적용되지 않는다. 대신 규제당국이 요구하는 CET1(보통주자본비율)이 핵심 건전성 지표이며, BAC는 규제 최소 요건을 상회하는 자본으로 자사주매입·배당을 지속 중이다. 효율성 비율 59%는 JPM(47%) 대비 열위지만 전년 대비 개선 추세다.</div>
+    </div>
+
+    <div class="section-label" style="margin-top:14px;"><span class="dot" style="background:var(--accent);"></span>자산건전성 — NII·신용손실 추이</div>
+    <div class="diag-summary">
+      <div class="icon">🔄</div>
+      <div>
+        <div class="title">종합 진단: 견조 — NII 확대·충당금 감소세</div>
+        <div class="sub">Q2 2026 NII $16.0B(+9% YoY), 대손충당금 $1.4B로 전년 동기 대비 감소 — 표준 재고·매출채권 회전율 대신 은행 고유의 NII·충당금 추이로 대체</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:4px;">
     <div class="card-title">핵심 성장 동력 — Global Markets(트레이딩) vs Global Banking(투자은행) vs Consumer Banking</div>
     <div class="grid-3">
       <div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--ma20);font-weight:700;margin-bottom:6px;">Global Markets (트레이딩)</div><div style="font-size:12px;color:var(--text2);">주식 트레이딩 매출 +70% YoY로 사상 최대<br>파생상품·현물 모두 견조한 고객 활동<br>17분기 연속 YoY 성장 — 가장 강력한 성장동력</div></div>
@@ -309,65 +383,60 @@
 <div id="valuation" class="section">
   <div class="section-title">Per-Share & 밸류에이션 — 대형은행 중 합리적 밸류에이션, PBR은 장부가 부근</div>
   <div class="info-box">
-    <strong>핵심 전제:</strong> PER(TTM) 13.9x는 대형 은행 피어 밴드 내에서 합리적인 수준이다. PBR 1.51x는 자기자본 대비 소폭 프리미엄으로 은행주 특성상 매우 안정적인 밸류에이션 구간에 위치.
+    <strong>핵심 전제:</strong> PER(TTM) 14.6x는 대형 은행 피어 밴드 중상단이다. PBR 1.5x는 자기자본 대비 소폭 프리미엄으로 은행주 특성상 매우 안정적인 밸류에이션 구간에 위치.
   </div>
   <div class="grid-2">
     <div class="card">
       <div class="card-title">멀티플 5단계 평가</div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">PER (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">14.4x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);background-size:181.8% 100%;"></div></div>
+      <div class="val-item" data-metric="per" onclick="selectMultiple('per')">
+        <div class="val-header"><span class="val-name">PER (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">14.6x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:78%;background:linear-gradient(90deg,#e67e22,#e74c3c);background-size:181.8% 100%;"></div></div>
         <div class="val-labels"><span class="val-low">저(9x)</span><span class="val-mid">적정(13x)</span><span class="val-high">고(17x)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">$63.17÷TTM EPS $4.34(Q3FY25~Q2FY26 합산) · 대형은행 피어 밴드 중상단</div>
       </div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">Forward P/E (추정)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">약 13.0x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:50%;background:linear-gradient(90deg,#2ecc71,#f0c040,#e74c3c);background-size:200% 100%;"></div></div>
+      <div class="val-item" data-metric="fwdpe" onclick="selectMultiple('fwdpe')">
+        <div class="val-header"><span class="val-name">Forward P/E (추정)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">약 13.6x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:58%;background:linear-gradient(90deg,#2ecc71,#f0c040,#e74c3c);background-size:200% 100%;"></div></div>
         <div class="val-labels"><span class="val-low">저(9x)</span><span class="val-mid">적정(13x)</span><span class="val-high">고(17x)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">상반기(Q1+Q2) EPS $2.32 연환산 추정치 기준 · 트레이딩 호조가 하반기에도 이어질 경우의 보수적 추정</div>
       </div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">1.6x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);background-size:200% 100%;"></div></div>
+      <div class="val-item" data-metric="pbr" onclick="selectMultiple('pbr')">
+        <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">1.5x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:50%;background:linear-gradient(90deg,#f0c040,#e67e22);background-size:200% 100%;"></div></div>
         <div class="val-labels"><span class="val-low">저(0.8x)</span><span class="val-mid">적정(1.5x)</span><span class="val-high">고(2.2x)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">BPS $39.98(자기자본 $300.7B÷약 75.2억 주) · 대형은행 치고는 자기자본 대비 소폭 프리미엄 수준</div>
       </div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">배당수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">1.88%</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);background-size:192.3% 100%;"></div></div>
+      <div class="val-item" data-metric="dividend" onclick="selectMultiple('dividend')">
+        <div class="val-header"><span class="val-name">배당수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">1.77%</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:44%;background:linear-gradient(90deg,#f0c040,#e67e22);background-size:192.3% 100%;"></div></div>
         <div class="val-labels"><span class="val-low">저(1%)</span><span class="val-mid">적정(2%)</span><span class="val-high">고(3.5%)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">분기 $0.28 · 자사주매입($7.2B, Q1 기준)까지 포함하면 주주환원 규모는 더 큼</div>
       </div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">P/TBV (유형자기자본 대비)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">2.1x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+      <div class="val-item" data-metric="ptbv" onclick="selectMultiple('ptbv')">
+        <div class="val-header"><span class="val-name">P/TBV (유형자기자본 대비)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">2.0x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:100%;background:linear-gradient(90deg,#2ecc71,#f0c040,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저(1.0x)</span><span class="val-mid">적정(1.5x)</span><span class="val-high">고(2.0x)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">유형자기자본(TBVPS) $29.37(2026 Q2) 기준 · 영업권·무형자산을 제외하면 PBR(1.51x)보다 실질 프리미엄이 더 크게 나타남</div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title">대형은행 피어 P/E 비교</div>
-      <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:12px;font-size:12px;color:var(--text2);">BAC의 P/E 13.9x는 Wells Fargo(13.0x)와 비슷한 수준이며, JPMorgan(15.9x)·Goldman Sachs(17.2x, IB·트레이딩 비중이 높아 프리미엄) 대비 낮아 대형은행 피어 밴드 하단에 위치 — 트레이딩·투자은행 부문의 견조한 성장이 밸류에이션에 아직 충분히 반영되지 않았다는 시각도 존재.</div>
+      <div class="card-title"><span id="multipleCompareTitle">대형은행 피어 P/E 비교</span></div>
+      <div class="chart-wrap" style="height:240px;"><canvas id="multipleChart"></canvas></div>
+      <div style="margin-top:12px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText">$63.17÷TTM EPS $4.34(Q3FY25~Q2FY26 합산) · BAC의 P/E 14.6x는 Wells Fargo(13.0x)보다 높고 JPMorgan(15.9x)보다는 낮아 대형은행 피어 밴드 중상단에 위치 — Goldman Sachs(17.2x, IB·트레이딩 비중이 높아 프리미엄) 대비는 여전히 낮다.</div>
     </div>
   </div>
 
   
 
   <div class="card">
-    <div class="card-title">Per-Share 지표 (TTM·최근 공시 기준 · 약 75.2억 주)</div>
+    <div class="card-title">Per-Share 지표 (TTM·최근 공시 기준 · 약 72.9억 주)</div>
 <div class="per-share-grid">
       <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석)</div><div class="ps-value">$4.34</div><div class="ps-sub">TTM GAAP</div></div>
-      <div class="ps-card"><div class="ps-icon">📘</div><div class="ps-label">BPS</div><div class="ps-value">$39.98</div><div class="ps-sub">최근 분기 장부가</div></div>
-      <div class="ps-card"><div class="ps-icon">🧾</div><div class="ps-label">매출/주</div><div class="ps-value">$15.83</div><div class="ps-sub">최근 4개 분기</div></div>
+      <div class="ps-card"><div class="ps-icon">📘</div><div class="ps-label">BPS</div><div class="ps-value">$41.29</div><div class="ps-sub">최근 분기 장부가</div></div>
+      <div class="ps-card"><div class="ps-icon">🧾</div><div class="ps-label">매출/주</div><div class="ps-value">$16.61</div><div class="ps-sub">최근 4개 분기</div></div>
       <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS (연간배당)</div><div class="ps-value">$1.12</div><div class="ps-sub">분기 $0.28 연환산</div></div>
     </div>
-    <div style="margin-top:10px;font-size:11px;color:var(--text3);">* EPS·매출/주는 최근 4개 분기, BPS는 최근 분기 공시를 약 75.2억 주 기준으로 환산했다. DPS는 현재 분기배당을 연환산한 값이다.</div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text3);">* EPS·매출/주는 최근 4개 분기, BPS는 최근 분기 공시를 약 72.9억 주(희석 기준) 기준으로 환산했다. DPS는 현재 분기배당을 연환산한 값이다.</div>
   </div>
 
   <div class="card">
     <div class="card-title">종합 밸류에이션 — 대형은행 중 합리적 수준, 트레이딩 이익구조의 지속성이 핵심 변수</div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.6;">PER·PBR·Forward P/E·배당수익률 모두 3단계(적정)로 일관되게 나타나며, 밸류에이션 자체는 대형은행 중에서도 합리적인 수준이다. <strong style="color:var(--text);">17분기 연속 트레이딩 매출 성장이라는 기록은 인상적이나, 이 성장이 구조적인지 시장 활동성에 의존한 순환적 호황인지가 향후 밸류에이션 재평가의 핵심 변수다.</strong> 공정가치 $45(Bear)~$78(Bull) — 현재가는 Base 밴드 내에 위치.</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;">PBR·Forward P/E·배당수익률은 3단계(적정)이나 PER·P/TBV는 4단계(높음)로, 밸류에이션은 대형은행 피어 중상단 수준이다. <strong style="color:var(--text);">17분기 연속 트레이딩 매출 성장이라는 기록은 인상적이나, 이 성장이 구조적인지 시장 활동성에 의존한 순환적 호황인지가 향후 밸류에이션 재평가의 핵심 변수다.</strong> 공정가치 $45(Bear)~$78(Bull) — 현재가는 Base 밴드 내에 위치.</div>
   </div><div class="card">
     <div class="card-title">시나리오별 공정가치 분석</div>
     <div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;">
@@ -437,7 +506,7 @@
       <div class="bb-title bb-bull">🐂 Bull 요인</div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>17분기 연속 트레이딩 매출 성장:</strong> 구조적 경쟁력 입증.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Q2 EPS $1.21 — 20년래 최고:</strong> 광범위한 사업부 고른 성장.</span></div>
-      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>PER 13.9x·PBR 1.51x:</strong> 대형은행 중 합리적 밸류에이션.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>PER 14.6x·PBR 1.5x:</strong> 대형은행 중 합리적 밸류에이션.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>52주 수익률 +27.4%:</strong> S&P500 대비 +8.1%p 아웃퍼폼.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>CET1 11.2%:</strong> 자사주매입·배당 확대 여력 충분.</span></div>
     </div>
@@ -490,7 +559,7 @@
     <div class="zone-list">
       <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:#f0c040">MA5&gt;현재가&gt;MA20&gt;MA60&gt;MA120 · 지지와 저항이 교차하는 혼조 구간</span></div>
       <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">트레이딩·IB 전방위 고성장, 8분기 연속 실적 개선</span></div>
-      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:var(--green);">PER·PBR 모두 3단계(적정) — 대형은행 중 합리적</span></div>
+      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:#f0c040;">PBR·Forward P/E·배당수익률 3단계(적정), PER·P/TBV는 4단계(높음)</span></div>
       <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:var(--green);">S&P500 대비 +8.1%p 아웃퍼폼, CET1 여력 충분</span></div>
       <div class="zone-item"><span class="zone-label">📰 시계열 뉴스</span><span class="zone-val" style="color:var(--green);">Q2 실적 서프라이즈가 랠리 견인, 10월 Q3가 다음 분수령</span></div>
     </div>
@@ -729,9 +798,9 @@ function renderFundChart() {
     data:{
       labels:['Q3 \'24','Q4 \'24','Q1 \'25','Q2 \'25','Q3 \'25','Q4 \'25','Q1 \'26','Q2 \'26'],
       datasets:[
-        {type:'bar',label:'매출($B)',data:[25.3,25.5,28.2,27.4,29.0,28.4,30.3,31.6],backgroundColor:'#e31837',borderRadius:4,barPercentage:0.7,categoryPercentage:0.7,yAxisID:'y'},
-        {type:'bar',label:'순이익($B)',data:[6.896,6.806,7.360,7.116,8.469,7.528,8.584,9.074],backgroundColor:'rgba(255,90,114,0.5)',borderRadius:4,barPercentage:0.7,categoryPercentage:0.7,yAxisID:'y'},
-        {type:'line',label:'EPS($)',data:[0.81,0.82,0.89,0.90,1.04,0.98,1.11,1.21],borderColor:'#ff5a72',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y2'}
+        {type:'bar',label:'NII($B)',data:[13.967,14.359,14.443,14.670,15.233,15.750,15.745,15.997],backgroundColor:'#e31837',borderRadius:4,barPercentage:0.7,categoryPercentage:0.7,yAxisID:'y'},
+        {type:'bar',label:'비이자이익($B)',data:[11.378,10.988,13.804,12.773,12.855,15.430,14.527,15.561],backgroundColor:'rgba(240,192,64,0.5)',borderRadius:4,barPercentage:0.7,categoryPercentage:0.7,yAxisID:'y'},
+        {type:'line',label:'순이익($B)',data:[6.896,6.665,7.360,7.170,8.469,7.528,8.584,9.074],borderColor:'#2ecc71',backgroundColor:'transparent',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y'}
       ]
     },
     options:{
@@ -739,36 +808,66 @@ function renderFundChart() {
       plugins:{legend:{labels:{color:'#9aa0b8',font:{size:10}}}},
       scales:{
         x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10}}},
-        y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}},
-        y2:{position:'right',min:0,max:1.5,grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v}}
+        y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'},max:36},
+        y2:{display:false}
       }
     }
   });
 }
 
-function renderPeerChart() {
-  const ctx = document.getElementById('peerChart');
-  if (!ctx || charts['peer']) return;
-  charts['peer'] = new Chart(ctx,{
+const MULTIPLE_DATA = {
+  per: { title:'대형은행 피어 P/E 비교', unit:'P/E', labels:['BAC','JPM','WFC','GS'], data:[14.6,15.9,13.0,17.2], max:18,
+    explanation: '$63.17÷TTM EPS $4.34(Q3FY25~Q2FY26 합산) · BAC의 P/E 14.6x는 Wells Fargo(13.0x)보다 높고 JPMorgan(15.9x)보다는 낮아 대형은행 피어 밴드 중상단에 위치 — Goldman Sachs(17.2x, IB·트레이딩 비중이 높아 프리미엄) 대비는 여전히 낮다.' },
+  fwdpe: { title:'Forward P/E (추정)', unit:'Fwd P/E', labels:['BAC(현재)'], data:[13.6], max:18,
+    explanation: '상반기(Q1+Q2) EPS $2.32 연환산 추정치 기준 · 트레이딩 호조가 하반기에도 이어질 경우의 보수적 추정치로, TTM PER(14.6x)보다 낮은 3단계(적정) 구간.' },
+  pbr: { title:'PBR 비교', unit:'PBR', labels:['BAC(현재)'], data:[1.5], max:2.5,
+    explanation: 'BPS $41.29(자기자본 $301.1B÷약 72.9억 주) · 대형은행 치고는 자기자본 대비 소폭 프리미엄 수준으로 안정적인 밸류에이션 구간.' },
+  dividend: { title:'배당수익률 비교', unit:'배당수익률', labels:['BAC(현재)'], data:[1.77], max:4,
+    explanation: '분기 $0.28 연환산 $1.12 기준 · 자사주매입($7.2B, Q1 기준)까지 포함하면 주주환원 규모는 더 크다.' },
+  ptbv: { title:'P/TBV (유형자기자본 대비)', unit:'P/TBV', labels:['BAC(현재)'], data:[2.0], max:2.5,
+    explanation: '유형자기자본(TBVPS) $31.82(자기자본−영업권 $69.0B) 기준 · 영업권·무형자산을 제외하면 PBR(1.5x)보다 실질 프리미엄이 더 크게 나타난다.' }
+};
+
+function renderMultipleChart(key) {
+  const d = MULTIPLE_DATA[key];
+  const ctx = document.getElementById('multipleChart');
+  if (!ctx || !d) return;
+  if (charts['multiple']) charts['multiple'].destroy();
+  const bg = d.labels.map(l => l==='BAC' || l.includes('현재') ? '#ff5a72' : 'rgba(154,160,184,0.4)');
+  charts['multiple'] = new Chart(ctx,{
     type:'bar',
-    data:{
-      labels:['BAC','JPM','WFC','GS'],
-      datasets:[{
-        label:'P/E (TTM)',
-        data:[13.9,15.9,13.0,17.2],
-        backgroundColor:['#ff5a72','rgba(154,160,184,0.4)','rgba(154,160,184,0.4)','rgba(154,160,184,0.4)'],
-        borderRadius:4,borderSkipped:false
-      }]
-    },
+    data:{ labels:d.labels, datasets:[{ label:d.unit, data:d.data, backgroundColor:bg, borderRadius:4, borderSkipped:false }] },
     options:{
       responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`P/E ${ctx.raw}x`}}},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${d.unit} ${ctx.raw}${key==='dividend'?'%':'x'}`}}},
       scales:{
         x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
-        y:{max:18,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
+        y:{max:d.max,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+(key==='dividend'?'%':'x')}}
       }
     }
   });
+}
+
+let currentMultipleKey = 'per';
+function selectMultiple(key) {
+  const d = MULTIPLE_DATA[key];
+  if (!d) return;
+  currentMultipleKey = key;
+  document.querySelectorAll('.val-item[data-metric]').forEach(el => el.classList.toggle('selected', el.dataset.metric === key));
+  const titleEl = document.getElementById('multipleCompareTitle');
+  const textEl = document.getElementById('multipleCompareText');
+  if (titleEl) titleEl.textContent = d.title;
+  if (textEl) textEl.innerHTML = d.explanation;
+  renderMultipleChart(key);
+}
+
+function toggleCollapsible(header) {
+  const body = header.nextElementSibling;
+  const collapsed = body.classList.toggle('collapsed');
+  header.classList.toggle('collapsed', collapsed);
+  header.setAttribute('aria-expanded', String(!collapsed));
+  const hintText = header.querySelector('.toggle-hint-text');
+  if (hintText) hintText.textContent = collapsed ? '상세 보기' : '상세 숨기기';
 }
 
 function renderBacUsMarketsChart() {
@@ -784,7 +883,7 @@ function renderBacUsMarketsChart() {
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
-    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'valuation' && !charts['multiple']) selectMultiple(currentMultipleKey);
     if (sectionId === 'us') renderBacUsMarketsChart();
   }, 50);
 }
