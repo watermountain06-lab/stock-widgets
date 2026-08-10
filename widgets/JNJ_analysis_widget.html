@@ -73,7 +73,50 @@
   .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
   .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
   .tag-current { background: rgba(56,189,248,0.2); color: var(--blue); }
-  .val-item { margin-bottom: 18px; }
+  /* COLLAPSIBLE / 재무 건전성 */
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(52,152,219,0.12); border: 1px solid rgba(52,152,219,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(52,152,219,0.22); border-color: rgba(52,152,219,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
+  .section-label { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:12px; color:var(--text2); margin-top:2px; line-height:1.4; }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 12px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .diag-label { font-size:13px; color:var(--text); font-weight:600; min-width:90px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:11.5px; color:var(--text2); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .diag-badge.watch { background:rgba(240,192,64,0.16); color:var(--gold); }
+  .ccc-card { background: var(--bg3); border-radius: 8px; padding: 16px 18px 12px; }
+  .ccc-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 6px; }
+  .ccc-head-label { font-size:12.5px; color:var(--text); font-weight:700; }
+  .ccc-head-value { font-size:18px; font-weight:800; color:var(--gold); }
+  .ccc-explain { font-size: 11.5px; color: var(--text2); line-height: 1.6; margin-bottom: 22px; }
+  .tl-bar-wrap { position: relative; margin: 40px 4px 8px; }
+  .tl-bar { height: 18px; border-radius: 5px; overflow: hidden; display: flex; }
+  .tl-seg-inv { background: linear-gradient(90deg,#3498db,#2980b9); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
+  .tl-seg-ar { background: linear-gradient(90deg,#e74c3c,#c0392b); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
+  .tl-marker { position: absolute; top: -18px; width: 2px; background: var(--gold); }
+  .tl-marker-label { position: absolute; top: -32px; transform: translateX(-50%); font-size: 10.5px; font-weight: 700; color: var(--gold); white-space: nowrap; }
+  .tl-ccc-span { position: absolute; height: 3px; background: rgba(240,192,64,0.6); border-radius: 2px; top: 24px; }
+
+  .val-item { margin-bottom: 18px; padding: 8px; margin-left: -8px; margin-right: -8px; border-radius: 8px; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; cursor: pointer; }
+  .val-item:hover { background: rgba(255,255,255,0.03); }
+  .val-item.selected { background: rgba(52,152,219,0.08); border-color: rgba(52,152,219,0.35); }
+  .val-name { position: relative; }
+  .val-item.selected .val-name::after { content: '▸ 비교 보기'; font-size: 9.5px; font-weight: 600; color: var(--accent2); margin-left: 8px; vertical-align: middle; }
   .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
@@ -287,17 +330,112 @@
     <div style="margin-top:8px;">두 수치가 크게 갈릴 때는 그 이유(이번엔 탈크 소송충당금 변동)를 함께 확인하는 것이 중요합니다.</div>
   </div>
   <div class="grid-3">
-    <div class="stat-box"><div class="stat-label">Q2 FY26 매출</div><div class="stat-value up">$25.31B</div><div class="stat-sub">▲6.6% YoY</div></div>
-    <div class="stat-box"><div class="stat-label">Q2 FY26 GAAP 순이익</div><div class="stat-value">$5.53B</div><div class="stat-sub">▼0.1% YoY (거의 flat)</div></div>
     <div class="stat-box"><div class="stat-label">Q2 FY26 GAAP EPS</div><div class="stat-value">$2.27</div><div class="stat-sub">▼0.9% YoY</div></div>
     <div class="stat-box"><div class="stat-label">Q2 FY26 Adjusted EPS</div><div class="stat-value up">$2.90</div><div class="stat-sub">▲4.7% YoY</div></div>
     <div class="stat-box"><div class="stat-label">Innovative Medicine 매출</div><div class="stat-value up">$16.38B</div><div class="stat-sub">▲7.8% (Oncology·면역 견인)</div></div>
     <div class="stat-box"><div class="stat-label">MedTech 매출</div><div class="stat-value up">$8.93B</div><div class="stat-sub">▲4.5% (심혈관 부문은 부진)</div></div>
     <div class="stat-box"><div class="stat-label">FY2026(E) 매출 가이던스</div><div class="stat-value up">$101.1B</div><div class="stat-sub">▲7.3% · 창사 140년 첫 $100B 돌파 전망</div></div>
     <div class="stat-box"><div class="stat-label">FY2026(E) Adj EPS 가이던스</div><div class="stat-value up">$11.68</div><div class="stat-sub">▲8.2% (이번에 상향)</div></div>
-    <div class="stat-box"><div class="stat-label">분기배당</div><div class="stat-value up">$1.34</div><div class="stat-sub">▲3.1% — 64년 연속 인상(2026.04)</div></div>
   </div>
   <div style="margin-top:12px;font-size:12px;color:var(--text3);">Q2 FY26 조정순이익 $7.08B(+5.7%) · CEO Joaquin Duato "분기 매출 $25B 돌파, 2026년 사상 최초 연매출 $100B 목표 궤도"</div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-title"><span>재무 건전성 — 안정성·활동성 (Q2 FY26 기준)</span></div>
+
+    <div class="section-label"><span class="dot"></span>안정성 — 단기 지급능력·차입 의존도</div>
+    <div class="diag-summary">
+      <div class="icon">🩺</div>
+      <div>
+        <div class="title">종합 진단: 매우 안정적</div>
+        <div class="sub">유동비율 108.9% · 이자보상배율 25.0x로 지급능력 매우 안전, 차입금의존도 24.4%도 양호한 수준</div>
+      </div>
+    </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>안정성 상세 — 개별 지표</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">108.9%</span><span class="diag-note">기준 150%↑ 안정, 50%↓ 위험 — 중간 구간</span></div>
+        <div class="diag-badge info">ℹ️ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">당좌비율</span><span class="diag-value">81.3%</span><span class="diag-note">기준 100%↑</span></div>
+        <div class="diag-badge info">ℹ️ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">부채비율</span><span class="diag-value">136.6%</span><span class="diag-note">부채 $116.1B÷자기자본 $85.0B</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">차입금의존도</span><span class="diag-value">24.4%</span><span class="diag-note">기준 30%↓ 양호</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">이자보상배율</span><span class="diag-value">25.0x</span><span class="diag-note">기준 1x↑ · Q2 FY26 세전이익÷이자비용</span></div>
+        <div class="diag-badge safe">✅ 매우안전</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">총자산증가율</span><span class="diag-value">+10.6%</span><span class="diag-note">FY2025 $199.2B(전기 $180.1B) · 참고용</span></div>
+        <div class="diag-badge info">ℹ️ 참고</div>
+      </div>
+    </div>
+    <div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">유동비율·당좌비율은 최고 등급 기준(150%·100%)에는 못 미치나 안전 구간이며, 이자보상배율 25배·차입금의존도 24%로 실제 채무 상환 능력과 레버리지 리스크는 낮다.</div>
+    </div>
+
+    <div class="section-label" style="margin-top:14px;"><span class="dot" style="background:var(--blue);"></span>활동성 — 회수·재고소진·지급 속도 (TTM 기준)</div>
+    <div class="diag-summary">
+      <div class="icon">🔄</div>
+      <div>
+        <div class="title">종합 진단: 완만한 둔화 — 제약 재고 확대 국면</div>
+        <div class="sub">CCC 132.3일(전년동기 TTM 119.3일 대비 +13.0일) — 재고자산 회전 둔화와 매입채무 지급기간 단축이 함께 작용</div>
+      </div>
+    </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>활동성 상세 — 개별 비율·CCC 그래프</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">매출채권 회전율</span><span class="diag-value">5.34회</span><span class="diag-note">68.3일 · 전년동기 5.33회(68.5일)</span></div>
+        <div class="diag-badge info">→ 거의 변화없음</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">재고자산 회전율</span><span class="diag-value">2.15회</span><span class="diag-note">170.1일 · 전년동기 2.24회(163.3일)</span></div>
+        <div class="diag-badge info">→ 소폭 둔화</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">매입채무 회전율</span><span class="diag-value">3.44회</span><span class="diag-note">106.1일 · 전년동기 3.25회(112.5일)</span></div>
+        <div class="diag-badge info">ℹ️ 지급기간 단축</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">영업순환주기</span><span class="diag-value">238.4일</span><span class="diag-note">재고+매출채권 · 전년동기 231.8일</span></div>
+        <div class="diag-badge info">→ 소폭 확장</div>
+      </div>
+    </div>
+    <div class="ccc-card">
+      <div class="ccc-head">
+        <div class="ccc-head-label">⏱️ 현금창출주기 (CCC)</div>
+        <div class="ccc-head-value">132.3일</div>
+      </div>
+      <div class="ccc-explain">재고를 사서 판매 대금을 회수하기까지 238.4일이 걸리는데, 그중 106.1일은 매입채무(외상)로 버티고 나머지 <strong style="color:var(--gold);">132.3일은 회사가 직접 현금으로 메워야</strong> 하는 기간이다. 전년동기 TTM(119.3일) 대비 13.0일 늘어난 것은 재고자산 회전 둔화(+6.8일)와 매입채무 지급기간 단축(+6.4일, 공급업체에 더 빨리 지급) 두 요인이 비슷한 비중으로 작용했다.</div>
+      <div class="tl-bar-wrap">
+        <div class="tl-marker" style="left:44.5%; height:18px;"></div>
+        <div class="tl-marker-label" style="left:44.5%;">매입채무 지급 106.1일</div>
+        <div class="tl-bar">
+          <div class="tl-seg-inv" style="width:71.4%;">재고보유 170.1일</div>
+          <div class="tl-seg-ar" style="width:28.6%;">매출채권회수 68.3일</div>
+        </div>
+        <div class="tl-ccc-span" style="left:44.5%; width:55.5%;"></div>
+      </div>
+    </div>
+    <div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">활동성 지표는 전년동기 대비 완만하게 둔화됐다 — CCC 132일은 제약·의료기기 복합 사업 특성상 재고와 매출채권 회수에 4개월 이상 현금이 묶인다는 뜻이다. 급격한 악화는 아니나 재고자산 회전 둔화는 지속 관찰이 필요하다.</div>
+    </div>
+  </div>
 
   <div class="card" style="margin-top:16px;">
     <div class="card-title">핵심 성장 동력 — Innovative Medicine 신약 vs MedTech 부문별 vs 소송 리스크 정상화</div>
@@ -334,41 +472,36 @@
   <div class="grid-2">
     <div class="card">
       <div class="card-title">멀티플 5단계 평가</div>
-      <div class="val-item">
+      <div class="val-item" data-metric="per" onclick="selectMultiple('per')">
         <div class="val-header"><span class="val-name">PER (GAAP TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">30.0x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);background-size:151.5% 100%;"></div></div>
         <div class="val-labels"><span class="val-low">저(15x)</span><span class="val-mid">적정(22x)</span><span class="val-high">고(32x)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">$259.24÷$8.63 · 대형 제약 피어 밴드 상단에 위치</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="fwdpe" onclick="selectMultiple('fwdpe')">
         <div class="val-header"><span class="val-name">Forward P/E (가이던스)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">22.1x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);background-size:200% 100%;"></div></div>
         <div class="val-labels"><span class="val-low">저(15x)</span><span class="val-mid">적정(22x)</span><span class="val-high">고(32x)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">FY2026 Adj EPS 가이던스 $11.68 기준 — Trailing PER보다 안정적인 밴드 중심부</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="pbr" onclick="selectMultiple('pbr')">
         <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">7.7x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);background-size:125% 100%;"></div></div>
         <div class="val-labels"><span class="val-low">저(2x)</span><span class="val-mid">적정(4x)</span><span class="val-high">고(8x)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">Shockwave·Abiomed 등 대형 M&A로 쌓인 영업권·무형자산이 자기자본을 압축시킨 결과</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="evebitda" onclick="selectMultiple('evebitda')">
         <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">16.3x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);background-size:169.5% 100%;"></div></div>
         <div class="val-labels"><span class="val-low">저(10x)</span><span class="val-mid">적정(14x)</span><span class="val-high">고(20x)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV $638.1B÷FY25 EBITDA $40.1B · 10년 평균(15.5x)과 거의 일치하는 수준</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="psr" onclick="selectMultiple('psr')">
         <div class="val-header"><span class="val-name">PSR (시총/매출)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">6.5x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);background-size:133% 100%;"></div></div>
         <div class="val-labels"><span class="val-low">저(3x)</span><span class="val-mid">적정(4.5x)</span><span class="val-high">고(6x)</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">시총 $609.8B÷TTM 매출 $97.93B · 대형 제약 역사적 밴드(3~6x) 상단 초과</div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title">대형 제약 피어 P/E 비교</div>
-      <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:12px;font-size:12px;color:var(--text2);">JNJ의 P/E 29.3x는 실적 부진에 시달리는 Pfizer(7.9x)보다 훨씬 높지만, GLP-1發 고성장주 Eli Lilly(40.5x)·Merck(36.0x)보다는 낮은 합리적 중간 지대에 위치.</div>
+      <div class="card-title"><span id="multipleCompareTitle">PER 비교 — 대형 제약 피어</span></div>
+      <div class="chart-wrap" style="height:240px;"><canvas id="multipleChart"></canvas></div>
+      <div style="margin-top:12px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText">$259.24÷$8.63 · 대형 제약 피어 밴드 상단에 위치. JNJ의 P/E 29.3x는 실적 부진에 시달리는 Pfizer(7.9x)보다 훨씬 높지만, GLP-1發 고성장주 Eli Lilly(40.5x)·Merck(36.0x)보다는 낮은 합리적 중간 지대에 위치.</div>
     </div>
   </div>
 
@@ -810,31 +943,6 @@ function renderFundChart() {
   });
 }
 
-function renderPeerChart() {
-  const ctx = document.getElementById('peerChart');
-  if (!ctx || charts['peer']) return;
-  charts['peer'] = new Chart(ctx,{
-    type:'bar',
-    data:{
-      labels:['PFE','JNJ','MRK','LLY'],
-      datasets:[{
-        label:'P/E (TTM)',
-        data:[7.9,29.3,36.0,40.5],
-        backgroundColor:['rgba(154,160,184,0.4)','#d15772','rgba(154,160,184,0.4)','rgba(154,160,184,0.4)'],
-        borderRadius:4,borderSkipped:false
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`P/E ${ctx.raw}x`}}},
-      scales:{
-        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
-        y:{max:46,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
-      }
-    }
-  });
-}
-
 function renderJnjUsMixChart() {
   const ctx = document.getElementById('jnjUsMixChart');
   if (!ctx || charts['usmix']) return;
@@ -857,9 +965,64 @@ function renderJnjUsMixChart() {
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
-    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'valuation' && !charts['multiple']) selectMultiple(currentMultipleKey);
     if (sectionId === 'us') renderJnjUsMixChart();
   }, 50);
+}
+
+function toggleCollapsible(header) {
+  const body = header.nextElementSibling;
+  const collapsed = body.classList.toggle('collapsed');
+  header.classList.toggle('collapsed', collapsed);
+  header.setAttribute('aria-expanded', String(!collapsed));
+  const hintText = header.querySelector('.toggle-hint-text');
+  if (hintText) hintText.textContent = collapsed ? '상세 보기' : '상세 숨기기';
+}
+
+const MULTIPLE_DATA = {
+  per: { title:'PER 비교 — 대형 제약 피어', unit:'P/E', labels:['PFE','JNJ','MRK','LLY'], data:[7.9,29.3,36.0,40.5], max:46,
+    explanation: '$259.24÷$8.63 · 대형 제약 피어 밴드 상단에 위치. JNJ의 P/E 29.3x는 실적 부진에 시달리는 Pfizer(7.9x)보다 훨씬 높지만, GLP-1發 고성장주 Eli Lilly(40.5x)·Merck(36.0x)보다는 낮은 합리적 중간 지대에 위치.' },
+  fwdpe: { title:'Forward P/E 비교', unit:'Fwd P/E', labels:['JNJ(현재)'], data:[22.1], max:35,
+    explanation: 'FY2026 Adj EPS 가이던스 $11.68 기준 — Trailing PER(30.0x)보다 안정적인 밴드 중심부(적정 22x)에 위치한다. 소송충당금 등 일회성 항목 영향이 적은 forward 지표라 밸류에이션 판단에 더 참고할 만하다.' },
+  pbr: { title:'PBR 비교', unit:'PBR', labels:['JNJ(현재)'], data:[7.7], max:10,
+    explanation: 'Shockwave·Abiomed 등 대형 M&A로 쌓인 영업권·무형자산이 자기자본을 압축시킨 결과 PBR이 높게 나타난다. 순자산 기준 배수만으로 고평가를 단정하기보다 M&A 회계 효과를 함께 고려해야 한다.' },
+  evebitda: { title:'EV/EBITDA 비교', unit:'EV/EBITDA', labels:['JNJ(현재)'], data:[16.3], max:25,
+    explanation: 'EV $638.1B÷FY25 EBITDA $40.1B · 10년 평균(15.5x)과 거의 일치하는 수준 — 5개 지표 중 가장 밴드 중심부에 가깝게 거래되고 있다.' },
+  psr: { title:'PSR 비교', unit:'PSR', labels:['JNJ(현재)'], data:[6.5], max:8,
+    explanation: '시총 $609.8B÷TTM 매출 $97.93B · 대형 제약 역사적 밴드(3~6x) 상단을 초과한 수준이다.' }
+};
+
+function renderMultipleChart(key) {
+  const d = MULTIPLE_DATA[key];
+  const ctx = document.getElementById('multipleChart');
+  if (!ctx || !d) return;
+  if (charts['multiple']) charts['multiple'].destroy();
+  const bg = d.labels.map((l,i)=> l==='JNJ' || l.includes('현재') ? '#d15772' : 'rgba(154,160,184,0.4)');
+  charts['multiple'] = new Chart(ctx,{
+    type:'bar',
+    data:{ labels:d.labels, datasets:[{ label:d.unit, data:d.data, backgroundColor:bg, borderRadius:4, borderSkipped:false }] },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${d.unit} ${ctx.raw}x`}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
+        y:{max:d.max,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
+      }
+    }
+  });
+}
+
+let currentMultipleKey = 'per';
+function selectMultiple(key) {
+  const d = MULTIPLE_DATA[key];
+  if (!d) return;
+  currentMultipleKey = key;
+  document.querySelectorAll('.val-item[data-metric]').forEach(el => el.classList.toggle('selected', el.dataset.metric === key));
+  const titleEl = document.getElementById('multipleCompareTitle');
+  const textEl = document.getElementById('multipleCompareText');
+  if (titleEl) titleEl.textContent = d.title;
+  if (textEl) textEl.innerHTML = d.explanation;
+  renderMultipleChart(key);
 }
 </script>
 </body>
