@@ -72,7 +72,37 @@
   .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
   .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
   .tag-current { background: rgba(56,189,248,0.2); color: var(--accent2); }
-  .val-item { margin-bottom: 18px; }
+  /* COLLAPSIBLE / 재무 건전성 */
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(52,152,219,0.12); border: 1px solid rgba(52,152,219,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(52,152,219,0.22); border-color: rgba(52,152,219,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
+  .section-label { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:12px; color:var(--text2); margin-top:2px; line-height:1.4; }
+  .diag-summary.watch { background: linear-gradient(90deg, rgba(240,192,64,0.14), rgba(240,192,64,0.03)); border-color: rgba(240,192,64,0.35); }
+  .diag-summary.watch .title { color: var(--gold); }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 12px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .diag-label { font-size:13px; color:var(--text); font-weight:600; min-width:90px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:11.5px; color:var(--text2); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .diag-badge.watch { background:rgba(240,192,64,0.16); color:var(--gold); }
+  .val-item { margin-bottom: 18px; padding: 8px; margin-left: -8px; margin-right: -8px; border-radius: 8px; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; cursor: pointer; }
+  .val-item:hover { background: rgba(255,255,255,0.03); }
+  .val-item.selected { background: rgba(52,152,219,0.08); border-color: rgba(52,152,219,0.35); }
   .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
@@ -224,14 +254,14 @@
 <div class="grid-2">
 <div class="card">
 <div class="card-title">핵심 가격대</div>
-<div class="zone-list"><div class="zone-item"><span class="zone-label">52주 최고</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$170.46 (2026.02.27)</span><span class="zone-tag tag-resist">저항선</span></div></div><div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$156.79 (고점 대비 -8.0%)</span><span class="zone-tag tag-current">현재</span></div></div><div class="zone-item"><span class="zone-label">MA120</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$153.31</span><span class="zone-tag tag-support">지지선</span></div></div><div class="zone-item"><span class="zone-label">52주 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$115.75 (2025.08.08)</span><span class="zone-tag tag-support">강지지</span></div></div><div class="zone-item"><span class="zone-label">52주 수익률</span><span class="zone-val" style="color:var(--green);">+34.2%</span></div></div>
+<div class="zone-list"><div class="zone-item"><span class="zone-label">52주 최고</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$170.46 (2026.02.27)</span><span class="zone-tag tag-resist">저항선</span></div></div><div class="zone-item"><span class="zone-label">현재가</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$156.79 (고점 대비 -8.0%)</span><span class="zone-tag tag-current">현재</span></div></div><div class="zone-item"><span class="zone-label">MA120</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$153.03</span><span class="zone-tag tag-support">지지선</span></div></div><div class="zone-item"><span class="zone-label">52주 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val">$115.75 (2025.08.08)</span><span class="zone-tag tag-support">강지지</span></div></div><div class="zone-item"><span class="zone-label">52주 수익률</span><span class="zone-val" style="color:var(--green);">+34.2%</span></div></div>
 </div>
 <div class="card">
 <div class="card-title">이동평균선 현황</div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$157.19</span><span class="ma-status status-above">현재가 상회</span></div></div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$154.69</span><span class="ma-status status-above">현재가 상회</span></div></div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$151.40</span><span class="ma-status status-above">현재가 상회</span></div></div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$153.31</span><span class="ma-status status-above">현재가 상회</span></div></div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$155.01</span><span class="ma-status status-above">현재가 상회</span></div></div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$154.67</span><span class="ma-status status-above">현재가 상회</span></div></div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$152.57</span><span class="ma-status status-above">현재가 상회</span></div></div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$153.03</span><span class="ma-status status-above">현재가 상회</span></div></div>
 <div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">현재가&gt;MA5&gt;MA20&gt;MA120&gt;MA60 순 — 4개 이평선 중 4개 상회 · 기술적 강세. 현재가 $156.79, 52주 고점 $170.46 대비 -8.0%.</div>
 </div>
 </div>
@@ -249,14 +279,48 @@
 </div>
 <div class="grid-3">
 <div class="stat-box"><div class="stat-label">매출 (Q2 2026)</div><div class="stat-value gold">$14.41B</div><div class="stat-sub">▲3% · cc +1%</div></div>
-<div class="stat-box"><div class="stat-label">Core 영업이익 (Q2 2026)</div><div class="stat-value">$5.9B</div><div class="stat-sub">YoY 유지</div></div>
 <div class="stat-box"><div class="stat-label">Core 영업마진</div><div class="stat-value down">41.2%</div><div class="stat-sub">▼70bp YoY</div></div>
 <div class="stat-box"><div class="stat-label">Core EPS (Q2 2026)</div><div class="stat-value down">$2.41</div><div class="stat-sub">▼1% cc</div></div>
-<div class="stat-box"><div class="stat-label">GAAP 순이익 (Q2 2026)</div><div class="stat-value down">$3.3B</div><div class="stat-sub">▼19% · 세금·이자비용 증가</div></div>
-<div class="stat-box"><div class="stat-label">GAAP EPS (Q2 2026)</div><div class="stat-value down">$1.71</div><div class="stat-sub">▼17%</div></div>
 <div class="stat-box"><div class="stat-label">성장동력 매출</div><div class="stat-value up">+36% cc</div><div class="stat-sub">Kisqali·Cosentyx·Pluvicto 등</div></div>
 <div class="stat-box"><div class="stat-label">잉여현금흐름</div><div class="stat-value">$5.56B</div><div class="stat-sub">Q2 2026</div></div>
 <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value gold">10월 27일 예정</div><div class="stat-sub">Q3 2026</div></div>
+</div>
+<div class="card"><div class="card-title"><span>재무 건전성 — 안정성 (Q2 2026 기준)</span></div>
+<div class="diag-summary watch">
+  <div class="icon">🩺</div>
+  <div>
+    <div class="title">종합 진단: Avidity 인수로 레버리지 확대, 이자보상배율은 견조</div>
+    <div class="sub">부채비율 190.9%·차입금의존도 38.6%는 Avidity Biosciences $12.0B 인수를 신규 채권 발행으로 조달한 영향 · 유동비율 86.2%는 업종 평균 대비 낮은 편이나 이자보상배율 12.3배(TTM)로 상환 여력은 충분</div>
+  </div>
+</div>
+<div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+  <span>안정성 상세 — 개별 지표</span>
+  <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+</div>
+<div class="collapsible-body collapsed">
+<div class="diag-list">
+  <div class="diag-row">
+    <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">86.2%</span><span class="diag-note">유동자산 $27.35B÷유동부채 $31.75B</span></div>
+    <div class="diag-badge watch">⚠️ 주의</div>
+  </div>
+  <div class="diag-row">
+    <div class="diag-left"><span class="diag-label">당좌비율</span><span class="diag-value">66.5%</span><span class="diag-note">(유동자산-재고 $6.22B)÷유동부채 $31.75B</span></div>
+    <div class="diag-badge info">ℹ️ 참고</div>
+  </div>
+  <div class="diag-row">
+    <div class="diag-left"><span class="diag-label">부채비율</span><span class="diag-value">190.9%</span><span class="diag-note">부채 $80.09B÷자기자본 $41.95B — Avidity 인수 자금조달 영향</span></div>
+    <div class="diag-badge watch">⚠️ 주의</div>
+  </div>
+  <div class="diag-row">
+    <div class="diag-left"><span class="diag-label">차입금의존도</span><span class="diag-value">38.6%</span><span class="diag-note">총차입금 $47.08B÷총자산 $122.03B</span></div>
+    <div class="diag-badge watch">⚠️ 주의</div>
+  </div>
+  <div class="diag-row">
+    <div class="diag-left"><span class="diag-label">이자보상배율</span><span class="diag-value">12.3배</span><span class="diag-note">TTM 영업이익 $17.10B÷TTM 이자비용 $1.39B — 상환 여력 충분</span></div>
+    <div class="diag-badge safe">✅ 안전</div>
+  </div>
+</div>
+</div>
 </div>
 <div class="card" style="margin-top:16px;">
 <div class="card-title">핵심 성장 동력 3가지</div>
@@ -278,16 +342,16 @@
 <div class="grid-2">
 <div class="card">
 <div class="card-title">멀티플 5단계 평가</div>
-<div class="val-item"><div class="val-header"><span class="val-name">Forward PER</span><span class="val-number">16.7x</span><span class="stage-badge stage-3">3단계 적정</span></div><div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div><div class="val-labels"><span class="val-low">저 12x</span><span class="val-mid">적정 17x</span><span class="val-high">고 23x</span></div></div>
-<div class="val-item"><div class="val-header"><span class="val-name">EV/EBITDA</span><span class="val-number">14.2x</span><span class="stage-badge stage-3">3단계 적정</span></div><div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div><div class="val-labels"><span class="val-low">저 9x</span><span class="val-mid">적정 14x</span><span class="val-high">고 19x</span></div></div>
-<div class="val-item"><div class="val-header"><span class="val-name">P/S</span><span class="val-number">5.3x</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 4x</span><span class="val-high">고 6x</span></div></div>
-<div class="val-item"><div class="val-header"><span class="val-name">FCF 수익률</span><span class="val-number">5.6%</span><span class="stage-badge stage-2">2단계 낮음</span></div><div class="val-track"><div class="val-fill" style="width:38%;background:linear-gradient(90deg,#27ae60,#f0c040);"></div></div><div class="val-labels"><span class="val-low">저 3%</span><span class="val-mid">적정 5%</span><span class="val-high">고 7%</span></div></div>
-<div class="val-item"><div class="val-header"><span class="val-name">배당수익률</span><span class="val-number">2.6%</span><span class="stage-badge stage-3">3단계 적정</span></div><div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div><div class="val-labels"><span class="val-low">저 2%</span><span class="val-mid">적정 3%</span><span class="val-high">고 4%</span></div></div>
+<div class="val-item" data-metric="fwdpe" onclick="selectMultiple('fwdpe')"><div class="val-header"><span class="val-name">Forward PER</span><span class="val-number">16.7x</span><span class="stage-badge stage-3">3단계 적정</span></div><div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div><div class="val-labels"><span class="val-low">저 12x</span><span class="val-mid">적정 17x</span><span class="val-high">고 23x</span></div></div>
+<div class="val-item" data-metric="evebitda" onclick="selectMultiple('evebitda')"><div class="val-header"><span class="val-name">EV/EBITDA</span><span class="val-number">14.2x</span><span class="stage-badge stage-3">3단계 적정</span></div><div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div><div class="val-labels"><span class="val-low">저 9x</span><span class="val-mid">적정 14x</span><span class="val-high">고 19x</span></div></div>
+<div class="val-item" data-metric="psr" onclick="selectMultiple('psr')"><div class="val-header"><span class="val-name">P/S</span><span class="val-number">5.3x</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 4x</span><span class="val-high">고 6x</span></div></div>
+<div class="val-item" data-metric="fcfyield" onclick="selectMultiple('fcfyield')"><div class="val-header"><span class="val-name">FCF 수익률</span><span class="val-number">5.6%</span><span class="stage-badge stage-2">2단계 낮음</span></div><div class="val-track"><div class="val-fill" style="width:38%;background:linear-gradient(90deg,#27ae60,#f0c040);"></div></div><div class="val-labels"><span class="val-low">저 3%</span><span class="val-mid">적정 5%</span><span class="val-high">고 7%</span></div></div>
+<div class="val-item" data-metric="divyield" onclick="selectMultiple('divyield')"><div class="val-header"><span class="val-name">배당수익률</span><span class="val-number">2.6%</span><span class="stage-badge stage-3">3단계 적정</span></div><div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div><div class="val-labels"><span class="val-low">저 2%</span><span class="val-mid">적정 3%</span><span class="val-high">고 4%</span></div></div>
 </div>
 <div class="card">
-<div class="card-title">Health Care 비교 — NVS 밸류에이션</div>
-<div class="chart-wrap" style="height:270px;"><canvas id="peerChart"></canvas></div>
-<div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;">NVS의 현재 멀티플을 Health Care 비교군과 함께 본다. 회사별 기존 5단계 평가와 현재가 기준을 유지했다.</div>
+<div class="card-title"><span id="multipleCompareTitle">Health Care 비교 — NVS 밸류에이션</span></div>
+<div class="chart-wrap" style="height:270px;"><canvas id="multipleChart"></canvas></div>
+<div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText">NVS의 현재 멀티플을 Health Care 비교군과 함께 본다. 회사별 기존 5단계 평가와 현재가 기준을 유지했다.</div>
 </div>
 </div>
 
@@ -295,7 +359,7 @@
 <div class="card-title">Per-Share 지표 (TTM·현재 밸류에이션 기준)</div>
 <div class="per-share-grid">
 <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석)</div><div class="ps-value">$8.97</div><div class="ps-sub">TTM</div></div>
-<div class="ps-card"><div class="ps-icon">🧾</div><div class="ps-label">매출/주</div><div class="ps-value">약 $29.41</div><div class="ps-sub">P/S 5.4x 기준</div></div>
+<div class="ps-card"><div class="ps-icon">🧾</div><div class="ps-label">매출/주</div><div class="ps-value">약 $29.41</div><div class="ps-sub">P/S 5.3x 기준</div></div>
 <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주</div><div class="ps-value">약 $8.89</div><div class="ps-sub">FCF 수익률 5.6% 기준</div></div>
 <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS</div><div class="ps-value">$4.15</div><div class="ps-sub">연환산</div></div>
 </div>
@@ -378,17 +442,17 @@
 <div style="position:relative;height:70px;margin:28px 6px 6px;">
 <div style="position:absolute;top:28px;left:0;right:0;height:10px;border-radius:5px;overflow:hidden;display:flex;">
 <div style="width:12.5%;height:100%;background:var(--bg3);"></div>
-<div style="width:12.5%;height:100%;background:rgba(46,204,113,0.45);"></div>
+<div style="width:12.5%;height:100%;background:rgba(231,76,60,0.45);"></div>
 <div style="width:12.5%;height:100%;background:var(--bg3);"></div>
 <div style="width:25.0%;height:100%;background:rgba(240,192,64,0.5);"></div>
 <div style="width:12.5%;height:100%;background:var(--bg3);"></div>
-<div style="width:12.5%;height:100%;background:rgba(231,76,60,0.45);"></div>
+<div style="width:12.5%;height:100%;background:rgba(46,204,113,0.45);"></div>
 <div style="width:12.5%;height:100%;background:var(--bg3);"></div>
 </div>
-<div style="position:absolute;top:10px;left:39.2%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
-<div style="position:absolute;top:-6px;left:39.2%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $156.33</div>
-<div style="position:absolute;top:22px;left:57.3%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
-<div style="position:absolute;top:48px;left:57.3%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $168</div>
+<div style="position:absolute;top:10px;left:39.7%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
+<div style="position:absolute;top:-6px;left:39.7%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--accent2);white-space:nowrap;">현재 $156.79</div>
+<div style="position:absolute;top:22px;left:53.8%;width:2px;height:24px;background:#ffc107;border-radius:1px;"></div>
+<div style="position:absolute;top:48px;left:53.8%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#ffc107;white-space:nowrap;">▲ 목표 $168</div>
 </div>
 <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-top:4px;">
 <span style="color:var(--red);">Bear $135~145</span><span>Base $155~175</span><span style="color:var(--green);">Bull $185~195</span>
@@ -418,7 +482,7 @@
 <div class="card-title">투자의견 요약</div>
 <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;">
 <div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107">Q3 2026 · 2026년 10월 예상</strong></div>
-<div><span style="color:var(--text2);">투자의견:</span> <strong style="color:var(--gold)">매수 비중 50%</strong></div><div><span style="color:var(--text2);">목표주가:</span> <strong style="color:#ffc107">$168 · +7.5%</strong></div><div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">핵심 신약 성장과 Entresto 침식의 균형 확인</strong></div>
+<div><span style="color:var(--text2);">투자의견:</span> <strong style="color:var(--gold)">매수 비중 50%</strong></div><div><span style="color:var(--text2);">목표주가:</span> <strong style="color:#ffc107">$168 · +7.1%</strong></div><div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">핵심 신약 성장과 Entresto 침식의 균형 확인</strong></div>
 </div>
 </div>
 </div>
@@ -638,7 +702,37 @@ const NVS_MA120 = [113.51,113.61,113.71,113.82,113.93,114.06,114.18,114.32,114.4
 })();
 
 function renderFundChart(){let ctx=document.getElementById('nvsRevChart');if(!ctx||charts.fund)return;charts.fund=new Chart(ctx,{data:{labels:["Q3'24", "Q4'24", "Q1'25", "Q2'25", "Q3'25", "Q4'25", "Q1'26", "Q2'26"],datasets:[{type:'bar',label:'매출 ($B)',data:[12.51, 12.82, 12.58, 13.23, 14.05, 13.95, 13.17, 14.41],backgroundColor:'rgba(56,189,248,.45)',borderColor:'#38bdf8',borderWidth:1,borderRadius:4,yAxisID:'y'},{type:'bar',label:'순이익 ($B)',data:[3.25, 3.19, 2.82, 3.61, 4.02, 3.71, 3.09, 3.26],backgroundColor:'rgba(46,204,113,.45)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4,yAxisID:'y'},{type:'line',label:'EPS',data:[1.63, 1.6, 1.42, 1.83, 2.07, 1.92, 1.62, 1.71],borderColor:'#f0c040',tension:.35,pointRadius:4,borderWidth:2.5,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:900,easing:'easeOutQuart'},scales:{x:{ticks:{color:'#9aa0b8'}},y:{beginAtZero:true,ticks:{color:'#9aa0b8'}},y1:{position:'right',beginAtZero:true,ticks:{color:'#f0c040'}}},plugins:{legend:{labels:{color:'#9aa0b8'}}}}})}
-function renderPeerChart(){let ctx=document.getElementById('peerChart');if(!ctx||charts.peer)return;charts.peer=new Chart(ctx,{type:'bar',data:{labels:['NVS','섹터 중앙값','S&P 500'],datasets:[{data:[17.0,24,22],backgroundColor:['#38bdf8','rgba(154,160,184,.35)','rgba(154,160,184,.35)'],borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:900,easing:'easeOutQuart'},scales:{y:{beginAtZero:true,ticks:{color:'#9aa0b8'}},x:{ticks:{color:'#9aa0b8'}}},plugins:{legend:{display:false}}}})}
+const MULTIPLE_DATA = {
+  fwdpe: { title:'Health Care 비교 — Forward PER', unit:'Forward P/E', labels:['NVS','섹터 중앙값','S&P 500'], data:[16.7,24,22], max:26,
+    explanation: 'NVS의 현재 멀티플을 Health Care 비교군과 함께 본다. 회사별 기존 5단계 평가와 현재가 기준을 유지했다.' },
+  evebitda: { title:'EV/EBITDA 비교', unit:'EV/EBITDA', labels:['NVS(현재)'], data:[14.2], max:19,
+    explanation: '3단계 적정 — 방어적 헬스케어 프로필 대비 무난한 수준.' },
+  psr: { title:'P/S 비교', unit:'P/S', labels:['NVS(현재)'], data:[5.3], max:6,
+    explanation: '4단계 높음 — Kisqali·Kesimpta·Pluvicto 성장 기대가 반영된 수준.' },
+  fcfyield: { title:'FCF 수익률 비교', unit:'FCF 수익률(%)', labels:['NVS(현재)'], data:[5.6], max:7,
+    explanation: '2단계 낮음 — 높은 FCF 수익률로 저평가 신호에 가깝다.' },
+  divyield: { title:'배당수익률 비교', unit:'배당수익률(%)', labels:['NVS(현재)'], data:[2.6], max:4,
+    explanation: '3단계 적정 — 방어적 헬스케어 배당주 밴드 내 수준.' }
+};
+function renderMultipleChart(key){
+  const d=MULTIPLE_DATA[key];const ctx=document.getElementById('multipleChart');if(!ctx||!d)return;
+  if(charts.multiple)charts.multiple.destroy();
+  const bg=d.labels.map(l=>l==='NVS'||l.includes('현재')?'#38bdf8':'rgba(154,160,184,.35)');
+  charts.multiple=new Chart(ctx,{type:'bar',data:{labels:d.labels,datasets:[{label:d.unit,data:d.data,backgroundColor:bg,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:900,easing:'easeOutQuart'},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${d.unit} ${c.raw}x`}}},scales:{x:{ticks:{color:'#9aa0b8'}},y:{max:d.max,beginAtZero:true,ticks:{color:'#9aa0b8'}}}}});
+}
+let currentMultipleKey='fwdpe';
+function selectMultiple(key){
+  const d=MULTIPLE_DATA[key];if(!d)return;currentMultipleKey=key;
+  document.querySelectorAll('.val-item[data-metric]').forEach(el=>el.classList.toggle('selected',el.dataset.metric===key));
+  const titleEl=document.getElementById('multipleCompareTitle');const textEl=document.getElementById('multipleCompareText');
+  if(titleEl)titleEl.textContent=d.title;if(textEl)textEl.innerHTML=d.explanation;
+  renderMultipleChart(key);
+}
+function toggleCollapsible(header){
+  const body=header.nextElementSibling;const collapsed=body.classList.toggle('collapsed');
+  header.classList.toggle('collapsed',collapsed);header.setAttribute('aria-expanded',String(!collapsed));
+  const hintText=header.querySelector('.toggle-hint-text');if(hintText)hintText.textContent=collapsed?'상세 보기':'상세 숨기기';
+}
 function renderCapexFcfChart() {
   const ctx = document.getElementById('capexFcfChart');
   if (!ctx || charts['capexfcf']) return;
@@ -661,7 +755,7 @@ function renderCapexFcfChart() {
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
-    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'valuation' && !charts.multiple) selectMultiple(currentMultipleKey);
     if (sectionId === 'us') renderCapexFcfChart();
   }, 50);
 }
