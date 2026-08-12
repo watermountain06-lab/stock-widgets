@@ -72,7 +72,37 @@
   .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
   .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
   .tag-current { background: rgba(56,189,248,0.2); color: var(--accent2); }
-  .val-item { margin-bottom: 18px; }
+  /* COLLAPSIBLE / 재무 건전성 */
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(52,152,219,0.12); border: 1px solid rgba(52,152,219,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(52,152,219,0.22); border-color: rgba(52,152,219,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
+  .section-label { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:12px; color:var(--text2); margin-top:2px; line-height:1.4; }
+  .diag-summary.watch { background: linear-gradient(90deg, rgba(240,192,64,0.14), rgba(240,192,64,0.03)); border-color: rgba(240,192,64,0.35); }
+  .diag-summary.watch .title { color: var(--gold); }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 12px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .diag-label { font-size:13px; color:var(--text); font-weight:600; min-width:90px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:11.5px; color:var(--text2); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .diag-badge.watch { background:rgba(240,192,64,0.16); color:var(--gold); }
+  .val-item { margin-bottom: 18px; padding: 8px; margin-left: -8px; margin-right: -8px; border-radius: 8px; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; cursor: pointer; }
+  .val-item:hover { background: rgba(255,255,255,0.03); }
+  .val-item.selected { background: rgba(52,152,219,0.08); border-color: rgba(52,152,219,0.35); }
   .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
@@ -232,7 +262,7 @@
 <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$72.65</span><span class="ma-status status-above">현재가 상회</span></div></div>
 <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$79.45</span><span class="ma-status status-below">현재가 하회</span></div></div>
 <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120 </span><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$85.77</span><span class="ma-status status-below">현재가 하회</span></div></div>
-<div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">MA120&gt;MA60&gt;현재가&gt;MA5&gt;MA20 순 — 4개 이평선 중 2개 상회 · 혼조. 현재가 $76.29, 52주 고점 $126.71 대비 -39.8%.</div>
+<div style="margin-top:12px;padding:10px;background:var(--bg3);border-radius:6px;font-size:12px;color:var(--text2);">MA120&gt;MA60&gt;현재가&gt;MA20&gt;MA5 순 — 4개 이평선 중 2개 상회 · 혼조. 현재가 $76.29, 52주 고점 $126.71 대비 -39.8%.</div>
 </div>
 </div>
 <div class="card">
@@ -250,13 +280,44 @@
 <div class="grid-3">
 <div class="stat-box"><div class="stat-label">매출 (Q2 2026)</div><div class="stat-value gold">$12.56B</div><div class="stat-sub">▲13% YoY</div></div>
 <div class="stat-box"><div class="stat-label">영업이익 (Q2 2026)</div><div class="stat-value up">$4.19B</div><div class="stat-sub">마진 33.4%</div></div>
-<div class="stat-box"><div class="stat-label">순이익 (Q2 2026)</div><div class="stat-value">$3.40B</div><div class="stat-sub">공식 발표 기준</div></div>
 <div class="stat-box"><div class="stat-label">희석 EPS (Q2 2026)</div><div class="stat-value up">$0.80</div><div class="stat-sub">▲11% YoY</div></div>
-<div class="stat-box"><div class="stat-label">현금흐름</div><div class="stat-value">$9B+ FY 예상</div><div class="stat-sub">최신 공시 기준</div></div>
 <div class="stat-box"><div class="stat-label">FY26 매출 가이던스</div><div class="stat-value">$51.0~51.4B</div><div class="stat-sub">범위 좁힘</div></div>
-<div class="stat-box"><div class="stat-label">FY26 영업이익률 목표</div><div class="stat-value">31.5%</div><div class="stat-sub">재확인</div></div>
 <div class="stat-box"><div class="stat-label">Q3 2026 가이던스</div><div class="stat-value down">$12.86B</div><div class="stat-sub">+11.7% · EPS $0.82</div></div>
 <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value gold">10월 20일 예정</div><div class="stat-sub">Q3 2026</div></div>
+</div>
+<div class="card"><div class="card-title"><span>재무 건전성 — 안정성 (Q2 2026 기준)</span></div>
+<div style="font-size:11px;color:var(--text3);line-height:1.5;margin:-4px 0 14px;">※ NFLX는 스트리밍 서비스업 특성상 물리적 재고가 없어 당좌비율은 유동비율과 사실상 동일하다.</div>
+<div class="diag-summary">
+  <div class="icon">🩺</div>
+  <div>
+    <div class="title">종합 진단: 유동성·레버리지·이자보상배율 모두 안정적</div>
+    <div class="sub">유동비율 114.2%로 견조 · 부채비율 93.9%·차입금의존도 24.5%는 낮은 편 · 이자보상배율 16.9배(TTM)로 상환 여력 매우 충분</div>
+  </div>
+</div>
+<div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+  <span>안정성 상세 — 개별 지표</span>
+  <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+</div>
+<div class="collapsible-body collapsed">
+<div class="diag-list">
+  <div class="diag-row">
+    <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">114.2%</span><span class="diag-note">유동자산 $13.85B÷유동부채 $12.13B</span></div>
+    <div class="diag-badge safe">✅ 안전</div>
+  </div>
+  <div class="diag-row">
+    <div class="diag-left"><span class="diag-label">부채비율</span><span class="diag-value">93.9%</span><span class="diag-note">부채 $28.30B÷자기자본 $30.15B</span></div>
+    <div class="diag-badge safe">✅ 안전</div>
+  </div>
+  <div class="diag-row">
+    <div class="diag-left"><span class="diag-label">차입금의존도</span><span class="diag-value">24.5%</span><span class="diag-note">총차입금 $14.31B÷총자산 $58.45B</span></div>
+    <div class="diag-badge safe">✅ 안전</div>
+  </div>
+  <div class="diag-row">
+    <div class="diag-left"><span class="diag-label">이자보상배율</span><span class="diag-value">16.9배</span><span class="diag-note">TTM 영업이익 $14.35B÷TTM 이자비용 $0.85B — 상환 여력 매우 충분</span></div>
+    <div class="diag-badge safe">✅ 안전</div>
+  </div>
+</div>
+</div>
 </div>
 <div class="card" style="margin-top:16px;">
 <div class="card-title">핵심 성장 동력 3가지</div>
@@ -278,16 +339,16 @@
 <div class="grid-2">
 <div class="card">
 <div class="card-title">멀티플 5단계 평가</div>
-<div class="val-item"><div class="val-header"><span class="val-name">Forward PER</span><span class="val-number">35.9x</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 22x</span><span class="val-mid">적정 30x</span><span class="val-high">고 40x</span></div></div>
-<div class="val-item"><div class="val-header"><span class="val-name">EV/EBITDA</span><span class="val-number">29.9x</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 18x</span><span class="val-mid">적정 25x</span><span class="val-high">고 34x</span></div></div>
-<div class="val-item"><div class="val-header"><span class="val-name">P/S</span><span class="val-number">6.4x</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 5x</span><span class="val-high">고 7x</span></div></div>
-<div class="val-item"><div class="val-header"><span class="val-name">FCF 수익률</span><span class="val-number">2.9%</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 2%</span><span class="val-mid">적정 4%</span><span class="val-high">고 6%</span></div></div>
-<div class="val-item"><div class="val-header"><span class="val-name">PEG</span><span class="val-number">1.9x</span><span class="stage-badge stage-3">3단계 적정</span></div><div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div><div class="val-labels"><span class="val-low">저 1x</span><span class="val-mid">적정 2x</span><span class="val-high">고 3x</span></div></div>
+<div class="val-item" data-metric="fwdpe" onclick="selectMultiple('fwdpe')"><div class="val-header"><span class="val-name">Forward PER</span><span class="val-number">35.9x</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 22x</span><span class="val-mid">적정 30x</span><span class="val-high">고 40x</span></div></div>
+<div class="val-item" data-metric="evebitda" onclick="selectMultiple('evebitda')"><div class="val-header"><span class="val-name">EV/EBITDA</span><span class="val-number">29.9x</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 18x</span><span class="val-mid">적정 25x</span><span class="val-high">고 34x</span></div></div>
+<div class="val-item" data-metric="psr" onclick="selectMultiple('psr')"><div class="val-header"><span class="val-name">P/S</span><span class="val-number">6.4x</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 5x</span><span class="val-high">고 7x</span></div></div>
+<div class="val-item" data-metric="fcfyield" onclick="selectMultiple('fcfyield')"><div class="val-header"><span class="val-name">FCF 수익률</span><span class="val-number">2.9%</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 2%</span><span class="val-mid">적정 4%</span><span class="val-high">고 6%</span></div></div>
+<div class="val-item" data-metric="peg" onclick="selectMultiple('peg')"><div class="val-header"><span class="val-name">PEG</span><span class="val-number">1.9x</span><span class="stage-badge stage-3">3단계 적정</span></div><div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div><div class="val-labels"><span class="val-low">저 1x</span><span class="val-mid">적정 2x</span><span class="val-high">고 3x</span></div></div>
 </div>
 <div class="card">
-<div class="card-title">Communication Services 비교 — NFLX 밸류에이션</div>
-<div class="chart-wrap" style="height:270px;"><canvas id="peerChart"></canvas></div>
-<div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;">NFLX의 현재 멀티플을 Communication Services 비교군과 함께 본다. 회사별 기존 5단계 평가와 현재가 기준을 유지했다.</div>
+<div class="card-title"><span id="multipleCompareTitle">Communication Services 비교 — NFLX 밸류에이션</span></div>
+<div class="chart-wrap" style="height:270px;"><canvas id="multipleChart"></canvas></div>
+<div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText">NFLX의 현재 멀티플을 Communication Services 비교군과 함께 본다. 회사별 기존 5단계 평가와 현재가 기준을 유지했다.</div>
 </div>
 </div>
 
@@ -295,7 +356,7 @@
 <div class="card-title">Per-Share 지표 (TTM·FY26 전망 기준)</div>
 <div class="per-share-grid">
 <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">EPS (희석)</div><div class="ps-value">$1.93</div><div class="ps-sub">TTM</div></div>
-<div class="ps-card"><div class="ps-icon">🧾</div><div class="ps-label">매출/주</div><div class="ps-value">약 $11.88</div><div class="ps-sub">현재 P/S 6.2x 역산</div></div>
+<div class="ps-card"><div class="ps-icon">🧾</div><div class="ps-label">매출/주</div><div class="ps-value">약 $11.88</div><div class="ps-sub">현재 P/S 6.4x 역산</div></div>
 <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주</div><div class="ps-value">약 $2.14</div><div class="ps-sub">FCF 수익률 2.9% 기준</div></div>
 <div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">DPS</div><div class="ps-value">없음</div><div class="ps-sub">성장 재투자 우선</div></div>
 </div>
@@ -378,11 +439,11 @@
 <div style="position:relative;height:70px;margin:28px 6px 6px;">
 <div style="position:absolute;top:28px;left:0;right:0;height:10px;border-radius:5px;overflow:hidden;display:flex;">
 <div style="width:13.2%;height:100%;background:var(--bg3);"></div>
-<div style="width:13.2%;height:100%;background:rgba(46,204,113,0.45);"></div>
+<div style="width:13.2%;height:100%;background:rgba(231,76,60,0.45);"></div>
 <div style="width:13.2%;height:100%;background:var(--bg3);"></div>
 <div style="width:18.9%;height:100%;background:rgba(240,192,64,0.5);"></div>
 <div style="width:11.3%;height:100%;background:var(--bg3);"></div>
-<div style="width:18.9%;height:100%;background:rgba(231,76,60,0.45);"></div>
+<div style="width:18.9%;height:100%;background:rgba(46,204,113,0.45);"></div>
 <div style="width:11.3%;height:100%;background:var(--bg3);"></div>
 </div>
 <div style="position:absolute;top:10px;left:47.7%;width:2px;height:28px;background:var(--accent2);border-radius:1px;"></div>
@@ -641,7 +702,37 @@ const NFLX_MA120 = [110.87,111.02,111.17,111.32,111.51,111.72,111.94,112.13,112.
 })();
 
 function renderFundChart(){let ctx=document.getElementById('nflxRevChart');if(!ctx||charts.fund)return;charts.fund=new Chart(ctx,{data:{labels:["Q3'24", "Q4'24", "Q1'25", "Q2'25", "Q3'25", "Q4'25", "Q1'26", "Q2'26"],datasets:[{type:'bar',label:'매출 ($B)',data:[9.56, 9.83, 10.25, 10.54, 11.08, 11.53, 12.05, 12.56],backgroundColor:'rgba(56,189,248,.45)',borderColor:'#38bdf8',borderWidth:1,borderRadius:4,yAxisID:'y'},{type:'bar',label:'순이익 ($B)',data:[2.15, 2.36, 1.87, 2.89, 2.81, 2.55, 2.42, 3.4],backgroundColor:'rgba(46,204,113,.45)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4,yAxisID:'y'},{type:'line',label:'EPS',data:[0.49, 0.54, 0.43, 0.67, 0.66, 0.6, 0.57, 0.8],borderColor:'#f0c040',tension:.35,pointRadius:4,borderWidth:2.5,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:900,easing:'easeOutQuart'},scales:{x:{ticks:{color:'#9aa0b8'}},y:{beginAtZero:true,ticks:{color:'#9aa0b8'}},y1:{position:'right',beginAtZero:true,ticks:{color:'#f0c040'}}},plugins:{legend:{labels:{color:'#9aa0b8'}}}}})}
-function renderPeerChart(){let ctx=document.getElementById('peerChart');if(!ctx||charts.peer)return;charts.peer=new Chart(ctx,{type:'bar',data:{labels:['NFLX','섹터 중앙값','S&P 500'],datasets:[{data:[34.6,24,22],backgroundColor:['#38bdf8','rgba(154,160,184,.35)','rgba(154,160,184,.35)'],borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:900,easing:'easeOutQuart'},scales:{y:{beginAtZero:true,ticks:{color:'#9aa0b8'}},x:{ticks:{color:'#9aa0b8'}}},plugins:{legend:{display:false}}}})}
+const MULTIPLE_DATA = {
+  fwdpe: { title:'Communication Services 비교 — Forward PER', unit:'Forward P/E', labels:['NFLX','섹터 중앙값','S&P 500'], data:[35.9,24,22], max:40,
+    explanation: 'NFLX의 현재 멀티플을 Communication Services 비교군과 함께 본다. 회사별 기존 5단계 평가와 현재가 기준을 유지했다.' },
+  evebitda: { title:'EV/EBITDA 비교', unit:'EV/EBITDA', labels:['NFLX(현재)'], data:[29.9], max:34,
+    explanation: '4단계 높음 — 콘텐츠 규모의 경제와 이익률 개선 기대가 반영된 수준.' },
+  psr: { title:'P/S 비교', unit:'P/S', labels:['NFLX(현재)'], data:[6.4], max:7,
+    explanation: '4단계 높음 — 두 자릿수 매출 성장과 광고 매출 확대 기대가 반영된 수준.' },
+  fcfyield: { title:'FCF 수익률 비교', unit:'FCF 수익률(%)', labels:['NFLX(현재)'], data:[2.9], max:6,
+    explanation: '4단계 높음 — 콘텐츠 투자 지출 대비 FCF 전환율이 핵심 변수.' },
+  peg: { title:'PEG 비교', unit:'PEG', labels:['NFLX(현재)'], data:[1.9], max:3,
+    explanation: '3단계 적정 — 이익 성장률 대비로는 과도한 프리미엄은 아니다.' }
+};
+function renderMultipleChart(key){
+  const d=MULTIPLE_DATA[key];const ctx=document.getElementById('multipleChart');if(!ctx||!d)return;
+  if(charts.multiple)charts.multiple.destroy();
+  const bg=d.labels.map(l=>l==='NFLX'||l.includes('현재')?'#38bdf8':'rgba(154,160,184,.35)');
+  charts.multiple=new Chart(ctx,{type:'bar',data:{labels:d.labels,datasets:[{label:d.unit,data:d.data,backgroundColor:bg,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:900,easing:'easeOutQuart'},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${d.unit} ${c.raw}x`}}},scales:{x:{ticks:{color:'#9aa0b8'}},y:{max:d.max,beginAtZero:true,ticks:{color:'#9aa0b8'}}}}});
+}
+let currentMultipleKey='fwdpe';
+function selectMultiple(key){
+  const d=MULTIPLE_DATA[key];if(!d)return;currentMultipleKey=key;
+  document.querySelectorAll('.val-item[data-metric]').forEach(el=>el.classList.toggle('selected',el.dataset.metric===key));
+  const titleEl=document.getElementById('multipleCompareTitle');const textEl=document.getElementById('multipleCompareText');
+  if(titleEl)titleEl.textContent=d.title;if(textEl)textEl.innerHTML=d.explanation;
+  renderMultipleChart(key);
+}
+function toggleCollapsible(header){
+  const body=header.nextElementSibling;const collapsed=body.classList.toggle('collapsed');
+  header.classList.toggle('collapsed',collapsed);header.setAttribute('aria-expanded',String(!collapsed));
+  const hintText=header.querySelector('.toggle-hint-text');if(hintText)hintText.textContent=collapsed?'상세 보기':'상세 숨기기';
+}
 function renderCapexFcfChart() {
   const ctx = document.getElementById('capexFcfChart');
   if (!ctx || charts['capexfcf']) return;
@@ -664,7 +755,7 @@ function renderCapexFcfChart() {
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
-    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'valuation' && !charts.multiple) selectMultiple(currentMultipleKey);
     if (sectionId === 'us') renderCapexFcfChart();
   }, 50);
 }
