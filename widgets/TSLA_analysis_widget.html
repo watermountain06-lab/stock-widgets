@@ -107,6 +107,15 @@
   .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
   .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
   .tag-current { background: rgba(227,25,55,0.2); color: var(--accent2); }
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(52,152,219,0.12); border: 1px solid rgba(52,152,219,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(52,152,219,0.22); border-color: rgba(52,152,219,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
   .val-item { margin-bottom: 18px; }
   .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
@@ -327,6 +336,11 @@
         <div class="sub">유동성·차입 의존도는 양호 — 다만 이자보상배율은 다른 빅테크 대비 얇은 편(Q2 영업이익이 크게 위축된 영향)</div>
       </div>
     </div>
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>안정성 상세 — 개별 지표</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
     <div class="diag-list">
       <div class="diag-row">
         <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">194.1%</span><span class="diag-note">기준 150%↑</span></div>
@@ -353,8 +367,14 @@
         <div class="diag-badge info">ℹ️ 참고</div>
       </div>
     </div>
+    </div>
 
     <div class="section-label"><span class="dot" style="background:var(--blue);"></span>활동성 — 회수·재고소진·지급 속도 (TTM 기준 · Q3'25~Q2'26)</div>
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>활동성 상세 — 개별 비율·CCC 그래프</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
     <div class="activity-grid">
       <div class="act-card">
         <div class="act-icon">💳</div>
@@ -388,6 +408,7 @@
         </div>
         <div class="tl-ccc-span" style="left:82.8%; width:17.2%;"></div>
       </div>
+    </div>
     </div>
 
     <div style="margin-top:14px;font-size:11px;color:var(--text3);">유동비율·당좌비율·차입금의존도·부채비율 모두 기준치를 상회 — 재무구조 자체의 부실 위험은 낮다. 다만 이자보상배율 4.9x는 Q2 영업이익이 AI/Capex 투자 부담으로 크게 위축된 결과라, 수익성 회복 속도를 계속 지켜봐야 한다. CCC 13.0일은 자동차 업종치고는 짧은 편으로, 재고회전이 상대적으로 빠르다.</div>
@@ -672,6 +693,11 @@ function showSection(id) {
   document.getElementById(id).classList.add('active');
   event.target.classList.add('active');
   renderCharts(id);
+}
+function toggleCollapsible(header){
+  const body=header.nextElementSibling;const collapsed=body.classList.toggle('collapsed');
+  header.classList.toggle('collapsed',collapsed);header.setAttribute('aria-expanded',String(!collapsed));
+  const hintText=header.querySelector('.toggle-hint-text');if(hintText)hintText.textContent=collapsed?'상세 보기':'상세 숨기기';
 }
 const charts = {};
 

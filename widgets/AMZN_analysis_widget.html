@@ -103,6 +103,15 @@
   .tag-support { background: rgba(46,204,113,0.15); color: var(--green); }
   .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
   .tag-current { background: rgba(255,153,0,0.2); color: var(--accent2); }
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(52,152,219,0.12); border: 1px solid rgba(52,152,219,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(52,152,219,0.22); border-color: rgba(52,152,219,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
   .val-item { margin-bottom: 18px; }
   .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
@@ -319,6 +328,11 @@
         <div class="sub">차입금·이자보상은 양호 — 유동비율은 유통업 특성상 낮게 나오는 게 정상 (아래 활동성 참고)</div>
       </div>
     </div>
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>안정성 상세 — 개별 지표</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
     <div class="diag-list">
       <div class="diag-row">
         <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">103.3%</span><span class="diag-note">기준 150%↑ · 유통업 특성상 낮게 나옴</span></div>
@@ -345,8 +359,14 @@
         <div class="diag-badge info">ℹ️ 참고</div>
       </div>
     </div>
+    </div>
 
     <div class="section-label"><span class="dot" style="background:var(--blue);"></span>활동성 — 회수·재고소진·지급 속도 (TTM 기준 · Q3'25~Q2'26)</div>
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>활동성 상세 — 개별 비율·CCC 그래프</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
     <div class="activity-grid">
       <div class="act-card">
         <div class="act-icon">💳</div>
@@ -380,6 +400,7 @@
         </div>
         <div class="tl-ccc-span" style="left:55.3%; width:35.7%; background:rgba(46,204,113,0.6);"></div>
       </div>
+    </div>
     </div>
 
     <div style="margin-top:14px;font-size:11px;color:var(--text3);">차입금의존도·이자보상배율·부채비율은 모두 양호 — AI 인프라 투자로 부채가 늘었지만 이를 감당할 수익성은 충분하다. 유동비율·당좌비율이 낮은 건 위험 신호가 아니라 공급업체 자금(매입채무)으로 운영하는 유통업 구조 때문이며, 활동성 지표의 마이너스 CCC가 이를 뒷받침한다.</div>
@@ -615,6 +636,11 @@ function showSection(id) {
   document.getElementById(id).classList.add('active');
   event.target.classList.add('active');
   renderCharts(id);
+}
+function toggleCollapsible(header){
+  const body=header.nextElementSibling;const collapsed=body.classList.toggle('collapsed');
+  header.classList.toggle('collapsed',collapsed);header.setAttribute('aria-expanded',String(!collapsed));
+  const hintText=header.querySelector('.toggle-hint-text');if(hintText)hintText.textContent=collapsed?'상세 보기':'상세 숨기기';
 }
 const charts = {};
 

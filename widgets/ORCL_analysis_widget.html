@@ -138,6 +138,15 @@
   .seg-val { font-size: 12px; font-weight: 700; color: var(--accent2); width: 70px; text-align: right; flex-shrink: 0; }
 
   /* VALUATION */
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(52,152,219,0.12); border: 1px solid rgba(52,152,219,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(52,152,219,0.22); border-color: rgba(52,152,219,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
   .val-item { margin-bottom: 18px; }
   .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
@@ -391,6 +400,11 @@
         <div class="sub">AI 데이터센터 Capex를 대규모 부채로 조달 — 차입금의존도·부채비율이 기준치를 크게 상회</div>
       </div>
     </div>
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>안정성 상세 — 개별 지표</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
     <div class="diag-list">
       <div class="diag-row">
         <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">111.5%</span><span class="diag-note">기준 150%↑ · 소프트웨어 기업 특성상 재고 없음</span></div>
@@ -417,8 +431,14 @@
         <div class="diag-badge info">ℹ️ 참고</div>
       </div>
     </div>
+    </div>
 
     <div class="section-label"><span class="dot" style="background:var(--blue);"></span>활동성 — 매출채권 회수 속도</div>
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>활동성 상세 — 개별 비율</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
     <div class="activity-grid">
       <div class="act-card">
         <div class="act-icon">💳</div>
@@ -426,6 +446,7 @@
       </div>
     </div>
     <div style="margin-top:6px;font-size:11px;color:var(--text3);">Oracle은 소프트웨어·클라우드 기업으로 물리적 재고가 사실상 없어, 재고자산 회전율·매입채무 지급기간·CCC 같은 제조업형 활동성 지표는 적용하지 않는다. 매출채권 회수기간(51.3일)만으로도 현금 전환 속도를 충분히 가늠할 수 있다.</div>
+    </div>
 
     <div style="margin-top:14px;font-size:11px;color:var(--text3);">유동성 자체는 문제없지만, 차입금의존도(49.5%)·부채비율(515.8%) 모두 기준치를 크게 웃돈다 — RPO $638B를 실현하기 위한 데이터센터 투자를 부채로 조달한 결과다. 이자보상배율 4.3x는 아직 안전하지만 NVDA·AMZN 같은 현금 풍부한 빅테크보다 훨씬 얇은 여유라, 금리 상승이나 실적 둔화 시 레버리지 부담이 빠르게 부각될 수 있다.</div>
   </div>
@@ -760,6 +781,11 @@ function showSection(id, e) {
   document.getElementById(id).classList.add('active');
   if(e) e.target.classList.add('active');
   setTimeout(() => renderCharts(id), 50);
+}
+function toggleCollapsible(header){
+  const body=header.nextElementSibling;const collapsed=body.classList.toggle('collapsed');
+  header.classList.toggle('collapsed',collapsed);header.setAttribute('aria-expanded',String(!collapsed));
+  const hintText=header.querySelector('.toggle-hint-text');if(hintText)hintText.textContent=collapsed?'상세 보기':'상세 숨기기';
 }
 function renderCharts(id) {
   if(id==='fund') renderFund();
