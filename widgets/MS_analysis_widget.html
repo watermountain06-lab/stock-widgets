@@ -27,6 +27,7 @@
     --green: #2ecc71;
     --red: #e74c3c; --event-major: #38bdf8; --event-neutral: #f1c40f;
     --blue: #3498db;
+    --gold: #f0c040;
     --radius: 10px;
     --shadow: 0 4px 20px rgba(0,0,0,0.4);
   }
@@ -175,8 +176,39 @@
   .tag-resist { background: rgba(231,76,60,0.15); color: var(--red); }
   .tag-current { background: rgba(118,185,0,0.2); color: var(--accent2); }
 
+  /* COLLAPSIBLE / 재무 건전성 */
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(52,152,219,0.12); border: 1px solid rgba(52,152,219,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(52,152,219,0.22); border-color: rgba(52,152,219,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
+  .section-label { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:12px; color:var(--text2); margin-top:2px; line-height:1.4; }
+  .diag-summary.watch { background: linear-gradient(90deg, rgba(240,192,64,0.14), rgba(240,192,64,0.03)); border-color: rgba(240,192,64,0.35); }
+  .diag-summary.watch .title { color: var(--gold); }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 12px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .diag-label { font-size:13px; color:var(--text); font-weight:600; min-width:90px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:11.5px; color:var(--text2); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .diag-badge.watch { background:rgba(240,192,64,0.16); color:var(--gold); }
+
   /* VALUATION METER */
-  .val-item { margin-bottom: 18px; }
+  .val-item { margin-bottom: 18px; padding: 8px; margin-left: -8px; margin-right: -8px; border-radius: 8px; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; cursor: pointer; }
+  .val-item:hover { background: rgba(255,255,255,0.03); }
+  .val-item.selected { background: rgba(52,152,219,0.08); border-color: rgba(52,152,219,0.35); }
   .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
@@ -306,7 +338,7 @@
 <a class="peer-nav-link" href="ORCL_analysis_widget.html">다음 ORCL ▶</a>
 </div>
 </div>
-<div class="today-banner">📌 <strong>2026년 10월 14일 다음 실적 체크</strong> · 가격 데이터 2026.07.29 완료 거래일 · 저장소 순위 37위</div>
+<div class="today-banner">📌 <strong>2026년 10월 14일 다음 실적 체크</strong> · 가격 데이터 2026.08.10 완료 거래일 · 저장소 순위 37위</div>
 <div class="header">
 <div class="header-top"><div class="ticker-block"><div>
 <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;"><span class="ticker-badge">MS</span><span style="font-size:11px;color:var(--accent);font-weight:600;">NYSE · S&amp;P 500</span></div>
@@ -321,7 +353,7 @@
 </div></div>
 <div class="box-key">
 <div style="font-size:13px;font-weight:500;color:var(--accent2);margin-bottom:4px;">핵심 투자 논리 <span style="color:#e67e22;">(고평가)</span> — Q2 매출 +27%·EPS +62% · ROTCE 26.6%</div>
-<div style="font-size:12px;color:var(--text2);line-height:1.6;">Q2 매출 +27%, EPS +62%, ROTCE 26.6%는 거래·IB 업사이클과 Wealth의 반복 수수료 기반이 동시에 작동했음을 보여준다. $10T 고객자산과 $148.1B 순유입은 이익 변동성을 낮추고, CET1 14.8%와 $20B 자사주 승인은 자본환원을 뒷받침한다. 다만 P/B 3.07x·P/TBV 4.14x는 역사적 프리미엄 구간이고 시장 변동성, 딜 파이프라인 둔화, 주가 +41.5% 이후 멀티플 압축이 핵심 위험이다.</div>
+<div style="font-size:12px;color:var(--text2);line-height:1.6;">Q2 매출 +27%, EPS +62%, ROTCE 26.6%는 거래·IB 업사이클과 Wealth의 반복 수수료 기반이 동시에 작동했음을 보여준다. $10T 고객자산과 $148.1B 순유입은 이익 변동성을 낮추고, CET1 14.8%와 $20B 자사주 승인은 자본환원을 뒷받침한다. 다만 P/B 3.2x·P/TBV 4.4x는 역사적 프리미엄 구간이고 시장 변동성, 딜 파이프라인 둔화, 주가 +41.5% 이후 멀티플 압축이 핵심 위험이다.</div>
 </div>
 <div class="nav">
 <button class="nav-btn active" onclick="showSection('tech',this)">📈 기술적 분석</button><button class="nav-btn" onclick="showSection('fund',this)">📊 기본적 분석</button><button class="nav-btn" onclick="showSection('valuation',this)">⚖️ 밸류에이션</button><button class="nav-btn" onclick="showSection('us',this)">🇺🇸 US 특화</button><button class="nav-btn" onclick="showSection('news',this)">📰 시계열 뉴스</button><button class="nav-btn" onclick="showSection('invest',this)">🎯 투자 포인트</button>
@@ -338,49 +370,73 @@
 <div class="zone-item"><span class="zone-label">MA120</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--green);">$191.31</span><span class="zone-tag tag-support">지지선</span></div></div>
 <div class="zone-item"><span class="zone-label">52주 최저</span><div style="display:flex;align-items:center;gap:8px;"><span class="zone-val" style="color:var(--green);">$141.03 (2025.08.20)</span><span class="zone-tag tag-support">강지지</span></div></div>
 </div></div><div class="card"><div class="card-title">이동평균선 현황</div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$211.79</span><span class="ma-status status-below">현재가 하회</span></div></div></div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma5)"></span>MA5</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$211.79</span><span class="ma-status status-above">현재가 상회</span></div></div></div>
 <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma20)"></span>MA20</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$217.42</span><span class="ma-status status-below">현재가 하회</span></div></div></div>
-<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$209.98</span><span class="ma-status status-below">현재가 하회</span></div></div></div>
+<div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma60)"></span>MA60</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$209.98</span><span class="ma-status status-above">현재가 상회</span></div></div></div>
 <div class="ma-row"><span class="ma-name"><span class="ma-dot" style="background:var(--ma120)"></span>MA120</span><div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;align-items:center;gap:10px;"><span class="ma-val">$191.31</span><span class="ma-status status-above">현재가 상회</span></div></div></div>
-<div style="margin-top:10px;background:var(--bg3);padding:12px;border-radius:8px;font-size:12px;">MA20&gt;MA5&gt;MA60&gt;현재가&gt;MA120 순 — 지지와 저항이 교차하는 혼조 구간. 현재가 $215.33, 52주 고점 $232.25 대비 -12.5%.</div></div></div>
+<div style="margin-top:10px;background:var(--bg3);padding:12px;border-radius:8px;font-size:12px;">MA20&gt;현재가&gt;MA5&gt;MA60&gt;MA120 순 — 지지와 저항이 교차하는 혼조 구간. 현재가 $215.33, 52주 고점 $232.25 대비 -7.3%.</div></div></div>
 <div class="card"><div class="card-title">구간별 패턴 분석</div><div class="grid-4">
 <div class="stat-box" style="background:rgba(241,196,15,.08);border-color:rgba(241,196,15,.35);"><div class="stat-label" style="color:var(--event-neutral);">2025.07~09 · $140대 기반 형성</div><div class="stat-value" style="font-size:15px;">$136.17~$155.90</div><div class="stat-sub" style="line-height:1.6;">관세·금리 불확실성 속에서도 자산관리 수수료 기반이 하단을 지지했다.</div></div>
 <div class="stat-box" style="background:rgba(46,204,113,.08);border-color:rgba(46,204,113,.35);"><div class="stat-label" style="color:var(--green);">2025.10~12 · 실적 재평가</div><div class="stat-value" style="font-size:15px;">$156→$184</div><div class="stat-sub" style="line-height:1.6;">거래·IB 회복과 Wealth 성장으로 이익 모멘텀이 확인됐다.</div></div>
 <div class="stat-box" style="background:rgba(46,204,113,.08);border-color:rgba(46,204,113,.35);"><div class="stat-label" style="color:var(--green);">2026.01~04 · 기록적 실적 랠리</div><div class="stat-value" style="font-size:15px;">$170대→$205대</div><div class="stat-sub" style="line-height:1.6;">Q1 기록과 강한 자본시장 활동이 장기 이동평균 위 추세를 강화했다.</div></div>
 <div class="stat-box" style="background:rgba(241,196,15,.08);border-color:rgba(241,196,15,.35);"><div class="stat-label" style="color:var(--event-neutral);">2026.05~07 · 신고가 후 소화</div><div class="stat-value" style="font-size:15px;">$193.73→$232.25→$215.33</div><div class="stat-sub" style="line-height:1.6;">Q2 사상 최대 실적 뒤 높아진 배수와 차익실현이 단기 조정을 만들었다.</div></div>
 </div></div>
-<div style="display:flex;gap:8px;flex-wrap:wrap;"><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,.15);color:var(--green);">Q2 매출 $21.35B</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,.15);color:var(--green);">ROTCE 26.6%</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,.15);color:var(--green);">$20B 자사주 승인</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(241,196,15,.15);color:var(--event-neutral);">Forward P/E 16.44x</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,.15);color:var(--red);">베타 1.22</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(56,189,248,.15);color:var(--accent2);">$10T 고객자산</span></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;"><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,.15);color:var(--green);">Q2 매출 $21.35B</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,.15);color:var(--green);">ROTCE 26.6%</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(46,204,113,.15);color:var(--green);">$20B 자사주 승인</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(241,196,15,.15);color:var(--event-neutral);">Forward P/E 16.6x</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(231,76,60,.15);color:var(--red);">베타 1.22</span><span style="font-size:11px;padding:3px 10px;border-radius:999px;font-weight:600;background:rgba(56,189,248,.15);color:var(--accent2);">$10T 고객자산</span></div>
 </div>
 
 <div class="section" id="fund"><div class="section-title">기본적 분석 — 분기 재무제표</div>
 <div class="card"><div class="card-title">분기 매출 · 순이익 · EPS</div><div class="chart-wrap" style="height:300px;"><canvas id="msRevChart"></canvas></div><div style="margin-top:8px;font-size:10px;color:var(--text3);">* Q4 2024·Q4 2025는 감사 연간 실적에서 Q1~Q3 누적치를 차감해 산출.</div></div>
 <div class="grid-3">
 <div class="stat-box"><div class="stat-label">순매출 (Q2 2026)</div><div class="stat-value up">$21.3B</div><div class="stat-sub">▲27% YoY · 사상 최대</div></div>
-<div class="stat-box"><div class="stat-label">순이익 (Q2 2026)</div><div class="stat-value up">$5.6B</div><div class="stat-sub">▲60% YoY</div></div>
 <div class="stat-box"><div class="stat-label">희석 EPS (Q2 2026)</div><div class="stat-value up">$3.46</div><div class="stat-sub">▲62% YoY · 사상 최대</div></div>
 <div class="stat-box"><div class="stat-label">ROTCE (Q2 2026)</div><div class="stat-value gold">26.6%</div><div class="stat-sub">ROE 20.7%</div></div>
-<div class="stat-box"><div class="stat-label">Wealth Management 매출</div><div class="stat-value up">$8.9B</div><div class="stat-sub">역대 최고</div></div>
 <div class="stat-box"><div class="stat-label">WM 순신규자산</div><div class="stat-value up">$148.1B</div><div class="stat-sub">분기 기록</div></div>
 <div class="stat-box"><div class="stat-label">IB 매출 (Q2 2026)</div><div class="stat-value up">$2.44B</div><div class="stat-sub">▲58% YoY</div></div>
-<div class="stat-box"><div class="stat-label">Equities 매출 (Q2 2026)</div><div class="stat-value up">$6.3B</div><div class="stat-sub">▲69% YoY</div></div>
 <div class="stat-box"><div class="stat-label">다음 실적</div><div class="stat-value gold">10월 14일 예상</div><div class="stat-sub">Q3 2026</div></div>
+</div>
+<div class="card"><div class="card-title"><span>재무 건전성 — 자본건전성 (Q2 2026 기준)</span></div>
+<div style="font-size:11px;color:var(--text3);line-height:1.5;margin:-4px 0 14px;">※ MS는 은행 특성상 분류 재무상태표를 작성하지 않아 유동비율·차입금의존도·표준 회전율 지표가 적용되지 않는다. IB·트레이딩 중심 사업모델 특성상 대출 관련 자산건전성 지표(대손충당금 등)의 비중도 크지 않아, 은행업 표준 자본비율(CET1)로 대체했다.</div>
+<div class="diag-summary">
+  <div class="icon">🩺</div>
+  <div>
+    <div class="title">종합 진단: 매우 안정적</div>
+    <div class="sub">CET1 14.8%로 규제 최소 요건을 상회 · 자기자본/자산 비율 6.9%는 은행업 표준 레버리지 구조(고레버리지 자체가 위험 신호는 아님)</div>
+  </div>
+</div>
+<div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+  <span>자본건전성 상세 — 개별 지표</span>
+  <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+</div>
+<div class="collapsible-body collapsed">
+<div class="diag-list">
+  <div class="diag-row">
+    <div class="diag-left"><span class="diag-label">CET1 비율</span><span class="diag-value">14.8%</span><span class="diag-note">Q2 2026 기준 · 규제최소 요건 상회</span></div>
+    <div class="diag-badge safe">✅ 매우 안정</div>
+  </div>
+  <div class="diag-row">
+    <div class="diag-left"><span class="diag-label">자기자본비율</span><span class="diag-value">6.9%</span><span class="diag-note">자기자본 $116.33B÷자산 $1,675.06B — 은행 표준 레버리지 구조</span></div>
+    <div class="diag-badge info">ℹ️ 은행 표준</div>
+  </div>
+</div>
+<div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">은행은 예금·차입을 레버리지 삼아 대출·투자를 운용하는 사업모델이라 일반 기업의 부채비율 잣대가 적용되지 않는다. MS는 IB·트레이딩·Wealth 중심의 자본시장 비즈니스 모델이라 대출 비중이 상대적으로 작아 BAC·HSBC 같은 상업은행보다 자산건전성(대손충당금) 지표의 비중이 낮다. 규제당국이 요구하는 CET1(보통주자본비율) 14.8%는 규제 최소 요건을 크게 상회하며, 이는 $20B 자사주매입 승인과 배당 15% 인상의 기반이 된다.</div>
+</div>
 </div>
 <div class="info-box">Q2 2026 · CEO Ted Pick “활발한 시장과 세 지역 전반의 일관된 실행으로 통합 회사가 210억 달러를 넘는 사상 최대 매출과 $3.46의 사상 최대 EPS를 달성했다” <a href="https://www.sec.gov/Archives/edgar/data/895421/000089542126000207/a2q26msearningsrelease.htm" rel="noopener" style="color:var(--accent2);margin-left:6px;" target="_blank">발언 출처 →</a></div>
 <div class="card"><div class="card-title">핵심 성장 동력 3가지</div><div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">자본시장 업사이클</div><div class="driver-desc">Q2 IB 매출 +58% YoY<br/>Equities 매출 $6.3B·+69%</div></div></div><div class="driver-item"><div class="driver-num">2</div><div><div class="driver-title">Wealth 자산 복리</div><div class="driver-desc">Q2 순유입 사상 최대 $148.1B<br/>통합 고객자산 $10T 돌파</div></div></div><div class="driver-item"><div class="driver-num">3</div><div><div class="driver-title">자본환원 확대</div><div class="driver-desc">분기배당 $1.15로 15% 인상<br/>다년간 $20B 자사주 승인</div></div></div></div>
-<div class="card"><div class="card-title">핵심 투자 논리 <span style="color:#e67e22;">(고평가)</span></div><div class="tl-desc">Q2 매출 +27%, EPS +62%, ROTCE 26.6%는 거래·IB 업사이클과 Wealth의 반복 수수료 기반이 동시에 작동했음을 보여준다. $10T 고객자산과 $148.1B 순유입은 이익 변동성을 낮추고, CET1 14.8%와 $20B 자사주 승인은 자본환원을 뒷받침한다. 다만 P/B 3.07x·P/TBV 4.14x는 역사적 프리미엄 구간이고 시장 변동성, 딜 파이프라인 둔화, 주가 +41.5% 이후 멀티플 압축이 핵심 위험이다.</div></div>
+<div class="card"><div class="card-title">핵심 투자 논리 <span style="color:#e67e22;">(고평가)</span></div><div class="tl-desc">Q2 매출 +27%, EPS +62%, ROTCE 26.6%는 거래·IB 업사이클과 Wealth의 반복 수수료 기반이 동시에 작동했음을 보여준다. $10T 고객자산과 $148.1B 순유입은 이익 변동성을 낮추고, CET1 14.8%와 $20B 자사주 승인은 자본환원을 뒷받침한다. 다만 P/B 3.2x·P/TBV 4.4x는 역사적 프리미엄 구간이고 시장 변동성, 딜 파이프라인 둔화, 주가 +41.5% 이후 멀티플 압축이 핵심 위험이다.</div></div>
 <div class="card"><div class="card-title">다음 실적 체크포인트 — 2026년 10월 14일</div><div class="tl-desc">① Q2 $6.3B였던 Equities와 $2.44B였던 IB 매출의 정상화 폭 ② Wealth 순유입 $148.1B 중 Workplace IPO 유입의 반복 가능성과 30.5% 세전마진 ③ CET1 14.8%를 유지하면서 $20B 자사주 프로그램을 집행하는 속도 ④ 65% 효율성 비율과 연간 세율 22~23% 가이던스</div></div></div>
 
 <div class="section" id="valuation"><div class="section-title">밸류에이션 — 현재가 $215.33</div>
 <div class="grid-2"><div class="card"><div class="card-title">멀티플 5단계 평가</div>
-<div class="val-item"><div class="val-header"><span class="val-name">Forward PER</span><span class="val-number">16.6x</span><span class="stage-badge stage-3">3단계 적정</span></div><div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div><div class="val-labels"><span class="val-low">저 12x</span><span class="val-mid">적정 16x</span><span class="val-high">고 21x</span></div><div style="font-size:11px;color:var(--text3);">FY2026 EPS 컨센서스 $12.96 기준</div></div>
-<div class="val-item"><div class="val-header"><span class="val-name">P/B</span><span class="val-number">3.2x</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 1.5x</span><span class="val-mid">적정 2.5x</span><span class="val-high">고 3.5x</span></div><div style="font-size:11px;color:var(--text3);">BPS $66.18 기준</div></div>
-<div class="val-item"><div class="val-header"><span class="val-name">P/TBV</span><span class="val-number">4.4x</span><span class="stage-badge stage-5">5단계 매우높음</span></div><div class="val-track"><div class="val-fill" style="width:92%;background:linear-gradient(90deg,#e74c3c,#922b21);"></div></div><div class="val-labels"><span class="val-low">저 1.8x</span><span class="val-mid">적정 2.8x</span><span class="val-high">고 4.0x</span></div><div style="font-size:11px;color:var(--text3);">Q2 TBVPS $53.18 기준</div></div>
-<div class="val-item"><div class="val-header"><span class="val-name">PEG</span><span class="val-number">1.5x</span><span class="stage-badge stage-3">3단계 적정</span></div><div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div><div class="val-labels"><span class="val-low">저 0.8x</span><span class="val-mid">적정 1.5x</span><span class="val-high">고 2.2x</span></div><div style="font-size:11px;color:var(--text3);">3년 EPS 성장 전망 11.6%</div></div>
-<div class="val-item"><div class="val-header"><span class="val-name">ROTCE</span><span class="val-number">26.6%</span><span class="stage-badge stage-1">1단계 최우수</span></div><div class="val-track"><div class="val-fill" style="width:92%;background:linear-gradient(90deg,#2ecc71,#3498db);"></div></div><div class="val-labels"><span class="val-low">보통 12%</span><span class="val-mid">우수 18%</span><span class="val-high">최우수 25%+</span></div><div style="font-size:11px;color:var(--text3);">Q2 2026 공식 실적</div></div>
-</div><div class="card"><div class="card-title">미국 투자은행 피어 비교 (Forward P/E)</div><div class="chart-wrap" style="height:270px;"><canvas id="msPeerChart"></canvas></div><div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;">MS 16.44x는 GS 15.6x·JPM 15.8x보다 소폭 높고 BAC 13.7x보다 높다. Wealth의 반복 수익성과 26.6% ROTCE가 피어 프리미엄을 설명한다.</div></div></div>
+<div class="val-item" data-metric="fwdpe" onclick="selectMultiple('fwdpe')"><div class="val-header"><span class="val-name">Forward PER</span><span class="val-number">16.6x</span><span class="stage-badge stage-3">3단계 적정</span></div><div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div><div class="val-labels"><span class="val-low">저 12x</span><span class="val-mid">적정 16x</span><span class="val-high">고 21x</span></div></div>
+<div class="val-item" data-metric="pb" onclick="selectMultiple('pb')"><div class="val-header"><span class="val-name">P/B</span><span class="val-number">3.2x</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 1.5x</span><span class="val-mid">적정 2.5x</span><span class="val-high">고 3.5x</span></div></div>
+<div class="val-item" data-metric="ptbv" onclick="selectMultiple('ptbv')"><div class="val-header"><span class="val-name">P/TBV</span><span class="val-number">4.4x</span><span class="stage-badge stage-5">5단계 매우높음</span></div><div class="val-track"><div class="val-fill" style="width:92%;background:linear-gradient(90deg,#e74c3c,#922b21);"></div></div><div class="val-labels"><span class="val-low">저 1.8x</span><span class="val-mid">적정 2.8x</span><span class="val-high">고 4.0x</span></div></div>
+<div class="val-item" data-metric="peg" onclick="selectMultiple('peg')"><div class="val-header"><span class="val-name">PEG</span><span class="val-number">1.5x</span><span class="stage-badge stage-3">3단계 적정</span></div><div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div><div class="val-labels"><span class="val-low">저 0.8x</span><span class="val-mid">적정 1.5x</span><span class="val-high">고 2.2x</span></div></div>
+<div class="val-item" data-metric="rotce" onclick="selectMultiple('rotce')"><div class="val-header"><span class="val-name">ROTCE</span><span class="val-number">26.6%</span><span class="stage-badge stage-1">1단계 최우수</span></div><div class="val-track"><div class="val-fill" style="width:92%;background:linear-gradient(90deg,#2ecc71,#3498db);"></div></div><div class="val-labels"><span class="val-low">보통 12%</span><span class="val-mid">우수 18%</span><span class="val-high">최우수 25%+</span></div></div>
+</div><div class="card"><div class="card-title"><span id="multipleCompareTitle">미국 투자은행 피어 비교 (Forward P/E)</span></div><div class="chart-wrap" style="height:270px;"><canvas id="multipleChart"></canvas></div><div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText">MS 16.6x는 GS 15.6x·JPM 15.8x보다 소폭 높고 BAC 13.7x보다 높다. Wealth의 반복 수익성과 26.6% ROTCE가 피어 프리미엄을 설명한다.</div></div></div>
 
 <div class="card"><div class="card-title">Per-Share 지표 · 2026.06 말 및 2026.07 시장 기준</div><div class="per-share-grid"><div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">EPS</div><div class="ps-value">$12.38</div><div class="ps-sub">TTM GAAP · Q2 반영</div></div><div class="ps-card"><div class="ps-icon">📘</div><div class="ps-label">BPS</div><div class="ps-value">$67.80</div><div class="ps-sub">Q2 2026 공식 공시</div></div><div class="ps-card"><div class="ps-icon">🏦</div><div class="ps-label">TBVPS</div><div class="ps-value">$53.18</div><div class="ps-sub">Q2 2026 공식 공시</div></div><div class="ps-card"><div class="ps-icon">🎁</div><div class="ps-label">Dividend</div><div class="ps-value">$4.60</div><div class="ps-sub">Q3부터 분기 $1.15</div></div></div></div>
-<div class="card"><div class="card-title">종합 밸류에이션 — 높은 수익성이 높은 장부가 프리미엄을 요구</div><div class="tl-desc">Forward P/E 15.6x와 PEG 1.43x는 이익 성장 대비 적정권이고, 26.6% ROTCE·14.8% CET1·$20B 자사주가 주당가치 성장을 지지한다. 반면 P/B 3.07x와 P/TBV 4.14x는 높은 프리미엄이며, 52주간 +41.5% 오른 뒤 거래 수익 정상화나 딜 둔화가 나타나면 배수 압축 위험이 크다. $223~243의 Base 밴드 안에서는 성장·자본환원 프리미엄이 설명되지만 신규 매수에는 $200대 초반의 가격 규율이 유리하다.</div></div>
+<div class="card"><div class="card-title">종합 밸류에이션 — 높은 수익성이 높은 장부가 프리미엄을 요구</div><div class="tl-desc">Forward P/E 16.6x와 PEG 1.5x는 이익 성장 대비 적정권이고, 26.6% ROTCE·14.8% CET1·$20B 자사주가 주당가치 성장을 지지한다. 반면 P/B 3.07x와 P/TBV 4.14x는 높은 프리미엄이며, 52주간 +41.5% 오른 뒤 거래 수익 정상화나 딜 둔화가 나타나면 배수 압축 위험이 크다. $223~243의 Base 밴드 안에서는 성장·자본환원 프리미엄이 설명되지만 신규 매수에는 $200대 초반의 가격 규율이 유리하다.</div></div>
 <div class="card"><div class="card-title">시나리오별 공정가치 분석</div><div class="scenario-card" style="background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.2);margin-bottom:8px;"><div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">Bear — 거래·IB 정상화</div><div style="font-size:12px;color:var(--text2);">FY2027 EPS $12.5~13.0, Forward PER 14~15x로 프리미엄이 축소될 경우 → 공정가치 <strong style="color:var(--red);">$175~195/주</strong></div></div><div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;"><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base — Wealth 복리와 정상 자본시장</div><div style="font-size:12px;color:var(--text2);">FY2027 EPS $13.5, 16.5~18x 유지 시 → 공정가치 <strong style="color:var(--text);">$223~243/주</strong> (Street 평균 $235.76 포함)</div></div><div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);"><div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull — 딜 슈퍼사이클·고마진 지속</div><div style="font-size:12px;color:var(--text2);">EPS $14 이상과 18~19x 프리미엄이 유지될 경우 → 공정가치 <strong style="color:var(--green);">$252~266/주</strong></div></div></div>
 </div>
 
@@ -397,12 +453,12 @@
 </div><div class="timeline-legend"><span><i style="background:var(--event-major)"></i>주요</span><span><i style="background:var(--green)"></i>긍정</span><span><i style="background:var(--red)"></i>부정</span><span><i style="background:var(--event-neutral)"></i>중립</span></div></div>
 
 <div class="section" id="invest"><div class="section-title">투자 포인트 — 상승·하락 요인과 목표가</div>
-<div class="bull-bear"><div class="bb-box"><div class="bb-title bb-bull">🐂 Bull 요인</div><div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>기록적 수익성:</strong> Q2 ROTCE 26.6%, EPS +62%.</span></div><div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>딜 회복:</strong> IB 매출 +58%, Equities +69%.</span></div><div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Wealth 복리:</strong> 고객자산 $10T, 순유입 $148.1B.</span></div><div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>자본환원:</strong> $20B 환매와 배당 15% 인상.</span></div><div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>운영 레버리지:</strong> 상반기 효율성 비율 65%.</span></div></div><div class="bb-box"><div class="bb-title bb-bear">🐻 Bear 요인</div><div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>장부가 프리미엄:</strong> P/B 3.07x·P/TBV 4.14x.</span></div><div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>주기 민감도:</strong> 거래·IB 수익은 시장 활동에 연동.</span></div><div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>높아진 기대:</strong> 52주 +41.5% 이후 실적 허들 상승.</span></div><div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>시장 변동성:</strong> 베타 1.22로 지수보다 민감.</span></div><div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>신용·규제:</strong> 기업대출·CRE와 자본규제 변화 위험.</span></div></div></div>
-<div class="card"><div class="card-title">목표가 밴드 · Bear $175~195 / Base $223~243 / Bull $252~266</div><div class="target-gauge"><div class="gauge-bar"><div style="flex:20;background:#e74c3c;"></div><div style="flex:28;background:var(--bg3);"></div><div style="flex:20;background:#f0c040;"></div><div style="flex:9;background:var(--bg3);"></div><div style="flex:14;background:#2ecc71;"></div><span class="current-marker" style="left:45.4%;"><span>현재 $216.33</span></span><span class="target-marker" style="left:66.8%;"><span>▲ 목표 $235.76 (+9.0%)</span></span></div><div class="gauge-labels"><span style="color:var(--red);">Bear $175~195</span><span style="color:var(--event-neutral);">Base $223~243</span><span style="color:var(--green);">Bull $252~266</span></div></div><div class="tl-desc" style="margin-top:12px;">현재가는 Bear와 Base 사이로, 평균 목표가까지 상승여력은 남았지만 P/TBV 프리미엄이 안전마진을 제한한다.</div><div style="margin-top:16px;font-size:12px;font-weight:700;">애널리스트 25명 투자의견 분포</div><div style="display:flex;height:9px;border-radius:5px;overflow:hidden;margin:8px 0;"><div style="width:44%;background:var(--green);"></div><div style="width:48%;background:var(--event-neutral);"></div><div style="width:8%;background:var(--red);"></div></div><div style="display:flex;gap:18px;font-size:11px;color:var(--text2);"><span>Buy 11</span><span>Hold 12</span><span>Sell 2</span></div></div>
+<div class="bull-bear"><div class="bb-box"><div class="bb-title bb-bull">🐂 Bull 요인</div><div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>기록적 수익성:</strong> Q2 ROTCE 26.6%, EPS +62%.</span></div><div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>딜 회복:</strong> IB 매출 +58%, Equities +69%.</span></div><div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>Wealth 복리:</strong> 고객자산 $10T, 순유입 $148.1B.</span></div><div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>자본환원:</strong> $20B 환매와 배당 15% 인상.</span></div><div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>운영 레버리지:</strong> 상반기 효율성 비율 65%.</span></div></div><div class="bb-box"><div class="bb-title bb-bear">🐻 Bear 요인</div><div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>장부가 프리미엄:</strong> P/B 3.2x·P/TBV 4.4x.</span></div><div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>주기 민감도:</strong> 거래·IB 수익은 시장 활동에 연동.</span></div><div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>높아진 기대:</strong> 52주 +41.5% 이후 실적 허들 상승.</span></div><div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>시장 변동성:</strong> 베타 1.22로 지수보다 민감.</span></div><div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>신용·규제:</strong> 기업대출·CRE와 자본규제 변화 위험.</span></div></div></div>
+<div class="card"><div class="card-title">목표가 밴드 · Bear $175~195 / Base $223~243 / Bull $252~266</div><div class="target-gauge"><div class="gauge-bar"><div style="flex:20;background:#e74c3c;"></div><div style="flex:28;background:var(--bg3);"></div><div style="flex:20;background:#f0c040;"></div><div style="flex:9;background:var(--bg3);"></div><div style="flex:14;background:#2ecc71;"></div><span class="current-marker" style="left:44.3%;"><span>현재 $215.33</span></span><span class="target-marker" style="left:66.8%;"><span>▲ 목표 $235.76 (+9.5%)</span></span></div><div class="gauge-labels"><span style="color:var(--red);">Bear $175~195</span><span style="color:var(--event-neutral);">Base $223~243</span><span style="color:var(--green);">Bull $252~266</span></div></div><div class="tl-desc" style="margin-top:12px;">현재가는 Bear와 Base 사이로, 평균 목표가까지 상승여력은 남았지만 P/TBV 프리미엄이 안전마진을 제한한다.</div><div style="margin-top:16px;font-size:12px;font-weight:700;">애널리스트 25명 투자의견 분포</div><div style="display:flex;height:9px;border-radius:5px;overflow:hidden;margin:8px 0;"><div style="width:44%;background:var(--green);"></div><div style="width:48%;background:var(--event-neutral);"></div><div style="width:8%;background:var(--red);"></div></div><div style="display:flex;gap:18px;font-size:11px;color:var(--text2);"><span>Buy 11</span><span>Hold 12</span><span>Sell 2</span></div></div>
 <div class="card"><div class="card-title">5개 분석 종합</div><div class="zone-list"><div class="zone-item"><span class="zone-label">📈 기술적</span><span class="zone-val" style="color:var(--green);">장기 상승·단기 조정</span></div><div class="zone-item"><span class="zone-label">📊 펀더멘털</span><span class="zone-val" style="color:var(--green);">기록적 수익성</span></div><div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:#f0c040;">이익 적정·장부가 고평가</span></div><div class="zone-item"><span class="zone-label">🇺🇸 수급</span><span class="zone-val" style="color:var(--green);">환매·기관 기반 우호적</span></div><div class="zone-item"><span class="zone-label">📰 이벤트</span><span class="zone-val" style="color:#f0c040;">호실적 뒤 기대치 부담</span></div></div></div>
-<div class="card"><div class="card-title">투자의견 요약</div><div style="display:flex;flex-direction:column;gap:10px;font-size:13px;"><div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107">2026년 10월 14일</strong></div><div><span style="color:var(--text2);">투자의견:</span> <strong style="color:var(--accent2)">Buy · 매수 11/25명(44%)</strong></div><div><span style="color:var(--text2);">목표주가:</span> <strong style="color:var(--text)">$235.76 · +9.0%</strong></div><div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">수익성 우수, $200대 초반 가격 규율</strong></div></div></div></div>
+<div class="card"><div class="card-title">투자의견 요약</div><div style="display:flex;flex-direction:column;gap:10px;font-size:13px;"><div><span style="color:var(--text2);">📅 다음 실적:</span> <strong style="color:#ffc107">2026년 10월 14일</strong></div><div><span style="color:var(--text2);">투자의견:</span> <strong style="color:var(--accent2)">Buy · 매수 11/25명(44%)</strong></div><div><span style="color:var(--text2);">목표주가:</span> <strong style="color:var(--text)">$235.76 · +9.5%</strong></div><div><span style="color:var(--text2);">결론:</span> <strong style="color:var(--text)">수익성 우수, $200대 초반 가격 규율</strong></div></div></div></div>
 
-<div class="disclaimer">※ 본 자료는 공개된 기업 공시와 시장 데이터를 바탕으로 작성한 참고용 분석이며 투자 권유가 아닙니다. 시장 데이터 기준일: 2026-07-29.</div>
+<div class="disclaimer">※ 본 자료는 공개된 기업 공시와 시장 데이터를 바탕으로 작성한 참고용 분석이며 투자 권유가 아닙니다. 시장 데이터 기준일: 2026-08-10.</div>
 
 <script>
 function showSection(id,button){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');button.classList.add('active');renderCharts(id);}
@@ -565,9 +621,39 @@ const charts={};
   draw('1Y');
 })();
 function renderFundChart(){let ctx=document.getElementById('msRevChart');if(!ctx||charts.fund)return;charts.fund=new Chart(ctx,{data:{labels:["Q3'24","Q4'24*","Q1'25","Q2'25","Q3'25","Q4'25*","Q1'26","Q2'26"],datasets:[{type:'bar',label:'매출 ($B)',data:[15.383,16.223,17.739,16.792,18.224,17.890,20.580,21.348],backgroundColor:'rgba(59,130,246,.58)',borderColor:'#3b82f6',borderWidth:1,borderRadius:4,yAxisID:'y'},{type:'bar',label:'순이익 ($B)',data:[3.188,3.714,4.315,3.539,4.610,4.397,5.567,5.581],backgroundColor:'rgba(46,204,113,.50)',borderColor:'#2ecc71',borderWidth:1,borderRadius:4,yAxisID:'y'},{type:'line',label:'희석 EPS',data:[1.88,2.22,2.60,2.13,2.80,2.68,3.43,3.46],borderColor:'#f0c040',backgroundColor:'rgba(240,192,64,.1)',tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:900,easing:'easeOutQuart'},plugins:{legend:{labels:{color:'#9aa0b8',font:{size:11}}}},scales:{x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},maxRotation:30}},y:{position:'left',beginAtZero:true,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>'$'+v+'B'}},y1:{position:'right',beginAtZero:true,grid:{display:false},ticks:{color:'#f0c040',font:{size:10},callback:v=>'$'+v}}}}})}
-function renderPeerChart(){let ctx=document.getElementById('msPeerChart');if(!ctx||charts.peer)return;charts.peer=new Chart(ctx,{type:'bar',data:{labels:["MS","GS","JPM","BAC"],datasets:[{data:[16.44,15.6,15.8,13.7],backgroundColor:['#3b82f6','rgba(154,160,184,.35)','rgba(154,160,184,.35)','rgba(154,160,184,.35)'],borderWidth:1,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#9aa0b8'}},y:{beginAtZero:true,ticks:{color:'#9aa0b8'}}}}})}
+const MULTIPLE_DATA = {
+  fwdpe: { title:'미국 투자은행 피어 비교 (Forward P/E)', unit:'Forward P/E', labels:['MS','GS','JPM','BAC'], data:[16.6,15.6,15.8,13.7], max:20,
+    explanation: 'MS 16.6x는 GS 15.6x·JPM 15.8x보다 소폭 높고 BAC 13.7x보다 높다. Wealth의 반복 수익성과 26.6% ROTCE가 피어 프리미엄을 설명한다.' },
+  pb: { title:'P/B 비교', unit:'P/B', labels:['MS(현재)'], data:[3.2], max:4,
+    explanation: 'BPS 기준 높은 프리미엄 — ROTCE 26.6%의 높은 자본 수익성이 반영된 수준.' },
+  ptbv: { title:'P/TBV 비교', unit:'P/TBV', labels:['MS(현재)'], data:[4.4], max:5,
+    explanation: 'TBVPS $53.18 기준 5단계 매우높음 — 52주 +41.5% 상승 이후 거래·IB 수익 정상화 여부가 배수 압축 위험의 핵심.' },
+  peg: { title:'PEG 비교', unit:'PEG', labels:['MS(현재)'], data:[1.5], max:2.5,
+    explanation: '3년 EPS 성장 전망 11.6% 대비 적정권 — 이익 성장 대비 과도한 프리미엄은 아니다.' },
+  rotce: { title:'ROTCE 비교', unit:'ROTCE(%)', labels:['MS(현재)'], data:[26.6], max:30,
+    explanation: 'Q2 2026 공식 실적 기준 — 최우수 구간(25%+)에 위치하며 IB·Wealth 업사이클이 동시에 반영됐다.' }
+};
+function renderMultipleChart(key){
+  const d=MULTIPLE_DATA[key];const ctx=document.getElementById('multipleChart');if(!ctx||!d)return;
+  if(charts.multiple)charts.multiple.destroy();
+  const bg=d.labels.map(l=>l==='MS'||l.includes('현재')?'#3b82f6':'rgba(154,160,184,.35)');
+  charts.multiple=new Chart(ctx,{type:'bar',data:{labels:d.labels,datasets:[{label:d.unit,data:d.data,backgroundColor:bg,borderWidth:1,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${d.unit} ${c.raw}x`}}},scales:{x:{ticks:{color:'#9aa0b8'}},y:{max:d.max,beginAtZero:true,ticks:{color:'#9aa0b8'}}}}});
+}
+let currentMultipleKey='fwdpe';
+function selectMultiple(key){
+  const d=MULTIPLE_DATA[key];if(!d)return;currentMultipleKey=key;
+  document.querySelectorAll('.val-item[data-metric]').forEach(el=>el.classList.toggle('selected',el.dataset.metric===key));
+  const titleEl=document.getElementById('multipleCompareTitle');const textEl=document.getElementById('multipleCompareText');
+  if(titleEl)titleEl.textContent=d.title;if(textEl)textEl.innerHTML=d.explanation;
+  renderMultipleChart(key);
+}
+function toggleCollapsible(header){
+  const body=header.nextElementSibling;const collapsed=body.classList.toggle('collapsed');
+  header.classList.toggle('collapsed',collapsed);header.setAttribute('aria-expanded',String(!collapsed));
+  const hintText=header.querySelector('.toggle-hint-text');if(hintText)hintText.textContent=collapsed?'상세 보기':'상세 숨기기';
+}
 function renderMsUsPortfolioChart(){let ctx=document.getElementById('msUsPortfolioChart');if(!ctx||charts.usportfolio)return;charts.usportfolio=new Chart(ctx,{type:'bar',data:{labels:['Institutional Securities','Wealth Management','Investment Management'],datasets:[{data:[11.04,8.86,1.65],backgroundColor:['#3b82f6','#2ecc71','#f0c040'],borderRadius:5,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.raw.toFixed(2)+'B'}}},scales:{x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},y:{beginAtZero:true,grid:{color:'rgba(255,255,255,.05)'},ticks:{color:'#9aa0b8',callback:v=>'$'+v+'B'}}}}})}
-function renderCharts(id){setTimeout(()=>{if(id==='fund')renderFundChart();if(id==='valuation')renderPeerChart();if(id==='us')renderMsUsPortfolioChart()},40)}renderCharts('tech');
+function renderCharts(id){setTimeout(()=>{if(id==='fund')renderFundChart();if(id==='valuation'&&!charts.multiple)selectMultiple(currentMultipleKey);if(id==='us')renderMsUsPortfolioChart()},40)}renderCharts('tech');
 </script>
 </body>
 </html>
