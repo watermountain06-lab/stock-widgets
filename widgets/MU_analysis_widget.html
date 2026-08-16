@@ -114,7 +114,10 @@
   .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
   .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
   .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
-  .val-item { margin-bottom: 18px; }
+  .val-item { margin-bottom: 18px; cursor: pointer; border: 1px solid transparent; border-radius: 8px; padding: 6px; margin-left: -6px; margin-right: -6px; transition: background 0.15s ease, border-color 0.15s ease; }
+  .val-item:hover { background: rgba(0,94,184,0.06); }
+  .val-item.selected { background: rgba(0,94,184,0.08); border-color: rgba(0,94,184,0.35); }
+  .val-item.selected .val-name::after { content: '▸ 비교 보기'; font-size: 9.5px; font-weight: 600; color: var(--accent2); margin-left: 8px; vertical-align: middle; }
   .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
@@ -431,41 +434,42 @@
   <div class="grid-2">
     <div class="card">
       <div class="card-title">멀티플 5단계 평가</div>
-      <div class="val-item">
+      <div class="val-item" data-metric="per" onclick="selectMultiple('per')">
         <div class="val-header"><span class="val-name">PER (Trailing)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">20.7x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 5x</span><span class="val-mid">적정 20x</span><span class="val-high">고 60x</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">$911.29÷TTM EPS $44.17(Q4FY25~Q3FY26) — 실적 서프라이즈로 적정 구간 진입. Forward PER 8.3x(FY2027E)·PEG 0.06 — 반도체 역사상 최저 수준</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="pbr" onclick="selectMultiple('pbr')">
         <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">10.2x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 2x</span><span class="val-mid">적정 10x</span><span class="val-high">고 30x</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">자기자본 $100.7B(Q3 FY26) · ROE 약 50%</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="psr" onclick="selectMultiple('psr')">
         <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">11.4x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 10x</span><span class="val-high">고 30x</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">시총 약 $991B÷TTM 매출 $90.3B(Q4FY25~Q3FY26)</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="fcfyield" onclick="selectMultiple('fcfyield')">
         <div class="val-header"><span class="val-name">FCF Yield (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">2.64%</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">낮음 1%</span><span class="val-mid">적정 3%</span><span class="val-high">높음 6%</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">TTM FCF/주 $23.18 ÷ 현재가 $911.29. 순부채 자료 없이 EV/EBITDA를 추정하지 않음.</div>
       </div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">Forward PER (FY2027E)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">8.7x</span><span class="stage-badge stage-1">1단계 매우낮음</span></div></div>
+      <div class="val-item" data-metric="fwdpe" onclick="selectMultiple('fwdpe')">
+        <div class="val-header"><span class="val-name">Forward PER (FY2027E)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">8.3x</span><span class="stage-badge stage-1">1단계 매우낮음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:20%;background:linear-gradient(90deg,#2ecc71,#27ae60);"></div></div>
         <div class="val-labels"><span class="val-low">저 8x</span><span class="val-mid">적정 18x</span><span class="val-high">고 30x</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">FY2027E EPS 컨센서스 $103~106 기준 · 반도체 사이클 역사상 가장 저렴한 PER 구간</div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title">메모리 반도체 피어 비교 — CY2027E Forward PER</div>
-      <div class="chart-wrap" style="height:270px;"><canvas id="muPeerChart"></canvas></div>
+      <div class="card-title"><span id="multipleCompareTitle">메모리 반도체 피어 비교 — CY2027E Forward PER</span></div>
+      <div class="chart-wrap" style="height:270px;"><canvas id="multipleChart"></canvas></div>
       <div style="font-size:11px;color:var(--text3);margin-top:10px;">2026년 6월 1일 비교 스냅샷 · 단위: 배 · Micron FY2027(8월 결산), 한국 2사는 CY2027(12월 결산)으로 모두 약 2027년 이익 기준.</div>
-      <div style="margin-top:10px;background:var(--bg3);padding:12px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.6;">Micron 8.3x는 SK hynix 6.2x·Samsung Electronics 6.5x보다 높지만 세 회사 모두 한 자릿수 Forward PER다. 이는 AI 메모리 호황에도 시장이 이익 정점 이후의 사이클 둔화를 할인하고 있음을 보여준다.</div>
+      <div style="margin-top:10px;background:var(--bg3);padding:12px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.6;" id="multipleCompareText"></div>
       <!-- Source: FairCurve Equity Pulse, 2026-06-01; anchor years aligned to approximately calendar 2027. -->
     </div>
   </div>
@@ -492,7 +496,7 @@
     </div>
     <div class="scenario-card" style="background:var(--bg3);margin-bottom:8px;">
       <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Base 시나리오 — FY2027E 컨센서스 달성</div>
-      <div style="font-size:12px;color:var(--text2);">FY2027E EPS $103~106 컨센서스 달성, Forward PER 10x대 유지 시 → 공정가치 <strong style="color:var(--text);">$1,000~1,500/주</strong> (현재가 대비 -88.7% ~ -88.4%)</div>
+      <div style="font-size:12px;color:var(--text2);">FY2027E EPS $103~106 컨센서스 달성, Forward PER 10x대 유지 시 → 공정가치 <strong style="color:var(--text);">$1,000~1,500/주</strong> (현재가 대비 +9.7% ~ +64.6%)</div>
     </div>
     <div class="scenario-card" style="background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.2);">
       <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;">Bull 시나리오 — AI 메모리 슈퍼사이클 지속</div>
@@ -906,40 +910,82 @@ function renderCycleChart() {
     }
   });
 }
-function renderPeerChart() {
-  const ctx = document.getElementById('muPeerChart');
-  if (!ctx || charts['valuation']) return;
-  charts['valuation'] = new Chart(ctx,{
-    type:'bar',
-    data:{
-      labels:['Micron','SK hynix','Samsung Electronics'],
-      datasets:[{
-        label:'CY2027E Forward PER (x)',
-        data:[8.3,6.2,6.5],
-        backgroundColor:['rgba(0,94,184,0.78)','rgba(46,204,113,0.72)','rgba(240,192,64,0.72)'],
-        borderColor:['#005EB8','#2ecc71','#f0c040'],
-        borderWidth:1.5,
-        borderRadius:6,
-        maxBarThickness:72
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{
-        legend:{display:false},
-        tooltip:{callbacks:{label:c=>c.raw.toFixed(1)+'x'}}
-      },
-      scales:{
-        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
-        y:{beginAtZero:true,suggestedMax:12,grid:{color:'rgba(255,255,255,0.06)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'},title:{display:true,text:'2027E Forward PER (배)',color:'#9aa0b8',font:{size:10}}}
-      }
-    }
-  });
+const MULTIPLE_DATA = {
+  per: {
+    title: 'PER(Trailing) 비교 — 자체 밴드 기준',
+    unit: 'PER',
+    labels: ['MU','적정 20x(자체 밴드)'],
+    data: [20.7,20],
+    max: 60,
+    explanation: '$911.29÷TTM EPS $44.17(Q4FY25~Q3FY26) 기준 PER(Trailing) 20.7x는 적정 밴드(20x)에 근접 — Q3 실적 서프라이즈로 더 이상 고평가 구간이 아니다. Forward PER 8.3x(FY2027E)·PEG 0.06는 여전히 반도체 역사상 최저 수준.'
+  },
+  pbr: {
+    title: 'PBR 비교 — 자체 밴드 기준',
+    unit: 'PBR',
+    labels: ['MU','적정 10x(자체 밴드)'],
+    data: [10.2,10],
+    max: 30,
+    explanation: '자기자본 $100.7B(Q3 FY26) 기준 PBR 10.2x는 적정 밴드(10x)와 거의 일치 — ROE 약 50%의 높은 수익성이 이 수준의 배수를 정당화한다.'
+  },
+  psr: {
+    title: 'PSR 비교 — 자체 밴드 기준',
+    unit: 'PSR',
+    labels: ['MU','적정 10x(자체 밴드)'],
+    data: [11.4,10],
+    max: 30,
+    explanation: '시총 약 $991B÷TTM 매출 $90.3B(Q4FY25~Q3FY26) 기준 PSR 11.4x는 적정 밴드(10x)를 소폭 상회한다.'
+  },
+  fcfyield: {
+    title: 'FCF Yield 비교 — 자체 밴드 기준',
+    unit: 'FCF Yield(%)',
+    labels: ['MU'],
+    data: [2.64],
+    max: 6,
+    explanation: 'TTM FCF/주 $23.18÷현재가 $911.29 기준 FCF Yield 2.64%는 적정 밴드(3%) 부근이다. 순부채 자료 없이 EV/EBITDA는 별도로 추정하지 않았다.'
+  },
+  fwdpe: {
+    title: '메모리 반도체 피어 비교 — CY2027E Forward PER',
+    unit: 'Forward PER',
+    labels: ['Micron','SK hynix','Samsung Electronics'],
+    data: [8.3,6.2,6.5],
+    max: 12,
+    explanation: 'Micron 8.3x는 SK hynix 6.2x·Samsung Electronics 6.5x보다 높지만 세 회사 모두 한 자릿수 Forward PER다. 이는 AI 메모리 호황에도 시장이 이익 정점 이후의 사이클 둔화를 할인하고 있음을 보여준다. (2026년 6월 1일 비교 스냅샷)'
+  }
+};
+function renderMultipleChart(key) {
+  const d = MULTIPLE_DATA[key];
+  const ctx = document.getElementById('multipleChart');
+  if (!ctx || !d) return;
+  if (charts['multiple']) charts['multiple'].destroy();
+  const isPct = d.unit.includes('%');
+  let bg, bd;
+  if (key === 'fwdpe') {
+    bg = ['rgba(0,94,184,0.78)','rgba(46,204,113,0.72)','rgba(240,192,64,0.72)'];
+    bd = ['#005EB8','#2ecc71','#f0c040'];
+  } else {
+    bg = d.labels.map((l,i)=> i===0 ? 'rgba(0,94,184,0.78)' : 'rgba(154,160,184,0.35)');
+    bd = d.labels.map((l,i)=> i===0 ? '#005EB8' : '#5c6282');
+  }
+  charts['multiple'] = new Chart(ctx,{ type:'bar', data:{ labels:d.labels, datasets:[{ label:d.unit, data:d.data, backgroundColor:bg, borderColor:bd, borderWidth:1.5, borderRadius:6, maxBarThickness:72 }] },
+    options:{ responsive:true,maintainAspectRatio:false, plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>isPct?`${d.unit} ${ctx.raw}%`:`${d.unit} ${ctx.raw}x`}}},
+      scales:{ x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}}, y:{beginAtZero:true,max:d.max,grid:{color:'rgba(255,255,255,0.06)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>isPct?v+'%':v+'x'}} } } });
+}
+let currentMultipleKey = 'fwdpe';
+function selectMultiple(key) {
+  const d = MULTIPLE_DATA[key];
+  if (!d) return;
+  currentMultipleKey = key;
+  document.querySelectorAll('.val-item').forEach(el => el.classList.toggle('selected', el.dataset.metric === key));
+  const titleEl = document.getElementById('multipleCompareTitle');
+  const textEl = document.getElementById('multipleCompareText');
+  if (titleEl) titleEl.textContent = d.title;
+  if (textEl) textEl.innerHTML = d.explanation;
+  renderMultipleChart(key);
 }
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
-    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'valuation') { if (!charts['multiple']) selectMultiple(currentMultipleKey); }
     if (sectionId === 'us') renderCycleChart();
   }, 50);
 }
