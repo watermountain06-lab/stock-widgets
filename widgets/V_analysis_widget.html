@@ -103,7 +103,10 @@
   .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
   .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
   .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
-  .val-item { margin-bottom: 18px; }
+  .val-item { margin-bottom: 18px; cursor: pointer; border: 1px solid transparent; border-radius: 8px; padding: 6px; margin-left: -6px; margin-right: -6px; transition: background 0.15s ease, border-color 0.15s ease; }
+  .val-item:hover { background: rgba(107,127,212,0.06); }
+  .val-item.selected { background: rgba(107,127,212,0.08); border-color: rgba(107,127,212,0.35); }
+  .val-item.selected .val-name::after { content: '▸ 비교 보기'; font-size: 9.5px; font-weight: 600; color: var(--accent2); margin-left: 8px; vertical-align: middle; }
   .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
@@ -219,7 +222,7 @@
     <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$681.5B</span></div>
     <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Financials</span></div>
     <div class="meta-item"><span class="meta-label">Q3 FY26 매출</span><span class="meta-value">$11.63B (+14%)</span></div>
-    <div class="meta-item"><span class="meta-label">P/E (TTM)</span><span class="meta-value">30.9x</span></div>
+    <div class="meta-item"><span class="meta-label">P/E (TTM)</span><span class="meta-value">30.6x</span></div>
     <div class="meta-item"><span class="meta-label">GAAP EPS (TTM)</span><span class="meta-value">$11.75</span></div>
     <div class="meta-item"><span class="meta-label">분기 배당</span><span class="meta-value">$0.670 (+14%)</span></div>
   </div>
@@ -408,31 +411,31 @@
   <div class="grid-2">
     <div class="card">
       <div class="card-title">멀티플 5단계 평가</div>
-      <div class="val-item">
+      <div class="val-item" data-metric="per" onclick="selectMultiple('per')">
         <div class="val-header"><span class="val-name">PER (GAAP TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">30.6x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:64%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저(15x)</span><span class="val-mid">적정(25x)</span><span class="val-high">고(40x)</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">$359.42÷$11.75 · PEG 1.96 · Mastercard(31.9x)와 거의 동일 수준</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="pbr" onclick="selectMultiple('pbr')">
         <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">19.2x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:74%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저(3x)</span><span class="val-mid">적정(10x)</span><span class="val-high">고(25x)</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">지속적 자사주 매입으로 자기자본이 얇아진 결과 — ROE 매우 높은 자산경량 비즈니스 특유의 구조적 고PBR</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="psr" onclick="selectMultiple('psr')">
         <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">15.3x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:72%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저(3x)</span><span class="val-mid">적정(8x)</span><span class="val-high">고(20x)</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">영업이익률 60% 수준 초고마진 사업에 대한 프리미엄 — 순마진 감안 시 정당화 가능한 구간</div>
       </div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">22.5x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
+      <div class="val-item" data-metric="evebitda" onclick="selectMultiple('evebitda')">
+        <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">22.7x</span><span class="stage-badge stage-4">4단계 높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:64%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div>
         <div class="val-labels"><span class="val-low">저(10x)</span><span class="val-mid">적정(18x)</span><span class="val-high">고(30x)</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV $692.1B÷Adjusted EBITDA(TTM, 소송충당금 가산) $30.5B · 2025년 3월 24.2x에서 18.8x까지 압축됐다가 부분 회복한 수준</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="fcfyield" onclick="selectMultiple('fcfyield')">
         <div class="val-header"><span class="val-name">FCF수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">3.08%</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:66%;background:linear-gradient(90deg,#e74c3c,#f0c040,#2ecc71);background-size:151.5% 100%;"></div></div>
         <div class="val-labels"><span class="val-low">저(1.5%)</span><span class="val-mid">적정(+5.0%)</span><span class="val-high">고(4%)</span></div>
@@ -440,16 +443,16 @@
       </div>
     </div>
     <div class="card">
-      <div class="card-title">결제 네트워크 피어 P/E 비교</div>
-      <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:12px;font-size:12px;color:var(--text2);">Visa의 P/E 30.9x는 듀오폴리 파트너 Mastercard(31.9x)와 거의 동일하며, 폐쇄형 네트워크 American Express(22.6x)보다 높고, 규제·경쟁 압박이 큰 PayPal(10.6x)보다 훨씬 높은 프리미엄을 받고 있음.</div>
+      <div class="card-title"><span id="multipleCompareTitle">P/E 비교 — 결제 네트워크 피어 기준</span></div>
+      <div class="chart-wrap" style="height:270px;"><canvas id="multipleChart"></canvas></div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text2);" id="multipleCompareText"></div>
     </div>
   </div>
 
   <div class="card">
     <div class="card-title">Per-Share 지표 (TTM 기준 · 약 18.8억 주)</div>
     <div class="per-share-grid">
-      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS · TTM</div><div class="ps-value">$11.75</div><div class="ps-sub">'25.Q4~'26.Q3(FY26 Q3, Class A 기준) 합산 · PER 30.9x</div><div style="margin-top:5px;"><span class="stage-badge stage-4">4단계 높음</span></div></div>
+      <div class="ps-card"><div class="ps-icon">📈</div><div class="ps-label">GAAP EPS · TTM</div><div class="ps-value">$11.75</div><div class="ps-sub">'25.Q4~'26.Q3(FY26 Q3, Class A 기준) 합산 · PER 30.6x</div><div style="margin-top:5px;"><span class="stage-badge stage-4">4단계 높음</span></div></div>
       <div class="ps-card"><div class="ps-icon">📊</div><div class="ps-label">Non-GAAP EPS · TTM</div><div class="ps-value">$12.44</div><div class="ps-sub">Non-GAAP PER 28.8x</div><div style="margin-top:5px;"><span class="stage-badge stage-3">3단계 적정</span></div></div>
       <div class="ps-card"><div class="ps-icon">📚</div><div class="ps-label">BPS · 주당순자산</div><div class="ps-value">$18.97</div><div class="ps-sub">'26.Q2 자기자본 $35.7B</div><div style="margin-top:5px;"><span class="stage-badge stage-4">4단계 높음</span></div></div>
       <div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">FCF/주 · FY2025</div><div class="ps-value">$11.48</div><div class="ps-sub">FY25 FCF $21.58B · 매출 대비 54%</div><div style="margin-top:5px;"><span class="stage-badge stage-2">2단계 낮음</span></div></div>
@@ -457,7 +460,7 @@
     <div style="font-size:11px;color:var(--text3);margin-top:10px;">* BPS가 낮고 PBR이 높은 것은 저평가가 아니라 Visa 특유의 자산경량(asset-light) 구조와 대규모 자사주 매입으로 자기자본이 얇아진 결과 — ROE는 오히려 매우 높음(순이익/자기자본 비율 50%대). PER·EV/EBITDA는 5년 평균 대비 적정~약간 낮은 구간.</div>
   </div>
   <div class="info-box">
-    <strong>핵심 전제:</strong> Visa는 TSLA류 성장주와 달리 <strong>영업이익률 60%의 초고마진 검증된 사업</strong>. PER 30.9x·EV/EBITDA 22.7x는 자체 5년 평균 대비 오히려 낮은 편 — 2026년 초 규제 우려·거시 불안으로 밸류에이션이 한 차례 압축된 뒤 아직 완전히 재평가되지 않은 상태.
+    <strong>핵심 전제:</strong> Visa는 TSLA류 성장주와 달리 <strong>영업이익률 60%의 초고마진 검증된 사업</strong>. PER 30.6x·EV/EBITDA 22.7x는 자체 5년 평균 대비 오히려 낮은 편 — 2026년 초 규제 우려·거시 불안으로 밸류에이션이 한 차례 압축된 뒤 아직 완전히 재평가되지 않은 상태.
   </div>
 
   <div class="card">
@@ -594,7 +597,7 @@
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>$20B 신규 자사주 매입 + 배당 14% 인상:</strong> 강력한 주주환원.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>OpenAI 제휴·에이전틱 커머스 선점:</strong> AI 결제 인프라 주도권.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>스테이블코인 정산 연 $7B 규모로 확대:</strong> 위협을 기회로 전환.</span></div>
-      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>PER 30.9x — 5년 평균 대비 낮은 편:</strong> 재평가 여력.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bull);">▲</span><span><strong>PER 30.6x — 5년 평균 대비 낮은 편:</strong> 재평가 여력.</span></div>
     </div>
     <div class="bb-box">
       <div class="bb-title bb-bear">🐻 Bear 요인</div>
@@ -648,7 +651,7 @@
     <div class="zone-list">
       <div class="zone-item"><span class="zone-label">📈 기술적 분석</span><span class="zone-val" style="color:var(--green)">현재가&gt;MA5&gt;MA20&gt;MA60&gt;MA120 · 전 이평선 상회 · 상승 추세</span></div>
       <div class="zone-item"><span class="zone-label">📊 기본적 분석</span><span class="zone-val" style="color:var(--green);">영업이익률 60%·4개 분기 연속 EPS 서프라이즈, $20B 자사주+배당 14% 인상</span></div>
-      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:#f0c040;">PER 30.9x는 5년 평균 대비 낮은 편이나 PBR 19.4x·PSR 15.3x 절대 수준은 높음</span></div>
+      <div class="zone-item"><span class="zone-label">⚖️ 밸류에이션</span><span class="zone-val" style="color:#f0c040;">PER 30.6x는 5년 평균 대비 낮은 편이나 PBR 19.4x·PSR 15.3x 절대 수준은 높음</span></div>
       <div class="zone-item"><span class="zone-label">🇺🇸 US 특화</span><span class="zone-val" style="color:var(--red);">52주 수익률 +9.2% — S&P500 대비 소폭 언더퍼폼</span></div>
       <div class="zone-item"><span class="zone-label">📰 시계열 뉴스</span><span class="zone-val" style="color:#f0c040;">Credit Card Competition Act 재발의가 핵심 변수, 7/28 Q3 실적 발표 임박</span></div>
     </div>
@@ -922,29 +925,79 @@ function renderFundChart() {
   });
 }
 
-function renderPeerChart() {
-  const ctx = document.getElementById('peerChart');
-  if (!ctx || charts['peer']) return;
-  charts['peer'] = new Chart(ctx,{
+const MULTIPLE_DATA = {
+  per: {
+    title: 'P/E 비교 — 결제 네트워크 피어 기준',
+    unit: 'P/E',
+    labels: ['PYPL','AXP','V','MA'],
+    data: [10.63,22.57,30.6,31.91],
+    max: 40,
+    explanation: 'Visa의 P/E 30.6x는 듀오폴리 파트너 Mastercard(31.9x)와 거의 동일하며, 폐쇄형 네트워크 American Express(22.6x)보다 높고, 규제·경쟁 압박이 큰 PayPal(10.6x)보다 훨씬 높은 프리미엄을 받고 있다.'
+  },
+  pbr: {
+    title: 'PBR 비교 — 자체 밴드 기준',
+    unit: 'PBR',
+    labels: ['V','적정 10x(자체 밴드)'],
+    data: [19.2,10],
+    max: 25,
+    explanation: '지속적 자사주 매입으로 자기자본이 얇아진 결과 PBR 19.2x — ROE가 매우 높은 자산경량 비즈니스 특유의 구조적 고PBR이다.'
+  },
+  psr: {
+    title: 'PSR 비교 — 자체 밴드 기준',
+    unit: 'PSR',
+    labels: ['V','적정 8x(자체 밴드)'],
+    data: [15.3,8],
+    max: 20,
+    explanation: '영업이익률 60% 수준 초고마진 사업에 대한 프리미엄 — 순마진을 감안하면 정당화 가능한 구간이다.'
+  },
+  evebitda: {
+    title: 'EV/EBITDA 비교 — 자체 밴드 기준',
+    unit: 'EV/EBITDA',
+    labels: ['V','적정 18x(자체 밴드)'],
+    data: [22.7,18],
+    max: 30,
+    explanation: 'EV $692.1B÷Adjusted EBITDA(TTM, 소송충당금 가산) $30.5B 기준 22.7x — 2025년 3월 24.2x에서 18.8x까지 압축됐다가 부분 회복한 수준이다.'
+  },
+  fcfyield: {
+    title: 'FCF수익률 비교 — 자체 밴드 기준',
+    unit: 'FCF수익률(%)',
+    labels: ['V'],
+    data: [3.08],
+    max: 5,
+    explanation: 'TTM FCF $21.0B÷시총 $681.5B 기준 FCF수익률 3.08% — 수익률이 높을수록 저평가 신호이며, 자산경량 비즈니스의 높은 현금창출력이 프리미엄 멀티플을 상당폭 정당화한다.'
+  }
+};
+function renderMultipleChart(key) {
+  const d = MULTIPLE_DATA[key];
+  const ctx = document.getElementById('multipleChart');
+  if (!ctx || !d) return;
+  if (charts['multiple']) charts['multiple'].destroy();
+  const isPct = d.unit.includes('%');
+  const bg = d.labels.map((l,i)=> l==='V' ? '#6b7fd4' : 'rgba(154,160,184,0.4)');
+  charts['multiple'] = new Chart(ctx,{
     type:'bar',
-    data:{
-      labels:['PYPL','AXP','V','MA'],
-      datasets:[{
-        label:'P/E (TTM)',
-        data:[10.63,22.57,30.9,31.91],
-        backgroundColor:['rgba(154,160,184,0.4)','rgba(154,160,184,0.4)','#6b7fd4','rgba(154,160,184,0.4)'],
-        borderRadius:4,borderSkipped:false
-      }]
-    },
+    data:{ labels:d.labels, datasets:[{ label:d.unit, data:d.data, backgroundColor:bg, borderRadius:4, borderSkipped:false }] },
     options:{
       responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`P/E ${ctx.raw}x`}}},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>isPct?`${d.unit} ${ctx.raw}%`:`${d.unit} ${ctx.raw}x`}}},
       scales:{
         x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
-        y:{max:40,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
+        y:{max:d.max,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>isPct?v+'%':v+'x'}}
       }
     }
   });
+}
+let currentMultipleKey = 'per';
+function selectMultiple(key) {
+  const d = MULTIPLE_DATA[key];
+  if (!d) return;
+  currentMultipleKey = key;
+  document.querySelectorAll('.val-item').forEach(el => el.classList.toggle('selected', el.dataset.metric === key));
+  const titleEl = document.getElementById('multipleCompareTitle');
+  const textEl = document.getElementById('multipleCompareText');
+  if (titleEl) titleEl.textContent = d.title;
+  if (textEl) textEl.innerHTML = d.explanation;
+  renderMultipleChart(key);
 }
 
 function renderNiChart() {
@@ -975,7 +1028,7 @@ function renderNiChart() {
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
-    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'valuation') { if (!charts['multiple']) selectMultiple(currentMultipleKey); }
     if (sectionId === 'us') renderNiChart();
   }, 50);
 }
