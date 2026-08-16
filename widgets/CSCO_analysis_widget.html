@@ -114,7 +114,10 @@
   .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
   .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
   .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
-  .val-item { margin-bottom: 18px; }
+  .val-item { margin-bottom: 18px; cursor: pointer; border: 1px solid transparent; border-radius: 8px; padding: 6px; margin-left: -6px; margin-right: -6px; transition: background 0.15s ease, border-color 0.15s ease; }
+  .val-item:hover { background: rgba(92,201,245,0.06); }
+  .val-item.selected { background: rgba(92,201,245,0.08); border-color: rgba(92,201,245,0.35); }
+  .val-item.selected .val-name::after { content: '▸ 비교 보기'; font-size: 9.5px; font-weight: 600; color: var(--accent2); margin-left: 8px; vertical-align: middle; }
   .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
@@ -223,7 +226,7 @@
     <div class="meta-item"><span class="meta-label">시가총액</span><span class="meta-value highlight">$439.2B</span></div>
     <div class="meta-item"><span class="meta-label">섹터</span><span class="meta-value">Information Technology</span></div>
     <div class="meta-item"><span class="meta-label">Q3 FY26 매출</span><span class="meta-value">$15.84B (+12%)</span></div>
-    <div class="meta-item"><span class="meta-label">P/E (TTM)</span><span class="meta-value">39.4x</span></div>
+    <div class="meta-item"><span class="meta-label">P/E (TTM)</span><span class="meta-value">40.2x</span></div>
     <div class="meta-item"><span class="meta-label">GAAP EPS (TTM)</span><span class="meta-value">$3.08</span></div>
     <div class="meta-item"><span class="meta-label">분기 배당</span><span class="meta-value">$0.42</span></div>
   </div>
@@ -436,36 +439,36 @@
 <div id="valuation" class="section">
   <div class="section-title">Per-Share & 밸류에이션 — AI 재평가로 자체 역사적 평균 대비 프리미엄 구간 진입</div>
   <div class="info-box">
-    <strong>핵심 전제:</strong> PER(TTM) 39.4x는 Cisco의 과거 평균(10년 평균 약 17~20x) 대비 크게 높은 수준이다 — 52주 +73.7% 랠리는 전통적 네트워킹 기업에서 AI 인프라 수혜주로의 밸류에이션 재평가(리레이팅)를 반영한 결과로 해석해야 한다.
+    <strong>핵심 전제:</strong> PER(TTM) 40.2x는 Cisco의 과거 평균(10년 평균 약 17~20x) 대비 크게 높은 수준이다 — 52주 +73.7% 랠리는 전통적 네트워킹 기업에서 AI 인프라 수혜주로의 밸류에이션 재평가(리레이팅)를 반영한 결과로 해석해야 한다.
   </div>
   <div class="grid-2">
     <div class="card">
       <div class="card-title">멀티플 5단계 평가</div>
-      <div class="val-item">
+      <div class="val-item" data-metric="per" onclick="selectMultiple('per')">
         <div class="val-header"><span class="val-name">PER (GAAP TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">40.2x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);background-size:130.9% 100%;"></div></div>
         <div class="val-labels"><span class="val-low">저(15x)</span><span class="val-mid">적정(22x)</span><span class="val-high">고(28x)</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">$123.88÷TTM EPS $3.08(Q4FY25~Q3FY26 합산) · 자체 역사적 평균(17~20x) 대비 약 2배 프리미엄</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="fwdpe" onclick="selectMultiple('fwdpe')">
         <div class="val-header"><span class="val-name">Forward P/E (FY26E 가이던스)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">30.0x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:74.5%;background:linear-gradient(90deg,#2ecc71,#f0c040,#e74c3c);background-size:170.6% 100%;"></div></div>
         <div class="val-labels"><span class="val-low">저(15x)</span><span class="val-mid">적정(20x)</span><span class="val-high">고(28x)</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">FY2026(E) EPS 가이던스 중간값($4.11) 기준 · TTM보다는 완화되나 여전히 프리미엄 구간</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="pbr" onclick="selectMultiple('pbr')">
         <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">10.0x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);background-size:112.5% 100%;"></div></div>
         <div class="val-labels"><span class="val-low">저(2x)</span><span class="val-mid">적정(4x)</span><span class="val-high">고(8x)</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">BPS $12.31(자기자본 $48.9B÷약 39.7억 주) · Splunk 인수 영업권 반영, 자사주매입도 장부가치 압축 요인</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="divyield" onclick="selectMultiple('divyield')">
         <div class="val-header"><span class="val-name">배당수익률</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">1.48%</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:57%;background:linear-gradient(90deg,#f0c040,#e67e22);background-size:200% 100%;"></div></div>
         <div class="val-labels"><span class="val-low">저(0.5%)</span><span class="val-mid">적정(1.5%)</span><span class="val-high">고(3%)</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">주가 급등으로 배당수익률은 낮아졌으나 대형 하드웨어 기업 대비 여전히 안정적 배당 정책 유지</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="psr" onclick="selectMultiple('psr')">
         <div class="val-header"><span class="val-name">PSR (시총/매출)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">8.2x</span><span class="stage-badge stage-5">5단계 매우높음</span></div></div>
         <div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div>
         <div class="val-labels"><span class="val-low">저(3x)</span><span class="val-mid">적정(5x)</span><span class="val-high">고(7x)</span></div>
@@ -473,9 +476,9 @@
       </div>
     </div>
     <div class="card">
-      <div class="card-title">네트워킹·하드웨어 피어 P/E 비교</div>
-      <div class="chart-wrap" style="height:240px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:12px;font-size:12px;color:var(--text2);">Cisco의 P/E 39.4x는 자체 역사적 평균은 물론, 전통 네트워킹 피어 대비로도 높은 수준 — AI 인프라 프리미엄이 상당폭 반영된 결과로, 향후 실적이 이 밸류에이션을 뒷받침할 수 있는지가 관건.</div>
+      <div class="card-title"><span id="multipleCompareTitle">PER 비교 — 자체 10년 평균 기준</span></div>
+      <div class="chart-wrap" style="height:270px;"><canvas id="multipleChart"></canvas></div>
+      <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText"></div>
     </div>
   </div>
 
@@ -569,7 +572,7 @@
     </div>
     <div class="bb-box">
       <div class="bb-title bb-bear">🐻 Bear 요인</div>
-      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>PER 39.4x, PBR 9.8x:</strong> 자체 역사적 평균 대비 약 2배 프리미엄.</span></div>
+      <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>PER 40.2x, PBR 10.0x:</strong> 자체 역사적 평균 대비 약 2배 프리미엄.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>Splunk 매출 믹스 역풍:</strong> 온프레미스→클라우드 전환이 실적 발목.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>52주 고점 대비 -15.1% 조정:</strong> 단·중기 이평선 저항 국면.</span></div>
       <div class="bb-item"><span class="bb-icon" style="color:var(--bear);">▼</span><span><strong>약 4,000명 감원:</strong> 비용구조 재편 진행 중, 실행 리스크 존재.</span></div>
@@ -891,29 +894,71 @@ function renderFundChart() {
   });
 }
 
-function renderPeerChart() {
-  const ctx = document.getElementById('peerChart');
-  if (!ctx || charts['peer']) return;
-  charts['peer'] = new Chart(ctx,{
-    type:'bar',
-    data:{
-      labels:['CSCO','자체 10년평균'],
-      datasets:[{
-        label:'P/E',
-        data:[35.9,18.5],
-        backgroundColor:['#5cc9f5','rgba(154,160,184,0.4)'],
-        borderRadius:4,borderSkipped:false
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`P/E ${ctx.raw}x`}}},
-      scales:{
-        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
-        y:{max:40,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
-      }
-    }
-  });
+const MULTIPLE_DATA = {
+  per: {
+    title: 'PER 비교 — 자체 10년 평균 기준',
+    unit: 'PER',
+    labels: ['CSCO','자체 10년평균'],
+    data: [40.2,18.5],
+    max: 45,
+    explanation: 'PER(TTM) 40.2x($123.88÷TTM EPS $3.08)는 Cisco의 10년 평균(약 17~20x) 대비 약 2배 프리미엄이다. 52주 +73.7% 랠리는 전통적 네트워킹 기업에서 AI 인프라 수혜주로의 밸류에이션 리레이팅을 반영한 결과로 해석된다.'
+  },
+  fwdpe: {
+    title: 'Forward P/E 비교 — FY26E 가이던스 기준',
+    unit: 'Forward P/E',
+    labels: ['CSCO Forward','CSCO TTM'],
+    data: [30.0,40.2],
+    max: 45,
+    explanation: 'FY2026(E) EPS 가이던스 중간값($4.11) 기준 Forward P/E 30.0x는 TTM PER 40.2x보다 완화됐으나, 자체 밴드(적정 20x) 대비로는 여전히 프리미엄 구간이다.'
+  },
+  pbr: {
+    title: 'PBR 비교 — 자체 밴드 기준',
+    unit: 'PBR',
+    labels: ['CSCO','적정 4x(자체 밴드)'],
+    data: [10.0,4],
+    max: 12,
+    explanation: 'BPS $12.31(자기자본 $48.9B÷약 39.7억 주) 기준 PBR 10.0x는 적정 밴드(4x)를 크게 상회한다. Splunk 인수 영업권과 지속적 자사주매입이 장부가치를 압축시킨 영향도 있다.'
+  },
+  divyield: {
+    title: '배당수익률 비교 — 자체 밴드 기준',
+    unit: '배당수익률(%)',
+    labels: ['CSCO'],
+    data: [1.48],
+    max: 3,
+    explanation: '주가 급등으로 배당수익률이 1.48%까지 낮아졌으나 적정 밴드(1.5%) 부근이며, 대형 하드웨어 기업 대비 여전히 안정적인 배당 정책을 유지하고 있다.'
+  },
+  psr: {
+    title: 'PSR 비교 — 자체 밴드 기준',
+    unit: 'PSR',
+    labels: ['CSCO','적정 5x(자체 밴드)'],
+    data: [8.2,5],
+    max: 10,
+    explanation: '시총 $439.2B÷TTM 매출 $60.7B 기준 PSR 8.2x는 전통 네트워킹 하드웨어 기업 밴드(적정 5x)를 넘어선 AI 프리미엄이 반영된 결과다.'
+  }
+};
+function renderMultipleChart(key) {
+  const d = MULTIPLE_DATA[key];
+  const ctx = document.getElementById('multipleChart');
+  if (!ctx || !d) return;
+  if (charts['multiple']) charts['multiple'].destroy();
+  const isPct = d.unit.includes('%');
+  const bg = d.labels.map((l,i)=> i===0 ? '#5cc9f5' : 'rgba(154,160,184,0.35)');
+  const bd = d.labels.map((l,i)=> i===0 ? '#7fd4f7' : '#5c6282');
+  charts['multiple'] = new Chart(ctx,{ type:'bar', data:{ labels:d.labels, datasets:[{ label:d.unit, data:d.data, backgroundColor:bg, borderColor:bd, borderWidth:1, borderRadius:5 }] },
+    options:{ responsive:true,maintainAspectRatio:false, plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>isPct?`${d.unit} ${ctx.raw}%`:`${d.unit} ${ctx.raw}x`}}},
+      scales:{ x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10.5}}}, y:{max:d.max,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>isPct?v+'%':v+'x'}} } } });
+}
+let currentMultipleKey = 'per';
+function selectMultiple(key) {
+  const d = MULTIPLE_DATA[key];
+  if (!d) return;
+  currentMultipleKey = key;
+  document.querySelectorAll('.val-item').forEach(el => el.classList.toggle('selected', el.dataset.metric === key));
+  const titleEl = document.getElementById('multipleCompareTitle');
+  const textEl = document.getElementById('multipleCompareText');
+  if (titleEl) titleEl.textContent = d.title;
+  if (textEl) textEl.innerHTML = d.explanation;
+  renderMultipleChart(key);
 }
 
 function renderCscoUsOrdersChart() {
@@ -929,7 +974,7 @@ function renderCscoUsOrdersChart() {
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
-    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'valuation') { if (!charts['multiple']) selectMultiple(currentMultipleKey); }
     if (sectionId === 'us') renderCscoUsOrdersChart();
   }, 50);
 }
