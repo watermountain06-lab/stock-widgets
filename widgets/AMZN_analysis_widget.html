@@ -112,7 +112,10 @@
   .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
   .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
   .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
-  .val-item { margin-bottom: 18px; }
+  .val-item { margin-bottom: 18px; cursor: pointer; border: 1px solid transparent; border-radius: 8px; padding: 6px; margin-left: -6px; margin-right: -6px; transition: background 0.15s ease, border-color 0.15s ease; }
+  .val-item:hover { background: rgba(255,153,0,0.06); }
+  .val-item.selected { background: rgba(255,153,0,0.08); border-color: rgba(255,153,0,0.35); }
+  .val-item.selected .val-name::after { content: '▸ 비교 보기'; font-size: 9.5px; font-weight: 600; color: var(--accent2); margin-left: 8px; vertical-align: middle; }
   .val-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .val-name { font-size: 13px; font-weight: 600; color: var(--text); }
   .val-number { font-size: 14px; font-weight: 700; color: var(--accent2); }
@@ -428,41 +431,41 @@
   <div class="grid-2">
     <div class="card">
       <div class="card-title">멀티플 5단계 평가</div>
-      <div class="val-item">
+      <div class="val-item" data-metric="per" onclick="selectMultiple('per')">
         <div class="val-header"><span class="val-name">PER (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">21.5x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:38%;background:linear-gradient(90deg,#27ae60,#8bc34a);"></div></div>
+        <div class="val-track"><div class="val-fill" style="width:16%;background:linear-gradient(90deg,#27ae60,#8bc34a);"></div></div>
         <div class="val-labels"><span class="val-low">저 15x</span><span class="val-mid">적정 28x</span><span class="val-high">고 55x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">빅테크 평균 ~30x. TTM EPS $12.41에 Anthropic 평가익(Q1 $16.8B+Q2 $53.4B) 포함 — 제거 시 실질 EPS 약 $6.0 → 실질 PER ~46x</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">⚠️ TTM EPS $12.41에 Anthropic 평가익(Q1 $16.8B+Q2 $53.4B) 포함돼 착시적으로 낮음 — 제거 시 실질 EPS 약 $6.0 → 실질 PER ~46x로 급등</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="pbr" onclick="selectMultiple('pbr')">
         <div class="val-header"><span class="val-name">PBR</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">5.4x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:38%;background:linear-gradient(90deg,#27ae60,#8bc34a);"></div></div>
+        <div class="val-track"><div class="val-fill" style="width:15%;background:linear-gradient(90deg,#27ae60,#8bc34a);"></div></div>
         <div class="val-labels"><span class="val-low">저 2x</span><span class="val-mid">적정 8x</span><span class="val-high">고 25x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">자기자본 약 $540B · ROE 약 28%(Anthropic 평가익 반영)</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">자기자본 약 $540B · ROE 약 28%(Anthropic 평가익 일부 반영)</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="psr" onclick="selectMultiple('psr')">
         <div class="val-header"><span class="val-name">PSR (TTM)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">3.8x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:38%;background:linear-gradient(90deg,#27ae60,#8bc34a);"></div></div>
+        <div class="val-track"><div class="val-fill" style="width:25%;background:linear-gradient(90deg,#27ae60,#8bc34a);"></div></div>
         <div class="val-labels"><span class="val-low">저 1x</span><span class="val-mid">적정 4x</span><span class="val-high">고 12x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">리테일+클라우드 혼합 특성으로 낮음</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">리테일+클라우드 혼합 특성으로 낮음 · 매출 기반 지표라 지분평가이익 착시 없음</div>
       </div>
-      <div class="val-item">
+      <div class="val-item" data-metric="pcr" onclick="selectMultiple('pcr')">
         <div class="val-header"><span class="val-name">PCR (운영CF)</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">18.1x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:38%;background:linear-gradient(90deg,#27ae60,#8bc34a);"></div></div>
+        <div class="val-track"><div class="val-fill" style="width:24%;background:linear-gradient(90deg,#27ae60,#8bc34a);"></div></div>
         <div class="val-labels"><span class="val-low">저 8x</span><span class="val-mid">적정 20x</span><span class="val-high">고 50x</span></div>
         <div style="font-size:11px;color:var(--text3);margin-top:4px;">FCF 대신 운영CF 사용 (Capex 급증으로 FCF는 TTM -$7.6B로 왜곡)</div>
       </div>
-      <div class="val-item">
-        <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">17.5x</span><span class="stage-badge stage-2">2단계 낮음</span></div></div>
-        <div class="val-track"><div class="val-fill" style="width:38%;background:linear-gradient(90deg,#27ae60,#8bc34a);"></div></div>
+      <div class="val-item" data-metric="evebitda" onclick="selectMultiple('evebitda')">
+        <div class="val-header"><span class="val-name">EV/EBITDA</span><div style="display:flex;align-items:center;gap:8px;"><span class="val-number">18.0x</span><span class="stage-badge stage-3">3단계 적정</span></div></div>
+        <div class="val-track"><div class="val-fill" style="width:31%;background:linear-gradient(90deg,#f0c040,#e67e22);"></div></div>
         <div class="val-labels"><span class="val-low">저 8x</span><span class="val-mid">적정 18x</span><span class="val-high">고 40x</span></div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV 약 $3.04T÷TTM EBITDA 약 $168.9B · 5년 평균 21x 대비 역대 최저 · 회귀 시 대형 업사이드</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">EV 약 $3.04T÷TTM EBITDA 약 $168.9B · 5년 평균 21x 대비 낮은 적정권 · Operating Income 기반이라 지분평가이익 영향 없음</div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title">빅테크 PER 비교</div>
-      <div class="chart-wrap" style="height:270px;"><canvas id="peerChart"></canvas></div>
-      <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;">AMZN 22.1x는 빅테크 5개 중 MSFT(22.6x)·GOOGL(24.2x)·NVDA(31.5x)·AAPL(40.4x)보다 낮은 최저 수준이나, Anthropic 평가익으로 TTM EPS가 부풀려진 영향이 크다. EV/EBITDA 18.0x는 5년 평균 21x를 밑돈다.</div>
+      <div class="card-title"><span id="multipleCompareTitle">PER 비교 — 빅테크 기준</span></div>
+      <div class="chart-wrap" style="height:270px;"><canvas id="multipleChart"></canvas></div>
+      <div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText"></div>
     </div>
   </div>
   <div class="card">
@@ -476,8 +479,8 @@
     <div style="font-size:11px;color:var(--text3);margin-top:10px;">* 운영CF $161.4B(TTM) vs FCF -$7.6B(TTM) 괴리 = Capex 약 $169B(TTM) 차액. Capex 사이클 정상화 시 FCF 복귀 기대.</div>
   </div>
   <div class="card">
-    <div class="card-title">종합 밸류에이션 — 5개 지표 모두 2단계 · MSFT와 함께 Capex 사이클 저평가 구간</div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.6;">PER 22.1x → 2단계(Anthropic 평가익 제거 시 실질 EPS 기준 약 46x로 급등). PBR 5.5x → 2단계. PSR 3.9x → 2단계. PCR(운영CF) 18.6x → 2단계. EV/EBITDA 18.0x → 2단계(5년 평균 21x 대비 낮음). 5개 지표 모두 2단계 낮음 — MSFT와 함께 빅테크 내 밸류 매력 상위권이나, PER은 일회성 투자평가익 영향이 커 액면 그대로 해석하기 어렵다. Capex 정점 시 FCF 정상화 = 주가 재평가.</div>
+    <div class="card-title">종합 밸류에이션 — PER 제외 3개 지표 2단계 낮음, EV/EBITDA는 3단계 적정 · Capex 사이클 저평가 구간</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;">PER 21.5x는 Anthropic 평가익 제거 시 실질 EPS 기준 약 46x로 급등해 착시가 커 비교에서 제외. PBR 5.4x·PSR 3.8x·PCR(운영CF) 18.1x는 착시 없는 지표로 일관되게 2단계 낮음이며, EV/EBITDA 18.0x(5년 평균 21x 대비 낮음)는 3단계 적정권이다. 빅테크 내 밸류 매력 상위권이나 EV/EBITDA는 이미 적정가에 근접. Capex 정점 시 FCF 정상화 = 주가 재평가.</div>
   </div>
 
   <div class="card">
@@ -883,30 +886,70 @@ function renderFundChart() {
     c.update();
   });
 }
-function renderPeerChart() {
-  const ctx = document.getElementById('peerChart');
-  if (!ctx || charts['peer']) return;
-  charts['peer'] = new Chart(ctx,{
-    type:'bar',
-    data:{
-      labels:['MSFT','GOOGL','AMZN','NVDA','AAPL'],
-      datasets:[{
-        label:'PER(TTM)',
-        data:[22.6,24.2,22.1,31.5,40.4],
-        backgroundColor:['rgba(154,160,184,0.35)','rgba(154,160,184,0.35)','#FF9900','rgba(154,160,184,0.35)','rgba(154,160,184,0.35)'],
-        borderColor:['#5c6282','#5c6282','#ffb84d','#5c6282','#5c6282'],
-        borderWidth:1,borderRadius:5
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`PER ${ctx.raw}x`}}},
-      scales:{
-        x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10}}},
-        y:{max:45,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}}
-      }
-    }
-  });
+const MULTIPLE_DATA = {
+  per: {
+    title: 'PER 비교 — 빅테크 기준',
+    unit: 'PER',
+    labels: ['AMZN','MSFT','GOOGL','NVDA','AAPL'],
+    data: [21.5,22.6,24.2,31.5,40.4],
+    max: 45,
+    explanation: '빅테크 평균 ~30x. AMZN 21.5x는 5개 중 가장 낮은 최저 수준이나, TTM EPS $12.41에 Anthropic 평가익(Q1 $16.8B+Q2 $53.4B)이 포함돼 착시가 크다 — 제거 시 실질 EPS 약 $6.0 → 실질 PER ~46x로 급등해, 착시를 걷어내면 오히려 5개 중 가장 높은 배수가 된다.'
+  },
+  pbr: {
+    title: 'PBR 비교 — 빅테크 기준',
+    unit: 'PBR',
+    labels: ['AMZN','빅테크 평균(추정)'],
+    data: [5.4,8],
+    max: 25,
+    explanation: '적정 8x는 빅테크 평균 추정치. AMZN 5.4x는 이보다 낮음 — 자기자본 약 $540B, ROE 약 28%(단, Anthropic 평가익이 일부 반영돼 실제 사업 ROIC보다는 다소 부풀려진 수치).'
+  },
+  psr: {
+    title: 'PSR 비교 — 빅테크 기준',
+    unit: 'PSR(TTM)',
+    labels: ['AMZN','빅테크 평균(추정)'],
+    data: [3.8,4],
+    max: 12,
+    explanation: '적정 4x는 빅테크 평균 추정치. AMZN 3.8x는 거의 일치 — 매출 기반 지표라 지분평가이익 착시가 없어 PER보다 신뢰도가 높은 비교다. 리테일+클라우드 혼합 매출 구조상 순수 SW 기업보다 낮은 배수가 자연스럽다.'
+  },
+  pcr: {
+    title: 'PCR(운영CF) 비교 — 빅테크 기준',
+    unit: 'PCR(운영CF)',
+    labels: ['AMZN','빅테크 평균(추정)'],
+    data: [18.1,20],
+    max: 50,
+    explanation: '적정 20x는 빅테크 평균 추정치. AMZN은 FCF 대신 운영CF 기준 18.1x를 사용 — Capex 급증으로 FCF가 TTM -$7.6B로 왜곡돼 직접 비교가 불가능하기 때문이다. 운영CF $161.4B는 견조하며, Capex 정점 통과 후 FCF가 정상화되면 재평가 여지가 크다.'
+  },
+  evebitda: {
+    title: 'EV/EBITDA 비교 — 5년 평균 기준',
+    unit: 'EV/EBITDA',
+    labels: ['AMZN','5년 평균'],
+    data: [18.0,21],
+    max: 40,
+    explanation: 'AMZN EV/EBITDA 18.0x(EV 약 $3.04T÷TTM EBITDA 약 $168.9B)는 자체 5년 평균 21x보다 낮은 적정권이다. Operating Income 기반 지표라 지분평가이익 영향이 없다. Capex 사이클이 정점을 지나 정상화되면 밸류에이션 회귀에 따른 업사이드가 기대된다.'
+  }
+};
+function renderMultipleChart(key) {
+  const d = MULTIPLE_DATA[key];
+  const ctx = document.getElementById('multipleChart');
+  if (!ctx || !d) return;
+  if (charts['multiple']) charts['multiple'].destroy();
+  const bg = d.labels.map((l,i)=> i===0 ? '#FF9900' : 'rgba(154,160,184,0.35)');
+  const bd = d.labels.map((l,i)=> i===0 ? '#ffb84d' : '#5c6282');
+  charts['multiple'] = new Chart(ctx,{ type:'bar', data:{ labels:d.labels, datasets:[{ label:d.unit, data:d.data, backgroundColor:bg, borderColor:bd, borderWidth:1, borderRadius:5 }] },
+    options:{ responsive:true,maintainAspectRatio:false, plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${d.unit} ${ctx.raw}x`}}},
+      scales:{ x:{grid:{display:false},ticks:{color:'#9aa0b8',font:{size:10.5}}}, y:{max:d.max,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#9aa0b8',font:{size:10},callback:v=>v+'x'}} } } });
+}
+let currentMultipleKey = 'per';
+function selectMultiple(key) {
+  const d = MULTIPLE_DATA[key];
+  if (!d) return;
+  currentMultipleKey = key;
+  document.querySelectorAll('.val-item').forEach(el => el.classList.toggle('selected', el.dataset.metric === key));
+  const titleEl = document.getElementById('multipleCompareTitle');
+  const textEl = document.getElementById('multipleCompareText');
+  if (titleEl) titleEl.textContent = d.title;
+  if (textEl) textEl.innerHTML = d.explanation;
+  renderMultipleChart(key);
 }
 function renderCfChart() {
   const ctx = document.getElementById('cfChart');
@@ -934,7 +977,7 @@ function renderCfChart() {
 function renderCharts(sectionId) {
   setTimeout(() => {
     if (sectionId === 'fund') renderFundChart();
-    if (sectionId === 'valuation') renderPeerChart();
+    if (sectionId === 'valuation') { if (!charts['multiple']) selectMultiple(currentMultipleKey); }
     if (sectionId === 'us') renderCfChart();
   }, 50);
 }
