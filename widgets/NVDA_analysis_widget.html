@@ -612,53 +612,7 @@
     <div class="chart-wrap" style="height:220px;">
       <canvas id="nvdaFundCompareChart"></canvas>
     </div>
-    <div class="yoy-table" style="margin-top:14px;">
-      <div class="yoy-row yoy-header">
-        <div class="yoy-label"></div><div class="yoy-val" id="fv-h-cur">Q1 FY27</div><div class="yoy-val" id="fv-h-cmp">Q1 FY26</div><div class="yoy-delta">%</div>
-      </div>
-      <div class="yoy-row">
-        <div class="yoy-label">매출</div>
-        <div class="yoy-val" id="fv-revenue-cur"></div>
-        <div class="yoy-val" id="fv-revenue-cmp"></div>
-        <div class="yoy-delta" id="fv-revenue-delta"></div>
-      </div>
-      <div class="yoy-row">
-        <div class="yoy-label">영업이익</div>
-        <div class="yoy-val" id="fv-opinc-cur"></div>
-        <div class="yoy-val" id="fv-opinc-cmp"></div>
-        <div class="yoy-delta" id="fv-opinc-delta"></div>
-      </div>
-      <div class="yoy-row">
-        <div class="yoy-label">순이익</div>
-        <div class="yoy-val" id="fv-netinc-cur"></div>
-        <div class="yoy-val" id="fv-netinc-cmp"></div>
-        <div class="yoy-delta" id="fv-netinc-delta"></div>
-      </div>
-      <div class="yoy-row">
-        <div class="yoy-label">EPS (희석)</div>
-        <div class="yoy-val" id="fv-eps-cur"></div>
-        <div class="yoy-val" id="fv-eps-cmp"></div>
-        <div class="yoy-delta" id="fv-eps-delta"></div>
-      </div>
-      <div class="yoy-row">
-        <div class="yoy-label">현금+시장성증권</div>
-        <div class="yoy-val" id="fv-cash-cur"></div>
-        <div class="yoy-val" id="fv-cash-cmp"></div>
-        <div class="yoy-delta" id="fv-cash-delta"></div>
-      </div>
-      <div class="yoy-row">
-        <div class="yoy-label">총부채(차입금)</div>
-        <div class="yoy-val" id="fv-debt-cur"></div>
-        <div class="yoy-val" id="fv-debt-cmp"></div>
-        <div class="yoy-delta" id="fv-debt-delta"></div>
-      </div>
-      <div class="yoy-row">
-        <div class="yoy-label">자사주 매입</div>
-        <div class="yoy-val" id="fv-buyback-cur"></div>
-        <div class="yoy-val" id="fv-buyback-cmp"></div>
-        <div class="yoy-delta" id="fv-buyback-delta"></div>
-      </div>
-    </div>
+    <div id="fundNarrative" style="font-size:12px;color:var(--text2);line-height:1.75;margin-top:14px;"></div>
     <div class="yoy-footnote" id="fundFootnote"></div>
   </div>
 
@@ -1349,32 +1303,16 @@ const FUND_COMPARE = {
   yoy: {
     curLabel: 'Q1 FY27', cmpLabel: 'Q1 FY26',
     titleSuffix: 'YoY (Q1 FY27 vs Q1 FY26)',
-    chart: { cur: [81.6, 53.5, 58.3], cmp: [44.1, 21.6, 18.8] },
-    rows: {
-      revenue: { cur: '$81.6B', cmp: '$44.1B', delta: '+85.2%', cls: 'up' },
-      opinc:   { cur: '$53.5B', cmp: '$21.6B', delta: '+147.4%', cls: 'up', curNote: 'OPM 65.6%', cmpNote: 'OPM 49.1%' },
-      netinc:  { cur: '$58.3B', cmp: '$18.8B', delta: '+210.6%', cls: 'up', curNote: '마진 71.5%', cmpNote: '마진 42.6%' },
-      eps:     { cur: '$2.39', cmp: '$0.76', delta: '+214.5%', cls: 'up' },
-      cash:    { cur: '$80.6B', cmp: '$53.7B', delta: '+50.1%', cls: 'up' },
-      debt:    { cur: '$8.47B', cmp: '$8.46B', delta: '+0.1%', cls: 'flat' },
-      buyback: { cur: '$19.3B', cmp: '$14.1B', delta: '+37.0%', cls: 'up' }
-    },
+    chart: { cur: [81.6, 53.5, 69.9, 58.3, 48.6], cmp: [44.1, 21.6, 21.9, 18.8, 26.1] },
+    narrative: 'Q1 FY27 매출 $81.6B은 Q1 FY26($44.1B) 대비 85.2% 증가했고, 영업이익은 $53.5B(OPM 65.6%)로 전년동기(OPM 49.1%) 대비 마진 자체가 16.5%p 확대됐다 — 단순 매출 성장이 아니라 영업 레버리지가 본격 가동되고 있다는 신호다. 세전이익은 $69.9B로 전년동기($21.9B) 대비 3.2배, 순이익은 $58.3B(마진 71.5%)로 EPS $2.39(+214.5%)를 견인했다. 다만 FCF는 $48.6B(전년동기 $26.1B, +85.8%)로 순이익 증가율(+210.6%)에는 못 미치는데, 앞서 활동성 지표에서도 나타났듯 재고 확대·매출채권 회수 둔화로 운전자본이 늘어난 영향이다. 현금+시장성증권은 $80.6B로 1년 전($53.7B) 대비 50.1% 늘었고, 이 중 $19.3B는 이번 분기 자사주 매입에 썼다 — 총부채($8.47B)는 거의 변화가 없어(+0.1%) 이 확장이 차입이 아닌 순수 영업현금흐름만으로 이뤄졌다는 뜻이다.',
     footnote: '기준일: 2026.04.26(Q1 FY27) vs 2025.04.27(Q1 FY26) · GAAP 기준 · <a href="https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-first-quarter-fiscal-2027" target="_blank" rel="noopener">NVIDIA Q1 FY27 실적발표 원문 →</a>'
   },
   qoq: {
     curLabel: 'Q1 FY27', cmpLabel: 'Q4 FY26',
     titleSuffix: 'QoQ (Q1 FY27 vs Q4 FY26)',
-    chart: { cur: [81.6, 53.5, 58.3], cmp: [68.1, 44.3, 43.0] },
-    rows: {
-      revenue: { cur: '$81.6B', cmp: '$68.1B', delta: '+19.8%', cls: 'up' },
-      opinc:   { cur: '$53.5B', cmp: '$44.3B', delta: '+20.8%', cls: 'up', curNote: 'OPM 65.6%', cmpNote: 'OPM 65.0%' },
-      netinc:  { cur: '$58.3B', cmp: '$43.0B', delta: '+35.8%', cls: 'up', curNote: '마진 71.5%', cmpNote: '마진 63.1%' },
-      eps:     { cur: '$2.39', cmp: '$1.76', delta: '+35.8%', cls: 'up' },
-      cash:    { cur: '$80.6B', cmp: '$62.6B', delta: '+28.7%', cls: 'up' },
-      debt:    { cur: '$8.47B', cmp: '$8.50B', delta: '-0.3%', cls: 'flat' },
-      buyback: { cur: '$19.3B', cmp: '$3.8B', delta: '+408.2%', cls: 'up', cmpNote: '이례적 저점' }
-    },
-    footnote: '기준일: 2026.04.26(Q1 FY27) vs 2026.01.25(Q4 FY26) · GAAP 기준 · Q4 자사주 매입($3.8B)이 이례적으로 낮았던 기저효과로 QoQ% 왜곡 — 자사주 매입은 절대 규모($19.3B, 분기 최대) 기준으로 판단 권장 · <a href="https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2026" target="_blank" rel="noopener">NVIDIA Q4 FY26 실적발표 원문 →</a>'
+    chart: { cur: [81.6, 53.5, 69.9, 58.3, 48.6], cmp: [68.1, 44.3, 50.4, 43.0, 34.9] },
+    narrative: 'Q1 FY27 매출 $81.6B은 직전분기(Q4 FY26 $68.1B) 대비 19.8% 늘며 성장세가 이어졌다. 영업이익은 $53.5B(OPM 65.6%)로 전분기(OPM 65.0%) 대비 마진이 소폭 더 개선됐고, 세전이익은 $69.9B(전분기 $50.4B, +38.7%)·순이익은 $58.3B(마진 71.5%, 전분기 63.1%)로 손익 전 구간에서 개선이 뚜렷하다. FCF는 $48.6B로 전분기($34.9B) 대비 39.1% 늘어 순이익 증가율(+35.8%)과 비슷한 속도를 유지했다 — YoY에서 나타난 운전자본 부담이 최근 분기에는 크게 재발하지 않았다는 뜻이다. 현금+시장성증권은 $80.6B(전분기 $62.6B, +28.7%)로 늘었는데, 자사주 매입이 $3.8B(Q4, 이례적 저점)에서 $19.3B(Q1, 분기 최대)로 급증했음에도 총부채는 오히려 소폭 감소(-0.3%)해 매입 재원이 전액 현금창출력에서 나왔음을 보여준다.',
+    footnote: '기준일: 2026.04.26(Q1 FY27) vs 2026.01.25(Q4 FY26) · GAAP 기준 · <a href="https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2026" target="_blank" rel="noopener">NVIDIA Q4 FY26 실적발표 원문 →</a>'
   }
 };
 
@@ -1384,17 +1322,8 @@ function selectFundPeriod(period) {
   document.querySelectorAll('.range-btn[data-period]').forEach(b => b.classList.toggle('active', b.dataset.period === period));
   const titleEl = document.getElementById('fundPeriodTitle');
   if (titleEl) titleEl.textContent = d.titleSuffix;
-  document.getElementById('fv-h-cur').textContent = d.curLabel;
-  document.getElementById('fv-h-cmp').textContent = d.cmpLabel;
-  Object.keys(d.rows).forEach(key => {
-    const r = d.rows[key];
-    const curEl = document.getElementById(`fv-${key}-cur`);
-    const cmpEl = document.getElementById(`fv-${key}-cmp`);
-    const deltaEl = document.getElementById(`fv-${key}-delta`);
-    if (curEl) curEl.innerHTML = r.cur + (r.curNote ? `<span class="yoy-val-note">${r.curNote}</span>` : '');
-    if (cmpEl) cmpEl.innerHTML = r.cmp + (r.cmpNote ? `<span class="yoy-val-note">${r.cmpNote}</span>` : '');
-    if (deltaEl) { deltaEl.textContent = r.delta; deltaEl.className = 'yoy-delta ' + r.cls; }
-  });
+  const narrEl = document.getElementById('fundNarrative');
+  if (narrEl) narrEl.textContent = d.narrative;
   const footEl = document.getElementById('fundFootnote');
   if (footEl) footEl.innerHTML = d.footnote;
 
@@ -1410,7 +1339,7 @@ function selectFundPeriod(period) {
     charts['fundCompare'] = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['매출', '영업이익', '순이익'],
+        labels: ['매출', '영업이익', '세전이익', '순이익', 'FCF'],
         datasets: [
           { label: d.cmpLabel, data: d.chart.cmp, backgroundColor: 'rgba(154,160,184,0.35)', borderColor: '#5c6282', borderWidth: 1, borderRadius: 4 },
           { label: d.curLabel, data: d.chart.cur, backgroundColor: 'rgba(118,185,0,0.55)', borderColor: '#76b900', borderWidth: 1, borderRadius: 4 }
