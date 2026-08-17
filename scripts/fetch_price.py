@@ -15,15 +15,15 @@ import sys
 import urllib.request
 from datetime import datetime, timezone
 
-CHART_URL = "https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?range=1y&interval=1d"
+CHART_URL = "https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?range={range}&interval=1d"
 
 
 def yahoo_ticker(ticker):
     return ticker.replace(".", "-")
 
 
-def fetch_chart(ticker):
-    url = CHART_URL.format(ticker=yahoo_ticker(ticker))
+def fetch_chart(ticker, range_="1y"):
+    url = CHART_URL.format(ticker=yahoo_ticker(ticker), range=range_)
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
     with urllib.request.urlopen(req, timeout=30) as resp:
         data = json.loads(resp.read().decode("utf-8"))
@@ -108,9 +108,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("ticker")
     ap.add_argument("--out", default=None)
+    ap.add_argument("--range", dest="range_", default="1y", help="Yahoo chart range, e.g. 1y (default), 5y for historical-multiple averaging")
     args = ap.parse_args()
 
-    chart = fetch_chart(args.ticker)
+    chart = fetch_chart(args.ticker, range_=args.range_)
     bars = build_bars(chart)
     bars = drop_stale_last_bar(bars)
     if not bars:

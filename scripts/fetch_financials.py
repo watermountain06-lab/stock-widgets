@@ -57,6 +57,12 @@ CONCEPTS = {
     "operatingCashFlow": ["NetCashProvidedByUsedInOperatingActivities",
                            "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations"],
     "capex": ["PaymentsToAcquirePropertyPlantAndEquipment", "PaymentsToAcquireProductiveAssets", "PaymentsToAcquireOtherPropertyPlantAndEquipment"],
+    # dei:EntityCommonStockSharesOutstanding (net of treasury, cover-page "as of
+    # filing date" fact) tried first - the us-gaap fallbacks are gross shares
+    # issued/outstanding-including-treasury, which can overstate the share count
+    # by 20-30%+ for buyback-heavy companies (confirmed on JNJ: 3.12B issued vs
+    # 2.41B actually outstanding) and would understate BVPS/overstate PBR.
+    "sharesOutstanding": ["EntityCommonStockSharesOutstanding", "CommonStockSharesOutstanding", "CommonStockSharesIssued"],
 }
 
 # Balance-sheet concepts are point-in-time ("instant": only an "end" date,
@@ -64,7 +70,7 @@ CONCEPTS = {
 INSTANT_CONCEPTS = {"assets", "currentAssets", "currentLiabilities", "inventory",
                      "accountsReceivable", "accountsPayable", "totalLiabilities",
                      "shortTermDebt", "longTermDebt",
-                     "equityAttributableToParent", "cash"}
+                     "equityAttributableToParent", "cash", "sharesOutstanding"}
 
 
 def fetch_json(url, user_agent):
@@ -150,7 +156,7 @@ def pick_latest_quarter(entries):
     return min(candidates, key=_days)
 
 
-def extract_concept(facts, tag_candidates, is_instant=False):
+def extract_concept(facts, tag_candidates, is_instant=False, n_years=3):
     """Try every fallback tag and keep the one with the most recent data.
 
     Filers change XBRL tags over time (e.g. Apple's income-statement revenue
@@ -158,6 +164,13 @@ def extract_concept(facts, tag_candidates, is_instant=False):
     around ASC 606 adoption). The old tag still returns years-stale data, so
     picking the first candidate with *any* data silently returns outdated
     numbers instead of an error - must compare recency across candidates.
+
+    A candidate can have quarterly data but an empty annual series (e.g. JNJ
+    tags its 10-K balance sheet with 'StockholdersEquityIncludingPortion...'
+    but only ever reports 'StockholdersEquity' inside 10-Q's) - ranking by
+    latest_end alone would silently prefer that annual-less tag whenever its
+    quarterly end happens to be newer, so a candidate with a non-empty annual
+    series is always ranked above one without, before comparing recency.
     """
     best = None
     for tag in tag_candidates:
@@ -165,8 +178,8 @@ def extract_concept(facts, tag_candidates, is_instant=False):
         if not node:
             continue
         for unit_entries in node["units"].values():
-            annual = (pick_annual_instants(unit_entries) if is_instant
-                      else pick_annual_series(unit_entries))
+            annual = (pick_annual_instants(unit_entries, n_years=n_years) if is_instant
+                      else pick_annual_series(unit_entries, n_years=n_years))
             quarterly = pick_latest_quarter(unit_entries)
             if not annual and not quarterly:
                 continue
@@ -174,8 +187,9 @@ def extract_concept(facts, tag_candidates, is_instant=False):
             if quarterly:
                 end_dates.append(quarterly["end"])
             latest_end = max(end_dates)
-            if best is None or latest_end > best[0]:
-                best = (latest_end, {"tag": tag, "annual": annual, "latestQuarter": quarterly})
+            rank = (bool(annual), latest_end)
+            if best is None or rank > best[0]:
+                best = (rank, {"tag": tag, "annual": annual, "latestQuarter": quarterly})
     if best is None:
         return {"tag": None, "annual": [], "latestQuarter": None}
     return best[1]
@@ -187,6 +201,7 @@ def main():
     ap.add_argument("--cik", help="10-digit CIK, skips sp500.json lookup")
     ap.add_argument("--sp500", default="sp500.json")
     ap.add_argument("--out", default=None)
+    ap.add_argument("--years", type=int, default=3, help="annual periods to keep (default 3; use 5 for historical multiple averages)")
     args = ap.parse_args()
 
     user_agent = os.environ.get("SEC_USER_AGENT", DEFAULT_USER_AGENT)
@@ -207,6 +222,13 @@ def main():
     url = f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json"
     data = fetch_json(url, user_agent)
     usgaap = data["facts"].get("us-gaap", {})
+    dei = data["facts"].get("dei", {})
+    # sharesOutstanding's preferred tag lives in the separate "dei" taxonomy,
+    # not "us-gaap" - merge it in under its own name so extract_concept's
+    # normal fallback-tag loop can find it without a second code path.
+    facts = dict(usgaap)
+    if "EntityCommonStockSharesOutstanding" in dei:
+        facts["EntityCommonStockSharesOutstanding"] = dei["EntityCommonStockSharesOutstanding"]
 
     result = {
         "ticker": args.ticker.upper(),
@@ -214,7 +236,7 @@ def main():
         "entityName": data.get("entityName"),
     }
     for key, tags in CONCEPTS.items():
-        result[key] = extract_concept(usgaap, tags, is_instant=key in INSTANT_CONCEPTS)
+        result[key] = extract_concept(facts, tags, is_instant=key in INSTANT_CONCEPTS, n_years=args.years)
 
     out_path = args.out or f"{args.ticker.upper()}_financials.json"
     with open(out_path, "w") as f:

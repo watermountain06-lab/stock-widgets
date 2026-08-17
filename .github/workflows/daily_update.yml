@@ -1,0 +1,60 @@
+name: Daily valuation update
+
+# Fetches fresh price/financials/analyst-target data for every ticker,
+# recomputes PER/PBR valuation stages, patches each widget's badges + 목표가
+# 밴드 markers in place, and opens a PR with the result. This workflow NEVER
+# pushes to main directly - a human reviews and merges the PR. See
+# scripts/daily_update.py and the project plan (2026-08-17) for the full
+# design and why direct-to-main push was deliberately left out.
+
+on:
+  schedule:
+    # 22:00 UTC = 07:00 KST, after the US market close + a data-settling buffer
+    - cron: "0 22 * * 1-5"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Run daily valuation update (fetch + compute + patch + validate)
+        env:
+          SEC_USER_AGENT: "second-brain-stock-widgets gptjhss@gmail.com"
+        run: python3 scripts/daily_update.py
+
+      - name: Check for changes
+        id: changes
+        run: |
+          # `git diff` alone misses newly-created untracked files (e.g. the
+          # first run ever writing data/valuation_signals.json) - stage first.
+          git add -A -- widgets/ data/valuation_signals.json docs/daily_digest_*.md
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open pull request
+        if: steps.changes.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: daily-update-${{ github.run_id }}
+          delete-branch: true
+          commit-message: "daily valuation update"
+          title: "Daily valuation update - ${{ github.run_id }}"
+          body-path: docs/daily_digest_latest.md
+          add-paths: |
+            widgets/
+            data/valuation_signals.json
+            docs/daily_digest_*.md
