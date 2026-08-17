@@ -181,6 +181,24 @@
   .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
   .section-label { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
   .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
+  .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .act-card { background: var(--bg3); border-radius: 8px; padding: 12px 14px; display:flex; align-items:center; gap:12px; }
+  .act-icon { font-size: 19px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:rgba(240,192,64,0.1); border-radius:8px; flex-shrink:0; }
+  .act-label { font-size: 10.5px; color: var(--text3); margin-bottom:2px; }
+  .act-value { font-size: 15px; font-weight: 700; color: var(--text); }
+  .act-sub { font-size: 10px; color: var(--text3); margin-top:1px; }
+  .ccc-card { background: var(--bg3); border-radius: 8px; padding: 16px 18px 12px; }
+  .ccc-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 6px; }
+  .ccc-head-label { font-size:11.5px; color:var(--text2); font-weight:700; }
+  .ccc-head-value { font-size:18px; font-weight:800; color:var(--gold); }
+  .ccc-explain { font-size: 10.5px; color: var(--text3); line-height: 1.5; margin-bottom: 22px; }
+  .tl-bar-wrap { position: relative; margin: 40px 4px 8px; }
+  .tl-bar { height: 18px; border-radius: 5px; overflow: hidden; display: flex; }
+  .tl-seg-inv { background: linear-gradient(90deg,#3498db,#2980b9); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
+  .tl-seg-ar { background: linear-gradient(90deg,#9fdb2f,#76b900); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#0f1117; }
+  .tl-marker { position: absolute; top: -18px; width: 2px; background: var(--gold); }
+  .tl-marker-label { position: absolute; top: -32px; transform: translateX(-50%); font-size: 9.5px; font-weight: 700; color: var(--gold); white-space: nowrap; }
+  .tl-ccc-span { position: absolute; height: 3px; background: rgba(240,192,64,0.6); border-radius: 2px; top: 24px; }
   .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
   .diag-summary .icon { font-size:24px; }
   .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
@@ -364,6 +382,55 @@
   </div>
 </div>
 <div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">KO의 부채비율·차입금의존도는 필수소비재 대형주 중 다소 높은 편이지만, 이는 안정적 잉여현금흐름을 바탕으로 64년 연속 배당 인상과 자사주매입을 부채로 일부 조달해온 자본배분 정책의 결과다. 이자보상배율 9.5배는 이 부채 구조가 충분한 여력 안에서 운용되고 있음을 보여준다.</div>
+</div>
+
+<div class="section-label" style="margin-top:14px;"><span class="dot" style="background:var(--blue);"></span>활동성 — 회수·재고소진·지급 속도 (TTM 기준)</div>
+<div class="diag-summary">
+  <div class="icon">🔄</div>
+  <div>
+    <div class="title">종합 진단: 매우 우수 — 보틀러 네트워크 특유의 공급업체 자금 활용</div>
+    <div class="sub">마이너스 CCC(-48.3일) — 농축액 중심 사업모델이라 재고·매출채권 부담은 작고, 대형 보틀러 대상 매입채무 지급 조건이 길어 오히려 여유 현금을 만들어내는 구조</div>
+  </div>
+</div>
+<div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+  <span>활동성 상세 — 개별 비율·CCC 그래프</span>
+  <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+</div>
+<div class="collapsible-body collapsed">
+<div class="activity-grid">
+  <div class="act-card">
+    <div class="act-icon">💳</div>
+    <div><div class="act-label">매출채권 회전율·회전기간</div><div class="act-value">13.43회</div><div class="act-sub">27.2일 만에 현금화</div></div>
+  </div>
+  <div class="act-card">
+    <div class="act-icon">📦</div>
+    <div><div class="act-label">재고자산 회전율·회전기간</div><div class="act-value">10.79회</div><div class="act-sub">33.8일 재고 보유</div></div>
+  </div>
+  <div class="act-card">
+    <div class="act-icon">🧾</div>
+    <div><div class="act-label">매입채무 회전율·지급기간</div><div class="act-value">3.34회</div><div class="act-sub">109.3일 만에 지급</div></div>
+  </div>
+  <div class="act-card">
+    <div class="act-icon">🔄</div>
+    <div><div class="act-label">영업순환주기</div><div class="act-value">61.0일</div><div class="act-sub">재고보유+매출채권 회전기간</div></div>
+  </div>
+</div>
+<div class="ccc-card">
+  <div class="ccc-head">
+    <div class="ccc-head-label">⏱️ 현금창출주기 (CCC)</div>
+    <div class="ccc-head-value" style="color:var(--green);">-48.3일</div>
+  </div>
+  <div class="ccc-explain">재고를 사서 판매 대금을 회수하기까지는 61.0일이 걸리지만, 매입채무는 109.3일 후에 갚기 때문에 오히려 48.3일 동안 공급업체(보틀러) 자금으로 사업을 운영하는 구조다. 농축액 중심의 자산경량 비즈니스 모델과 강력한 협상력이 반영된 결과다.</div>
+  <div class="tl-bar-wrap">
+    <div class="tl-marker" style="left:90.0%; height:18px;"></div>
+    <div class="tl-marker-label" style="left:90.0%;">매입채무 지급 109.3일</div>
+    <div class="tl-bar">
+      <div class="tl-seg-inv" style="width:27.8%;">재고 33.8일</div>
+      <div class="tl-seg-ar" style="width:22.4%;">매출채권회수 27.2일</div>
+    </div>
+    <div class="tl-ccc-span" style="left:50.2%; width:39.8%; background:rgba(46,204,113,0.6);"></div>
+  </div>
+</div>
 </div>
 </div><div class="card"><div class="card-title">핵심 성장 동력 3가지</div><div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">가격·믹스</div><div class="driver-desc">글로벌 브랜드 가격력<br/>프리미엄·소형 패키지</div></div></div><div class="driver-item"><div class="driver-num">2</div><div><div class="driver-title">제로 슈거</div><div class="driver-desc">Coke Zero Sugar 성장<br/>소비자 선택지 확대</div></div></div><div class="driver-item"><div class="driver-num">3</div><div><div class="driver-title">자산경량 모델</div><div class="driver-desc">보틀러 재프랜차이징<br/>높은 마진과 FCF</div></div></div></div><div class="card"><div class="card-title">핵심 투자 논리 <span style="color:var(--red);">(초고평가)</span></div><div class="tl-desc">Q2 매출 $13.37B(+7%)와 조정 EPS $0.97, 2026 유기매출 약 5%·비교 EPS +9~10%로의 전망 상향은 농축액·브랜드 중심 자산경량 모델의 가격력을 확인했다. 다만 P/S·PEG는 5단계, Forward PER·EV/EBITDA는 4단계로 실적 개선 기대가 상당 부분 반영됐다. fairlife 생산 복구, 원재료·환율과 북미 판매량이 다음 멀티플 유지의 핵심이다.</div></div><div class="card"><div class="card-title">다음 실적 체크포인트 — Q3 2026 · 2026년 10월 예상</div><div class="tl-desc">① 유기매출 약 5%와 비교 EPS +9~10% 상향 가이던스의 달성 경로<br>② 북미 단위 케이스 볼륨과 가격·믹스 기여도<br>③ 약 .2B FCF 전망과 마케팅·원재료 비용<br>④ fairlife 미국 생산 정상화 및 CCBA 매각 진행 상황</div></div></div>
 <div id="valuation" class="section"><div class="section-title">밸류에이션 — 현재가 $86.71</div><div class="grid-2"><div class="card"><div class="card-title">멀티플 5단계 평가</div><div class="val-item" data-metric="fwdpe" onclick="selectMultiple('fwdpe')"><div class="val-header"><span class="val-name">Forward PER</span><span class="val-number">26.6x</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 18x</span><span class="val-mid">적정 23x</span><span class="val-high">고 29x</span></div></div><div class="val-item" data-metric="psr" onclick="selectMultiple('psr')"><div class="val-header"><span class="val-name">P/S</span><span class="val-number">7.6x</span><span class="stage-badge stage-5">5단계 매우높음</span></div><div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div><div class="val-labels"><span class="val-low">저 3x</span><span class="val-mid">적정 5x</span><span class="val-high">고 7x</span></div></div><div class="val-item" data-metric="evebitda" onclick="selectMultiple('evebitda')"><div class="val-header"><span class="val-name">EV/EBITDA</span><span class="val-number">24.1x</span><span class="stage-badge stage-5">5단계 매우높음</span></div><div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div><div class="val-labels"><span class="val-low">저 14x</span><span class="val-mid">적정 19x</span><span class="val-high">고 25x</span></div></div><div class="val-item" data-metric="divyield" onclick="selectMultiple('divyield')"><div class="val-header"><span class="val-name">배당수익률</span><span class="val-number">2.37%</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 2%</span><span class="val-mid">적정 3%</span><span class="val-high">고 4%</span></div></div><div class="val-item" data-metric="peg" onclick="selectMultiple('peg')"><div class="val-header"><span class="val-name">PEG</span><span class="val-number">3.5x</span><span class="stage-badge stage-5">5단계 매우높음</span></div><div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div><div class="val-labels"><span class="val-low">저 1.5x</span><span class="val-mid">적정 2.2x</span><span class="val-high">고 3x</span></div></div></div><div class="card"><div class="card-title"><span id="multipleCompareTitle">음료 피어 P/E 비교</span></div><div class="chart-wrap" style="height:270px;"><canvas id="multipleChart"></canvas></div><div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText">TTM 기준 · KO 28.9x는 PEP 21.5x, KDP 19.8x 대비 프리미엄에서 거래되며, MNST 31.2x보다는 낮다 — 브랜드력과 자산경량 농축액 모델이 반영된 수준.</div></div></div><div class="card"><div class="card-title">Per-Share 지표 · 2026.08 기준</div><div class="per-share-grid"><div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">EPS</div><div class="ps-value">$3.33</div><div class="ps-sub">TTM GAAP(희석) · 2026 Q2</div></div><div class="ps-card"><div class="ps-icon">📘</div><div class="ps-label">BPS</div><div class="ps-value">$8.40</div><div class="ps-sub">2026 Q2 자본 기준</div></div><div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">FCF/Share</div><div class="ps-value">$2.84</div><div class="ps-sub">2026 FCF 전망/주식수</div></div><div class="ps-card"><div class="ps-icon">🎁</div><div class="ps-label">Dividend</div><div class="ps-value">$2.12</div><div class="ps-sub">연환산 · $0.53×4</div></div></div></div><div class="card"><div class="card-title">종합 밸류에이션 <span style="color:var(--red);">(초고평가)</span> — 브랜드·배당 프리미엄과 성장 대비 가격 부담</div><div class="grid-2"><div style="background:var(--bg3);padding:15px;border-radius:8px;"><div style="font-size:12px;font-weight:800;color:var(--green);margin-bottom:7px;">저평가 근거</div><div class="tl-desc">배당수익률 2.37%는 4단계로 여전히 견조하며, TTM FCF $12.56B·FCF 마진 25.5%와 64년 연속 배당 증가가 방어적 프리미엄의 근거다.</div></div><div style="background:var(--bg3);padding:15px;border-radius:8px;"><div style="font-size:12px;font-weight:800;color:var(--accent);margin-bottom:7px;">주의 요소</div><div class="tl-desc">Forward PER 26.6x·EV/EBITDA 24.1x는 4단계, P/S 7.6x·PEG 3.5x는 5단계다. 3년 EPS 성장 전망 7.5% 대비 가격 부담이 높다.</div></div></div></div><div class="card"><div class="card-title">시나리오별 공정가치 분석</div>
