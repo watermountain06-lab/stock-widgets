@@ -181,6 +181,25 @@
   .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
   .section-label { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
   .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
+  .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .act-card { background: var(--bg3); border-radius: 8px; padding: 12px 14px; display:flex; align-items:center; gap:12px; }
+  .act-icon { font-size: 19px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:rgba(240,192,64,0.1); border-radius:8px; flex-shrink:0; }
+  .act-label { font-size: 10.5px; color: var(--text3); margin-bottom:2px; }
+  .act-value { font-size: 15px; font-weight: 700; color: var(--text); }
+  .act-sub { font-size: 10px; color: var(--text3); margin-top:1px; }
+  .ccc-card { background: var(--bg3); border-radius: 8px; padding: 16px 18px 12px; }
+  .ccc-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 6px; }
+  .ccc-head-label { font-size:11.5px; color:var(--text2); font-weight:700; }
+  .ccc-head-value { font-size:18px; font-weight:800; color:var(--gold); }
+  .ccc-explain { font-size: 10.5px; color: var(--text3); line-height: 1.5; margin-bottom: 22px; }
+  .tl-bar-wrap { position: relative; margin: 40px 4px 8px; }
+  .tl-bar { height: 18px; border-radius: 5px; overflow: hidden; display: flex; }
+  .tl-seg-inv { background: linear-gradient(90deg,#3498db,#2980b9); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
+  .tl-seg-ar { background: linear-gradient(90deg,#9fdb2f,#76b900); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#0f1117; }
+  .tl-marker { position: absolute; top: -18px; width: 2px; background: var(--gold); }
+  .tl-marker-label { position: absolute; top: -32px; transform: translateX(-50%); font-size: 9.5px; font-weight: 700; color: var(--gold); white-space: nowrap; }
+  .tl-ccc-span { position: absolute; height: 3px; background: rgba(240,192,64,0.6); border-radius: 2px; top: 24px; }
+  .diag-badge.warn { background:rgba(231,76,60,0.16); color:var(--red); }
   .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
   .diag-summary .icon { font-size:24px; }
   .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
@@ -365,6 +384,55 @@
   </div>
 </div>
 <div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">GE의 부채비율 622.5%는 항공 엔진·서비스 본업의 차입이 아니라, GE Capital에서 물려받은 장기요양보험 런오프 사업의 보험계약 준비금이 대부분이다. 이 준비금은 향후 보험금 지급에 대응하는 자산(투자 포트폴리오)과 매칭돼 있어, 일반 제조업의 부채비율과 같은 잣대로 해석하기 어렵다. 반면 차입금의존도 15.0%는 본업의 재무 레버리지가 낮음을 보여준다.</div>
+</div>
+
+<div class="section-label" style="margin-top:14px;"><span class="dot" style="background:var(--blue);"></span>활동성 — 회수·재고소진·지급 속도 (TTM 기준 · Q3'25~Q2'26)</div>
+<div class="diag-summary watch">
+  <div class="icon">🔄</div>
+  <div>
+    <div class="title">종합 진단: 길지만 업종 특성 — 장주기 항공엔진 제조·서비스 재고 구조</div>
+    <div class="sub">CCC 151.0일은 엔진·부품의 긴 생산·정비 리드타임이 반영된 항공엔진 OEM 업종 특유의 구조 — 경고 신호라기보다 LEAP 램프업에 따른 재고 축적 국면으로 해석</div>
+  </div>
+</div>
+<div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+  <span>활동성 상세 — 개별 비율·CCC 그래프</span>
+  <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+</div>
+<div class="collapsible-body collapsed">
+<div class="activity-grid">
+  <div class="act-card">
+    <div class="act-icon">💳</div>
+    <div><div class="act-label">매출채권 회전율·회전기간</div><div class="act-value">3.44회</div><div class="act-sub">106.0일 만에 현금화</div></div>
+  </div>
+  <div class="act-card">
+    <div class="act-icon">📦</div>
+    <div><div class="act-label">재고자산 회전율·회전기간</div><div class="act-value">4.07회</div><div class="act-sub">89.7일 재고 보유</div></div>
+  </div>
+  <div class="act-card">
+    <div class="act-icon">🧾</div>
+    <div><div class="act-label">매입채무 회전율·지급기간</div><div class="act-value">8.17회</div><div class="act-sub">44.7일 만에 지급</div></div>
+  </div>
+  <div class="act-card">
+    <div class="act-icon">🔄</div>
+    <div><div class="act-label">영업순환주기</div><div class="act-value">195.7일</div><div class="act-sub">재고보유+매출채권 회전기간</div></div>
+  </div>
+</div>
+<div class="ccc-card">
+  <div class="ccc-head">
+    <div class="ccc-head-label">⏱️ 현금창출주기 (CCC)</div>
+    <div class="ccc-head-value">151.0일</div>
+  </div>
+  <div class="ccc-explain">재고를 사서 판매 대금을 회수하기까지 195.7일이 걸리는데, 그중 44.7일은 매입채무(외상)로 버티고 나머지 151.0일은 회사가 직접 현금으로 메워야 하는 기간이다. 항공엔진·서비스 부품은 생산·정비 리드타임이 길어 CCC가 긴 것 자체는 업종 특성이지, LEAP 램프업이 정상화되면 점진적으로 개선될 여지가 있다.</div>
+  <div class="tl-bar-wrap">
+    <div class="tl-marker" style="left:22.8%; height:18px;"></div>
+    <div class="tl-marker-label" style="left:22.8%;">매입채무 지급 44.7일</div>
+    <div class="tl-bar">
+      <div class="tl-seg-inv" style="width:45.8%;">재고 89.7일</div>
+      <div class="tl-seg-ar" style="width:54.2%;">매출채권회수 106.0일</div>
+    </div>
+    <div class="tl-ccc-span" style="left:22.8%; width:77.2%; background:rgba(240,192,64,0.6);"></div>
+  </div>
+</div>
 </div>
 </div><div class="card"><div class="card-title">핵심 성장 동력 3가지</div><div class="driver-item"><div class="driver-num">1</div><div><div class="driver-title">서비스 믹스</div><div class="driver-desc">상업 엔진 설치기반 확대<br/>장기 서비스 계약의 반복매출</div></div></div><div class="driver-item"><div class="driver-num">2</div><div><div class="driver-title">LEAP 램프</div><div class="driver-desc">항공기 생산 정상화<br/>향후 서비스 풀 확대</div></div></div><div class="driver-item"><div class="driver-num">3</div><div><div class="driver-title">방산 수요</div><div class="driver-desc">국방 예산과 교체 수요<br/>대형 수주잔고 가시성</div></div></div></div><div class="card"><div class="card-title">핵심 투자 논리 <span style="color:#e67e22;">(고평가)</span></div><div class="tl-desc">상업 엔진의 방대한 설치 기반은 장기 서비스 계약과 부품 수요를 반복매출로 전환하고, LEAP 설치 기반이 2025~2030년 두 배 이상 늘어날 전망은 다음 서비스 사이클을 키운다. 다만 Forward PER 42.3x와 EV/EBITDA 33.5x는 이 성장의 상당 부분을 이미 반영하므로, 공급망 병목으로 엔진 납품·마진이 흔들리면 멀티플 압축 위험이 크다.</div></div><div class="card"><div class="card-title">다음 실적 체크포인트 — 2026년 10월 중순</div><div class="tl-desc">① Commercial Engines & Services의 유기매출과 서비스 이익률 ② LEAP 납품 증가율 및 부품 투입 개선 ③ 2026 조정 EPS $7.65~7.85·FCF 가이던스 달성 경로 ④ 공급망 병목과 고유가가 항공사 정비 수요에 미치는 영향</div></div></div>
 <div id="valuation" class="section"><div class="section-title">밸류에이션 — 현재가 $365.33</div><div class="grid-2"><div class="card"><div class="card-title">멀티플 5단계 평가</div><div class="val-item" data-metric="fwdpe" onclick="selectMultiple('fwdpe')"><div class="val-header"><span class="val-name">Forward PER</span><span class="val-number">41.8x</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 22x</span><span class="val-mid">적정 30x</span><span class="val-high">고 45x</span></div></div><div class="val-item" data-metric="psr" onclick="selectMultiple('psr')"><div class="val-header"><span class="val-name">P/S</span><span class="val-number">7.2x</span><span class="stage-badge stage-5">5단계 매우높음</span></div><div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div><div class="val-labels"><span class="val-low">저 2x</span><span class="val-mid">적정 4x</span><span class="val-high">고 6x</span></div></div><div class="val-item" data-metric="evebitda" onclick="selectMultiple('evebitda')"><div class="val-header"><span class="val-name">EV/EBITDA</span><span class="val-number">33.1x</span><span class="stage-badge stage-5">5단계 매우높음</span></div><div class="val-track"><div class="val-fill" style="width:95%;background:linear-gradient(90deg,#e74c3c,#c0392b);"></div></div><div class="val-labels"><span class="val-low">저 14x</span><span class="val-mid">적정 22x</span><span class="val-high">고 30x</span></div></div><div class="val-item" data-metric="fcfyield" onclick="selectMultiple('fcfyield')"><div class="val-header"><span class="val-name">FCF Yield</span><span class="val-number">1.89%</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 5%</span><span class="val-mid">적정 3%</span><span class="val-high">고 2%</span></div></div><div class="val-item" data-metric="peg" onclick="selectMultiple('peg')"><div class="val-header"><span class="val-name">PEG</span><span class="val-number">2.4x</span><span class="stage-badge stage-4">4단계 높음</span></div><div class="val-track"><div class="val-fill" style="width:76%;background:linear-gradient(90deg,#e67e22,#e74c3c);"></div></div><div class="val-labels"><span class="val-low">저 1x</span><span class="val-mid">적정 1.5x</span><span class="val-high">고 2.5x</span></div></div></div><div class="card"><div class="card-title"><span id="multipleCompareTitle">항공·방산 피어 Forward P/E</span></div><div class="chart-wrap" style="height:270px;"><canvas id="multipleChart"></canvas></div><div style="margin-top:14px;background:var(--bg3);padding:14px;border-radius:8px;font-size:12px;color:var(--text2);line-height:1.7;" id="multipleCompareText">컨센서스 Forward EPS 기준 · GE는 항공·방산 피어(RTX·Rolls-Royce) 대비 가장 높은 프리미엄에서 거래된다 — 서비스 매출 성장과 마진 개선 기대가 반영된 수준.</div></div></div><div class="card"><div class="card-title">Per-Share 지표 · 2026.08 기준</div><div class="per-share-grid"><div class="ps-card"><div class="ps-icon">💵</div><div class="ps-label">EPS</div><div class="ps-value">$8.49</div><div class="ps-sub">TTM GAAP(희석) · 2026.08</div></div><div class="ps-card"><div class="ps-icon">📘</div><div class="ps-label">BPS</div><div class="ps-value">$16.90</div><div class="ps-sub">최근 분기 장부가 기준</div></div><div class="ps-card"><div class="ps-icon">💰</div><div class="ps-label">FCF/Share</div><div class="ps-value">$6.95</div><div class="ps-sub">2026 FCF 가이던스/주식수</div></div><div class="ps-card"><div class="ps-icon">🎁</div><div class="ps-label">Dividend</div><div class="ps-value">$1.44</div><div class="ps-sub">연환산 · $0.36×4</div></div></div></div><div class="card"><div class="card-title">종합 밸류에이션 <span style="color:#e67e22;">(고평가)</span> — 서비스 성장 프리미엄을 대부분 반영</div><div class="tl-desc">TTM FCF $8.40B와 ROIC 31.0%는 항공 서비스의 품질 프리미엄을 뒷받침한다. 그러나 Forward PER 42.3x·EV/EBITDA 33.5x·P/S 7.3x로 5개 지표가 모두 4~5단계여서, 엔진 납품이나 서비스 마진이 기대를 밑돌면 멀티플 압축 위험이 크다.</div></div><div class="card"><div class="card-title">시나리오별 공정가치 분석</div>
