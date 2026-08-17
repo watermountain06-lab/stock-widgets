@@ -106,6 +106,50 @@
   .ma-toggle-btn { background: var(--bg3); border: 1px solid; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer; transition: all .15s; }
   .ma-toggle-btn:hover { filter: brightness(1.2); }
   .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
+  .section-label { font-size: 12px; color: var(--text2); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
+  .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
+  .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
+  .diag-summary .icon { font-size:24px; }
+  .diag-summary .title { font-size:14px; font-weight:800; color:var(--green); }
+  .diag-summary .sub { font-size:11px; color:var(--text2); margin-top:2px; }
+  .diag-list { display:flex; flex-direction:column; gap:6px; margin-bottom: 22px; }
+  .diag-row { display:flex; align-items:center; justify-content:space-between; background:var(--bg3); border-radius:8px; padding:10px 14px; }
+  .diag-left { display:flex; align-items:baseline; gap:10px; }
+  .diag-label { font-size:12px; color:var(--text2); min-width:96px; }
+  .diag-value { font-size:15px; font-weight:700; color:var(--text); }
+  .diag-note { font-size:10.5px; color:var(--text3); }
+  .diag-badge { font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
+  .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
+  .diag-badge.watch { background:rgba(240,192,64,0.16); color:#f0c040; }
+  .diag-badge.warn { background:rgba(231,76,60,0.16); color:var(--red); }
+  .detail-toggle { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; user-select: none; font-size: 12.5px; color: var(--text2); font-weight: 600; padding: 10px 2px 6px; border-top: 1px dashed var(--bg3); margin-top: 2px; }
+  .detail-toggle:hover { color: var(--text); }
+  .detail-toggle .toggle-hint { display: flex; align-items: center; gap: 6px; background: rgba(77,166,255,0.12); border: 1px solid rgba(77,166,255,0.35); border-radius: 999px; padding: 5px 11px; flex-shrink: 0; transition: background 0.2s ease, border-color 0.2s ease; }
+  .detail-toggle:hover .toggle-hint { background: rgba(77,166,255,0.22); border-color: rgba(77,166,255,0.5); }
+  .detail-toggle .toggle-hint-text { font-size: 10.5px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+  .detail-toggle .chevron { font-size: 11px; color: var(--accent2); transition: transform 0.25s ease; flex-shrink: 0; }
+  .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
+  .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
+  .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
+  .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .act-card { background: var(--bg3); border-radius: 8px; padding: 12px 14px; display:flex; align-items:center; gap:12px; }
+  .act-icon { font-size: 19px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:rgba(77,166,255,0.1); border-radius:8px; flex-shrink:0; }
+  .act-label { font-size: 10.5px; color: var(--text3); margin-bottom:2px; }
+  .act-value { font-size: 15px; font-weight: 700; color: var(--text); }
+  .act-sub { font-size: 10px; color: var(--text3); margin-top:1px; }
+  .ccc-card { background: var(--bg3); border-radius: 8px; padding: 16px 18px 12px; }
+  .ccc-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 6px; }
+  .ccc-head-label { font-size:11.5px; color:var(--text2); font-weight:700; }
+  .ccc-head-value { font-size:18px; font-weight:800; color:#f0c040; }
+  .ccc-explain { font-size: 10.5px; color: var(--text3); line-height: 1.5; margin-bottom: 22px; }
+  .tl-bar-wrap { position: relative; margin: 40px 4px 8px; }
+  .tl-bar { height: 18px; border-radius: 5px; overflow: hidden; display: flex; }
+  .tl-seg-inv { background: linear-gradient(90deg,#3498db,#2980b9); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
+  .tl-seg-ar { background: linear-gradient(90deg,#9fdb2f,#76b900); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#0f1117; }
+  .tl-marker { position: absolute; top: -18px; width: 2px; background: #f0c040; }
+  .tl-marker-label { position: absolute; top: -32px; transform: translateX(-50%); font-size: 9.5px; font-weight: 700; color: #f0c040; white-space: nowrap; }
+  .tl-ccc-span { position: absolute; height: 3px; background: rgba(240,192,64,0.6); border-radius: 2px; top: 24px; }
   @media (max-width: 600px) {
     .header { padding: 20px 16px; } .section { padding: 20px 16px; } .nav { padding: 10px 16px; }
     .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } .bull-bear { grid-template-columns: 1fr; } .price-main { font-size: 24px; }
@@ -239,6 +283,99 @@
     <div class="chart-wrap" style="height:260px;"><canvas id="spcxRevChart"></canvas></div>
     <div style="margin-top:8px;font-size:11px;color:var(--text3);">* 2026.02 xAI(X Holdings 포함) 합병이 동일지배하 거래로 처리되어, 2025년 재무제표는 xAI를 소급 연결한 수치. Starlink(Connectivity)만 흑자이며, Space·AI 부문은 영업손실 중.</div>
   </div>
+
+  <div class="card">
+    <div class="card-title">재무 건전성 — 안정성·활동성 (TTM 기준, 2026.06.30 분기말 잔액)</div>
+    <div style="font-size:10.5px;color:var(--text3);line-height:1.5;margin:-4px 0 14px;">※ SPCX는 상장 25거래일로 정식 10-Q가 아직 없어, SEC EDGAR에 공개된 최근 분기 재무제표 기준으로 직접 계산했다. 상장 직후라 IPO 조달 자금이 현금성자산에 그대로 남아 있어 유동성 지표가 일시적으로 매우 높게 나온다는 점에 유의.</div>
+
+    <div class="section-label"><span class="dot"></span>안정성 — 단기 지급능력·차입 의존도</div>
+    <div class="diag-summary">
+      <div class="icon">🩺</div>
+      <div>
+        <div class="title">종합 진단: 안정적 (IPO 조달금 반영 · 부채는 인프라 투자성)</div>
+        <div class="sub">유동비율 511.5%로 단기 지급능력은 매우 견고 — 단, 총차입금 $39.7B은 Starlink 위성망·xAI 데이터센터 등 인프라 투자에 따른 것으로 부채비율(51.5%)이 SKHY 등 현금창출 성숙기업보다는 높은 편</div>
+      </div>
+    </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>안정성 상세 — 개별 비율 4개</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+    <div class="diag-list">
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">유동비율</span><span class="diag-value">511.5%</span><span class="diag-note">기준 150%↑ · 유동자산 $108.0B÷유동부채 $21.1B — IPO 조달금 반영</span></div>
+        <div class="diag-badge safe">✅ 매우 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">당좌비율</span><span class="diag-value">498.6%</span><span class="diag-note">기준 100%↑ · (유동자산-재고자산)÷유동부채</span></div>
+        <div class="diag-badge safe">✅ 매우 양호</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">차입금의존도</span><span class="diag-value">20.6%</span><span class="diag-note">총차입금 $39.7B÷총자산 $192.8B · 위성망·데이터센터 인프라 조달 부채 포함</span></div>
+        <div class="diag-badge watch">⚠️ 주의 관찰</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-left"><span class="diag-label">부채비율</span><span class="diag-value">51.5%</span><span class="diag-note">부채총계 $65.5B÷자본총계 $127.2B</span></div>
+        <div class="diag-badge safe">✅ 양호</div>
+      </div>
+    </div>
+    <div style="margin-top:14px;font-size:11px;color:var(--text3);">이자보상배율은 공개 재무제표에서 이자비용이 세부 구분 공시되지 않아 산출 제한 — 차입금의존도가 SKHY 등 성숙 반도체 기업보다 높은 건 위성망·AI 데이터센터 등 자본집약적 인프라를 동시에 확장 중인 성장기업 특성이다.</div>
+    </div>
+
+    <div class="section-label" style="margin-top:14px;"><span class="dot" style="background:var(--blue);"></span>활동성 — 회수·재고소진·지급 속도 (TTM 기준)</div>
+    <div class="diag-summary">
+      <div class="icon">🔄</div>
+      <div>
+        <div class="title">종합 진단: 양호 — 마이너스 CCC로 공급업체 자금 활용</div>
+        <div class="sub">CCC -27.5일 — 매입채무 지급기간(130.6일)이 재고·매출채권 회수기간(103.1일)보다 길어 오히려 여유 현금을 만들어내는 구조. 위성·로켓 부품 공급망 특유의 장기 결제 조건이 반영된 결과로 보인다.</div>
+      </div>
+    </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>활동성 상세 — 개별 비율·CCC 그래프</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+    <div class="activity-grid">
+      <div class="act-card">
+        <div class="act-icon">💳</div>
+        <div><div class="act-label">매출채권 회전율·회전기간</div><div class="act-value">6.08회</div><div class="act-sub">60.0일 만에 현금화</div></div>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">📦</div>
+        <div><div class="act-label">재고자산 회전율·회전기간</div><div class="act-value">8.48회</div><div class="act-sub">43.1일 재고 보유</div></div>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">🧾</div>
+        <div><div class="act-label">매입채무 회전율·지급기간</div><div class="act-value">2.80회</div><div class="act-sub">130.6일 만에 지급</div></div>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">🔄</div>
+        <div><div class="act-label">영업순환주기</div><div class="act-value">103.1일</div><div class="act-sub">재고보유+매출채권 회전기간</div></div>
+      </div>
+    </div>
+    <div class="ccc-card">
+      <div class="ccc-head">
+        <div class="ccc-head-label">⏱️ 현금창출주기 (CCC)</div>
+        <div class="ccc-head-value" style="color:var(--green);">-27.5일</div>
+      </div>
+      <div class="ccc-explain">재고를 사서 판매 대금을 회수하기까지는 103.1일이 걸리지만, 매입채무는 130.6일 후에 갚기 때문에 오히려 27.5일 동안 공급업체 자금으로 사업을 운영하는 구조다. 위성·로켓 부품처럼 리드타임이 긴 공급망에서는 장기 결제 조건이 일반적이라는 점이 반영된 것으로 해석된다.</div>
+      <div class="tl-bar-wrap">
+        <div class="tl-marker" style="left:82.4%; height:18px;"></div>
+        <div class="tl-marker-label" style="left:82.4%;">매입채무 지급 130.6일</div>
+        <div class="tl-bar">
+          <div class="tl-seg-inv" style="width:41.8%;">재고보유 43.1일</div>
+          <div class="tl-seg-ar" style="width:58.2%;">매출채권회수 60.0일</div>
+        </div>
+        <div class="tl-ccc-span" style="left:65.1%; width:17.3%; background:rgba(46,204,113,0.6);"></div>
+      </div>
+    </div>
+    </div>
+
+    <div style="margin-top:14px;font-size:11px;color:var(--text3);">IPO 직후라 유동성은 일시적으로 매우 여유롭고, 활동성 CCC도 마이너스로 공급업체 자금을 활용하는 우호적 구조다. 다만 총차입금 규모는 위성망·AI 인프라 확장에 따른 것으로, 상장 후 첫 정식 분기보고서에서 자본지출·부채 추이를 계속 확인할 필요가 있다.</div>
+  </div>
+
   <div class="info-box">
     <strong>SpaceX는 왜 영업적자인가?</strong>
     <div style="margin-top:8px;">· <strong style="color:var(--text);">Connectivity(Starlink)</strong> — 소비자·기업·정부용 위성 브로드밴드. 2025년 $11.39B 매출(+50% YoY), 영업이익 +$4.4B로 유일하게 확실한 흑자 사업부.</div>
@@ -412,6 +549,32 @@
 </div>
 
 <script>
+function toggleCollapsible(header) {
+  const body = header.nextElementSibling;
+  const hintText = header.querySelector('.toggle-hint-text');
+  const expandedLabel = '상세 숨기기';
+  const collapsedLabel = '상세 보기';
+  const collapsing = !header.classList.contains('collapsed');
+  if (collapsing) {
+    body.style.maxHeight = body.scrollHeight + 'px';
+    requestAnimationFrame(() => {
+      header.classList.add('collapsed');
+      body.classList.add('collapsed');
+      header.setAttribute('aria-expanded', 'false');
+      if (hintText) hintText.textContent = collapsedLabel;
+    });
+  } else {
+    header.classList.remove('collapsed');
+    body.classList.remove('collapsed');
+    body.style.maxHeight = body.scrollHeight + 'px';
+    header.setAttribute('aria-expanded', 'true');
+    if (hintText) hintText.textContent = expandedLabel;
+    body.addEventListener('transitionend', function clear() {
+      body.style.maxHeight = '';
+      body.removeEventListener('transitionend', clear);
+    });
+  }
+}
 function showSection(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
