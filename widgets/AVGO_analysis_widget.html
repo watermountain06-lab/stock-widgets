@@ -142,6 +142,24 @@
   .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
   .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
   .diag-badge.watch { background:rgba(240,192,64,0.16); color:var(--gold); }
+  .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .act-card { background: var(--bg3); border-radius: 8px; padding: 12px 14px; display:flex; align-items:center; gap:12px; }
+  .act-icon { font-size: 19px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:rgba(240,192,64,0.1); border-radius:8px; flex-shrink:0; }
+  .act-label { font-size: 10.5px; color: var(--text3); margin-bottom:2px; }
+  .act-value { font-size: 15px; font-weight: 700; color: var(--text); }
+  .act-sub { font-size: 10px; color: var(--text3); margin-top:1px; }
+  .ccc-card { background: var(--bg3); border-radius: 8px; padding: 16px 18px 12px; }
+  .ccc-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 6px; }
+  .ccc-head-label { font-size:11.5px; color:var(--text2); font-weight:700; }
+  .ccc-head-value { font-size:18px; font-weight:800; color:var(--gold); }
+  .ccc-explain { font-size: 10.5px; color: var(--text3); line-height: 1.5; margin-bottom: 22px; }
+  .tl-bar-wrap { position: relative; margin: 40px 4px 8px; }
+  .tl-bar { height: 18px; border-radius: 5px; overflow: hidden; display: flex; }
+  .tl-seg-inv { background: linear-gradient(90deg,#3498db,#2980b9); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
+  .tl-seg-ar { background: linear-gradient(90deg,#9fdb2f,#76b900); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#0f1117; }
+  .tl-marker { position: absolute; top: -18px; width: 2px; background: var(--gold); }
+  .tl-marker-label { position: absolute; top: -32px; transform: translateX(-50%); font-size: 9.5px; font-weight: 700; color: var(--gold); white-space: nowrap; }
+  .tl-ccc-span { position: absolute; height: 3px; background: rgba(240,192,64,0.6); border-radius: 2px; top: 24px; }
   .diag-summary.watch { background: linear-gradient(90deg, rgba(240,192,64,0.14), rgba(240,192,64,0.03)); border-color: rgba(240,192,64,0.35); }
   .diag-summary.watch .title { color: var(--gold); }
   .ccc-card { background: var(--bg3); border-radius: 8px; padding: 16px 18px 12px; }
@@ -381,22 +399,22 @@
     </div>
     <div class="collapsible-body collapsed">
 
-    <div class="diag-list">
-      <div class="diag-row">
-        <div class="diag-left"><span class="diag-label">매출채권 회전율</span><span class="diag-value">11.05회</span><span class="diag-note">33.0일 · FY24 13.63회(26.8일)</span></div>
-        <div class="diag-badge watch">🟡 회수 지연</div>
+    <div class="activity-grid">
+      <div class="act-card">
+        <div class="act-icon">💳</div>
+        <div><div class="act-label">매출채권 회전율·회전기간</div><div class="act-value">11.05회</div><div class="act-sub">33.0일 만에 현금화 · FY24 26.8일 대비 지연</div></div>
       </div>
-      <div class="diag-row">
-        <div class="diag-left"><span class="diag-label">재고자산 회전율</span><span class="diag-value">10.22회</span><span class="diag-note">35.7일 · FY24 10.42회(35.0일)</span></div>
-        <div class="diag-badge info">→ 거의 안정적</div>
+      <div class="act-card">
+        <div class="act-icon">📦</div>
+        <div><div class="act-label">재고자산 회전율·회전기간</div><div class="act-value">10.22회</div><div class="act-sub">35.7일 재고 보유 · FY24와 거의 안정적</div></div>
       </div>
-      <div class="diag-row">
-        <div class="diag-left"><span class="diag-label">매입채무 회전율</span><span class="diag-value">13.10회</span><span class="diag-note">27.9일 · FY24 13.18회(27.7일)</span></div>
-        <div class="diag-badge info">ℹ️ 거의 안정적</div>
+      <div class="act-card">
+        <div class="act-icon">🧾</div>
+        <div><div class="act-label">매입채무 회전율·지급기간</div><div class="act-value">13.10회</div><div class="act-sub">27.9일 만에 지급 · FY24와 거의 안정적</div></div>
       </div>
-      <div class="diag-row">
-        <div class="diag-left"><span class="diag-label">영업순환주기</span><span class="diag-value">68.7일</span><span class="diag-note">재고+매출채권 · FY24 61.8일</span></div>
-        <div class="diag-badge info">→ 소폭 확장</div>
+      <div class="act-card">
+        <div class="act-icon">🔄</div>
+        <div><div class="act-label">영업순환주기</div><div class="act-value">68.7일</div><div class="act-sub">재고보유+매출채권 회전기간 · FY24 61.8일</div></div>
       </div>
     </div>
     <div class="ccc-card">
