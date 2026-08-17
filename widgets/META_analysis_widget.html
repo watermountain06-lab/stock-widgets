@@ -130,6 +130,12 @@
   .detail-toggle.collapsed .chevron { transform: rotate(-90deg); }
   .collapsible-body { overflow: hidden; opacity: 1; transition: max-height 0.3s ease, opacity 0.2s ease, margin-top 0.2s ease; }
   .collapsible-body.collapsed { max-height: 0 !important; opacity: 0; margin-top: 0 !important; }
+  .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .act-card { background: var(--bg3); border-radius: 8px; padding: 12px 14px; display:flex; align-items:center; gap:12px; }
+  .act-icon { font-size: 19px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:rgba(24,119,242,0.1); border-radius:8px; flex-shrink:0; }
+  .act-label { font-size: 10.5px; color: var(--text3); margin-bottom:2px; }
+  .act-value { font-size: 15px; font-weight: 700; color: var(--text); }
+  .act-sub { font-size: 10px; color: var(--text3); margin-top:1px; }
   .section-label { font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:6px; }
   .section-label .dot { width:6px; height:6px; border-radius:50%; background:var(--accent2); }
   .diag-summary { display:flex; align-items:center; gap:12px; background: linear-gradient(90deg, rgba(46,204,113,0.14), rgba(46,204,113,0.03)); border:1px solid rgba(46,204,113,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; }
@@ -347,7 +353,34 @@
       </div>
     </div>
 
-    <div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">유동비율·당좌비율·차입금의존도 모두 기준치를 상회해 단기 유동성·차입 부담 우려는 없다. 장기부채가 반년 만에 거의 3배($28.8B→$83.7B)로 늘었지만 현금·단기투자($90.3B)가 여전히 총차입금을 웃돌아 순현금을 유지 중이다. (매출채권 회전율은 TTM 기준 10.5회·34.8일로 안정적이나, META는 재고·매입채무 데이터가 사업 구조상 크지 않아 활동성 섹션은 별도 표기하지 않음)</div>
+    <div style="margin-top:14px;font-size:11.5px;color:var(--text2);line-height:1.6;">유동비율·당좌비율·차입금의존도 모두 기준치를 상회해 단기 유동성·차입 부담 우려는 없다. 장기부채가 반년 만에 거의 3배($28.8B→$83.7B)로 늘었지만 현금·단기투자($90.3B)가 여전히 총차입금을 웃돌아 순현금을 유지 중이다.</div>
+    </div>
+
+    <div class="section-label" style="margin-top:14px;"><span class="dot" style="background:var(--blue);"></span>활동성 — 매출채권 회수 속도 (TTM 기준)</div>
+    <div class="diag-summary">
+      <div class="icon">🔄</div>
+      <div>
+        <div class="title">종합 진단: 양호 — 안정적 매출채권 회수</div>
+        <div class="sub">매출채권 회전율 10.5회(34.8일 만에 현금화) — 광고 플랫폼 사업 특성상 재고·매입채무 개념이 크지 않아 이 지표가 활동성의 핵심</div>
+      </div>
+    </div>
+
+    <div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+      <span>활동성 상세 — 개별 비율</span>
+      <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+    </div>
+    <div class="collapsible-body collapsed">
+    <div class="activity-grid">
+      <div class="act-card">
+        <div class="act-icon">💳</div>
+        <div><div class="act-label">매출채권 회전율·회전기간</div><div class="act-value">10.5회</div><div class="act-sub">34.8일 만에 현금화</div></div>
+      </div>
+      <div class="act-card">
+        <div class="act-icon">ℹ️</div>
+        <div><div class="act-label">재고·매입채무 회전율</div><div class="act-value">해당 없음</div><div class="act-sub">광고 플랫폼 사업 특성상 재고·매입채무 부담이 크지 않음</div></div>
+      </div>
+    </div>
+    <div style="margin-top:4px;font-size:11px;color:var(--text3);">META는 제조·유통업과 달리 물리적 재고나 매입채무가 핵심적이지 않은 광고 플랫폼 사업이라 CCC(현금창출주기) 개념이 큰 의미를 갖지 않는다 — 매출채권 회전율만으로 활동성을 판단.</div>
     </div>
   </div>
 
