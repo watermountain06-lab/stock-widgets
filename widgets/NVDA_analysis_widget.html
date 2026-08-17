@@ -343,6 +343,7 @@
   .range-btn { background: var(--bg3); border: 1px solid var(--border); color: var(--text3); font-size: 11px; font-weight: 700; padding: 4px 11px; border-radius: 999px; cursor: pointer; transition: all .15s; }
   .range-btn:hover { color: var(--text); border-color: var(--text2); }
   .range-btn.active { background: var(--accent3); color: var(--accent2); border-color: var(--accent); }
+  .range-btn-lg { font-size: 13px; padding: 9px 22px; border-radius: 10px; }
   .ma-toggle-btn { background: var(--bg3); border: 1px solid; border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 11px; cursor: pointer; transition: all .15s; }
   .ma-toggle-btn:hover { filter: brightness(1.2); }
   .ma-toggle-btn.ma-off { opacity: 0.32; filter: grayscale(0.6); }
@@ -606,10 +607,10 @@
   <div class="card">
     <div class="card-title">최신 분기 핵심 재무 — <span id="fundPeriodTitle">YoY (Q1 FY27 vs Q1 FY26)</span></div>
     <div style="display:flex;gap:8px;margin-bottom:14px;">
-      <button class="range-btn active" data-period="yoy" onclick="selectFundPeriod('yoy')">YoY · 전년동기</button>
-      <button class="range-btn" data-period="qoq" onclick="selectFundPeriod('qoq')">QoQ · 전분기</button>
+      <button class="range-btn range-btn-lg active" data-period="yoy" onclick="selectFundPeriod('yoy')">YoY · 전년동기</button>
+      <button class="range-btn range-btn-lg" data-period="qoq" onclick="selectFundPeriod('qoq')">QoQ · 전분기</button>
     </div>
-    <div class="chart-wrap" style="height:220px;">
+    <div class="chart-wrap" style="height:240px;">
       <canvas id="nvdaFundCompareChart"></canvas>
     </div>
     <div id="fundNarrative" style="font-size:12px;color:var(--text2);line-height:1.75;margin-top:14px;"></div>
@@ -1304,15 +1305,41 @@ const FUND_COMPARE = {
     curLabel: 'Q1 FY27', cmpLabel: 'Q1 FY26',
     titleSuffix: 'YoY (Q1 FY27 vs Q1 FY26)',
     chart: { cur: [81.6, 53.5, 69.9, 58.3, 48.6], cmp: [44.1, 21.6, 21.9, 18.8, 26.1] },
-    narrative: 'Q1 FY27 매출 $81.6B은 Q1 FY26($44.1B) 대비 85.2% 증가했고, 영업이익은 $53.5B(OPM 65.6%)로 전년동기(OPM 49.1%) 대비 마진 자체가 16.5%p 확대됐다 — 단순 매출 성장이 아니라 영업 레버리지가 본격 가동되고 있다는 신호다. 세전이익은 $69.9B로 전년동기($21.9B) 대비 3.2배, 순이익은 $58.3B(마진 71.5%)로 EPS $2.39(+214.5%)를 견인했다. 다만 FCF는 $48.6B(전년동기 $26.1B, +85.8%)로 순이익 증가율(+210.6%)에는 못 미치는데, 앞서 활동성 지표에서도 나타났듯 재고 확대·매출채권 회수 둔화로 운전자본이 늘어난 영향이다. 현금+시장성증권은 $80.6B로 1년 전($53.7B) 대비 50.1% 늘었고, 이 중 $19.3B는 이번 분기 자사주 매입에 썼다 — 총부채($8.47B)는 거의 변화가 없어(+0.1%) 이 확장이 차입이 아닌 순수 영업현금흐름만으로 이뤄졌다는 뜻이다.',
+    deltas: ['+85.2%', '+147.4%', '+219.0%', '+210.6%', '+85.8%'],
+    narrative: '영업이익률이 49.1%→65.6%로 16.5%p 확대되며 매출 성장(+85.2%)보다 영업 레버리지가 더 두드러졌다(EPS +214.5%). 다만 FCF 증가율(+85.8%)이 순이익(+210.6%)에 못 미치는 건 재고 확대 등 운전자본 부담(CCC 참고) 때문이다. 자사주 매입 $19.3B에도 총부채는 그대로(+0.1%)라 순수 현금창출력으로 이뤄진 확장이다.',
     footnote: '기준일: 2026.04.26(Q1 FY27) vs 2025.04.27(Q1 FY26) · GAAP 기준 · <a href="https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-first-quarter-fiscal-2027" target="_blank" rel="noopener">NVIDIA Q1 FY27 실적발표 원문 →</a>'
   },
   qoq: {
     curLabel: 'Q1 FY27', cmpLabel: 'Q4 FY26',
     titleSuffix: 'QoQ (Q1 FY27 vs Q4 FY26)',
     chart: { cur: [81.6, 53.5, 69.9, 58.3, 48.6], cmp: [68.1, 44.3, 50.4, 43.0, 34.9] },
-    narrative: 'Q1 FY27 매출 $81.6B은 직전분기(Q4 FY26 $68.1B) 대비 19.8% 늘며 성장세가 이어졌다. 영업이익은 $53.5B(OPM 65.6%)로 전분기(OPM 65.0%) 대비 마진이 소폭 더 개선됐고, 세전이익은 $69.9B(전분기 $50.4B, +38.7%)·순이익은 $58.3B(마진 71.5%, 전분기 63.1%)로 손익 전 구간에서 개선이 뚜렷하다. FCF는 $48.6B로 전분기($34.9B) 대비 39.1% 늘어 순이익 증가율(+35.8%)과 비슷한 속도를 유지했다 — YoY에서 나타난 운전자본 부담이 최근 분기에는 크게 재발하지 않았다는 뜻이다. 현금+시장성증권은 $80.6B(전분기 $62.6B, +28.7%)로 늘었는데, 자사주 매입이 $3.8B(Q4, 이례적 저점)에서 $19.3B(Q1, 분기 최대)로 급증했음에도 총부채는 오히려 소폭 감소(-0.3%)해 매입 재원이 전액 현금창출력에서 나왔음을 보여준다.',
+    deltas: ['+19.8%', '+20.8%', '+38.7%', '+35.8%', '+39.1%'],
+    narrative: '영업이익률이 65.0%→65.6%로 소폭 더 개선되며 손익 전 구간 성장세가 이어졌다(EPS +35.8%). FCF 증가율(+39.1%)이 순이익(+35.8%)과 비슷해, YoY의 운전자본 부담은 최근 분기엔 재발하지 않았다. 자사주 매입은 $3.8B(이례적 저점)→$19.3B(분기 최대)로 급증했지만 총부채는 오히려 소폭 감소(-0.3%)했다.',
     footnote: '기준일: 2026.04.26(Q1 FY27) vs 2026.01.25(Q4 FY26) · GAAP 기준 · <a href="https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2026" target="_blank" rel="noopener">NVIDIA Q4 FY26 실적발표 원문 →</a>'
+  }
+};
+
+const fundBarLabelPlugin = {
+  id: 'fundBarLabels',
+  afterDatasetsDraw(chart) {
+    if (!chart.fundDeltas) return;
+    const { ctx } = chart;
+    const meta = chart.getDatasetMeta(1);
+    const values = chart.data.datasets[1].data;
+    ctx.save();
+    ctx.textAlign = 'center';
+    meta.data.forEach((bar, i) => {
+      const { x, y } = bar.getProps(['x', 'y'], true);
+      const delta = chart.fundDeltas[i] || '';
+      const color = delta.startsWith('-') ? '#e74c3c' : '#2ecc71';
+      ctx.font = '700 11.5px sans-serif';
+      ctx.fillStyle = '#e8eaf0';
+      ctx.fillText('$' + values[i] + 'B', x, y - 22);
+      ctx.font = '700 10.5px sans-serif';
+      ctx.fillStyle = color;
+      ctx.fillText(delta, x, y - 9);
+    });
+    ctx.restore();
   }
 };
 
@@ -1330,13 +1357,15 @@ function selectFundPeriod(period) {
   const ctx = document.getElementById('nvdaFundCompareChart');
   if (!ctx) return;
   if (charts['fundCompare']) {
-    charts['fundCompare'].data.datasets[0].data = d.chart.cmp;
-    charts['fundCompare'].data.datasets[1].data = d.chart.cur;
-    charts['fundCompare'].data.datasets[0].label = d.cmpLabel;
-    charts['fundCompare'].data.datasets[1].label = d.curLabel;
-    charts['fundCompare'].update();
+    const c = charts['fundCompare'];
+    c.data.datasets[0].data = d.chart.cmp;
+    c.data.datasets[1].data = d.chart.cur;
+    c.data.datasets[0].label = d.cmpLabel;
+    c.data.datasets[1].label = d.curLabel;
+    c.fundDeltas = d.deltas;
+    c.update();
   } else {
-    charts['fundCompare'] = new Chart(ctx, {
+    const c = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: ['매출', '영업이익', '세전이익', '순이익', 'FCF'],
@@ -1347,13 +1376,18 @@ function selectFundPeriod(period) {
       },
       options: {
         responsive: true, maintainAspectRatio: false,
+        layout: { padding: { top: 34 } },
         plugins: { legend: { labels: { color: '#9aa0b8', font: { size: 11 } } } },
         scales: {
           x: { grid: { display: false }, ticks: { color: '#9aa0b8', font: { size: 11 } } },
           y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9aa0b8', font: { size: 10 }, callback: v => '$' + v + 'B' } }
         }
-      }
+      },
+      plugins: [fundBarLabelPlugin]
     });
+    c.fundDeltas = d.deltas;
+    charts['fundCompare'] = c;
+    c.update();
   }
 }
 
