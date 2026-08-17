@@ -99,6 +99,24 @@
   .diag-badge.safe { background:rgba(46,204,113,0.16); color:var(--green); }
   .diag-badge.info { background:rgba(154,160,184,0.14); color:var(--text2); }
   .diag-badge.watch { background:rgba(240,192,64,0.16); color:var(--gold); }
+  .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .act-card { background: var(--bg3); border-radius: 8px; padding: 12px 14px; display:flex; align-items:center; gap:12px; }
+  .act-icon { font-size: 19px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:rgba(240,192,64,0.1); border-radius:8px; flex-shrink:0; }
+  .act-label { font-size: 10.5px; color: var(--text3); margin-bottom:2px; }
+  .act-value { font-size: 15px; font-weight: 700; color: var(--text); }
+  .act-sub { font-size: 10px; color: var(--text3); margin-top:1px; }
+  .ccc-card { background: var(--bg3); border-radius: 8px; padding: 16px 18px 12px; }
+  .ccc-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 6px; }
+  .ccc-head-label { font-size:11.5px; color:var(--text2); font-weight:700; }
+  .ccc-head-value { font-size:18px; font-weight:800; color:var(--gold); }
+  .ccc-explain { font-size: 10.5px; color: var(--text3); line-height: 1.5; margin-bottom: 22px; }
+  .tl-bar-wrap { position: relative; margin: 40px 4px 8px; }
+  .tl-bar { height: 18px; border-radius: 5px; overflow: hidden; display: flex; }
+  .tl-seg-inv { background: linear-gradient(90deg,#3498db,#2980b9); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
+  .tl-seg-ar { background: linear-gradient(90deg,#9fdb2f,#76b900); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#0f1117; }
+  .tl-marker { position: absolute; top: -18px; width: 2px; background: var(--gold); }
+  .tl-marker-label { position: absolute; top: -32px; transform: translateX(-50%); font-size: 9.5px; font-weight: 700; color: var(--gold); white-space: nowrap; }
+  .tl-ccc-span { position: absolute; height: 3px; background: rgba(240,192,64,0.6); border-radius: 2px; top: 24px; }
   .val-item { margin-bottom: 18px; padding: 8px; margin-left: -8px; margin-right: -8px; border-radius: 8px; border: 1px solid transparent; transition: background 0.15s ease, border-color 0.15s ease; cursor: pointer; }
   .val-item:hover { background: rgba(255,255,255,0.03); }
   .val-item.selected { background: rgba(52,152,219,0.08); border-color: rgba(52,152,219,0.35); }
@@ -265,7 +283,46 @@
     <div class="sub">매출채권회전일수 4.1일(현금·카드 위주 판매) + 재고자산회전일수 27.1일 − 매입채무회전일수 30.0일 = CCC 1.2일 · 공급업체 신용으로 재고를 거의 즉시 회전</div>
   </div>
 </div>
-<div style="margin-top:8px;font-size:11.5px;color:var(--text2);line-height:1.6;">Costco는 회원제 도매클럽 특성상 매출채권이 사실상 없고(현금·카드 즉시 결제) 재고 회전이 매우 빠르다. CCC가 거의 0일에 수렴한다는 것은 매입채무 지급주기(30.0일) 안에 재고를 판매해 현금을 회수한다는 의미로, WMT와 함께 대형 유통업 중 최상위 운전자본 효율성을 보여준다.</div>
+<div class="detail-toggle collapsed" onclick="toggleCollapsible(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCollapsible(this);}" role="button" tabindex="0" aria-expanded="false">
+  <span>활동성 상세 — 개별 비율·CCC 그래프</span>
+  <span class="toggle-hint"><span class="toggle-hint-text">상세 보기</span><span class="chevron">▾</span></span>
+</div>
+<div class="collapsible-body collapsed">
+<div class="activity-grid">
+  <div class="act-card">
+    <div class="act-icon">💳</div>
+    <div><div class="act-label">매출채권 회전율·회전기간</div><div class="act-value">89.02회</div><div class="act-sub">4.1일 만에 현금화</div></div>
+  </div>
+  <div class="act-card">
+    <div class="act-icon">📦</div>
+    <div><div class="act-label">재고자산 회전율·회전기간</div><div class="act-value">13.47회</div><div class="act-sub">27.1일 재고 보유</div></div>
+  </div>
+  <div class="act-card">
+    <div class="act-icon">🧾</div>
+    <div><div class="act-label">매입채무 회전율·지급기간</div><div class="act-value">12.17회</div><div class="act-sub">30.0일 만에 지급</div></div>
+  </div>
+  <div class="act-card">
+    <div class="act-icon">🔄</div>
+    <div><div class="act-label">영업순환주기</div><div class="act-value">31.2일</div><div class="act-sub">재고보유+매출채권 회전기간</div></div>
+  </div>
+</div>
+<div class="ccc-card">
+  <div class="ccc-head">
+    <div class="ccc-head-label">⏱️ 현금창출주기 (CCC)</div>
+    <div class="ccc-head-value">1.2일</div>
+  </div>
+  <div class="ccc-explain">재고를 사서 판매 대금을 회수하기까지 31.2일이 걸리는데, 그중 30.0일은 매입채무(외상)로 버티고 나머지 1.2일만 회사가 현금으로 메우면 된다. Costco는 회원제 도매클럽 특성상 매출채권이 사실상 없고(현금·카드 즉시 결제) 재고 회전이 매우 빠르다. CCC가 거의 0일에 수렴한다는 것은 매입채무 지급주기(30.0일) 안에 재고를 판매해 현금을 회수한다는 의미로, WMT와 함께 대형 유통업 중 최상위 운전자본 효율성을 보여준다.</div>
+  <div class="tl-bar-wrap">
+    <div class="tl-marker" style="left:96.2%; height:18px;"></div>
+    <div class="tl-marker-label" style="left:96.2%;">매입채무 지급 30.0일</div>
+    <div class="tl-bar">
+      <div class="tl-seg-inv" style="width:86.9%;">재고 27.1일</div>
+      <div class="tl-seg-ar" style="width:13.1%;">매출채권회수 4.1일</div>
+    </div>
+    <div class="tl-ccc-span" style="left:96.2%; width:3.8%; background:rgba(46,204,113,0.6);"></div>
+  </div>
+</div>
+</div>
 </div>
 <div class="card"><div class="card-title">핵심 성장 동력</div><div class="grid-3"><div style="background:var(--bg3);padding:12px;border-radius:8px;border-top:3px solid var(--green);"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">멤버십 경제성</div><div style="font-size:12px;color:var(--text2);">갱신율 92.2%(미국·캐나다)<br>수수료 인상 효과<br>Executive 회원 +9.6%</div></div><div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--blue);font-weight:700;margin-bottom:6px;">트래픽·디지털</div><div style="font-size:12px;color:var(--text2);">동일점포 +6.6%<br>디지털 +20.8%<br>사이트·앱 트래픽 +37%</div></div><div style="background:var(--bg3);padding:12px;border-radius:8px;"><div style="font-size:11px;color:var(--green);font-weight:700;margin-bottom:6px;">글로벌 확장</div><div style="font-size:12px;color:var(--text2);">연간 신규점 목표 26개<br>Kirkland 경쟁력<br>규모의 구매력</div></div></div></div>
 <div class="card"><div class="card-title">핵심 투자 논리 — 탁월한 멤버십 모델이 프리미엄을 정당화하는가 <span style="color:var(--red);">(초고평가)</span></div><div style="font-size:12px;color:var(--text2);line-height:1.7;">회원 충성도와 낮은 상품 마진 전략은 트래픽과 반복수익을 만든다. Q3 순매출 +11.6%, 멤버십 수입 +10.7%, 디지털 +20.8%는 모델의 견조함을 입증한다. <strong style="color:var(--text);">반면 PER 46.7x는 성장 둔화나 마진 압박에 민감하며, 핵심 논쟁은 멤버십 반복수익의 안정성이 이 프리미엄을 정당화하는지다.</strong></div></div>
