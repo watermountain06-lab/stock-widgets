@@ -27,6 +27,7 @@ DATA = REPO_ROOT / "data"
 sys.path.insert(0, str(SCRIPTS))
 import fetch_target_price as ftp          # noqa: E402
 import compute_valuation_score as cvs     # noqa: E402
+import audit_valuation_consistency as avc  # noqa: E402
 
 
 def run(cmd, **kw):
@@ -86,6 +87,18 @@ def process_ticker(entry, workdir, opener, crumb):
         row["notes"].append(v.stdout.strip())
         # revert only this ticker's widget - don't let one bad patch block the rest of the fleet
         run(["git", "checkout", "--", entry["page"]])
+        return row
+
+    # The badge just moved but this pipeline deliberately never touches the
+    # widget's narrative prose (out of scope - see project plan), so any
+    # prose mention of PER/PBR elsewhere in the file can now be stale. Surface
+    # that as a count in the digest rather than trying to auto-fix it here.
+    widget_html = widget_path.read_text(encoding="utf-8")
+    prose_findings = []
+    for check in avc.CHECKS:
+        prose_findings.extend(check(widget_html))
+    row["proseSyncIssues"] = len(prose_findings)
+    row["proseSyncDetails"] = [msg for _, msg in sorted(prose_findings, key=lambda x: -x[0])]
     return row
 
 
@@ -100,24 +113,40 @@ def build_digest_markdown(digest, run_date):
         if cs and cs in (1, 5):
             stage_flips.append((r["ticker"], cs, sig.get("combinedLabel")))
 
+    needs_prose_sync = [r for r in applied if r.get("proseSyncIssues")]
+
     lines.append(f"- 총 {len(digest)}개 종목 중 {len(applied)}개 자동 반영, {len(failed)}개 제외 (아래 참고)")
     if stage_flips:
         lines.append(f"- 극단 스테이지(1 또는 5) 종목: {', '.join(f'{t}({l})' for t, _, l in stage_flips)}")
+    if needs_prose_sync:
+        sync_summary = ", ".join(f"{r['ticker']}({r['proseSyncIssues']}건)" for r in needs_prose_sync)
+        lines.append(f"- 배지-프로즈 불일치 발견: {sync_summary} — stock-refresh로 서술문 갱신 권장")
     lines.append("")
     lines.append("## 자동 반영된 종목")
     lines.append("")
-    lines.append("| 티커 | PER | PBR | 목표가 괴리율 | 종합 |")
-    lines.append("|---|---|---|---|---|")
+    lines.append("| 티커 | PER | PBR | 목표가 괴리율 | 종합 | 프로즈 동기화 |")
+    lines.append("|---|---|---|---|---|---|")
     for r in applied:
         sig = r.get("signal", {})
         per = sig.get("per", {})
         pbr = sig.get("pbr", {})
         tp = sig.get("targetPrice", {})
+        n_issues = r.get("proseSyncIssues", 0)
+        prose_cell = "✓" if not n_issues else f"⚠️ {n_issues}건"
         lines.append(
             f"| {r['ticker']} | {per.get('current', '-')}x (stage {per.get('stage', '-')}) "
             f"| {pbr.get('current', '-')}x (stage {pbr.get('stage', '-')}) "
-            f"| {tp.get('upsidePct', '-')}% | {sig.get('combinedStage', '-')} {sig.get('combinedLabel', '')} |"
+            f"| {tp.get('upsidePct', '-')}% | {sig.get('combinedStage', '-')} {sig.get('combinedLabel', '')} "
+            f"| {prose_cell} |"
         )
+    if needs_prose_sync:
+        lines.append("")
+        lines.append("### 배지-프로즈 불일치 상세")
+        lines.append("")
+        for r in needs_prose_sync:
+            lines.append(f"- **{r['ticker']}**:")
+            for detail in r.get("proseSyncDetails", []):
+                lines.append(f"  - {detail}")
     if failed:
         lines.append("")
         lines.append("## 제외된 종목 (수동 확인 필요)")

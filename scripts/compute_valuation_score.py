@@ -84,29 +84,50 @@ def compute_multiple_series(price_daily, annual_per_share):
     return out
 
 
+def pair_by_nearest_date(series_a, series_b, tolerance_days=120):
+    """Pair each (date, value) in series_a with the nearest (date, value) in
+    series_b within tolerance_days; entries with no match inside the window
+    are dropped. Returns [(date_a, value_a, value_b), ...].
+
+    equity and shares-outstanding are fetched as independent XBRL concepts
+    with different end-date conventions (fiscal-year-end vs filing
+    cover-page date), so they can't just be zipped by list position - on V
+    (Visa), SEC's non-dimensional sharesOutstanding facts only go back to a
+    single stale 2009 entry (Visa reports shares per-class from 2010 on, and
+    XBRL companyfacts drops dimensional facts), so a position-based zip
+    silently paired 2025 equity with 2009 share count, inflating BVPS ~4x
+    and understating PBR by the same factor. Matching by proximity instead
+    means a year with no shares data anywhere nearby is simply skipped."""
+    from datetime import date as _date
+
+    def parse(d):
+        return _date.fromisoformat(d)
+
+    pairs = []
+    for date_a, value_a in series_a:
+        best = None
+        for date_b, value_b in series_b:
+            delta = abs((parse(date_a) - parse(date_b)).days)
+            if delta <= tolerance_days and (best is None or delta < best[0]):
+                best = (delta, value_b)
+        if best:
+            pairs.append((date_a, value_a, best[1]))
+    return pairs
+
+
+MIN_HISTORY_YEARS = 3  # below this, a "5-year average" is more noise than signal
+
+
 def compute_signal(ticker, price_data, financials_data, target_data=None,
                     weight_component_a=0.6, weight_component_b=0.4):
     current_price = price_data["current"]
     daily = sorted(price_data["daily"], key=lambda b: b["date"])
 
     eps_annual = [(a["end"], a["val"]) for a in financials_data["epsDiluted"]["annual"]]
-    equity_annual = {a["end"]: a["val"] for a in financials_data["equityAttributableToParent"]["annual"]}
-    shares_annual = {a["end"]: a["val"] for a in financials_data["sharesOutstanding"]["annual"]}
-    # equity and shares are fetched from different XBRL tags with different
-    # end-date conventions (fiscal-year-end vs filing-cover-page date) - pair
-    # them by list position (both are sorted ascending, same n_years call),
-    # not by exact matching end date.
-    equity_dates = sorted(equity_annual.keys())
-    shares_dates = sorted(shares_annual.keys())
-    n = min(len(equity_dates), len(shares_dates))
-    bvps_annual = []
-    for i in range(n):
-        eq = equity_annual[equity_dates[-n + i]]
-        sh = shares_annual[shares_dates[-n + i]]
-        if sh:
-            # use the equity period's own end date for price lookup - it's
-            # the fiscal-year-end, which is what the multiple should be as-of
-            bvps_annual.append((equity_dates[-n + i], eq / sh))
+    equity_annual = [(a["end"], a["val"]) for a in financials_data["equityAttributableToParent"]["annual"]]
+    shares_annual = [(a["end"], a["val"]) for a in financials_data["sharesOutstanding"]["annual"]]
+    bvps_annual = [(d, eq / sh) for d, eq, sh in pair_by_nearest_date(equity_annual, shares_annual)
+                   if sh]
 
     result = {"ticker": ticker, "asOf": price_data["asOf"], "currentPrice": current_price,
               "dataQuality": {}}
@@ -116,7 +137,7 @@ def compute_signal(ticker, price_data, financials_data, target_data=None,
         latest_eps = eps_annual[-1][1]
         current_per = round(current_price / latest_eps, 2)
         per_series = compute_multiple_series(daily, eps_annual)
-        if per_series:
+        if len(per_series) >= MIN_HISTORY_YEARS:
             hist_avg_per = sum(m for _, m in per_series) / len(per_series)
             per_gap_pct = round((current_per - hist_avg_per) / hist_avg_per * 100, 1)
             result["per"] = {
@@ -125,14 +146,14 @@ def compute_signal(ticker, price_data, financials_data, target_data=None,
                 "sampleYears": len(per_series),
             }
     if "per" not in result:
-        result["dataQuality"]["per"] = "missing (no positive EPS history)"
+        result["dataQuality"]["per"] = "missing (no positive EPS history, or fewer than 3 usable years)"
 
     # --- PBR ---
     if bvps_annual and bvps_annual[-1][1] and bvps_annual[-1][1] > 0:
         latest_bvps = bvps_annual[-1][1]
         current_pbr = round(current_price / latest_bvps, 2)
         pbr_series = compute_multiple_series(daily, bvps_annual)
-        if pbr_series:
+        if len(pbr_series) >= MIN_HISTORY_YEARS:
             hist_avg_pbr = sum(m for _, m in pbr_series) / len(pbr_series)
             pbr_gap_pct = round((current_pbr - hist_avg_pbr) / hist_avg_pbr * 100, 1)
             result["pbr"] = {
@@ -141,7 +162,7 @@ def compute_signal(ticker, price_data, financials_data, target_data=None,
                 "sampleYears": len(pbr_series),
             }
     if "pbr" not in result:
-        result["dataQuality"]["pbr"] = "missing (no positive equity/shares history)"
+        result["dataQuality"]["pbr"] = "missing (no positive equity/shares history within date tolerance, or fewer than 3 matched years)"
 
     # --- target price (component B) ---
     if target_data and target_data.get("targetMeanPrice"):
