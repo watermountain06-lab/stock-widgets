@@ -70,11 +70,24 @@ def strip_val_item_blocks(s):
     return re.sub(r'<span class="val-name">.*?</span>\s*<div[^>]*>.*?</div>', "", s, flags=re.S)
 
 
+def strip_peer_comparison_rows(s):
+    """Remove zone-items that quote a COMPETITOR's own multiple (e.g.
+    Micron's "P/E 21x" on SKHY's card) rather than this ticker's, so it isn't
+    misread as this ticker's own stale prose. Narrowly scoped to zone-labels
+    containing "경쟁" (confirmed 5 such rows fleet-wide: Chevron/Mastercard/
+    Micron "(직접 경쟁)", PayPal "(핀테크 경쟁)", Waymo "경쟁") - a broader
+    "zone-label starts with a Latin letter" filter was tried and rejected:
+    legitimate own-metric zone-items routinely start with Latin product names
+    (AWS OI, Azure 연매출, iPhone 비중, Bear/Base/Bull...) and would have been
+    wrongly stripped, hiding real drift in those rows."""
+    return re.sub(r'<div class="zone-item"><span class="zone-label">[^<]*경쟁[^<]*</span>.*?</div>', "", s, flags=re.S)
+
+
 def check_metric_consistency(s):
     """Returns (gap_pct, message) tuples."""
     issues = []
     val_items = extract_val_items(s)
-    prose = strip_val_item_blocks(s)
+    prose = strip_peer_comparison_rows(strip_val_item_blocks(s))
     for keyword, pat in PROSE_PATTERNS.items():
         prose_vals = sorted(set(re.findall(pat, prose)), key=float)
         if not prose_vals:
