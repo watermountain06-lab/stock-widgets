@@ -79,6 +79,16 @@ def process_ticker(entry, workdir, opener, crumb):
         row["applyNotes"] = json.loads(r.stdout)["notes"]
     except (json.JSONDecodeError, KeyError):
         row["applyNotes"] = [r.stdout.strip()]
+    # apply_valuation_signals.py can compute a value but still fail to write
+    # it (e.g. CAT/COST/LRCX use an older val-fill markup with no gradient
+    # background, so the regex match count check aborts that one metric) -
+    # the digest must reflect what's actually IN the file, not just what was
+    # computed, or it silently overclaims (confirmed: CAT's digest once
+    # showed a computed 45.54x while the widget file still said 36.8x).
+    row["patchedMetrics"] = {
+        metric: any(note.startswith(f"{metric}: patched") for note in row["applyNotes"])
+        for metric in ("per", "pbr")
+    }
 
     v = run(["python3", SCRIPTS / "validate_widget.py", widget_path, "--ticker", ticker],
             capture_output=True, text=True)
@@ -128,17 +138,29 @@ def build_digest_markdown(digest, run_date):
     lines.append("|---|---|---|---|---|---|")
     for r in applied:
         sig = r.get("signal", {})
-        per = sig.get("per", {})
-        pbr = sig.get("pbr", {})
+        patched = r.get("patchedMetrics", {})
         tp = sig.get("targetPrice", {})
         n_issues = r.get("proseSyncIssues", 0)
         prose_cell = "✓" if not n_issues else f"⚠️ {n_issues}건"
+
+        def cell(metric):
+            m = sig.get(metric)
+            if not m:
+                return "-"
+            if not patched.get(metric):
+                return f"{m['current']}x (stage {m['stage']}, 파일 미반영*)"
+            return f"{m['current']}x (stage {m['stage']})"
+
         lines.append(
-            f"| {r['ticker']} | {per.get('current', '-')}x (stage {per.get('stage', '-')}) "
-            f"| {pbr.get('current', '-')}x (stage {pbr.get('stage', '-')}) "
+            f"| {r['ticker']} | {cell('per')} | {cell('pbr')} "
             f"| {tp.get('upsidePct', '-')}% | {sig.get('combinedStage', '-')} {sig.get('combinedLabel', '')} "
             f"| {prose_cell} |"
         )
+    if any(not r.get("patchedMetrics", {}).get(m, True) and r.get("signal", {}).get(m)
+           for r in applied for m in ("per", "pbr")):
+        lines.append("")
+        lines.append("\\* 계산은 됐지만 파일에는 반영되지 않은 값 (예: 구형 val-fill 마크업이라 배지 패치가 스킵된 경우) - "
+                      "실제 위젯은 이전 숫자 그대로입니다.")
     if needs_prose_sync:
         lines.append("")
         lines.append("### 배지-프로즈 불일치 상세")

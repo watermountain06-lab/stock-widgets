@@ -61,8 +61,16 @@ def patch_val_item(html, metric, number_str, stage):
     new_block, n2 = re.subn(r'<span class="stage-badge stage-\d">\d단계 [^<]*</span>',
                              f'<span class="stage-badge stage-{stage}">{stage}단계 {stage_label}</span>',
                              new_block, count=1)
+    # two val-fill conventions exist fleet-wide: most widgets carry a
+    # per-stage gradient (width:X%;background:...;), but CAT/COST/LRCX use an
+    # older plain style (width:X%;) with no background clause at all - try
+    # the gradient form first, fall back to upgrading the plain form to also
+    # carry the gradient (rather than leaving those 3 widgets un-patched).
     new_block, n3 = re.subn(r'(<div class="val-fill" style="width:)[\d.]+(%;background:)[^"]*(")',
                              rf'\g<1>{width}\g<2>{gradient};\g<3>', new_block, count=1)
+    if not n3:
+        new_block, n3 = re.subn(r'(<div class="val-fill" style="width:)[\d.]+(%;)(")',
+                                 rf'\g<1>{width}\g<2>background:{gradient};\g<3>', new_block, count=1)
     if not (n1 and n2 and n3):
         return html, f"{metric}: expected exactly one val-number/stage-badge/val-fill match, got {n1}/{n2}/{n3}, skipped"
 
@@ -120,16 +128,43 @@ def patch_target_band(html, new_current_price, new_target_price, upside_pct):
     return html, None
 
 
+def _valuation_section_span(html):
+    """Same section-boundary regex validate_widget.py uses for section('valuation')
+    - returns (start, end) offsets of the #valuation tab's content in html, or
+    None if not found."""
+    opener = r'<div(?=[^>]*\bclass="section(?: active)?")(?=[^>]*\bid="valuation")[^>]*>'
+    next_section = r'<div(?=[^>]*\bclass="section(?: active)?")(?=[^>]*\bid=")[^>]*>'
+    m = re.search(rf'{opener}(.*?)(?={next_section}|<div class="disclaimer")', html, re.S)
+    return m.span(1) if m else None
+
+
 def patch_valuation_tab_current_price(html, new_current_price):
-    """Best-effort: update the '현재가 $X' mention validate_widget.py cross-
-    checks against the target band, if there's exactly one in the file.
-    Not required for the val-item/target-band patches to succeed."""
+    """Update the '현재가 $X' mention validate_widget.py cross-checks against
+    the target band. Widgets often have several '현재가 $' mentions scattered
+    across other tabs (#tech's MA summary, etc.) that are a separate,
+    out-of-scope prose-staleness concern (see the daily digest's prose-sync
+    column) - this only requires uniqueness *within the #valuation section*,
+    matching exactly what validate_widget.py itself compares against the
+    target band, so a widget with 2-3 '현재가 $' mentions fleet-wide (AAPL,
+    MSFT, GOOGL, ...) still gets its validation-relevant one fixed instead of
+    being skipped entirely for being "ambiguous" file-wide."""
+    span = _valuation_section_span(html)
+    if not span:
+        return html, "현재가 mention: #valuation section not found, skipped"
+    start, end = span
+    section_text = html[start:end]
     price_re = r'현재가 \$\d{1,3}(?:,\d{3})*(?:\.\d+)?'
-    n = len(re.findall(price_re, html))
-    if n != 1:
-        return html, f"현재가 mention: expected exactly 1 occurrence, found {n}, left untouched"
-    html = re.sub(price_re, f'현재가 ${new_current_price:,.2f}', html, count=1)
-    return html, None
+    matches = re.findall(price_re, section_text)
+    if not matches:
+        return html, "현재가 mention: no occurrence inside #valuation, left untouched"
+    # a few widgets (e.g. MU) repeat the identical mention twice inside
+    # #valuation (section-title + info-box) - safe to replace all of them
+    # since they already agree; only bail out if they *disagree*, which is a
+    # genuine pre-existing inconsistency this script shouldn't guess at.
+    if len(set(matches)) > 1:
+        return html, f"현재가 mention: disagreeing values inside #valuation {sorted(set(matches))}, left untouched"
+    new_section_text = re.sub(price_re, f'현재가 ${new_current_price:,.2f}', section_text)
+    return html[:start] + new_section_text + html[end:], None
 
 
 def main():
@@ -153,15 +188,27 @@ def main():
         else:
             notes.append(f"{metric}: no signal data, skipped")
 
+    target_band_patched = False
     if "targetPrice" in signal:
         html, note = patch_target_band(html, signal["currentPrice"], signal["targetPrice"]["mean"],
                                         signal["targetPrice"]["upsidePct"])
         notes.append(note or "target band: patched")
+        target_band_patched = note is None
     else:
         notes.append("target band: no target price data, skipped")
 
-    html, note = patch_valuation_tab_current_price(html, signal["currentPrice"])
-    notes.append(note or "현재가 mention: patched")
+    # Only touch the valuation-tab '현재가' mention when the band was ALSO
+    # just updated to the same new price. Several widgets (e.g. GE) use a
+    # target-band markup this script doesn't recognize, so patch_target_band
+    # silently skips them - moving just the valuation-tab side in that case
+    # would turn an already-consistent (if stale) pair into a fresh mismatch
+    # that validate_widget.py would then flag, which is worse than leaving
+    # both sides untouched.
+    if target_band_patched:
+        html, note = patch_valuation_tab_current_price(html, signal["currentPrice"])
+        notes.append(note or "현재가 mention: patched")
+    else:
+        notes.append("현재가 mention: skipped (target band wasn't patched, avoiding a fresh mismatch)")
 
     out_path = args.out or args.widget
     with open(out_path, "w") as f:

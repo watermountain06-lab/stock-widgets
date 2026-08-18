@@ -129,8 +129,9 @@ if a.ticker != 'NVDA' and re.search(r'\bNVDA_(?:DAILY|MA5|MA20|MA60|MA120)\b',s)
 for m in re.finditer(r'<div class="val-labels">(.*?)</div>',s,re.S):
     x=m.group(1)
     if not all(c in x for c in ('val-low','val-mid','val-high')) or not re.search(r'\d',x): errors.append('non-numeric or unstyled val-labels')
+js_ticker = a.ticker.replace('.', '_')  # tickers like BRK.B use BRK_B_* in JS identifiers - dots aren't valid there
 for name in ('DAILY','MA5','MA20','MA60','MA120'):
-    m=re.search(rf'const {re.escape(a.ticker)}_{name} = (\[.*?\]);',s,re.S)
+    m=re.search(rf'const {re.escape(js_ticker)}_{name} = (\[.*?\]);',s,re.S)
     if not m: errors.append(f'missing array: {name}'); continue
     try:
         if len(json.loads(m.group(1))) != 252: errors.append(f'{name} length is not 252')
