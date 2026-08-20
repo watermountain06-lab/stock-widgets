@@ -1,28 +1,28 @@
 {
   "NVDA": {
     "ticker": "NVDA",
-    "asOf": "2026-08-14",
-    "currentPrice": 225.16,
+    "asOf": "2026-08-20",
+    "currentPrice": 216.85,
     "dataQuality": {},
     "per": {
-      "current": 45.95,
+      "current": 44.26,
       "historicalAvg5y": 52.76,
-      "gapPct": -12.9,
+      "gapPct": -16.1,
       "stage": 2,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 34.78,
+      "current": 33.5,
       "historicalAvg5y": 16.17,
-      "gapPct": 115.1,
+      "gapPct": 107.2,
       "stage": 5,
       "sampleYears": 5
     },
     "targetPrice": {
-      "mean": 302.82758,
+      "mean": 304.1207,
       "high": 500.0,
       "low": 180.0,
-      "upsidePct": 34.5,
+      "upsidePct": 40.2,
       "stage": 1,
       "numAnalysts": 58,
       "recommendationKey": "strong_buy"
@@ -32,30 +32,30 @@
   },
   "AAPL": {
     "ticker": "AAPL",
-    "asOf": "2026-08-14",
-    "currentPrice": 305.93,
+    "asOf": "2026-08-20",
+    "currentPrice": 311.3,
     "dataQuality": {},
     "per": {
-      "current": 41.01,
+      "current": 41.73,
       "historicalAvg5y": 30.09,
-      "gapPct": 36.3,
+      "gapPct": 38.7,
       "stage": 5,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 61.31,
+      "current": 62.39,
       "historicalAvg5y": 47.99,
-      "gapPct": 27.8,
+      "gapPct": 30.0,
       "stage": 5,
       "sampleYears": 5
     },
     "targetPrice": {
-      "mean": 322.2844,
+      "mean": 326.3415,
       "high": 400.0,
       "low": 215.0,
-      "upsidePct": 5.3,
-      "stage": 2,
-      "numAnalysts": 41,
+      "upsidePct": 4.8,
+      "stage": 3,
+      "numAnalysts": 40,
       "recommendationKey": "buy"
     },
     "combinedStage": 4,
@@ -63,30 +63,30 @@
   },
   "GOOGL": {
     "ticker": "GOOGL",
-    "asOf": "2026-08-14",
-    "currentPrice": 345.9,
+    "asOf": "2026-08-20",
+    "currentPrice": 340.67,
     "dataQuality": {},
     "per": {
-      "current": 32.0,
+      "current": 31.51,
       "historicalAvg5y": 24.35,
-      "gapPct": 31.4,
+      "gapPct": 29.4,
       "stage": 5,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 10.07,
+      "current": 9.92,
       "historicalAvg5y": 6.88,
-      "gapPct": 46.3,
+      "gapPct": 44.1,
       "stage": 5,
       "sampleYears": 5
     },
     "targetPrice": {
-      "mean": 427.52,
+      "mean": 428.06668,
       "high": 515.0,
       "low": 340.0,
-      "upsidePct": 23.6,
+      "upsidePct": 25.7,
       "stage": 1,
-      "numAnalysts": 55,
+      "numAnalysts": 54,
       "recommendationKey": "strong_buy"
     },
     "combinedStage": 3,
@@ -94,20 +94,20 @@
   },
   "MSFT": {
     "ticker": "MSFT",
-    "asOf": "2026-08-14",
-    "currentPrice": 495.4,
+    "asOf": "2026-08-20",
+    "currentPrice": 481.15,
     "dataQuality": {},
     "per": {
-      "current": 27.6,
+      "current": 26.81,
       "historicalAvg5y": 31.38,
-      "gapPct": -12.1,
+      "gapPct": -14.6,
       "stage": 2,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 8.32,
+      "current": 8.08,
       "historicalAvg5y": 10.63,
-      "gapPct": -21.8,
+      "gapPct": -24.0,
       "stage": 1,
       "sampleYears": 5
     },
@@ -115,38 +115,38 @@
       "mean": 569.5583,
       "high": 870.0,
       "low": 400.0,
-      "upsidePct": 15.0,
-      "stage": 2,
+      "upsidePct": 18.4,
+      "stage": 1,
       "numAnalysts": 53,
       "recommendationKey": "strong_buy"
     },
-    "combinedStage": 2,
-    "combinedLabel": "낮음"
+    "combinedStage": 1,
+    "combinedLabel": "매우낮음"
   },
   "AMZN": {
     "ticker": "AMZN",
-    "asOf": "2026-08-14",
-    "currentPrice": 262.65,
+    "asOf": "2026-08-20",
+    "currentPrice": 260.11,
     "dataQuality": {},
     "per": {
-      "current": 36.63,
+      "current": 36.28,
       "historicalAvg5y": 43.93,
-      "gapPct": -16.6,
+      "gapPct": -17.4,
       "stage": 2,
       "sampleYears": 4
     },
     "pbr": {
-      "current": 6.86,
+      "current": 6.79,
       "historicalAvg5y": 5.7,
-      "gapPct": 20.4,
-      "stage": 5,
+      "gapPct": 19.2,
+      "stage": 4,
       "sampleYears": 5
     },
     "targetPrice": {
-      "mean": 327.004,
+      "mean": 326.83734,
       "high": 405.0,
       "low": 230.0,
-      "upsidePct": 24.5,
+      "upsidePct": 25.7,
       "stage": 1,
       "numAnalysts": 60,
       "recommendationKey": "strong_buy"
@@ -156,20 +156,20 @@
   },
   "AVGO": {
     "ticker": "AVGO",
-    "asOf": "2026-08-14",
-    "currentPrice": 392.99,
+    "asOf": "2026-08-20",
+    "currentPrice": 364.03,
     "dataQuality": {},
     "per": {
-      "current": 82.39,
+      "current": 76.32,
       "historicalAvg5y": 52.32,
-      "gapPct": 57.5,
+      "gapPct": 45.9,
       "stage": 5,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 22.92,
+      "current": 21.23,
       "historicalAvg5y": 7.33,
-      "gapPct": 212.7,
+      "gapPct": 189.7,
       "stage": 5,
       "sampleYears": 5
     },
@@ -177,7 +177,7 @@
       "mean": 527.88446,
       "high": 675.0,
       "low": 215.88,
-      "upsidePct": 34.3,
+      "upsidePct": 45.0,
       "stage": 1,
       "numAnalysts": 45,
       "recommendationKey": "strong_buy"
@@ -187,46 +187,46 @@
   },
   "META": {
     "ticker": "META",
-    "asOf": "2026-08-14",
-    "currentPrice": 589.85,
+    "asOf": "2026-08-20",
+    "currentPrice": 545.83,
     "dataQuality": {
       "pbr": "missing (no positive equity/shares history within date tolerance, or fewer than 3 matched years)"
     },
     "per": {
-      "current": 25.11,
+      "current": 23.24,
       "historicalAvg5y": 22.98,
-      "gapPct": 9.3,
-      "stage": 4,
+      "gapPct": 1.1,
+      "stage": 3,
       "sampleYears": 5
     },
     "targetPrice": {
       "mean": 754.14246,
       "high": 1000.0,
       "low": 580.0,
-      "upsidePct": 27.9,
+      "upsidePct": 38.2,
       "stage": 1,
       "numAnalysts": 57,
       "recommendationKey": "strong_buy"
     },
-    "combinedStage": 3,
-    "combinedLabel": "적정"
+    "combinedStage": 2,
+    "combinedLabel": "낮음"
   },
   "TSLA": {
     "ticker": "TSLA",
-    "asOf": "2026-08-14",
-    "currentPrice": 342.27,
+    "asOf": "2026-08-20",
+    "currentPrice": 345.13,
     "dataQuality": {},
     "per": {
-      "current": 316.92,
+      "current": 319.56,
       "historicalAvg5y": 184.46,
-      "gapPct": 71.8,
+      "gapPct": 73.2,
       "stage": 5,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 15.64,
+      "current": 15.77,
       "historicalAvg5y": 14.35,
-      "gapPct": 9.0,
+      "gapPct": 9.9,
       "stage": 4,
       "sampleYears": 5
     },
@@ -234,18 +234,18 @@
       "mean": 395.3405,
       "high": 600.0,
       "low": 125.0,
-      "upsidePct": 15.5,
-      "stage": 1,
+      "upsidePct": 14.5,
+      "stage": 2,
       "numAnalysts": 40,
       "recommendationKey": "buy"
     },
-    "combinedStage": 3,
-    "combinedLabel": "적정"
+    "combinedStage": 4,
+    "combinedLabel": "높음"
   },
   "BRK.B": {
     "ticker": "BRK.B",
-    "asOf": "2026-08-14",
-    "currentPrice": 504.03,
+    "asOf": "2026-08-20",
+    "currentPrice": 496.86,
     "dataQuality": {
       "per": "missing (no positive EPS history, or fewer than 3 usable years)",
       "pbr": "missing (no positive equity/shares history within date tolerance, or fewer than 3 matched years)",
@@ -255,7 +255,7 @@
       "mean": 547.6667,
       "high": 604.0,
       "low": 510.0,
-      "upsidePct": 8.7,
+      "upsidePct": 10.2,
       "stage": 2,
       "numAnalysts": 3,
       "recommendationKey": "buy"
@@ -263,61 +263,61 @@
   },
   "LLY": {
     "ticker": "LLY",
-    "asOf": "2026-08-14",
-    "currentPrice": 1180.16,
+    "asOf": "2026-08-20",
+    "currentPrice": 1244.4,
     "dataQuality": {},
     "per": {
-      "current": 51.42,
+      "current": 54.22,
       "historicalAvg5y": 62.28,
-      "gapPct": -17.4,
+      "gapPct": -12.9,
       "stage": 2,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 41.96,
+      "current": 44.24,
       "historicalAvg5y": 40.57,
-      "gapPct": 3.4,
-      "stage": 3,
+      "gapPct": 9.0,
+      "stage": 4,
       "sampleYears": 5
     },
     "targetPrice": {
       "mean": 1310.8993,
       "high": 1600.0,
       "low": 850.0,
-      "upsidePct": 11.1,
+      "upsidePct": 5.3,
       "stage": 2,
       "numAnalysts": 28,
       "recommendationKey": "buy"
     },
-    "combinedStage": 2,
-    "combinedLabel": "낮음"
+    "combinedStage": 3,
+    "combinedLabel": "적정"
   },
   "MU": {
     "ticker": "MU",
-    "asOf": "2026-08-14",
-    "currentPrice": 971.66,
+    "asOf": "2026-08-20",
+    "currentPrice": 974.33,
     "dataQuality": {},
     "per": {
-      "current": 128.02,
+      "current": 128.37,
       "historicalAvg5y": 43.6,
-      "gapPct": 193.6,
+      "gapPct": 194.4,
       "stage": 5,
       "sampleYears": 4
     },
     "pbr": {
-      "current": 20.14,
+      "current": 20.19,
       "historicalAvg5y": 1.95,
-      "gapPct": 932.9,
+      "gapPct": 935.5,
       "stage": 5,
       "sampleYears": 5
     },
     "targetPrice": {
-      "mean": 1501.9767,
+      "mean": 1521.6232,
       "high": 2200.0,
       "low": 361.0,
-      "upsidePct": 54.6,
+      "upsidePct": 56.2,
       "stage": 1,
-      "numAnalysts": 43,
+      "numAnalysts": 44,
       "recommendationKey": "strong_buy"
     },
     "combinedStage": 3,
@@ -325,20 +325,20 @@
   },
   "JPM": {
     "ticker": "JPM",
-    "asOf": "2026-08-14",
-    "currentPrice": 362.84,
+    "asOf": "2026-08-20",
+    "currentPrice": 351.55,
     "dataQuality": {},
     "per": {
-      "current": 18.12,
+      "current": 17.56,
       "historicalAvg5y": 12.02,
-      "gapPct": 50.7,
+      "gapPct": 46.1,
       "stage": 5,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 2.7,
+      "current": 2.62,
       "historicalAvg5y": 1.76,
-      "gapPct": 53.8,
+      "gapPct": 49.3,
       "stage": 5,
       "sampleYears": 5
     },
@@ -346,8 +346,8 @@
       "mean": 374.57144,
       "high": 420.0,
       "low": 305.0,
-      "upsidePct": 3.2,
-      "stage": 3,
+      "upsidePct": 6.5,
+      "stage": 2,
       "numAnalysts": 21,
       "recommendationKey": "buy"
     },
@@ -356,30 +356,30 @@
   },
   "WMT": {
     "ticker": "WMT",
-    "asOf": "2026-08-14",
-    "currentPrice": 115.27,
+    "asOf": "2026-08-20",
+    "currentPrice": 103.84,
     "dataQuality": {},
     "per": {
-      "current": 42.22,
+      "current": 38.04,
       "historicalAvg5y": 35.15,
-      "gapPct": 20.1,
-      "stage": 5,
+      "gapPct": 8.2,
+      "stage": 4,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 9.23,
+      "current": 8.31,
       "historicalAvg5y": 5.34,
-      "gapPct": 72.8,
+      "gapPct": 55.6,
       "stage": 5,
       "sampleYears": 5
     },
     "targetPrice": {
-      "mean": 137.975,
+      "mean": 137.94737,
       "high": 155.0,
       "low": 81.0,
-      "upsidePct": 19.7,
+      "upsidePct": 32.8,
       "stage": 1,
-      "numAnalysts": 40,
+      "numAnalysts": 38,
       "recommendationKey": "buy"
     },
     "combinedStage": 3,
@@ -387,28 +387,28 @@
   },
   "AMD": {
     "ticker": "AMD",
-    "asOf": "2026-08-14",
-    "currentPrice": 514.39,
+    "asOf": "2026-08-20",
+    "currentPrice": 469.45,
     "dataQuality": {},
     "per": {
-      "current": 194.11,
+      "current": 177.15,
       "historicalAvg5y": 123.68,
-      "gapPct": 56.9,
+      "gapPct": 43.2,
       "stage": 5,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 13.31,
+      "current": 12.15,
       "historicalAvg5y": 7.73,
-      "gapPct": 72.3,
+      "gapPct": 57.2,
       "stage": 5,
       "sampleYears": 5
     },
     "targetPrice": {
-      "mean": 612.8383,
+      "mean": 614.434,
       "high": 1250.0,
       "low": 365.0,
-      "upsidePct": 19.1,
+      "upsidePct": 30.9,
       "stage": 1,
       "numAnalysts": 47,
       "recommendationKey": "strong_buy"
@@ -418,8 +418,8 @@
   },
   "V": {
     "ticker": "V",
-    "asOf": "2026-08-14",
-    "currentPrice": 364.15,
+    "asOf": "2026-08-20",
+    "currentPrice": 365.73,
     "dataQuality": {
       "per": "missing (no positive EPS history, or fewer than 3 usable years)",
       "pbr": "missing (no positive equity/shares history within date tolerance, or fewer than 3 matched years)",
@@ -429,7 +429,7 @@
       "mean": 416.20026,
       "high": 450.0,
       "low": 330.0,
-      "upsidePct": 14.3,
+      "upsidePct": 13.8,
       "stage": 2,
       "numAnalysts": 37,
       "recommendationKey": "strong_buy"
@@ -437,29 +437,29 @@
   },
   "XOM": {
     "ticker": "XOM",
-    "asOf": "2026-08-14",
-    "currentPrice": 160.1,
+    "asOf": "2026-08-20",
+    "currentPrice": 166.15,
     "dataQuality": {},
     "per": {
-      "current": 23.9,
+      "current": 24.8,
       "historicalAvg5y": 12.52,
-      "gapPct": 90.9,
+      "gapPct": 98.1,
       "stage": 5,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 2.57,
+      "current": 2.67,
       "historicalAvg5y": 1.9,
-      "gapPct": 35.6,
+      "gapPct": 40.8,
       "stage": 5,
       "sampleYears": 5
     },
     "targetPrice": {
-      "mean": 168.54546,
-      "high": 185.0,
+      "mean": 169.68182,
+      "high": 200.0,
       "low": 142.0,
-      "upsidePct": 5.3,
-      "stage": 2,
+      "upsidePct": 2.1,
+      "stage": 3,
       "numAnalysts": 22,
       "recommendationKey": "buy"
     },
@@ -468,20 +468,20 @@
   },
   "JNJ": {
     "ticker": "JNJ",
-    "asOf": "2026-08-14",
-    "currentPrice": 260.35,
+    "asOf": "2026-08-20",
+    "currentPrice": 267.37,
     "dataQuality": {},
     "per": {
-      "current": 23.6,
+      "current": 24.24,
       "historicalAvg5y": 20.69,
-      "gapPct": 14.1,
+      "gapPct": 17.2,
       "stage": 4,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 7.69,
+      "current": 7.9,
       "historicalAvg5y": 5.72,
-      "gapPct": 34.5,
+      "gapPct": 38.2,
       "stage": 5,
       "sampleYears": 5
     },
@@ -489,7 +489,7 @@
       "mean": 272.5,
       "high": 305.0,
       "low": 190.0,
-      "upsidePct": 4.7,
+      "upsidePct": 1.9,
       "stage": 3,
       "numAnalysts": 22,
       "recommendationKey": "buy"
@@ -499,25 +499,25 @@
   },
   "MA": {
     "ticker": "MA",
-    "asOf": "2026-08-14",
-    "currentPrice": 569.29,
+    "asOf": "2026-08-20",
+    "currentPrice": 573.85,
     "dataQuality": {
       "pbr": "missing (no positive equity/shares history within date tolerance, or fewer than 3 matched years)"
     },
     "per": {
-      "current": 34.46,
+      "current": 34.74,
       "historicalAvg5y": 36.71,
-      "gapPct": -6.1,
+      "gapPct": -5.4,
       "stage": 2,
       "sampleYears": 5
     },
     "targetPrice": {
-      "mean": 665.2632,
+      "mean": 667.2973,
       "high": 735.0,
       "low": 550.0,
-      "upsidePct": 16.9,
+      "upsidePct": 16.3,
       "stage": 1,
-      "numAnalysts": 38,
+      "numAnalysts": 37,
       "recommendationKey": "strong_buy"
     },
     "combinedStage": 2,
@@ -525,15 +525,15 @@
   },
   "INTC": {
     "ticker": "INTC",
-    "asOf": "2026-08-14",
-    "currentPrice": 102.5,
+    "asOf": "2026-08-20",
+    "currentPrice": 92.13,
     "dataQuality": {
       "per": "missing (no positive EPS history, or fewer than 3 usable years)"
     },
     "pbr": {
-      "current": 4.48,
+      "current": 4.03,
       "historicalAvg5y": 1.55,
-      "gapPct": 189.1,
+      "gapPct": 160.1,
       "stage": 5,
       "sampleYears": 5
     },
@@ -541,33 +541,33 @@
       "mean": 114.87805,
       "high": 200.0,
       "low": 75.0,
-      "upsidePct": 12.1,
-      "stage": 2,
+      "upsidePct": 24.7,
+      "stage": 1,
       "numAnalysts": 41,
       "recommendationKey": "hold"
     },
-    "combinedStage": 4,
-    "combinedLabel": "높음"
+    "combinedStage": 3,
+    "combinedLabel": "적정"
   },
   "ABBV": {
     "ticker": "ABBV",
-    "asOf": "2026-08-14",
-    "currentPrice": 249.46,
+    "asOf": "2026-08-20",
+    "currentPrice": 261.83,
     "dataQuality": {
       "pbr": "missing (no positive equity/shares history within date tolerance, or fewer than 3 matched years)"
     },
     "per": {
-      "current": 105.7,
+      "current": 110.94,
       "historicalAvg5y": 54.7,
-      "gapPct": 93.2,
+      "gapPct": 102.8,
       "stage": 5,
       "sampleYears": 5
     },
     "targetPrice": {
-      "mean": 276.4138,
+      "mean": 276.5862,
       "high": 328.0,
       "low": 200.0,
-      "upsidePct": 10.8,
+      "upsidePct": 5.6,
       "stage": 2,
       "numAnalysts": 29,
       "recommendationKey": "buy"
@@ -577,28 +577,28 @@
   },
   "CSCO": {
     "ticker": "CSCO",
-    "asOf": "2026-08-14",
-    "currentPrice": 111.68,
+    "asOf": "2026-08-20",
+    "currentPrice": 109.59,
     "dataQuality": {},
     "per": {
-      "current": 43.8,
+      "current": 42.98,
       "historicalAvg5y": 19.71,
-      "gapPct": 122.2,
+      "gapPct": 118.1,
       "stage": 5,
       "sampleYears": 4
     },
     "pbr": {
-      "current": 9.42,
+      "current": 9.25,
       "historicalAvg5y": 4.86,
-      "gapPct": 93.7,
+      "gapPct": 90.2,
       "stage": 5,
       "sampleYears": 4
     },
     "targetPrice": {
-      "mean": 134.77274,
+      "mean": 136.04546,
       "high": 165.0,
       "low": 115.0,
-      "upsidePct": 20.7,
+      "upsidePct": 24.1,
       "stage": 1,
       "numAnalysts": 22,
       "recommendationKey": "buy"
@@ -608,20 +608,20 @@
   },
   "BAC": {
     "ticker": "BAC",
-    "asOf": "2026-08-14",
-    "currentPrice": 64.49,
+    "asOf": "2026-08-20",
+    "currentPrice": 61.86,
     "dataQuality": {},
     "per": {
-      "current": 16.93,
+      "current": 16.24,
       "historicalAvg5y": 12.42,
-      "gapPct": 36.3,
+      "gapPct": 30.8,
       "stage": 5,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 1.53,
+      "current": 1.46,
       "historicalAvg5y": 1.13,
-      "gapPct": 35.4,
+      "gapPct": 29.2,
       "stage": 5,
       "sampleYears": 5
     },
@@ -629,7 +629,7 @@
       "mean": 68.77273,
       "high": 75.0,
       "low": 62.0,
-      "upsidePct": 6.6,
+      "upsidePct": 11.2,
       "stage": 2,
       "numAnalysts": 22,
       "recommendationKey": "buy"
@@ -639,20 +639,20 @@
   },
   "AMAT": {
     "ticker": "AMAT",
-    "asOf": "2026-08-14",
-    "currentPrice": 507.18,
+    "asOf": "2026-08-20",
+    "currentPrice": 496.21,
     "dataQuality": {},
     "per": {
-      "current": 58.57,
+      "current": 57.3,
       "historicalAvg5y": 19.54,
-      "gapPct": 199.8,
+      "gapPct": 193.3,
       "stage": 5,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 19.7,
+      "current": 19.27,
       "historicalAvg5y": 7.93,
-      "gapPct": 148.3,
+      "gapPct": 142.9,
       "stage": 5,
       "sampleYears": 5
     },
@@ -660,7 +660,7 @@
       "mean": 641.02856,
       "high": 900.0,
       "low": 358.0,
-      "upsidePct": 26.4,
+      "upsidePct": 29.2,
       "stage": 1,
       "numAnalysts": 35,
       "recommendationKey": "strong_buy"
@@ -670,20 +670,20 @@
   },
   "COST": {
     "ticker": "COST",
-    "asOf": "2026-08-14",
-    "currentPrice": 961.1,
+    "asOf": "2026-08-20",
+    "currentPrice": 933.51,
     "dataQuality": {},
     "per": {
-      "current": 52.78,
+      "current": 51.26,
       "historicalAvg5y": 44.91,
-      "gapPct": 17.5,
+      "gapPct": 14.1,
       "stage": 4,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 14.6,
+      "current": 14.19,
       "historicalAvg5y": 12.68,
-      "gapPct": 15.1,
+      "gapPct": 11.9,
       "stage": 4,
       "sampleYears": 5
     },
@@ -691,8 +691,8 @@
       "mean": 1077.3143,
       "high": 1315.0,
       "low": 740.0,
-      "upsidePct": 12.1,
-      "stage": 2,
+      "upsidePct": 15.4,
+      "stage": 1,
       "numAnalysts": 35,
       "recommendationKey": "buy"
     },
@@ -701,20 +701,20 @@
   },
   "CAT": {
     "ticker": "CAT",
-    "asOf": "2026-08-14",
-    "currentPrice": 856.57,
+    "asOf": "2026-08-20",
+    "currentPrice": 815.39,
     "dataQuality": {},
     "per": {
-      "current": 45.54,
+      "current": 43.35,
       "historicalAvg5y": 19.61,
-      "gapPct": 132.3,
+      "gapPct": 121.1,
       "stage": 5,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 18.7,
+      "current": 17.8,
       "historicalAvg5y": 8.69,
-      "gapPct": 115.1,
+      "gapPct": 104.8,
       "stage": 5,
       "sampleYears": 5
     },
@@ -722,30 +722,30 @@
       "mean": 979.2196,
       "high": 1225.0,
       "low": 575.0,
-      "upsidePct": 14.3,
-      "stage": 2,
+      "upsidePct": 20.1,
+      "stage": 1,
       "numAnalysts": 26,
       "recommendationKey": "buy"
     },
-    "combinedStage": 4,
-    "combinedLabel": "높음"
+    "combinedStage": 3,
+    "combinedLabel": "적정"
   },
   "UNH": {
     "ticker": "UNH",
-    "asOf": "2026-08-14",
-    "currentPrice": 401.73,
+    "asOf": "2026-08-20",
+    "currentPrice": 384.85,
     "dataQuality": {},
     "per": {
-      "current": 30.37,
+      "current": 29.09,
       "historicalAvg5y": 26.49,
-      "gapPct": 14.7,
+      "gapPct": 9.8,
       "stage": 4,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 3.64,
+      "current": 3.49,
       "historicalAvg5y": 5.04,
-      "gapPct": -27.8,
+      "gapPct": -30.8,
       "stage": 1,
       "sampleYears": 5
     },
@@ -753,7 +753,7 @@
       "mean": 475.23077,
       "high": 529.0,
       "low": 313.0,
-      "upsidePct": 18.3,
+      "upsidePct": 23.5,
       "stage": 1,
       "numAnalysts": 26,
       "recommendationKey": "buy"
@@ -763,51 +763,51 @@
   },
   "LRCX": {
     "ticker": "LRCX",
-    "asOf": "2026-08-14",
-    "currentPrice": 332.36,
+    "asOf": "2026-08-20",
+    "currentPrice": 310.53,
     "dataQuality": {},
     "per": {
-      "current": 57.7,
+      "current": 53.91,
       "historicalAvg5y": 29.13,
-      "gapPct": 98.1,
+      "gapPct": 85.0,
       "stage": 5,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 33.35,
+      "current": 31.16,
       "historicalAvg5y": 10.82,
-      "gapPct": 208.2,
+      "gapPct": 188.0,
       "stage": 5,
       "sampleYears": 5
     },
     "targetPrice": {
-      "mean": 368.9355,
+      "mean": 371.35483,
       "high": 500.0,
       "low": 290.0,
-      "upsidePct": 11.0,
-      "stage": 2,
+      "upsidePct": 19.6,
+      "stage": 1,
       "numAnalysts": 31,
       "recommendationKey": "strong_buy"
     },
-    "combinedStage": 4,
-    "combinedLabel": "높음"
+    "combinedStage": 3,
+    "combinedLabel": "적정"
   },
   "GE": {
     "ticker": "GE",
-    "asOf": "2026-08-14",
-    "currentPrice": 368.38,
+    "asOf": "2026-08-20",
+    "currentPrice": 344.64,
     "dataQuality": {},
     "per": {
-      "current": 45.26,
+      "current": 42.34,
       "historicalAvg5y": 280.47,
-      "gapPct": -83.9,
+      "gapPct": -84.9,
       "stage": 1,
       "sampleYears": 4
     },
     "pbr": {
-      "current": 20.69,
+      "current": 19.35,
       "historicalAvg5y": 6.78,
-      "gapPct": 205.2,
+      "gapPct": 185.5,
       "stage": 5,
       "sampleYears": 5
     },
@@ -815,30 +815,30 @@
       "mean": 404.90475,
       "high": 455.0,
       "low": 347.0,
-      "upsidePct": 9.9,
-      "stage": 2,
+      "upsidePct": 17.5,
+      "stage": 1,
       "numAnalysts": 21,
-      "recommendationKey": "none"
+      "recommendationKey": "strong_buy"
     },
-    "combinedStage": 3,
-    "combinedLabel": "적정"
+    "combinedStage": 2,
+    "combinedLabel": "낮음"
   },
   "KO": {
     "ticker": "KO",
-    "asOf": "2026-08-14",
-    "currentPrice": 87.71,
+    "asOf": "2026-08-20",
+    "currentPrice": 90.5,
     "dataQuality": {},
     "per": {
-      "current": 28.85,
+      "current": 29.77,
       "historicalAvg5y": 25.51,
-      "gapPct": 13.1,
+      "gapPct": 16.7,
       "stage": 4,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 11.73,
+      "current": 12.1,
       "historicalAvg5y": 10.5,
-      "gapPct": 11.7,
+      "gapPct": 15.2,
       "stage": 4,
       "sampleYears": 5
     },
@@ -846,30 +846,30 @@
       "mean": 94.69565,
       "high": 104.0,
       "low": 75.0,
-      "upsidePct": 8.0,
-      "stage": 2,
+      "upsidePct": 4.6,
+      "stage": 3,
       "numAnalysts": 23,
       "recommendationKey": "buy"
     },
-    "combinedStage": 3,
-    "combinedLabel": "적정"
+    "combinedStage": 4,
+    "combinedLabel": "높음"
   },
   "PG": {
     "ticker": "PG",
-    "asOf": "2026-08-14",
-    "currentPrice": 144.55,
+    "asOf": "2026-08-20",
+    "currentPrice": 142.97,
     "dataQuality": {},
     "per": {
-      "current": 21.84,
+      "current": 21.6,
       "historicalAvg5y": 24.9,
-      "gapPct": -12.3,
+      "gapPct": -13.2,
       "stage": 2,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 6.19,
+      "current": 6.12,
       "historicalAvg5y": 7.21,
-      "gapPct": -14.1,
+      "gapPct": -15.1,
       "stage": 2,
       "sampleYears": 5
     },
@@ -877,7 +877,7 @@
       "mean": 160.56522,
       "high": 186.0,
       "low": 143.0,
-      "upsidePct": 11.1,
+      "upsidePct": 12.3,
       "stage": 2,
       "numAnalysts": 23,
       "recommendationKey": "buy"
@@ -887,20 +887,20 @@
   },
   "MS": {
     "ticker": "MS",
-    "asOf": "2026-08-14",
-    "currentPrice": 217.36,
+    "asOf": "2026-08-20",
+    "currentPrice": 207.45,
     "dataQuality": {},
     "per": {
-      "current": 21.29,
+      "current": 20.32,
       "historicalAvg5y": 15.45,
-      "gapPct": 37.8,
+      "gapPct": 31.5,
       "stage": 5,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 3.09,
+      "current": 2.95,
       "historicalAvg5y": 1.82,
-      "gapPct": 69.9,
+      "gapPct": 62.2,
       "stage": 5,
       "sampleYears": 5
     },
@@ -908,7 +908,7 @@
       "mean": 236.61905,
       "high": 262.0,
       "low": 184.0,
-      "upsidePct": 8.9,
+      "upsidePct": 14.1,
       "stage": 2,
       "numAnalysts": 21,
       "recommendationKey": "buy"
@@ -918,20 +918,20 @@
   },
   "ORCL": {
     "ticker": "ORCL",
-    "asOf": "2026-08-14",
-    "currentPrice": 150.52,
+    "asOf": "2026-08-20",
+    "currentPrice": 142.07,
     "dataQuality": {},
     "per": {
-      "current": 25.82,
+      "current": 24.37,
       "historicalAvg5y": 34.56,
-      "gapPct": -25.3,
+      "gapPct": -29.5,
       "stage": 1,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 10.2,
+      "current": 9.63,
       "historicalAvg5y": 85.78,
-      "gapPct": -88.1,
+      "gapPct": -88.8,
       "stage": 1,
       "sampleYears": 4
     },
@@ -939,7 +939,7 @@
       "mean": 246.42635,
       "high": 400.0,
       "low": 110.0,
-      "upsidePct": 63.7,
+      "upsidePct": 73.5,
       "stage": 1,
       "numAnalysts": 41,
       "recommendationKey": "buy"
@@ -949,28 +949,28 @@
   },
   "HD": {
     "ticker": "HD",
-    "asOf": "2026-08-14",
-    "currentPrice": 338.86,
+    "asOf": "2026-08-20",
+    "currentPrice": 334.49,
     "dataQuality": {},
     "per": {
-      "current": 23.81,
+      "current": 23.51,
       "historicalAvg5y": 24.01,
-      "gapPct": -0.8,
+      "gapPct": -2.1,
       "stage": 3,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 26.34,
+      "current": 26.0,
       "historicalAvg5y": 158.46,
-      "gapPct": -83.4,
+      "gapPct": -83.6,
       "stage": 1,
       "sampleYears": 4
     },
     "targetPrice": {
-      "mean": 374.0625,
-      "high": 430.0,
+      "mean": 377.1875,
+      "high": 425.0,
       "low": 310.0,
-      "upsidePct": 10.4,
+      "upsidePct": 12.8,
       "stage": 2,
       "numAnalysts": 32,
       "recommendationKey": "buy"
@@ -980,28 +980,28 @@
   },
   "MRK": {
     "ticker": "MRK",
-    "asOf": "2026-08-14",
-    "currentPrice": 135.84,
+    "asOf": "2026-08-20",
+    "currentPrice": 148.99,
     "dataQuality": {},
     "per": {
-      "current": 18.66,
+      "current": 20.47,
       "historicalAvg5y": 168.45,
-      "gapPct": -88.9,
+      "gapPct": -87.8,
       "stage": 1,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 6.38,
+      "current": 7.0,
       "historicalAvg5y": 5.78,
-      "gapPct": 10.3,
-      "stage": 4,
+      "gapPct": 21.0,
+      "stage": 5,
       "sampleYears": 5
     },
     "targetPrice": {
-      "mean": 137.73077,
-      "high": 155.0,
+      "mean": 146.53847,
+      "high": 179.0,
       "low": 105.0,
-      "upsidePct": 1.4,
+      "upsidePct": -1.6,
       "stage": 3,
       "numAnalysts": 26,
       "recommendationKey": "buy"
@@ -1011,15 +1011,15 @@
   },
   "PM": {
     "ticker": "PM",
-    "asOf": "2026-08-14",
-    "currentPrice": 190.39,
+    "asOf": "2026-08-20",
+    "currentPrice": 191.52,
     "dataQuality": {
       "pbr": "missing (no positive equity/shares history within date tolerance, or fewer than 3 matched years)"
     },
     "per": {
-      "current": 26.22,
+      "current": 26.38,
       "historicalAvg5y": 20.24,
-      "gapPct": 29.6,
+      "gapPct": 30.4,
       "stage": 5,
       "sampleYears": 5
     },
@@ -1027,7 +1027,7 @@
       "mean": 203.8,
       "high": 225.0,
       "low": 175.0,
-      "upsidePct": 7.0,
+      "upsidePct": 6.4,
       "stage": 2,
       "numAnalysts": 15,
       "recommendationKey": "none"
@@ -1037,28 +1037,28 @@
   },
   "NFLX": {
     "ticker": "NFLX",
-    "asOf": "2026-08-14",
-    "currentPrice": 78.16,
+    "asOf": "2026-08-20",
+    "currentPrice": 80.14,
     "dataQuality": {},
     "per": {
-      "current": 30.89,
+      "current": 31.68,
       "historicalAvg5y": 26.19,
-      "gapPct": 17.9,
-      "stage": 4,
+      "gapPct": 20.9,
+      "stage": 5,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 12.4,
+      "current": 12.71,
       "historicalAvg5y": 3.95,
-      "gapPct": 213.8,
+      "gapPct": 221.7,
       "stage": 5,
       "sampleYears": 5
     },
     "targetPrice": {
-      "mean": 94.03667,
+      "mean": 93.41556,
       "high": 135.0,
       "low": 70.0,
-      "upsidePct": 20.3,
+      "upsidePct": 16.6,
       "stage": 1,
       "numAnalysts": 45,
       "recommendationKey": "buy"
@@ -1068,20 +1068,20 @@
   },
   "PLTR": {
     "ticker": "PLTR",
-    "asOf": "2026-08-14",
-    "currentPrice": 174.04,
+    "asOf": "2026-08-20",
+    "currentPrice": 173.96,
     "dataQuality": {},
     "per": {
-      "current": 276.25,
+      "current": 276.13,
       "historicalAvg5y": 290.32,
-      "gapPct": -4.8,
+      "gapPct": -4.9,
       "stage": 3,
       "sampleYears": 3
     },
     "pbr": {
-      "current": 56.34,
+      "current": 56.31,
       "historicalAvg5y": 25.03,
-      "gapPct": 125.1,
+      "gapPct": 125.0,
       "stage": 5,
       "sampleYears": 5
     },
@@ -1089,7 +1089,7 @@
       "mean": 191.68,
       "high": 255.0,
       "low": 80.0,
-      "upsidePct": 10.1,
+      "upsidePct": 10.2,
       "stage": 2,
       "numAnalysts": 27,
       "recommendationKey": "buy"
@@ -1099,29 +1099,29 @@
   },
   "RTX": {
     "ticker": "RTX",
-    "asOf": "2026-08-14",
-    "currentPrice": 222.97,
+    "asOf": "2026-08-20",
+    "currentPrice": 212.29,
     "dataQuality": {},
     "per": {
-      "current": 44.95,
+      "current": 42.8,
       "historicalAvg5y": 33.95,
-      "gapPct": 32.4,
+      "gapPct": 26.1,
       "stage": 5,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 4.59,
+      "current": 4.37,
       "historicalAvg5y": 2.4,
-      "gapPct": 91.3,
+      "gapPct": 82.1,
       "stage": 5,
       "sampleYears": 5
     },
     "targetPrice": {
-      "mean": 232.27182,
+      "mean": 234.81818,
       "high": 265.0,
-      "low": 183.98,
-      "upsidePct": 4.2,
-      "stage": 3,
+      "low": 200.0,
+      "upsidePct": 10.6,
+      "stage": 2,
       "numAnalysts": 22,
       "recommendationKey": "buy"
     },
@@ -1130,30 +1130,30 @@
   },
   "CRM": {
     "ticker": "CRM",
-    "asOf": "2026-08-14",
-    "currentPrice": 196.21,
+    "asOf": "2026-08-20",
+    "currentPrice": 205.43,
     "dataQuality": {},
     "per": {
-      "current": 25.16,
+      "current": 26.34,
       "historicalAvg5y": 220.98,
-      "gapPct": -88.6,
+      "gapPct": -88.1,
       "stage": 1,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 3.06,
+      "current": 3.21,
       "historicalAvg5y": 4.02,
-      "gapPct": -23.9,
+      "gapPct": -20.1,
       "stage": 1,
       "sampleYears": 5
     },
     "targetPrice": {
-      "mean": 242.4287,
+      "mean": 243.0798,
       "high": 475.0,
       "low": 160.0,
-      "upsidePct": 23.6,
+      "upsidePct": 18.3,
       "stage": 1,
-      "numAnalysts": 54,
+      "numAnalysts": 52,
       "recommendationKey": "buy"
     },
     "combinedStage": 1,
@@ -1161,28 +1161,28 @@
   },
   "ADBE": {
     "ticker": "ADBE",
-    "asOf": "2026-08-14",
-    "currentPrice": 264.02,
+    "asOf": "2026-08-20",
+    "currentPrice": 272.22,
     "dataQuality": {},
     "per": {
-      "current": 15.81,
+      "current": 16.3,
       "historicalAvg5y": 41.61,
-      "gapPct": -62.0,
+      "gapPct": -60.8,
       "stage": 1,
       "sampleYears": 5
     },
     "pbr": {
-      "current": 9.32,
+      "current": 9.61,
       "historicalAvg5y": 14.95,
-      "gapPct": -37.7,
+      "gapPct": -35.7,
       "stage": 1,
       "sampleYears": 5
     },
     "targetPrice": {
-      "mean": 269.72354,
+      "mean": 270.60587,
       "high": 380.0,
       "low": 190.0,
-      "upsidePct": 2.2,
+      "upsidePct": -0.6,
       "stage": 3,
       "numAnalysts": 34,
       "recommendationKey": "hold"
